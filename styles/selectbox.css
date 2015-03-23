@@ -1,0 +1,29 @@
+/* Styled selectbox idea from http://bavotasan.com/2011/style-select-box-using-only-css */
+
+div.styled-select {
+    width: 170px;
+    overflow: hidden;
+    border: 1px solid #888;
+    display: inline-block;
+    vertical-align: middle;
+
+    background: no-repeat right;
+    background-image: url(Down_arrow.png); /* fallback */
+    background-image: url(Down_arrow.png), -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ddd)); /* Saf4+, Chrome */
+    background-image: url(Down_arrow.png), -webkit-linear-gradient(top, #eee, #ddd); /* Chrome 10+, Saf5.1+ */
+    background-image: url(Down_arrow.png),    -moz-linear-gradient(top, #eee, #ddd); /* FF3.6+ */
+    background-image: url(Down_arrow.png),     -ms-linear-gradient(top, #eee, #ddd); /* IE10 */
+    background-image: url(Down_arrow.png),      -o-linear-gradient(top, #eee, #ddd); /* Opera 11.10+ */
+    background-image: url(Down_arrow.png),         linear-gradient(top, #eee, #ddd);
+}
+
+div.styled-select select {
+    background: transparent;
+    width: 170px;  /* Increase this if you want to cover the browser's down arrow in IE and FF */
+    padding: 2px;
+    line-height: 1;
+    border: 0;
+    border-radius: 0;
+    -webkit-appearance: none;
+}
+

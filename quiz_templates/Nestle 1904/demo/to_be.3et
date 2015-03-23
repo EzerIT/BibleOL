@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="1">
+  <desc>Conjugating &quot;to be&quot;</desc>
+  <database>nestle1904</database>
+  <path></path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="1">
+      <enumfeature version="1">
+        <name>mood</name>
+        <comparator>differs</comparator>
+        <value>imperative_participle</value>
+        <value>participle</value>
+      </enumfeature>
+      <stringfeature version="1">
+        <name>lemma</name>
+        <comparator>equals</comparator>
+        <value>εἰμί</value>
+      </stringfeature>
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="1">
+    <show>voice</show>
+    <show>mood</show>
+    <show>person</show>
+    <show>number</show>
+    <show>tense</show>
+    <request>raw_normalized</request>
+  </quizfeatures>
+</questiontemplate>

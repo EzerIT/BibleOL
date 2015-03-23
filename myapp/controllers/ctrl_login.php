@@ -1,0 +1,60 @@
+<?php
+class Ctrl_login extends MY_Controller {
+    public function __construct() {
+        parent::__construct();
+    }
+
+    public function password_check($password) {
+        $login_name = $this->input->post('login_name');
+
+        $user_info = $this->mod_users->verify_login($login_name, $password);
+
+        if (is_null($user_info)) {
+            $this->mod_users->set_login_session(0,false); // Paranoia
+			$this->form_validation->set_message('password_check', 'Illegal user name or password');
+			return false;
+        }
+        else {
+            $this->mod_users->set_login_session($user_info->id, $user_info->isadmin);
+            return true;
+        }
+    }
+
+    public function index() {
+        if ($this->mod_users->is_logged_in()) {
+            // Log out
+            $this->mod_users->set_login_session(0, false);
+            redirect("/");
+        }
+
+        $this->load->helper('form');
+		$this->load->library('form_validation');
+
+        $this->form_validation->set_rules('login_name', 'User name', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('password', 'Password', 'trim|required|callback_password_check');
+
+		if ($this->form_validation->run())
+            redirect("/");
+
+
+        // Set up parameters for Google authentication.
+        // For details about the protocol, see https://developers.google.com/accounts/docs/OAuth2WebServer.
+        $this->session->unset_userdata(array('ol_user'=>'', 'ol_admin'=>'', 'files'=>'', 'operation'=>'', 'from_dir'=>''));
+
+        $this->session->set_userdata('state', md5(rand())); // Used to prevent forged Google requests
+        $google_request = array('response_type' => 'code',
+                                'client_id' => $this->config->item('google_client_id'),
+                                'redirect_uri' => site_url('/google/callback'),
+                                'scope' => 'https://www.googleapis.com/auth/userinfo.profile '
+                                         . 'https://www.googleapis.com/auth/userinfo.email',
+                                'state' => $this->session->userdata('state'));
+
+        // VIEW:
+        $this->load->view('view_top1', array('title' => 'Login',
+                                             'css_list' => array('zocial/css/zocial.css')));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar');
+        $this->load->view('view_login', array('google_request' => http_build_query($google_request)));
+        $this->load->view('view_bottom');
+    }
+  }

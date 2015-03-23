@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="1">
+  <desc>What is the lexeme of this verb?</desc>
+  <database>nestle1904</database>
+  <path></path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="1">
+      <enumfeature version="1">
+        <name>psp</name>
+        <comparator>equals</comparator>
+        <value>verb</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="1">
+    <show>visual</show>
+    <request>raw_lemma</request>
+  </quizfeatures>
+</questiontemplate>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="3">
+  <desc><![CDATA[Declination of nouns with suffixes]]></desc>
+  <database>ETCBC4</database>
+  <properties>ETCBC4</properties>
+  <path>Genesis</path>
+  <path>Exodus</path>
+  <path>Leviticus</path>
+  <path>Numeri</path>
+  <path>Deuteronomium</path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="2">
+      <enumfeature version="1">
+        <name>suffix_gender</name>
+        <comparator>differs</comparator>
+        <value>NA</value>
+      </enumfeature>
+      <enumfeature version="1">
+        <name>sp</name>
+        <comparator>equals</comparator>
+        <value>subs</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="3">
+    <show>vocalized_lexeme_utf8</show>
+    <show>st</show>
+    <show>suffix_gender</show>
+    <show>suffix_person</show>
+    <show>suffix_number</show>
+    <show>nu</show>
+    <request>text_nocant_utf8</request>
+  </quizfeatures>
+</questiontemplate>

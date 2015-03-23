@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="2">
+  <desc>Conjugate verbs (with an overweight of subjunctive and optative forms)</desc>
+  <database>nestle1904</database>
+  <properties>nestle1904</properties>
+  <path></path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="1">
+      <enumfeature version="1">
+        <name>mood</name>
+        <comparator>equals</comparator>
+        <value>optative</value>
+        <value>subjunctive</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>false</useforquizobjects>
+  </sentenceselection>
+  <quizobjectselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="1">
+      <enumfeature version="1">
+        <name>mood</name>
+        <comparator>equals</comparator>
+        <value>imperative</value>
+        <value>indicative</value>
+        <value>infinitive</value>
+        <value>optative</value>
+        <value>subjunctive</value>
+      </enumfeature>
+    </featurehandlers>
+  </quizobjectselection>
+  <quizfeatures version="1">
+    <show>voice</show>
+    <show>lemma</show>
+    <show>mood</show>
+    <show>person</show>
+    <show>number</show>
+    <show>tense</show>
+    <request>raw_normalized</request>
+  </quizfeatures>
+</questiontemplate>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="3">
+  <desc><![CDATA[Which stem is this?]]></desc>
+  <database>ETCBC4</database>
+  <properties>ETCBC4-translit</properties>
+  <path>Genesis</path>
+  <path>Exodus</path>
+  <path>Leviticus</path>
+  <path>Numeri</path>
+  <path>Deuteronomium</path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="2">
+      <enumfeature version="1">
+        <name>vs</name>
+        <comparator>differs</comparator>
+        <value>NA</value>
+        <value>qal</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>false</useforquizobjects>
+  </sentenceselection>
+  <quizobjectselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="2">
+      <enumfeature version="1">
+        <name>vs</name>
+        <comparator>differs</comparator>
+        <value>NA</value>
+      </enumfeature>
+    </featurehandlers>
+  </quizobjectselection>
+  <quizfeatures version="3">
+    <show>visual</show>
+    <request>vs</request>
+  </quizfeatures>
+</questiontemplate>

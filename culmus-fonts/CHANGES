@@ -1,0 +1,259 @@
+Culmus Hebrew fonts
+==============
+
+04-Nov-2012: version 0.130
+-------------------------
+Added new TrueType font "Shofar" by Yoram Gnat. Complete family with
+diacritics and cantillation marks. The font is inspired by Koren type, with
+redesigned letter forms and the height-to-width ratio.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+19-Dec-2011: version 0.121
+-------------------------
+Frank Ruehl CLM now supports diacritics.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+18-Nov-2010: version 0.120
+-------------------------
+Keter YG by Yoram Gnat added, minor changes in other fonts.
+
+Changes:
+ 1. Keter YG - complete family with cantillation marks support. Based on
+    Aleppo codex.
+ 2. Left quotes added to David, Miriam, Miriam Mono.
+ 3. Geresh and gershayim lowered in David, Miriam, Miriam Mono.
+ 4. Dreydl symbol added to Caladings.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+14-Oct-2010: version 0.110
+-------------------------
+Four new TrueType fonts added, by Yoram Gnat.
+
+Changes:
+ 1. Hadasim CLM - complete family with diacritics supported. Inspired by
+    Henri Friedlander's Hadassah font.
+ 2. Simple CLM - complete sans-serif family with diacritics supported.
+ 3. Stam Ashkenaz CLM and Stam Sefarad CLM - each in single weight, modeled
+    after the respective Torah scroll writing traditions.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+23-Aug-2010: version 0.105
+-------------------------
+Miriam Mono font family is enhanced and re-released in TrueType format.
+
+Changes:
+ 1. Introduced diacritics placement into Miriam Mono font, meteg supported.
+ 2. Supported "Hataf" diacritics with all letters in Miriam, David.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+19-Jan-2010: Version 0.104
+-------------------------
+Miriam font family is enhanced and re-released in TrueType format.
+
+Changes:
+ 1. Fixed TZVEY YUDN MIT A PASEKH in David.
+ 2. Miriam font released in TrueType format.
+ 3. Miriam font enhanced to support diacritics, more symbols.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+27-Feb-2009: Version 0.103
+-------------------------
+This is a bugfix release for David TrueType fonts. 
+
+Changes:
+ 1. Fixed "yod-hiriq" placement.
+ 2. Fixed bad "dagesh" placement in some circumstances.
+ 3. Added "qamats qatan" and a few other diacritics.
+ 4. "Vav with holam haser" distinguished from "holam male".
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+17-Jul-2008: Version 0.102
+-------------------------
+This is a minor release which affects only David font family. David font
+is re-released in TrueType format with several enhancements.
+
+Changes:
+ 1. David font released in TrueType format.
+ 2. A new weight added: David CLM Bold Italic.
+ 3. Diacritics placement supported in OpenType-enabled software.
+ 4. Several new currency symbols and punctuation marks added.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+19-Dec-2004: Version 0.101
+-------------------------
+This is a bugfix release aimed at the infamous "tet" bug in Nachlieli. It 
+fixes this bug, and also similar bugs in some other fonts.
+
+Changes:
+ Tet bug fixed in Ellinia CLM Light, David CLM Bold, Miriam Mono CLM Bold,
+ Miriam Mono CLM Bold Oblique, Nachlieli CLM Light, Nachlieli CLM Light 
+ Oblique. More information is available at 
+ http://qa.mandrakesoft.com/show_bug.cgi?id=11502
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+12-Jun-2004: Version 0.100
+------------------------- 
+This major release introduces two new typefaces: Miriam and Yehuda. It also
+reduces the size of most fonts to make them closer to the corresponding
+Windows/Mac fonts.
+
+Changes:
+ 1. Miriam - a new grotesque typeface in medium and bold variations.
+ 2. Yehuda - a new architect typeface in light and bold variations.
+ 3. Ktav Yad discontinued from the main package.
+ 4. Serif typefaces David, Drugulin and Frank Ruehl reduced by 17% to better
+    match Windows/Mac counterparts.
+ 5. Sans-serif typefaces Aharoni, Ellinia and Nachlieli reduced by 8%.
+ 6. Space between lines enlarged in most typefaces to improve readability.
+ 7. All font names now end with "CLM", to avoid confusion with non-Culmus
+    fonts.
+ 8. A new menorah symbol added to Caladings.
+ 9. Cantillation marks and extended punctuation added to Nachlieli.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+28-Jan-2004: Version 0.93 
+------------------------- 
+This is a minor release that focuses primarily on improving the on-screen 
+presentation and readability.
+
+Changes:
+ 1. Frank Ruehl family redrawn, together with punctuation and numerals.
+ 2. Nachlieli family hinted to enhance the on-screen look.
+ 3. Slash in David family was redrawn.
+ 4. Missing "ayin" in Drugulin Bold was fixed.
+ 5. ".notdef" character added to all the above fonts, to improve compliance 
+    with standards.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+15-Aug-2003: Version 0.90
+-------------------------
+The main feature of this release is the Ellinia typeface family. It comes
+in light and bold weights, both in square (roman) and cursive (italic) 
+variations. The entire collection now contains eight families.
+
+Changes:
+ 1. Ellinia family introduced with complete set of variations.
+ 2. Several symbols were added to Caladings.
+ 3. Diacritics and presentation forms were added to Drugulin Bold.
+ 4. Nachlieli family was reworked to look better on non-aa desktops.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+17-Mar-2003: Version 0.8 
+------------------------ 
+This is the third major release. Along with numerous extensions to the
+existing fonts, two new typeface families have been added: Ktav Yad
+(medium and bold) which is a generic handwriting face, and Drugulin
+(bold and bold italic) which is a modern rework of Haag-Drugulin faces from
+19th century. Also introduced the Caladings dingbats collection.
+
+Changes:
+ 1. Ktav Yad family introduced in medium and bold weights.
+ 2. Drugulin family introduced in bold weight, roman and italic variations.
+ 3. Caladings dingbats font added.
+ 4. David and Aharoni completed with extended forms (nikud, precomposed
+    forms etc.)
+ 5. Terminology: italic fonts renamed to oblique in Frank Ruehl, Nachlieli,
+    Miriam Mono and Aharoni.
+ 6. Metrics changed for Aharoni Book Oblique and Aharoni Medium Oblique.
+ 7. Experimental masoretic glyphs added to Frank Ruehl Meduim.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+9-Nov-2002: Version 0.71
+------------------------
+This is a minor release which introduces several changes and fixes to 0.7.
+
+Changes:
+1. David family expanded with a medium oblique font.
+2. Hasida family discontinued in favor of Miriam Mono.
+3. Cantillation marks added to Frank Ruehl.
+4. Nikud metrics changed in Frank Ruehl and Nachlieli.
+5. Empty character 0x00DE added to Frank Ruehl, Nachlieli and Miriam Mono.
+6. Microsoft ligatures vav+holam, final kaf+qamats, final kaf+shva added
+   to Frank Ruehl, Nachlieli and Miriam Mono at positions 0xE801-0xE803.
+7. Alternative Ayin (0xFB20) redrawn in Frank Ruehl.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+7-Oct-2002: Version 0.7
+-----------------------
+This is the second major release. It adds two new typefaces to the collection:
+Aharoni and David. Aharoni comes in medium and bold weights, both roman and 
+slanted; David comes in medium and bold weights, roman only. Both families
+include punctuation and numerals.
+
+Couple of letters in Nachlieli have been redrawn, with no significant changes.
+
+Foundry name changed from "hebrew" to "culmus".
+
+Installation directory changed from '/usr/share/fonts/ISO-8859-8' to
+'/usr/share/fonts/he', to conform with ISO 639-1 language code standard.
+
+Know issues:
+
+1. David lacks kerning, and this causes some character pairs to look poorly.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+10-Sep-2002: Version 0.6
+------------------------
+This is a complementary release to version 0.5. It contains the same font 
+families, including all Hebrew-related Unicode entries except cantillation
+marks.
+
+Font family Dror has been renamed to Frank Ruehl to maintain consistency
+with common conventions.
+
+Several characters redrawn in Frank Ruehl and Nachlieli, following advice
+from Sivan Toledo.
+
+Implemented Unicode entries (in addition to ASCII): 
+	0x05B0-0x05F4 (Nikud, Hebrew-specific punctuation and Yiddish digraphs), 
+	0x20AA (NIS currency symbol) and 
+	0xFB1D-0xFB4F (Presentation forms, including letters with dagesh).
+
+Known issues:
+
+1. Frank-Ruehl Bold Italic looks bad at low resolutions.
+Hasida family looks bad at some low resolutions.
+Letter "Lamed" looks bad at all fonts at some low resolutions.
+
+2. Cantillation marks (Unicode 0x0591-0x05AF) not implemented.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+26-Aug-2002: Version 0.5
+------------------------
+This is the first public release. Includes a classic serif font family (Dror),
+modern sans-serif font family (Nachlieli) and modern monospace font family
+(Hasida).
+
+Each family includes a Medium, Medium Italic, Bold and Bold Italic fonts. All
+fonts include Latin characters and punctuation (ASCII 0x20-0x7E) and Hebrew
+basic characters (Unicode 0x05D0-0x05EA)
+
+Known issues:
+
+1. Some fonts contain additional symbols, such as nikud, yiddish digraphs, etc.
+These symbols are presently not supported - please do not report bugs
+regarding them. They will be officially included in future releases.
+
+2. Dror Bold Italic looks bad at low resolutions.
+Hasida family looks bad at some low resolutions.
+Letter "Lamed" looks bad at all fonts at some low resolutions.
+
+3. At my system KWord refuses to display Hasida Medium Italic and replaces it
+with Hasida Bold Italic. Non-KDE applications (such as Mozilla, xfontsel) do
+not display such abnornal behavior.

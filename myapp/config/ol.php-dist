@@ -1,0 +1,9 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+$config['pw_salt']	= 'xxxxxxx';
+$config['mql_driver'] = 'native';
+$config['mail_sender_address'] = 'xxxxx@xxxxx.xx';
+$config['mail_sender_name'] = 'Bible Online Learner';
+
+$config['google_client_id'] = 'xxxxxxxxxxxx.apps.googleusercontent.com';
+$config['google_client_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxx';

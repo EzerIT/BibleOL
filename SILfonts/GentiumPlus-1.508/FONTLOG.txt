@@ -1,0 +1,201 @@
+FONTLOG
+Gentium Plus font family
+========================
+
+
+This file provides detailed information on the Gentium Plus family of fonts.
+This information should be distributed along with the Gentium Plus fonts and
+any derivative works.
+
+
+Basic Font Information
+----------------------
+
+Gentium ("belonging to the nations" in Latin) is a Unicode typeface family 
+designed to enable the many diverse ethnic groups around the world who use 
+the Latin script to produce readable, high-quality publications. The 
+design is intended to be highly readable, reasonably compact, and visually 
+attractive. Gentium has won a "Certificate of Excellence in Typeface 
+Design" in two major international typeface design competitions: 
+bukva:raz! (2001), TDC2003 (2003).
+
+The Gentium Plus font family is based on the original design. It currently 
+comes with regular and italic face only, although additional weights are in
+development.
+
+The goal for this product is to provide a single Unicode-based font family
+that contains a comprehensive inventory of glyphs needed for almost any
+Roman- or Cyrillic-based writing system, whether used for phonetic or
+orthographic needs, and provide a matching Greek face. In addition, there
+is provision for other characters and symbols useful to linguists. This
+font makes use of state-of-the-art font technologies to support complex
+typographic issues, such as the need to position arbitrary combinations
+of base glyphs and diacritics optimally.
+
+Two fonts from this typeface family are included in this release:
+
+     * Gentium Plus Regular
+     * Gentium Plus Italic
+
+Work is ongoing to provide bold and bold-italic weights, as well as a
+complete book-weight family.
+
+For detailed documentation see the contents of the 'documentation' folder.
+
+
+A Note Regarding the Open Font License and TypeTuner
+----------------------------------------------------
+
+The OFL prohibits the use of Reserved Font Names "Gentium" and "SIL" in
+the name of any font that is derived from the Original Version of Gentium
+Plus. However, SIL International (the Copyright Holder) grants through
+this separate written agreement the right to use the Reserved Font Names
+in any Modified Version of this font created by using TypeTuner as long
+as the feature information contained in the Original Version is used, 
+unmodified, as the source for TypeTuner feature information, and 
+"Gentium Plus" is not the resulting font family name.
+
+TypeTuner-produced fonts created in this manner are still bound by the
+terms of the OFL. Specifically, the use of Reserved Font Names is
+prohibited when making derivatives of a TypeTuner-produced font. Anyone
+making a derivative of a TypeTuner font will need to find a different
+name. For example a TypeTuner-produced font may be named 
+"Gentium Plus Literacy SomeFarAwayPlace" but a derivative of that font made 
+with other tools would not be allowed to use the "Gentium" and "SIL" 
+Reserved Font Names and would have to be named something like "Nations Serif".
+
+
+ChangeLog
+---------
+(This should list both major and minor changes, most recent first.)
+
+12 September 2011 (SIL NRSI team) Gentium Plus version 1.508
+- Removed the VDMX table
+- Changed version number (using ttfsetver)
+
+25 Aug 2011 (SIL NRSI team) Gentium Plus version 1.506
+- Double-encoded the SIL PUA characters which were added to Unicode 5.2 and 6.0
+  (using ttfremap)
+- Corrected problem with coverage tables (using ttfsortcover)
+- Changed version number (using ttfsetver)
+- Added device metric tables
+- Added an empty dsig table
+
+16 Nov 2010 (SIL NRSI team) Gentium Plus version 1.504
+- Added codepage bits for 1251 (Cyrillic), 1257 (Windows Baltic), 1258 
+  (Vietnamese)
+
+1 Nov 2010 (SIL NRSI team) Gentium Plus version 1.502
+- Regular and Italic weights only
+- New OpenType and Graphite support
+- Converted kerning to OpenType (but not Graphite)
+- New extended Cyrillic script support, inc. Serbian alternates
+- Character set and features up to same level as Charis SIL 4.106
+- Support for more historic Greek characters and alternate seriffed beta
+- No separate GentiumAlt fonts (replaced by font features)
+- Added WOFF versions and examples
+
+28 Nov 2005 (Victor Gaultney)  Gentium version 1.02
+- Changed licensing to the SIL Open Font License
+- Included FontLab source files
+- Fixed some duplicate PostScript glyph names
+- Fixed italic angle
+
+19 Sep 2003 (Victor Gaultney)  Gentium version 1.01 
+- Maintenance release focused on changing internal font
+- Information to reflect the changeover to an SIL project
+- There is only one bug fix - the Greek mu PS name was changed to try and fix 
+a display/printing problem. There is still no manual hinting.
+
+16 Sep 2002 (Victor Gaultney)  Gentium version 1.00
+- First public release
+- No manual hinting is included in this version. Some has been done - with 
+good results - but is not yet complete enough.
+
+
+Information for Developers/Contributors
+---------------------------------------
+
+The release of Gentium Plus version 1.502 (and any subsequent versions) under 
+the OFL license provides a means for people to modify the fonts to meet their
+needs and contribute to the project. For information on what you're allowed to
+change or modify, consult the OFL and OFL-FAQ.
+
+Anyone can make their own modified version of Gentium Plus (using a different
+name), but SIL International will continue to maintain and develop the
+canonical version of the Gentium Plus fonts. As the package maintainer, we
+welcome contributions. Here are some things to keep in mind:
+
+Format: We are open to contributions in various formats, but if you want to
+maximise the chances of us including your work, please make it available to
+us (via email or a URL) as either a FontLab database (preferred) or a
+PostScript Type 1 (or OT-CFF) font.
+
+Source files: The primary source files for the fonts are the fonts themselves.
+They contain all the important data in the fonts and can be studied and
+modified using open font tools such as FontForge and TTX. The developer
+release contains additional source files that might be useful. See the file
+source/SOURCES.txt in that release archive for further information.
+
+Copyright attribution: If you submit something for inclusion in the main
+Gentium Plus fonts, we will ask you to affirm that it is your original work,
+and ask you to assign the copyright of your work to SIL International. This
+is to ensure that future releases can be made under improved versions of the
+OFL without needing to track you down for further permission. This follows
+the same principle used by the FSF. Keep in mind that we are a
+not-for-profit organization committed to free/libre and open source
+software, and that any contributions incorporated in the fonts will always
+be available under the OFL or a similar license.
+
+Quality: Because we want to be able to guarantee a high level of quality for
+the primary Gentium Plus fonts, we will review submissions carefully. Please
+don't be discouraged if we do not include a submission for this reason, or
+ask you to make specific revisions.
+
+Types of contributions: If you wish to make a contribution - a set of
+additional glyphs, scripts, code, etc. - please contact us before you do any
+work to see if it is a contribution we currently need. Every addition adds
+to the complexity of the project and needs to be carefully planned. This
+also avoids two people working on the same type of addition at the same time.
+
+Linux packages: Please contact the upstream maintainer of the various 
+packages - nicolas_spalinger@sil.org - if you want to help package or 
+maintain a package.
+
+When submissions will be included: We plan to revise the fonts when major 
+updates are needed (eg new versions of Unicode). If you wish to make 
+submissions, contact us on the timing. 
+
+
+Acknowledgements
+----------------
+(Here is where contributors can be acknowledged. If you make modifications be 
+sure to add your name (N), email (E), web-address (W) and description (D). 
+This list is sorted by last name in alphabetical order.)
+
+N: Victor Gaultney
+E: victor_gaultney@sil.org
+W: http://www.sil.org/~gaultney/
+D: Original Designer
+
+N: Annie Olsen
+E: fonts@sil.org
+W: http://scripts.sil.org/
+D: Contributed some extended Latin glyphs
+
+N: Iska Routamaa
+E: fonts@sil.org
+W: http://scripts.sil.org/
+D: Contributed some extended Latin glyphs and extensive work on the italic face
+
+N: SIL font engineers
+E: fonts@sil.org
+W: http://scripts.sil.org/
+D: Graphite, OpenType, and TypeTuner code, and build support
+
+The Gentium and Gentium Plus fonts are maintained by SIL International.
+
+For more information please visit the Gentium page on SIL International's 
+Computers and Writing systems website: http://scripts.sil.org/gentium
+
+Or send an email to gentium@sil.org

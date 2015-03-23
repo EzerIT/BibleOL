@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="1">
+  <desc>Noun cases</desc>
+  <database>nestle1904</database>
+  <path>Matthew</path>
+  <path>Mark</path>
+  <path>Luke</path>
+  <path>John</path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="1">
+      <enumfeature version="1">
+        <name>psp</name>
+        <comparator>equals</comparator>
+        <value>noun</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="1">
+    <show>visual</show>
+    <request>case</request>
+  </quizfeatures>
+</questiontemplate>

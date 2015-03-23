@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="1">
+  <desc>Analyze everything</desc>
+  <database>nestle1904</database>
+  <path></path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="1">
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="1">
+    <show>visual</show>
+    <request>voice</request>
+    <request>case</request>
+    <request>gender</request>
+    <request>mood</request>
+    <request>psp</request>
+    <request>person</request>
+    <request>number</request>
+    <request>tense</request>
+  </quizfeatures>
+</questiontemplate>

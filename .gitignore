@@ -1,0 +1,10 @@
+*#
+*~
+dont_git
+quizzes
+db/*.name
+db/ETCBC4
+db/nestle1904
+ts/html
+myapp/html
+TAGS

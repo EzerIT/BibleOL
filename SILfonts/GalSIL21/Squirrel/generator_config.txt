@@ -1,0 +1,5 @@
+# Font Squirrel Font-face Generator Configuration File
+# Upload this file to the generator to recreate the settings
+# you used to create these fonts.
+
+{"mode":"optimal","formats":["ttf","woff","eot","svg"],"tt_instructor":"default","fix_vertical_metrics":"Y","fix_gasp":"xy","add_spaces":"Y","add_hyphens":"Y","fallback":"none","fallback_custom":"100","options_subset":"advanced","subset_range":["greek"],"subset_custom":"","subset_custom_range":"1f00,1f01,1f02,1f03,1f04,1f05,1f06,1f08,1f09,1f0c,1f0d,1f10,1f11,1f13,1f14,1f15,1f18,1f19,1f1c,1f1d,1f20,1f21,1f22,1f23,1f24,1f25,1f26,1f27,1f28,1f29,1f2a,1f2c,1f2d,1f2e,1f30,1f31,1f33,1f34,1f35,1f36,1f37,1f38,1f39,1f3c,1f3d,1f40,1f41,1f42,1f43,1f44,1f45,1f48,1f49,1f4b,1f4c,1f4d,1f50,1f51,1f52,1f53,1f54,1f55,1f56,1f57,1f59,1f5d,1f60,1f61,1f62,1f64,1f65,1f66,1f67,1f69,1f6d,1f6e,1f70,1f71,1f72,1f73,1f74,1f75,1f76,1f77,1f78,1f79,1f7a,1f7b,1f7c,1f7d,1f84,1f85,1f90,1f91,1f94,1f96,1f97,1fa0,1fa7,1fb3,1fb4,1fb6,1fb7,1fc3,1fc4,1fc6,1fc7,1fd2,1fd3,1fd6,1fe2,1fe3,1fe5,1fe6,1fec,1ff3,1ff4,1ff6,1ff7,2019","base64":"Y","css_stylesheet":"stylesheet.css","filename_suffix":"-webfont","emsquare":"2048","spacing_adjustment":"0"}

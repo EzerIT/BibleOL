@@ -1,0 +1,24 @@
+#!/bin/bash
+
+files="db/ETCBC4 db/nestle1904"
+
+for f in $files; do
+
+    location=$(cat ${f}.location)
+    filename=$(basename $location)
+
+    if [ -f ${f}.name ]; then
+        currentfilename=$(cat ${f}.name)
+    else
+        currentfilename=""
+    fi
+     
+    if [ x$filename != x$currentfilename ]; then
+       echo Retrieving $filename...
+       curl -L $location > ${f}
+       echo $filename > ${f}.name
+    fi
+
+done
+
+exit 0

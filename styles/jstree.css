@@ -1,0 +1,16 @@
+/* Use our own check box icons */
+
+.jstree-classic .jstree-checked > a > .jstree-checkbox {
+    background:url("../images/check.png") 0 0 !important;
+}
+.jstree-classic .jstree-unchecked > a > .jstree-checkbox  {
+    background:url("../images/nocheck.png") 0 0 !important;
+}
+.jstree-classic .jstree-undetermined > a > .jstree-checkbox  {
+    background:url("../images/partcheck.png") 0 0 !important;
+}
+
+/* We don't want a folder icon on leaves */
+.jstree-classic .jstree-leaf > a .jstree-icon {
+    display:none;
+}

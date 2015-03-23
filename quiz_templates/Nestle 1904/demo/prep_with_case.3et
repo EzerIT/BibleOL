@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="1">
+  <desc>Case and number of nouns and pronouns in sentences that contain a preposition</desc>
+  <database>nestle1904</database>
+  <path></path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="1">
+      <enumfeature version="1">
+        <name>psp</name>
+        <comparator>equals</comparator>
+        <value>preposition</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>false</useforquizobjects>
+  </sentenceselection>
+  <quizobjectselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="1">
+      <enumfeature version="1">
+        <name>psp</name>
+        <comparator>equals</comparator>
+        <value>correlative_or_interrogative_pronoun</value>
+        <value>correlative_pronoun</value>
+        <value>demonstrative_pronoun</value>
+        <value>indefinite_pronoun</value>
+        <value>interrogative_pronoun</value>
+        <value>letter_indeclinable</value>
+        <value>noun</value>
+        <value>noun_other_type_indeclinable</value>
+        <value>numeral_indeclinable</value>
+        <value>personal_pronoun</value>
+        <value>possessive_pronoun</value>
+        <value>proper_noun_indeclinable</value>
+        <value>reciprocal_pronoun</value>
+        <value>reflexive_pronoun</value>
+        <value>relative_pronoun</value>
+      </enumfeature>
+    </featurehandlers>
+  </quizobjectselection>
+  <quizfeatures version="1">
+    <show>visual</show>
+    <request>case</request>
+    <request>number</request>
+  </quizfeatures>
+</questiontemplate>

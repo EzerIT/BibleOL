@@ -1,0 +1,144 @@
+@font-face {
+    font-family: 'Ezra SIL Webfont';
+    src: url('fonts/ezrasilsr-webfont.eot'); /* IE9 Compat Modes */
+    src: url('fonts/ezrasilsr-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('fonts/ezrasilsr-webfont.woff') format('woff'), /* Modern Browsers */
+         url('fonts/ezrasilsr-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
+         url('fonts/ezrasilsr-webfont.svg#EzraSILSR') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+    font-family: 'Frank Ruehl CLM Webfont';
+    src: url('fonts/frankruehlclm-medium-webfont.eot');
+    src: url('fonts/frankruehlclm-medium-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/frankruehlclm-medium-webfont.woff') format('woff'),
+         url('fonts/frankruehlclm-medium-webfont.ttf') format('truetype'),
+         url('fonts/frankruehlclm-medium-webfont.svg#frank_ruehl_clmmedium') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Frank Ruehl CLM Webfont';
+    src: url('fonts/frankruehlclm-bold-webfont.eot');
+    src: url('fonts/frankruehlclm-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/frankruehlclm-bold-webfont.woff') format('woff'),
+         url('fonts/frankruehlclm-bold-webfont.ttf') format('truetype'),
+         url('fonts/frankruehlclm-bold-webfont.svg#frank_ruehl_clmbold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Frank Ruehl CLM Webfont';
+    src: url('fonts/frankruehlclm-mediumoblique-webfont.eot');
+    src: url('fonts/frankruehlclm-mediumoblique-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/frankruehlclm-mediumoblique-webfont.woff') format('woff'),
+         url('fonts/frankruehlclm-mediumoblique-webfont.ttf') format('truetype'),
+         url('fonts/frankruehlclm-mediumoblique-webfont.svg#frank_ruehl_clmmediumoblique') format('svg');
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Frank Ruehl CLM Webfont';
+    src: url('fonts/frankruehlclm-boldoblique-webfont.eot');
+    src: url('fonts/frankruehlclm-boldoblique-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/frankruehlclm-boldoblique-webfont.woff') format('woff'),
+         url('fonts/frankruehlclm-boldoblique-webfont.ttf') format('truetype'),
+         url('fonts/frankruehlclm-boldoblique-webfont.svg#frank_ruehl_clmboldoblique') format('svg');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'David CLM Webfont';
+    src: url('fonts/davidclm-medium-webfont.eot');
+    src: url('fonts/davidclm-medium-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/davidclm-medium-webfont.woff') format('woff'),
+         url('fonts/davidclm-medium-webfont.ttf') format('truetype'),
+         url('fonts/davidclm-medium-webfont.svg#david_clmmedium') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'David CLM Webfont';
+    src: url('fonts/davidclm-bold-webfont.eot');
+    src: url('fonts/davidclm-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/davidclm-bold-webfont.woff') format('woff'),
+         url('fonts/davidclm-bold-webfont.ttf') format('truetype'),
+         url('fonts/davidclm-bold-webfont.svg#david_clmbold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'David CLM Webfont';
+    src: url('fonts/davidclm-mediumitalic-webfont.eot');
+    src: url('fonts/davidclm-mediumitalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/davidclm-mediumitalic-webfont.woff') format('woff'),
+         url('fonts/davidclm-mediumitalic-webfont.ttf') format('truetype'),
+         url('fonts/davidclm-mediumitalic-webfont.svg#david_clmmediumitalic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'David CLM Webfont';
+    src: url('fonts/davidclm-bolditalic-webfont.eot');
+    src: url('fonts/davidclm-bolditalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/davidclm-bolditalic-webfont.woff') format('woff'),
+         url('fonts/davidclm-bolditalic-webfont.ttf') format('truetype'),
+         url('fonts/davidclm-bolditalic-webfont.svg#david_clmbolditalic') format('svg');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Doulos SIL Webfont';
+    src: url('fonts/doulossil-r-webfont.eot');
+    src: url('fonts/doulossil-r-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/doulossil-r-webfont.woff') format('woff'),
+         url('fonts/doulossil-r-webfont.ttf') format('truetype'),
+         url('fonts/doulossil-r-webfont.svg#doulos_silregular') format('svg');
+}
+
+@fontt-face {
+    font-family: 'Galatia SIL Webfont';
+    src: url('fonts/galsilr-webfont.eot');
+    src: url('fonts/galsilr-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/galsilr-webfont.woff') format('woff'),
+         url('fonts/galsilr-webfont.ttf') format('truetype'),
+         url('fonts/galsilr-webfont.svg#galatia_silregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Galatia SIL Webfont';
+    src: url('fonts/galsilb-webfont.eot');
+    src: url('fonts/galsilb-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/galsilb-webfont.woff') format('woff'),
+         url('fonts/galsilb-webfont.ttf') format('truetype'),
+         url('fonts/galsilb-webfont.svg#galatia_silbold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Gentium Plus Webfont';
+    src: url('fonts/gentiumplus-r-webfont.eot');
+    src: url('fonts/gentiumplus-r-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/gentiumplus-r-webfont.woff') format('woff'),
+         url('fonts/gentiumplus-r-webfont.ttf') format('truetype'),
+         url('fonts/gentiumplus-r-webfont.svg#gentium_plusregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Gentium Plus Webfont';
+    src: url('fonts/gentiumplus-i-webfont.eot');
+    src: url('fonts/gentiumplus-i-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/gentiumplus-i-webfont.woff') format('woff'),
+         url('fonts/gentiumplus-i-webfont.ttf') format('truetype'),
+         url('fonts/gentiumplus-i-webfont.svg#gentium_plusitalic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+}

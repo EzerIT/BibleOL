@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="3">
+  <desc><![CDATA[Qal perfect verb forms]]></desc>
+  <database>ETCBC4</database>
+  <properties>ETCBC4</properties>
+  <path>Genesis</path>
+  <path>Exodus</path>
+  <path>Leviticus</path>
+  <path>Numeri</path>
+  <path>Deuteronomium</path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="2">
+      <enumfeature version="1">
+        <name>vt</name>
+        <comparator>equals</comparator>
+        <value>perf</value>
+      </enumfeature>
+      <enumfeature version="1">
+        <name>vs</name>
+        <comparator>equals</comparator>
+        <value>qal</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="3">
+    <show>visual</show>
+    <request>gn</request>
+    <request>ps</request>
+    <request>nu</request>
+  </quizfeatures>
+</questiontemplate>

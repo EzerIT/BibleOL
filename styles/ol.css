@@ -1,0 +1,504 @@
+.rtl {
+  direction: rtl;
+}
+.ltr {
+  direction: ltr;
+}
+body {
+  background-color: white;
+  font-size: 10pt;
+  font-family: Segoe UI, Arial, sans-serif;
+  overflow: scroll;
+}
+.textdisplay {
+  padding: 0;
+  vertical-align: bottom;
+}
+.rtl .textdisplay {
+  margin-left: 0.5em;
+  margin-right: 0;
+}
+.ltr .textdisplay {
+  margin-left: 0;
+  margin-right: 0.5em;
+}
+.textblock {
+  display: inline;
+  vertical-align: text-top;
+  text-align: center;
+  margin-top: 8px;
+}
+.textblock.inline {
+  display: inline;
+}
+.textblock.inlineblock {
+  display: inline-block;
+}
+.leftalign {
+  text-align: left !important;
+}
+.centeralign {
+  text-align: center !important;
+}
+.small {
+  font-size: 10pt;
+}
+table#quiztab {
+  text-align: center;
+  background-color: #ffc0cb;
+}
+span.verse {
+  vertical-align: top;
+  font-size: 12pt;
+}
+.nolev3.seplin,
+.nolev2.seplin,
+.nolev1.seplin,
+.nolev0.seplin {
+  display: block;
+}
+.lev3,
+.lev2,
+.lev1,
+.lev0 {
+  position: relative;
+  margin: 15px;
+  padding: 5px;
+  vertical-align: middle;
+  /* Required by Chrome */
+
+}
+.lev3.noseplin,
+.lev2.noseplin,
+.lev1.noseplin,
+.lev0.noseplin {
+  display: inline-block;
+}
+.lev3.seplin,
+.lev2.seplin,
+.lev1.seplin,
+.lev0.seplin {
+  display: block;
+}
+.notdummy.lev3 {
+  border: solid 2px red;
+}
+.notdummy.lev2 {
+  border: solid 2px blue;
+}
+.notdummy.lev1 {
+  border: solid 2px green;
+}
+.rtl .hasp {
+  border-right-style: none;
+}
+.rtl .hass {
+  border-left-style: none;
+}
+.rtl .cont1 {
+  margin-left: 0;
+}
+.rtl .cont2,
+.rtl .cont2x {
+  margin-left: 0.5em;
+}
+.ltr .hasp {
+  border-left-style: none;
+}
+.ltr .hass {
+  border-right-style: none;
+}
+.ltr .cont1 {
+  margin-right: 0;
+}
+.ltr .cont2,
+.ltr .cont2x {
+  margin-right: 0.5em;
+}
+.cont2:after {
+  content: "-";
+}
+.wordspace {
+  display: inline-block;
+  /* Allows line breaks at this point */
+
+}
+.dontshowit {
+  display: none;
+}
+.wordgrammar.showit {
+  display: block;
+}
+.xgrammar.showit {
+  display: inline;
+}
+.gram.showit {
+  display: inline-block;
+}
+.gram {
+  direction: ltr;
+  font-size: 10pt;
+  margin-left: 2px;
+  margin-right: 2px;
+  position: absolute;
+  padding-left: 2px;
+  padding-right: 2px;
+  background-color: #e0e0ff;
+  top: -10px;
+}
+div.grammargroup {
+  margin: 0 5px;
+}
+div.grammarselector {
+  float: left;
+  font-size: 8pt;
+}
+div.grammardisplay {
+  width: 300px;
+  float: right;
+  font-size: 8pt;
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 20px;
+}
+div#textcontainer {
+  background-color: #e0e0ff;
+  display: block;
+}
+div#textcontainer h1 {
+  text-align: center;
+}
+table.grammargroup {
+  font-size: 8pt;
+}
+.attrshow {
+  font-size: 12pt;
+}
+div#quizdesc {
+  border: 2px blue solid;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+em {
+  color: red;
+  font-style: normal;
+}
+#bb {
+  margin-top: 20px;
+}
+#buttonlist1 {
+  text-align: center;
+}
+#buttonlist2 {
+  text-align: left;
+}
+.ui-tooltip {
+  font-size: 9pt;
+}
+.tooltiphead {
+  text-align: center;
+  font-weight: bold;
+}
+.ui-accordion .ui-accordion-content {
+  padding: 1em 0.2em;
+  border-top: 0;
+  overflow: auto;
+}
+.ui-button {
+  font-size: 10pt;
+  font-weight: normal;
+}
+div#progressbar {
+  display: inline-block;
+  width: 200px;
+  height: 10px;
+}
+progress {
+  width: 200px;
+}
+p.inline {
+  display: inline;
+}
+button#togglemql {
+  display: none;
+}
+.mqlarea {
+  display: none;
+}
+div.logo {
+  float: right;
+}
+img {
+  border-style: none;
+}
+div.topbar {
+  background-color: #e0e0ff;
+  color: blue;
+  font-size: 20pt;
+  font-weight: bold;
+  text-align: center;
+  font-family: Segoe UI, Arial, sans-serif;
+  margin-right: 310px;
+  line-height: 43px;
+}
+div.contentouter {
+  background-color: #d2691e;
+  padding: 10px;
+}
+div.contentinner {
+  background-color: white;
+}
+div.leftblock {
+  vertical-align: top;
+  width: 250px;
+  display: table-cell;
+  background-color: #ececec;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+div.leftblock h1 {
+  font-size: 14pt;
+}
+div.rightblock {
+  vertical-align: top;
+  width: 200px;
+  display: table-cell;
+  background-color: #ececec;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+div.rightblock h1 {
+  font-size: 14pt;
+}
+div.centerblock {
+  vertical-align: top;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 12pt;
+  display: table-cell;
+}
+div.innerinner {
+  padding: 10px;
+  font-size: 12pt;
+}
+div.error,
+div.warning {
+  margin: 5px;
+  padding: 5px;
+  border: solid 2px red;
+}
+div.error h1,
+div.warning h1 {
+  text-align: left !important;
+}
+p.error {
+  background-color: #ffc0cb;
+}
+#logincenter {
+  width: 700px;
+  font-size: 10pt;
+}
+#logincenter h1 {
+  text-align: center;
+}
+#logincenter #loginbox {
+  border: solid black 1px;
+  background-color: #fee78d;
+  width: 270px;
+  padding: 5px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
+#logincenter #loginbox input.logintext {
+  width: 190px;
+}
+#logincenter #googlebox {
+  width: 270px;
+  margin-left: auto;
+  margin-right: auto;
+}
+table.striped tr:nth-child(odd) {
+  background: #fee8a4;
+}
+table.striped tr:nth-child(even) {
+  background: #fef4d6;
+}
+table.fontattrib th.settingsfor,
+table.fontattrib td.settingsfor {
+  text-align: left;
+  width: 25%;
+}
+table.fontfamily {
+  font-size: 12pt;
+  margin-left: auto;
+  margin-right: auto;
+}
+div.fontsetting {
+  font-size: 12pt;
+}
+div.fontsetting h1 {
+  font-size: 16pt;
+}
+div.fontsetting span.styleexplanation {
+  font-size: small;
+}
+div.buttons {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+table.type1,
+table.type2 {
+  border-collapse: separate;
+}
+table.type1 th,
+table.type2 th {
+  padding: 0 6px;
+  text-align: center;
+  font-weight: normal;
+}
+table.type1 td,
+table.type2 td {
+  padding: 0 6px;
+  text-align: center;
+}
+table.type1 th {
+  background-color: #000077;
+  color: white;
+}
+table.type1 td {
+  background-color: #c0c0ff;
+}
+table.form td {
+  background-color: #ffcc00;
+  vertical-align: center;
+  padding: 5px;
+}
+table.form input {
+  font-size: 10pt;
+  width: 200px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+table.form input.narrow {
+  width: auto;
+}
+div.statistics h1 {
+  font-size: 16pt;
+}
+div.statistics table td {
+  text-align: center;
+}
+div#virtualkbid {
+  float: right;
+}
+table.main_menu {
+  background-color: yellow;
+  border-collapse: collapse;
+  font-size: 11pt;
+  color: black;
+  font-family: Segoe UI, Arial, sans-serif;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+table.main_menu td,
+table.main_menu th {
+  font-weight: normal;
+  border-right: solid 2px black;
+  width: 140px;
+  padding-bottom: 5px;
+}
+table.main_menu td {
+  text-align: left;
+  padding-left: 20px;
+}
+table.main_menu td a {
+  text-decoration: none;
+  color: inherit;
+}
+table.main_menu th {
+  font-style: italic;
+  text-align: left;
+  padding-left: 2px;
+}
+table.main_menu td:last-child,
+table.main_menu th:last-child {
+  border-right: none;
+}
+span.disabled {
+  color: #b0b0b0;
+}
+.jstree {
+  font-size: 10pt;
+}
+#tab_sentences,
+#tab_sentence_units,
+#tab_features {
+  font-size: 10pt;
+}
+td#clearbuttoncell {
+  vertical-align: top;
+}
+table.featuretable {
+  text-align: center;
+}
+table.featuretable th,
+table.featuretable td {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+ul.dropdown {
+  padding: 0;
+}
+ul.dropdown a {
+  text-decoration: none;
+}
+ul.dropdown li {
+  display: inline-block;
+  background: #f3d673;
+  margin-right: 5px;
+  z-index: 1;
+}
+ul.dropdown li:hover {
+  background: #d2691e;
+  position: relative;
+}
+ul.dropdown li a {
+  color: black;
+  display: block;
+  padding: 4px;
+}
+ul.dropdown ul {
+  padding: 0;
+  width: 150px;
+  visibility: hidden;
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+ul.dropdown ul li {
+  width: 150px;
+  background: #f3d673;
+  border-bottom: 1px solid #c0c0c0;
+}
+ul.dropdown ul li:hover {
+  background-color: #d2691e;
+}
+ul.dropdown ul li a {
+  padding-left: 10px;
+  padding-right: 0;
+  width: 100%;
+  display: inline-block;
+}
+ul.dropdown ul li a:hover {
+  background-color: transparent;
+}
+ul.dropdown ul ul {
+  left: 100%;
+  top: 0;
+}
+ul.dropdown li:hover > ul {
+  visibility: visible;
+}

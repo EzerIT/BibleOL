@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="3">
+  <desc><![CDATA[Number and state of nouns]]></desc>
+  <database>ETCBC4</database>
+  <properties>ETCBC4</properties>
+  <path>Genesis</path>
+  <path>Exodus</path>
+  <path>Leviticus</path>
+  <path>Numeri</path>
+  <path>Deuteronomium</path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="2">
+      <enumfeature version="1">
+        <name>suffix_gender</name>
+        <comparator>equals</comparator>
+        <value>NA</value>
+      </enumfeature>
+      <enumfeature version="1">
+        <name>st</name>
+        <comparator>equals</comparator>
+        <value>c</value>
+      </enumfeature>
+      <enumfeature version="1">
+        <name>sp</name>
+        <comparator>equals</comparator>
+        <value>subs</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>false</useforquizobjects>
+  </sentenceselection>
+  <quizobjectselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="2">
+      <enumfeature version="1">
+        <name>suffix_gender</name>
+        <comparator>equals</comparator>
+        <value>NA</value>
+      </enumfeature>
+      <enumfeature version="1">
+        <name>sp</name>
+        <comparator>equals</comparator>
+        <value>subs</value>
+      </enumfeature>
+    </featurehandlers>
+  </quizobjectselection>
+  <quizfeatures version="3">
+    <show>gn</show>
+    <show>vocalized_lexeme_utf8</show>
+    <show>st</show>
+    <show>nu</show>
+    <request>text_nocant_utf8</request>
+  </quizfeatures>
+</questiontemplate>

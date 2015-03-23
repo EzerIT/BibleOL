@@ -1,0 +1,131 @@
+This package is distributed under the terms of GNU General Public License
+version 2 (see file GNU-GPL).
+---------------------------------------------------------------------
+
+Shofar font family is Copyright 2011-2012 by Yoram Gnat (yoram.gnat@gmail.com)
+Latin glyphs and punctuation Copyright (URW)++,Copyright 1999 by (URW)++ Design
+& Development;
+Hebrew Cantillation marks GSUB and GPOS OpenType positioning rules copyright
+(c) 2010 by Yoram Gnat (yoram.gnat@gmail.com)
+Inspired by the Hebrew OpenType Layout logic copyright (c) 2003 & 2007,
+Ralph Hancock & John Hudson published under the MIT License.
+As a special exception, if you create a document which uses this font, and
+embed this font or unaltered portions of this font into the document, this
+font does not by itself cause the resulting document to be covered by the
+GNU General Public License. This exception does not however invalidate any
+other reasons why the document might be covered by the GNU General Public
+License. If you modify this font, you may extend this exception to your
+version of the font, but you are not obligated to do so. If you do not wish
+to do so, delete this exception statement from your version.
+
+Keter YG font family is Copyright 2009 by Yoram Gnat (yoram.gnat@gmail.com)
+Hebrew OpenType Layout logic copyright (c) 2003 & 2007, Ralph Hancock &
+John Hudson. This layout logic for Biblical Hebrew is open source software
+under the MIT License; for details  contact copyright holders
+at <license@tiro.com>.
+As a special exception, if you create a document which uses this font, and
+embed this font or unaltered portions of this font into the document, this
+font does not by itself cause the resulting document to be covered by the
+GNU General Public License. This exception does not however invalidate any
+other reasons why the document might be covered by the GNU General Public
+License. If you modify this font, you may extend this exception to your
+version of the font, but you are not obligated to do so. If you do not wish
+to do so, delete this exception statement from your version.
+
+Hadasim font family is copyright 2010 by Yoram Gnat (yoram.gnat@gmail.com).
+Latin and parts of general punctuation marks based on modified forms from
+the LiberationSerif font, created by Digitized data 2007 Ascender
+Corporation. All rights reserved. 
+As a special exception, if you create a document which uses this font, and
+embed this font or unaltered portions of this font into the document, this
+font does not by itself cause the resulting document to be covered by the
+GNU General Public License. This exception does not however invalidate any
+other reasons why the document might be covered by the GNU General Public
+License. If you modify this font, you may extend this exception to your
+version of the font, but you are not obligated to do so. If you do not wish
+to do so, delete this exception statement from your version.
+
+Simple font family is copyright 2007-2010 by Yoram Gnat
+(yoram-gnat@homeil.com). Latin glyphs, digits and punctuation copyright 1999
+by (URW)++ Design & Development. All rights reserved. 
+Hebrew vowel marks positioning algorithms Copyright 2010 by Yoram Gnat 2010.
+(yoram.gnat@gmail.com. 
+As a special exception, if you create a document which uses this font, and
+embed this font or unaltered portions of this font into the document, this
+font does not by itself cause the resulting document to be covered by the
+GNU General Public License. This exception does not however invalidate any
+other reasons why the document might be covered by the GNU General Public
+License. If you modify this font, you may extend this exception to your
+version of the font, but you are not obligated to do so. If you do not wish
+to do so, delete this exception statement from your version.
+
+Stam Ashkenaz font is copyright 2007-2010 by Yoram Gnat (yoram.gnat@gmail.com).
+As a special exception, if you create a document which uses this font, and
+embed this font or unaltered portions of this font into the document, this
+font does not by itself cause the resulting document to be covered by the
+GNU General Public License. This exception does not however invalidate any
+other reasons why the document might be covered by the GNU General Public
+License. If you modify this font, you may extend this exception to your
+version of the font, but you are not obligated to do so. If you do not wish
+to do so, delete this exception statement from your version.
+
+Stam Sefarad font is copyright 2008-2010 by Yoram Gnat (yoram.gnat@gmail.com).
+As a special exception, if you create a document which uses this font, and
+embed this font or unaltered portions of this font into the document, this
+font does not by itself cause the resulting document to be covered by the
+GNU General Public License. This exception does not however invalidate any
+other reasons why the document might be covered by the GNU General Public
+License. If you modify this font, you may extend this exception to your
+version of the font, but you are not obligated to do so. If you do not wish
+to do so, delete this exception statement from your version.
+
+Miriam font family is copyright 2004-2010 by Maxim Iorsh
+(iorsh@users.sourceforge.net). All rights reserved.
+
+Yehuda font family is copyright 2004 by Maxim Iorsh
+(iorsh@math.technion.ac.il). All rights reserved.
+
+Drugulin font family (Hebrew glyphs) is copyright 2003,2004 by Maxim Iorsh
+(iorsh@math.technion.ac.il).  Latin glyphs, digits and punctuation
+contained in the Drugulin font family are part of Nimbus Roman No9 L font
+family and are copyright 1999 by (URW)++ Design & Development. 
+All rights reserved.
+
+Ellinia font family is copyright 2003,2004 by Maxim Iorsh
+(iorsh@math.technion.ac.il). All rights reserved.
+
+Caladings collection is copyright 2003,2004 by Maxim Iorsh
+(iorsh@math.technion.ac.il). All rights reserved.
+
+Digital version of Aharoni font family (Hebrew glyphs, numerals and part
+of punctuation) is copyright 2002-2004 by Maxim Iorsh
+(iorsh@math.technion.ac.il).  Latin glyphs, digits and part of punctuation
+contained in the Aharoni font family are part of URW Gothic L font family
+and are copyright 1999 by (URW)++ Design & Development.
+All rights reserved.
+
+Digital version of David font family (Hebrew glyphs, numerals and part of
+punctuation) is copyright 2002-2010 by Maxim Iorsh
+(iorsh@users.sourceforge.net). Latin glyphs and part of punctuation
+contained in the David font family are part of Bitstream Charter font
+family and are copyright 1990 as an unpublished work by Bitstream Inc. All
+rights reserved. See also file LICENSE-BITSTREAM.
+
+Frank-Ruehl font family (Hebrew glyphs) is copyright 2002-2011 by Maxim
+Iorsh (iorsh@users.sourceforge.net).  Latin glyphs, digits and punctuation
+contained in the Frank-Ruehl font family are part of Century Schoolbook L
+font family and are copyright 1999 by (URW)++ Design & Development. All 
+rights reserved.
+
+Nachlieli font family (Hebrew glyphs) is copyright 2002-2004 by Maxim
+Iorsh (iorsh@math.technion.ac.il).  Latin glyphs, digits and punctuation
+contained in the Nachlieli font family are part of Nimbus Sans L font
+family and are copyright 1999 by (URW)++ Design & Development. All 
+rights reserved.
+
+Miriam Mono font family (Hebrew glyphs) is copyright 2002-2004 by Maxim
+Iorsh (iorsh@math.technion.ac.il). Hebrew vowel marks positioning algorithms
+implementation by Yoram Gnat (yoramg@shenkar.ac.il), 2010. 
+Latin glyphs, digits and punctuation contained in the Miriam Mono font
+family are part of Nimbus Mono L font family and are copyright 1999 by
+(URW)++ Design & Development. All rights reserved.

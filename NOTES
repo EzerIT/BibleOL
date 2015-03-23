@@ -1,0 +1,24 @@
+
+2013-07-30:
+
+I added virtualkeyboard. This modifies Array.prototype (by adding functions concat, copy, pop, push,
+shift, slice, splice, unshift, indexOf, lastIndexOf, map, unique, flatten, filter, binSearch,
+heapSort, range); this means that I can no longer do
+
+          for (var x in arr)
+
+even though I know that arr contains only numeric indexes.
+
+I cannot blindly change to
+
+         for (var x=0, len=arr.len; x<len; ++x)
+
+because that will not work with a sparsely populated array such as singleMonads.
+Instead I do this:
+
+          for (var x in arr) {
+              if (isNaN(+x)) continue; // Not numeric
+              ...
+          }
+
+Gradually, this should be changed to the ordinary loop where possible.
