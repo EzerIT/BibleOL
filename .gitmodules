@@ -1,0 +1,15 @@
+[submodule "CodeIgniter"]
+	path = CodeIgniter
+	url = https://github.com/EzerIT/CodeIgniter
+[submodule "ckeditor"]
+	path = ckeditor
+	url = https://github.com/EzerIT/ckeditor-releases
+[submodule "zocial"]
+	path = zocial
+	url = https://github.com/EzerIT/css-social-buttons
+[submodule "jstree"]
+	path = jstree
+	url = https://github.com/EzerIT/jstree
+[submodule "virtualkeyboard"]
+	path = virtualkeyboard
+	url = https://github.com/EzerIT/virtualkeyboard
