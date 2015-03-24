@@ -130,7 +130,6 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Auxiliary commands %%%
 \newcommand*{\bibleref}[3]{#1~#2\thinspace:\thinspace#3}
 \newcommand{\heb}[1]{{\RL {\ezr #1}}}
-\newcommand*{\hypref}[1]{\hyperref[#1]{\ref*{#1}}}  %% Delete this?
 \newcommand{\forlater}[1]{} %Omit text
 \newcommand*{\xml}[1]{\texttt{<#1>}}
 \newcommand*{\xmla}[1]{\texttt{#1}} % An xml attribute
@@ -153,7 +152,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \tabulinesep=_2mm %Works together with the \addlinespace[...] values below
 
 \newenvironment{my-longtabu}[2]{
-\begin{center}
+%\begin{center}
 \begin{longtabu*}{@{}#1@{}}
   \toprule
   #2\\\addlinespace[-1mm]
@@ -167,7 +166,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
   \endlastfoot
 }{%
 \end{longtabu*}
-\end{center}%
+%\end{center}%
 }
 
 \newcommand{\headii}[2]{\textbf{#1} & \textbf{#2}}
@@ -241,9 +240,6 @@ The document is made available under a Creative Commons Attribution 4.0 Internat
 %%%%%%%%%%%%%%%%%%%% Introduction %%%%%%%%%%%%%%%%%%%%
 \chapter{Introduction}
 
-
-TODO: Describe how to set up a running environment: git download, MySQL configuration, MQL support, Google login key.
-
 \textbf{You must read this chapter.}
 \plainbreak{3}
 
@@ -259,6 +255,19 @@ License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyrigh
 Tøndering, claus@ezer.dk.
 
 The present document is made available under a Creative Commons Attribution 4.0 International License\footnote{\url{http://creativecommons.org/licenses/by/4.0/}}.
+
+
+%%%%%%%%%%%%%%%%%%%% How To Read This Document %%%%%%%%%%%%%%%%%%%%
+\section{How To Read This Document}
+
+If you are reading this document because you want to host a Bible OL server, you should read chapter
+\ref{chap-install}. The rest of the document is optional reading for you.
+
+If you are reading this document because you want to modify or enhance Bible OL, you should follow
+the instructions at the start of each chapter. They will help you decide if you need to read a
+particular part of this document.
+
+
 
 
 %%%%%%%%%%%%%%%%%%%% Terminology %%%%%%%%%%%%%%%%%%%%
@@ -392,11 +401,317 @@ solution. Once again, the name of the product was change once more and became \e
 or \emph{Bible OL} for short. This is product that is described in this document.
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Installing Bible OL %%%%%%%%%%%%%%%%%%%%
+\chapter{Installing Bible OL}\label{chap-install}
+
+\textbf{Read as much of this chapter as you find necessary.}
+\plainbreak{3}
+
+What you need to do, depends on what you mean by ``installing'' Bible OL. If you want to set up a
+server that runs Bible OL for the benefit of researchers and students, follow the instructions in
+Section \ref{sec-host} below.
+
+If you want to get your own copy of Bible OL in order to enhance or modify it, follow the
+instructions in Section \ref{sec-devel} below.
+
+
+%%%%%%%%%%%%%%%%%%%% Hosting Bible OL %%%%%%%%%%%%%%%%%%%%
+\section{Hosting Bible OL}\label{sec-host}
+
+Bible OL runs on a Linux server. I'm sure that it would be quite easy to host it on a Mac or a
+Windows computer, but I haven't tried this myself, and the following instructions are aimed at
+people with a computer running the Linux operating system.
+
+\subsection{Step 1. Server Software}
+
+The following software must be installed on your server:
+
+\begin{itemize}
+\item \indexw{Apache} (\indexw{web server}). I use version 2.4.7, but version 2.2.22 also works.
+\item \indexw{MySQL} (database system). I use version 5.5.41.
+\item \indexw{SQLite3} (database system used by Emdros). I use version 3.8.2.
+\item \indexw{PHP}. I use version 5.5, but version 5.3 also works.
+\item \indexw{git}. I use version 1.9.1.
+\end{itemize}
+
+
+All of this can be installed on an Ubuntu system using the usual \emph{apt-get} installation
+program. I have not done a thorough investigation into the minimum required versions of these
+software packages; you should not see the versions mentioned above as minimum requirements.
+
+
+\subsection{Step 2. Install Emdros}\label{sec-install-emdros}
+
+You will also need to install the Emdros database system. This is probably the most complex part of
+the installation process since Emdros is not a standard component in any operating system.
+
+I use Emdros version 3.4.0.pre03, a pre-release; but versions 3.4.0 should probably be fine as well.
+Emdros can be downloaded from \url{http://sourceforge.net/projects/emdros/files/emdros}.
+
+Follow the instructions that come with Emdros to compile and install it on your computer. You will
+need a C++ compiler and the Gnu make system (and probably a few other things as well -- check the
+Emdros documentation).
+
+When you compile Emdros, be sure to include support for PHP. I use this \emph{configure} command to
+set up the Emdros compilation:
+
+\begin{lstlisting}[language=bash]
+./configure --with-sqlite3=local --with-mysql=yes --with-default-backend=sqlite3 --with-swig-language-php=yes --with-swig-language-java=no --with-swig-language-python=no --with-swig-language-perl=no
+\end{lstlisting}
+
+If you want to include support for Java, Python, or Perl, you will need to change this command.
+
+When you have compiled and installed Emdros (using the \emph{make} and \emph{sudo make install}
+commands, respectively) you need to enable access to Emdros in PHP. The correct way to do this
+depends on your Apache and PHP installation. In my case, I had to add a file with this contents to
+the directory \texttt{/etc/php5/mods-available}:
+
+\begin{lstlisting}
+extension=/usr/local/lib/emdros/EmdrosPHP.so
+\end{lstlisting}
+
+If you cannot or do not want to enhance PHP with Emdros support, you can configure Bible OL to use
+the \emph{mql} command line tool instead, but this is not recommended. More information about that
+is given in Section \ref{mql-extern}.
+
+If you already have Emdros installed on a development system, and if your runtime system uses the
+same operating system as your development system, you can simply copy the Emdros files to your
+runtime systems. The files to copy will be typically found in \texttt{/usr/local/bin} and
+\texttt{/usr/local/lib/emdros}. (I have never actually done this, and I suspect that you may need to
+run \emph{ldconfig} after copying the files to your runtime system.)
+
+
+\subsection{Step 3. Download Bible OL}
+
+You can download Bible OL from GitHub using this command:
+
+\begin{lstlisting}[language=bash]
+cd %\textrm{\scriptsize(installation directory)}%
+git clone --recursive https://github.com/EzerIT/BibleOL
+\end{lstlisting}
+
+This will fetch all the Bible OL software, including five submodules needed by Bible OL. The
+\emph{git} command will create a directory called \texttt{BibleOL} under the current directory.
+
+When the download completes, execute the following commands:
+
+\begin{lstlisting}[language=bash]
+cd BibleOL
+git-hooks/setup.sh
+\end{lstlisting}
+
+This will install a Git hook that automatically downloads the necessary databases from Dropbox when
+needed.
+
+
+\subsection{Step 4. Configure MySQL}
+
+Create a database in MySQL. When this is done, copy the file \texttt{myapp/config/database.php-dist}
+to \texttt{myapp/config/database.php} and modify the following lines in the copy:
+
+\begin{lstlisting}[language=PHP]
+$db['default']['username'] = 'USERNAME';
+$db['default']['password'] = 'PASSWORD';
+$db['default']['database'] = 'DATABASE';
+\end{lstlisting}
+
+Change the text USERNAME, PASSWORD, and DATABASE to be the database username, password, and database
+name.
+
+Initialize the contents of the database from the values in the file \texttt{bolsetup.sql}.
+
+
+\subsection{Step 5. Additional Configuration}
+
+Copy the file \texttt{myapp/config/ol.php-dist} to \texttt{myapp/config/ol.php} and modify the
+following lines in the copy:
+
+\begin{lstlisting}[language=PHP]
+$config['pw_salt'] = 'xxxxxxx';
+$config['mql_driver'] = 'native';
+$config['mail_sender_address'] = 'xxxxx@xxxxx.xx';
+$config['mail_sender_name'] = 'Bible Online Learner';
+
+$config['google_login_enabled'] = false;
+$config['google_client_id'] = 'xxxxxxxxxxxx.apps.googleusercontent.com';
+$config['google_client_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+\end{lstlisting}
+
+You should modify these values thus:
+
+\begin{my-longtabu}{>{\footnotesize\ttfamily}lX}{ \headii{\normalsize\textrm{Variable}}{Contents} }
+\$config['pw\_salt'] & A random text string of, say, 6-8 characters. This is used to randomize the
+  user passwords stored in the user database.\\
+
+\$config['mql\_driver'] & Set to \texttt{'native'} to select a built-in MQL driver. Set to or
+  \texttt{'extern'} to run MQL commands external to the PHP interpreter (see Section
+  \ref{mql-extern}).\\
+
+\$config['mail\_sender\_address'] & The email address to be used as sender when Bible OL sends email
+  to users.\\
+
+\$config['mail\_sender\_name'] & The name to be used as sender when Bible OL sends email to users.\\
+
+\$config['google\_login\_enabled'] & Set to \emph{true} if you have a Google apps account that allows you to
+  service Google logins; set to \emph{false} to disable Google login.\\
+
+\$config['google\_client\_id'] & Your Google apps client ID. Used only if you enable Google login.\\
+
+\$config['google\_client\_secret'] & Your Google apps client secret, if any. Used only if you enable
+  Google login.\\
+  
+\end{my-longtabu}
+
+Copy the file \texttt{myapp/config/config.php-dist} to \texttt{myapp/config/conf.php} and modify the
+following line in the copy:
+
+\begin{lstlisting}[language=PHP]
+$config['encryption_key'] = 'xxxxxxxxxxxx';
+\end{lstlisting}
+
+Replace `xxxxxxxxxxxx' with a random string that will be used to encrypt session information within
+the PHP framework.
+
+
+\subsection{Step 6. Add Administrator}
+
+You must manually add a user to the an administrator to the MySQL database. You do this by adding an
+entry to the table \emph{bol\_user} (see Section \ref{sec-user-table}). The entry should have the
+\emph{isadmin} field set to 1 (\emph{true}). The \emph{password} should be set to the value of this
+PHP function:
+
+\begin{lstlisting}[language=PHP]
+  md5($config['pw_salt'] . 'xxxxx');
+\end{lstlisting}
+
+where \emph{\$config[\q pw\_salt\q]} is configured in \texttt{myapp/config/ol.php}, and
+\emph{xxxxx} is the user's desired password.
+
+You can also find the correct value of the password by executing this shell command:
+
+\begin{lstlisting}[language=bash]
+  echo -n sssssxxxxx | md5sum
+\end{lstlisting}
+
+\noindent
+where \emph{sssss} is the value of \emph{\$config[\q pw\_salt\q]} and \emph{xxxxx} is the user's
+desired password.
+
+
+\subsection{Step 7. Apache Configuration}
+
+Set up the Apache web server to access Bible OL. Make sure that Apache is configured to allow
+\texttt{.htaccess} files. This is controlled by the Apache \emph{AllowOverride} directive.
+
+
+Copy the file \texttt{.htaccess-dist} to \texttt{.htaccess} and modify the following line in the
+copy:
+
+\begin{lstlisting}
+RewriteBase /
+\end{lstlisting}
+
+The correct value here depends on your Apache configuration. If your web server is set up to serve
+Bible OL at the url \texttt{http://example.com/alpha/beta}, then the above line should be changed to:
+
+\begin{lstlisting}
+RewriteBase /alpha/beta
+\end{lstlisting}
+
+If you have a dedicated URL for Bible OL (for example, \texttt{http://example.com}), you should
+leave \emph{RewriteBase} as it is: a single slash.
+
+%%%%%%%%%%%%%%%%%%%% Bible OL Development System Setup %%%%%%%%%%%%%%%%%%%%
+\section{Bible OL Development System Setup}\label{sec-devel}
+
+This section describes how to set up a complete development system for working with all aspects of
+Bible OL development. Depending on the type of development you are going to do, you may not need all
+of this.
+
+You may want to read Chapter \ref{chap-proglang} before you proceed with the following.
+
+If you want to test Bible OL on your own computer, you should also set it up as a Bible OL server.
+Please see Section \ref{sec-host} for information about how to do this.
+
+Much of the description here is quite vague. In many cases I am simply describing what \emph{I} have
+done. Your system may be different, and you may need to do things I have not described.
+
+For Bible OL, I use a computer with the Linux operating system (the Ubuntu distribution). I am sure
+the system could also be set up on a Windows or Mac computer, but I have not tried it and you will
+not find any instructions how to do it here.
+
+The following should be installed:
+
+\begin{itemize}
+\item \indexw{SQLite3} (database system used by Emdros). I use version 3.8.2.
+\item \indexw{PHP}. I use version 5.5, but version 5.3 also works.
+\item \indexw{nodejs} (JavaScript runtime, used for compiling TypeScript and Less). I use version
+  0.10.25.
+\item \indexw{npm} (package manager for nodejs). I use version 1.3.10.
+  This package may not strictly be required, but it is useful for installing nodejs modules.
+\item \indexw{git}. I use version 1.9.1.
+\end{itemize}
+
+
+All of this can be installed on an Ubuntu system using the usual \emph{apt-get} installation
+program. I have not done a thorough investigation into the minimum required versions of these
+software packages; you should not see the versions mentioned above as minimum requirements.
+
+You will also need to install the Emdros database system. On the development system you will also
+need a Less compiler and a TypeScript compiler. This is detailed in the following sections.
+
+
+\subsection{Installing Emdros}
+
+In order to install Emdros, you should follow the instructions given in in Section
+\ref{sec-install-emdros}.
+
+
+\subsection{Installing Lessc}\label{sec-installing-lessc}
+
+\emph{Lessc} is the Less compiler. It runs under \emph{nodejs}, which is a stand-alone JavaScript
+runtime system. For information about how to install and use the Less compiler, see
+\url{http://lesscss.org}. There, they recommend that lessc be installed using this shell command:
+
+\begin{lstlisting}[language=bash]
+npm install -g less
+\end{lstlisting}
+
+You may not need the ``-g'' option. If you do include it, you may need to prefix the command by
+\emph{sudo}.
+
+I use version 1.3.3 of \emph{lessc}, but the current version on GitHub is 2.4.0. I have not studied
+what impact, if any, using a new version of the compiler will have on the Less source files in Bible
+OL.
+
+\subsection{Installing Tsc}\label{sec-installing-tsc}
+
+\emph{Tsc} is the TypeScript compiler. It runs under \emph{nodejs}, which is a stand-alone
+JavaScript runtime system. For information about how to install and use the TypeScript compiler, see
+\url{http://www.typescriptlang.org}. There, they recommend that tsc be installed using this shell
+command:
+
+\begin{lstlisting}[language=bash]
+npm install -g typescript
+\end{lstlisting}
+
+You may not need the ``-g'' option. If you do include it, you may need to prefix the command by
+\emph{sudo}.
+
+I use version 1.0.1.0 of \emph{tsc}, but the current version on GitHub is 1.4. I have not studied
+what impact, if any, using a new version of the compiler will have on the TypeScript source files in
+Bible OL. Currently, the Makefile that comes with Bible OL checks that the compiler version is
+1.0.1.0. This is probably unnecessary.
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Programming Languages and Frameworks %%%%%%%%%%%%%%%%%%%%
-\chapter{Programming Languages and Frameworks}
+\chapter{Programming Languages and Frameworks}\label{chap-proglang}
 
-\textbf{You must read this chapter.}
+\textbf{As a developer, you must read this chapter.}
 \plainbreak{3}
 
 A considerable number of programming languages and other specification languages are used in the
@@ -411,14 +726,14 @@ The main language used on the server side is PHP\footnote{\url{http://php.net}.}
 general-purpose scripting language that is especially suited to web development.
 
 In order to execute Bible OL, the PHP implementation on the server must be enhanced with features to
-execute \hyperref[mql]{MQL} commands. This is described in Section \ref{php-mql}.
+execute \hyperref[sec-mql]{MQL} commands. This is described in Section \ref{sec-install-emdros}.
 
 %%%%%%%%%%%%%%%%%%%% CodeIgniter %%%%%%%%%%%%%%%%%%%%
 \section{CodeIgniter}\label{sec-codeigniter}
 
 Bible OL uses a PHP framework known as \emph{CodeIgniter.}\footnote{\url{http://www.codeigniter.com}.}
 
-More information is given in Section \ref{codeigniter-use}.
+More information is given in Section \ref{chap-codeigniter-use}.
 
 
 %%%%%%%%%%%%%%%%%%%% SQL %%%%%%%%%%%%%%%%%%%%
@@ -432,7 +747,7 @@ SQL commands are executed from PHP code through \hyperref[sec-codeigniter]{CodeI
 
 
 %%%%%%%%%%%%%%%%%%%% MQL %%%%%%%%%%%%%%%%%%%%
-\section{MQL}\label{mql}
+\section{MQL}\label{sec-mql}
 
 MQL is a language for manipulating Emdros\footnote{\url{http://emdros.org}.} text databases. The PHP
 implementation on the server must be extended with function to execute MQL commands.
@@ -448,18 +763,18 @@ The generated web pages use HTML version 5.\footnote{See \url{https://en.wikiped
 
 
 %%%%%%%%%%%%%%%%%%%% CSS %%%%%%%%%%%%%%%%%%%%
-\section{CSS}\label{css}
+\section{CSS}\label{sec-css}
 
 CSS (Cascading Style Sheets)\footnote{See
   \url{https://en.wikipedia.org/wiki/Cascading_Style_Sheets}} is a language for specifying the
 layout style of a web page. However, only a small part of the Bible OL styles are written directly
-in CSS. Most styling is written in \hyperref[less]{Less} which is then compiled into CSS.
+in CSS. Most styling is written in \hyperref[sec-less]{Less} which is then compiled into CSS.
 
 
 %%%%%%%%%%%%%%%%%%%% Less %%%%%%%%%%%%%%%%%%%%
-\section{Less}\label{less}
+\section{Less}\label{sec-less}
 
-Less\footnote{\url{http://lesscss.org}.} is a \hyperref[css]{CSS} pre-processor, meaning that it
+Less\footnote{\url{http://lesscss.org}.} is a \hyperref[sec-css]{CSS} pre-processor, meaning that it
 extends the CSS language, adding features that allow variables, mixins, functions and many other
 techniques that allow you to make CSS that is more maintainable, themable and extendable.
 
@@ -469,7 +784,7 @@ compiles Less files only once and stores the resulting CSS files.
 More information about how Less is used is given in Chapter \ref{chap-less-use}.
 
 %%%%%%%%%%%%%%%%%%%% JavaScript %%%%%%%%%%%%%%%%%%%%
-\section{JavaScript}\label{javascript}
+\section{JavaScript}
 
 On the client side (that is, in the user's browser) the software is loaded as
 JavaScript\footnote{See \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript}.} code.
@@ -514,11 +829,12 @@ good understanding of HTML, CSS, JavaScript, and JSON.
 
 Obviously, you also need a good understanding of how Bible OL works from a user's perspective.
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% High-level System Architecture %%%%%%%%%%%%%%%%%%%%
 \chapter{High-level System Architecture}
 
-\textbf{You must read this chapter.}
+\textbf{As a developer, you must read this chapter.}
 
 \plainbreak{3}
 
@@ -576,8 +892,8 @@ a serious flaw in the design since it would require considerable knowledge on th
 %%%%%%%%%%%%%%%%%%%% Understanding Emdros %%%%%%%%%%%%%%%%%%%%
 \chapter{Understanding Emdros}\label{chap-emdros-use}\index{Emdros}
 
-\textbf{You must read the first section of this chapter. If you need to use MQL, you should read the
-  whole chapter and also some of the documentation that comes with Emdros.}
+\textbf{As a developer, you must read the first section of this chapter. If you need to use MQL, you
+  should read the whole chapter and also some of the documentation that comes with Emdros.}
 
 \plainbreak{3}
 
@@ -676,147 +992,13 @@ be'.''
 The exact syntax of MQL queries can be quite arcane and is beyond the scope of this paper, but
 examples can be found in \url{http://emdros.org/petersen-emdros-COLING-2004.pdf}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%% Development and Runtime System Setup %%%%%%%%%%%%%%%%%%%%
-\chapter{Development and Runtime System Setup}
 
-\textbf{Read as much of this chapter as you find necessary.}
-\plainbreak{3}
-
-
-This chapter describes how to set up a complete development system for working with all aspects of
-Bible OL development. Depending on the type of development you are going to do, you may not need all
-of this.
-
-This chapter also describes how to set up a runtime system; this will be a subset of a development
-system.
-
-Much of the description here is quite vague. In many cases I am simply describing what \emph{I} have
-done. Your system may be different, and you may need to do things I have not described.
-
-
-For Bible OL, I use a computer with the Linux operating system (the Ubuntu distribution). I am sure
-the system could also be set up on a Windows computer, but I have not tried it and you will not find
-any instructions how to do it here.
-
-The following should be installed:
-
-\begin{itemize}
-\item \indexw{Apache} (\indexw{web server}). I use version 2.4.7, but version 2.2.22 also works.
-\item \indexw{MySQL} (database system). I use version 5.5.41.
-\item \indexw{SQLite3} (database system used by Emdros). I use version 3.8.2.
-\item \indexw{PHP}. I use version 5.5, but version 5.3 also works.
-\item (Development system only:) \indexw{nodejs} (JavaScript runtime, used for compiling
-  TypeScript and Less). I use version 0.10.25.
-\item (Development system only:) \indexw{npm} (package manager for nodejs). I use version 1.3.10.
-  This package may not strictly be required, but it is useful for installing nodejs modules.
-\item (Development system only:) \indexw{git}. I use version 1.9.1.
-\end{itemize}
-
-
-All of this can be installed on an Ubuntu system using the usual \emph{apt-get} installation
-program. I have not done a thorough investigation into the minimum required versions of these
-software packages; you should not see the versions mentioned above as minimum requirements.
-
-You will also need to install the Emdros database system. On the development system you will also
-need a Less compiler and a TypeScript compiler. This is detailed in the following sections.
-
-
-%%%%%%%%%%%%%%%%%%%% Installing Emdros %%%%%%%%%%%%%%%%%%%%
-\section{Installing Emdros}
-
-\subsection{Emdros on a Development System}\label{php-mql}
-
-I use Emdros version 3.4.0.pre03, a pre-release; but versions 3.4.0 should probably be fine as well.
-Emdros can be downloaded from \url{http://sourceforge.net/projects/emdros/files/emdros}.
-
-Follow the instructions that come with Emdros to compile and install it on your computer. You will
-need a C++ compiler and the Gnu make system (and probably a few other things as well -- check the
-Emdros documentation).
-
-When you compile Emdros, be sure to include support for PHP. I use this \emph{configure} command to set up
-the Emdros compilation:
-
-\begin{lstlisting}[language=bash]
-./configure --with-sqlite3=local --with-mysql=yes --with-default-backend=sqlite3 --with-swig-language-php=yes --with-swig-language-java=no --with-swig-language-python=no --with-swig-language-perl=no
-\end{lstlisting}
-
-If you want to include support for Java, Python, or Perl, you will need to change this command.
-
-When you have compiled and installed Emdros (using the \emph{make} and \emph{sudo make install}
-commands, respectively) you need to enable access to Emdros in PHP. The correct way to do this
-depends on your Apache and PHP installation. In my case, I had to add a file with this contents to
-the directory \texttt{/etc/php5/mods-available}:
-
-\begin{lstlisting}
-extension=/usr/local/lib/emdros/EmdrosPHP.so
-\end{lstlisting}
-
-If you cannot or do not want to enhance PHP with Emdros support, you can configure Bible OL to use
-the \emph{mql} command line tool instead, but this is not recommended. More information about that
-is given in Section \ref{mql-extern}.
-
-\subsection{Emdros on a Runtime System}
-
-On a runtime system, you can install Emdros is described for a development system. Alternatively, if
-your runtime system uses the same operating system as your development system, you can make and
-install the Emdros system on your development system and then copy the resulting files to your
-runtime systems. The files to copy will be typically found in \texttt{/usr/local/bin} and
-\texttt{/usr/local/lib/emdros}.
-
-(I have never actually done this, and I suspect that you may need to run \emph{ldconfig} after
-copying the files to your runtime system.)
-
-TBD: External MQL command execution.
-
-
-%%%%%%%%%%%%%%%%%%%% Installing Lessc %%%%%%%%%%%%%%%%%%%%
-\section{Installing Lessc}\label{sec-installing-lessc}
-
-This is only required on a development system.
-
-\emph{Lessc} is the Less compiler. It runs under \emph{nodejs}, which is a stand-alone JavaScript
-runtime system. For information about how to install and use the Less compiler, see
-\url{http://lesscss.org}. There, they recommend that lessc be installed using this shell command:
-
-\begin{lstlisting}[language=bash]
-npm install -g less
-\end{lstlisting}
-
-You may not need the ``-g'' option. If you do include it, you may need to prefix the command by
-\emph{sudo}.
-
-I use version 1.3.3 of \emph{lessc}, but the current version on GitHub is 2.4.0. I have not studied
-what impact, if any, using a new version of the compiler will have on the Less source files in Bible
-OL.
-
-%%%%%%%%%%%%%%%%%%%% Installing Tsc %%%%%%%%%%%%%%%%%%%%
-\section{Installing Tsc}\label{sec-installing-tsc}
-
-This is only required on a development system.
-
-\emph{Tsc} is the TypeScript compiler. It runs under \emph{nodejs}, which is a stand-alone
-JavaScript runtime system. For information about how to install and use the TypeScript compiler, see
-\url{http://www.typescriptlang.org}. There, they recommend that tsc be installed using this shell
-command:
-
-\begin{lstlisting}[language=bash]
-npm install -g typescript
-\end{lstlisting}
-
-You may not need the ``-g'' option. If you do include it, you may need to prefix the command by
-\emph{sudo}.
-
-I use version 1.0.1.0 of \emph{tsc}, but the current version on GitHub is 1.4. I have not studied
-what impact, if any, using a new version of the compiler will have on the TypeScript source files in
-Bible OL. Currently, the Makefile that comes with Bible OL checks that the compiler version is
-1.0.1.0. This is probably unnecessary.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Source Code Tree Overview %%%%%%%%%%%%%%%%%%%%
 \chapter{Source Code Tree Overview}
 
-\textbf{You must read this chapter.}
+\textbf{As a developer, you must read this chapter.}
 \plainbreak{3}
 
 The source code contains the following directories (in alphabetical order):
@@ -876,7 +1058,7 @@ Download: \url{https://github.com/vakata/jstree}.
 
 License: A choice between MIT and GPL.\\
 
-myapp & The server code. Chapter \ref{server-code} gives more information.\\
+myapp & The server code. Chapter \ref{chap-server-code} gives more information.\\
 
 quizzes & Quizzes available for the user. This directory is used only by the runtime system.
 Development files should not be stored here, and the contents of the directory is not under Git
@@ -917,8 +1099,6 @@ Webpage: \url{http://definitelytyped.org}.
 Download: \url{https://github.com/borisyankov/DefinitelyTyped/tree/master/jqueryui}.
 
 License: MIT.\\
-
-uguide & TBD\\
 
 \parbox[t]{3cm}{valums-file- uploader-b3b20b1} & An old version of a file upload mechanism, used to upload exercise
 files to the server. This code was released under a GPL license. Since this code was copied to Bible
@@ -968,10 +1148,17 @@ Bible OL currently supports two text databases:
 \item nestle1904, which contains the Greek version of the New Testament.
 \end{itemize}
 
-These two databases are described in detail in appendices \ref{etcbc-app} and
-\ref{nestle-app}. This chapter gives only the most important information.
+These two databases are described in detail in appendices \ref{app-etcbc} and
+\ref{app-nestle}. This chapter gives only the most important information.
 One way to learn more about them is to look at the MQL code used for generating these databases. The
-MQL code is found in the files TBD and TBD.
+MQL code for generating the first 1,000 words of an MQL database can be printed by this command:
+
+\begin{lstlisting}[language=bash]
+mqldump --batch-create-objects --start 1 --end 1000 %\textrm{\textit{database}}\label{list-mqldump}%
+\end{lstlisting}
+
+\noindent
+where \emph{database} should be the name of the Emdros database file.
 
 Previous versions of Bible OL have used two other databases: \emph{WIVU} for the Old Testament and
 \emph{tisch} for the New Testament. The \emph{WIVU} database was protected by a more restrictive
@@ -1000,7 +1187,7 @@ database.
 \section{ETCBC4}
 
 This section describes a number of features of the ETCBC4 Hebrew/Aramaic database. A more detailed
-description can be found in Appendix \ref{etcbc-app}.
+description can be found in Appendix \ref{app-etcbc}.
 
 Text in the database come in three different alphabets:
 
@@ -1107,7 +1294,7 @@ example, in \bibleref{Genesis}{1}{1}, the two half\_verse objects correspond in 
 \end{itemize}
 
 
-\subsection{What Is a Word?}\label{contin}
+\subsection{What Is a Word?}\label{sec-contin}
 
 In most western languages, a space is inserted between two words. In Hebrew, some words are strung
 together as one. For example, the text \heb{וַֽיְהִי־אֹֽור} (``and there was light'') in \bibleref{Genesis}{1}{3}
@@ -1141,7 +1328,7 @@ So for the text \heb{וַֽיְהִי־אֹֽור}, mentioned above, we have the
 \section{Nestle1904}
 
 This section describes a number of features of the nestle1904 Greek database. A more detailed
-description can be found in Appendix \ref{nestle-app}.
+description can be found in Appendix \ref{app-nestle}.
 
 \subsection{Object Types}
 
@@ -1164,7 +1351,7 @@ composition of the text.
 
 The basic object type is the \emph{word.} Each \emph{word} corresponds to a single monad. In
 contrast to the Hebrew database, the Greek database has no concept of a \emph{continuation} feature
-(see Section \ref{contin}).
+(see Section \ref{sec-contin}).
 
 The top-level syntactic element is the \emph{sentence.} A sentence is a set of contiguous monads.
 
@@ -1335,7 +1522,7 @@ simply output the word ``null''.
 
 
 %%%%%%%%%%%%%%%%%%%% Database Specification File: XXX.db.json %%%%%%%%%%%%%%%%%%%%
-\section{Database Specification File: XXX.db.json}\label{dsf}
+\section{Database Specification File: XXX.db.json}\label{sec-dsf}
 
 \textbf{On the server} the \emph{Database Specification File} has a name that ends in \texttt{.db.json}. For Bible OL,
 this is the main point of access to the Emdros databases. When Bible OL needs to list the available
@@ -1377,7 +1564,7 @@ The Database Specification File is a JSON file containing the following key/valu
   objHasSurface & The name of the Emdros object type that contains the \emph{surfaceFeature.}\\
 
   suffixFeature & The name of the feature that contains the continuation for the word to display
-  (see Section \ref{contin}). For ETCBC4
+  (see Section \ref{sec-contin}). For ETCBC4
   using the native alphabet this value is ``continuation\_utf8'', for ETCBC4
   using the transliterated alphabet the value is ``continuation\_translit'', for nestle1904 the value is \emph{null}. \\
 
@@ -1386,7 +1573,7 @@ The Database Specification File is a JSON file containing the following key/valu
   using the transliterated alphabet the value is ``transliterated\_hebrew'', for nestle1904 the value is ``greek''.\\
 
   objectSettings & A collection of key/value pairs containing information about how Bible OL should
-  treat Emdros object type. This is detailed in Section \ref{objectsettings}.\\
+  treat Emdros object type. This is detailed in Section \ref{sec-objectsettings}.\\
 
   universeHierarchy & An array containing information about how the text references are structured.
   For the Bible, this hierarchy is book/chapter/verse. A typical value is\label{universe-hierarchy}
@@ -1430,7 +1617,7 @@ The Database Specification File is a JSON file containing the following key/valu
 \end{my-longtabu}
 
 
-\subsection{The \emph{objectSettings} Key}\label{objectsettings}
+\subsection{The \emph{objectSettings} Key}\label{sec-objectsettings}
 
 The \emph{objectSettings} key in the Database Specification File gives detailed information about
 how the Emdros object types and their features should be treated by Bible OL. The
@@ -1479,13 +1666,13 @@ in \emph{objectSettings.} As shown in the example above, these objects have one 
 key/value pairs with the keys \emph{featuresetting} and, optionally, \emph{additionalfeatures.}
 
 The value of \emph{featuresetting} is another collection of key/value pairs, giving
-details about the features of the object. This is detailed in Section \ref{featuresetting}.
+details about the features of the object. This is detailed in Section \ref{sec-featuresetting}.
 
 The \emph{additionalfeatures} key identifies an array of features that should always be retrieved
 for this Emdros object, even though these features are not the subject of an exercise. They are used
-for accessing the multiple choice database (see Chapter \ref{sec-multiple-choice}).
+for accessing the multiple choice database (see Chapter \ref{chap-multiple-choice}).
 
-\subsection{The \emph{featuresetting} Key}\label{featuresetting}
+\subsection{The \emph{featuresetting} Key}\label{sec-featuresetting}
 
 The \emph{featuresetting} key under an Emdros object type gives detailed information about how the
 features of the Emdros object should be treated by Bible OL. Its value is a collection of key/value
@@ -1578,10 +1765,10 @@ object:
   to ensure that a learner's answer is accepted, regardless of whether the answer is ``land'',
   ``territory'', ``country'', or ``the earth''.\\
 
-  alternateshowrequestDb & The name of a multiple choice database (see Chapter \ref{sec-multiple-choice}).\\
+  alternateshowrequestDb & The name of a multiple choice database (see Chapter \ref{chap-multiple-choice}).\\
 
   alternateshowrequestSql & An SQL statement used to access the multiple choice database (see
-  Chapter \ref{sec-multiple-choice}).\\
+  Chapter \ref{chap-multiple-choice}).\\
 \end{my-longtabu}
 
 
@@ -1706,7 +1893,7 @@ A typical \emph{item} array may look like this:
 In this example, the \emph{items} array has two elements, one with \emph{mytype=GrammarFeature},
 one with \emph{mytype=GrammarGroup}, and one with \emph{mytype=GrammarMetaFeature.}
 
-\subsection{GrammarFeature}\label{gf}
+\subsection{GrammarFeature}\label{sec-grammarfeature}
 
 A \emph{sentencegrammar} item with \emph{mytype=GrammarFeature} describes a single Emdros
 feature. The format is:
@@ -1733,7 +1920,7 @@ In the grammar information box, a GrammarFeature is displayed thus:
 \end{center}
 
 
-\subsection{GrammarMetaFeature}\label{gmf}
+\subsection{GrammarMetaFeature}\label{sec-grammarmetafeature}
 
 A \emph{sentencegrammar} item with \emph{mytype=GrammarFeature} describes a combined value of a
 number of Emdros features.
@@ -1804,7 +1991,7 @@ In the grammar information box, a GrammarMetaFeature is displayed thus:
 \end{center}
 
 
-\subsection{GrammarGroup}\label{gg}
+\subsection{GrammarGroup}\label{sec-grammargroup}
 
 A \emph{sentencegrammar} item with \emph{mytype=GrammarGroup} groups GrammarFeatures and
 GrammarMetaFeatures into logical units, such as ``Features that describe the lexeme'' or ``Features
@@ -1883,7 +2070,7 @@ Currently, Bible OL uses two databases, the Hebrew \emph{ETCBC4} database and th
 \emph{nestle1904} database. Previous versions of Bible OL used the Hebrew \emph{WIVU} database (and
 various variants of it) and the Greek \emph{tisch}\footnote{Short for \emph{Tischendorf.}} database.
 
-The statistics tables in the user database (see Section \label{sec-statistics-tables}) may
+The statistics tables in the user database (see Section \ref{sec-statistics-tables}) may
 still contain data from these older databases. In order to display these statistics, Bible OL needs
 description and localization information for the databases. For this reason, database descriptions
 files for the old databases are still present in the \texttt{db} directory.
@@ -1893,7 +2080,7 @@ files for the old databases are still present in the \texttt{db} directory.
 %%%%%%%%%%%%%%%%%%%% Database Localization Files: XXX.LANG.prop.json %%%%%%%%%%%%%%%%%%%%
 \section{Database Localization Files: XXX.LANG.prop.json}\label{db-local}
 
-All keys and values in the Database Specification File (Section \ref{dsf}) are language
+All keys and values in the Database Specification File (Section \ref{sec-dsf}) are language
 independent. \textbf{On the server} the \emph{propertiesName} key (page \pageref{propname}) of the
 Database Specification File is used to locate language specific files for the database, the
 so-called \emph{Database Localization Files}. If the \emph{propertiesName} key has a value of ABC,
@@ -2044,7 +2231,7 @@ order. So with the contents of \emph{gender\_t} given above, genders are sorted 
 
 Section \ref{sentencegrammar} describes how the Database Specification File specifies how grammar
 information should be grouped in the grammar selection box and the grammar information box on the
-Bible OL webpage. Sections \ref{gf}, \ref{gmf}, and \ref{gg} describe the GrammarFeature,
+Bible OL webpage. Sections \ref{sec-grammarfeature}, \ref{sec-grammarmetafeature}, and \ref{sec-grammargroup} describe the GrammarFeature,
 GrammarMetaFeature, and GrammarGroup specifications and the GrammarSubFeature which is part of a
 GrammarMetaFeature.
 
@@ -2087,7 +2274,7 @@ ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}):
 \end{lstlisting}
 
 Here the GrammarMetaFeature \emph{pgn} of the \emph{word} object is given the English translation
-``Person, gender, number''. (The example in Section \ref{gmf} specifies that the \emph{word}
+``Person, gender, number''. (The example in Section \ref{sec-grammarmetafeature} specifies that the \emph{word}
 object has a GrammarMetaFeature called \emph{pgn}.)
 
 \subsubsection{\emph{grammarsubfeature}}
@@ -2123,7 +2310,7 @@ ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}):
     }
 \end{lstlisting}
 
-The example in Section \ref{gmf} specifies that the \emph{word} object has a GrammarMetaFeature
+The example in Section \ref{sec-grammarmetafeature} specifies that the \emph{word} object has a GrammarMetaFeature
 called \emph{pgn} which is made up of the GrammarSubFeatures \emph{ps, gn,} and \emph{nu}. The
 \emph{grammarsubfeature} value listed above specifies the English translation for these three
 GrammarSubFeatures. So if, for example, a word has features \emph{ps=p2, gn=m,} and \emph{nu=sg}
@@ -2409,7 +2596,7 @@ elements:
 \xml{desc} & A \emph{CDATA} string describing the exercise. This string may contain HTML code. This
 is the text entered under the ``Description'' tab when creating a quiz template.\\
 
-\xml{database} & The name of the Emdros database (TBD: Or specification file?).\\
+\xml{database} & The name of the Emdros database.\\
 
 \xml{properties} & The name of the Database Localization File (without the
 \texttt{.}\emph{language}\texttt{.prop.json} extension).\\
@@ -2610,7 +2797,7 @@ occur several times.
 \xml{request} & The name of a request feature.\\
 
 \xml{requestdd} & The name of a request feature of string type which should be asked as a multiple-choice question (see
-Chapter \ref{sec-multiple-choice}).\\
+Chapter \ref{chap-multiple-choice}).\\
 
 \xml{dontshow} & The name of a feature that must not be available in the grammar selection box and the grammar
 information box.\\
@@ -2619,7 +2806,7 @@ information box.\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Multiple-Choice Questions %%%%%%%%%%%%%%%%%%%%
-\chapter{Multiple-Choice Questions}\label{sec-multiple-choice}
+\chapter{Multiple-Choice Questions}\label{chap-multiple-choice}
 
 \textbf{Read this chapter if you need to understand or modify the way Bible OL automatically
   generates multiple-choice questions for a few features.}
@@ -2649,7 +2836,7 @@ random but guaranteed to contain the correct answer:
 \end{center}
 
 The strings in the drop-down box are chosen based on three keys from the \emph{objectSettings} of
-the Database Specification file. (See Section \ref{objectsettings}.)
+the Database Specification file. (See Section \ref{sec-objectsettings}.)
 
 \begin{itemize}
 \item The name of the Words Database, found under the \emph{alternateshowrequestDb} key.
@@ -2661,7 +2848,7 @@ the Database Specification file. (See Section \ref{objectsettings}.)
 
 
 Let us look at an example from the ETCBC4 database.\footnote{For a detailed description of the Words
-Database for ETCBC4 see Appendix \ref{worddb-app}.} For the \emph{g\_prs\_utf8} feature (the
+Database for ETCBC4 see Appendix \ref{app-worddb}.} For the \emph{g\_prs\_utf8} feature (the
 pronominal suffix) of the \emph{word} object, the following values are specified under
 \emph{objectSettings} in the Database Specification File:
 
@@ -2727,7 +2914,7 @@ server with hostname \texttt{bibleol.3bmoodle.dk}, you can use this URL:
 \url{http://bibleol.3bmoodle.dk/text/show_text/ETCBC4-translit/Genesis/1/2/5}.
 
 The \emph{dsfname} in the URLs is the first part of the name of the Database Specification File
-(Section \ref{dsf}); so if the \emph{dsfname} is ``ETCBC4-translit'', the server will access the
+(Section \ref{sec-dsf}); so if the \emph{dsfname} is ``ETCBC4-translit'', the server will access the
 Database Specification file \texttt{ETCBC4-translit.db.json}.
 
 The server will always expand the requested range of verse to contain a complete set of sentences;
@@ -2745,7 +2932,7 @@ headers, HTML code to lay out the menu, and these JavaScript variables:
   there is no user interface to change its value.\\
 
   configuration & A JavaScript object whose value is the contents of the Database Specification File
-  (Section \ref{dsf}).\\
+  (Section \ref{sec-dsf}).\\
 
   localization & A JavaScript object whose value is the contents of the Database Localization File
   (Section \ref{db-local}).\\
@@ -3146,7 +3333,7 @@ In addition to the fields mentioned above, a \emph{SingleMonadObject} has these 
 text & A string containing the text used to display the word.\\
 
 suffix & A string containing the continuation feature, if any, of the word. (See Section
-\ref{contin}.)\\
+\ref{sec-contin}.)\\
 
 bcv & An array containing the Bible reference for the verse containing the word. For a word in
 \bibleref{Genesis}{1}{7}, \emph{bcv} is the array [~``Genesis'',~1,~7~].\\
@@ -3334,7 +3521,7 @@ The \emph{ExtendedQuizFeatures} interface has these members:
 
     The \emph{name} field contains the name of the request feature, the \emph{usedropdown} field is
     \emph{true} if the request feature is of type string and the question should be asked as a
-    multiple choice question (see Section \ref{sec-multiple-choice}).\\
+    multiple choice question (see Section \ref{chap-multiple-choice}).\\
 
     dontShowFeatures & Array of strings naming features that must not be available in the grammar
     selection box and the grammar information box.\\
@@ -3358,7 +3545,7 @@ software.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% The CodeIgniter Framework %%%%%%%%%%%%%%%%%%%%
-\chapter{The CodeIgniter Framework}\label{codeigniter-use}
+\chapter{The CodeIgniter Framework}\label{chap-codeigniter-use}
 
 \textbf{Read this chapter if you are going to understand or modify the server code.}
 \plainbreak{3}
@@ -3496,14 +3683,14 @@ google\_client\_secret & Used by Google login (see Section \ref{sec-google-login
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Server Code %%%%%%%%%%%%%%%%%%%%
-\chapter{Server Code}\label{server-code}
+\chapter{Server Code}\label{chap-server-code}
 
 \textbf{Read this chapter if you are going to understand or modify the server code.}
 \plainbreak{3}
 
 This chapter describes some of the techniques and tools you will find in the server code. The server
 code is written in PHP, and almost the server code resides in the directory \texttt{myapp}. The
-server code uses the CodeIgniter framework (see Section \ref{codeigniter-use}), and a good
+server code uses the CodeIgniter framework (see Section \ref{chap-codeigniter-use}), and a good
 understanding of how CodeIgniter works is essential to understanding the server code.
 
 %%%%%%%%%%%%%%%%%%%% Models, Views, and Controllers %%%%%%%%%%%%%%%%%%%%
@@ -3609,7 +3796,7 @@ website (see Section \ref{sec-resource-web}).\\
 libraries/Quiz\_data & The \emph{Quiz\_data} class and associated functions and class (see Chapter
 \ref{chap-quizdata}).\\
 
-libraries/Suggest\_answers & Class for accessing the Words Database (see Chapter \ref{sec-multiple-choice}).\\
+libraries/Suggest\_answers & Class for accessing the Words Database (see Chapter \ref{chap-multiple-choice}).\\
 
 libraries/Universe\_tree & Classes used together with \emph{jstree} (see page \pageref{jstree}) to display a
 hierarchy of books, chapters, and verses of the Bible.\\
@@ -3741,8 +3928,8 @@ any \emph{OlMonadSets} are available; and the function \emph{get\_monadset} retu
 
 \subsection{Driver for Native MQL}\label{mql-native}
 
-The driver for native MQL assumes that MQL support has been added to PHP. Section \ref{php-mql}
-explains how to do this.
+The driver for native MQL assumes that MQL support has been added to PHP. Section
+\ref{sec-install-emdros} explains how to do this.
 
 Using the native MQL driver, the MQL API is available directly from within PHP. A C++ version of the
 MQL API is described in the Emdros Programmer's Reference
@@ -3877,8 +4064,8 @@ exercisedir      & sta\_quiztemplate    &                     \\
 
 The names are typically prefixed by a common text string found in
 \emph{\$db[\q default\q][\q dbprefix\q]} in the file \texttt{myapp/config/database.php}. If that
-value is \emph{`ol\_',} the database tables will be named \emph{ol\_alphabet,
-  ol\_bible\_refs} etc.
+value is \emph{`bol\_',} the database tables will be named \emph{bol\_alphabet,
+  bol\_bible\_refs} etc.
 
 The tables are described in the following sections.
 
@@ -4221,23 +4408,6 @@ correct    & Boolean & \emph{True} if the user's answer is correct.\footnote{Thi
 \end{my-longtabu}
 
 
-%%%%%%%%%%%%%%%%%%%% Initial Database Setup %%%%%%%%%%%%%%%%%%%%
-\section{Initial Database Setup}
-
-Before you run a Bible OL system for the first time, the database must initialized to sensible
-values. The file \texttt{bolsetup.sql} contains SQL commands that do this.
-
-Additionally you must manually add a user to the \emph{user} table with administrative rights. The
-entry should set the field \emph{isadmin} to \emph{true} (1). The \emph{password} should be set to
-the value of this PHP function:
-
-\begin{lstlisting}[language=PHP]
-  md5($config['pw_salt'] . 'xxxxx');
-\end{lstlisting}
-
-where \emph{\$config[\q pw\_salt\q]} is configured in \texttt{myapp/config/ol.php}, and
-\emph{xxxxx} is the user's desired password.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Less Style Sheets %%%%%%%%%%%%%%%%%%%%
 \chapter{Less Style Sheets}\label{chap-less-use}
@@ -4361,7 +4531,7 @@ TypeScript is a superset of JavaScript that adds strong typing and proper classe
 The website \url{http://www.typescriptlang.org} contains a tutorial and the formal specification of
 the language.
 
-Section \label{sec-installing-tsc} describes how to install the TypeScript compiler \emph{tsc}.
+Section \ref{sec-installing-tsc} describes how to install the TypeScript compiler \emph{tsc}.
 
 The Bible OL implementation
 compiles TypeScript files only once and stores the resulting JavaScript files. This is achieved through the
@@ -4739,7 +4909,7 @@ SHEBANQ website.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Appendix: ETCBC4 Details %%%%%%%%%%%%%%%%%%%%
 \appendix
-\chapter{ETCBC4 Details}\label{etcbc-app}
+\chapter{ETCBC4 Details}\label{app-etcbc}
 
 The \emph{ETCBC4} Emdros database contains the Hebrew and Aramaic text for the Old Testament.
 
@@ -4797,7 +4967,7 @@ The \emph{text} features contain the actual text of the word. These variants exi
 \end{itemize}
 
 The \emph{text} features work together with the \emph{continuation} features as described in Section
-\ref{contin}. The \emph{continuation} features exist
+\ref{sec-contin}. The \emph{continuation} features exist
 in these variants:
 
 \begin{itemize}
@@ -5437,13 +5607,14 @@ and undocumented) script in the \emph{extra\_tenses} directory under \emph{emdro
 \section{The Other Object Types}
 
 For information about the other object types in the ETCBC4 database, please consult the MQL code
-used for generating the database. The MQL code is found in the file TBD.
+used for generating the database. The MQL code can be seen by running the \emph{mqldump} program as
+described on page \pageref{list-mqldump}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Appendix: ETCBC4 Words Database %%%%%%%%%%%%%%%%%%%%
-\chapter{ETCBC4 Words Database}\label{worddb-app}
+\chapter{ETCBC4 Words Database}\label{app-worddb}
 
-The Words Database (see Section \ref{sec-multiple-choice}) for the ETCBC4 Emdros database has the
+The Words Database (see Section \ref{chap-multiple-choice}) for the ETCBC4 Emdros database has the
 structure defined by these SQL statements:
 
 \begin{lstlisting}[language=SQL]
@@ -5497,7 +5668,7 @@ using a Java program called \texttt{WordDb.java}, which has not been updated for
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Appendix: Nestle1904 Details %%%%%%%%%%%%%%%%%%%%
-\chapter{Nestle1904 Details}\label{nestle-app}
+\chapter{Nestle1904 Details}\label{app-nestle}
 
 The \emph{nestle1904} database is in the public domain and derives from the 1904 version of Nestle's
 Greek New Testament text.
@@ -5772,7 +5943,8 @@ type \emph{clause\_type\_t} and can have these values:
 \section{The Other Object Types}
 
 For information about the other object types in the nestle4 database, please consult the MQL code
-used for generating the database. The MQL code is found in the file TBD.
+used for generating the database.  The MQL code can be seen by running the \emph{mqldump} program as
+described on page \pageref{list-mqldump}.
 
 
 %%%%%%%%%%%%%%%%%%%% The Origin of the Data %%%%%%%%%%%%%%%%%%%%
