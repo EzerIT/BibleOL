@@ -54,7 +54,8 @@ class Ctrl_login extends MY_Controller {
                                              'css_list' => array('zocial/css/zocial.css')));
         $this->load->view('view_top2');
         $this->load->view('view_menu_bar');
-        $this->load->view('view_login', array('google_request' => http_build_query($google_request)));
+        $this->load->view('view_login', array('google_login_enabled' => $this->config->item('google_login_enabled'),
+                                              'google_request' => http_build_query($google_request)));
         $this->load->view('view_bottom');
     }
   }

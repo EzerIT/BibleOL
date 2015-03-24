@@ -13,8 +13,10 @@
         </form>
         <p><a href="<?= site_url('/users/forgot_pw') ?>">Forgotten user name or password?</a></p>
       </div>
-      <div id="googlebox">
-        <p>or</p>
-        <p><a class="zocial googleplus" href="https://accounts.google.com/o/oauth2/auth?<?= $google_request ?>">Sign in with Google+</a></p>
-      </div>
+      <? if ($google_login_enabled): ?>
+        <div id="googlebox">
+          <p>or</p>
+          <p><a class="zocial googleplus" href="https://accounts.google.com/o/oauth2/auth?<?= $google_request ?>">Sign in with Google+</a></p>
+        </div>
+      <? endif; ?>
     </div>   
