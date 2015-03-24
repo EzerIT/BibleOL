@@ -12,7 +12,7 @@ class Mql_native extends CI_Driver {
                                           kCSUTF8,
                                           "", // hostname, e.g., localhost
                                           "", // database user, e.g, emdf or ulrikp
-                                          "xxxxxxxxxx xxxxxxxxxx xxxxxxxxxx xxxxxxxxxx xxxxxxxxxx xxxxxxxxxx xxxxxxxxxx xxxxxxxxxx", // password
+                                          "0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000", // password
                                           $this->emdros_db, // database name
                                           kSQLite3); // database kind
     }

@@ -29,7 +29,7 @@ class Mql_extern extends CI_Driver {
         if (is_resource($process)) {
             // $pipes[0] is now a writeable handle connected to child stdin
 
-            fwrite($pipes[0],"USE DATABASE '$this->emdros_db' WITH KEY \"xxxxxxxxxx xxxxxxxxxx xxxxxxxxxx xxxxxxxxxx xxxxxxxxxx xxxxxxxxxx xxxxxxxxxx xxxxxxxxxx\" GO\n");
+            fwrite($pipes[0],"USE DATABASE '$this->emdros_db' WITH KEY \"0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000\" GO\n");
             fwrite($pipes[0], preg_replace("/GOqxqxqx/","GO",$mql_cmd));
             fclose($pipes[0]);
 
