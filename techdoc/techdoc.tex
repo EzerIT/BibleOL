@@ -49,7 +49,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \definecolor{shadecolor}{gray}{0.9}
 
 %%% shaded environment %%%
-\setlength{\FrameSep}{15\fboxsep}
+\setlength{\FrameSep}{0.5\fboxsep}
 
 
 %%% listings %%%
@@ -127,6 +127,17 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \renewcommand*{\chaptitlefont}{\normalfont\huge\sffamily}
 
 
+%%% Indexing %%%
+
+% Combines hyperref and italic page number in index
+\newcommand*{\hyperit}[1]{\textit{\hyperpage{#1}}}
+
+\renewcommand{\preindexhook}{Page numbers in italics are used to indicate the main reference for an entry.
+\vspace{1cm}
+}
+
+
+
 %%% Auxiliary commands %%%
 \newcommand*{\bibleref}[3]{#1~#2\thinspace:\thinspace#3}
 \newcommand{\heb}[1]{{\RL {\ezr #1}}}
@@ -134,19 +145,6 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \newcommand*{\xml}[1]{\texttt{<#1>}}
 \newcommand*{\xmla}[1]{\texttt{#1}} % An xml attribute
 
-
-% Write a term and index it
-\newcommand*{\indexw}[1]{%
-  #1%
-  \index{#1}%
-}
-
- % Write a term and index a lower case version of it
-\newcommand*{\indexl}[1]{%
-  #1%
-  \lowercase{\def\temp{#1}}%  \lowercase{\def\temp{ABC}} becomes \def\temp{abc}
-  \expandafter\index\expandafter{\temp}%
-}
 
 %%% Auxiliary tabu environments %%%
 \tabulinesep=_2mm %Works together with the \addlinespace[...] values below
@@ -212,7 +210,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Font matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering}
-\date{20 March 2015}
+\date{25 March 2015}
 
 \makeindex
 
@@ -279,55 +277,58 @@ gives an overview of what you may come across here:
 
 \begin{my-longtabu-nomid}{lX}{ \headii{Term}{Meaning} }
 
-\parbox[t]{3cm}{\indexw{quiz}\par \indexw{exercise}} & These terms are synonymous. They refer to an exercise executed
+\parbox[t]{3cm}{quiz\index{quiz}\par exercise\index{exercise}} & These terms are synonymous. They refer to an exercise executed
 by a user.\\
 
 \midrule
 
-\indexw{quiz template}\index{template} & A file located in the \texttt{quizzes} directory. In XML format it describes how Bible
-OL should generate questions for an exercise.\\
+quiz template\index{quiz template}\index{template} & A file located in the \texttt{quizzes} directory. In XML
+format it describes how Bible OL should generate questions for an exercise.\\
 
 \midrule
 
-\parbox[t]{3cm}{\indexw{question}\par \indexw{question item}} & An exercise
-  consists of several questions (see Figure \ref{fig-question}). Each question contains several
-  question items.\\
+\parbox[t]{3cm}{question\index{question}} & An exercise
+  consists of several questions. Figure \ref{fig-question} shows \emph{one} question.\\
 
 \midrule
 
-\parbox[t]{3cm}{\indexw{sentence unit}\par \indexw{quiz object}\par question
+\parbox[t]{3cm}{question item\index{question item}} & Each question in an exercise contains several
+  question items. The question in Figure \ref{fig-question} has \emph{two} question items.\\
+
+\midrule
+\parbox[t]{3cm}{sentence unit\index{sentence unit}\par quiz object\index{quiz object}\par question
   object\index{question object}} & These terms are synonymous. The terms
 refer to the Emdros objects that are the subject of a question item. They are marked in red in the
 question text. (See Figure \ref{fig-question}.)\\
 
 \midrule
 
-\indexw{display feature} & An Emdros feature presented to the user as part of a question item  (see Figure
+display feature\index{display feature} & An Emdros feature presented to the user as part of a question item  (see Figure
 \ref{fig-question}).\\
 
 \midrule
 
-\indexw{request feature} & An Emdros feature which the user must provide as part of a question item
+request feature\index{request feature} & An Emdros feature which the user must provide as part of a question item
 (see Figure \ref{fig-question}).\\
 
 \midrule
 
-\parbox[t]{3cm}{\indexw{passages}\par \indexw{universe}} & The collection of Bible passages from
+\parbox[t]{3cm}{passages\index{passages}\par universe\index{universe}} & The collection of Bible passages from
 which an exercise draws its sentences. The term ``universe'' is found in older parts of the code.\\
 
 \midrule
 
-\indexw{grammar selection box} & A box found on the left part of the display where the user can select what
+grammar selection box\index{grammar selection box} & A box found on the left part of the display where the user can select what
 in-line grammatical features to display. See Figure \ref{fig-grammar-info}.\\
 
 \midrule
 
-\indexw{grammar information box} & A box found on the right part of the display containing grammatical
+grammar information box\index{grammar information box} & A box found on the right part of the display containing grammatical
 information about the word under the mouse pointer. See Figure \ref{fig-grammar-info}.\\
 
 \midrule
 
-\indexw{grammar hierarchy}\index{hierarchy, grammar} & The organization of components of text. At
+grammar hierarchy\index{grammar hierarchy}\index{hierarchy, grammar} & The organization of components of text. At
 the lowest level of the grammar hierarchy we have the \emph{words}. Above that we may find
 \emph{phrases,} then \emph{clauses,} and finally \emph{sentences.} The exact words for the levels of
 the grammar hierarchy varies between databases.\\
@@ -337,12 +338,12 @@ the grammar hierarchy varies between databases.\\
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{questionwindow.png}
-\caption{A \indexw{question} containing two \indexw{question item}s.}\label{fig-question}
+\caption{A question\index{question} containing two question item\index{question item}s.}\label{fig-question}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{grammarboxes.png}
-\caption{The \indexw{grammar selection box} and the \indexw{grammar information box}.}\label{fig-grammar-info}
+\caption{The grammar selection box\index{grammar selection box} and the grammar information box\index{grammar information box}.}\label{fig-grammar-info}
 \end{figure}
 
 
@@ -370,7 +371,7 @@ first version of \emph{EQG,} the \emph{Emdros-based Quiz Generator}, was demonst
 applet in a web browser.
 
 %%%%%%%%%%%%%%%%%%%% 3ET: A Stand-alone Java Program (2009-2010) %%%%%%%%%%%%%%%%%%%%
-\section{\indexw{3ET}: A Stand-alone Java Program (2009-2010)}
+\section{3ET\index{3ET}: A Stand-alone Java Program (2009-2010)}
 
 The Java applet solution was not practical, especially since there was no easy way to access an
 Emdros database over a network connection. In 2009 the applet was therefore abandoned in favour of a
@@ -379,10 +380,10 @@ stand-alone PC application, still written in Java but running directly under Mic
 The name was changed to \emph{3ET,} \emph{Ezer's Emdros-based Exercise Tool}, and an attempt was made to
 market it through 3BM, a company owned by Nicolai and his colleague Jens Bruun Kofoed.
 
-The name 3ET is still reflected in the file extension \texttt{.3et} used in exercise files.
+The name 3ET is still reflected in the file extension \texttt{.3et} used in quiz template files.
 
 %%%%%%%%%%%%%%%%%%%% PLOTLearner: A EuroPLOT Product (2011-2013) %%%%%%%%%%%%%%%%%%%%
-\section{\indexw{PLOTLearner}: A EuroPLOT Product (2011-2013)}
+\section{PLOTLearner\index{PLOTLearner}: A EuroPLOT Product (2011-2013)}
 
 In 2011 3ET became part of an EU project about \emph{Persuasive Learning Objects and Technologies},
 PLOT. The project became known as EuroPLOT,\footnote{\url{http://www.eplot.eu}.} and 3ET changed its
@@ -394,11 +395,11 @@ version of the product, and it can be downloaded from
 \url{http://eplot.3bmoodle.dk/index.php/downloads}.
 
 %%%%%%%%%%%%%%%%%%%% Bible Online Learner: Web-based (since 2013) %%%%%%%%%%%%%%%%%%%%
-\section{\indexw{Bible Online Learner}: Web-based (since 2013)}
+\section{Bible Online Learner\index{Bible Online Learner}: Web-based (since 2013)}
 
-In 2013 I started moving PLOTLearner from a Java-based stand-alone PC application to a web-based
-solution. Once again, the name of the product was change once more and became \emph{Bible Online Learner},
-or \emph{Bible OL} for short. This is product that is described in this document.
+Since 2013 the program has been moved from a Java-based stand-alone PC application to a web-based
+solution. The name of the product was changed once more and became \emph{Bible Online Learner},
+or \emph{Bible OL} for short. This is the product that is described in this document.
 
 
 
@@ -409,12 +410,11 @@ or \emph{Bible OL} for short. This is product that is described in this document
 \textbf{Read as much of this chapter as you find necessary.}
 \plainbreak{3}
 
-What you need to do, depends on what you mean by ``installing'' Bible OL. If you want to set up a
-server that runs Bible OL for the benefit of researchers and students, follow the instructions in
-Section \ref{sec-host} below.
-
+This chapter describes how to install Bible OL on a computer. What you need to do, depends on what
+you mean by ``installing'' Bible OL. If you want to set up a server that runs Bible OL for the
+benefit of researchers and students, follow the instructions in Section \ref{sec-host}.
 If you want to get your own copy of Bible OL in order to enhance or modify it, follow the
-instructions in Section \ref{sec-devel} below.
+instructions in Section \ref{sec-devel}.
 
 
 %%%%%%%%%%%%%%%%%%%% Hosting Bible OL %%%%%%%%%%%%%%%%%%%%
@@ -429,22 +429,22 @@ people with a computer running the Linux operating system.
 The following software must be installed on your server:
 
 \begin{itemize}
-\item \indexw{Apache} (\indexw{web server}). I use version 2.4.7, but version 2.2.22 also works.
-\item \indexw{MySQL} (database system). I use version 5.5.41.
-\item \indexw{SQLite3} (database system used by Emdros). I use version 3.8.2.
-\item \indexw{PHP}. I use version 5.5, but version 5.3 also works.
-\item \indexw{git}. I use version 1.9.1.
+\item Apache\index{Apache} (web server\index{web server}). I use version 2.4.7, but version 2.2.22 also works.
+\item MySQL\index{MySQL} (database system). I use version 5.5.41.
+\item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.8.2.
+\item PHP\index{PHP}. I use version 5.5, but version 5.3 also works.
+\item git\index{git}. I use version 1.9.1.
 \end{itemize}
 
 
-All of this can be installed on an Ubuntu system using the usual \emph{apt-get} installation
+All of this can be installed on an Ubuntu Linux system using the usual \emph{apt-get} installation
 program. I have not done a thorough investigation into the minimum required versions of these
 software packages; you should not see the versions mentioned above as minimum requirements.
 
 
 \subsection{Step 2. Install Emdros}\label{sec-install-emdros}
 
-You will also need to install the Emdros database system. This is probably the most complex part of
+You must install the Emdros database system. This is probably the most complex part of
 the installation process since Emdros is not a standard component in any operating system.
 
 I use Emdros version 3.4.0.pre03, a pre-release; but versions 3.4.0 should probably be fine as well.
@@ -457,13 +457,14 @@ Emdros documentation).
 When you compile Emdros, be sure to include support for PHP. I use this \emph{configure} command to
 set up the Emdros compilation:
 
-\begin{lstlisting}[language=bash]
+% Do not set language=bash in the following line lest "local" be printed in blue
+\begin{lstlisting}
 ./configure --with-sqlite3=local --with-mysql=yes --with-default-backend=sqlite3 --with-swig-language-php=yes --with-swig-language-java=no --with-swig-language-python=no --with-swig-language-perl=no
 \end{lstlisting}
 
 If you want to include support for Java, Python, or Perl, you will need to change this command.
 
-When you have compiled and installed Emdros (using the \emph{make} and \emph{sudo make install}
+When you have compiled and installed Emdros (using the ``make'' and ``sudo make install''
 commands, respectively) you need to enable access to Emdros in PHP. The correct way to do this
 depends on your Apache and PHP installation. In my case, I had to add a file with this contents to
 the directory \texttt{/etc/php5/mods-available}:
@@ -474,7 +475,7 @@ extension=/usr/local/lib/emdros/EmdrosPHP.so
 
 If you cannot or do not want to enhance PHP with Emdros support, you can configure Bible OL to use
 the \emph{mql} command line tool instead, but this is not recommended. More information about that
-is given in Section \ref{mql-extern}.
+is given in Section \ref{sec-mql-extern}.
 
 If you already have Emdros installed on a development system, and if your runtime system uses the
 same operating system as your development system, you can simply copy the Emdros files to your
@@ -488,7 +489,7 @@ run \emph{ldconfig} after copying the files to your runtime system.)
 You can download Bible OL from GitHub using this command:
 
 \begin{lstlisting}[language=bash]
-cd %\textrm{\scriptsize(installation directory)}%
+cd %\textrm{\emph{installation directory}}%
 git clone --recursive https://github.com/EzerIT/BibleOL
 \end{lstlisting}
 
@@ -508,7 +509,7 @@ needed.
 
 \subsection{Step 4. Configure MySQL}
 
-Create a database in MySQL. When this is done, copy the file \texttt{myapp/config/database.php-dist}
+Create an empty database in MySQL. Then copy the file \texttt{myapp/config/database.php-dist}
 to \texttt{myapp/config/database.php} and modify the following lines in the copy:
 
 \begin{lstlisting}[language=PHP]
@@ -547,7 +548,7 @@ You should modify these values thus:
 
 \$config['mql\_driver'] & Set to \texttt{'native'} to select a built-in MQL driver. Set to or
   \texttt{'extern'} to run MQL commands external to the PHP interpreter (see Section
-  \ref{mql-extern}).\\
+  \ref{sec-mql-extern}).\\
 
 \$config['mail\_sender\_address'] & The email address to be used as sender when Bible OL sends email
   to users.\\
@@ -577,7 +578,7 @@ the PHP framework.
 
 \subsection{Step 6. Add Administrator}
 
-You must manually add a user to the an administrator to the MySQL database. You do this by adding an
+You must manually add an administrator to the MySQL database. You do this by adding an
 entry to the table \emph{bol\_user} (see Section \ref{sec-user-table}). The entry should have the
 \emph{isadmin} field set to 1 (\emph{true}). The \emph{password} should be set to the value of this
 PHP function:
@@ -586,6 +587,7 @@ PHP function:
   md5($config['pw_salt'] . 'xxxxx');
 \end{lstlisting}
 
+\noindent
 where \emph{\$config[\q pw\_salt\q]} is configured in \texttt{myapp/config/ol.php}, and
 \emph{xxxxx} is the user's desired password.
 
@@ -620,8 +622,17 @@ Bible OL at the url \texttt{http://example.com/alpha/beta}, then the above line 
 RewriteBase /alpha/beta
 \end{lstlisting}
 
-If you have a dedicated URL for Bible OL (for example, \texttt{http://example.com}), you should
+If you have a dedicated hostname for Bible OL (for example, \texttt{http://example.com}), you should
 leave \emph{RewriteBase} as it is: a single slash.
+
+\subsection{Step 8. Set Up Quiz Template Directory}
+
+Create a directory called \texttt{quizzes} in the installation directory. Quiz template files will
+be stored here. If you want to, you can copy the contents of the \texttt{quiz\_templates} directory,
+which contains sample quiz templates, to \texttt{quizzes}.
+
+Make sure that the permissions on the \texttt{quizzes} directory and its contents is set to allow
+the web server to modify the files.
 
 %%%%%%%%%%%%%%%%%%%% Bible OL Development System Setup %%%%%%%%%%%%%%%%%%%%
 \section{Bible OL Development System Setup}\label{sec-devel}
@@ -645,13 +656,13 @@ not find any instructions how to do it here.
 The following should be installed:
 
 \begin{itemize}
-\item \indexw{SQLite3} (database system used by Emdros). I use version 3.8.2.
-\item \indexw{PHP}. I use version 5.5, but version 5.3 also works.
-\item \indexw{nodejs} (JavaScript runtime, used for compiling TypeScript and Less). I use version
+\item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.8.2.
+\item PHP\index{PHP}. I use version 5.5, but version 5.3 also works.
+\item nodejs\index{nodejs} (JavaScript runtime, used for compiling TypeScript and Less). I use version
   0.10.25.
-\item \indexw{npm} (package manager for nodejs). I use version 1.3.10.
+\item npm\index{npm} (package manager for nodejs). I use version 1.3.10.
   This package may not strictly be required, but it is useful for installing nodejs modules.
-\item \indexw{git}. I use version 1.9.1.
+\item git\index{git}. I use version 1.9.1.
 \end{itemize}
 
 
@@ -659,8 +670,8 @@ All of this can be installed on an Ubuntu system using the usual \emph{apt-get} 
 program. I have not done a thorough investigation into the minimum required versions of these
 software packages; you should not see the versions mentioned above as minimum requirements.
 
-You will also need to install the Emdros database system. On the development system you will also
-need a Less compiler and a TypeScript compiler. This is detailed in the following sections.
+You will also need to install the Emdros database system, a Less compiler, and a TypeScript
+compiler. This is detailed in the following sections.
 
 
 \subsection{Installing Emdros}
@@ -673,14 +684,14 @@ In order to install Emdros, you should follow the instructions given in in Secti
 
 \emph{Lessc} is the Less compiler. It runs under \emph{nodejs}, which is a stand-alone JavaScript
 runtime system. For information about how to install and use the Less compiler, see
-\url{http://lesscss.org}. There, they recommend that lessc be installed using this shell command:
+\url{http://lesscss.org}. There, they recommend that \emph{lessc} be installed using this shell command:
 
 \begin{lstlisting}[language=bash]
 npm install -g less
 \end{lstlisting}
 
 You may not need the ``-g'' option. If you do include it, you may need to prefix the command by
-\emph{sudo}.
+``sudo''.
 
 I use version 1.3.3 of \emph{lessc}, but the current version on GitHub is 2.4.0. I have not studied
 what impact, if any, using a new version of the compiler will have on the Less source files in Bible
@@ -690,7 +701,7 @@ OL.
 
 \emph{Tsc} is the TypeScript compiler. It runs under \emph{nodejs}, which is a stand-alone
 JavaScript runtime system. For information about how to install and use the TypeScript compiler, see
-\url{http://www.typescriptlang.org}. There, they recommend that tsc be installed using this shell
+\url{http://www.typescriptlang.org}. There, they recommend that \emph{tsc} be installed using this shell
 command:
 
 \begin{lstlisting}[language=bash]
@@ -698,7 +709,7 @@ npm install -g typescript
 \end{lstlisting}
 
 You may not need the ``-g'' option. If you do include it, you may need to prefix the command by
-\emph{sudo}.
+``sudo''.
 
 I use version 1.0.1.0 of \emph{tsc}, but the current version on GitHub is 1.4. I have not studied
 what impact, if any, using a new version of the compiler will have on the TypeScript source files in
@@ -722,18 +733,17 @@ points you to where you may learn more about them.
 %%%%%%%%%%%%%%%%%%%% PHP %%%%%%%%%%%%%%%%%%%%
 \section{PHP}
 
-The main language used on the server side is PHP\footnote{\url{http://php.net}.}. PHP is a popular
+The main language used on the server side is PHP\footnote{\url{http://php.net}.}, which is a popular
 general-purpose scripting language that is especially suited to web development.
 
 In order to execute Bible OL, the PHP implementation on the server must be enhanced with features to
-execute \hyperref[sec-mql]{MQL} commands. This is described in Section \ref{sec-install-emdros}.
+execute MQL commands. This is described in Section \ref{sec-install-emdros}.
 
 %%%%%%%%%%%%%%%%%%%% CodeIgniter %%%%%%%%%%%%%%%%%%%%
 \section{CodeIgniter}\label{sec-codeigniter}
 
 Bible OL uses a PHP framework known as \emph{CodeIgniter.}\footnote{\url{http://www.codeigniter.com}.}
-
-More information is given in Section \ref{chap-codeigniter-use}.
+More information about this is given in Chapter \ref{chap-codeigniter-use}.
 
 
 %%%%%%%%%%%%%%%%%%%% SQL %%%%%%%%%%%%%%%%%%%%
@@ -743,14 +753,15 @@ SQL\footnote{See \url{https://en.wikipedia.org/wiki/SQL}.} is a language for man
 relational database. Bible OL uses the MySQL database\footnote{\url{http://www.mysql.com}.} to store
 information about users who have an account on the Bible OL website.
 
-SQL commands are executed from PHP code through \hyperref[sec-codeigniter]{CodeIgniter}.
+SQL commands are executed from PHP code through CodeIgniter.
 
 
 %%%%%%%%%%%%%%%%%%%% MQL %%%%%%%%%%%%%%%%%%%%
 \section{MQL}\label{sec-mql}
 
 MQL is a language for manipulating Emdros\footnote{\url{http://emdros.org}.} text databases. The PHP
-implementation on the server must be extended with function to execute MQL commands.
+implementation on the server must be extended with function to execute MQL commands. This is
+described in Section \ref{sec-install-emdros}.
 
 MQL and Emdros are described in greater detail in Chapter \ref{chap-emdros-use}.
 
@@ -768,13 +779,13 @@ The generated web pages use HTML version 5.\footnote{See \url{https://en.wikiped
 CSS (Cascading Style Sheets)\footnote{See
   \url{https://en.wikipedia.org/wiki/Cascading_Style_Sheets}} is a language for specifying the
 layout style of a web page. However, only a small part of the Bible OL styles are written directly
-in CSS. Most styling is written in \hyperref[sec-less]{Less} which is then compiled into CSS.
+in CSS. Most styling is written in Less which is then compiled into CSS.
 
 
 %%%%%%%%%%%%%%%%%%%% Less %%%%%%%%%%%%%%%%%%%%
 \section{Less}\label{sec-less}
 
-Less\footnote{\url{http://lesscss.org}.} is a \hyperref[sec-css]{CSS} pre-processor, meaning that it
+Less\footnote{\url{http://lesscss.org}.} is a CSS pre-processor, meaning that it
 extends the CSS language, adding features that allow variables, mixins, functions and many other
 techniques that allow you to make CSS that is more maintainable, themable and extendable.
 
@@ -789,7 +800,7 @@ More information about how Less is used is given in Chapter \ref{chap-less-use}.
 On the client side (that is, in the user's browser) the software is loaded as
 JavaScript\footnote{See \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript}.} code.
 However, only a small part of Bible OL is written directly in JavaScript. Most client-side software
-is written in \hyperref[sec-typescript]{TypeScript} which is then compiled into JavaScript.
+is written in TypeScript which is then compiled into JavaScript.
 
 %%%%%%%%%%%%%%%%%%%% TypeScript %%%%%%%%%%%%%%%%%%%%
 \section{TypeScript}\label{sec-typescript}
@@ -878,7 +889,7 @@ If the client requests an exercise to be displayed, the data exchange is:
 \item Client requests the server to load a particular URL. The URL contains information about which
   quiz template to use and how many questions to generate.
 \item The server sends the requested exercise to the client.
-\item When the user click on the ``Finish'' button, the user's answers are sent to the server.
+\item When the user click on the ``Finish'' button, the client sends the user's answers to the server.
 \end{enumerate}
 
 Note that there is no data exchange between the client and the server when the user presses the
@@ -892,8 +903,8 @@ a serious flaw in the design since it would require considerable knowledge on th
 %%%%%%%%%%%%%%%%%%%% Understanding Emdros %%%%%%%%%%%%%%%%%%%%
 \chapter{Understanding Emdros}\label{chap-emdros-use}\index{Emdros}
 
-\textbf{As a developer, you must read the first section of this chapter. If you need to use MQL, you
-  should read the whole chapter and also some of the documentation that comes with Emdros.}
+\textbf{As a developer, you must read this chapter. If you need to use MQL, you should read the
+  whole chapter and also some of the documentation that comes with Emdros.}
 
 \plainbreak{3}
 
@@ -914,7 +925,7 @@ floor'' and ``who had red hair''. Emdros assigns a monad (a positive integer) to
 
 \begin{center}
   \begin{tabular}{c!{\hspace{1cm}}c}
-
+ 
     \begin{tabular}{cc}
       \toprule
       \textbf{Monad} & \textbf{Word}\\
@@ -927,9 +938,9 @@ floor'' and ``who had red hair''. Emdros assigns a monad (a positive integer) to
       6 & hair,\\
       \bottomrule
     \end{tabular}
-
+ 
     &
-
+ 
     \begin{tabular}{cc}
       \toprule
       \textbf{Monad} & \textbf{Word}\\
@@ -942,11 +953,9 @@ floor'' and ``who had red hair''. Emdros assigns a monad (a positive integer) to
       &  \\
       \bottomrule
     \end{tabular}
-
+ 
   \end{tabular}
 \end{center}
-
-
 
 
 Additionally, sets of monads are used to identify clause objects: Monads \{~1-2,~7-11~\} identify
@@ -957,18 +966,14 @@ Associated with each object are a number of \emph{features} that describe variou
 object. For a word object, typical features could be \emph{part of speech, gender, number, tense,} and
 \emph{mood.} In the above sentence, word object 4 (the word ``had'') could, for example, have these features:
 
-\begin{center}
-\begin{tabular}{cc}
-\textbf{Feature} & \textbf{Value}\\
-\hline
+\begin{my-tabu}{cc}{ \headii{Feature}{Value} }
 Text           & ``had''\\
 Part of speech & Verb\\
 Tense          & Past\\
 Number         & Singular\\
 Person         & 3rd\\
-Lexeme         & ``have''
-\end{tabular}
-\end{center}
+Lexeme         & ``have''\\
+\end{my-tabu}
 
 
 Similarly, the two clause objects could have a feature called \emph{type} with the values
@@ -977,7 +982,7 @@ Similarly, the two clause objects could have a feature called \emph{type} with t
 The exact set of objects and features available in a database is entirely up to the person who
 creates the database.
 
-In addition to the monads, Emdros objects can also be identified by an \indexw{ID\_D}. Like a monad, the ID\_D
+In addition to the monads, Emdros objects can also be identified by an ID\_D\index{ID\_D|hyperit}. Like a monad, the ID\_D
 is an integer, but every object in the Emdros database has a unique ID\_D. So a single ID\_D may refer to
 a single word or a clause or a sentence. In the above example, the word ``who'' with monad 3 may
 have ID\_D=8, and the clause ``who had red hair'' with monads \{~3-6~\} may have ID\_D=12.
@@ -1003,13 +1008,13 @@ examples can be found in \url{http://emdros.org/petersen-emdros-COLING-2004.pdf}
 
 The source code contains the following directories (in alphabetical order):
 
-\begin{my-longtabu}{>{\ttfamily}lX}{ \headii{\textrm{Name}}{Contents} }
+\begin{my-longtabu}{>{\ttfamily}p{3.3cm}X}{ \headii{\textrm{Name}}{Contents} }
 ckeditor & An HTML text editor. It is used in the server code to allow the user to edit the
 description of an exercise.
 
 Webpage: \url{http://ckeditor.com}.
 
-Download: \url{https://github.com/ckeditor}.
+Source: \url{https://github.com/ckeditor/ckeditor-releases}.
 
 License: A choice between GPL, LGPL, and MPL.\\
 
@@ -1017,7 +1022,7 @@ CodeIgniter & The PHP framework used by the server side of Bible OL.
 
 Webpage: \url{http://www.codeigniter.com}.
 
-Download: \url{https://github.com/bcit-ci/CodeIgniter}.
+Source: \url{https://github.com/bcit-ci/CodeIgniter}.
 
 License: MIT.\\
 
@@ -1027,7 +1032,7 @@ few of the font files from the subdirectory \texttt{Squirrel} have been copied t
 
 Webpage: \url{http://culmus.sourceforge.net}.
 
-Download: \url{http://sourceforge.net/projects/culmus/files/culmus/0.130}\footnote{This does not
+Source: \url{http://sourceforge.net/projects/culmus/files/culmus/0.130}\footnote{This does not
   include the \texttt{Squirrel} subdirectory. Unfortunately, I don't recall the origin of that directory.}
 
 License: GPL.\\
@@ -1036,12 +1041,12 @@ db & The Emdros databases and associated description files.\\
 
 images & Image files used by the server.\\
 
-\parbox[t]{3cm}{jquery-ui- 1.10.2.custom} & A customized version of \emph{jQuery UI.} Used by the client to display
+jquery-\allowbreak{}ui-\allowbreak{}1.10.2.custom & A customized version of \emph{jQuery UI.} Used by the client to display
 components of the user interface.
 
 Webpage: \url{http://jqueryui.com}.
 
-Download: \url{http://jqueryui.com/download}.
+Source: \url{http://jqueryui.com/download}.
 
 License: MIT.\\
 
@@ -1049,22 +1054,31 @@ js & JavaScript files from various sources. The files \texttt{ol.js}, \texttt{ed
 \texttt{fontselector.js} are the output form compiling TypeScript files. These JavaScript files
 should therefore never be edited.\\
 
+js/jquery-\allowbreak{}1.9.1.min.js js/jquery.min.map & These files are part of jQuery.
+
+Webpage: \url{http://jquery.com}.
+
+Source: \url{http://jquery.com/download}.
+
+License: MIT.\\
+
+
 jstree\label{jstree} & A JavaScript component used by the server to display a hierarchy of books, chapters, and
 verses of the Bible.
 
 Webpage: \url{http://jstree.com}.
 
-Download: \url{https://github.com/vakata/jstree}.
+Source: \url{https://github.com/vakata/jstree}.
 
 License: A choice between MIT and GPL.\\
 
 myapp & The server code. Chapter \ref{chap-server-code} gives more information.\\
 
-quizzes & Quizzes available for the user. This directory is used only by the runtime system.
+quizzes & Quiz templates available for the user. This directory is used only by the runtime system.
 Development files should not be stored here, and the contents of the directory is not under Git
 control.\\
 
-quiz\_templates & Sample \indexw{quiz template}s to be copied to the \texttt{quizzes} directory in a new
+quiz\_templates & Sample quiz template\index{quiz template}s to be copied to the \texttt{quizzes} directory in a new
 installation.\\
 
 SILfonts & A collection of Greek and phonetic fonts. These files are not used directly by the server,
@@ -1073,7 +1087,7 @@ but a few of the font files from the sub-subdirectories \texttt{*/Squirrel} have
 
 Webpage: \url{http://scripts.sil.org}.
 
-Download: Search the \url{http://scripts.sil.org} website for relevant fonts.
+Source: Search the \url{http://scripts.sil.org} website for relevant fonts.
 
 License: SIL Open Font License.\\
 
@@ -1081,14 +1095,13 @@ styles & CSS, Less, and fonts files from various sources.\\
 
 techdoc & The technical documentation.\\
 
-ts & TypeScript source files for the client. See the following entries for information about the
-subdirectories \texttt{jquery} and \texttt{jqueryui}.\\
+ts & TypeScript source files for the client.\\
 
 ts/jquery & The TypeScript definitions of the interfaces and variables found in \emph{jQuery}.
 
 Webpage: \url{http://definitelytyped.org}.
 
-Download: \url{https://github.com/borisyankov/DefinitelyTyped/tree/master/jquery}.
+Source: \url{https://github.com/borisyankov/DefinitelyTyped/tree/master/jquery}.
 
 License: MIT.\\
 
@@ -1096,18 +1109,18 @@ ts/jqueryui & The TypeScript definitions of the interfaces found in \emph{jQuery
 
 Webpage: \url{http://definitelytyped.org}.
 
-Download: \url{https://github.com/borisyankov/DefinitelyTyped/tree/master/jqueryui}.
+Source: \url{https://github.com/borisyankov/DefinitelyTyped/tree/master/jqueryui}.
 
 License: MIT.\\
 
-\parbox[t]{3cm}{valums-file- uploader-b3b20b1} & An old version of a file upload mechanism, used to upload exercise
+valums-\allowbreak{}file-\allowbreak{}uploader-\allowbreak{}b3b20b1 & An old version of a file upload mechanism, used to upload exercise
 files to the server. This code was released under a GPL license. Since this code was copied to Bible
 OL, it ownership and licensing has changed. It is now known as \emph{FineUploader} and is available
 from these sources:
 
 Webpage: \url{http://fineuploader.com}.
 
-Download: \url{https://github.com/FineUploader/fine-uploader}
+Source: \url{https://github.com/FineUploader/fine-uploader}
 
 License: Widen Commercial
 License.\footnote{\url{https://github.com/FineUploader/fine-uploader/blob/master/LICENSE}} (I cannot
@@ -1118,7 +1131,7 @@ virtualkeyboard & A JavaScript-based virtual keyboard for typing Greek and Hebre
 
 Website: \url{http://allanguages.info}.
 
-Download: \url{http://freecode.com/projects/jsvk}.
+Source: \url{http://freecode.com/projects/jsvk}.
 
 License: LGPL.\\
 
@@ -1126,7 +1139,7 @@ zocial & Icon and styles for setting up a Google login button.
 
 Website: \url{http://zocial.smcllns.com}.
 
-Download: \url{https://github.com/samcollins/css-social-buttons}.
+Source: \url{https://github.com/samcollins/css-social-buttons}.
 
 License: MIT. \\
 \end{my-longtabu}
@@ -1148,7 +1161,7 @@ Bible OL currently supports two text databases:
 \item nestle1904, which contains the Greek version of the New Testament.
 \end{itemize}
 
-These two databases are described in detail in appendices \ref{app-etcbc} and
+These two databases are described in detail in Appendices \ref{app-etcbc} and
 \ref{app-nestle}. This chapter gives only the most important information.
 One way to learn more about them is to look at the MQL code used for generating these databases. The
 MQL code for generating the first 1,000 words of an MQL database can be printed by this command:
@@ -1170,7 +1183,7 @@ In the Bible OL source tree, the Emdros databases are found in the directory \te
 
 
 %%%%%%%%%%%%%%%%%%%% The visual Feature %%%%%%%%%%%%%%%%%%%%
-\section{The \emph{visual} Feature}\index{visual}
+\section{The \emph{visual} Feature}\label{sec-visual}\index{visual|hyperit}
 
 The Emdros databases use various feature names to describe the actual text of the corpus. In ETCBC4,
 the name of the feature is \emph{text\_utf8} when the Hebrew alphabet is used and
@@ -1189,7 +1202,7 @@ database.
 This section describes a number of features of the ETCBC4 Hebrew/Aramaic database. A more detailed
 description can be found in Appendix \ref{app-etcbc}.
 
-Text in the database come in three different alphabets:
+Text in the database comes in three different alphabets:
 
 \begin{itemize}
 \item Hebrew/Aramaic characters encoded in UTF-8. (In the following text, this will be known as the
@@ -1300,7 +1313,7 @@ In most western languages, a space is inserted between two words. In Hebrew, som
 together as one. For example, the text \heb{וַֽיְהִי־אֹֽור} (``and there was light'') in \bibleref{Genesis}{1}{3}
 consists of the three words \heb{וַֽ} (``and''), \heb{יְהִי} (``there was''), and \heb{אֹֽור} (``light'').
 
-In ETCBC4 this issue is handled by associating an Emdros feature called \emph{continuation} with each
+In ETCBC4 this problem is handled by associating an Emdros feature called \emph{continuation} with each
 word. The continuation feature contains
 
 \begin{itemize}
@@ -1408,7 +1421,7 @@ ancient Greek.
 The affected Unicode characters are:
 
 \begin{center}
-  \begin{tabular}{@{}ccc@{}}
+  \begin{tabu}{@{}ccc@{}}
     \toprule
     & \multicolumn{2}{c}{\textbf{Unicode value with}}\\
     \cmidrule{2-3}
@@ -1424,7 +1437,7 @@ The affected Unicode characters are:
     ΐ & 0390 & 1FD3\\
     ΰ & 03B0 & 1FE3\\
     \bottomrule
-  \end{tabular}
+  \end{tabu}
 \end{center}
 
 So nowadays the correct way to encode the character ά is to use the value 03AC, regardless of
@@ -1447,13 +1460,33 @@ This necessitates a conversion between tonos encoding and oxia encoding in a few
 \plainbreak{3}
 
 
-Each database is associated with a number of files that describe details about the database. This
-chapter describes these files in detail.
+Each database is associated with a number of files that describe details about the database. They
+are collectively known as the \emph{Database Description Files}\index{Database Description Files}.
+This chapter describes these files in detail.
 
-In the Bible OL source tree, the database description files are found in the directory \texttt{db}.
+In the Bible OL source tree, the Database Description Files are found in the directory \texttt{db}.
 
-In the following sections the file names all start with the string ``XXX''. The actual file name can
-be anything, but examples will be given in the text.
+The names of Database Description Files consist of a so-called \emph{primary name}\index{primary
+  name|hyperit} and a suffix. For example, one Database Specification File is
+\texttt{ETCBC4-translit.db.json}. Here the primary name is ``\texttt{ETCBC4-translit}'' and the
+suffix is ``\texttt{.db.json}''.
+
+The following table lists the suffixes of various Database Description Files:
+
+\begin{my-tabu}{>{\ttfamily}llc}{ \headiii{\textrm{Suffix}}{Type}{Described in Section} }
+.db.json & Database Specification File & \ref{sec-dsf}\\
+
+.LANG.prop.json & Database Localization File & \ref{sec-db-local}\\
+
+.typeinfo.json & Database Type Information File & \ref{sec-tif}\\
+
+.bookorder & Database Book Order File & \ref{sec-bookorder}\\
+
+\end{my-tabu}
+
+In the following sections the string ``PRIM'' is used to denote the primary name of a file.
+
+\pfbreak
 
 Most of the files are JSON files. A JSON file contains key/value pairs, where the value can be
 a string, a number, a Boolean value, an array of values, or another collection of key/value pairs.
@@ -1517,12 +1550,12 @@ php json_pretty_print.php -u xxx.json
 will write the data in ugly format to standard output.
 
 Note that \emph{json\_pretty\_print.php} is completely unforgiving about errors in its input. If the
-input JSON file contains the slightest error (such as a missing or extra comma), the script will
+input file contains the slightest error (such as a missing or extra comma), the script will
 simply output the word ``null''.
 
 
-%%%%%%%%%%%%%%%%%%%% Database Specification File: XXX.db.json %%%%%%%%%%%%%%%%%%%%
-\section{Database Specification File: XXX.db.json}\label{sec-dsf}
+%%%%%%%%%%%%%%%%%%%% Database Specification File: PRIM.db.json %%%%%%%%%%%%%%%%%%%%
+\section{Database Specification File: PRIM.db.json}\label{sec-dsf}\index{Database Specification File|hyperit}
 
 \textbf{On the server} the \emph{Database Specification File} has a name that ends in \texttt{.db.json}. For Bible OL,
 this is the main point of access to the Emdros databases. When Bible OL needs to list the available
@@ -1532,7 +1565,7 @@ databases, it searches for files with names that end in \texttt{.db.json}.
 called \emph{configuration.} Its structure is described in TypeScript as the \emph{Configuration}
 interface in the file \texttt{ts/configuration.ts}.
 
-The Database Specification File describes how the individual parts of the database are used by Bible
+The Database Specification File describes how the individual parts of an Emdros database are used by Bible
 OL. It describes what features are available for exercises and what grammatical features the user
 can choose to display.
 
@@ -1547,9 +1580,11 @@ The Database Specification File is a JSON file containing the following key/valu
   version & A number which identifies the layout used by this file. This number is currently ignored.\\
 
   databaseName\label{databasename} & The name of the Emdros database file. Currently, this is either
-  ``ETCBC4'' or ``nestle1904''.\\
+  ``ETCBC4'' or ``nestle1904''. This is also the primary name of the Database Type Information File
+  (see Section \ref{sec-tif}) and Database Book Order File (see Section \ref{sec-bookorder}).\\
 
-  propertiesName\label{propname} & The name of the Database Localization Files (see Section \ref{db-local}).\\
+  propertiesName\label{propname} & The primary name of the Database Localization Files (see Section
+  \ref{sec-db-local}).\\
 
   databaseVersion & A string containing the version number of the database. This number is only used
   for display purposes. Whenever an Emdros database is changed, this number should also be changed.\\
@@ -1557,11 +1592,10 @@ The Database Specification File is a JSON file containing the following key/valu
   granularity & The name of the Emdros object type defining the amount of text to display in an exercise.
   Typically, this name is ``sentence''. \\
 
-  surfaceFeature & The name of the feature that contains the actual text to display. For ETCBC4
-  using the native alphabet this value is ``text\_utf8'', for ETCBC4
-  using the transliterated alphabet the value is ``text\_translit'', for nestle1904 the value is ``surface''. \\
+  surfaceFeature & The actual name of the \emph{visual}\index{visual} feature (see Section \ref{sec-visual}). \\
 
-  objHasSurface & The name of the Emdros object type that contains the \emph{surfaceFeature.}\\
+  objHasSurface & The name of the Emdros object type that contains the \emph{surfaceFeature.}
+  (Typically, ``word''.)\\
 
   suffixFeature & The name of the feature that contains the continuation for the word to display
   (see Section \ref{sec-contin}). For ETCBC4
@@ -1597,9 +1631,9 @@ The Database Specification File is a JSON file containing the following key/valu
     \end{tabular}
   }
 
-  This means that the top reference level is found in the \emph{book} feature of the Emdros type
-  \emph{book}, the second reference level is found in the \emph{chapter} feature of the Emdros type
-  \emph{chapter}, and the third reference level is found in the \emph{verse} feature of the Emdros type
+  This means that the top reference level is found in the \emph{book} feature of Emdros objects of type
+  \emph{book}, the second reference level is found in the \emph{chapter} feature of Emdros objects of type
+  \emph{chapter}, and the third reference level is found in the \emph{verse} feature of Emdros objects of type
   \emph{verse}.\\
 
   picDb & The URL of the resource website (see Section \ref{sec-resource-web}). This value may be \emph{null.}\\
@@ -1612,7 +1646,7 @@ The Database Specification File is a JSON file containing the following key/valu
   \ref{subsetof}. This value is always \emph{null} for the ETCBC4 and nestle1904
   databases.\\
 
-  useSofPasuq & A Boolean value indicating if a sof pasuq (\heb{׃}) should be added to the end of a
+  useSofPasuq & A Boolean value indicating if a \emph{sof pasuq} (\heb{׃}) should be added to the end of a
   Hebrew verse. This key is only present for Hebrew text.\\
 \end{my-longtabu}
 
@@ -1625,9 +1659,9 @@ how the Emdros object types and their features should be treated by Bible OL. Th
 Emdros object type. The corresponding values give information about how the Emdros object should be
 treated.
 
-Let us consider a subset of the \emph{objectSettings} for the ETCBC4 database:
+Listing \ref{list-ossample} shows a subset of the \emph{objectSettings} for the ETCBC4 database.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=A sample objectSettings value,label=list-ossample]
     "objectSettings": {
         "book": {
         },
@@ -1649,21 +1683,23 @@ Let us consider a subset of the \emph{objectSettings} for the ETCBC4 database:
 
 In this subset, the Emdros types \emph{book, chapter, verse, word,} and \emph{subphrase} are
 mentioned. No special information about \emph{book, chapter,} and \emph{verse} is provided, which
-means that these Emdros types cannot be made the subject of exercises. It is the presence of the
-key \emph{mayselect} with the value \emph{true} that signals to Bible OL that the associated Emdros
-object can be used when select quiz objects for an exercise. So in the above example, the Emdros
-objects \emph{word} and \emph{subphrase} can be used for quiz object selection.
+means that these Emdros types cannot be made the subject of exercises. It is the presence of the key
+\emph{mayselect} with the value \emph{true} that signals to Bible OL that the associated Emdros
+object can be used when selecting quiz objects for an exercise. So in the example in Listing
+\ref{list-ossample}, the Emdros objects \emph{word} and \emph{subphrase} can be used for quiz object
+selection.
 
 When you are creating an exercise with the ETCBC4 database, the ``Sentences'' and ``Sentence Units''
-tab allow you to specify a sentence unit type:
+tabs allow you to specify a sentence unit (a.k.a. quiz object) type:
 
 \begin{center}
   \includegraphics[width=0.9\textwidth]{senselect.png}
 \end{center}
 
 The values in the drop down box are the Emdros object that have \emph{mayselect} set to \emph{true}
-in \emph{objectSettings.} As shown in the example above, these objects have one or two additional
-key/value pairs with the keys \emph{featuresetting} and, optionally, \emph{additionalfeatures.}
+in \emph{objectSettings.} As shown in Listing \ref{list-ossample}, these objects have one or
+two additional key/value pairs with the keys \emph{featuresetting} and, optionally,
+\emph{additionalfeatures.}
 
 The value of \emph{featuresetting} is another collection of key/value pairs, giving
 details about the features of the object. This is detailed in Section \ref{sec-featuresetting}.
@@ -1679,10 +1715,10 @@ features of the Emdros object should be treated by Bible OL. Its value is a coll
 pairs, where the keys are feature names. The corresponding values give
 information about how the feature should be treated.
 
-Let us consider a subset of the \emph{featuresetting} for the \emph{word} object in the ETCBC4
-database:
+Listing \ref{list-fssample} shows a subset of the \emph{featuresetting} for the \emph{word} object
+in the ETCBC4 database.
 
-\begin{lstlisting}[escapechar=\#]
+\begin{lstlisting}[escapechar=\#,caption=A sample featuresetting value,label=list-fssample]
     "featuresetting": {
         "lexeme_occurrences": {
             "ignoreShowRequest": true,
@@ -1799,8 +1835,9 @@ The \emph{sentencegrammar} key in the Database Specification File gives detailed
 the grammar items available to the user. Its value is an array, in which each entry
 corresponds to an Emdros object type.
 
-Bible OL uses the information in \emph{sentencegrammar} in two locations. One is the \indexw{grammar
-selection box} in the left part of the screen, the other is in the \indexw{grammar information box} in the
+Bible OL uses the information in \emph{sentencegrammar} in two locations. One is the grammar
+selection box\index{grammar
+selection box} in the left part of the screen, the other is in the grammar information box\index{grammar information box} in the
 right part of the screen.
 
 The grammar selection box may look like this:
@@ -2055,7 +2092,7 @@ Specification File:
 \end{lstlisting}
 
 Here, \emph{name} is the name of the Emdros database file for the superset, and \emph{properties} is
-the name of the Database Localization Files (see Section \ref{db-local}) for the superset.
+the name of the Database Localization Files (see Section \ref{sec-db-local}) for the superset.
 
 The \emph{provides} array identifies the books and chapters provided by the subset. In this example,
 the subset includes the entire book of Genesis and the first three chapters of Exodus.
@@ -2072,13 +2109,13 @@ various variants of it) and the Greek \emph{tisch}\footnote{Short for \emph{Tisc
 
 The statistics tables in the user database (see Section \ref{sec-statistics-tables}) may
 still contain data from these older databases. In order to display these statistics, Bible OL needs
-description and localization information for the databases. For this reason, database descriptions
-files for the old databases are still present in the \texttt{db} directory.
+description and localization information for the databases. For this reason, Database Description
+Files for the old databases are still present in the \texttt{db} directory.
 
 
 
-%%%%%%%%%%%%%%%%%%%% Database Localization Files: XXX.LANG.prop.json %%%%%%%%%%%%%%%%%%%%
-\section{Database Localization Files: XXX.LANG.prop.json}\label{db-local}
+%%%%%%%%%%%%%%%%%%%% Database Localization Files: PRIM.LANG.prop.json %%%%%%%%%%%%%%%%%%%%
+\section{Database Localization Files: PRIM.LANG.prop.json}\label{sec-db-local}
 
 All keys and values in the Database Specification File (Section \ref{sec-dsf}) are language
 independent. \textbf{On the server} the \emph{propertiesName} key (page \pageref{propname}) of the
@@ -2393,13 +2430,13 @@ Currently, this \emph{universe} information is only used when displaying a passa
 \end{center}
 
 
-%%%%%%%%%%%%%%%%%%%% Database Type Information Files: XXX.typeinfo.json %%%%%%%%%%%%%%%%%%%%
-\section{Database Type Information Files: XXX.typeinfo.json}\label{tif}
+%%%%%%%%%%%%%%%%%%%% Database Type Information Files: PRIM.typeinfo.json %%%%%%%%%%%%%%%%%%%%
+\section{Database Type Information Files: PRIM.typeinfo.json}\label{sec-tif}
 
 The Emdros databases in Bible OL have an associated Database Type Information File. This file
 contains information about the Emdros object types and enumeration types. \textbf{On the server,} if
-the name of the Emdros database is XXX, the name of the associated Database Type Information File is
-\texttt{XXX.typeinfo.json}.
+the name of the Emdros database is PRIM, the name of the associated Database Type Information File is
+\texttt{PRIM.typeinfo.json}.
 
 \textbf{On the client} the contents of the Database Type Information File is available in a variable
 called \emph{typeinfo.} Its structure is described in TypeScript as the \emph{TypeInfo} interface in the file
@@ -2493,12 +2530,12 @@ This is a subset of \emph{enum2values} for the ETCBC4 database (taken from the f
 This example shows that the enumeration type \emph{boolean\_t} has the values \emph{false} and
 \emph{true.}
 
-%%%%%%%%%%%%%%%%%%%% Database Book Order Files: XXX.bookorder %%%%%%%%%%%%%%%%%%%%
-\section{Database Book Order Files: XXX.bookorder}
+%%%%%%%%%%%%%%%%%%%% Database Book Order Files: PRIM.bookorder %%%%%%%%%%%%%%%%%%%%
+\section{Database Book Order Files: PRIM.bookorder}\label{sec-bookorder}
 
 The Emdros databases in Bible OL have an associated Database Book Order File. If the name of
-the Emdros database is XXX, the name of the associated Database Book Order File is
-\texttt{XXX.bookorder}. This information is only available \textbf{on the server}.
+the Emdros database is PRIM, the name of the associated Database Book Order File is
+\texttt{PRIM.bookorder}. This information is only available \textbf{on the server}.
 
 This is a text file that lists the names of the books in the database in the order in which they
 should be presented. I also lists the chapters available in each book.
@@ -2542,7 +2579,7 @@ This line indicates that only chapters 2, 6-9, and 23 of Leviticus are available
 \plainbreak{3}
 
 
-A quiz template (or an \indexw{exercise template}) is an XML file that describes how Bible OL should
+A quiz template (or an exercise template\index{exercise template}) is an XML file that describes how Bible OL should
 generate an exercise. It always has a filename that ends in \texttt{.3et}\index{.3et (file extension)}.
 
 A typical quiz template may look like this:
@@ -2935,10 +2972,10 @@ headers, HTML code to lay out the menu, and these JavaScript variables:
   (Section \ref{sec-dsf}).\\
 
   localization & A JavaScript object whose value is the contents of the Database Localization File
-  (Section \ref{db-local}).\\
+  (Section \ref{sec-db-local}).\\
 
   typeinfo & A JavaScript object whose value is the contents of the Database Type Information File
-  (Section \ref{tif}).\\
+  (Section \ref{sec-tif}).\\
 
   site\_url & The base part of the URL of the website.
 
@@ -3198,7 +3235,7 @@ names and the depth of the hierarchy can be chosen freely by the database, altho
 interface can only display a limited number of levels.
 
 Above the top level, all sentences in a lump of text are grouped together in a so-called
-``\indexw{patriarch}'' object.
+``patriarch\index{patriarch}'' object.
 
 Each Emdros object is described by a \emph{MonadObject} int the \emph{monadObjects} array mentioned
 above. The second index of \emph{monadObjects} identifies the level in the grammatical hierarchy.
@@ -3718,7 +3755,7 @@ main\_page & Displays the main page.\\
 
 maketypeinfo & This controller can only be accessed from the command line, not through the web
 interface. It is used to create the Database Type Information File as described in Section
-\ref{tif}.\\
+\ref{sec-tif}.\\
 
 pic2db & This controller can only be accessed from the command line, not through the web interface.
 It is used to retrieve information from the resource website (see Section
@@ -3773,7 +3810,7 @@ helpers/sheaf\_xml\_helper & XML parser for Emdros replies.\\
 
 helpers/xmlhandler\_helper & Superclass and functions for XML parser.\\
 
-libraries/DB\_config & Classes for handling Emdros database description files.\\
+libraries/DB\_config & Classes for handling Emdros Database Description Files.\\
 
 libraries/Dictionary & The \emph{Dictionary} class (see Chapter \ref{chap-dictionary}).\\
 
@@ -3781,7 +3818,7 @@ libraries/include/dataexception.inc & Exception classes.\\
 
 libraries/include/monadobject.inc & The \emph{MonadObject} class and its subclasses (see Section \ref{MonadObject}).\\
 
-libraries/include/typeinfo.inc & The \emph{TypeInfo} class (see Section \ref{tif}).\\
+libraries/include/typeinfo.inc & The \emph{TypeInfo} class (see Section \ref{sec-tif}).\\
 
 libraries/Mql/Mql & The \emph{Mql} class which handles MQL requests (see Section \ref{sec-mql-server}).\\
 
@@ -3860,11 +3897,11 @@ The server code can be configured to execute MQL requests in one of two ways:
 \end{itemize}
 
 A driver layer in Bible OL protects the programmer for having to worry about this in most cases;
-this is described in Section \ref{mql-if}. Information about the two drivers are found in Sections
-\ref{mql-native} and \ref{mql-extern}.
+this is described in Section \ref{sec-mql-if}. Information about the two drivers are found in Sections
+\ref{sec-mql-native} and \ref{sec-mql-extern}.
 
 
-\subsection{The MQL Interface to Bible OL}\label{mql-if}
+\subsection{The MQL Interface to Bible OL}\label{sec-mql-if}
 
 The Driver Library mechanism of CodeIgniter is used to hide the MQL implementation from the
 programmer in most situations. The programmer must specify the desired way to interact with MQL by
@@ -3912,7 +3949,7 @@ access the straws within the sheaf.
 \pfbreak
 
 If you know that the MQL request will return a sheaf and you are only interested in the monads of
-that sheaf, the so-called ``\indexw{quick harvest}\index{harvest, quick}'' method can be used. In
+that sheaf, the so-called ``quick harvest\index{quick harvest}\index{harvest, quick}'' method can be used. In
 this case you must add a Boolean argument with the value \emph{true} to the call to \emph{exec}:
 
 \begin{lstlisting}[language=PHP]
@@ -3926,7 +3963,7 @@ functions for accessing straws do not work. The function \emph{has\_monadset} re
 any \emph{OlMonadSets} are available; and the function \emph{get\_monadset} returns an array of
 \emph{OlMonadSets}.
 
-\subsection{Driver for Native MQL}\label{mql-native}
+\subsection{Driver for Native MQL}\label{sec-mql-native}
 
 The driver for native MQL assumes that MQL support has been added to PHP. Section
 \ref{sec-install-emdros} explains how to do this.
@@ -3935,7 +3972,7 @@ Using the native MQL driver, the MQL API is available directly from within PHP. 
 MQL API is described in the Emdros Programmer's Reference
 Guide\footnote{\url{http://emdros.org/progref/current}}.
 
-\subsection{Driver for External MQL}\label{mql-extern}
+\subsection{Driver for External MQL}\label{sec-mql-extern}
 
 The driver for external MQL relies on the existence of an MQL command line tool on the server. The
 driver (located in file \texttt{myapp/libraries/Mql/drivers/Mql\_extern.php}) contains this variable
@@ -4980,7 +5017,7 @@ The \emph{g\_word} features are very similar to the \emph{text} features.
 The \emph{g\_word} feature is not used by Bible OL because its information is available by other means. The
 difference between \emph{g\_word} and \emph{text} is that \emph{g\_word} does not use the proper final form of the Hebrew
 consonants, and it includes punctuation information that follows a word. This punctuation information
-is typically the character \heb{׃} (sof pasuq) or \heb{־} (maqaf), but it may also include
+is typically the character \heb{׃} \emph{(sof pasuq)} or \heb{־} \emph{(maqaf),} but it may also include
 additional characters.
 
 The \emph{g\_word} features exist in these variants:
@@ -5975,6 +6012,6 @@ which is currently not published or documented.
 % Local Variables:
 % mode: latex
 % ispell-dictionary: "british-ize"
-% ispell-extra-args: ("--home-dir=/home/claus/Projects/3ET.web/techdoc")
+% ispell-extra-args: ("--home-dir=/home/claus/Projects/BibleOL/techdoc")
 % eval: (auto-fill-mode 1)
 % End:
