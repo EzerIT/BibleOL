@@ -239,6 +239,8 @@ The document is made available under a Creative Commons Attribution 4.0 Internat
 %%%%%%%%%%%%%%%%%%%% Introduction %%%%%%%%%%%%%%%%%%%%
 \chapter{Introduction}
 
+TODO: Index
+
 \textbf{You must read this chapter.}
 \plainbreak{3}
 
@@ -1846,7 +1848,7 @@ The grammar selection box may look like this:
   \includegraphics[width=0.3\textwidth]{grammarselect.png}\label{grammarselect}
 \end{center}
 
-In the above illustration, each of the four main boxes, \emph{Word, Phrase, Clause,} and
+In the above illustration, each of the four main menus, \emph{Word, Phrase, Clause,} and
 \emph{Sentence,} of the grammar selection box corresponds to an entry at the top level of
 \emph{sentencegrammar}.
 
@@ -1859,11 +1861,10 @@ The grammar information box may look like this:
 In this illustration, the \emph{sentencegrammar} for the \emph{word} object
 has been used to determine what information to retrieve.
 
+Listing \ref{list-sgsample} shows the \emph{sentencegrammar} for the ETCBC4 database (taken from the
+file \texttt{db/ETCBC4.db.json}).
 
-Let us consider the \emph{sentencegrammar} for the ETCBC4 database (taken from the file
-\texttt{db/ETCBC4.db.json}):
-
-\begin{lstlisting}
+\begin{lstlisting}[caption=Condensed sentencegrammar value,label=list-sgsample]
     "sentencegrammar": [
         {
             "mytype": "SentenceGrammar",
@@ -1902,13 +1903,13 @@ page \pageref{grammarselect}, you will notice that each element in the \emph{sen
 corresponds to a top level box in the illustration.
 
 For each Emdros object (that is, for each element in the \emph{sentencegrammar} array) the value of
-\emph{items} is an array that specified the items that can be displayed for the particular Emdros
+\emph{items} is an array that specified the features that can be displayed for the particular Emdros
 object. Each entry in the \emph{items} array can have one of three forms: \emph{GrammarFeature,
   GrammarMetaFeature,} or \emph{GrammarGroup}, as specified in their \emph{mytype} value.
 
-A typical \emph{item} array may look like this:
+Listing \ref{list-itemssample} shows a typical \emph{items} array.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=A sample items value,label=list-itemssample]
     "items": [
         {
             "mytype": "GrammarFeature",
@@ -1933,9 +1934,9 @@ one with \emph{mytype=GrammarGroup}, and one with \emph{mytype=GrammarMetaFeatur
 \subsection{GrammarFeature}\label{sec-grammarfeature}
 
 A \emph{sentencegrammar} item with \emph{mytype=GrammarFeature} describes a single Emdros
-feature. The format is:
+feature. The format is given in Listing \ref{list-gf-syntax}.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=GrammarFeature syntax,label=list-gf-syntax]
     {
         "mytype": "GrammarFeature",
         "name": %\textrm{\emph{an Emdros feature name}}%
@@ -1959,12 +1960,10 @@ In the grammar information box, a GrammarFeature is displayed thus:
 
 \subsection{GrammarMetaFeature}\label{sec-grammarmetafeature}
 
-A \emph{sentencegrammar} item with \emph{mytype=GrammarFeature} describes a combined value of a
-number of Emdros features.
+A \emph{sentencegrammar} item with \emph{mytype=GrammarMetaFeature} describes a combined value of a
+number of Emdros features. Its format is given in Listing \ref{list-gmf-syntax}.
 
-A GrammarMetaFeature is specified thus:
-
-\begin{lstlisting}
+\begin{lstlisting}[caption=GrammarMetaFeature syntax,label=list-gmf-syntax]
     {
         "mytype": "GrammarMetaFeature",
         "name": %\textrm{\emph{the name of the GrammarMetaFeature}}%,
@@ -1975,7 +1974,6 @@ A GrammarMetaFeature is specified thus:
             },
             {
                 "mytype": "GrammarSubFeature",
-                "name": %\textrm{\emph{an Emdros feature name}}%
             },
             ... %\textrm{\emph{Additional GrammarSubFeatures}}%
         ]
@@ -1986,9 +1984,10 @@ In the \emph{items} array the Emdros features that make up the GrammarMetaFeatur
 \emph{mytype} value of ``GrammarSubFeature''.
 
 As an example, Bible OL combines the person, gender, and number of a word to a single item, such as
-``2FSg'' (which means 2nd person, feminine, singular). This is specified thus:
+``2FSg'' (which means 2nd person, feminine, singular). This is specified as indicated in Listing
+\ref{list-gmf-sample}.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption={A GrammarMetaFeature combining person, gender, and number},label=list-gmf-sample]
     {
         "mytype": "GrammarMetaFeature",
         "name": "pgn",
@@ -2032,11 +2031,9 @@ In the grammar information box, a GrammarMetaFeature is displayed thus:
 
 A \emph{sentencegrammar} item with \emph{mytype=GrammarGroup} groups GrammarFeatures and
 GrammarMetaFeatures into logical units, such as ``Features that describe the lexeme'' or ``Features
-that describe the morphology''.
+that describe the morphology''. Its format is given in Listing \ref{list-gg-syntax}.
 
-A GrammarGroup is specified thus:
-
-\begin{lstlisting}
+\begin{lstlisting}[caption=GrammarGroup syntax,label=list-gg-syntax]
     {
         "mytype": "GrammarGroup",
         "name": %\textrm{\emph{the name of the GrammarGroup}}%,
@@ -2069,7 +2066,7 @@ In the grammar information box, a GrammarGroup is displayed thus:
 
 The \emph{subsetOf} value is present for historical reasons. With the current ETCBC4 and nestle1904
 databases it is not required; however, the previously used WIVU database, was available in two
-versions: the entire Old Testament and a subset containing about 20\% of the text.
+versions: the entire Old Testament and a subset containing about 20 per cent of the text.
 
 The \emph{subsetOf} key specifies the relationship between the subset and the superset. It is used
 to enable exercises that have been created for the subset to be used with the superset.
@@ -2092,7 +2089,7 @@ Specification File:
 \end{lstlisting}
 
 Here, \emph{name} is the name of the Emdros database file for the superset, and \emph{properties} is
-the name of the Database Localization Files (see Section \ref{sec-db-local}) for the superset.
+the primary name of the Database Localization Files (see Section \ref{sec-db-local}) for the superset.
 
 The \emph{provides} array identifies the books and chapters provided by the subset. In this example,
 the subset includes the entire book of Genesis and the first three chapters of Exodus.
@@ -2120,19 +2117,14 @@ Files for the old databases are still present in the \texttt{db} directory.
 All keys and values in the Database Specification File (Section \ref{sec-dsf}) are language
 independent. \textbf{On the server} the \emph{propertiesName} key (page \pageref{propname}) of the
 Database Specification File is used to locate language specific files for the database, the
-so-called \emph{Database Localization Files}. If the \emph{propertiesName} key has a value of ABC,
-the file \texttt{db/ABC.LANG.prop.json} will contain localization information for the language LANG.
+so-called \emph{Database Localization Files}. If the \emph{propertiesName} key has a value of PRIM,
+the file \texttt{db/PRIM.LANG.prop.json} will contain localization information for the language LANG.
 For English, LANG should be ``en''.
 
-For example, in the Database Specification File \texttt{db/ETCBC4-translit.db.json} the value of
-\emph{propertiesName} is ``ETCBC4-translit''. The corresponding English localization information is
-therefore found in the file file \texttt{db/ETCBC4-translit.en.prop.json}.
-
-The language is selected by the server. Note: Currently, only English localization files exist, and
-the language code ``en'' is hard-coded into the PHP files.\footnote{In the file
-  \texttt{myapp/models/mod\_askemdros.php} in the functions \emph{setup()} and
-  \emph{db\_and\_books(),} and in the file \texttt{myapp/controllers/ctrl\_statistics.php} in the
-  function \emph{show\_stat().}}
+Note: Currently, only English localization files exist, and the language code ``en'' is hard-coded
+into the PHP files.\footnote{In the file \texttt{myapp/models/mod\_askemdros.php} in the functions
+  \emph{setup} and \emph{db\_and\_books,} and in the file
+  \texttt{myapp/controllers/ctrl\_statistics.php} in the function \emph{show\_stat.}}
 
 \textbf{On the client} the contents of the selected Database Localization File is available in a
 variable called \emph{localization.} Its structure is described in TypeScript as the
@@ -2167,27 +2159,28 @@ The Database Localization File is a JSON file containing the following key/value
   references (see Section \ref{universe-loc}).\\
 \end{my-longtabu}
 
+
 \subsection{The \emph{emdrosobject} Key}\label{emdrosobject-loc}
 
 The value of \emph{emdrosobject} is a collection of key/value pairs containing the localized names
-for the Emdros object types and their features. As an example, let us consider a subset of the
-\emph{emdrosobject} for English localization of the ETCBC4 database (taken from the file
-\texttt{db/ETCBC4.en.prop.json}):
+for the Emdros object types and their features. As an example, Listing
+\ref{list-emdrosobject-sample} shows a subset of the \emph{emdrosobject} for English localization
+of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
 
-\begin{lstlisting}
+\begin{lstlisting}[numbers=left,caption=A sample emdrosobject value,label=list-emdrosobject-sample]
     "emdrosobject": {
-        "word": {
+        "word": {%\label{line-word-start}%
             "_objname": "Word",
             "vt": "Tense",
             "sp": "Part of speech",
             ... %\textrm{\scriptsize(Additional features omitted)}%
-        },
-        "phrase_atom": {
+        },%\label{line-word-end}%
+        "phrase_atom": {%\label{line-phrase-atom-start}%
             "_objname": "Phrase atom",
             "det": "Determination",
             "rela": "Relation",
             ... %\textrm{\scriptsize(Additional feature omitted)}%
-        },
+        },%\label{line-phrase-atom-end}%
         ... %\textrm{\scriptsize(Additional Emdros object types omitted)}%
     }
 \end{lstlisting}
@@ -2200,38 +2193,38 @@ Each key has a value which is a collection of key/value pairs. One of those keys
 \emph{\_objname}, and its value is the English name for the Emdros object; the remaining keys are
 features of the Emdros object, and their values are the English name for the feature.
 
-So the above example states that the English name of the Emdros object \emph{word} is ``Word'', and
-that object has a feature called \emph{vt} which in English should be rendered as
-``Tense''. The \emph{word} feature \emph{sp} should be rendered
+So in the above example, lines \ref{line-word-start}-\ref{line-word-end} state that the English name
+of the Emdros object \emph{word} is ``Word'', and that it has a feature called \emph{vt} which
+in English should be rendered as ``Tense''. The \emph{word} feature \emph{sp} should be rendered
 ``Part of speech'' in English.
 
-Similarly, the English name of the Emdros object \emph{phrase\_atom} is ``Phrase~atom'', and
-that object has a feature called \emph{det} which in English should be rendered as
-``Determination''. The \emph{phrase\_atom} feature \emph{rela} should be rendered
-``Relation'' in English.
+Similarly, lines \ref{line-phrase-atom-start}-\ref{line-phrase-atom-end} state that the English name
+of the Emdros object \emph{phrase\_atom} is ``Phrase~atom'', and that it has a feature called
+\emph{det} which in English should be rendered as ``Determination''. The \emph{phrase\_atom} feature
+\emph{rela} should be rendered ``Relation'' in English.
 
 
 \subsection{The \emph{emdrostype} Key}\label{enum-loc}
 
 The value of \emph{emdrostype} is a collection of key/value pairs containing the localized names for
-the value of Emdros enumeration types. As an example, let us consider a subset of the
-\emph{emdrostype} for English localization of the ETCBC4 database (taken from the file
-\texttt{db/ETCBC4.en.prop.json}):
+the value of Emdros enumeration types. As an example, Listing \ref{list-emdrostype-sample} shows
+a subset of the \emph{emdrostype} for English localization of the ETCBC4 database (taken from the
+file \texttt{db/ETCBC4.en.prop.json}).
 
-\begin{lstlisting}
+\begin{lstlisting}[numbers=left,caption=A sample emdrostype value,label=list-emdrostype-sample]
     "emdrostype": {
-        "part_of_speech_t": {
+        "part_of_speech_t": {%\label{line-pos-start}%
             "verb": "Verb",
             "subs": "Noun",
             "nmpr": "Proper noun",
             ... %\textrm{\scriptsize(Additional values omitted)}%
-        },
-        "gender_t": {
+        },%\label{line-pos-end}%
+        "gender_t": {%\label{line-gender-start}%
             "f": "#2 Feminine",
             "m": "#1 Masculine",
             "NA": "#3 None",
             "unknown": "#4 Unknown"
-        },
+        },%\label{line-gender-end}%
         ... %\textrm{\scriptsize(Additional enumeration types omitted)}%
     }
 \end{lstlisting}
@@ -2243,20 +2236,23 @@ types.
 Each key has a value which is a collection of key/value pairs, giving the names and the English
 translation of the values of the enumeration type.
 
-In the above example, the type \emph{part\_of\_speech\_t} has values such as \emph{verb, subs,} and
-\emph{nmpr}, whose English translations are ``Verb'', ``Noun'', and ``Proper~noun'', respectively.
+In the above example, lines \ref{line-pos-start}-\ref{line-pos-end} indicate that the type
+\emph{part\_of\_speech\_t} has values such as \emph{verb, subs,} and \emph{nmpr}, whose English
+translations are ``Verb'', ``Noun'', and ``Proper~noun'', respectively.
 
-The type \emph{gender\_t} has values \emph{f, m, NA,} and \emph{unknown}, whose English translations
-are ``Feminine'', ``Masculine'', ``None'', and ``Unknown'', respectively. The strings ``\#1'', ``\#2''
-etc. indicate the order in which these values should be sorted when presented to the user. Normally,
-the values would be sorted alphabetically thus:
+Lines \ref{line-gender-start}-\ref{line-gender-end} indicate that type \emph{gender\_t} has values
+\emph{f, m, NA,} and \emph{unknown}, whose English translations are ``Feminine'', ``Masculine'',
+``None'', and ``Unknown'', respectively. The strings ``\#1'', ``\#2'' etc. indicate the order in
+which these values should be sorted when presented to the user. Normally, the values would be sorted
+alphabetically thus:
 
 \begin{center}
   \includegraphics[width=0.3\textwidth]{psp.png}
 \end{center}
 
 But if the English translation starts with ``\#1'', ``\#2'' etc. these numbers indicate the sort
-order. So with the contents of \emph{gender\_t} given above, genders are sorted thus:
+order. So with the contents of \emph{gender\_t} given in Listing \ref{list-emdrostype-sample},
+genders are sorted thus:
 
 \begin{center}
   \includegraphics[width=0.148\textwidth]{gender.png}
@@ -2277,10 +2273,10 @@ In the Database Localization File, the \emph{grammarfeature, grammarmetafeature,
 
 \subsubsection{\emph{grammarfeature}}
 
-As an example, let us consider the \emph{grammarfeature} for the English localization of the
-ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}):
+As an example, Listing \ref{list-grammarfeature-sample} shows the \emph{grammarfeature} for the
+English localization of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=A sample grammarfeature value,label=list-grammarfeature-sample]
     "grammarfeature": {
         "word": {
             "text_translit": "Transliteration"
@@ -2298,28 +2294,29 @@ translation from \emph{emdrosobject} is used.
 
 \subsubsection{\emph{grammarmetafeature}}
 
-This is the \emph{grammarmetafeature} for the English localization of the
-ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}):
+Listing \ref{list-grammarmetafeature-sample} shows the \emph{grammarmetafeature} for the English
+localization of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
 
-\begin{lstlisting}
+\begin{lstlisting}[numbers=left,caption=A sample grammarmetafeature value,label=list-grammarmetafeature-sample]
     "grammarmetafeature": {
         "word": {
-            "pgn": "Person, gender, number",
+            "pgn": "Person, gender, number",%\label{line-pgn}%
             "suffix_pgn": "Suffix: Person, gender, number"
         }
     }
 \end{lstlisting}
 
-Here the GrammarMetaFeature \emph{pgn} of the \emph{word} object is given the English translation
-``Person, gender, number''. (The example in Section \ref{sec-grammarmetafeature} specifies that the \emph{word}
-object has a GrammarMetaFeature called \emph{pgn}.)
+In line \ref{line-pgn} the GrammarMetaFeature \emph{pgn} of the \emph{word} object is given the
+English translation ``Person, gender, number''. (Listing \ref{list-gmf-sample} on page
+\pageref{list-gmf-sample} specifies that the \emph{word} object has a GrammarMetaFeature called
+\emph{pgn}.)
 
 \subsubsection{\emph{grammarsubfeature}}
 
-This is a subset of the \emph{grammarmetafeature} for the English localization of the
-ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}):
+Listing \ref{list-grammarsubfeature-sample} shows a subset of the \emph{grammarsubfeature} for the
+English localization of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=A sample grammarsubfeature value,label=list-grammarsubfeature-sample]
     "grammarsubfeature": {
         "word": {
             "ps": {
@@ -2347,9 +2344,10 @@ ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}):
     }
 \end{lstlisting}
 
-The example in Section \ref{sec-grammarmetafeature} specifies that the \emph{word} object has a GrammarMetaFeature
-called \emph{pgn} which is made up of the GrammarSubFeatures \emph{ps, gn,} and \emph{nu}. The
-\emph{grammarsubfeature} value listed above specifies the English translation for these three
+The example in Listing \ref{list-gmf-sample} on page \pageref{list-gmf-sample} specifies that the
+\emph{word} object has a GrammarMetaFeature called \emph{pgn} which is made up of the
+GrammarSubFeatures \emph{ps, gn,} and \emph{nu}. The \emph{grammarsubfeature} value in Listing
+\ref{list-grammarsubfeature-sample} above specifies the English translation for these three
 GrammarSubFeatures. So if, for example, a word has features \emph{ps=p2, gn=m,} and \emph{nu=sg}
 (corresponding to second person, masculine, singular), the \emph{pgn} GrammarMetaFeature should be
 rendered as ``2MSg''.
@@ -2357,10 +2355,10 @@ rendered as ``2MSg''.
 
 \subsubsection{\emph{grammargroup}}
 
-This is the \emph{grammargroup} for the English localization of the ETCBC4 database (taken from the
-file \texttt{db/ETCBC4.en.prop.json}):
+Listing \ref{list-grammargroup-sample} shows the \emph{grammargroup} for the English localization of
+the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=A sample grammargroup value,label=list-grammargroup-sample]
     "grammargroup": {
         "word": {
             "form_in_text": "Form in text",
@@ -2371,10 +2369,11 @@ file \texttt{db/ETCBC4.en.prop.json}):
 \end{lstlisting}
 
 The Database Specification File for the ETCBC4 database defines three GrammarGroups for the
-\emph{word} object with the names \emph{form\_in\_text, lexeme,} and \emph{morphology.} The
+\emph{word} object with the names \emph{form\_in\_text,\footnote{Shown in Listing
+    \ref{list-itemssample} on page \pageref{list-itemssample}.} lexeme,} and \emph{morphology.} The
 localization information above specifies the English names for these GrammarGroups. The two
-illustrations in Section \ref{sentencegrammar} show these translations in the grammar selection
-box and the grammar information box.
+illustrations in Section \ref{sentencegrammar} show these translations in the grammar selection box
+and the grammar information box.
 
 \subsection{The \emph{universe} Key}\label{universe-loc}
 
@@ -2383,14 +2382,14 @@ chapter, and verse references.\footnote{Strictly speaking, references do not hav
   references, since Bible OL can handle any other text corpuses. But book, chapter, and verse are
   used here as a useful illustration.}
 
-As an example, let us consider a subset of the \emph{universe} for English localization of
-the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}):
+As an example, Listing \ref{list-universe-sample} shows a subset of the \emph{universe} for English
+localization of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
 
-\begin{lstlisting}[escapechar=\#]
+\begin{lstlisting}[escapechar=\#,numbers=left,caption=A subset of the universe value,label=list-universe-sample]
     "universe": {
         "book": {
-            "_label": "%s",
-            "Genesis": "Genesis",
+            "_label": "%s", #\label{line-book-label}#
+            "Genesis": "Genesis", #\label{line-first-book}#
             "Exodus": "Exodus",
             "Leviticus": "Leviticus",
             "Numeri": "Numbers",
@@ -2400,34 +2399,30 @@ the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}):
             "Ruth": "Ruth",
             "Samuel_I": "1 Samuel",
             "Samuel_II": "2 Samuel",
-            ... #\textrm{\scriptsize(Additional books omitted)}#
+            ... #\textrm{\scriptsize(Additional books omitted)}\label{line-last-book}#
         },
         "chapter": {
-            "_label": "Chapter %s"
+            "_label": "Chapter %s" #\label{line-chapter-label}#
         },
         "verse": {
-            "_label": "Verse %s"
+            "_label": "Verse %s" #\label{line-verse-label}#
         }
     }
 \end{lstlisting}
 
 The \emph{universeHierarchy} key of the Database Specification File (see page
 \pageref{universe-hierarchy}) defines the reference hierarchy of ETCBC4 as consisting of the Emdros
-object types \emph{book, chapter,} and \emph{verse.} The \emph{universe} key in the above localization
-example, define how these three object types should be rendered:
+object types \emph{book, chapter,} and \emph{verse.} The \emph{universe} key in Listing
+\ref{list-universe-sample} above defines how these three object types should be rendered:
 
 The \emph{\_label} key presents the general format as a string where ``\%s'' is to be replaced by
-the actual reference. So, when the \emph{\_label} key of \emph{chapter} is ``Chapter~\%s'', it means
-that chapter 18 will be displayed as ``Chapter~18''.
+the actual reference. So, when line \ref{line-chapter-label} gives the \emph{\_label} key of
+\emph{chapter} a value of ``Chapter~\%s'', it means that chapter 18 will be displayed as
+``Chapter~18''.
 
-For the \emph{book} object, the \emph{\_label} key is simply the string ``\%s'', but additionally
-English translations of the book names used in ETCBC4 are given.
-
-Currently, this \emph{universe} information is only used when displaying a passage tree in Bible OL:
-
-\begin{center}
-  \includegraphics[width=0.3\textwidth]{universe.png}
-\end{center}
+For the \emph{book} object, the \emph{\_label} key (line \ref{line-book-label}) is simply the string
+``\%s'', but additionally English translations of the book names used in ETCBC4 are given in lines
+\ref{line-first-book}-\ref{line-last-book}.
 
 
 %%%%%%%%%%%%%%%%%%%% Database Type Information Files: PRIM.typeinfo.json %%%%%%%%%%%%%%%%%%%%
@@ -2460,8 +2455,8 @@ The Database Localization File contains the following key/value pairs:
 \begin{my-longtabu}{lX}{ \headii{Key}{Value} }
   objTypes & An array containing the names of all Emdros object types.\\
 
-  obj2feat & A collection of key/value pairs that list the features and type of each Emdros object
-  type (see Section \ref{obj2feat}).\\
+  obj2feat & A collection of key/value pairs that list the names and types of the features
+  associated with each Emdros object type (see Section \ref{obj2feat}).\\
 
   enymTypes & An array containing the names of all enumeration types in the database.\\
 
@@ -2471,16 +2466,16 @@ The Database Localization File contains the following key/value pairs:
 
 \subsection{The \emph{obj2feat} Key}\label{obj2feat}
 
-The value of the \emph{obj2feat} key is a collection of key/value pairs that list the features and
-type of each Emdros object type.
+The value of the \emph{obj2feat} key is a collection of key/value pairs that list the names and
+types of the features associated with each Emdros object type.
 
-This is a subset of \emph{obj2feat} for the ETCBC4 database (taken from the file
-\texttt{db/ETCBC4.typeinfo.json}):
+Listing \ref{list-obj2feat-sample} shows a subset of \emph{obj2feat} for the ETCBC4 database (taken
+from the file \texttt{db/ETCBC4.typeinfo.json}).
 
-\begin{lstlisting}
+\begin{lstlisting}[numbers=left,caption=A sample obj2feat value,label=list-obj2feat-sample]
     "obj2feat": {
         "word": {
-            "frequency_rank": "integer",
+            "frequency_rank": "integer",%\label{line-freq-rank}%
             "continuation": "string",
             "nu": "number_t",
             "gn": "gender_t",
@@ -2499,23 +2494,23 @@ This is a subset of \emph{obj2feat} for the ETCBC4 database (taken from the file
     }
 \end{lstlisting}
 
-This example shows that the \emph{word} object has a feature called \emph{frequency\_rank} of type
-\emph{integer}.
+For example, line \ref{line-freq-rank} shows that the \emph{word} object has a feature called
+\emph{frequency\_rank} of type \emph{integer}.
 
 \subsection{The \emph{enum2values} Key}\label{enum2values}
 
 The value of the \emph{enum2values} key is a collection of key/value pairs that list the values of
 all enumeration types.
 
-This is a subset of \emph{enum2values} for the ETCBC4 database (taken from the file
-\texttt{db/ETCBC4.typeinfo.json}):
+Listing \ref{list-enum2values-sample} shows a subset of \emph{enum2values} for the ETCBC4 database
+(taken from the file \texttt{db/ETCBC4.typeinfo.json}).
 
-\begin{lstlisting}
+\begin{lstlisting}[numbers=left,caption=A sample enum2values value,label=list-enum2values-sample]
     "enum2values": {
-        "boolean_t": [
+        "boolean_t": [%\label{line-bool-start}%
             "false",
             "true"
-        ],
+        ],%\label{line-bool-end}%
         "number_t": [
             "NA",
             "du",
@@ -2527,8 +2522,8 @@ This is a subset of \emph{enum2values} for the ETCBC4 database (taken from the f
     }
 \end{lstlisting}
 
-This example shows that the enumeration type \emph{boolean\_t} has the values \emph{false} and
-\emph{true.}
+For example, lines \ref{line-bool-start}-\ref{line-bool-end} show that the enumeration type
+\emph{boolean\_t} has the values \emph{false} and \emph{true.}
 
 %%%%%%%%%%%%%%%%%%%% Database Book Order Files: PRIM.bookorder %%%%%%%%%%%%%%%%%%%%
 \section{Database Book Order Files: PRIM.bookorder}\label{sec-bookorder}
@@ -2540,10 +2535,10 @@ the Emdros database is PRIM, the name of the associated Database Book Order File
 This is a text file that lists the names of the books in the database in the order in which they
 should be presented. I also lists the chapters available in each book.
 
-This is a subset of the Database Book Order File for the ETCBC4 database (taken from the file
-\texttt{db/ETCBC4.bookorder}):
+Listing \ref{list-bookorder} shows a subset of the Database Book Order File for the ETCBC4 database
+(taken from the file \texttt{db/ETCBC4.bookorder}).
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=A subset of the ETCBC4 Book Order File,label=list-bookorder]
 Genesis/1-50
 Exodus/1-40
 Leviticus/1-27
@@ -2568,7 +2563,8 @@ subset of a database. In that case a line of the Database Book Order File may lo
 Leviticus/2,6-9,23
 \end{lstlisting}
 
-This line indicates that only chapters 2, 6-9, and 23 of Leviticus are available.
+\noindent
+which indicates that only chapters 2, 6-9, and 23 of Leviticus are available.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2582,9 +2578,9 @@ This line indicates that only chapters 2, 6-9, and 23 of Leviticus are available
 A quiz template (or an exercise template\index{exercise template}) is an XML file that describes how Bible OL should
 generate an exercise. It always has a filename that ends in \texttt{.3et}\index{.3et (file extension)}.
 
-A typical quiz template may look like this:
+Listing \ref{list-qtsample} shows a typical quiz template.
 
-\begin{lstlisting}[language=XML,numbers=left,caption=Quiz template sample,label=qtsample]
+\begin{lstlisting}[language=XML,numbers=left,caption=Quiz template sample,label=list-qtsample]
 <?xml version="1.0" encoding="UTF-8"?>
 <questiontemplate version="3">
   <desc><![CDATA[Which gender is this?]]></desc>
@@ -2633,14 +2629,14 @@ elements:
 \xml{desc} & A \emph{CDATA} string describing the exercise. This string may contain HTML code. This
 is the text entered under the ``Description'' tab when creating a quiz template.\\
 
-\xml{database} & The name of the Emdros database.\\
+\xml{database} & The name of the Emdros database and the primary name of the Database Specification
+File.\\
 
-\xml{properties} & The name of the Database Localization File (without the
-\texttt{.}\emph{language}\texttt{.prop.json} extension).\\
+\xml{properties} & The primary name of the Database Localization File.\\
 
 \xml{path} & This element may occur several times in the file. It describes a component of the
 passages used for the exercise. This is the data entered under the ``Passages'' tab when creating a
-quiz template. In Listing \ref{qtsample}, lines \ref{xml-pa}-\ref{xml-pb} specify Genesis chapter 1
+quiz template. In Listing \ref{list-qtsample}, lines \ref{xml-pa}-\ref{xml-pb} specify Genesis chapter 1
 verses 1-2, Genesis chapter 3 (all verses), and the book of Exodus (all chapters).\\
 
 \xml{sentenceselection} & A description of how Bible OL should select sentences. See Section \ref{sensel-xml}.\\
@@ -2661,10 +2657,11 @@ when creating a quiz template.
 The \xml{sentenceselection} element contains these elements:
 
 \begin{my-longtabu}{lX}{ \headii{Element}{Contents} }
-\xml{questionobject} & The Emdros object type that is used for sentence selection.\\
+\xml{questionobject} & The Emdros object type that is used for sentence selection. This value of
+this element is irrelevant if an MQL string is to be used for sentence selection.\\
 
 \xml{mql} & This element is only present if an MQL string is to be used for sentence selection. The
-element contains the MQL string.\\
+element contains the MQL string. (See Section \ref{sec-mql-selection}.)\\
 
 \xml{featurehandlers} & This element is not present if an MQL string is to be used for sentence selection.
 It contains a description of the features used for sentence selection. See Section \ref{feathand-xml}.\\
@@ -2677,14 +2674,13 @@ sentence unit selection'' under the ``Sentences'' tab.\\
 \end{my-longtabu}
 
 
-
 \subsection{\xml{featurehandlers}}\label{feathand-xml}
 
 The \xml{featurehandlers} element contains descriptions of the Emdros features used for selecting a sentence
 or a sentence unit. The \xml{featurehandlers} element contains one or more of these elements, each
 of which describes an Emdros feature and how it is used for selections:
 
-\begin{my-longtabu}{lX}{ \headii{Element}{Emdros feature type} }
+\begin{my-tabu}{lX}{ \headii{Element}{Emdros feature type} }
 \xml{stringfeature} & String. See Section \ref{stringfeat-xml}.\\
 
 \xml{integerfeature} & Integer. The selector specifies distinct integer values. See Section \ref{integerfeat-xml}.\\
@@ -2696,7 +2692,7 @@ of which describes an Emdros feature and how it is used for selections:
 
 \xml{enumlistfeature} & List of enumeration values. See Section \ref{enumlistfeat-xml}.\\
 
-\end{my-longtabu}
+\end{my-tabu}
 
 An implicit logical \emph{AND} is assumed between these selector specifiers, meaning that only
 objects that match all of the specified selectors are chosen.
@@ -2709,7 +2705,7 @@ used for selecting a sentence or a sentence unit.
 
 The \xml{stringfeature} element contains these elements:
 
-\begin{my-longtabu}{lX}{ \headii{Element}{Contents} }
+\begin{my-tabu}{lX}{ \headii{Element}{Contents} }
 \xml{name} & The name of the Emdros feature.\\
 
 \xml{comparator} & The string ``equals'', ``differs'', or ``matches''. If the string is ``equals'', the
@@ -2720,7 +2716,7 @@ the string is ``matches'', the Emdros feature must match one of the regular expr
 
 \xml{value} & This element may occur several times. It contains a string that is compared to the value of
 the Emdros feature.\\
-\end{my-longtabu}
+\end{my-tabu}
 
 
 \subsubsection{\xml{integerfeature}}\label{integerfeat-xml}
@@ -2730,7 +2726,7 @@ used for selecting a sentence or a sentence unit.
 
 The \xml{integerfeature} element contains these elements:
 
-\begin{my-longtabu}{lX}{ \headii{Element}{Contents} }
+\begin{my-tabu}{lX}{ \headii{Element}{Contents} }
 \xml{name} & The name of the Emdros feature.\\
 
 \xml{comparator} & The string ``equals'' or ``differs''. If the string is ``equals'', the
@@ -2739,7 +2735,7 @@ Emdros feature must be equal to one of the \xml{value} elements mentioned below;
 
 \xml{value} & This element may occur several times. It contains an integer that is compared to the value of
 the Emdros feature.\\
-\end{my-longtabu}
+\end{my-tabu}
 
 
 \subsubsection{\xml{rangeintegerfeature}}\label{rangefeat-xml}
@@ -2749,7 +2745,7 @@ used for selecting a sentence or a sentence unit.
 
 The \xml{integerfeature} element contains these elements:
 
-\begin{my-longtabu}{lX}{ \headii{Element}{Contents} }
+\begin{my-tabu}{lX}{ \headii{Element}{Contents} }
 \xml{name} & The name of the Emdros feature.\\
 
 \xml{valuelow} & This element is optional. If it is present, it contains an integer. The
@@ -2758,7 +2754,7 @@ value of the Emdros feature must be greater than or equal to this value.\\
 \xml{valuehigh} & This element is optional. If it is present, it contains an integer. The
 value of the Emdros feature must be less than or equal to this value.\\
 
-\end{my-longtabu}
+\end{my-tabu}
 
 
 \subsubsection{\xml{enumfeature}}\label{enumfeat-xml}
@@ -2768,16 +2764,16 @@ used for selecting a sentence or a sentence unit.
 
 The \xml{enumfeature} element contains these elements:
 
-\begin{my-longtabu}{lX}{ \headii{Element}{Contents} }
+\begin{my-tabu}{lX}{ \headii{Element}{Contents} }
 \xml{name} & The name of the Emdros feature.\\
 
 \xml{comparator} & The string ``equals'' or ``differs''. If the string is ``equals'', the
 Emdros feature must be equal to one of the \xml{value} elements mentioned below; if the string is
 ``differs'', the Emdros feature must not be equal to any of the \xml{value} elements mentioned below.\\
 
-\xml{value} & This element may occur several times. It contains string naming an enumeration value that is
+\xml{value} & This element may occur several times. It contains an enumeration value name that is
 compared to the value of the Emdros feature.\\
-\end{my-longtabu}
+\end{my-tabu}
 
 
 \subsubsection{\xml{enumlistfeature}}\label{enumlistfeat-xml}
@@ -2788,22 +2784,22 @@ enumeration type'' is used for selecting a sentence or a sentence unit.
 
 The \xml{enumlistfeature} element contains these elements:
 
-\begin{my-longtabu}{lX}{ \headii{Element}{Contents} }
+\begin{my-tabu}{lX}{ \headii{Element}{Contents} }
 \xml{name} & The name of the Emdros feature.\\
 
 \xml{listvalues} & This element may occur several times. Each specifies a separate selection
 mechanism. A logical \emph{OR} is assumed between each selection. See below for further
 information.\\
-\end{my-longtabu}
+\end{my-tabu}
 
 The \xml{listvalues} element specifies which enumeration values must occur in the Emdros feature.
 The \xml{listvalues} element contains these elements:
 
 \begin{my-tabu}{lX}{ \headii{Element}{Contents} }
-yes & This element may occur zero or more times. Each contains an enumeration value that must be
+\xml{yes} & This element may occur zero or more times. Each contains an enumeration value that must be
 present in the Emdros feature.\\
 
-no & This element may occur zero or more times. Each contains an enumeration value that must not be
+\xml{no} & This element may occur zero or more times. Each contains an enumeration value that must not be
 present in the Emdros feature.\\
 \end{my-tabu}
 
@@ -2815,8 +2811,20 @@ tab when creating a quiz template. This element is not present in the quiz templ
 \xml{useforquizobjects} element under the \xml{sentenceselection} element is \emph{true}. (See
 Section \ref{sensel-xml}.)
 
-The \xml{quizobjectselection} element may contain the same elements as the \xml{sentenceselection}
-element except for \xml{useforquizobjects}.
+The \xml{quizobjectselection} element contains these elements:
+
+\begin{my-longtabu}{lX}{ \headii{Element}{Contents} }
+\xml{questionobject} & The Emdros object type that is used for sentence unit selection.\\
+
+\xml{mql} & This element is only present if an MQL string is to be used for sentence unit selection. The
+element contains the MQL string. (See Section \ref{sec-mql-selection}.)\\
+
+\xml{featurehandlers} & This element is not present if an MQL string is to be used for sentence selection.
+It contains a description of the features used for sentence unit selection. The format is the same
+as for \xml{sentenceselection} elements. See Section \ref{feathand-xml}.\\
+\end{my-longtabu}
+
+
 
 %%%%%%%%%%%%%%%%%%%% quizfeatures %%%%%%%%%%%%%%%%%%%%
 \section{\xml{quizfeatures}}\label{feat-xml}
@@ -2841,6 +2849,91 @@ information box.\\
 \end{my-longtabu}
 
 
+%%%%%%%%%%%%%%%%%%%% Templates Using MQL for Selection %%%%%%%%%%%%%%%%%%%%
+\section{Templates Using MQL for Selection}\label{sec-mql-selection}
+
+When creating a quiz template, a facilitator can use a user-friendly selector for specifying which
+feature values to use when selecting sentences and sentence units. However, for more complex
+selection criteria, an MQL query string can be specified.
+
+When a quiz template contains an MQL string for \emph{sentence selection,} Bible OL will surround
+the MQL string by \texttt{[sentence ...]}, where the three dots are replaced by the contents of the
+\xml{mql} element under the \xml{sentenceselection} element. This means that Bible OL will search for a
+sentence containing whatever is specified in the MQL statement. It is recommended that facilitators
+include the word \texttt{NORETRIEVE} in the MQL statement as this will cause the program to run
+considerably faster.
+
+When a quiz template contains an MQL string for \emph{sentence unit selection,} Bible OL will
+surround the MQL string by \texttt{[ttt ...]}, where \texttt{ttt} is the contents of the
+\xml{questionobject} element under the \xml{quizobjectselection} element, and the three dots are
+replaced by the contents of the \xml{mql} element under the \xml{quizobjectselection} element.
+This means that Bible OL will look in the chosen sentence for sentence units that can be described
+as specified in the MQL statement. Here, the MQL statement must not contain the characters
+\texttt{[} and \texttt{]}; so it is only possible to specify one sentence unit. Furthermore, the
+word \texttt{NORETRIEVE} must not be included in the statement.
+
+\pfbreak
+
+The reason for handling the \xml{mql} element in these different ways is that the MQL for sentence
+selection may include multiple query elements, whereas the MQL for sentence unit selection must
+refer to a single object.
+
+This can be illustrated by the following example: Assume that an exercise is intended to test a
+student's knowledge of the case of Greek nouns when they follow a preposition. Sentence selection
+would therefore look for sentences that contain a preposition followed by a noun. This is achieved
+by this \xml{sentenceselection} element:
+
+\begin{lstlisting}[language=XML]
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <mql>[word NORETRIEVE psp=preposition][word NORETRIEVE psp=noun]</mql>
+    <useforquizobjects>false</useforquizobjects>
+  </sentenceselection>
+\end{lstlisting}
+
+Note that the \xml{mql} element contains two \texttt{[word~...]} blocks.
+
+
+The sentence units (question objects) should be nouns. This is achieved
+by this \xml{question\-object\-selection} element:
+
+\begin{lstlisting}[language=XML]
+  <quizobjectselection version="1">
+    <questionobject>word</questionobject>
+    <mql>psp=noun</mql>
+  </quizobjectselection>
+\end{lstlisting}
+
+Note that the \xml{mql} element contains just the \texttt{psp=noun} specification.
+
+The student will be asked to provide the case of the noun, so the \xml{quizfeatures} element will
+contain this:
+
+
+\begin{lstlisting}[language=XML]
+  <quizfeatures version="3">
+    <show>visual</show>
+    <request>case</request>
+  </quizfeatures>
+\end{lstlisting}
+
+
+When a student runs the exercise, Bible OL will select sentences using this MQL query:
+
+\begin{lstlisting}[frame=]
+[sentence [word NORETRIEVE psp=preposition][word NORETRIEVE psp=noun]]
+\end{lstlisting}
+
+Once a sentence has been chosen, Bible OL will select sentence units using this MQL query:
+
+\begin{lstlisting}[frame=]
+[word psp=noun GET case]
+\end{lstlisting}
+
+(When running this exercise, the student will be asked about the case of all nouns, not just the
+nouns that follow prepositions; but each sentence is guaranteed to contain at least one
+preposition/noun pair.)
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Multiple-Choice Questions %%%%%%%%%%%%%%%%%%%%
 \chapter{Multiple-Choice Questions}\label{chap-multiple-choice}
@@ -2850,7 +2943,7 @@ information box.\\
 \plainbreak{3}
 
 
-If an request feature in an exercise has an enumeration type, the request feature is displayed as a
+If a request feature in an exercise has an enumeration type, the request feature is displayed as a
 drop-down box and thus becomes a multiple choice question:
 
 \begin{center}
@@ -2910,7 +3003,7 @@ SELECT DISTINCT suffix FROM suffixes,lexsuf,lexemes
     WHERE lex='CM/' AND lexid=lexemes.id AND sufid=suffixes.id
 \end{lstlisting}
 
-This will yield a collection of twelve possible pronominal suffixes associated with the \emph{lex}
+This will yield a collection of all possible pronominal suffixes associated with the \emph{lex}
 value ``CM/''. Bible OL will then choose ten of these at random, while still ensuring that the
 correct answer (\heb{ֹו}) is among them, and present them in a drop-down box.
 
@@ -2935,7 +3028,7 @@ This chapter describes the data exchange between the client (web browser) and th
 %%%%%%%%%%%%%%%%%%%% Displaying Text %%%%%%%%%%%%%%%%%%%%
 \section{Displaying Text}\label{displaying-text}
 
-The user requests Bible OL to display a particular passage by accessing a URL in one of these formats:
+A user requests Bible OL to display a particular passage by accessing a URL in one of these formats:
 
 \begin{lstlisting}[frame=]
 http://%\textrm{\textit{hostname}}%/text/show_text/%\textrm{\textit{dsfname}}%/%\textrm{\textit{book}}%/%\textrm{\textit{chapter}}%
@@ -2946,13 +3039,13 @@ http://%\textrm{\textit{hostname}}%/text/show_text/%\textrm{\textit{dsfname}}%/%
 The first variant retrieves an entire chapter, the second variant retrieves a single verse, and the
 third variant retrieves a range of verses.
 
-So, for example, to retrieve \bibleref{Genesis}{1}{2-5} from the ETCBC4-translit database on the
+The \emph{dsfname} in the URLs is the primary name of the Database Specification File
+(Section \ref{sec-dsf}); so if the \emph{dsfname} is ``ETCBC4-translit'', the server will access the
+Database Specification File \texttt{ETCBC4-translit.db.json}.
+
+So, for example, to retrieve \bibleref{Genesis}{1}{2-5} from ETCBC4-translit on the
 server with hostname \texttt{bibleol.3bmoodle.dk}, you can use this URL:
 \url{http://bibleol.3bmoodle.dk/text/show_text/ETCBC4-translit/Genesis/1/2/5}.
-
-The \emph{dsfname} in the URLs is the first part of the name of the Database Specification File
-(Section \ref{sec-dsf}); so if the \emph{dsfname} is ``ETCBC4-translit'', the server will access the
-Database Specification file \texttt{ETCBC4-translit.db.json}.
 
 The server will always expand the requested range of verse to contain a complete set of sentences;
 so a request for \bibleref{Genesis}{1}{16-17} will automatically be expanded to include verse 18,
@@ -2988,11 +3081,11 @@ headers, HTML code to lay out the menu, and these JavaScript variables:
   exercise.\\
 \end{my-longtabu}
 
-Included in the HTML document which the server sends to the client is a link to a number of CSS and
-JavaScript files, including \texttt{ol.js} which contains the main piece of code that is to run on
+Included in the HTML document that the server sends to the client is a link to a number of CSS and
+JavaScript files, including \texttt{ol.js}, which contains the main piece of code that is to run on
 the client.
 
-When the client (the web browser) has read the HTML file the JavaScript code directs it to construct
+When the client (the web browser) has read the HTML file, the JavaScript code directs it to construct
 the visual appearance of the text. This involves building the central text layout, adding
 grammatical information to each word, phrase, clause, etc., and constructing the grammar selection
 box and the grammar information box.
@@ -3000,7 +3093,7 @@ box and the grammar information box.
 %%%%%%%%%%%%%%%%%%%% Running an Exercise %%%%%%%%%%%%%%%%%%%%
 \section{Running an Exercise}
 
-The user requests Bible OL to start a particular exercise by accessing a URL in one of these
+A user requests Bible OL to start a particular exercise by accessing a URL in one of these
 formats:
 
 \begin{lstlisting}[frame=]
@@ -3008,29 +3101,29 @@ http://%\textrm{\textit{hostname}}%/text/show_quiz?quiz=%\textrm{\textit{excerci
 http://%\textrm{\textit{hostname}}%/text/show_quiz_univ?quiz=%\textrm{\textit{excercisename}}%&count=%\textrm{\textit{numberOfQuestions}}%
 \end{lstlisting}
 
-The first variant executes an exercise based on a pre-defined set of Bible passages (which are stored as
-part of the exercise file); the second variant asks the user which Bible passages to use, and then
+The first variant executes an exercise based on the set of Bible passages specified in the
+\xml{path} elements of the quiz template; the second variant asks the user which Bible passages to use, and then
 starts the exercise. In both cases the \emph{exercisename} is the path name (relative to the
 \texttt{quizzes} directory) of the file containing the exercise; the \emph{numberOfQuestions} is a
 positive integer indicating the maximum number of questions to ask in the exercise.\footnote{If
   \texttt{count} is omitted or if the number is illegal, five questions will be asked.}
 
-So, for example, to run an exercise consisting of ten questions from the exercise file
+So, for example, to run an exercise consisting of ten questions from the quiz template file
 \texttt{Nestle~1904/demo/case.3et} on the server with hostname \texttt{bibleol.3bmoodle.dk}, you can
 use this URL:
 \url{http://bibleol.3bmoodle.dk/text/show_quiz?quiz=Nestle\%201904/demo/case.3et&count=10}. This
-will use the pre-defined set of Bible passages stored with the exercise file.
+will use the pre-defined set of Bible passages stored in the quiz template file.
 
-If the user chooses the second variant of URL, the server will display a tree of books of the Bible.
-The user can open book nodes to display a list chapters, and they can open chapter nodes to display
+If the user chooses the second variant of the URL, the server will display a tree of books of the Bible.
+The user can open book nodes to display a list of chapters, and they can open chapter nodes to display
 a list of verses. The client retrieves the number of chapters in each book and the number verses in
 each chapter as needed using AJAX requests from the \emph{jstree} package (see page
-\pageref{jstree}). Once the user is click the ``Start quiz'' button, the client sends an HTTP~POST
-request to the server containing the exercise file name, the number of questions to ask, and the
+\pageref{jstree}). Once the user clicks the ``Start quiz'' button, the client sends an HTTP~POST
+request to the server containing the quiz template filename, the number of questions to ask, and the
 list of selected passages.
 
-The server uses information in the exercise file and the list of passages (either the list specified
-by the user or the pre-defined list for the exercise) to generate a query for the relevant Emdros
+The server uses information in the quiz template file and the list of passages (either the list specified
+by the user or the pre-defined list from the template) to generate a query for the relevant Emdros
 database. Based on the result of the query, the server generates an HTML document containing little
 more than the relevant headers, HTML code to lay out the menu, and these JavaScript variables:
 
@@ -3054,12 +3147,12 @@ more than the relevant headers, HTML code to lay out the menu, and these JavaScr
   variable is described in Chapter \ref{chap-quizdata}.\\
 \end{my-longtabu}
 
-Included in the HTML document which the server sends to the client is a link to a number of CSS and
-JavaScript files, including \texttt{ol.js} which contains the main piece of code that is to run on
+Included in the HTML document that the server sends to the client is a link to a number of CSS and
+JavaScript files, including \texttt{ol.js}, which contains the main piece of code that is to run on
 the client.
 
-When the client (the web browser) has read the HTML file the JavaScript code directs it to construct
-the visual appearance of the exercises. This involves building the central text layout, adding
+When the client (the web browser) has read the HTML file, the JavaScript code directs it to construct
+the visual appearance of the questions. This involves building the central text layout, adding
 grammatical information to each word, phrase, clause, etc., building the question/answer panel, and
 constructing the grammar selection box and the grammar information box.
 
@@ -3074,6 +3167,8 @@ the user; if the user not logged in, the client instructs the server to display 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% The dictionaries Variable %%%%%%%%%%%%%%%%%%%%
 \chapter{The \emph{dictionaries} Variable}\label{chap-dictionary}
+
+<HERTIL>
 
 \textbf{Read this chapter if you are going to work with code that accesses the Emdros databases on
   the server or displays text and exercises in the client.}
@@ -3099,7 +3194,7 @@ Note: There is also a class in the client called \emph{Dictionary}. This is not 
 %%%%%%%%%%%%%%%%%%%% The TypeScript DictionaryIf and PHP Dictionary Classes %%%%%%%%%%%%%%%%%%%%
 \section{The TypeScript \emph{DictionaryIf} and PHP \emph{Dictionary} Classes}\label{sec-dictionaryif}
 
-There is a one-to-one mapping of classes and data fields in the server and in the client, but the
+xThere is a one-to-one mapping of classes and data fields in the server and in the client, but the
 names differ a little, as you can see from the following.
 
 This is a simplified overview of the relevant TypeScript definitions in the client:
@@ -3802,7 +3897,7 @@ noting:\footnote{Note that the list is not complete. Consult the comments in the
 \begin{my-longtabu}{>{\ttfamily\footnotesize}lX}{ \headii{\textrm{\normalsize File (add ``\texttt{.php}'' to name)}}{Contents} }
 core/MY\_Controller & Customized version of CodeIgniter's \emph{CI\_Controller} class.\\
 
-helpers/quiztemplate\_helper & XML parser for exercise files.\\
+helpers/quiztemplate\_helper & XML parser for quiz template files.\\
 
 helpers/sheaf\_helper & Classes that model data in Emdros replies.\\
 
