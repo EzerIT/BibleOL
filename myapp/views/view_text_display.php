@@ -25,7 +25,7 @@
     <table id="quiztab"></table>
     <p><input id="locate_cb" type="checkbox">Locate: <span class="location"></span></p>
      <?php /* <progess> works in most browsers, <div id="progressbar"> is for older browsers and uses JQuery UI*/ ?>
-     <p class="inline">Progess:</p>
+     <p class="inline">Progress:</p>
      <progress id="progress" value="0" max="1"></progress>
      <div id="progressbar"></div>
      <p id="progresstext" class="inline"></p>
