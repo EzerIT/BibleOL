@@ -278,12 +278,12 @@ gives an overview of what you may come across here:
 
 \begin{my-longtabu-nomid}{lX}{ \headii{Term}{Meaning} }
 
-\parbox[t]{3cm}{quiz\index{quiz|hyperit}\par exercise\index{exercise|hyperit}} & These terms are
+\parbox[t]{3cm}{quiz\index{quiz|see {exercise}}\par exercise\index{exercise|hyperit}} & These terms are
 synonymous. They refer to an exercise executed by a user.\\
 
 \midrule
 
-quiz template\index{quiz template|hyperit}\index{template|hyperit} & A file located in the
+quiz template\index{quiz template|hyperit}\index{template|see {quiz template}} & A file located in the
 \texttt{quizzes} directory. In XML format it describes how Bible OL should generate questions for an
 exercise.\\
 
@@ -298,10 +298,11 @@ exercise.\\
 several question items. The question in Figure \ref{fig-question} has \emph{two} question items.\\
 
 \midrule
-\parbox[t]{3cm}{sentence unit\index{sentence unit|hyperit}\par quiz object\index{quiz
-    object|hyperit}\par question object\index{question object|hyperit}} & These terms are
-synonymous. The terms refer to the Emdros objects that are the subject of a question item. They are
-marked in red in the question text. (See Figure \ref{fig-question}.)\\
+\parbox[t]{3cm}{sentence unit\index{sentence unit|see {quiz object}}\par
+  quiz object\index{quiz object (a.k.a. sentence unit)|hyperit}\par
+  question object\index{question object|see {quiz object}}} &
+These terms are synonymous. The terms refer to the Emdros objects that are the subject of a question
+item. They are marked in red in the question text. (See Figure \ref{fig-question}.)\\
 
 \midrule
 
@@ -315,25 +316,26 @@ part of a question item (see Figure \ref{fig-question}).\\
 
 \midrule
 
-\parbox[t]{3cm}{passages\index{passages|hyperit}\par universe\index{universe|hyperit}} & The
+\parbox[t]{3cm}{passages\index{passages|hyperit}\par universe\index{universe|see {passages}}} & The
 collection of Bible passages from which an exercise draws its sentences. The term ``universe'' is
 found in older parts of the code.\\
 
 \midrule
 
-grammar selection box\index{grammar selection box|hyperit}\index{selection box, grammar|hyperit} & A
-box found on the left part of the display where the user can select what in-line grammatical
-features to display. See Figure \ref{fig-grammar-info}.\\
+grammar selection box\index{grammar selection box|hyperit}\index{selection box|see {grammar
+    selection box}} & A box found on the left part of the display where the user can select what
+in-line grammatical features to display. See Figure \ref{fig-grammar-info}.\\
 
 \midrule
 
-grammar information box\index{grammar information box|hyperit}\index{information box, grammar|hyperit} &
+grammar information box\index{grammar information box|hyperit}\index{information box|see {grammar
+    information box}} &
 A box found on the right part of the display containing grammatical information
 about the word under the mouse pointer. See Figure \ref{fig-grammar-info}.\\
 
 \midrule
 
-grammar hierarchy\index{grammar hierarchy|hyperit}\index{hierarchy, grammar|hyperit} & The
+grammar hierarchy\index{grammar hierarchy|hyperit}\index{hierarchy, grammar|see {grammar hierarchy}} & The
 organization of components of text. At the lowest level of the grammar hierarchy we have the
 \emph{words.}\index{word} Above that we may find \emph{phrases,}\index{phrase} then
 \emph{clauses,}\index{clause} and finally \emph{sentences.}\index{sentence} The exact words for the
@@ -348,9 +350,8 @@ levels of the grammar hierarchy varies between databases.\\
 
 \begin{figure}[h]
 \includegraphics[width=\textwidth]{grammarboxes.png}
-\caption{The grammar selection box\index{grammar selection box}\index{selection box, grammar} and
-  the grammar information box\index{grammar information box}\index{information box,
-    grammar}.}\label{fig-grammar-info}
+\caption{The grammar selection box\index{grammar selection box} and
+  the grammar information box\index{grammar information box}.}\label{fig-grammar-info}
 \end{figure}
 
 
@@ -461,7 +462,8 @@ I use Emdros version 3.4.0.pre03, a pre-release; but versions 3.4.0 should proba
 Emdros can be downloaded from \url{http://sourceforge.net/projects/emdros/files/emdros}.
 
 Follow the instructions that come with Emdros to compile and install it on your computer. You will
-need a C++\index{C++} compiler and the Gnu make\index{make}\index{Gnu make}\index{gmake} system (and
+need a C++\index{C++} compiler and the Gnu make\index{make}\index{Gnu make|see
+  {make}}\index{gmake|see {make}} system (and
 probably a few other things as well -- check the Emdros documentation).
 
 When you compile Emdros, be sure to include support for PHP\index{PHP}. I use this
@@ -524,7 +526,7 @@ from Dropbox\index{Dropbox} when needed.
 
 \subsection{Step 4. Configure MySQL\index{MySQL}}
 
-Create an empty database\index{database, user}\index{user database} in MySQL. Then copy the file
+Create an empty database\index{user database}\index{database, user|see {user database}} in MySQL. Then copy the file
 \texttt{myapp/config/database.php-dist} to \texttt{myapp/config/database.php} and modify the
 following lines in the copy:
 
@@ -562,24 +564,25 @@ You should modify these values thus:
 \$config['pw\_salt']\index{salt} & A random text string of, say, 6-8 characters. This is used to randomize the
   user passwords stored in the user database.\\
 
-\$config['mql\_driver']\index{MQL driver}\index{driver, MQL} & Set to \texttt{'native'} to select a
+\$config['mql\_driver']\index{MQL driver}\index{driver, MQL|see {MQL driver}} & Set to \texttt{'native'} to select a
 built-in MQL driver. Set to or \texttt{'extern'} to run MQL commands external to the PHP interpreter
 (see Section \ref{sec-mql-extern}).\\
 
-\$config['mail\_sender\_address']\index{email address}\index{address, email} & The email address to
+\$config['mail\_sender\_address']\index{email address}\index{address|see {email address}} & The email address to
 be used as sender when Bible OL sends email to users.\\
 
-\$config['mail\_sender\_name']\index{email sender}\index{sender, email} & The name to be used as
+\$config['mail\_sender\_name']\index{email sender}\index{sender|see {email sender}} & The name to be used as
 sender when Bible OL sends email to users.\\
 
-\$config['google\_login\_enabled']\index{Google!login}\index{login!Google} & Set to \emph{true} if
+\$config['google\_login\_enabled']\index{login!Google}\index{Google!login|see {login, Google}} & Set to \emph{true} if
 you have a Google apps account\index{Google!apps account} that allows you to service Google logins;
 set to \emph{false} to disable Google login.\\
 
-\$config['google\_client\_id']\index{Google!client ID}\index{client ID, Google} & Your Google apps
+\$config['google\_client\_id']\index{Google!client ID}\index{client ID|see {Google, client ID}} & Your Google apps
 client ID. Used only if you enable Google login.\\
 
-\$config['google\_client\_secret']\index{Google!client secret}\index{client secret, Google} & Your
+\$config['google\_client\_secret']\index{Google!client secret}\index{client secret|see {Google,
+    client secret}} & Your
 Google apps client secret, if any. Used only if you enable Google login.\\
   
 \end{my-longtabu}
@@ -776,9 +779,9 @@ I use version 1.3.3 of \emph{lessc}, but the current version on GitHub is 2.4.0.
 what impact, if any, using a new version of the compiler will have on the Less source files in Bible
 OL.
 
-\subsection{Installing Tsc\index{tsc!installation}\index{TypeScript!compiler installation}}\label{sec-installing-tsc}\label{sec-install-end}
+\subsection{Installing Tsc\index{tsc!installation}\index{TypeScript!compiler|see {tsc}}}\label{sec-installing-tsc}\label{sec-install-end}
  
-\emph{Tsc}\index{tsc}\index{TypeScript!compiler} is the TypeScript\index{TypeScript} compiler. It
+\emph{Tsc}\index{tsc} is the TypeScript\index{TypeScript} compiler. It
 runs under \emph{nodejs},\index{nodejs} which is a stand-alone JavaScript\index{JavaScript} runtime
 system. For information about how to install and use the TypeScript compiler, see
 \url{http://www.typescriptlang.org}. There, they recommend that \emph{tsc} be installed using this
@@ -923,7 +926,7 @@ Obviously, you also need a good understanding of how Bible OL works from a user'
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% High-level System Architecture %%%%%%%%%%%%%%%%%%%%
-\chapter{High-level System Architecture}\index{architecture|hyperit}\index{system architecture|hyperit}
+\chapter{High-level System Architecture}\index{architecture|hyperit}\index{system architecture|see {architecture}}
 
 \textbf{As a developer, you must read this chapter.}
 
@@ -941,13 +944,12 @@ that supports PHP, MySQL, and Emdros. It is programmed in PHP\index{PHP} and has
 databases:
 
 \begin{itemize}
-\item The user database\index{user database}\index{database, user}, which contains information about
-  registered users.
+\item The user database\index{user database}, which contains information about registered users.
 \item A number of Emdros databases, which contain the text and grammatical information for the Old
   and New Testaments (and potentially other texts as well).
 \end{itemize}
 
-The client is a web browser\index{web browser}\index{browser} that accesses the server over an
+The client is a web browser\index{web browser}\index{browser|see {web browser}} that accesses the server over an
 internet connection. It requests the server to provide an exercise or a portion of a text, which it
 then displays in the browser window. The client code is primarily written in
 TypeScript\index{TypeScript}, which has been translated to JavaScript\index{JavaScript} so that the
@@ -1048,11 +1050,11 @@ Additionally, sets of monads are used to identify clause objects: Monads \{~1-2,
 one clause, and monads \{~3-6~\} identify another. Finally, the monads \{~1-11~\} identify a
 sentence object.
 
-Associated with each object are a number of \emph{features}\index{feature
-  (Emdros)|hyperit}\index{Emdros!feature|hyperit} that describe various characteristics of the object. For a
-word object, typical features could be \emph{part of speech, gender, number, tense,} and
-\emph{mood.} In the above sentence, word object 4 (the word ``had'') could, for example, have these
-features:
+Associated with each object are a number of \emph{features}%
+\index{Emdros!feature|hyperit}\index{feature|see {Emdros, feature}}
+that describe various characteristics of the object. For a word object, typical features could be
+\emph{part of speech, gender, number, tense,} and \emph{mood.} In the above sentence, word object 4
+(the word ``had'') could, for example, have these features:
 
 \begin{my-tabu}{cc}{ \headii{Feature}{Value} }
 Text           & ``had''\\
@@ -1071,7 +1073,7 @@ The exact set of objects and features available in a database is entirely up to 
 creates the database.
 
 In addition to the monads, Emdros objects can also be identified by an
-ID\_D\index{ID\_D|hyperit}\index{Emdros!ID\_D|hyperit}. Like a monad, the ID\_D is an integer, but
+ID\_D\index{Emdros!ID\_D|hyperit}\index{ID\_D|see {Emdros, ID\_D}}. Like a monad, the ID\_D is an integer, but
 every object in the Emdros database has a unique ID\_D. So a single ID\_D may refer to a single word
 or a clause or a sentence. In the above example, the word ``who'' with monad 3 may have ID\_D=8, and
 the clause ``who had red hair'' with monads \{~3-6~\} may have ID\_D=12.
@@ -1164,11 +1166,11 @@ License: A choice between MIT and GPL.\\
 
 myapp & The server code. Chapter \ref{chap-server-code} gives more information.\\
 
-quizzes & Quiz templates\index{quiz template}\index{template} available for the user. This directory
+quizzes & Quiz templates\index{quiz template} available for the user. This directory
 is used only by the runtime system. Development files should not be stored here, and the contents of
 the directory is not under Git control.\\
 
-quiz\_templates & Sample quiz templates\index{quiz template}\index{template} to be copied to the
+quiz\_templates & Sample quiz templates\index{quiz template} to be copied to the
 \texttt{quizzes} directory in a new installation.\\
 
 SILfonts & A collection of Greek and phonetic fonts\index{font}. These files are not used directly
@@ -1218,7 +1220,7 @@ tell this from their license, but according to their website the license allows 
 non-commercial purposes.)\\
 
 virtualkeyboard\index{virtualkeyboard} & A JavaScript-based virtual keyboard\index{virtual
-  keyboard}\index{keyboard, virtual} for typing Greek and Hebrew in the client.
+  keyboard}\index{keyboard, virtual|see {virtual keyboard}} for typing Greek and Hebrew in the client.
 
 Website: \url{http://allanguages.info}.
 
@@ -1227,7 +1229,7 @@ Source: \url{http://freecode.com/projects/jsvk}.
 License: LGPL.\\
 
 zocial\index{zocial} & Icon\index{icon} and styles for setting up a Google
-login\index{Google!login}\index{login!Google} button.
+login\index{login!Google} button.
 
 Website: \url{http://zocial.smcllns.com}.
 
@@ -1278,7 +1280,7 @@ In the Bible OL source tree, the Emdros databases are found in the directory \te
 
 
 %%%%%%%%%%%%%%%%%%%% The visual Feature %%%%%%%%%%%%%%%%%%%%
-\section{The \emph{visual}\index{visual feature@``visual'' feature} Feature}\label{sec-visual}\index{visual|hyperit}
+\section{The \emph{visual}\index{visual feature@``visual'' feature|hyperit} Feature}\label{sec-visual}
 
 The Emdros databases use various feature names to describe the actual text of the corpus. In ETCBC4,
 the name of the feature is \emph{text\_utf8} when the Hebrew alphabet is used and
@@ -1300,18 +1302,22 @@ description can be found in Appendix \ref{app-etcbc}.
 Text in the database comes in three different alphabets:
 
 \begin{itemize}
+
 \item Hebrew/Aramaic characters encoded in UTF-8\index{UTF-8}\index{Unicode}. (In the following
-  text, this will be known as the \emph{native} alphabet.)\index{native
-    alphabet}\index{alphabet!native}
+  text, this will be known as the \emph{native} alphabet.)%
+  \index{alphabet!native|hyperit}\index{native alphabet|see {alphabet, native}}
+
 \item Latin transliteration of the text, encoded in UTF-8\index{UTF-8}\index{Unicode}. (In the
-  following text, this will be known as the \emph{transliterated} alphabet.)\index{transliterated
-    alphabet}\index{alphabet!transliterated}
-\item Hebrew/Aramaic characters int \emph{ETCBC4 transcription}.\index{transcribed
-  alphabet}\index{alphabet!transcribed} This transcription is defined in the document
-  \texttt{ETCBC4-transcription.pdf} which is located together with the current document or can be
-  downloaded from
+  following text, this will be known as the \emph{transliterated} alphabet.)%
+  \index{alphabet!transliterated|hyperit}\index{transliterated alphabet|see {alphabet, transliterated}}
+
+\item Hebrew/Aramaic characters in \emph{ETCBC4 transcription}.%
+  \index{alphabet!transcribed|hyperit}\index{transcribed alphabet|see {alphabet, transcribed}}
+  This transcription is defined in the document \texttt{ETCBC4-transcription.pdf} which is located
+  together with the current document or can be downloaded from
   \url{http://shebanq.ancient-data.org/shebanq/static/docs/ETCBC4-transcription.pdf}. (In the
   following text, this will be known as the \emph{transcribed} alphabet.)
+
 \end{itemize}
 
 For example, using these three encodings, the three different encodings of the word ``created'' from
@@ -1486,23 +1492,24 @@ The object types \emph{book, chapter,} and \emph{verse} describe the editorial c
 text.\index{book}\index{chapter}\index{verse}
 
 %%%%%%%%%%%%%%%%%%%% A Note on Greek Accents in Unicode %%%%%%%%%%%%%%%%%%%%
-\section{A Note on Greek Accents in Unicode}\index{Unicode}\index{Greek accents}\index{accents!Greek}
+\section{A Note on Greek Accents in Unicode}\index{Unicode}\index{accent!Greek}\index{Greek accent|see {accent, Greek}}
 
-Classical Greek used polytonic accents\index{polytonic accents}\index{accents!polytonic} over vowels. For example, the letter
-alpha could have these polytonic accents:
+Classical Greek used polytonic accents\index{accent!polytonic}\index{polytonic accent|see {accent,
+    polytonic}} over vowels. For example, the letter alpha could have these polytonic accents:
 
 \begin{my-tabu}{cll}{ \headiii{Character}{Greek accent name}{English accent name} }
-    ά & Oxia\index{oxia} (οξεία) & Acute\index{acute accent}\\
-    ὰ & Varia\index{varia} (βαρεία) & Grave\index{grave accent}\\
-    ᾶ & Perispomeni\index{perispomeni} (περισπωμένη) & Circumflex\index{circumflex accent}\\
+    ά & Oxia\index{oxia} (οξεία) & Acute\index{accent!acute}\index{acute accent|see {accent, acute}}\\
+    ὰ & Varia\index{varia} (βαρεία) & Grave\index{accent!grave}\index{grave accent|see {accent, grave}}\\
+    ᾶ & Perispomeni\index{perispomeni} (περισπωμένη) & Circumflex\index{accent!circumflex}\index{circumflex accent|see {accent, circumflex}}\\
 \end{my-tabu}
 
 Modern Greek is not a polytonic language, and in 1982 the polytonic accents were replaced by a
-single, monotonic accent\index{accents!monotonic}: the \emph{tonos}\index{tonos} (τόνος). In the early years of
-the monotonic system, particularly when reformers wished to differentiate their system from the
-polytonic, the tonos on letters was a novel sign: typically a dot or wedge:
-α\hspace{-0.5mm}̍\hspace{0.5mm}. However, the Greek government decreed in 1986 that the tonos shall
-be the acute. So you must now write ά instead of α\hspace{-0.5mm}̍\hspace{0.5mm}.\footnote{Source:
+single, monotonic accent\index{accent!monotonic}\index{monotonic accent|see {accent, monotonic}}:
+the \emph{tonos}\index{tonos} (τόνος). In the early years of the monotonic system, particularly when
+reformers wished to differentiate their system from the polytonic, the tonos on letters was a novel
+sign: typically a dot or wedge: α\hspace{-0.5mm}̍\hspace{0.5mm}. However, the Greek government
+decreed in 1986 that the tonos shall be the acute. So you must now write ά instead of
+α\hspace{-0.5mm}̍\hspace{0.5mm}.\footnote{Source:
   \url{http://www.tlg.uci.edu/~opoudjis/unicode/unicode_gkbkgd.html}, accessed 20 February 2015.}
 
 This confusion has had an impact on the representation of the oxia and tonos accents in Unicode.
@@ -1548,7 +1555,7 @@ a few places in Bible OL.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Database Description Files %%%%%%%%%%%%%%%%%%%%
-\chapter{Database Description Files}\index{Database Description File}\index{Description File, Database}<HERTIL>
+\chapter{Database Description Files}\index{Database Description File}\index{Description File|see {Database Description File}}
 
 \textbf{Read this chapter if you are going to work with code that accesses the Emdros databases on
   the server or displays text and exercises in the client.}
@@ -1556,8 +1563,8 @@ a few places in Bible OL.
 
 
 Each database is associated with a number of files that describe details about the database. They
-are collectively known as the \emph{Database Description Files}\index{Database Description File}.
-This chapter describes these files in detail.
+are collectively known as the \emph{Database Description Files}. This chapter describes these files
+in detail.
 
 In the Bible OL source tree, the Database Description Files are found in the directory \texttt{db}.
 
@@ -1569,13 +1576,25 @@ suffix is ``\texttt{.db.json}''.
 The following table lists the suffixes of various Database Description Files:
 
 \begin{my-tabu}{>{\ttfamily}llc}{ \headiii{\textrm{Suffix}}{Type}{Described in Section} }
-.db.json & Database Specification File & \ref{sec-dsf}\\
+.db.json &
+Database Specification File\index{Database Specification File}\index{Specification File|see
+  {Database Specification File}} &
+\ref{sec-dsf}\\
 
-.LANG.prop.json & Database Localization File & \ref{sec-db-local}\\
+.LANG.prop.json &
+Database Localization File\index{Database Localization File}\index{Localization File|see {Database
+    Localization File}} &
+\ref{sec-db-local}\\
 
-.typeinfo.json & Database Type Information File & \ref{sec-tif}\\
+.typeinfo.json &
+Database Type Information File\index{Database Type Information File}\index{Type Information File|see
+{Database Type Information File}} &
+\ref{sec-tif}\\
 
-.bookorder & Database Book Order File & \ref{sec-bookorder}\\
+.bookorder &
+Database Book Order File\index{Database Book Order File}\index{Book Order File|see {Database Book
+    Order File}} &
+\ref{sec-bookorder}\\
 
 \end{my-tabu}
 
@@ -1583,10 +1602,13 @@ In the following sections the string ``PRIM'' is used to denote the primary name
 
 \pfbreak
 
-Most of the files are JSON files. A JSON file contains key/value pairs, where the value can be
-a string, a number, a Boolean value, an array of values, or another collection of key/value pairs.
+Most of the files are JSON\index{JSON} files. A JSON file contains key/value pairs\index{key value
+  pairs@key/value pairs}, where the value can be a string, a number, a Boolean value, an array of
+  values, or another collection of key/value pairs.
 
-A JSON file can either be ``ugly'' or ``pretty''. This is an example of an ugly JSON file:
+A JSON file can either be ``ugly''\index{JSON!ugly file|hyperit}\index{ugly JSON file|see {JSON,
+    ugly file}} or ``pretty''\index{JSON!pretty file|hyperit}\index{pretty JSON file|see {JSON,
+    pretty file}}. This is an example of an ugly JSON file:
 
 \begin{lstlisting}
 {"alpha":8,"beta":{"gamma":true,"delta":["ten","eleven"]}}
@@ -1627,8 +1649,9 @@ preferred because it takes up less space (and makes reverse engineering slightly
 the uninitiated). The pretty format is, of course, easier for humans to understand is therefore useful
 while debugging the system.
 
-The script \emph{json\_pretty\_print.php} can be used to convert between the ugly and the pretty
-format. If the file ``xxx.json'' contains JSON data (either ugly or pretty), the command
+The script \emph{json\_pretty\_print.php}\index{json\_pretty\_print.php} can be used to convert
+between the ugly\index{JSON!ugly file} and the pretty\index{JSON!pretty file} format. If the file
+``xxx.json'' contains JSON data (either ugly or pretty), the command
 
 \begin{lstlisting}[language=bash]
 php json_pretty_print.php -p xxx.json
@@ -1657,7 +1680,10 @@ this is the main point of access to the Emdros databases. When Bible OL needs to
 databases, it searches for files with names that end in \texttt{.db.json}.
 
 \textbf{On the client} the contents of the Database Specification File is available in a variable
-called \emph{configuration.} Its structure is described in TypeScript as the \emph{Configuration}
+called \emph{configuration.}%
+\index{configuration JavaScript variable@\emph{configuration} JavaScript variable}
+Its structure is described in TypeScript as the \emph{Configuration}%
+\index{Configuration JavaScript interface@\emph{Configuration} JavaScript interface}
 interface in the file \texttt{ts/configuration.ts}.
 
 The Database Specification File describes how the individual parts of an Emdros database are used by Bible
@@ -1666,8 +1692,8 @@ can choose to display.
 
 Multiple Database Specification Files can refer to the same Emdros database. For example,
 \texttt{ETCBC4.db.json} and \texttt{ETCBC4-translit.db.json} both reference the ETCBC4 Emdros
-database, but the former displays text using the native alphabet, whereas the latter displays text
-using the transliterated alphabet.
+database, but the former displays text using the native alphabet\index{alphabet!native}, whereas the
+latter displays text using the transliterated alphabet\index{alphabet!transliterated}.
 
 The Database Specification File is a JSON file containing the following key/value pairs:
 
@@ -1675,37 +1701,42 @@ The Database Specification File is a JSON file containing the following key/valu
   version & A number which identifies the layout used by this file. This number is currently ignored.\\
 
   databaseName\label{databasename} & The name of the Emdros database file. Currently, this is either
-  ``ETCBC4'' or ``nestle1904''. This is also the primary name of the Database Type Information File
-  (see Section \ref{sec-tif}) and Database Book Order File (see Section \ref{sec-bookorder}).\\
+  ``ETCBC4'' or ``nestle1904''. This is also the primary name\index{primary name} of the Database
+  Type Information File\index{Database Type Information File} (see Section \ref{sec-tif}) and
+  Database Book Order File\index{Database Book Order File} (see Section \ref{sec-bookorder}).\\
 
-  propertiesName\label{propname} & The primary name of the Database Localization Files (see Section
-  \ref{sec-db-local}).\\
+  propertiesName\label{propname} & The primary name of the Database Localization
+  Files\index{Database Localization File} (see Section \ref{sec-db-local}).\\
 
   databaseVersion & A string containing the version number of the database. This number is only used
   for display purposes. Whenever an Emdros database is changed, this number should also be changed.\\
 
   granularity & The name of the Emdros object type defining the amount of text to display in an exercise.
-  Typically, this name is ``sentence''. \\
+  Typically, this name is ``sentence''.\index{sentence}\\
 
-  surfaceFeature & The actual name of the \emph{visual}\index{visual} feature (see Section \ref{sec-visual}). \\
+  surfaceFeature & The actual name of the \emph{visual} feature%
+  \index{visual feature@``visual'' feature}
+  (see Section \ref{sec-visual}). \\
 
   objHasSurface & The name of the Emdros object type that contains the \emph{surfaceFeature.}
   (Typically, ``word''.)\\
 
-  suffixFeature & The name of the feature that contains the continuation for the word to display
-  (see Section \ref{sec-contin}). For ETCBC4
-  using the native alphabet this value is ``continuation\_utf8'', for ETCBC4
-  using the transliterated alphabet the value is ``continuation\_translit'', for nestle1904 the value is \emph{null}. \\
+  suffixFeature & The name of the feature that contains the continuation\index{continuation} for the
+  word to display (see Section \ref{sec-contin}). For ETCBC4 using the native alphabet this value is
+  ``continuation\_utf8'', for ETCBC4 using the transliterated alphabet the value is
+  ``continuation\_translit'', for nestle1904 the value is \emph{null}. \\
 
   charSet & The name of the character set for the text. For ETCBC4
   using the native alphabet this value is ``hebrew'', for ETCBC4
   using the transliterated alphabet the value is ``transliterated\_hebrew'', for nestle1904 the value is ``greek''.\\
 
-  objectSettings & A collection of key/value pairs containing information about how Bible OL should
+  objectSettings\index{objectSettings} & A collection of key/value pairs containing information about how Bible OL should
   treat Emdros object type. This is detailed in Section \ref{sec-objectsettings}.\\
 
   universeHierarchy & An array containing information about how the text references are structured.
-  For the Bible, this hierarchy is book/chapter/verse. A typical value is\label{universe-hierarchy}
+  For the Bible, this hierarchy is book/chapter/verse.%
+  \index{passages!hierarchy}
+  A typical value is\label{universe-hierarchy}
 
   {\ttfamily
     \begin{tabular}{lll}
@@ -1726,27 +1757,29 @@ The Database Specification File is a JSON file containing the following key/valu
     \end{tabular}
   }
 
-  This means that the top reference level is found in the \emph{book} feature of Emdros objects of type
-  \emph{book}, the second reference level is found in the \emph{chapter} feature of Emdros objects of type
-  \emph{chapter}, and the third reference level is found in the \emph{verse} feature of Emdros objects of type
+  This means that the top reference level is found in the \emph{book}\index{book} feature of Emdros
+  objects of type \emph{book}, the second reference level is found in the
+  \emph{chapter}\index{chapter} feature of Emdros objects of type \emph{chapter}, and the third
+  reference level is found in the \emph{verse}\index{verse} feature of Emdros objects of type
   \emph{verse}.\\
 
-  picDb & The URL of the resource website (see Section \ref{sec-resource-web}). This value may be \emph{null.}\\
+  picDb & The URL of the resource website\index{resource website} (see Section
+  \ref{sec-resource-web}). This value may be \emph{null.}\\
 
   sentencegrammar & An array containing information about the grammar items available to the user.
   This is detailed in Section \ref{sentencegrammar}.\\
 
-  subsetOf & If the Database Specification File describes a subset of a larger database,
+  subsetOf & If the Database Specification File describes a subset\index{subset} of a larger database,
   \emph{subsetOf} gives information about the subset. This is detailed in Section
   \ref{subsetof}. This value is always \emph{null} for the ETCBC4 and nestle1904
   databases.\\
 
-  useSofPasuq & A Boolean value indicating if a \emph{sof pasuq} (\heb{׃}) should be added to the end of a
-  Hebrew verse. This key is only present for Hebrew text.\\
+  useSofPasuq & A Boolean value indicating if a \emph{sof pasuq}\index{sof pasuq} (\heb{׃}) should
+  be added to the end of a Hebrew verse. This key is only present for Hebrew text.\\
 \end{my-longtabu}
 
 
-\subsection{The \emph{objectSettings} Key}\label{sec-objectsettings}
+\subsection{The \emph{objectSettings} Key}\label{sec-objectsettings}\index{objectSettings|hyperit}
 
 The \emph{objectSettings} key in the Database Specification File gives detailed information about
 how the Emdros object types and their features should be treated by Bible OL. The
@@ -1779,20 +1812,20 @@ Listing \ref{list-ossample} shows a subset of the \emph{objectSettings} for the 
 In this subset, the Emdros types \emph{book, chapter, verse, word,} and \emph{subphrase} are
 mentioned. No special information about \emph{book, chapter,} and \emph{verse} is provided, which
 means that these Emdros types cannot be made the subject of exercises. It is the presence of the key
-\emph{mayselect} with the value \emph{true} that signals to Bible OL that the associated Emdros
-object can be used when selecting quiz objects for an exercise. So in the example in Listing
+\emph{mayselect}\index{mayselect} with the value \emph{true} that signals to Bible OL that the associated Emdros
+object can be used when selecting quiz objects\index{quiz object (a.k.a. sentence unit)} for an exercise. So in the example in Listing
 \ref{list-ossample}, the Emdros objects \emph{word} and \emph{subphrase} can be used for quiz object
 selection.
 
 When you are creating an exercise with the ETCBC4 database, the ``Sentences'' and ``Sentence Units''
-tabs allow you to specify a sentence unit (a.k.a. quiz object) type:
+tabs allow you to specify a sentence unit (a.k.a. quiz object\index{quiz object (a.k.a. sentence unit)}) type:
 
 \begin{center}
   \includegraphics[width=0.9\textwidth]{senselect.png}
 \end{center}
 
-The values in the drop down box are the Emdros object that have \emph{mayselect} set to \emph{true}
-in \emph{objectSettings.} As shown in Listing \ref{list-ossample}, these objects have one or
+The values in the drop down box are the Emdros object that have \emph{mayselect}\index{mayselect} set to \emph{true}
+in \emph{objectSettings.}\index{objectSettings} As shown in Listing \ref{list-ossample}, these objects have one or
 two additional key/value pairs with the keys \emph{featuresetting} and, optionally,
 \emph{additionalfeatures.}
 
@@ -1801,12 +1834,12 @@ details about the features of the object. This is detailed in Section \ref{sec-f
 
 The \emph{additionalfeatures} key identifies an array of features that should always be retrieved
 for this Emdros object, even though these features are not the subject of an exercise. They are used
-for accessing the multiple choice database (see Chapter \ref{chap-multiple-choice}).
+for accessing the multiple choice\index{multiple-choice} database (see Chapter \ref{chap-multiple-choice}).
 
-\subsection{The \emph{featuresetting} Key}\label{sec-featuresetting}
+\subsection{The \emph{featuresetting} Key}\label{sec-featuresetting}\index{featuresetting}
 
 The \emph{featuresetting} key under an Emdros object type gives detailed information about how the
-features of the Emdros object should be treated by Bible OL. Its value is a collection of key/value
+features\index{Emdros!feature} of the Emdros object should be treated by Bible OL. Its value is a collection of key/value
 pairs, where the keys are feature names. The corresponding values give
 information about how the feature should be treated.
 
@@ -1881,13 +1914,14 @@ object:
   transliteratedText & A value of \emph{true} means that this feature is written using the
   transliterated Hebrew alphabet.\\
 
-  hideValues & Relevant only for enumeration features. It is an array of enumeration values
+  hideValues & Relevant only for enumeration\index{Emdros!enumeration}\index{enumeration|see
+    {Emdros, enumeration}} features. It is an array of enumeration values
   that never occur in a text and should therefore be omitted from the user interface.\\
 
   isRange & A value of \emph{true} means that this feature represents range of integer
   values.\\
 
-  otherValues & An array of enumeration feature values that should be lumped together as ``Other'' in
+  otherValues & An array of enumeration\index{Emdros!enumeration} feature values that should be lumped together as ``Other'' in
   the user interface.\\
 
   matchregexp & A regular expression used to check if an answer provided by a learner matches the
@@ -1896,10 +1930,11 @@ object:
   to ensure that a learner's answer is accepted, regardless of whether the answer is ``land'',
   ``territory'', ``country'', or ``the earth''.\\
 
-  alternateshowrequestDb & The name of a multiple choice database (see Chapter \ref{chap-multiple-choice}).\\
-
-  alternateshowrequestSql & An SQL statement used to access the multiple choice database (see
+  alternateshowrequestDb & The name of a multiple choice\index{multiple-choice} database (see
   Chapter \ref{chap-multiple-choice}).\\
+
+  alternateshowrequestSql & An SQL statement used to access the multiple choice\index{multiple
+    choice} database (see Chapter \ref{chap-multiple-choice}).\\
 \end{my-longtabu}
 
 
@@ -1913,18 +1948,19 @@ menu when creating an exercise:
 If \emph{ignoreSelect} is set for a feature, then that feature is not shown in the selection menu.
 The feature with \emph{isDefault} set is the selected feature when the dialog is first loaded.
 
-If \emph{hideWord} is \emph{true} and the feature is used as a request feature in an exercise, the
-corresponding word is replaced by a number in the text. For example, in the following exercise the
-feature \emph{text\_nocant\_utf8} (that is, ``Text (no cantillation marks)'') is used as a request
-feature. Consequently the corresponding words in the text are replaced by the numbers (1), (2), and
-(3) lest the words in the text give the answer to the questions:
+If \emph{hideWord} is \emph{true} and the feature is used as a request feature\index{request
+  feature} in an exercise, the corresponding word is replaced by a number in the text. For example,
+in the following exercise the feature \emph{text\_nocant\_utf8} (that is, ``Text (no cantillation
+marks)'') is used as a request feature. Consequently the corresponding words in the text are
+replaced by the numbers (1), (2), and (3) lest the words in the text give the answer to the
+questions:
 
 
 \begin{center}
   \includegraphics[width=0.9\textwidth]{numbers.png}
 \end{center}
 
-\subsection{The \emph{sentencegrammar} Key}\label{sentencegrammar}
+\subsection{The \emph{sentencegrammar} Key}\label{sentencegrammar}\index{sentencegrammar|hyperit}
 
 The \emph{sentencegrammar} key in the Database Specification File gives detailed information about
 the grammar items available to the user. Its value is an array, in which each entry
@@ -1935,7 +1971,7 @@ selection box\index{grammar
 selection box} in the left part of the screen, the other is in the grammar information box\index{grammar information box} in the
 right part of the screen.
 
-The grammar selection box may look like this:
+The grammar selection box\index{grammar selection box} may look like this:
 
 \begin{center}
   \includegraphics[width=0.3\textwidth]{grammarselect.png}\label{grammarselect}
@@ -1945,7 +1981,7 @@ In the above illustration, each of the four main menus, \emph{Word, Phrase, Clau
 \emph{Sentence,} of the grammar selection box corresponds to an entry at the top level of
 \emph{sentencegrammar}.
 
-The grammar information box may look like this:
+The grammar information box\index{grammar information box} may look like this:
 
 \begin{center}
   \includegraphics[width=0.5\textwidth]{grammarinfo.png}
@@ -2024,7 +2060,7 @@ Listing \ref{list-itemssample} shows a typical \emph{items} array.
 In this example, the \emph{items} array has two elements, one with \emph{mytype=GrammarFeature},
 one with \emph{mytype=GrammarGroup}, and one with \emph{mytype=GrammarMetaFeature.}
 
-\subsection{GrammarFeature}\label{sec-grammarfeature}
+\subsection{GrammarFeature}\label{sec-grammarfeature}\index{GrammarFeature|hyperit}
 
 A \emph{sentencegrammar} item with \emph{mytype=GrammarFeature} describes a single Emdros
 feature. The format is given in Listing \ref{list-gf-syntax}.
@@ -2037,21 +2073,21 @@ feature. The format is given in Listing \ref{list-gf-syntax}.
 \end{lstlisting}
 
 \Needspace*{5cm}%
-In the grammar selection box, a GrammarFeature is displayed thus:
+In the grammar selection box\index{grammar selection box}, a GrammarFeature is displayed thus:
 
 \begin{center}
   \includegraphics[width=0.3\textwidth]{state1.png}
 \end{center}
 
 \Needspace*{5cm}%
-In the grammar information box, a GrammarFeature is displayed thus:
+In the grammar information box\index{grammar information box}, a GrammarFeature is displayed thus:
 
 \begin{center}
   \includegraphics[width=0.5\textwidth]{state2.png}
 \end{center}
 
 
-\subsection{GrammarMetaFeature}\label{sec-grammarmetafeature}
+\subsection{GrammarMetaFeature}\label{sec-grammarmetafeature}\index{GrammarMetaFeature|hyperit}
 
 A \emph{sentencegrammar} item with \emph{mytype=GrammarMetaFeature} describes a combined value of a
 number of Emdros features. Its format is given in Listing \ref{list-gmf-syntax}.
@@ -2074,7 +2110,7 @@ number of Emdros features. Its format is given in Listing \ref{list-gmf-syntax}.
 \end{lstlisting}
 
 In the \emph{items} array the Emdros features that make up the GrammarMetaFeature are listed with a
-\emph{mytype} value of ``GrammarSubFeature''.
+\emph{mytype} value of ``GrammarSubFeature''.\index{GrammarSubFeature|hyperit}
 
 As an example, Bible OL combines the person, gender, and number of a word to a single item, such as
 ``2FSg'' (which means 2nd person, feminine, singular). This is specified as indicated in Listing
@@ -2106,21 +2142,21 @@ respectively.
 
 
 \Needspace*{5cm}%
-In the grammar selection box, a GrammarMetaFeature is displayed thus:
+In the grammar selection box\index{grammar selection box}, a GrammarMetaFeature is displayed thus:
 
 \begin{center}
   \includegraphics[width=0.3\textwidth]{pgn1.png}
 \end{center}
 
 \Needspace*{5cm}%
-In the grammar information box, a GrammarMetaFeature is displayed thus:
+In the grammar information box\index{grammar information box}, a GrammarMetaFeature is displayed thus:
 
 \begin{center}
   \includegraphics[width=0.5\textwidth]{pgn2.png}
 \end{center}
 
 
-\subsection{GrammarGroup}\label{sec-grammargroup}
+\subsection{GrammarGroup}\label{sec-grammargroup}\index{GrammarGroup|hyperit}
 
 A \emph{sentencegrammar} item with \emph{mytype=GrammarGroup} groups GrammarFeatures and
 GrammarMetaFeatures into logical units, such as ``Features that describe the lexeme'' or ``Features
@@ -2138,7 +2174,8 @@ The \emph{items} array here contains a collection of GrammarFeatures and Grammar
 format described above.
 
 \Needspace*{5cm}%
-In the grammar selection box, a GrammarGroup (called ``Morphology'' in this case) is displayed thus:
+In the grammar selection box\index{grammar selection box}, a GrammarGroup (called ``Morphology'' in
+this case) is displayed thus:
 
 \begin{center}
 \begin{tabular}{rcl}
@@ -2149,16 +2186,16 @@ In the grammar selection box, a GrammarGroup (called ``Morphology'' in this case
 \end{center}
 
 \Needspace*{5cm}%
-In the grammar information box, a GrammarGroup is displayed thus:
+In the grammar information box\index{grammar information box}, a GrammarGroup is displayed thus:
 
 \begin{center}
   \includegraphics[width=0.5\textwidth]{morph2.png}
 \end{center}
 
-\subsection{The \emph{subsetOf} Key}\label{subsetof}
+\subsection{The \emph{subsetOf} Key}\label{subsetof}\index{subset|hyperit}
 
 The \emph{subsetOf} value is present for historical reasons. With the current ETCBC4 and nestle1904
-databases it is not required; however, the previously used WIVU database, was available in two
+databases it is not required; however, the previously used WIVU\index{WIVU} database, was available in two
 versions: the entire Old Testament and a subset containing about 20 per cent of the text.
 
 The \emph{subsetOf} key specifies the relationship between the subset and the superset. It is used
@@ -2182,7 +2219,8 @@ Specification File:
 \end{lstlisting}
 
 Here, \emph{name} is the name of the Emdros database file for the superset, and \emph{properties} is
-the primary name of the Database Localization Files (see Section \ref{sec-db-local}) for the superset.
+the primary name\index{primary name} of the Database Localization File\index{Database Localization
+  File} (see Section \ref{sec-db-local}) for the superset.
 
 The \emph{provides} array identifies the books and chapters provided by the subset. In this example,
 the subset includes the entire book of Genesis and the first three chapters of Exodus.
@@ -2194,18 +2232,21 @@ database.
 \section{Database Description Files for Old Databases}\label{sec-old-db}
 
 Currently, Bible OL uses two databases, the Hebrew \emph{ETCBC4} database and the Greek
-\emph{nestle1904} database. Previous versions of Bible OL used the Hebrew \emph{WIVU} database (and
-various variants of it) and the Greek \emph{tisch}\footnote{Short for \emph{Tischendorf.}} database.
+\emph{nestle1904} database. Previous versions of Bible OL used the Hebrew \emph{WIVU}\index{WIVU}
+database (and various variants of it) and the Greek \emph{tisch}\index{tisch}\footnote{Short for
+  \emph{Tischendorf.}} database.
 
-The statistics tables in the user database (see Section \ref{sec-statistics-tables}) may
-still contain data from these older databases. In order to display these statistics, Bible OL needs
-description and localization information for the databases. For this reason, Database Description
-Files for the old databases are still present in the \texttt{db} directory.
+The statistics\index{statistics} tables in the user database\index{user database} (see Section
+\ref{sec-statistics-tables}) may still contain data from these older databases. In order to display
+these statistics, Bible OL needs description and localization information for the databases. For
+this reason, Database Description Files for the old databases are still present in the \texttt{db}
+directory.
 
 
 
 %%%%%%%%%%%%%%%%%%%% Database Localization Files: PRIM.LANG.prop.json %%%%%%%%%%%%%%%%%%%%
-\section{Database Localization Files: PRIM.LANG.prop.json}\label{sec-db-local}
+\section{Database Localization Files: PRIM.LANG.prop.json}\label{sec-db-local}\index{Database Localization File|hyperit}
+
 
 All keys and values in the Database Specification File (Section \ref{sec-dsf}) are language
 independent. \textbf{On the server} the \emph{propertiesName} key (page \pageref{propname}) of the
@@ -2220,45 +2261,48 @@ into the PHP files.\footnote{In the file \texttt{myapp/models/mod\_askemdros.php
   \texttt{myapp/controllers/ctrl\_statistics.php} in the function \emph{show\_stat.}}
 
 \textbf{On the client} the contents of the selected Database Localization File is available in a
-variable called \emph{localization.} Its structure is described in TypeScript as the
-\emph{Localization} interface in the file \texttt{ts/localization.ts}.
+variable called \emph{localization.}%
+\index{localization JavaScript variable@\emph{localization} JavaScript variable}
+Its structure is described in TypeScript as the \emph{Localization} interface%
+\index{Localization JavaScript interface@\emph{Localization} JavaScript interface}
+ in the file \texttt{ts/localization.ts}.
 
 The Database Localization File is a JSON file containing the following key/value pairs:
 
 \begin{my-longtabu}{lX}{ \headii{Key}{Value} }
   dbdescription & A short description of the database.\\
 
-  dbcopyright & An HTML string containing copyright information for the database.\\
+  dbcopyright & An HTML string containing copyright\index{copyright} information for the database.\\
 
-  emdrosobject & A collection of key/value pairs containing the localized names for the Emdros
+  emdrosobject\index{emdrosobject} & A collection of key/value pairs containing the localized names for the Emdros
   object types and their features (see Section \ref{emdrosobject-loc}).\\
 
-  emdrostype & A collection of key/value pairs containing the localized names for the values in the
-  Emdros enumeration types (see Section \ref{enum-loc}).\\
+  emdrostype\index{emdrostype} & A collection of key/value pairs containing the localized names for the values in the
+  Emdros enumeration\index{Emdros!enumeration} types (see Section \ref{enum-loc}).\\
 
-  grammarfeature & A collection of key/value pairs giving the names of GrammarFeatures (see Section
+  grammarfeature & A collection of key/value pairs giving the names of
+  GrammarFeatures\index{GrammarFeature} (see Section \ref{grammar-loc}).\\
+
+  grammarmetafeature & A collection of key/value pairs giving the names of
+  GrammarMetaFeatures\index{GrammarMetaFeature} (see Section \ref{grammar-loc}).\\
+
+  grammarsubfeature\index{GrammarSubFeature} & A collection of key/value pairs giving the names of
+  features within a GrammarMetaFeature (see Section \ref{grammar-loc}).\\
+
+  grammargroup & A collection of key/value pairs giving the names of GrammarGroups\index{GrammarGroup} (see Section
   \ref{grammar-loc}).\\
 
-  grammarmetafeature & A collection of key/value pairs giving the names of GrammarMetaFeatures (see
-  Section \ref{grammar-loc}).\\
-
-  grammarsubfeature & A collection of key/value pairs giving the names of features within a
-  GrammarMetaFeature (see Section \ref{grammar-loc}).\\
-
-  grammargroup & A collection of key/value pairs giving the names of GrammarGroups (see Section
-  \ref{grammar-loc}).\\
-
-  universe & A collection of key/value pairs describing how to display book, chapter, and verse
-  references (see Section \ref{universe-loc}).\\
+  universe\index{passages} & A collection of key/value pairs describing how to display book,
+  chapter, and verse references (see Section \ref{universe-loc}).\\
 \end{my-longtabu}
 
 
-\subsection{The \emph{emdrosobject} Key}\label{emdrosobject-loc}
+\subsection{The \emph{emdrosobject} Key}\label{emdrosobject-loc}\index{emdrosobject|hyperit}
 
 The value of \emph{emdrosobject} is a collection of key/value pairs containing the localized names
-for the Emdros object types and their features. As an example, Listing
-\ref{list-emdrosobject-sample} shows a subset of the \emph{emdrosobject} for English localization
-of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
+for the Emdros object\index{Emdros!object} types and their features\index{Emdros!feature}. As an
+example, Listing \ref{list-emdrosobject-sample} shows a subset of the \emph{emdrosobject} for
+English localization of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
 
 \begin{lstlisting}[numbers=left,caption=A sample emdrosobject value,label=list-emdrosobject-sample]
     "emdrosobject": {
@@ -2297,10 +2341,10 @@ of the Emdros object \emph{phrase\_atom} is ``Phrase~atom'', and that it has a f
 \emph{rela} should be rendered ``Relation'' in English.
 
 
-\subsection{The \emph{emdrostype} Key}\label{enum-loc}
+\subsection{The \emph{emdrostype} Key}\label{enum-loc}\index{emdrostype|hyperit}
 
 The value of \emph{emdrostype} is a collection of key/value pairs containing the localized names for
-the value of Emdros enumeration types. As an example, Listing \ref{list-emdrostype-sample} shows
+the value of Emdros enumeration\index{Emdros!enumeration} types. As an example, Listing \ref{list-emdrostype-sample} shows
 a subset of the \emph{emdrostype} for English localization of the ETCBC4 database (taken from the
 file \texttt{db/ETCBC4.en.prop.json}).
 
@@ -2352,14 +2396,14 @@ genders are sorted thus:
 \end{center}
 
 
-\subsection{The \emph{grammarfeature, grammarmetafeature, grammarsubfeature,} and
-  \emph{grammargroup} Keys}\label{grammar-loc}
+\subsection{The \emph{grammarfeature, grammarmetafeature, grammarsubfeature,} and \emph{grammargroup} Keys}%
+\label{grammar-loc}\index{GrammarFeature}\index{GrammarMetaFeature}\index{GrammarSubFeature}\index{GrammarGroup}
 
 Section \ref{sentencegrammar} describes how the Database Specification File specifies how grammar
 information should be grouped in the grammar selection box and the grammar information box on the
-Bible OL webpage. Sections \ref{sec-grammarfeature}, \ref{sec-grammarmetafeature}, and \ref{sec-grammargroup} describe the GrammarFeature,
-GrammarMetaFeature, and GrammarGroup specifications and the GrammarSubFeature which is part of a
-GrammarMetaFeature.
+Bible OL webpage. Sections \ref{sec-grammarfeature}, \ref{sec-grammarmetafeature}, and
+\ref{sec-grammargroup} describe the GrammarFeature, GrammarMetaFeature, and GrammarGroup
+specifications and the GrammarSubFeature which is part of a GrammarMetaFeature.
 
 In the Database Localization File, the \emph{grammarfeature, grammarmetafeature, grammargroup,} and
 \emph{grammarsubfeature} keys give the translation of these items, as detailed below.
@@ -2377,15 +2421,16 @@ English localization of the ETCBC4 database (taken from the file \texttt{db/ETCB
     }
 \end{lstlisting}
 
-Section \ref{emdrosobject-loc} describes how the \emph{emdrosobject} key is used to provide
-translations for Emdros object features. The \emph{grammarfeature} in the above example gives an
-alternative translation. Normally the translation of a feature is taken from \emph{emdrosobject},
-but in the case of the grammar specification box and the grammar information box, the translation in
-\emph{grammarfeature} is used, if present. If no translation is given in \emph{grammarfeature}, the
-translation from \emph{emdrosobject} is used.
+Section \ref{emdrosobject-loc} describes how the \emph{emdrosobject}\index{emdrosobject} key is used
+to provide translations for Emdros object features. The \emph{grammarfeature} in the above example
+gives an alternative translation. Normally the translation of a feature is taken from
+\emph{emdrosobject}, but in the case of the grammar selection box\index{grammar selection box} and
+the grammar information box\index{grammar information box}, the translation in \emph{grammarfeature}
+is used, if present. If no translation is given in \emph{grammarfeature}, the translation from
+\emph{emdrosobject} is used.
 
 
-\subsubsection{\emph{grammarmetafeature}}
+\subsubsection{\emph{grammarmetafeature}}\index{GrammarMetaFeature}
 
 Listing \ref{list-grammarmetafeature-sample} shows the \emph{grammarmetafeature} for the English
 localization of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
@@ -2404,7 +2449,7 @@ English translation ``Person, gender, number''. (Listing \ref{list-gmf-sample} o
 \pageref{list-gmf-sample} specifies that the \emph{word} object has a GrammarMetaFeature called
 \emph{pgn}.)
 
-\subsubsection{\emph{grammarsubfeature}}
+\subsubsection{\emph{grammarsubfeature}}\index{GrammarSubFeature}
 
 Listing \ref{list-grammarsubfeature-sample} shows a subset of the \emph{grammarsubfeature} for the
 English localization of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
@@ -2446,7 +2491,7 @@ GrammarSubFeatures. So if, for example, a word has features \emph{ps=p2, gn=m,} 
 rendered as ``2MSg''.
 
 
-\subsubsection{\emph{grammargroup}}
+\subsubsection{\emph{grammargroup}}\index{GrammarGroup}
 
 Listing \ref{list-grammargroup-sample} shows the \emph{grammargroup} for the English localization of
 the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
@@ -2465,10 +2510,10 @@ The Database Specification File for the ETCBC4 database defines three GrammarGro
 \emph{word} object with the names \emph{form\_in\_text,\footnote{Shown in Listing
     \ref{list-itemssample} on page \pageref{list-itemssample}.} lexeme,} and \emph{morphology.} The
 localization information above specifies the English names for these GrammarGroups. The two
-illustrations in Section \ref{sentencegrammar} show these translations in the grammar selection box
-and the grammar information box.
+illustrations in Section \ref{sentencegrammar} show these translations in the grammar selection
+box\index{grammar selection box} and the grammar information box\index{grammar information box}.
 
-\subsection{The \emph{universe} Key}\label{universe-loc}
+\subsection{The \emph{universe} Key}\label{universe-loc}\index{passages}
 
 The value of \emph{universe} is collection of key/value pairs describing how to display book,
 chapter, and verse references.\footnote{Strictly speaking, references do not have to be Bible
@@ -2519,16 +2564,20 @@ For the \emph{book} object, the \emph{\_label} key (line \ref{line-book-label}) 
 
 
 %%%%%%%%%%%%%%%%%%%% Database Type Information Files: PRIM.typeinfo.json %%%%%%%%%%%%%%%%%%%%
-\section{Database Type Information Files: PRIM.typeinfo.json}\label{sec-tif}
+\section{Database Type Information Files: PRIM.typeinfo.json}\label{sec-tif}\index{Database Type Information File|hyperit}
 
 The Emdros databases in Bible OL have an associated Database Type Information File. This file
-contains information about the Emdros object types and enumeration types. \textbf{On the server,} if
-the name of the Emdros database is PRIM, the name of the associated Database Type Information File is
+contains information about the Emdros object\index{Emdros!object} types and
+enumeration\index{Emdros!enumeration} types. \textbf{On the server,} if the name of the Emdros
+database is PRIM, the name of the associated Database Type Information File is
 \texttt{PRIM.typeinfo.json}.
 
 \textbf{On the client} the contents of the Database Type Information File is available in a variable
-called \emph{typeinfo.} Its structure is described in TypeScript as the \emph{TypeInfo} interface in the file
-\texttt{ts/configuration.ts}.
+called \emph{typeinfo.}%
+\index{typeinfo JavaScript variable@\emph{typeinfo} JavaScript variable}
+Its structure is described in TypeScript as the \emph{TypeInfo} interface%
+\index{TypeInfo JavaScript interface@\emph{TypeInfo} JavaScript interface}
+in the file \texttt{ts/configuration.ts}.
 
 The Database Type Information file is a JSON file. Its contents can be automatically generated from
 the Emdros database itself. The PHP script \texttt{myapp/controllers/ctrl\_maketypeinfo.php}
@@ -2543,24 +2592,24 @@ from the base of the source code tree will generate the type information form th
 database and write it to standard out in ugly JSON format.
 
 
-The Database Localization File contains the following key/value pairs:
+The Database Type Information File contains the following key/value pairs:
 
 \begin{my-longtabu}{lX}{ \headii{Key}{Value} }
-  objTypes & An array containing the names of all Emdros object types.\\
+  objTypes & An array containing the names of all Emdros object\index{Emdros!object} types.\\
 
   obj2feat & A collection of key/value pairs that list the names and types of the features
   associated with each Emdros object type (see Section \ref{obj2feat}).\\
 
-  enymTypes & An array containing the names of all enumeration types in the database.\\
+  enymTypes & An array containing the names of all enumeration\index{Emdros!enumeration} types in the database.\\
 
-  enum2values & A collection of key/value pairs that list the values of all enumeration types (see
+  enum2values & A collection of key/value pairs that list the values of all enumeration\index{Emdros!enumeration} types (see
   Section \ref{enum2values}).\\
 \end{my-longtabu}
 
-\subsection{The \emph{obj2feat} Key}\label{obj2feat}
+\subsection{The \emph{obj2feat} Key}\label{obj2feat}\index{obj2feat}
 
 The value of the \emph{obj2feat} key is a collection of key/value pairs that list the names and
-types of the features associated with each Emdros object type.
+types of the features\index{Emdros!feature} associated with each Emdros object type.
 
 Listing \ref{list-obj2feat-sample} shows a subset of \emph{obj2feat} for the ETCBC4 database (taken
 from the file \texttt{db/ETCBC4.typeinfo.json}).
@@ -2590,10 +2639,10 @@ from the file \texttt{db/ETCBC4.typeinfo.json}).
 For example, line \ref{line-freq-rank} shows that the \emph{word} object has a feature called
 \emph{frequency\_rank} of type \emph{integer}.
 
-\subsection{The \emph{enum2values} Key}\label{enum2values}
+\subsection{The \emph{enum2values} Key}\label{enum2values}\index{enum2values}
 
 The value of the \emph{enum2values} key is a collection of key/value pairs that list the values of
-all enumeration types.
+all enumeration\index{Emdros!enumeration} types.
 
 Listing \ref{list-enum2values-sample} shows a subset of \emph{enum2values} for the ETCBC4 database
 (taken from the file \texttt{db/ETCBC4.typeinfo.json}).
@@ -2619,7 +2668,7 @@ For example, lines \ref{line-bool-start}-\ref{line-bool-end} show that the enume
 \emph{boolean\_t} has the values \emph{false} and \emph{true.}
 
 %%%%%%%%%%%%%%%%%%%% Database Book Order Files: PRIM.bookorder %%%%%%%%%%%%%%%%%%%%
-\section{Database Book Order Files: PRIM.bookorder}\label{sec-bookorder}
+\section{Database Book Order Files: PRIM.bookorder}\label{sec-bookorder}\index{Database Book Order File|hyperit}
 
 The Emdros databases in Bible OL have an associated Database Book Order File. If the name of
 the Emdros database is PRIM, the name of the associated Database Book Order File is
@@ -2644,9 +2693,10 @@ Samuel_II/1-24
 ... %\textrm{\scriptsize(Additional books omitted)}%
 \end{lstlisting}
 
-This file defines the Hebrew order of the books of the Old Testament.\footnote{This differs from the
-  order of books used in Christian Bibles.} Each line consists of the name of the book (as it is
-defined in the database), followed by a slash and the list of available chapters.
+This file defines the Hebrew order of the books of the Old Testament.\index{Old
+  Testament}\footnote{This differs from the order of books used in Christian Bibles.} Each line
+consists of the name of the book (as it is defined in the database), followed by a slash and the
+list of available chapters.
 
 For the ETCBC4 and nestle1904 databases, the chapters are always given as a simple range, such as
 ``1-50'' for Genesis, but as mentioned in Section \ref{subsetof}, it is possible to define a
@@ -2662,14 +2712,15 @@ which indicates that only chapters 2, 6-9, and 23 of Leviticus are available.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Quiz Templates %%%%%%%%%%%%%%%%%%%%
-\chapter{Quiz Templates}\index{quiz template}\index{template}
+\chapter{Quiz Templates}\index{quiz template|hyperit}
 
 \textbf{Read this chapter if you need to understand how exercises are stored in the server.}
 \plainbreak{3}
 
 
-A quiz template (or an exercise template\index{exercise template}) is an XML file that describes how Bible OL should
-generate an exercise. It always has a filename that ends in \texttt{.3et}\index{.3et (file extension)}.
+A quiz template (or an exercise template\index{exercise template|see {quiz template}}) is an XML\index{XML}
+file that describes how Bible OL should generate an exercise. It always has a filename that ends in
+\texttt{.3et}\index{.3et (file extension)}.
 
 Listing \ref{list-qtsample} shows a typical quiz template.
 
@@ -2722,27 +2773,30 @@ elements:
 \xml{desc} & A \emph{CDATA} string describing the exercise. This string may contain HTML code. This
 is the text entered under the ``Description'' tab when creating a quiz template.\\
 
-\xml{database} & The name of the Emdros database and the primary name of the Database Specification
-File.\\
+\xml{database} & The name of the Emdros database and the primary name\index{primary name} of the
+Database Specification File\index{Database Specification File}.\\
 
-\xml{properties} & The primary name of the Database Localization File.\\
+\xml{properties} & The primary name\index{primary name} of the Database Localization
+File\index{Database Localization File}.\\
 
 \xml{path} & This element may occur several times in the file. It describes a component of the
-passages used for the exercise. This is the data entered under the ``Passages'' tab when creating a
-quiz template. In Listing \ref{list-qtsample}, lines \ref{xml-pa}-\ref{xml-pb} specify Genesis chapter 1
-verses 1-2, Genesis chapter 3 (all verses), and the book of Exodus (all chapters).\\
+passages\index{passages} used for the exercise. This is the data entered under the ``Passages'' tab
+when creating a quiz template. In Listing \ref{list-qtsample}, lines \ref{xml-pa}-\ref{xml-pb}
+specify Genesis chapter 1 verses 1-2, Genesis chapter 3 (all verses), and the book of Exodus (all
+chapters).\\
 
 \xml{sentenceselection} & A description of how Bible OL should select sentences. See Section \ref{sensel-xml}.\\
 
 \xml{quizobjectselection} & A description of how Bible OL should select sentence units (a.k.a.
-quiz objects). See Section \ref{qosel-xml}.\\
+quiz objects\index{quiz object (a.k.a. sentence unit)}). See Section \ref{qosel-xml}.\\
 
-\xml{quizfeatures} & The display features and request features. See Section \ref{feat-xml}.\\
+\xml{quizfeatures} & The display features\index{display feature} and request features\index{request
+  feature}. See Section \ref{feat-xml}.\\
 
 \end{my-longtabu}
 
 %%%%%%%%%%%%%%%%%%%% sentenceselection %%%%%%%%%%%%%%%%%%%%
-\section{\xml{sentenceselection}}\label{sensel-xml}
+\section{\xml{sentenceselection}}\label{sensel-xml}\index{sentenceselection@\xml{sentenceselection}|hyperit}
 
 The \xml{sentenceselection} element contains the information entered under the ``Sentences'' tab
 when creating a quiz template.
@@ -2754,24 +2808,25 @@ The \xml{sentenceselection} element contains these elements:
 this element is irrelevant if an MQL string is to be used for sentence selection.\\
 
 \xml{mql} & This element is only present if an MQL string is to be used for sentence selection. The
-element contains the MQL string. (See Section \ref{sec-mql-selection}.)\\
+element contains the MQL\index{MQL} string. (See Section \ref{sec-mql-selection}.)\\
 
-\xml{featurehandlers} & This element is not present if an MQL string is to be used for sentence selection.
-It contains a description of the features used for sentence selection. See Section \ref{feathand-xml}.\\
+\xml{featurehandlers} & This element is not present if an MQL string is to be used for sentence
+selection. It contains a description of the features\index{Emdros!feature} used for sentence
+selection. See Section \ref{feathand-xml}.\\
 
 \xml{useforquizobjects} & A Boolean value which is \emph{true} if the contents of the
-\xml{sentenceselection} element is also used for sentence unit selection, and is \emph{false} is
-sentence unit select is specified separately. This is controlled by the check box ``Use this for
-sentence unit selection'' under the ``Sentences'' tab.\\
+\xml{sentenceselection} element is also used for sentence unit\index{quiz object (a.k.a. sentence unit)} selection, and is
+\emph{false} is sentence unit select is specified separately. This is controlled by the check box
+``Use this for sentence unit selection'' under the ``Sentences'' tab.\\
 
 \end{my-longtabu}
 
 
-\subsection{\xml{featurehandlers}}\label{feathand-xml}
+\subsection{\xml{featurehandlers}}\label{feathand-xml}\index{featurehandlers@\xml{featurehandlers}}
 
-The \xml{featurehandlers} element contains descriptions of the Emdros features used for selecting a sentence
-or a sentence unit. The \xml{featurehandlers} element contains one or more of these elements, each
-of which describes an Emdros feature and how it is used for selections:
+The \xml{featurehandlers} element contains descriptions of the Emdros features\index{Emdros!feature}
+used for selecting a sentence or a sentence unit. The \xml{featurehandlers} element contains one or
+more of these elements, each of which describes an Emdros feature and how it is used for selections:
 
 \begin{my-tabu}{lX}{ \headii{Element}{Emdros feature type} }
 \xml{stringfeature} & String. See Section \ref{stringfeat-xml}.\\
@@ -2791,7 +2846,7 @@ An implicit logical \emph{AND} is assumed between these selector specifiers, mea
 objects that match all of the specified selectors are chosen.
 
 
-\subsubsection{\xml{stringfeature}}\label{stringfeat-xml}
+\subsubsection{\xml{stringfeature}}\label{stringfeat-xml}\index{stringfeature@\xml{stringfeature}}
 
 The \xml{stringfeature} element contains a description of how an Emdros feature of type string is
 used for selecting a sentence or a sentence unit.
@@ -2812,7 +2867,7 @@ the Emdros feature.\\
 \end{my-tabu}
 
 
-\subsubsection{\xml{integerfeature}}\label{integerfeat-xml}
+\subsubsection{\xml{integerfeature}}\label{integerfeat-xml}\index{integerfeature@\xml{integerfeature}}
 
 The \xml{integerfeature} element contains a description of how an Emdros feature of type integer is
 used for selecting a sentence or a sentence unit.
@@ -2831,7 +2886,7 @@ the Emdros feature.\\
 \end{my-tabu}
 
 
-\subsubsection{\xml{rangeintegerfeature}}\label{rangefeat-xml}
+\subsubsection{\xml{rangeintegerfeature}}\label{rangefeat-xml}\index{rangeintegerfeature@\xml{rangeintegerfeature}}
 
 The \xml{rangeintegerfeature} element contains a description of how an Emdros feature of type integer is
 used for selecting a sentence or a sentence unit.
@@ -2850,9 +2905,9 @@ value of the Emdros feature must be less than or equal to this value.\\
 \end{my-tabu}
 
 
-\subsubsection{\xml{enumfeature}}\label{enumfeat-xml}
+\subsubsection{\xml{enumfeature}}\label{enumfeat-xml}\index{enumfeature@\xml{enumfeature}}
 
-The \xml{enumfeature} element contains a description of how an Emdros feature of enumeration type is
+The \xml{enumfeature} element contains a description of how an Emdros feature of enumeration\index{Emdros!enumeration} type is
 used for selecting a sentence or a sentence unit.
 
 The \xml{enumfeature} element contains these elements:
@@ -2864,15 +2919,15 @@ The \xml{enumfeature} element contains these elements:
 Emdros feature must be equal to one of the \xml{value} elements mentioned below; if the string is
 ``differs'', the Emdros feature must not be equal to any of the \xml{value} elements mentioned below.\\
 
-\xml{value} & This element may occur several times. It contains an enumeration value name that is
+\xml{value} & This element may occur several times. It contains an enumeration\index{Emdros!enumeration} value name that is
 compared to the value of the Emdros feature.\\
 \end{my-tabu}
 
 
-\subsubsection{\xml{enumlistfeature}}\label{enumlistfeat-xml}
+\subsubsection{\xml{enumlistfeature}}\label{enumlistfeat-xml}\index{enumlistfeature@\xml{enumlistfeature}}
 
 The \xml{enumlistfeature} element contains a description of how an Emdros feature of type ``list of
-enumeration type'' is used for selecting a sentence or a sentence unit.
+enumeration type''\index{Emdros!enumeration} is used for selecting a sentence or a sentence unit.
 
 
 The \xml{enumlistfeature} element contains these elements:
@@ -2897,12 +2952,12 @@ present in the Emdros feature.\\
 \end{my-tabu}
 
 %%%%%%%%%%%%%%%%%%%% quizobjectselection %%%%%%%%%%%%%%%%%%%%
-\section{\xml{quizobjectselection}}\label{qosel-xml}
+\section{\xml{quizobjectselection}}\label{qosel-xml}\index{quizobjectselection@\xml{quizobjectselection}|hyperit}
 
-The \xml{quizobjectselection} element contains the information entered under the ``Sentence Units''
-tab when creating a quiz template. This element is not present in the quiz template if the
-\xml{useforquizobjects} element under the \xml{sentenceselection} element is \emph{true}. (See
-Section \ref{sensel-xml}.)
+The \xml{quizobjectselection} element contains the information entered under the ``Sentence
+Units''\index{quiz object (a.k.a. sentence unit)} tab when creating a quiz template. This element is not present in the
+quiz template if the \xml{useforquizobjects} element under the \xml{sentenceselection} element is
+\emph{true}. (See Section \ref{sensel-xml}.)
 
 The \xml{quizobjectselection} element contains these elements:
 
@@ -2920,11 +2975,12 @@ as for \xml{sentenceselection} elements. See Section \ref{feathand-xml}.\\
 
 
 %%%%%%%%%%%%%%%%%%%% quizfeatures %%%%%%%%%%%%%%%%%%%%
-\section{\xml{quizfeatures}}\label{feat-xml}
+\section{\xml{quizfeatures}}\label{feat-xml}\index{quizfeatures@\xml{quizfeatures}|hyperit}
 
-The \xml{quizfeatures} element lists the display features and request features of the quiz. These
-must be features of the Emdros object specified in the \xml{questionobject} element of the
-\xml{quizobjectselection} element (see Section \ref{qosel-xml}).
+The \xml{quizfeatures} element lists the display features\index{display feature} and request
+features\index{request feature} of the quiz. These must be features of the Emdros object specified
+in the \xml{questionobject} element of the \xml{quizobjectselection} element (see Section
+\ref{qosel-xml}).
 
 The \xml{quizfeatures} element may contain some or all of the following elements. Each element may
 occur several times.
@@ -2934,16 +2990,16 @@ occur several times.
 
 \xml{request} & The name of a request feature.\\
 
-\xml{requestdd} & The name of a request feature of string type which should be asked as a multiple-choice question (see
-Chapter \ref{chap-multiple-choice}).\\
+\xml{requestdd} & The name of a request feature of string type which should be asked as a
+multiple-choice\index{multiple-choice} question (see Chapter \ref{chap-multiple-choice}).\\
 
-\xml{dontshow} & The name of a feature that must not be available in the grammar selection box and the grammar
+\xml{dontshow} & The name of a feature that must not be available in the grammar selection box\index{grammar selection box} and the grammar
 information box.\\
 \end{my-longtabu}
 
 
 %%%%%%%%%%%%%%%%%%%% Templates Using MQL for Selection %%%%%%%%%%%%%%%%%%%%
-\section{Templates Using MQL for Selection}\label{sec-mql-selection}
+\section{Templates Using MQL for Selection}\label{sec-mql-selection}\index{MQL}
 
 When creating a quiz template, a facilitator can use a user-friendly selector for specifying which
 feature values to use when selecting sentences and sentence units. However, for more complex
@@ -2951,19 +3007,19 @@ selection criteria, an MQL query string can be specified.
 
 When a quiz template contains an MQL string for \emph{sentence selection,} Bible OL will surround
 the MQL string by \texttt{[sentence ...]}, where the three dots are replaced by the contents of the
-\xml{mql} element under the \xml{sentenceselection} element. This means that Bible OL will search for a
-sentence containing whatever is specified in the MQL statement. It is recommended that facilitators
-include the word \texttt{NORETRIEVE} in the MQL statement as this will cause the program to run
-considerably faster.
+\xml{mql} element under the \xml{sentenceselection} element. This means that Bible OL will search
+for a sentence containing whatever is specified in the MQL statement. It is recommended that
+facilitators include the word \texttt{NORETRIEVE}\index{NORETRIEVE} in the MQL statement as this
+will cause the program to run considerably faster.
 
-When a quiz template contains an MQL string for \emph{sentence unit selection,} Bible OL will
-surround the MQL string by \texttt{[ttt ...]}, where \texttt{ttt} is the contents of the
-\xml{questionobject} element under the \xml{quizobjectselection} element, and the three dots are
-replaced by the contents of the \xml{mql} element under the \xml{quizobjectselection} element.
-This means that Bible OL will look in the chosen sentence for sentence units that can be described
-as specified in the MQL statement. Here, the MQL statement must not contain the characters
-\texttt{[} and \texttt{]}; so it is only possible to specify one sentence unit. Furthermore, the
-word \texttt{NORETRIEVE} must not be included in the statement.
+When a quiz template contains an MQL string for \emph{sentence unit selection,}\index{quiz object (a.k.a. sentence unit)}
+Bible OL will surround the MQL string by \texttt{[ttt ...]}, where \texttt{ttt} is the contents of
+the \xml{questionobject} element under the \xml{quizobjectselection} element, and the three dots are
+replaced by the contents of the \xml{mql} element under the \xml{quizobjectselection} element. This
+means that Bible OL will look in the chosen sentence for sentence units that can be described as
+specified in the MQL statement. Here, the MQL statement must not contain the characters \texttt{[}
+  and \texttt{]}; so it is only possible to specify one sentence unit. Furthermore, the word
+\texttt{NORETRIEVE}\index{NORETRIEVE} must not be included in the statement.
 
 \pfbreak
 
@@ -2974,7 +3030,7 @@ refer to a single object.
 This can be illustrated by the following example: Assume that an exercise is intended to test a
 student's knowledge of the case of Greek nouns when they follow a preposition. Sentence selection
 would therefore look for sentences that contain a preposition followed by a noun. This is achieved
-by this \xml{sentenceselection} element:
+by this \xml{sentenceselection}\index{sentenceselection@\xml{sentenceselection}} element:
 
 \begin{lstlisting}[language=XML]
   <sentenceselection version="1">
@@ -2988,7 +3044,7 @@ Note that the \xml{mql} element contains two \texttt{[word~...]} blocks.
 
 
 The sentence units (question objects) should be nouns. This is achieved
-by this \xml{question\-object\-selection} element:
+by this \xml{quiz\-object\-selection}\index{quizobjectselection@\xml{quizobjectselection}} element:
 
 \begin{lstlisting}[language=XML]
   <quizobjectselection version="1">
@@ -2999,8 +3055,8 @@ by this \xml{question\-object\-selection} element:
 
 Note that the \xml{mql} element contains just the \texttt{psp=noun} specification.
 
-The student will be asked to provide the case of the noun, so the \xml{quizfeatures} element will
-contain this:
+The student will be asked to provide the case of the noun, so the
+\xml{quizfeatures}\index{quizfeatures@\xml{quizfeatures}} element will contain this:
 
 
 \begin{lstlisting}[language=XML]
@@ -3017,7 +3073,8 @@ When a student runs the exercise, Bible OL will select sentences using this MQL 
 [sentence [word NORETRIEVE psp=preposition][word NORETRIEVE psp=noun]]
 \end{lstlisting}
 
-Once a sentence has been chosen, Bible OL will select sentence units using this MQL query:
+Once a sentence has been chosen, Bible OL will select sentence units%
+\index{quiz object (a.k.a. sentence unit)} using this MQL query:
 
 \begin{lstlisting}[frame=]
 [word psp=noun GET case]
@@ -3029,15 +3086,16 @@ preposition/noun pair.)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Multiple-Choice Questions %%%%%%%%%%%%%%%%%%%%
-\chapter{Multiple-Choice Questions}\label{chap-multiple-choice}
+\chapter{Multiple-Choice Questions}\label{chap-multiple-choice}\index{multiple-choice|hyperit}
 
 \textbf{Read this chapter if you need to understand or modify the way Bible OL automatically
   generates multiple-choice questions for a few features.}
 \plainbreak{3}
 
 
-If a request feature in an exercise has an enumeration type, the request feature is displayed as a
-drop-down box and thus becomes a multiple choice question:
+If a request feature\index{request feature} in an exercise has an
+enumeration\index{Emdros!enumeration} type, the request feature is displayed as a drop-down box and
+thus becomes a multiple choice question:
 
 \begin{center}
   \includegraphics[width=0.148\textwidth]{gender.png}
@@ -3048,9 +3106,9 @@ choice. For example, in the current version of Bible OL, this is possible for th
 \emph{text\_nocant\_utf8}\footnote{That is, \emph{Text (no cantillation marks).}} and
 \emph{g\_prs\_utf8}\footnote{That is, \emph{Pronominal suffix.}}.
 
-A separate ``Words Database'' exists with the information necessary for this to work.
+A separate ``Words Database''\index{Words Database|hyperit} exists with the information necessary for this to work.
 
-The Words Database is an SQLite3 database containing all possible values for the relevant feature.
+The Words Database is an SQLite3\index{SQLite3} database containing all possible values for the relevant feature.
 Bible OL then constructs a drop-down box containing at most ten of the possible values, chosen at
 random but guaranteed to contain the correct answer:
 
@@ -3058,7 +3116,7 @@ random but guaranteed to contain the correct answer:
   \includegraphics[width=0.4\textwidth]{pronsuf.png}
 \end{center}
 
-The strings in the drop-down box are chosen based on three keys from the \emph{objectSettings} of
+The strings in the drop-down box are chosen based on three keys from the \emph{objectSettings}\index{objectSettings} of
 the Database Specification file. (See Section \ref{sec-objectsettings}.)
 
 \begin{itemize}
@@ -3073,7 +3131,7 @@ the Database Specification file. (See Section \ref{sec-objectsettings}.)
 Let us look at an example from the ETCBC4 database.\footnote{For a detailed description of the Words
 Database for ETCBC4 see Appendix \ref{app-worddb}.} For the \emph{g\_prs\_utf8} feature (the
 pronominal suffix) of the \emph{word} object, the following values are specified under
-\emph{objectSettings} in the Database Specification File:
+\emph{objectSettings}\index{objectSettings} in the Database Specification File:
 
 \begin{my-tabu}{lX}{ \headii{Key}{Value} }
   additionalfeatures & \lstinline[upquote=true]|["lex"]|\\
@@ -3110,7 +3168,7 @@ word here:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Client/Server Data Exchange %%%%%%%%%%%%%%%%%%%%
-\chapter{Data Exchange}\label{chap-data-exchange}
+\chapter{Data Exchange}\label{chap-data-exchange}<HERTIL>
 
 \textbf{Read this chapter if you are going to work with code that accesses the Emdros databases on
   the server or displays text and exercises in the client.}
@@ -3149,7 +3207,7 @@ and based on the result it generates an HTML document containing little more tha
 headers, HTML code to lay out the menu, and these JavaScript variables:
 
 \begin{my-longtabu}{lX}{ \headii{Variable}{Contents} }
-  useToolTip & A Boolean value of \emph{true} if the grammar information box should be displayed as
+  useToolTip & A Boolean value of \emph{true} if the grammar information box\index{grammar information box} should be displayed as
   a tooltip under the mouse, \emph{false} if the grammar information box should be displayed at the
   right side of the browser window. This value is configurable on a per-user basis, but currently
   there is no user interface to change its value.\\
@@ -3181,7 +3239,7 @@ the client.
 When the client (the web browser) has read the HTML file, the JavaScript code directs it to construct
 the visual appearance of the text. This involves building the central text layout, adding
 grammatical information to each word, phrase, clause, etc., and constructing the grammar selection
-box and the grammar information box.
+box\index{grammar selection box} and the grammar information box.\index{grammar information box}
 
 %%%%%%%%%%%%%%%%%%%% Running an Exercise %%%%%%%%%%%%%%%%%%%%
 \section{Running an Exercise}
@@ -3247,7 +3305,7 @@ the client.
 When the client (the web browser) has read the HTML file, the JavaScript code directs it to construct
 the visual appearance of the questions. This involves building the central text layout, adding
 grammatical information to each word, phrase, clause, etc., building the question/answer panel, and
-constructing the grammar selection box and the grammar information box.
+constructing the grammar selection box\index{grammar selection box} and the grammar information box.\index{grammar information box}
 
 As the user answers the questions, the client keeps track of the answers, but no communication with
 the server takes place before the user presses the ``Finish'' button. What happens when the
@@ -3538,7 +3596,7 @@ mo & An object of class \emph{MatchedObject} (\emph{OlMatchedObject} in PHP). A 
 is a representation of data about a single Emdros object. Details are given in Section
 \ref{matchedobject}.\\
 
-children\_idds & An array of integers containing the ID\_Ds\index{ID\_D} of the constituent Emdros
+children\_idds & An array of integers containing the ID\_Ds\index{Emdros!ID\_D} of the constituent Emdros
 objects at a lower level in the grammar hierarchy. Consider, for example, the three clauses at
 grammatical level 2 in the example on page \pageref{clause-example}. The clause ``ʔᵃšer mittaḥat
 lārāqîₐʕ'' contains the two phrases ``ʔᵃšer'' and ``mittaḥat lārāqîₐʕ''. If these two phrases have
@@ -3572,7 +3630,7 @@ the previous word; \emph{sameAsPrev[2]} is \emph{true} if this word belongs to t
 previous word. For the first word in a collection, all three Booleans are
 \emph{false.}\\
 
-pics & An array of integers identifying pictures on the resource website (see Section
+pics & An array of integers identifying pictures on the resource website\index{resource website} (see Section
 \ref{sec-resource-web}) that are relevant for this word. The first three values in the array are the book
 number, chapter number, and verse number. The remaining elements are IDs of pictures on the resource
 website.\\
@@ -3744,10 +3802,10 @@ The \emph{ExtendedQuizFeatures} interface has these members:
 
     The \emph{name} field contains the name of the request feature, the \emph{usedropdown} field is
     \emph{true} if the request feature is of type string and the question should be asked as a
-    multiple choice question (see Section \ref{chap-multiple-choice}).\\
+    multiple choice\index{multiple-choice} question (see Section \ref{chap-multiple-choice}).\\
 
     dontShowFeatures & Array of strings naming features that must not be available in the grammar
-    selection box and the grammar information box.\\
+    selection box and the grammar information box.\index{grammar information box}\\
 
     objectType & The Emdros type of the quiz objects.\\
 
@@ -3944,7 +4002,7 @@ interface. It is used to create the Database Type Information File as described 
 \ref{sec-tif}.\\
 
 pic2db & This controller can only be accessed from the command line, not through the web interface.
-It is used to retrieve information from the resource website (see Section
+It is used to retrieve information from the resource website\index{resource website} (see Section
 \ref{sec-resource-web}).\\
 
 privacy & Displays the privacy policy.\\
@@ -4010,12 +4068,12 @@ command.\\
 libraries/Mql/drivers/Mql\_native.php & Driver for executing MQL commands through an MQL library in PHP.\\
 
 libraries/picdb.php & Class for retrieving picture references and URL references from the resource
-website (see Section \ref{sec-resource-web}).\\
+website\index{resource website} (see Section \ref{sec-resource-web}).\\
 
 libraries/Quiz\_data.php & The \emph{Quiz\_data} class and associated functions and class (see Chapter
 \ref{chap-quizdata}).\\
 
-libraries/Suggest\_answers.php & Class for accessing the Words Database (see Chapter \ref{chap-multiple-choice}).\\
+libraries/Suggest\_answers.php & Class for accessing the Words Database\index{Words Database} (see Chapter \ref{chap-multiple-choice}).\\
 
 libraries/Universe\_tree.php & Classes used together with \emph{jstree} (see page \pageref{jstree}) to display a
 hierarchy of books, chapters, and verses of the Bible.\\
@@ -4131,7 +4189,7 @@ access the straws within the sheaf.
 \pfbreak
 
 If you know that the MQL request will return a sheaf and you are only interested in the monads of
-that sheaf, the so-called ``quick harvest\index{quick harvest}\index{harvest, quick}'' method can be used. In
+that sheaf, the so-called ``quick harvest\index{quick harvest}'' method can be used. In
 this case you must add a Boolean argument with the value \emph{true} to the call to \emph{exec}:
 
 \begin{lstlisting}[language=PHP]
@@ -4351,7 +4409,7 @@ table has these fields:
 
 \begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
  user\_id   & Integer  & The \emph{id} field from an entry in the \emph{user} table.\\
- usetooltip & Boolean  & \emph{True} if the user wants the grammar information box to work as a
+ usetooltip & Boolean  & \emph{True} if the user wants the grammar information box\index{grammar information box} to work as a
                           tooltip instead of having a fixed position on the display.\\
 \end{my-longtabu}
 
@@ -4387,7 +4445,7 @@ text\_bold      & Boolean & \emph{True} if the font is bold when displaying text
 feature\_size   & Integer & Font size for interlinear text.\\
 feature\_italic & Boolean & \emph{True} if the font is italic for interlinear text.\\
 feature\_bold   & Boolean & \emph{True} if the font is bold for interlinear text.\\
-tooltip\_size   & Integer & Font size for text in the grammar information box.\\
+tooltip\_size   & Integer & Font size for text in the grammar information box.\index{grammar information box}\\
 tooltip\_italic & Boolean & \emph{True} if the font is italic for text in the grammar information box.\\
 tooltip\_bold   & Boolean & \emph{True} if the font is bold for text in the grammar information box.\\
 input\_size     & Integer & Font size in input fields.\\
@@ -4441,7 +4499,7 @@ pathid & Integer & The \emph{id} field from an entry in the \emph{exercisedir} t
 \section{The \emph{bible\_refs} Table}\label{sec-bible-refs}
 
 The \emph{bible\_refs} table contains links between Bible verses and pictures on the resource
-website (see Section \ref{sec-resource-web}) that are relevant for the verse. The table contains these
+website\index{resource website} (see Section \ref{sec-resource-web}) that are relevant for the verse. The table contains these
 fields:
 
 \begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
@@ -4460,7 +4518,7 @@ picture    & Integer & The number of a picture on the resource website.\\
 \section{The \emph{bible\_urls} Table}\label{sec-bible-urls}
 
 The \emph{bible\_urls} table contains links between Bible verses and URLs.\footnote{Currently, the URLs are
-configured on the resource website (see Section \ref{sec-resource-web}), but they could come from other
+configured on the resource website\index{resource website} (see Section \ref{sec-resource-web}), but they could come from other
 sources.} The table contains these fields:
 
 \begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
@@ -4813,10 +4871,10 @@ server. The skeleton looks like this (somewhat simplified):
 </div>
 \end{lstlisting}
   
-The \xml{div class="grammarselector"} element is for the grammar selection box. The \emph{ol} program
+The \xml{div class="grammarselector"} element is for the grammar selection box\index{grammar selection box}. The \emph{ol} program
 generates the contents of this element using the class \emph{GenerateCheckboxes}.
 
-The \xml{div class="grammardisplay"} element is for the grammar information box. It is built by the
+The \xml{div class="grammardisplay"} element is for the grammar information box.\index{grammar information box} It is built by the
 function \emph{toolTipFunc,} which is defined within the function \emph{generateSentenceHtml} in the
 \emph{Dictionary} class.
 
@@ -4915,7 +4973,7 @@ featurevalue & is the localized value of the feature.\\
 \end{tabu}
 \end{minipage}
 
-If a particular feature is turned on in the grammar selection box, the \xmla{dontshowit} class in the
+If a particular feature is turned on in the grammar selection box\index{grammar selection box}, the \xmla{dontshowit} class in the
 relevant \xml{span} elements is changed to \xmla{showit.}
 
 Two extra class values are added to the \xml{span class="textdisplay"} element to control the
@@ -4993,15 +5051,15 @@ noncontiguous collection of monads. The class value \xmla{hasp} means that the
 \emph{DisplayMultipleMonadObject} has a successor.
 
 
-If ``Show border'' is selected in the grammar selection box for a particular level in the grammar
+If ``Show border'' is selected in the grammar selection box\index{grammar selection box} for a particular level in the grammar
 hierarchy, the \xmla{dontshowit} class in the relevant \xml{span class="gram"} elements is changed
 to \xmla{showit.}
 
-If ``Separate lines'' is selected in the grammar selection box for a particular level in the grammar
+If ``Separate lines'' is selected in the grammar selection box\index{grammar selection box} for a particular level in the grammar
 hierarchy, the \xmla{noseplin} class in the relevant \xml{span class="notdummy"} elements is changed
 to \xmla{seplin.}
 
-If a particular feature is turned on in the grammar selection box, the \xmla{dontshowit} class in the
+If a particular feature is turned on in the grammar selection box\index{grammar selection box}, the \xmla{dontshowit} class in the
 relevant \xml{span class="xgrammar"} elements is changed to \xmla{showit.}
 
 
@@ -5056,7 +5114,7 @@ No further information about Learning Journey is given in this document.
 
 
 %%%%%%%%%%%%%%%%%%%% The Resource Website %%%%%%%%%%%%%%%%%%%%
-\section{The Resource Website}\label{sec-resource-web}
+\section{The Resource Website}\label{sec-resource-web}\index{resource website|hyperit}
 
 The resource web site is a collection of photos from the Middle East. Many of them relate to events
 and places described in the Bible. The photos have descriptive texts that contain Bible references.
@@ -5152,7 +5210,7 @@ of the feature. A feature \emph{XXX} may exists in these variants:
 
 Except where otherwise noted, all features of the \emph{word} object are string features.
 
-In cases where a feature is an enumeration, the enumeration type may contain values that are not
+In cases where a feature is an enumeration\index{Emdros!enumeration}, the enumeration type may contain values that are not
 actually used. Such values are not listed in the following sections.
 
 \subsection{Features: text, continuation, g\_word, suffix, and g\_cons}\label{suffix}
@@ -5184,7 +5242,7 @@ The \emph{g\_word} features are very similar to the \emph{text} features.
 The \emph{g\_word} features are not used by Bible OL because their information is available by other means. The
 difference between \emph{g\_word} and \emph{text} is that \emph{g\_word} does not use the proper final form of the Hebrew
 consonants, and it includes punctuation information that follows a word. This punctuation information
-is typically the character \heb{׃} \emph{(sof pasuq)} or \heb{־} \emph{(maqaf),}\index{maqaf} but it may also include
+is typically the character \heb{׃} \emph{(sof pasuq)}\index{sof pasuq} or \heb{־} \emph{(maqaf),}\index{maqaf} but it may also include
 additional characters.
 
 The \emph{g\_word} features exist in these variants:
@@ -5787,7 +5845,7 @@ described on page \pageref{list-mqldump}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Appendix: ETCBC4 Words Database %%%%%%%%%%%%%%%%%%%%
-\chapter{ETCBC4 Words Database}\label{app-worddb}
+\chapter{ETCBC4 Words Database}\label{app-worddb}\index{Words Database}
 
 The Words Database (see Section \ref{chap-multiple-choice}) for the ETCBC4 Emdros database has the
 structure defined by these SQL statements:
@@ -5835,7 +5893,7 @@ SELECT lex,suffix FROM lexemes
 will list all possible combinations of the \emph{lex} and \emph{g\_prs\_utf8} features.
 
 %%%%%%%%%%%%%%%%%%%% The Origin of the ETCBC4 Words Database %%%%%%%%%%%%%%%%%%%%
-\section{The Origin of the ETCBC4 Words Database}
+\section{The Origin of the ETCBC4 Words Database}\index{Words Database}
 
 The current Word Database was originally generated for the old WIVU Emdros database. It was created
 using a Java program called \texttt{WordDb.java}, which has not been updated for ETCBC4.
