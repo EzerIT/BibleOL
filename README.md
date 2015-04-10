@@ -11,9 +11,14 @@ To clone this repository on a Linux machine, please use this command:
 
     git clone --recursive https://github.com/EzerIT/BibleOL
 
+(If you have forked this GitHub repository, you should replace the URL in the "git clone" command
+with with a URL that points to your repository on GitHub.)
+
 Then go to the BibleOL directory you just downloaded and execute this command:
 
     git-hooks/setup.sh
 
 This will install a Git hook that downloads the necessary databases from Dropbox when needed.
+
+*If you want to develop for Bible OL, you must read the file techdoc/techdoc.pdf.*
 
