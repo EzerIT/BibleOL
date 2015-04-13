@@ -20,5 +20,6 @@ Then go to the BibleOL directory you just downloaded and execute this command:
 
 This will install a Git hook that downloads the necessary databases from Dropbox when needed.
 
-*If you want to develop for Bible OL, you must read the file techdoc/techdoc.pdf.*
+*If you want to set up a Bible OL website, or if you want to develop for Bible OL, you must read the
+ file techdoc/techdoc.pdf.*
 
