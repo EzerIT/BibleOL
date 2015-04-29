@@ -548,7 +548,7 @@ class Ctrl_text extends MY_Controller {
 
             $this->load->helper('file');
             $json_data = read_file($tmpfname);
-            @unlink($this->tmpfname);
+            @unlink($tmpfname);
 
             $data = json_decode($json_data);
 
