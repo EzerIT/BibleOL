@@ -30,12 +30,13 @@ interface JQuery{
     ckeditor : Function;    
 }
 
-declare var decoded_3et      : any;
-declare var initial_universe : string[];
-declare var submit_to        : string;
-declare var check_url        : string;
-declare var quiz_name        : string;
-declare var dir_name         : string;
+declare var decoded_3et        : any;
+declare var initial_universe   : string[];
+declare var submit_to          : string;
+declare var check_url          : string;
+declare var import_shebanq_url : string;
+declare var quiz_name          : string;
+declare var dir_name           : string;
 
 var VirtualKeyboard  : any;
 
@@ -240,4 +241,42 @@ function save_quiz2() {
 
     isSubmitting = true;
     form.submit();
+}
+
+function import_from_shebanq() {
+    $('#import-shebanq-error').text('');
+
+    $("#import-shebanq-dialog").dialog({
+        autoOpen: true,
+        resizable: false,
+        modal: true,
+        width: 400,
+        buttons: {
+            "Import": function() {
+                $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url,
+                                                       encodeURIComponent($('#import-shebanq-qid').val().trim()),
+                                                       encodeURIComponent($('#import-shebanq-dbvers').val().trim())))
+                    .done((data, textStatus, jqXHR) => {
+                        data = data.trim();
+
+                        if (data.substr(0,2)=='OK') {
+ 	                    $('#mqltext').val(data.substr(3));
+                            $(this).dialog('close');
+                        }
+                        else if (data.substr(0,5)=='ERROR') {
+                            $('#import-shebanq-error').text(data.substr(6));
+                        }
+                        else {
+                            $('#import-shebanq-error').text(data);
+                        }
+                    })
+                    .fail((jqXHR, textStatus, errorThrown) => {
+                        $('#import-shebanq-error').text('Error response from server: ' + errorThrown);
+                    });
+            },
+            "Cancel": function() {
+                $(this).dialog("close");
+            }
+        }
+    });
 }

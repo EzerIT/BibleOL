@@ -1239,6 +1239,7 @@ var PanelTemplSentenceSelector = (function (_super) {
         _super.call(this, md, 'sensel');
         this.questObjTypeLab = $('<span>Sentence unit type:</span>');
         this.featSelLab = $('<span>Feature:</span>');
+        this.importShebanq = $('<button type="button">Import from SHEBANQ</button>');
         this.templTabs = ttabs;
         this.dirty = false;
         this.featureTab = featureTab;
@@ -1270,6 +1271,7 @@ var PanelTemplSentenceSelector = (function (_super) {
             this.templTabs.tabs('enable', 3);
         }
 
+        this.importShebanq.click(import_from_shebanq);
         this.finish_construct();
     }
     PanelTemplSentenceSelector.prototype.switchToMql = function (useMql) {
@@ -1284,10 +1286,12 @@ var PanelTemplSentenceSelector = (function (_super) {
             this.cbUseForQoLabel.addClass('disabled');
             this.cbUseForQo.prop('checked', false);
             this.templTabs.tabs('enable', 3);
+            this.importShebanq.prop('disabled', false);
         } else {
             this.questObjTypeLab.removeClass('disabled');
             this.featSelLab.removeClass('disabled');
             this.cbUseForQoLabel.removeClass('disabled');
+            this.importShebanq.prop('disabled', true);
         }
 
         if (this.currentBox) {
@@ -1339,6 +1343,14 @@ var PanelTemplSentenceSelector = (function (_super) {
 
         cell = $('<td></td>');
         cell.append(this.mqlText);
+        row.append(cell);
+        table.append(row);
+
+        row = $('<tr></tr>');
+        cell = $('<td></td>');
+        row.append(cell);
+        cell = $('<td></td>');
+        cell.append(this.importShebanq);
         row.append(cell);
         table.append(row);
 
@@ -2391,4 +2403,37 @@ function save_quiz2() {
 
     isSubmitting = true;
     form.submit();
+}
+
+function import_from_shebanq() {
+    $('#import-shebanq-error').text('');
+
+    $("#import-shebanq-dialog").dialog({
+        autoOpen: true,
+        resizable: false,
+        modal: true,
+        width: 400,
+        buttons: {
+            "Import": function () {
+                var _this = this;
+                $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url, encodeURIComponent($('#import-shebanq-qid').val().trim()), encodeURIComponent($('#import-shebanq-dbvers').val().trim()))).done(function (data, textStatus, jqXHR) {
+                    data = data.trim();
+
+                    if (data.substr(0, 2) == 'OK') {
+                        $('#mqltext').val(data.substr(3));
+                        $(_this).dialog('close');
+                    } else if (data.substr(0, 5) == 'ERROR') {
+                        $('#import-shebanq-error').text(data.substr(6));
+                    } else {
+                        $('#import-shebanq-error').text(data);
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    $('#import-shebanq-error').text('Error response from server: ' + errorThrown);
+                });
+            },
+            "Cancel": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
 }

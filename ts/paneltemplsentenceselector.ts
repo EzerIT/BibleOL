@@ -8,6 +8,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
     private templTabs : JQuery;
     private questObjTypeLab : JQuery = $('<span>Sentence unit type:</span>');
     private featSelLab : JQuery = $('<span>Feature:</span>');
+    private importShebanq : JQuery = $('<button type="button">Import from SHEBANQ</button>');
     private dirty : boolean;
     private featureTab : PanelTemplQuizFeatures;
     private qoselTab : PanelTemplQuizObjectSelector;
@@ -24,11 +25,13 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
             this.cbUseForQoLabel.addClass('disabled');
             this.cbUseForQo.prop('checked', false);
             this.templTabs.tabs('enable',3);
+            this.importShebanq.prop('disabled',false);
         }
         else {
 	    this.questObjTypeLab.removeClass('disabled');
 	    this.featSelLab.removeClass('disabled');
 	    this.cbUseForQoLabel.removeClass('disabled');
+            this.importShebanq.prop('disabled',true);
         }
 
 	if (this.currentBox) {
@@ -83,6 +86,14 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         row.append(cell);
         table.append(row);
         
+        row = $('<tr></tr>');
+        cell = $('<td></td>');
+        row.append(cell);
+        cell = $('<td></td>');
+        cell.append(this.importShebanq);
+        row.append(cell);
+        table.append(row);
+
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
         cell.append(this.rbFriendly, this.rbFriendlyLabel);
@@ -164,6 +175,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
             this.templTabs.tabs('enable',3);
         }
 
+	this.importShebanq.click(import_from_shebanq);
         this.finish_construct();
     }
 

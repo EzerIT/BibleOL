@@ -40,6 +40,7 @@
   var initial_universe = <?= $universe ?>;
   var submit_to = '<?= site_url("text/submit_quiz") ?>';
   var check_url = '<?= site_url("text/check_submit_quiz") ?>';
+  var import_shebanq_url = '<?= site_url("text/import_shebanq") ?>';
   var quiz_name = '<?= is_null($quiz) ? '' : $quiz ?>';
   var dir_name = '<?= $dir ?>';
 </script>
@@ -69,3 +70,24 @@
     The file already exists. Do you want to replace it?
   </p>
 </div>
+
+<!-- Import from SHEBANQ dialog -->
+
+<div id="import-shebanq-dialog" style="display:none" title="Import from SHEBANQ">
+  <p class="error" id="import-shebanq-error"></p>
+  <table>
+    <tr>
+      <td>SHEBANQ query ID: </td>
+      <td>
+        <input type="text" name="query-id" id="import-shebanq-qid" value="" size="10" class="text ui-widget-content ui-corner-all">
+      </td>
+    </tr>
+    <tr>
+      <td>SHEBANQ database version: </td>
+      <td>
+        <input type="text" name="db-version" id="import-shebanq-dbvers" value="4b" size="10" class="text ui-widget-content ui-corner-all">
+      </td>
+    </tr>
+  </table>
+</div>
+
