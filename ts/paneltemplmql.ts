@@ -907,7 +907,7 @@ class PanelTemplMql {
     }
 
     public setOtype(otype : string) {
-        this.objectTypeCombo.val(otype);  // TODO: Test this
+        this.objectTypeCombo.val(otype);
         this.objectTypeCombo.change();
     }
 

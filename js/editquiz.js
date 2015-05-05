@@ -1169,7 +1169,7 @@ var PanelTemplMql = (function () {
     };
 
     PanelTemplMql.prototype.setOtype = function (otype) {
-        this.objectTypeCombo.val(otype); // TODO: Test this
+        this.objectTypeCombo.val(otype);
         this.objectTypeCombo.change();
     };
 
