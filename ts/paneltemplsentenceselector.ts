@@ -48,10 +48,6 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         return "[" + this.getOtype() + " NORETRIEVE " + super.makeMql() + "]";
     }
     
-    public getMql() : string {
-        return this.mqlText.val();
-    }
-    
     public getMqlEmulQos() : string {
     	return super.makeMql();
     }

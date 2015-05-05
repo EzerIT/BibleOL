@@ -243,6 +243,42 @@ function save_quiz2() {
     form.submit();
 }
 
+function shebanq_to_qo(qo : string, mql : string) {
+    if (qo===null) {
+        $('#qo-dialog-text').html( '<p>Sentence selection imported.</p><p>SHEBANQ query does not contain any FOCUS objects that can be used for sentence unit selection.</p>');
+        $("#qo-dialog-confirm").dialog({
+            autoOpen: true,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "OK": function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    }
+    else {
+        $('#qo-dialog-text').html( '<p>Sentence selection imported.</p><p>Do you also wish to use<br><code>[{0} {1}]</code><br>for sentence unit selection?</p>'.format(qo, mql.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')) );
+
+        $("#qo-dialog-confirm").dialog({
+            autoOpen: true,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Yes": function() {
+                    $(this).dialog("close");
+                    panelSentUnit.setOtype(qo);
+                    panelSentUnit.setUsemql();
+                    panelSentUnit.setMql(mql);
+                },
+                "No": function() {
+                    $(this).dialog("close");
+            }
+            }
+        });
+    }
+}
+
 function import_from_shebanq() {
     $('#import-shebanq-error').text('');
 
@@ -253,24 +289,27 @@ function import_from_shebanq() {
         width: 400,
         buttons: {
             "Import": function() {
+                $('.ui-dialog *').css('cursor', 'wait');
+
                 $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url,
                                                        encodeURIComponent($('#import-shebanq-qid').val().trim()),
                                                        encodeURIComponent($('#import-shebanq-dbvers').val().trim())))
                     .done((data, textStatus, jqXHR) => {
-                        data = data.trim();
+                        $('.ui-dialog *').css('cursor', 'auto');
 
-                        if (data.substr(0,2)=='OK') {
- 	                    $('#mqltext').val(data.substr(3));
+                        var result = JSON.parse(data);
+                        if (result.error===null) {
+                            panelSent.setMql(result.sentence_mql);
                             $(this).dialog('close');
-                        }
-                        else if (data.substr(0,5)=='ERROR') {
-                            $('#import-shebanq-error').text(data.substr(6));
+                            shebanq_to_qo(result.sentence_unit, result.sentence_unit_mql);
                         }
                         else {
-                            $('#import-shebanq-error').text(data);
+                            $('#import-shebanq-error').text(result.error);
                         }
                     })
                     .fail((jqXHR, textStatus, errorThrown) => {
+                        $('.ui-dialog *').css('cursor', 'auto');
+
                         $('#import-shebanq-error').text('Error response from server: ' + errorThrown);
                     });
             },

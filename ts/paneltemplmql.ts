@@ -427,7 +427,8 @@ class PanelTemplMql {
 	this.rbMqlLabel = $('<span>YOU SHOULD NOT SEE THIS</span>');
 	this.rbFriendlyLabel = $('<span>YOU SHOULD NOT SEE THIS</span>');
 
-        this.mqlText = $('<textarea id="mqltext" cols="45" rows="2">');
+        this.mqlText = $('<textarea id="{0}_mqltext" cols="45" rows="2">'.format(this.name_prefix));
+
 
         this.featureCombo.on('change', () => {
             this.currentBox.hide();
@@ -497,8 +498,18 @@ class PanelTemplMql {
 	    this.updateMql();
 	    this.switchToMql(false);
 	}
- 	this.txtEntry = this.mqlText.val();
+ 	this.txtEntry = this.getMql();
     }
+
+
+    public setMql(s : string) {
+        this.mqlText.val(s);
+    }
+
+    public getMql() : string {
+        return this.mqlText.val();
+    }
+
 
     // Handles changes to input fields under virtual keyboard control
     private intervalHandler : number;
@@ -894,6 +905,16 @@ class PanelTemplMql {
     public getOtype() : string {
         return this.objectTypeCombo.val();
     }
+
+    public setOtype(otype : string) {
+        this.objectTypeCombo.val(otype);  // TODO: Test this
+        this.objectTypeCombo.change();
+    }
+
+    public setUsemql() {
+        this.rbMql.prop('checked', true);
+        this.rbMql.click();
+    }
     
     
     // Default value. Overidden in PanelTemplSentenceSelector
@@ -902,7 +923,7 @@ class PanelTemplMql {
     }
 	
     public isDirty() : boolean {
-	return this.mqlText.val() !== this.txtEntry;
+	return this.getMql() !== this.txtEntry;
     }
 	
     public makeMql() : string {
@@ -932,7 +953,7 @@ class PanelTemplMql {
     }
 	
     public updateMql() : void {
- 	this.mqlText.val(this.makeMql());
+ 	this.setMql(this.makeMql());
     }
 
 
@@ -950,7 +971,7 @@ class PanelTemplMql {
         };
 
         if (this.rbMql.prop('checked'))
-            res.mql = this.mqlText.val();
+            res.mql = this.getMql();
         else {
             res.featHand.vhand = [];
 

@@ -40,7 +40,7 @@
   var initial_universe = <?= $universe ?>;
   var submit_to = '<?= site_url("text/submit_quiz") ?>';
   var check_url = '<?= site_url("text/check_submit_quiz") ?>';
-  var import_shebanq_url = '<?= site_url("text/import_shebanq") ?>';
+  var import_shebanq_url = '<?= site_url("shebanq/import_shebanq") ?>';
   var quiz_name = '<?= is_null($quiz) ? '' : $quiz ?>';
   var dir_name = '<?= $dir ?>';
 </script>
@@ -89,5 +89,11 @@
       </td>
     </tr>
   </table>
+</div>
+
+<!-- Confirm Sentence Unit MQL dialog -->
+
+<div id="qo-dialog-confirm" style="display:none" title="MQL for sentence unit">
+  <p id="qo-dialog-text"></p>
 </div>
 

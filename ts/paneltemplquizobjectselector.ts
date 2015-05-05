@@ -22,10 +22,6 @@ class PanelTemplQuizObjectSelector extends PanelTemplMql {
         }
     }
 
-    public getMql() : string {
-        return this.mqlText.val();
-    }
-
     private doLayout(where : JQuery) : void {
         var table : JQuery = $('<table></table>');
         var row : JQuery;

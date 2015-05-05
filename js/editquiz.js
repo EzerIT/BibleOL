@@ -674,7 +674,7 @@ var PanelTemplMql = (function () {
         this.rbMqlLabel = $('<span>YOU SHOULD NOT SEE THIS</span>');
         this.rbFriendlyLabel = $('<span>YOU SHOULD NOT SEE THIS</span>');
 
-        this.mqlText = $('<textarea id="mqltext" cols="45" rows="2">');
+        this.mqlText = $('<textarea id="{0}_mqltext" cols="45" rows="2">'.format(this.name_prefix));
 
         this.featureCombo.on('change', function () {
             _this.currentBox.hide();
@@ -775,7 +775,15 @@ var PanelTemplMql = (function () {
             this.updateMql();
             this.switchToMql(false);
         }
-        this.txtEntry = this.mqlText.val();
+        this.txtEntry = this.getMql();
+    };
+
+    PanelTemplMql.prototype.setMql = function (s) {
+        this.mqlText.val(s);
+    };
+
+    PanelTemplMql.prototype.getMql = function () {
+        return this.mqlText.val();
     };
 
     PanelTemplMql.prototype.monitorChange = function (elem, sfh, i) {
@@ -1160,13 +1168,23 @@ var PanelTemplMql = (function () {
         return this.objectTypeCombo.val();
     };
 
+    PanelTemplMql.prototype.setOtype = function (otype) {
+        this.objectTypeCombo.val(otype); // TODO: Test this
+        this.objectTypeCombo.change();
+    };
+
+    PanelTemplMql.prototype.setUsemql = function () {
+        this.rbMql.prop('checked', true);
+        this.rbMql.click();
+    };
+
     // Default value. Overidden in PanelTemplSentenceSelector
     PanelTemplMql.prototype.getUseForQo = function () {
         return false;
     };
 
     PanelTemplMql.prototype.isDirty = function () {
-        return this.mqlText.val() !== this.txtEntry;
+        return this.getMql() !== this.txtEntry;
     };
 
     PanelTemplMql.prototype.makeMql = function () {
@@ -1195,7 +1213,7 @@ var PanelTemplMql = (function () {
     };
 
     PanelTemplMql.prototype.updateMql = function () {
-        this.mqlText.val(this.makeMql());
+        this.setMql(this.makeMql());
     };
 
     PanelTemplMql.prototype.populateFeatureTab = function (otype) {
@@ -1211,7 +1229,7 @@ var PanelTemplMql = (function () {
         };
 
         if (this.rbMql.prop('checked'))
-            res.mql = this.mqlText.val();
+            res.mql = this.getMql();
         else {
             res.featHand.vhand = [];
 
@@ -1306,10 +1324,6 @@ var PanelTemplSentenceSelector = (function (_super) {
 
     PanelTemplSentenceSelector.prototype.makeMql = function () {
         return "[" + this.getOtype() + " NORETRIEVE " + _super.prototype.makeMql.call(this) + "]";
-    };
-
-    PanelTemplSentenceSelector.prototype.getMql = function () {
-        return this.mqlText.val();
     };
 
     PanelTemplSentenceSelector.prototype.getMqlEmulQos = function () {
@@ -1440,10 +1454,6 @@ var PanelTemplQuizObjectSelector = (function (_super) {
             else
                 this.currentBox.show();
         }
-    };
-
-    PanelTemplQuizObjectSelector.prototype.getMql = function () {
-        return this.mqlText.val();
     };
 
     PanelTemplQuizObjectSelector.prototype.doLayout = function (where) {
@@ -2405,6 +2415,41 @@ function save_quiz2() {
     form.submit();
 }
 
+function shebanq_to_qo(qo, mql) {
+    if (qo === null) {
+        $('#qo-dialog-text').html('<p>Sentence selection imported.</p><p>SHEBANQ query does not contain any FOCUS objects that can be used for sentence unit selection.</p>');
+        $("#qo-dialog-confirm").dialog({
+            autoOpen: true,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    } else {
+        $('#qo-dialog-text').html('<p>Sentence selection imported.</p><p>Do you also wish to use<br><code>[{0} {1}]</code><br>for sentence unit selection?</p>'.format(qo, mql.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')));
+
+        $("#qo-dialog-confirm").dialog({
+            autoOpen: true,
+            resizable: false,
+            modal: true,
+            buttons: {
+                "Yes": function () {
+                    $(this).dialog("close");
+                    panelSentUnit.setOtype(qo);
+                    panelSentUnit.setUsemql();
+                    panelSentUnit.setMql(mql);
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    }
+}
+
 function import_from_shebanq() {
     $('#import-shebanq-error').text('');
 
@@ -2416,18 +2461,22 @@ function import_from_shebanq() {
         buttons: {
             "Import": function () {
                 var _this = this;
-                $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url, encodeURIComponent($('#import-shebanq-qid').val().trim()), encodeURIComponent($('#import-shebanq-dbvers').val().trim()))).done(function (data, textStatus, jqXHR) {
-                    data = data.trim();
+                $('.ui-dialog *').css('cursor', 'wait');
 
-                    if (data.substr(0, 2) == 'OK') {
-                        $('#mqltext').val(data.substr(3));
+                $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url, encodeURIComponent($('#import-shebanq-qid').val().trim()), encodeURIComponent($('#import-shebanq-dbvers').val().trim()))).done(function (data, textStatus, jqXHR) {
+                    $('.ui-dialog *').css('cursor', 'auto');
+
+                    var result = JSON.parse(data);
+                    if (result.error === null) {
+                        panelSent.setMql(result.sentence_mql);
                         $(_this).dialog('close');
-                    } else if (data.substr(0, 5) == 'ERROR') {
-                        $('#import-shebanq-error').text(data.substr(6));
+                        shebanq_to_qo(result.sentence_unit, result.sentence_unit_mql);
                     } else {
-                        $('#import-shebanq-error').text(data);
+                        $('#import-shebanq-error').text(result.error);
                     }
                 }).fail(function (jqXHR, textStatus, errorThrown) {
+                    $('.ui-dialog *').css('cursor', 'auto');
+
                     $('#import-shebanq-error').text('Error response from server: ' + errorThrown);
                 });
             },
