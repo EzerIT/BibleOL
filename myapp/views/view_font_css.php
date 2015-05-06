@@ -23,22 +23,31 @@ function heightsize($fs) {
     }
 
     <?php if ($f->name==='hebrew'): ?>
-        #virtualKeyboard.HE div.kbButton span {
+        #virtualKeyboard.HE div.kbButton span {  /* Main character on a key */
             font-family: <?= $f->font_family ?>;
             font-size: 13pt;
         }
-        #virtualKeyboard.HE div#kbDesk.modeNormal div.kbButton span.hiddenShiftCaps {
+        #virtualKeyboard.HE div#kbDesk.modeNormal div.kbButton span.hiddenShiftCaps { /* Shifted character in unhifted mode */
             font-size: 9pt;
         }
-        #virtualKeyboard.HE div#kbDesk.modeCaps div.kbButton span.hiddenShiftCaps {
+        #virtualKeyboard.HE div#kbDesk.modeCaps div.kbButton span.hiddenShiftCaps { /* Shifted character in Caps Lock mode */
             font-size: 9pt;
         }
   <?php endif; ?>
 
     <?php if ($f->name==='greek'): ?>
-        #virtualKeyboard.EL div.kbButton span {
+        #virtualKeyboard.EL div.kbButton span {  /* Main character on a key */
             font-family: <?= $f->font_family ?>;
             font-size: 13pt;
+        }
+        #virtualKeyboard.EL div#kbDesk.modeNormal div.kbButton span.hiddenShiftCaps { /* Shifted character in unhifted mode */
+            font-size: 9pt;
+        }
+        #virtualKeyboard.EL div#kbDesk.modeCaps div.kbButton span.hiddenShiftCaps { /* Shifted character in Caps Lock mode */
+            font-size: 9pt;
+        }
+        #virtualKeyboard.EL div#kbDesk.modeNormal div.kbButton span.charAlt { /* Alt character in unhifted mode */
+            font-size: 9pt;
         }
     <?php endif; ?>
 
