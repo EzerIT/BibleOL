@@ -25,14 +25,20 @@ function heightsize($fs) {
     <?php if ($f->name==='hebrew'): ?>
         #virtualKeyboard.HE div.kbButton span {
             font-family: <?= $f->font_family ?>;
+            font-size: 13pt;
+        }
+        #virtualKeyboard.HE div#kbDesk.modeNormal div.kbButton span.hiddenShiftCaps {
             font-size: 9pt;
         }
-    <?php endif; ?>
+        #virtualKeyboard.HE div#kbDesk.modeCaps div.kbButton span.hiddenShiftCaps {
+            font-size: 9pt;
+        }
+  <?php endif; ?>
 
     <?php if ($f->name==='greek'): ?>
         #virtualKeyboard.EL div.kbButton span {
             font-family: <?= $f->font_family ?>;
-            font-size: 9pt;
+            font-size: 13pt;
         }
     <?php endif; ?>
 
