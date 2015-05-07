@@ -418,7 +418,7 @@ class Mod_askemdros extends CI_Model {
 
     public function shebanq_link(string $db, string $book, integer $chapter) {
         if ($db==='ETCBC4' || $db==='ETCBC4-translit')
-            return "http://shebanq.ancient-data.org/hebrew/text?book=$book&amp;chapter=$chapter";
+            return "http://shebanq.ancient-data.org/hebrew/text?book=$book&amp;chapter=$chapter&mr=m";
         else
             return null;
     }
