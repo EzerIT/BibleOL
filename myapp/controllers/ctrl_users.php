@@ -69,7 +69,7 @@ class Ctrl_users extends MY_Controller {
             $this->mod_users->check_logged_in_google(true);
  
             // Revoke user permissions
-            $url = "https://accounts.google.com/o/oauth2/revoke?token={" . $this->session->userdata('access_token') . "}";
+            $url = "https://accounts.google.com/o/oauth2/revoke?token=" . $this->session->userdata('access_token');
             $options = array(
                 'http' => array(
                     'method'  => 'GET'
