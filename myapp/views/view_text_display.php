@@ -13,7 +13,7 @@
     <div id="quizdesc"></div>
   <?php else: ?>
     <?php if ($shebanq_link): ?>
-      <div style="float:right;"><a href="<?= $shebanq_link ?>" target="shebanq"><img src="<?= site_url('/images/shebanq_logo32.png') ?>" alt=""></a></div>
+      <div style="float:right;"><a href="<?= $shebanq_link ?>" title="Find chapter at SHEBANQ" target="shebanq"><img src="<?= site_url('/images/shebanq_logo32.png') ?>" alt=""></a></div>
     <?php endif; ?>
     <h1></h1>
   <?php endif; ?>
