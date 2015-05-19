@@ -1,8 +1,8 @@
-<h1>Users in the Class '<?= $classname ?>'</h1>
+<h1><?= sprintf($this->lang->line('users_in_class'), $classname) ?></h1>
 
 <?= form_open("userclass/users_in_class?classid=$classid") ?>
 <table class="form">
-  <tr><th>User</th><th>In this class?</th></tr>
+  <tr><th><?= $this->lang->line('user') ?></th><th><?= $this->lang->line('in_this_class') ?></th></tr>
   
   <?php foreach ($allusers as $user): ?>
     <tr>
@@ -12,7 +12,7 @@
   <?php endforeach; ?>
 </table>
 
-<p><input class="makebutton" type="submit" name="submit" value="OK">
-   <a class="makebutton" href="<?= site_url('classes') ?>">Cancel</a>
+<p><input class="makebutton" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
+   <a class="makebutton" href="<?= site_url('classes') ?>"><?= $this->lang->line('cancel_button') ?></a>
 </p>
 </form>

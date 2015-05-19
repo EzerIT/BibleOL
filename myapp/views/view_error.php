@@ -1,4 +1,4 @@
 <div class="error">
-  <h1>Error:</h1>
+  <h1><?= $this->lang->line('error_colon') ?></h1>
   <p><?= $text ?></p>
 </div>

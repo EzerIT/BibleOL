@@ -10,16 +10,19 @@ class Ctrl_config extends MY_Controller {
 
 
     public function fonts() {
+        $this->lang->load('font', $this->language);
+
         // MODEL:
+        $this->load->model('mod_localize');
         $this->load->model('mod_config');
         if (!$this->mod_users->is_logged_in()) {
             // Not logged in
 
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Font Settings'));
+            $this->load->view('view_top1', array('title' => $this->lang->line('font_settings')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
-            $this->load->view('view_error',array('text' => 'You must be logged in to access this function'));
+            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_error',array('text' => $this->lang->line('must_be_logged_in')));
             $this->load->view('view_bottom');
             return;
         }
@@ -49,16 +52,18 @@ class Ctrl_config extends MY_Controller {
         }
 
         // VIEW:
-        $this->load->view('view_top1', array('title' => 'Font Settings',
+        $this->load->view('view_top1', array('title' => $this->lang->line('font_settings'),
                                              'js_list' => array('js/fontdetect.js','js/fontselector.js')));
         $this->load->view('view_top2');
-        $this->load->view('view_menu_bar');
-        $center_text = $this->load->view('view_font_settings',array('alphabets' => $alphabets,
+        $this->load->view('view_menu_bar', array('langselect' => true));
+        $center_text = $this->load->view('view_font_settings',array('l10n_js_json' => $this->mod_localize->get_json(),
+                                                                    'alphabets' => $alphabets,
                                                                     'font_setting' => $font_setting,
                                                                     'avail_fonts' => $avail_fonts,
                                                                     'choice_values' => $choice_values,
                                                                     'personal_font' => $personal_fonts), true);
-        $this->load->view('view_main_page', array('left' => '<h1>Settings</h1><p>Configure your font preferences</p>',
+        $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('settings').'</h1>'
+                                                  .'<p>'.$this->lang->line('configure_font').'</p>',
                                                   'center' => $center_text));
         $this->load->view('view_bottom');
     }

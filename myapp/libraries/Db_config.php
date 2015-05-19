@@ -46,7 +46,7 @@ class Db_config {
 
     public $dbinfo_json;        ///< A JSON string describing the database information (dbinfo) structure of the selected Emdros database
 	public $dbinfo;             ///< The database information structure of the selected Emdros database
-	public $localization_json;  ///< A JSON string representing localization for the selected Emdros database
+	public $l10n_json;          ///< A JSON string representing localization for the selected Emdros database
 	public $typeinfo_json;      ///< A JSON string representing type information for the selected Emdros database
 	public $typeinfo;           ///< Type information for this Emdros database
 	public $emdros_db;          ///< The name of the Emdros database file!
@@ -163,7 +163,7 @@ class Db_config {
         $this->dbinfo_json = $this->read_or_throw($dbf->dbinfo);
         $this->dbinfo = json_decode($this->dbinfo_json);
 
-        $this->localization_json = $this->read_or_throw(sprintf($dbf->properties,$language));
+        $this->l10n_json = $this->read_or_throw(sprintf($dbf->properties,$language));
 
         $this->typeinfo_json = $this->read_or_throw($dbf->typeinfo);
         $this->typeinfo = new TypeInfo($this->typeinfo_json);

@@ -1,13 +1,13 @@
-<h1>This is your user profile</h1>
+<h1><?= $this->lang->line('this_your_profile') ?></h1>
 
-<p>If your want to change your name or email address, you must do so in your Google profile.</p>
+<p><?= $this->lang->line('change_through_google') ?></p>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<p><a class="makebutton" onclick="genericConfirm('Delete profile',
-                            'Do you want to delete your account on this server including all your data on this site and the statistics site?<br><br>Note: This will not change your account on Google, but it will remove Bible Online Learner from your list of approved applications.',
+<p><a class="makebutton" onclick="genericConfirm('<?= $this->lang->line('delete_profile'); ?>',
+                            '<?= $this->lang->line('delete_google_profile1'); ?><br><br><?= $this->lang->line('delete_google_profile2'); ?>',
                             '<?= site_url("users/delete_me_google") ?>');
              return false;"
-     href="#">Delete the profile</a></p>
+     href="#"><?= $this->lang->line('delete_profile_button') ?></a></p>
 

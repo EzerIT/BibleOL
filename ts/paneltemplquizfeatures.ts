@@ -42,7 +42,7 @@ class ButtonsAndLabel {
 	}
 
         if (useDropDown) {
-            this.ddCheck = $('<input type="checkbox" name="dd_{0}_{1}"">'.format(otype,featName));
+            this.ddCheck = $('<input type="checkbox" name="dd_{0}_{1}">'.format(otype,featName));
             this.ddCheck.prop('checked', select!=ButtonSelection.REQUEST);
         }
         else
@@ -133,10 +133,17 @@ class PanelForOneOtype  {
     constructor(otype : string, ptqf : PanelTemplQuizFeatures) {
         var useSavedFeatures : boolean = otype === ptqf.initialOtype;
         
-        this.panel.append("<tr><th>Show</th><th>Request</th><th>Don't care</th><th>Don't show</th><th>Multiple choice</th><th class=\"leftalign\">Feature</th></tr>");
+        this.panel.append('<tr><th>{0}</th><th>{1}</th><th>{2}</th><th>{3}</th><th>{4}</th><th class="leftalign">{5}</th></tr>'
+                          .format(localize('show'), 
+                                  localize('request'), 
+                                  localize('dont_care'), 
+                                  localize('dont_show'), 
+                                  localize('multiple_choice'), 
+                                  localize('feature')));
 
         // First set up "visual" pseudo feature
-        this.visualBAL = new ButtonsAndLabel('Text','visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE,
+        this.visualBAL = new ButtonsAndLabel(localize('visual'),'visual', otype,
+                                             useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE,
                                              configuration.objHasSurface===otype && !!getFeatureSetting(otype,configuration.surfaceFeature).alternateshowrequestSql,
                                              true,
                                              configuration.objHasSurface===otype,

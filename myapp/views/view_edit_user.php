@@ -7,82 +7,81 @@
       <table class="form">
         <tr>
           <?php if ($user_info->google_login): ?>
-            <td colspan="2">This user logs in with Google</td>
+            <td colspan="3"><?= $this->lang->line('this_user_google') ?></td>
           <?php else: ?>
-            <td>User name:</td>
-            <td>
-              <?php if ($userid==-1): ?>
-                <input type="text" name="username" value="<?= set_value('username',$user_info->username) ?>"> (Required)
-              <?php else: ?>
-                <input type="hidden" name="username" value="<?= $user_info->username ?>">
-                <?= $user_info->username ?> (Cannot be changed)
-              <?php endif; ?>
-            </td>
+            <td><?= $this->lang->line('user_name') ?></td>
+            <?php if ($userid==-1): ?>
+              <td class="norb"><input type="text" name="username" value="<?= set_value('username',$user_info->username) ?>"></td>
+              <td class="nolb"><?= $this->lang->line('field_required') ?></td>
+            <?php else: ?>
+              <td class="norb"><input type="hidden" name="username" value="<?= $user_info->username ?>"><?= $user_info->username ?></td>
+              <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
+            <?php endif; ?>
           <?php endif; ?>
       </tr>
         <tr>
-          <td>First name:</td>
+          <td><?= $this->lang->line('first_name') ?></td>
           <?php if ($user_info->google_login): ?>
-            <td><?= $user_info->first_name ?> (Cannot be changed)</td>
+            <td class="norb"><?= $user_info->first_name ?></td>
+            <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
           <?php else: ?>
-            <td><input type="text" name="first_name" value="<?= set_value('first_name',$user_info->first_name) ?>"> (Required)</td>
+            <td class="norb"><input type="text" name="first_name" value="<?= set_value('first_name',$user_info->first_name) ?>"></td>
+            <td class="nolb"><?= $this->lang->line('field_required') ?></td>
           <?php endif; ?>
         </tr>
         <tr>
-          <td>Last name:</td>
+          <td><?= $this->lang->line('last_name') ?></td>
           <?php if ($user_info->google_login): ?>
-            <td><?= $user_info->last_name ?> (Cannot be changed)</td>
+            <td class="norb"><?= $user_info->last_name ?></td>
+            <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
           <?php else: ?>
-            <td><input type="text" name="last_name" value="<?= set_value('last_name',$user_info->last_name) ?>"> (Required)</td>
+            <td class="norb"><input type="text" name="last_name" value="<?= set_value('last_name',$user_info->last_name) ?>"></td>
+            <td class="nolb"><?= $this->lang->line('field_required') ?></td>
           <?php endif; ?>
         </tr>
         <tr>
-          <td>E-mail:</td>
+          <td><?= $this->lang->line('email') ?></td>
           <?php if ($user_info->google_login): ?>
-            <td><?= $user_info->email ?> (Cannot be changed)</td>
+            <td class="norb"><?= $user_info->email ?></td>
+            <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
           <?php else: ?>
-            <td><input type="text" name="email" value="<?= set_value('email',$user_info->email) ?>"></td>
+            <td class="norb"><input type="text" name="email" value="<?= set_value('email',$user_info->email) ?>"></td>
+            <td class="nolb"></td>
           <?php endif; ?>
         </tr>
         <tr>
-          <td>Administrator:</td>
-          <td>
-            <input class="narrow" type="radio" name="isadmin" value="yes" <?= set_radio('isadmin', 'yes', !!$user_info->isadmin) ?>>Yes
-            <input class="narrow" type="radio" name="isadmin" value="no" <?= set_radio('isadmin', 'no', !$user_info->isadmin) ?>>No
+          <td><?= $this->lang->line('administrator') ?></td>
+          <td class="norb">
+            <input class="narrow" type="radio" name="isadmin" value="yes" <?= set_radio('isadmin', 'yes', !!$user_info->isadmin) ?>><?= $this->lang->line('yes') ?>
+            <input class="narrow" type="radio" name="isadmin" value="no" <?= set_radio('isadmin', 'no', !$user_info->isadmin) ?>><?= $this->lang->line('no') ?>
           </td>
-        </tr>
-        <tr>
-          <td>May see full WIVU database:</td>
-          <td>
-            <input class="narrow" type="radio" name="may_see_wivu" value="yes" <?= set_radio('may_see_wivu', 'yes', !!$user_info->may_see_wivu) ?>>Yes
-            <input class="narrow" type="radio" name="may_see_wivu" value="no"  <?= set_radio('may_see_wivu', 'no',   !$user_info->may_see_wivu) ?>>No (Ignored for administrators)
-          </td>
+          <td class="nolb"></td>
         </tr>
         <?php if (!$user_info->google_login): ?>
           <tr>
-            <td><?= $userid==-1 ? 'Password' : 'New password' ?>:</td>
-            <td>
-              <input type="password" name="password1" value="">
-              <?php if ($userid!=-1): ?>
-                (Leave blank if not changing password)
-              <?php else: ?>
-                (Required)
-              <?php endif; ?>
+            <td><?= $userid==-1 ? $this->lang->line('password') : $this->lang->line('new_password') ?></td>
+            <td class="norb"><input type="password" name="password1" value=""></td>
+            <td class="nolb">
+                <?php if ($userid!=-1): ?>
+                  <?= $this->lang->line('leave_blank_pw') ?>
+                <?php else: ?>
+                  <?= $this->lang->line('field_required') ?>
+                <?php endif; ?>
             </td>
           </tr>
           <tr>
-            <td>Repeat <?= $userid==-1 ? '' : 'new' ?> password:</td>
-            <td>
-              <input type="password" name="password2" value="">
+            <td><?= $userid==-1 ? $this->lang->line('repeat_password') : $this->lang->line('repeat_new_password') ?></td>
+            <td class="norb"><input type="password" name="password2" value=""></td>
+            <td class="nolb">
               <?php if ($userid!=-1): ?>
-                (Leave blank if not changing password)
+                <?= $this->lang->line('leave_blank_pw') ?>
               <?php else: ?>
-                (Required)
+                <?= $this->lang->line('field_required') ?>
               <?php endif; ?>
             </td>
           </tr>
         <?php endif; ?>
       </table>
-      <p><input class="makebutton" type="submit" name="submit" value="OK">
-          <a class="makebutton" href="<?= site_url('users') ?>">Cancel</a></p>
+      <p><input class="makebutton" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
+          <a class="makebutton" href="<?= site_url('users') ?>"><?= $this->lang->line('cancel_button') ?></a></p>
     </form>

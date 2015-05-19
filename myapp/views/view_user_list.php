@@ -1,25 +1,24 @@
 <table class="type1 small">
-  <tr><th>User name</th><th>First name</th><th>Last name</th><th>E-mail</th><th>Administrator</th><th>May see full WIVU</th><th>Operations</th></tr>
+  <tr><th><?= $this->lang->line('user_name') ?></th><th><?= $this->lang->line('first_name') ?></th><th><?= $this->lang->line('last_name') ?></th><th><?= $this->lang->line('email') ?></th><th><?= $this->lang->line('administrator') ?></th><th><?= $this->lang->line('user_operations') ?></th></tr>
   <?php foreach ($allusers as $user): ?>
     <tr>
       <td class="leftalign"><?= $user->username ?></td>
       <td class="leftalign"><?= $user->first_name ?></td>
       <td class="leftalign"><?= $user->last_name ?></td>
       <td class="leftalign"><?= $user->email ?></td>
-      <td><?= $user->isadmin ? 'Yes' : 'No' ?></td>
-      <td><?= $user->isadmin ? '-' : ($user->may_see_wivu ? 'Yes' : 'No' ) ?></td>
+      <td><?= $user->isadmin ? $this->lang->line('yes') : $this->lang->line('no') ?></td>
       <td class="leftalign">
-        <a href="<?= site_url("userclass/classes_for_user?userid=$user->id") ?>">Assign&nbsp;to&nbsp;class</a>
-        <a href="<?= site_url("users/edit_one_user?userid=$user->id") ?>">Edit</a>
+     <a href="<?= site_url("userclass/classes_for_user?userid=$user->id") ?>"><?= str_replace(' ', '&nbsp;', $this->lang->line('assign_to_class')) ?></a>
+     <a href="<?= site_url("users/edit_one_user?userid=$user->id") ?>"><?= $this->lang->line('user_edit') ?></a>
         <?php if ($my_id!=$user->id): ?>
-          <a onclick="genericConfirm('Delete user',
-                                     'Do you want to delete user \'<?= $user->username ?>\' including all their data on this site and the statistics site?',
+          <a onclick="genericConfirm('<?= $this->lang->line('delete_user') ?>',
+                                     '<?= sprintf($this->lang->line('delete_user_confirm'), "\'$user->username\'") ?>',
                                      '<?= site_url("users/delete_user?userid=$user->id") ?>');
                       return false;"
-             href="#">Delete</a>
+             href="#"><?= $this->lang->line('user_delete') ?></a>
         <?php endif; ?>
       </td>
     </tr>
   <?php endforeach; ?>
 </table>
-<p><a class="makebutton" href="<?= site_url("users/edit_one_user?userid=-1") ?>">Add new user</a></p>
+<p><a class="makebutton" href="<?= site_url("users/edit_one_user?userid=-1") ?>"><?= $this->lang->line('add_user') ?></a></p>

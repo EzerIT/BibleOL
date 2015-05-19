@@ -34,7 +34,7 @@ class Mod_classes extends CI_Model {
             $query = $this->db->where('id',$classid)->get('class');
             $cl = $query->row();
             if (!$cl)
-                throw new DataException('Illegal class ID');
+                throw new DataException($this->lang->line('illegal_class_id'));
         }
         return $cl;
     }
@@ -56,7 +56,7 @@ class Mod_classes extends CI_Model {
     public function delete_class(integer $classid) {
         $this->db->where('id', $classid)->delete('class');
         if ($this->db->affected_rows()==0)
-            throw new DataException('Illegal class ID');
+            throw new DataException($this->lang->line('illegal_class_id'));
 
         $this->db->where('classid', $classid)->delete('userclass');
         $this->db->where('classid', $classid)->delete('classexercise');

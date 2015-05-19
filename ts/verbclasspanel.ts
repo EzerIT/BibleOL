@@ -18,7 +18,7 @@ class VerbClassButtonsAndLabel {
         this.no       = $('<input type="radio" name="{0}" value="no" data-name="{1}">'.format(name,dataName));
         this.dontcare = $('<input type="radio" name="{0}" value="dontcare" data-name="{1}">'.format(name,dataName));
         this.label    = $('<span>{0}</span>'.format(lab));
-        
+
         switch (select) {
         case VerbClassSelection.YES:        this.yes.prop('checked',true);      break;
         case VerbClassSelection.NO:         this.no.prop('checked',true);       break;
@@ -48,46 +48,18 @@ class VerbClassButtonsAndLabel {
 
         return row;
     }
-
-//    public isSelected_showFeat() : boolean {
-//        if (this.canShow)
-//            return this.showFeat.prop('checked');
-//        else
-//            return false;
-//    }
-// 
-//    public isSelected_reqFeat() : boolean {
-//        if (this.canRequest)
-//            return this.reqFeat.prop('checked');
-//        else
-//            return false;
-//    }
-// 
-//    public isSelected_dontShowFeat() : boolean {
-//        if (this.canDisplayGrammar)
-//            return this.dontShowFeat.prop('checked');
-//        else
-//            return false;
-//    }
-// 
-//    public isSelected_ddCheck() : boolean {
-//        if (this.useDropDown)
-//            return this.ddCheck.prop('checked');
-//        else
-//            return false;
-//    }
-// 
-//    public getFeatName() : string {
-//        return this.featName;
-//    }
 }
 
 class PanelForOneVcChoice  {
     public allBAL    : VerbClassButtonsAndLabel[] = [];
     private panel    : JQuery = $('<table class="striped featuretable"></table>');
-     
+
     constructor(enumValues : any, valueType: string, prefix: string, lv: ListValuesHandler) {
-        this.panel.append("<tr><th>Yes</th><th>No</th><th>Don't care</th><th class=\"leftalign\">Verb class</th></tr>");
+        this.panel.append('<tr><th>{0}</th><th>{1}</th><th>{2}</th><th class="leftalign">{3}</th></tr>'
+                          .format(localize('verb_class_yes'),
+                                  localize('verb_class_no'),
+                                  localize('verb_class_dont_care'),
+                                  localize('verb_class')));
 
         // Next, loop through the keys in the sorted order
         for (var ix=0; ix<enumValues.length; ++ix) {
@@ -112,7 +84,3 @@ class PanelForOneVcChoice  {
         return this.panel;
     }
 }
-
-
-
- 

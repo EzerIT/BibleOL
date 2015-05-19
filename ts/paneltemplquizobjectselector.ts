@@ -2,7 +2,7 @@
 /* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 
 class PanelTemplQuizObjectSelector extends PanelTemplMql {
-    private featSelLab : JQuery = $('<span>Feature:</span>');
+    private featSelLab : JQuery = $('<span>' + localize('feature_prompt') + '</span>');
     private featureTab : PanelTemplQuizFeatures;
 
     public switchToMql(useMql : boolean) : void {
@@ -28,7 +28,7 @@ class PanelTemplQuizObjectSelector extends PanelTemplMql {
         var cell : JQuery;
 
         row = $('<tr></tr>');
-        cell = $('<td>Sentence unit type:</td>');
+        cell = $('<td>' + localize('sentence_unit_type_prompt') + '</td>');
         row.append(cell);
 
         cell = $('<td></td>');
@@ -85,8 +85,8 @@ class PanelTemplQuizObjectSelector extends PanelTemplMql {
         super(md,'qosel');
         this.featureTab = featureTab;
 
-        this.rbMqlLabel = $('<span>MQL feature selector:</span>');
-        this.rbFriendlyLabel = $('<span>Friendly feature selector:</span>');
+        this.rbMqlLabel = $('<span>' + localize('mql_featsel_prompt') + '</span>');
+        this.rbFriendlyLabel = $('<span>' + localize('friendly_featsel_prompt') + '</span>');
 
         this.doLayout(where);
 

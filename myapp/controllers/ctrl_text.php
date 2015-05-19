@@ -4,6 +4,7 @@ class Ctrl_text extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->lang->load('text', $this->language);
     }
 
 	public function index() {
@@ -20,9 +21,9 @@ class Ctrl_text extends MY_Controller {
             $db_books = $this->mod_askemdros->db_and_books();
 
             $this->form_validation->set_rules('db', '', '');
-            $this->form_validation->set_rules('chapter', 'Chapter', 'trim|required|is_natural_no_zero');
-            $this->form_validation->set_rules('vfrom', 'First verse', 'trim|is_natural_no_zero');
-            $this->form_validation->set_rules('vto', 'Last verse', 'trim|is_natural_no_zero');
+            $this->form_validation->set_rules('chapter', $this->lang->line('chapter'), 'trim|required|is_natural_no_zero');
+            $this->form_validation->set_rules('vfrom', $this->lang->line('first_verse'), 'trim|is_natural_no_zero');
+            $this->form_validation->set_rules('vto', $this->lang->line('last_verse'), 'trim|is_natural_no_zero');
             $this->form_validation->set_rules('showicons', '', '');
 
             foreach ($db_books as $dbb)
@@ -51,18 +52,18 @@ class Ctrl_text extends MY_Controller {
             }
 
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Select Text'));
+            $this->load->view('view_top1', array('title' => $this->lang->line('select_text')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
+            $this->load->view('view_menu_bar', array('langselect' => true));
 
             $center_text = $this->load->view('view_select_text',array('databases' => $db_books), true);
 
-            $this->load->view('view_main_page', array('left' => '<h1>Select a Passage to Display</h1>',
+            $this->load->view('view_main_page', array('left' => '<h1>' .$this->lang->line('select_a_passage') . '</h1>',
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Select Text');
+            $this->error_view($e->getMessage(), $this->lang->line('select_text'));
         }
     }
 
@@ -89,6 +90,7 @@ class Ctrl_text extends MY_Controller {
             $this->load->model('mod_askemdros');
             $this->mod_askemdros->show_text($db, $book, $chapter, $vfrom, $vto, $showIcons);
             $shebanq_link = $this->mod_askemdros->shebanq_link($db, $book, $chapter);
+            $this->load->model('mod_localize');
 
 
             // VIEW:
@@ -96,20 +98,21 @@ class Ctrl_text extends MY_Controller {
                                                  'js_list'=>array('js/ol.js')));
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
+            $this->load->view('view_menu_bar', array('langselect' => true));
             $this->load->view('view_text_display', array('is_quiz' => false,
                                                          'mql_list' => $this->mql->mql_list,
                                                          'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
                                                          'quizData_json' => 'null',
                                                          'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
                                                          'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
-                                                         'localization_json' => $this->mod_askemdros->localization_json,
+                                                         'l10n_json' => $this->mod_askemdros->l10n_json,
+                                                         'l10n_js_json' => $this->mod_localize->get_json(),
                                                          'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
                                                          'shebanq_link' => $shebanq_link));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Show Text');
+            $this->error_view($e->getMessage(), $this->lang->line('show_text'));
         }
     }
 
@@ -123,24 +126,21 @@ class Ctrl_text extends MY_Controller {
 
             // VIEW:
             $this->load->helper('varset');
-            $this->load->view('view_top1', array('title' => 'Directory'));
+            $this->load->view('view_top1', array('title' => $this->lang->line('directory')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
+            $this->load->view('view_menu_bar', array('langselect' => true));
             $center_text = $this->load->view('view_quizdir',
                                              array('dirlist' => $dirlist,
                                                    'is_logged_in' => $this->mod_users->is_logged_in()),
                                              true);
-            $this->load->view('view_main_page', array('left' => '<h1>Select a Quiz</h1><p>Click on a folder to open it,
-                                                             or select the number of questions you want from a
-                                                             particular quiz and whether you want to use the
-                                                             preset passage selection or specify your own
-                                                             passages.</p>',
+            $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('select_quiz') . '</h1>'
+                                                                . '<p>' . $this->lang->line('click_folder') . '</p>',
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
 
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Directory');
+            $this->error_view($e->getMessage(), $this->lang->line('directory'));
         }
     }
 
@@ -168,7 +168,7 @@ class Ctrl_text extends MY_Controller {
 
 
         if (!$this->input->is_cli_request()) {
-            echo '<pre>This command can only be run from the command line</pre>';
+            echo '<pre>'.$this->lang->line('only_cli').'</pre>';
             die;
         }
 
@@ -193,10 +193,10 @@ class Ctrl_text extends MY_Controller {
 	public function show_quiz_sel() {
         if (!isset($_POST['quiz']) || !isset($_POST['count']) || !isset($_POST['sel'])) {
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Quiz'));
+            $this->load->view('view_top1', array('title' => $this->lang->line('quiz')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
-            $this->load->view('view_error',array('text' => 'Do not access this URL directly.'));
+            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_error',array('text' => $this->lang->line('no_direct_url')));
             $this->load->view('view_bottom');
             return;
         }
@@ -213,6 +213,7 @@ class Ctrl_text extends MY_Controller {
             $this->mod_quizpath->init($quiz, false, true);
 
             $this->mod_askemdros->show_quiz($number_of_quizzes, $universe);
+            $this->load->model('mod_localize');
 
             // VIEW:
             $javascripts = array('js/ol.js');
@@ -231,25 +232,26 @@ class Ctrl_text extends MY_Controller {
                         break;
                 }
             }
-            $this->load->view('view_top1', array('title' => 'Quiz',
+            $this->load->view('view_top1', array('title' => $this->lang->line('quiz'),
                                                  'css_list' => array('styles/selectbox.css'),
                                                  'js_list' => $javascripts));
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
+            $this->load->view('view_menu_bar', array('langselect' => false));
             $this->load->view('view_text_display', array('is_quiz' => true,
                                                          'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
                                                          'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
                                                          'quizData_json' => $this->mod_askemdros->quiz_data_json,
                                                          'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
                                                          'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
-                                                         'localization_json' => $this->mod_askemdros->localization_json,
+                                                         'l10n_json' => $this->mod_askemdros->l10n_json,
+                                                         'l10n_js_json' => $this->mod_localize->get_json(),
                                                          'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
                                                          'is_logged_in' => $this->mod_users->is_logged_in()));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Quiz');
+            $this->error_view($e->getMessage(), $this->lang->line('quiz'));
         }
     }
 
@@ -272,16 +274,16 @@ class Ctrl_text extends MY_Controller {
             $this->mod_quizpath->init($_GET['quiz'], false, true);
 
             $this->mod_askemdros->get_quiz_universe();
-            $this->loc = json_decode($this->db_config->localization_json);
+            $this->loc = json_decode($this->db_config->l10n_json);
 
             $this->load->library('universe_tree', array('markedList' => $this->mod_askemdros->universe));
 
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Select Passages',
+            $this->load->view('view_top1', array('title' => $this->lang->line('select_passages'),
                                                  'css_list'=>array('styles/jstree.css'),
                                                  'js_list'=>array('jstree/jquery.jstree.js')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
+            $this->load->view('view_menu_bar', array('langselect' => true));
             $this->load->view('view_alert_dialog');
             $center_text = $this->load->view('view_passage_select',
                                              array('quiz' => $_GET['quiz'],
@@ -293,14 +295,13 @@ class Ctrl_text extends MY_Controller {
                                           'db' => $this->mod_askemdros->setup_db,
                                           'prop' => $this->mod_askemdros->setup_prop),
                                     true);
-            $this->load->view('view_main_page', array('left' => '<h1>Select the Passages to Use for the Quiz...</h1>
-                                                             <p>...and then press the &ldquo;Start quiz&rdquo;
-                                                             button at the bottom of the page</p>',
+            $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('quiz_instruct1').'</h1>'
+                                                               .'<p>'.$this->lang->line('quiz_instruct2').'</p>',
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Show Quiz Passages');
+            $this->error_view($e->getMessage(), $this->lang->line('show_quiz_passages'));
         }
     }
 
@@ -311,7 +312,7 @@ class Ctrl_text extends MY_Controller {
         // MODEL:
         $this->load->model('mod_askemdros');
         $this->mod_askemdros->setup($_GET['db'], $_GET['prop']);
-        $this->loc = json_decode($this->db_config->localization_json);
+        $this->loc = json_decode($this->db_config->l10n_json);
         
         $this->load->library('universe_tree');
         $res = $this->universe_tree->expand_level(intval($_GET['rangelow']), intval($_GET['rangehigh']),
@@ -324,18 +325,19 @@ class Ctrl_text extends MY_Controller {
     public function edit_quiz() {
         try {
             if (!isset($_GET['quiz']))
-                throw new DataException("Missing quiz filename");
+                throw new DataException($this->lang->line('missing_quiz_filename'));
 
             $this->mod_users->check_admin();
 
             $this->load->model('mod_quizpath');
             $this->load->model('mod_askemdros');
+            $this->load->model('mod_localize');
 
             $this->mod_quizpath->init($_GET['quiz'], false, false);
             
             $this->mod_askemdros->edit_quiz();
 
-            $this->loc = json_decode($this->db_config->localization_json);
+            $this->loc = json_decode($this->db_config->l10n_json);
             $this->load->library('universe_tree', array('markedList' => $this->mod_askemdros->universe));
 
             $javascripts = array('jstree/jquery.jstree.js',
@@ -358,18 +360,19 @@ class Ctrl_text extends MY_Controller {
             }
 
             //  View
-            $this->load->view('view_top1', array('title' => 'Edit Quiz',
+            $this->load->view('view_top1', array('title' => $this->lang->line('edit_quiz'),
                                                  'css_list' => array('styles/jstree.css'),
                                                  'js_list' => $javascripts));
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
+            $this->load->view('view_menu_bar', array('langselect' => false));
             $this->load->view('view_alert_dialog');
 
             $center_text = $this->load->view('view_edit_quiz',
                                              array('decoded_3et_json' => json_encode($this->mod_askemdros->decoded_3et),
                                                    'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
-                                                   'localization_json' => $this->mod_askemdros->localization_json,
+                                                   'l10n_json' => $this->mod_askemdros->l10n_json,
+                                                   'l10n_js_json' => $this->mod_localize->get_json(),
                                                    'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
                                                    'universe' => json_encode($this->mod_askemdros->universe),
                                                    'dir' => dirname($_GET['quiz']),
@@ -382,35 +385,38 @@ class Ctrl_text extends MY_Controller {
                                           'prop' => $this->mod_askemdros->setup_prop),
                                     true);
 
-            $this->load->view('view_main_page', array('left' => "<h1>Edit Quiz</h1>
-                                                                 <p>Using database:<br>
-                                                                 {$this->loc->dbdescription}
-                                                                 Version&nbsp;{$this->db_config->dbinfo->databaseVersion}</p>",
+            $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('edit_quiz').'</h1>'
+                                                                .'<p>'.sprintf($this->lang->line('using_database'),
+                                                                               '<br>'.$this->loc->dbdescription)
+                                                               .'<br>'.sprintf($this->lang->line('using_database_version'),
+                                                                               $this->db_config->dbinfo->databaseVersion)
+                                                               .'</p>',
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Edit Quiz');
+            $this->error_view($e->getMessage(), $this->lang->line('edit_quiz'));
         }
     }
 
     public function new_quiz() {
         try {
             if (!isset($_POST['dir']))
-                throw new DataException("Missing folder name");
+                throw new DataException($this->lang->line('missing_folder_name'));
             $dir = trim($_POST['dir']);
 
             if (!isset($_POST['db']))
-                throw new DataException("Missing database name");
+                throw new DataException($this->lang->line('missing_database_name'));
             $db = $_POST['db'];
 
             $this->mod_users->check_admin();
 
             $this->load->model('mod_askemdros');
+            $this->load->model('mod_localize');
 
             $decoded_3et_json = $this->mod_askemdros->new_quiz($db);
 
-            $this->loc = json_decode($this->db_config->localization_json);
+            $this->loc = json_decode($this->db_config->l10n_json);
             $this->load->library('universe_tree', array('markedList' => $this->mod_askemdros->universe));
 
             $javascripts = array('jstree/jquery.jstree.js',
@@ -434,18 +440,19 @@ class Ctrl_text extends MY_Controller {
 
 
             //  View
-            $this->load->view('view_top1', array('title' => 'Edit Quiz',
+            $this->load->view('view_top1', array('title' => $this->lang->line('edit_quiz'),
                                                  'css_list' => array('styles/jstree.css'),
                                                  'js_list' => $javascripts));
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
+            $this->load->view('view_menu_bar', array('langselect' => false));
             $this->load->view('view_alert_dialog');
 
             $center_text = $this->load->view('view_edit_quiz',
                                              array('decoded_3et_json' => $decoded_3et_json,
                                                    'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
-                                                   'localization_json' => $this->mod_askemdros->localization_json,
+                                                   'l10n_json' => $this->mod_askemdros->l10n_json,
+                                                   'l10n_js_json' => $this->mod_localize->get_json(),
                                                    'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
                                                    'universe' => '[]',
                                                    'dir' => $dir,
@@ -458,27 +465,30 @@ class Ctrl_text extends MY_Controller {
                                           'prop' => $this->mod_askemdros->setup_prop),
                                     true);
 
-            $this->load->view('view_main_page', array('left' => "<h1>Edit Quiz</h1>
-                                                                 <p>Using database:<br>
-                                                                 {$this->loc->dbdescription}
-                                                                 Version&nbsp;{$this->db_config->dbinfo->databaseVersion}</p>",
+
+            $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('edit_quiz').'</h1>'
+                                                                .'<p>'.sprintf($this->lang->line('using_database'),
+                                                                               '<br>'.$this->loc->dbdescription)
+                                                               .'<br>'.sprintf($this->lang->line('using_database_version'),
+                                                                               $this->db_config->dbinfo->databaseVersion)
+                                                               .'</p>',
                                                       'center' => $center_text));
+
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Edit Quiz');
+            $this->error_view($e->getMessage(), $this->lang->line('edit_quiz'));
         }
     }
-
 
     public function check_submit_quiz() {
         try {
             $this->mod_users->check_admin();
 
             if (!isset($_GET['dir']))
-                throw new DataException("Missing folder name");
+                throw new DataException($this->lang->line('missing_folder_name'));
             if (!isset($_GET['quiz']))
-                throw new DataException("Missing quiz filename");
+                throw new DataException($this->lang->line('missing_quiz_filename'));
 
             // MODEL:
             $this->load->model('mod_quizpath');
@@ -498,9 +508,9 @@ class Ctrl_text extends MY_Controller {
             $this->mod_users->check_admin();
 
             if (!isset($_POST['dir']))
-                throw new DataException("Missing folder name");
+                throw new DataException($this->lang->line('missing_folder_name'));
             if (!isset($_POST['quiz']))
-                throw new DataException("Missing quiz filename");
+                throw new DataException($this->lang->line('missing_quiz_filename'));
 
             if (!isset($_POST['quizdata']))
                 throw new DataException("Missing quiz data");
@@ -515,7 +525,7 @@ class Ctrl_text extends MY_Controller {
             redirect("/file_manager?dir=" . $_POST['dir']);
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Edit Quiz');
+            $this->error_view($e->getMessage(), $this->lang->line('edit_quiz'));
         }
     }
 }

@@ -12,7 +12,7 @@ class Ctrl_main_page extends MY_Controller {
         
         $this->load->view('view_top1', array('title'=>'Bible Online Learner'));
         $this->load->view('view_top2');
-        $this->load->view('view_menu_bar');
+        $this->load->view('view_menu_bar', array('langselect' => true));
         $this->load->view('view_main_page',$data);
         $this->load->view('view_bottom');
 	}

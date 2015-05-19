@@ -4,6 +4,7 @@ class Ctrl_file_manager extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->lang->load('file_manager', $this->language);
         $this->load->model('mod_quizpath');
         $this->load->helper('varset');
     }
@@ -20,9 +21,9 @@ class Ctrl_file_manager extends MY_Controller {
         $db_books = $this->mod_askemdros->db_and_books();
 
         // VIEW:
-        $this->load->view('view_top1', array('title' => 'File Management'));
+        $this->load->view('view_top1', array('title' => $this->lang->line('file_mgmt')));
         $this->load->view('view_top2');
-        $this->load->view('view_menu_bar');
+        $this->load->view('view_menu_bar', array('langselect' => true));
         $this->load->view('view_confirm_dialog');
         $this->load->view('view_alert_dialog');
 
@@ -32,15 +33,8 @@ class Ctrl_file_manager extends MY_Controller {
                                                'databases' => $db_books,
                                                'copy_or_move' => $this->session->userdata('operation')),
                                          true);
-        $this->load->view('view_main_page', array('left' => '<h1>Exercise File Management</h1>
-     														<p>Here you can upload or delete exercise files, or you can
-															create or delete folders for the files.</p>
-															<p>Note: You can only delete a folder if it is empty.</p>
-                                                            <p>The &ldquo;Edit visibility&rdquo; button allows you
-                                                            to control who can see the exercises</p>
-															<p>Exercise files can be created with the stand-alone
-															Windows-based version of PLOTLearner. The exercise files
-															have file type &ldquo;.3et&rdquo;.</p>',
+        $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('exercise_file_mgmt').'</h1>'
+                                                             .$this->lang->line('file_mgmt_description'),
                                                   'center' => $center_text));
         $this->load->view('view_bottom');
     }
@@ -54,7 +48,7 @@ class Ctrl_file_manager extends MY_Controller {
             $this->show_files_2();
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'File Management');
+            $this->error_view($e->getMessage(), $this->lang->line('file_mgmt'));
         }
     }
 
@@ -68,7 +62,7 @@ class Ctrl_file_manager extends MY_Controller {
                 $create = trim($_POST['create']);
 
                 if (preg_match('|[/?*:;{}\\\\]|',$create))
-                    throw new DataException("Illegal character in folder name");
+                    throw new DataException($this->lang->line('illegal_char_folder_name'));
 
                 $this->mod_quizpath->mkdir($create);
             }
@@ -76,7 +70,7 @@ class Ctrl_file_manager extends MY_Controller {
             $this->show_files_2();
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Create Folder');
+            $this->error_view($e->getMessage(), $this->lang->line('create_folder'));
         }
     }
 
@@ -92,7 +86,7 @@ class Ctrl_file_manager extends MY_Controller {
             $this->show_files_2();
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Delete Folder');
+            $this->error_view($e->getMessage(), $this->lang->line('delete_folder'));
         }
     }
 
@@ -119,7 +113,7 @@ class Ctrl_file_manager extends MY_Controller {
             $this->show_files_2();
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Copy or Delete Files');
+            $this->error_view($e->getMessage(), $this->lang->line('copy_or_delete_files'));
         }
     }
 
@@ -130,9 +124,9 @@ class Ctrl_file_manager extends MY_Controller {
             if ($this->session->userdata('files')===false ||
                 $this->session->userdata('operation')===false ||
                 $this->session->userdata('from_dir')===false)
-                throw new DataException("Missing source information");
+                throw new DataException($this->lang->line('missing_src_info'));
             if (!isset($_GET['dir']))
-                throw new DataException("Missing destination information");
+                throw new DataException($this->lang->line('missing_dest_info'));
 
             $this->mod_quizpath->init($_GET['dir'], true, false); // Destination
 
@@ -141,15 +135,15 @@ class Ctrl_file_manager extends MY_Controller {
 
             foreach ($this->session->userdata('files') as $f)
                 if (file_exists($this->mod_quizpath->get_absolute() . '/' . $f))
-                    throw new DataException("Destination file '$f' already exists. Delete or rename it. "
-                                            . 'Then try to insert the '
-                                            . ($this->session->userdata('operation')==='copy' ? 'copied' : 'moved')
-                                            . ' files again.');
+                    throw new DataException(sprintf($this->lang->line('file_exists'), $f)
+                                            .' '. ($this->session->userdata('operation')==='copy'
+                                               ? $this->lang->line('file_exists_copied')
+                                               : $this->lang->line('file_exists_moved')));
 
             foreach ($this->session->userdata('files') as $f)
                 if (!@copy($this->mod_source_quizpath->get_absolute() . '/' . $f,
                           $this->mod_quizpath->get_absolute() . '/' . $f))
-                    throw new DataException("Cannot copy file '$f'");
+                    throw new DataException(sprintf($this->lang->line('cannot_copy'), $f));
                 
             if ($this->session->userdata('operation') === 'move')
                 $this->mod_source_quizpath->delete_files($this->session->userdata('files'));
@@ -159,7 +153,7 @@ class Ctrl_file_manager extends MY_Controller {
             $this->show_files_2();
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Insert Files');
+            $this->error_view($e->getMessage(), $this->lang->line('insert_files'));
         }
     }
 
@@ -172,7 +166,7 @@ class Ctrl_file_manager extends MY_Controller {
             $this->show_files();
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Cancel Copy');
+            $this->error_view($e->getMessage(), $this->lang->line('cancel_copy_title'));
         }
     }
 
@@ -183,33 +177,28 @@ class Ctrl_file_manager extends MY_Controller {
             $this->mod_quizpath->init(set_or_default($_GET['dir'], ''), true, false);
 
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Upload Files',
+            $this->load->view('view_top1', array('title' => $this->lang->line('upload_files'),
                                                  'css_list' => array('styles/fileuploader.css'),
                                                  'js_list'=>array('valums-file-uploader-b3b20b1/client/fileuploader.js')));
 
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
+            $this->load->view('view_menu_bar', array('langselect' => true));
 
             $center_text = $this->load->view('view_upload_files',
                                              array('dir' => $this->mod_quizpath->get_relative()),
                                              true);
-            $this->load->view('view_main_page', array('left' => '<h1>Upload Exercise Files</h1>
-                                                                <p>You can generate exercise template files with
-                                                                the stand-alone Windows-based version of PLOTLearner.
-                                                                The exercise files have file type &ldquo;.3et&rdquo;.</p>
-                                                                <p>Here, you can upload the exercise template files to the '
-                                                                . ($this->mod_quizpath->is_top()
-                                                                   ? 'top'
-                                                                   : "<i>'{$this->mod_quizpath->get_relative()}'</i>") .
-                                                                ' folder of this web site.</p>
-                                                                <p>Click the &ldquo;Upload files&rdquo; button to the right
-                                                                to select files to upload. (In some browsers, you can also
-                                                                drag and drop files into the button.)</p>',
+            $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('upload_exercise_files1').'</h1>'
+                                                                .'<p>'.$this->lang->line('upload_exercise_files2').'</p>'
+                                                                .($this->mod_quizpath->is_top()
+                                                                  ? $this->lang->line('upload_exercise_files3_top')
+                                                                  : sprintf($this->lang->line('upload_exercise_files3_other'),
+                                                                            $this->mod_quizpath->get_relative()))
+                                                                .'<p>'.$this->lang->line('upload_exercise_files4').'</p>',
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Upload Files');
+            $this->error_view($e->getMessage(), $this->lang->line('upload_files'));
         }
     }
 
@@ -220,7 +209,7 @@ class Ctrl_file_manager extends MY_Controller {
             $this->mod_quizpath->init(set_or_default($_GET['dir'], ''), true, false);
 
             if ($this->mod_quizpath->is_top())
-                throw new DataException('You cannot change the visibility of the top directory');
+                throw new DataException($this->lang->line('cannot_change_visibility_top'));
 
 
             $this->load->model('mod_classes');
@@ -243,28 +232,27 @@ class Ctrl_file_manager extends MY_Controller {
             }
             else {
                 // VIEW:
-                $this->load->view('view_top1', array('title' => 'Edit Visibility'));
+                $this->load->view('view_top1', array('title' => $this->lang->line('edit_visibility')));
                 $this->load->view('view_top2');
-                $this->load->view('view_menu_bar');
+                $this->load->view('view_menu_bar', array('langselect' => true));
                 
-                $friendly_name = $this->mod_quizpath->is_top() ? 'the top folder' : "the folder <i>{$this->mod_quizpath->get_relative()}</i>";
                 $center_text = $this->load->view('view_edit_visibility',
                                                  array('dir' => $this->mod_quizpath->get_relative(),
-                                                       'friendly_name' => $friendly_name,
                                                        'allclasses' => $all_classes,
                                                        'old_classes' => $old_classes),
                                                  true);
              
-                $this->load->view('view_main_page', array('left' => "<h1>Control Exercise Visibility</h1>
-                                                                     <p>Here you can select which classes
-                                                                     can see the exercises in $friendly_name.</p>",
+                $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('control_visibility').'</h1>'
+                                                                     .'<p>'.sprintf($this->lang->line('select_folder'),
+                                                                                    $this->mod_quizpath->get_relative())
+                                                                     .'</p>',
                                                           'center' => $center_text));
                 $this->load->view('view_bottom');
                 return;
             }
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Edit Visibility');
+            $this->error_view($e->getMessage(), $this->lang->line('edit_visibility'));
         }
     }
 
@@ -273,9 +261,9 @@ class Ctrl_file_manager extends MY_Controller {
             $this->mod_users->check_admin();
         
             if (!isset($_GET['dir']))
-                throw new DataException("Missing folder name");
+                throw new DataException($this->lang->line('missing_folder_name'));
             if (!isset($_GET['file']))
-                throw new DataException("Missing quiz filename");
+                throw new DataException($this->lang->line('missing_quiz_filename'));
 
             $this->load->model('mod_quizpath');
             $this->mod_quizpath->init(rawurldecode($_GET['dir']) . '/' . rawurldecode($_GET['file']), false, false);
@@ -291,7 +279,7 @@ class Ctrl_file_manager extends MY_Controller {
             echo $contents;
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Download Exercise');
+            $this->error_view($e->getMessage(), $this->lang->line('download_exercise'));
         }
     }
 
@@ -300,16 +288,16 @@ class Ctrl_file_manager extends MY_Controller {
             $this->mod_users->check_admin();
         
             if (!isset($_POST['dir']))
-                throw new DataException("Missing folder name");
+                throw new DataException($this->lang->line('missing_folder_name'));
             if (!isset($_POST['oldname']))
-                throw new DataException("Missing old filename");
+                throw new DataException($this->lang->line('missing_old_filename'));
             if (!isset($_POST['newname']))
-                throw new DataException("Missing new filename");
+                throw new DataException($this->lang->line('missing_new_filename'));
 
             $newname = trim($_POST['newname']);
 
             if (preg_match('|[/?*:;{}\\\\]|',$newname))
-                throw new DataException("Illegal character in new filename");
+                throw new DataException($this->lang->line('illegal_char_filename'));
             
             $this->load->model('mod_quizpath');
             $this->mod_quizpath->init(rawurldecode($_POST['dir']), true, false);
@@ -319,7 +307,7 @@ class Ctrl_file_manager extends MY_Controller {
             redirect("/file_manager?dir={$this->mod_quizpath->get_relative()}");
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Rename Exercise');
+            $this->error_view($e->getMessage(), $this->lang->line('rename_exercise'));
         }
     }
 }

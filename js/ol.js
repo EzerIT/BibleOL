@@ -230,7 +230,7 @@ var GrammarGroup = (function () {
     function GrammarGroup() {
     }
     GrammarGroup.prototype.getFeatName = function (objType, callback) {
-        callback(2 /* groupstart */, objType, this.name, localization.grammargroup[objType][this.name], this);
+        callback(2 /* groupstart */, objType, this.name, l10n.grammargroup[objType][this.name], this);
         for (var i in this.items) {
             if (isNaN(+i))
                 continue;
@@ -269,7 +269,7 @@ var GrammarSubFeature = (function () {
     function GrammarSubFeature() {
     }
     GrammarSubFeature.prototype.getFeatValPart = function (monob, objType) {
-        return localization.grammarsubfeature[objType][this.name][monob.mo.features[this.name]];
+        return l10n.grammarsubfeature[objType][this.name][monob.mo.features[this.name]];
     };
 
     /** Does this object identify the specified feature?
@@ -323,7 +323,7 @@ var GrammarMetaFeature = (function () {
     function GrammarMetaFeature() {
     }
     GrammarMetaFeature.prototype.getFeatName = function (objType, callback) {
-        callback(1 /* metafeature */, objType, this.name, localization.grammarmetafeature[objType][this.name], this);
+        callback(1 /* metafeature */, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
     };
 
     GrammarMetaFeature.prototype.getFeatVal = function (monob, objType, abbrev, callback) {
@@ -358,7 +358,7 @@ var GrammarFeature = (function () {
         this.coloring = {};
     }
     GrammarFeature.prototype.getFeatName = function (objType, callback) {
-        var locname = localization.grammarfeature && localization.grammarfeature[objType] && localization.grammarfeature[objType][this.name] ? localization.grammarfeature[objType][this.name] : localization.emdrosobject[objType][this.name];
+        var locname = l10n.grammarfeature && l10n.grammarfeature[objType] && l10n.grammarfeature[objType][this.name] ? l10n.grammarfeature[objType][this.name] : l10n.emdrosobject[objType][this.name];
 
         callback(0 /* feature */, objType, this.name, locname, this);
     };
@@ -511,9 +511,9 @@ function getMonadArray(ms) {
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 var urlTypeString = {
-    'u': 'web site',
-    'v': 'video',
-    'd': 'document'
+    'u': 'click_for_web_site',
+    'v': 'click_for_video',
+    'd': 'click_for_document'
 };
 
 var DisplayMonadObject = (function () {
@@ -593,7 +593,7 @@ var DisplaySingleMonadObject = (function (_super) {
 
             // If this is not a quiz, add book, chapter, and verse, plus sof pasuq, if needed
             if (!this.inQuiz) {
-                document.title = localization.universe['book'][smo.bcv[0]];
+                document.title = l10n.universe['book'][smo.bcv[0]];
                 $('#textcontainer h1').html(document.title);
 
                 for (var i = 0; i < uhSize; ++i) {
@@ -636,15 +636,15 @@ var DisplaySingleMonadObject = (function (_super) {
         if (refs === null)
             refstring = '';
         else if (refs.length === 4)
-            refstring = '<a target="_blank" title="Click for picture" href="http://resources.3bmoodle.dk/link.php?picno={0}"><img src="{1}images/p.png"></a>'.format(refs[3], site_url);
+            refstring = '<a target="_blank" title="{2}" href="http://resources.3bmoodle.dk/link.php?picno={0}"><img src="{1}images/p.png"></a>'.format(refs[3], site_url, localize('click_for_picture'));
         else
-            refstring = '<a target="_blank" title="Click for pictures" href="http://resources.3bmoodle.dk/img.php?book={0}&chapter={1}&verse={2}"><img src="{3}images/pblue.png"></a>'.format(refs[0], refs[1], refs[2], site_url);
+            refstring = '<a target="_blank" title="{4}" href="http://resources.3bmoodle.dk/img.php?book={0}&chapter={1}&verse={2}"><img src="{3}images/pblue.png"></a>'.format(refs[0], refs[1], refs[2], site_url, localize('click_for_pictures'));
 
         var urlstring = '';
         if (urls !== null) {
             var len = urls.length;
             for (var uix = 0; uix < urls.length; ++uix) {
-                urlstring += '<a target="_blank" title="Click for {0}" href="{1}"><img src="{2}images/{3}.png"></a>'.format(urlTypeString[urls[uix][1]], urls[uix][0], site_url, urls[uix][1]);
+                urlstring += '<a target="_blank" title="{0}" href="{1}"><img src="{2}images/{3}.png"></a>'.format(localize(urlTypeString[urls[uix][1]]), urls[uix][0], site_url, urls[uix][1]);
             }
         }
         var grammar = '';
@@ -769,48 +769,56 @@ var DisplayMultipleMonadObject = (function (_super) {
 function getObjectFriendlyName(otype) {
     if (otype === 'Patriarch')
         return otype;
-    var fn = localization.emdrosobject[otype]._objname;
+    var fn = l10n.emdrosobject[otype]._objname;
     return fn ? fn : otype;
 }
 
 function getObjectShortFriendlyName(otype) {
-    if (localization.emdrosobject[otype + "_abbrev"] === undefined)
+    if (l10n.emdrosobject[otype + '_abbrev'] === undefined)
         return getObjectFriendlyName(otype);
     else
-        return localization.emdrosobject[otype + "_abbrev"]._objname;
+        return l10n.emdrosobject[otype + '_abbrev']._objname;
 }
 
 function getFeatureFriendlyName(otype, feature) {
     if (feature === 'visual')
-        return 'Text';
+        return localize('visual');
 
-    var fn = localization.emdrosobject[otype][feature];
+    var fn = l10n.emdrosobject[otype][feature];
     return fn ? fn : feature;
 }
 
 function getFeatureValueFriendlyName(featureType, value, abbrev) {
-    if (abbrev && localization.emdrostype[featureType + "_abbrev"] !== undefined)
+    if (abbrev && l10n.emdrostype[featureType + '_abbrev'] !== undefined)
         // TODO: We assume there is no "list of " types here
-        return localization.emdrostype[featureType + "_abbrev"][value];
+        return l10n.emdrostype[featureType + '_abbrev'][value];
 
     // TODO: For now we handle "list of ..." here. Is this OK with all the other locations where this is used?
-    if (featureType.substr(0, 8) === "list of ") {
+    if (featureType.substr(0, 8) === 'list of ') {
         featureType = featureType.substr(8); // Remove "list of "
         value = value.substr(1, value.length - 2); // Remove parenteses
         if (value.length == 0)
-            return localization.emdrostype[featureType]["NA"];
+            return l10n.emdrostype[featureType]['NA'];
 
         var verb_classes = value.split(',');
         var localized_verb_classes = [];
 
         for (var ix in verb_classes)
-            localized_verb_classes.push(localization.emdrostype[featureType][verb_classes[+ix]]);
+            localized_verb_classes.push(l10n.emdrostype[featureType][verb_classes[+ix]]);
 
         localized_verb_classes.sort();
         return localized_verb_classes.join(', ');
     }
 
-    return localization.emdrostype[featureType][value];
+    return l10n.emdrostype[featureType][value];
+}
+// -*- js -*-
+/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+
+function localize(s) {
+    var str = l10n_js[s];
+
+    return str === undefined ? '??' + s + '??' : str;
 }
 // -*- js -*-
 
@@ -977,7 +985,7 @@ var Dictionary = (function () {
             res += '<tr><td colspan="2" class="tooltiphead">{0}</td></tr>'.format(getObjectFriendlyName(sengram.objType));
 
             if (level === 0 && (!qd || !qd.quizFeatures.dontShow))
-                res += '<tr><td>Text</td><td class="tooltip leftalign {0}">{1}</td></tr>'.format(charset.foreignClass, monob.mo.features[configuration.surfaceFeature]);
+                res += '<tr><td>{2}</td><td class="tooltip leftalign {0}">{1}</td></tr>'.format(charset.foreignClass, monob.mo.features[configuration.surfaceFeature], localize('visual'));
 
             var map = [];
 
@@ -1361,7 +1369,7 @@ var PanelQuestion = (function () {
 
             switch (unixi) {
                 case 0:
-                    this.location += localization.universe[uniname][smo.bcv[unixi]] + ' ';
+                    this.location += l10n.universe[uniname][smo.bcv[unixi]] + ' ';
                     location_realname += smo.bcv[unixi] + ', ';
                     break;
                 case 2:
@@ -1401,7 +1409,7 @@ var PanelQuestion = (function () {
         var colcount = 0;
 
         if (dontShow) {
-            $("#quiztabhead").append('<th>Item number</th>');
+            $('#quiztabhead').append('<th>Item number</th>');
             this.question_stat.show_feat.names.push('item_number');
             ++colcount;
         }
@@ -1410,7 +1418,7 @@ var PanelQuestion = (function () {
             if (isNaN(+sfi))
                 continue;
 
-            $("#quiztabhead").append('<th>' + getFeatureFriendlyName(oType, showFeatures[sfi]) + '</th>');
+            $('#quiztabhead').append('<th>' + getFeatureFriendlyName(oType, showFeatures[sfi]) + '</th>');
             this.question_stat.show_feat.names.push(showFeatures[sfi]);
             ++colcount;
         }
@@ -1419,7 +1427,7 @@ var PanelQuestion = (function () {
             if (isNaN(+sfi))
                 continue;
 
-            $("#quiztabhead").append('<th>' + getFeatureFriendlyName(oType, requestFeatures[sfi].name) + '</th>');
+            $('#quiztabhead').append('<th>' + getFeatureFriendlyName(oType, requestFeatures[sfi].name) + '</th>');
             this.question_stat.req_feat.names.push(requestFeatures[sfi].name);
             ++colcount;
         }
@@ -1466,7 +1474,7 @@ var PanelQuestion = (function () {
                     // This is an enumeration feature type
                     // Replace val with the appropriate friendly name or "Other value"
                     if (featset.otherValues && featset.otherValues.indexOf(val) !== -1)
-                        val = 'Other value';
+                        val = localize('other_value');
                     else
                         val = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, val, false));
                 }
@@ -1596,12 +1604,12 @@ var PanelQuestion = (function () {
                                 if (featset.otherValues && featset.otherValues.indexOf(s) !== -1) {
                                     if (!hasAddedOther) {
                                         hasAddedOther = true;
-                                        var item = new StringWithSort('#1000 Other value', 'othervalue');
+                                        var item = new StringWithSort('#1000 ' + localize('other_value'), 'othervalue');
                                         var option = $('<option value="{0}">{1}</option>'.format(item.getInternal(), item.getString()));
                                         option.data('sws', item);
                                         optArray.push(option);
                                         if (correctIsOther)
-                                            this.vAnswers.push(new Answer(cwyn, item, 'Other value', null));
+                                            this.vAnswers.push(new Answer(cwyn, item, localize('other_value'), null));
                                     }
                                 } else {
                                     var sFriendly = getFeatureValueFriendlyName(featType, s, false);
@@ -1622,14 +1630,16 @@ var PanelQuestion = (function () {
                             v = cwyn.appendMeTo($('<td></td>'));
                         }
                     }
-                } else
+                } else {
+                    alert('Unexpected correctAnswer==null');
                     v = $('<td>WHAT?</td>'); // TODO: When can this happen?
+                }
 
                 currentRow.append(v);
             }
-            $("#quiztab").append(currentRow);
+            $('#quiztab').append(currentRow);
             if (hasForeignInput)
-                $("#quiztab").append('<tr><td colspan="{0}" id="row{1}" style="text-align:right;"></td></tr>'.format(colcount, +qoid + 1));
+                $('#quiztab').append('<tr><td colspan="{0}" id="row{1}" style="text-align:right;"></td></tr>'.format(colcount, +qoid + 1));
         }
 
         $('#quiztab').width($('#textcontainer').width()); // Initial table width
@@ -1890,12 +1900,12 @@ var Quiz = (function () {
 
             // Send statistics to server
             $('.grammarselector').empty();
-            $('#textcontainer').html('<p>Sending statistics to server...</p>');
+            $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
 
             $.post(site_url + 'statistics/update_stat', this.quiz_statistics).done(function () {
                 return window.location.replace(site_url + 'text/select_quiz');
             }).fail(function (jqXHR, textStatus, errorThrow) {
-                $('#textcontainer').html('<div class="error"><h1>Error reply from server:</h1><p>{0}</p></div>'.format(errorThrow));
+                $('#textcontainer').html('<div class="error"><h1>' + localize('error_response') + '</h1><p>{0}</p></div>'.format(errorThrow));
             });
         }
     };
@@ -1912,6 +1922,7 @@ var Quiz = (function () {
 /// <reference path="monadobject.ts" />
 /// <reference path="displaymonadobject.ts" />
 /// <reference path="localization.ts" />
+/// <reference path="localization_general.ts" />
 /// <reference path="quizdata.ts" />
 /// <reference path="dictionary.ts" />
 /// <reference path="panelquestion.ts" />
@@ -1969,7 +1980,7 @@ var GenerateCheckboxes = (function () {
                     else if (whattype === 0 /* feature */ && getFeatureSetting(objType, featName).transliteratedText)
                         wordclass = charset.transliteratedClass;
                     else
-                        wordclass = "latin";
+                        wordclass = 'latin';
                 } else
                     this.checkboxes += '{0}<input id="{1}_{2}_cb" type="checkbox" disabled>{3}'.format(this.addBr.getStr(), objType, featName, featNameLoc);
                 break;
@@ -1983,11 +1994,11 @@ var GenerateCheckboxes = (function () {
         if (level == 0) {
             // Object is word
             if (charset.isHebrew)
-                return '{0}<input id="ws_cb" type="checkbox">Word spacing</span>'.format(this.addBr.getStr());
+                return '{0}<input id="ws_cb" type="checkbox">{1}</span>'.format(this.addBr.getStr(), localize('word_spacing'));
             else
                 return '';
         } else
-            return '{0}<input id="lev{1}_seplin_cb" type="checkbox">Separate lines</span><br><input id="lev{1}_sb_cb" type="checkbox">Show border</span>'.format(this.addBr.getStr(), level);
+            return '{0}<input id="lev{1}_seplin_cb" type="checkbox">{2}</span><br><input id="lev{1}_sb_cb" type="checkbox">{3}</span>'.format(this.addBr.getStr(), level, localize('separate_lines'), localize('show_border'));
     };
 
     GenerateCheckboxes.prototype.generateHtml = function () {
@@ -2102,8 +2113,8 @@ var GenerateCheckboxes = (function () {
 // Build accordion for grammar selector.
 // Returns its width
 function buildGrammarAccordion() {
-    var acc1 = $('#gramselect').accordion({ heightStyle: "content", collapsible: true, header: 'h1' });
-    var acc2 = $('.subgrammargroup').accordion({ heightStyle: "content", collapsible: true, header: 'h2' });
+    var acc1 = $('#gramselect').accordion({ heightStyle: 'content', collapsible: true, header: 'h1' });
+    var acc2 = $('.subgrammargroup').accordion({ heightStyle: 'content', collapsible: true, header: 'h2' });
 
     /// @todo Does this work if there are multiple '.subgrammargroup' divs?
     var max_width = 0;

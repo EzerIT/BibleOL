@@ -6,9 +6,9 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
     private cbUseForQo : JQuery;
     private cbUseForQoLabel : JQuery;
     private templTabs : JQuery;
-    private questObjTypeLab : JQuery = $('<span>Sentence unit type:</span>');
-    private featSelLab : JQuery = $('<span>Feature:</span>');
-    private importShebanq : JQuery = $('<button type="button">Import from SHEBANQ</button>');
+    private questObjTypeLab : JQuery = $('<span>' + localize('sentence_unit_type_prompt') + '</span>');
+    private featSelLab : JQuery = $('<span>' + localize('feature_prompt') + '</span>');
+    private importShebanq : JQuery = $('<button type="button">' + localize('import_shebanq') + '</button>');
     private dirty : boolean;
     private featureTab : PanelTemplQuizFeatures;
     private qoselTab : PanelTemplQuizObjectSelector;
@@ -45,7 +45,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
     }
 
     public makeMql() : string {
-        return "[" + this.getOtype() + " NORETRIEVE " + super.makeMql() + "]";
+        return '[' + this.getOtype() + ' NORETRIEVE ' + super.makeMql() + ']';
     }
     
     public getMqlEmulQos() : string {
@@ -145,7 +145,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         this.qoselTab = qoselTab;
 
         this.cbUseForQo = $('<input type="checkbox" name="useforqol">');
-        this.cbUseForQoLabel = $('<span>Use this for sentence unit selection</span>');
+        this.cbUseForQoLabel = $('<span>' + localize('use_for_qosel') + '</span>');
 
 	this.cbUseForQo.click(() => {
             if (this.cbUseForQo.is(':checked'))
@@ -157,8 +157,8 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
             this.dirty = true;
         });
 
-        this.rbMqlLabel = $('<span>MQL statement to select sentences:</span>');
-        this.rbFriendlyLabel = $('<span>Friendly feature selector:</span>');
+        this.rbMqlLabel = $('<span>' + localize('mql_qosel_prompt') + '</span>');
+        this.rbFriendlyLabel = $('<span>' + localize('friendly_featsel_prompt') + '</span>');
 
         this.doLayout(where);
 

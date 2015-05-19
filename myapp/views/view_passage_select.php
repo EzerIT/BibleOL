@@ -27,8 +27,8 @@
     }
 </script>
 
-<h1>Select Passages</h1>
+<h1><?= $this->lang->line('select_passages') ?></h1>
 <div id="passagetree">
 </div>
 
-<p><a class="makebutton" href="#" onclick="getchk(); return false;">Start quiz</a></p>
+<p><a class="makebutton" href="#" onclick="getchk(); return false;"><?= $this->lang->line('start_quiz') ?></a></p>

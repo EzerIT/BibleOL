@@ -299,14 +299,12 @@ p.error {
 #logincenter {
   width: 700px;
   font-size: 10pt;
-}
-#logincenter h1 {
   text-align: center;
 }
 #logincenter #loginbox {
   border: solid black 1px;
   background-color: #fee78d;
-  width: 270px;
+  display: inline-block;
   padding: 5px;
   position: relative;
   margin-left: auto;
@@ -371,10 +369,20 @@ table.type1 th {
 table.type1 td {
   background-color: #c0c0ff;
 }
+table.form {
+  border-spacing: 0;
+}
 table.form td {
   background-color: #ffcc00;
   vertical-align: center;
   padding: 5px;
+  border: white solid 1px;
+}
+table.form td.norb {
+  border-right-width: 0;
+}
+table.form td.nolb {
+  border-left-width: 0;
 }
 table.form input {
   font-size: 10pt;

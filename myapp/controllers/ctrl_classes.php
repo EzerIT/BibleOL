@@ -8,6 +8,7 @@ function classname_cmp($c1, $c2) {
 class Ctrl_classes extends MY_Controller {
     public function __construct() {
         parent::__construct();
+        $this->lang->load('class', $this->language);
         $this->load->model('mod_classes');
     }
 
@@ -23,19 +24,20 @@ class Ctrl_classes extends MY_Controller {
             usort($allclasses, 'classname_cmp');
 
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'classes'));
+            $this->load->view('view_top1', array('title' => $this->lang->line('classes')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
+            $this->load->view('view_menu_bar', array('langselect' => true));
             $this->load->view('view_confirm_dialog');
             $center_text = $this->load->view('view_class_list',
                                              array('allclasses' => $allclasses),
                                              true);
-            $this->load->view('view_main_page', array('left' => '<h1>Class List</h1><p>Configure your classes</p>',
+            $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('class_list') . '</h1>'
+                                                      . '<p>' . $this->lang->line('configure_your_classes') . '</p>',
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Classes');
+            $this->error_view($e->getMessage(), $this->lang->line('classes'));
         }
     }
 
@@ -47,13 +49,13 @@ class Ctrl_classes extends MY_Controller {
             $classid = isset($_GET['classid']) ? intval($_GET['classid']) : 0;
         
             if ($classid<=0)
-                throw new DataException('Illegal class ID');
+                throw new DataException($this->lang->line('illegal_class_id'));
 
             $this->mod_classes->delete_class($classid);
             redirect('/classes');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Classes');
+            $this->error_view($e->getMessage(), $this->lang->line('classes'));
         }
     }
 
@@ -63,11 +65,9 @@ class Ctrl_classes extends MY_Controller {
         if (empty($date))
             return true;
 
-        $pat = '/^([0-9][0-9][0-9][0-9])-([01][0-9])-([0-3][0-9])$/'; // Pattern to match dates
+        $pat = '/^([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-9][0-9])$/'; // Pattern to match date format (not date values)
         if (!preg_match($pat, $date, $match)) {
-			$this->form_validation->set_message('date_valid_check',
-                                                'The \'Enroll before\' field, if specified, ' 
-                                                . 'must have the form YYYY-MM-DD (for example, 2013-12-25).');
+			$this->form_validation->set_message('date_valid_check', $this->lang->line('date_invalid_format'));
             return false;
         }
 
@@ -81,7 +81,7 @@ class Ctrl_classes extends MY_Controller {
             return true;
 
         if ($year<2000 || $year>2099 || $month<1 || $month>12 || $day<1 || $day>self::$days_in_month[$month-1]) {
-			$this->form_validation->set_message('date_valid_check', 'The \'Enrol before\' date is invalid.');
+			$this->form_validation->set_message('date_valid_check', $this->lang->line('date_invalid'));
             return false;
         }
 
@@ -95,7 +95,7 @@ class Ctrl_classes extends MY_Controller {
             $classid = isset($_GET['classid']) ? intval($_GET['classid']) : 0;
         
             if ($classid==0)
-                throw new DataException('Illegal class ID');
+                throw new DataException($this->lang->line('illegal_class_id'));
 
             $class_info = $this->mod_classes->get_class_by_id($classid);
 
@@ -112,10 +112,10 @@ class Ctrl_classes extends MY_Controller {
             else // If the class name is not modified, don't check for uniqueness
                 $is_unique = '';
 
-            $this->form_validation->set_message('is_unique', 'The class name "'.$this->input->post('classname').'" is already in use');
-            $this->form_validation->set_rules('classname', 'Class name', "trim|required|strip_tags$is_unique");
-            $this->form_validation->set_rules('password', 'Class password', 'trim|strip_tags');
-            $this->form_validation->set_rules('enrol_before', 'Enrol before', 'trim|strip_tags|callback_date_valid_check');
+            $this->form_validation->set_message('is_unique', sprintf($this->lang->line('class_name_used'), $this->input->post('classname')));
+            $this->form_validation->set_rules('classname', $this->lang->line('class_name'), "trim|required|strip_tags$is_unique");
+            $this->form_validation->set_rules('password', $this->lang->line('class_pw'), 'trim|strip_tags');
+            $this->form_validation->set_rules('enrol_before', $this->lang->line('enroll_before'), 'trim|strip_tags|callback_date_valid_check');
 
             if ($this->form_validation->run()) {
                 $class_info->classname = $this->input->post('classname');
@@ -128,19 +128,19 @@ class Ctrl_classes extends MY_Controller {
             }
             else {
                 // VIEW:
-                $this->load->view('view_top1', array('title' => 'Edit user'));
+                $this->load->view('view_top1', array('title' => $this->lang->line('edit_class')));
                 $this->load->view('view_top2');
-                $this->load->view('view_menu_bar');
+                $this->load->view('view_menu_bar', array('langselect' => true));
                 
                 $center_text = $this->load->view('view_edit_class',array('classid' => $classid, 'class_info' => $class_info), true);
 
-                $this->load->view('view_main_page', array('left' => '<h1>Edit class information</h1>',
+                $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('edit_class_information') . '</h1>',
                                                           'center' => $center_text));
                 $this->load->view('view_bottom');
             }
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Classes');
+            $this->error_view($e->getMessage(), $this->lang->line('classes'));
         }
     }
 

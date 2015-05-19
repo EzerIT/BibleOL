@@ -10,7 +10,7 @@ class Mod_askemdros extends CI_Model {
     public $quiz_data_json = 'null';
 
     public $dbinfo_json = 'null';
-    public $localization_json = 'null';
+    public $l10n_json = 'null';
     public $typeinfo_json = 'null';
 
     public $setup_db;
@@ -47,7 +47,7 @@ class Mod_askemdros extends CI_Model {
         $this->setup_prop = $prop;
         $this->load->helper(array('xmlhandler','sheaf'));
         $this->load->library('db_config');
-        $this->db_config->init_config($db,$prop,'en');
+        $this->db_config->init_config($db,$prop,$this->language_short);
         $this->load->driver('mql',array('db' => $this->db_config->emdros_db,
                                         'driver' => $this->config->item('mql_driver')));
     }
@@ -194,12 +194,12 @@ class Mod_askemdros extends CI_Model {
         $this->load->helper(array('file','xmlhandler','quiztemplate','convert_wivu'));
 
         if (!is_file($filename) || !is_readable($filename))
-            throw new DataException("Cannot open file: $filename");
+            throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
 
         $this->contents = read_file($filename);
 
         if ($this->contents === false)
-            throw new DataException("Cannot open file: $filename");
+            throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
 
         $this->decoded_3et = harvest($this->contents);
         $conv = Convert_wivu::convert($this->decoded_3et, $filename);
@@ -216,12 +216,12 @@ class Mod_askemdros extends CI_Model {
         $this->load->helper(array('file','xmlhandler','quiztemplate'));
 
         if (!is_file($filename) || !is_readable($filename))
-            throw new DataException("Cannot open file: $filename");
+            throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
 
         $this->contents = read_file($filename);
 
         if ($this->contents === false)
-            throw new DataException("Cannot open file: $filename");
+            throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
 
         $this->decoded_3et = harvest($this->contents);
 
@@ -245,20 +245,20 @@ class Mod_askemdros extends CI_Model {
             if ($this->quiz_data->getCandidateSheaf())
                 $numCandidates = $this->quiz_data->getNumberOfCandidates();
             else
-                throw new DataException("No sentences found");
+                throw new DataException($this->lang->line('no_sentences_found'));
             
             $this->dictionaries_json = json_encode($this->quiz_data->getNextCandidate($number_of_quizzes));
             $this->quiz_data_json = json_encode($this->quiz_data);
 
             $this->dbinfo_json = $this->db_config->dbinfo_json;
-            $this->localization_json = $this->db_config->localization_json;
+            $this->l10n_json = $this->db_config->l10n_json;
             $this->typeinfo_json = $this->db_config->typeinfo_json;
         }
         catch (MqlException $e) {
             if (!empty($e->db_error)) 
-                $error = "MQL database error:\n$e->db_error";
+                $error = $this->lang->line('mql_database_error_colon') . "\n$e->db_error";
             else
-                $error = "MQL compiler error:\n$e->compiler_error";
+                $error = $this->lang->line('mql_compiler_error_colon') . "\n$e->compiler_error";
 
             $error = str_replace("\n","<br>",htmlspecialchars($error));
             throw new DataException($error);
@@ -272,14 +272,14 @@ class Mod_askemdros extends CI_Model {
             self::parseQuizBasic($this->mod_quizpath->get_absolute());
 
             $this->dbinfo_json = $this->db_config->dbinfo_json;
-            $this->localization_json = $this->db_config->localization_json;
+            $this->l10n_json = $this->db_config->l10n_json;
             $this->typeinfo_json = $this->db_config->typeinfo_json;
         }
         catch (MqlException $e) { // TODO: Are any MQL commands executed?
             if (!empty($e->db_error)) 
-                $error = "MQL database error:\n$e->db_error";
+                $error = $this->lang->line('mql_database_error_colon') . "\n$e->db_error";
             else
-                $error = "MQL compiler error:\n$e->compiler_error";
+                $error = $this->lang->line('mql_compiler_error_colon') . "\n$e->compiler_error";
 
             $error = str_replace("\n","<br>",htmlspecialchars($error));
             throw new DataException($error);
@@ -292,7 +292,7 @@ class Mod_askemdros extends CI_Model {
             $this->setup($db, $db);
             
             $this->dbinfo_json = $this->db_config->dbinfo_json;
-            $this->localization_json = $this->db_config->localization_json;
+            $this->l10n_json = $this->db_config->l10n_json;
             $this->typeinfo_json = $this->db_config->typeinfo_json;
 
             return sprintf('{"desc":"",'
@@ -307,9 +307,9 @@ class Mod_askemdros extends CI_Model {
         }
         catch (MqlException $e) { // TODO: Are any MQL commands executed?
             if (!empty($e->db_error)) 
-                $error = "MQL database error:\n$e->db_error";
+                $error = $this->lang->line('mql_database_error_colon') . "\n$e->db_error";
             else
-                $error = "MQL compiler error:\n$e->compiler_error";
+                $error = $this->lang->line('mql_compiler_error_colon') . "\n$e->compiler_error";
 
             $error = str_replace("\n","<br>",htmlspecialchars($error));
             throw new DataException($error);
@@ -324,7 +324,7 @@ class Mod_askemdros extends CI_Model {
         $res = Template::writeAsXml($quizdata, $this->db_config->dbinfo);
 
         if (!write_file($this->mod_quizpath->get_absolute(), $res))
-            throw new DataException("Cannot write to quiz file");
+            throw new DataException($this->lang->line('cannot_write_to_quiz_file'));
     }
 
     public function get_quiz_universe() {
@@ -334,7 +334,7 @@ class Mod_askemdros extends CI_Model {
             
         // Do we need this?
         $this->dbinfo_json = $this->db_config->dbinfo_json;
-        $this->localization_json = $this->db_config->localization_json;
+        $this->l10n_json = $this->db_config->l10n_json;
         $this->typeinfo_json = $this->db_config->typeinfo_json;
     }
 
@@ -355,8 +355,8 @@ class Mod_askemdros extends CI_Model {
             if (in_array($name, self::$remove_databases))
                 continue;
 
-            $this->db_config->init_config_dbf($dbf, 'en');
-            $loc = json_decode($this->db_config->localization_json);
+            $this->db_config->init_config_dbf($dbf, $this->language_short);
+            $loc = json_decode($this->db_config->l10n_json);
             $db_books[] = array('name'=>$name,
                                 'loc_desc'=>$loc->dbdescription,
                                 'loc_copyright'=>isset($loc->dbcopyright) ? $loc->dbcopyright : null,
@@ -379,7 +379,7 @@ class Mod_askemdros extends CI_Model {
   
         $sh = $emdros_data[0]->get_sheaf();
         if ($sh->isEmpty())
-            throw new DataException("No text found");
+            throw new DataException($this->lang->line('no_text_found'));
 
         $mset = new OlMonadSet();
 
@@ -401,14 +401,14 @@ class Mod_askemdros extends CI_Model {
             $this->dictionaries_json = json_encode($this->dictionary);
 
             $this->dbinfo_json = $this->db_config->dbinfo_json;
-            $this->localization_json = $this->db_config->localization_json;
+            $this->l10n_json = $this->db_config->l10n_json;
             $this->typeinfo_json = $this->db_config->typeinfo_json;
         }
         catch (MqlException $e) {
             if (!empty($e->db_error)) 
-                $error = "MQL database error:\n$e->db_error";
+                $error = $this->lang->line('mql_database_error_colon') . "\n$e->db_error";
             else
-                $error = "MQL compiler error:\n$e->compiler_error";
+                $error = $this->lang->line('mql_compiler_error_colon') . "\n$e->compiler_error";
 
             $error = str_replace("\n","<br>",htmlspecialchars($error));
             throw new DataException($error);

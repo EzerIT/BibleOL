@@ -1,10 +1,10 @@
-<h1>Edit user profile</h1>
+<h1><?= $this->lang->line('edit_user_profile') ?></h1>
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<p><a class="makebutton" onclick="genericConfirm('Delete profile',
-                            'Do you want to delete your account including all your data on this site and the statistics site?',
+<p><a class="makebutton" onclick="genericConfirm('<?= $this->lang->line('delete_profile') ?>',
+                            '<?= $this->lang->line('delete_profile_confirm') ?>',
                             '<?= site_url("users/delete_me") ?>');
              return false;"
-     href="#">Delete the profile</a></p>
+     href="#"><?= $this->lang->line('delete_profile_button') ?></a></p>

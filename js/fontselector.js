@@ -143,19 +143,6 @@ var util;
             $('.' + classN).addClass(noClassN);
             $('.' + classN).removeClass(classN);
         }
-
-        classN = 'noborder_lev' + level;
-        noClassN = 'noborder_nolev' + level;
-
-        if (val) {
-            $('.' + noClassN + '> .gram').removeClass('dontshowit').addClass('showit'); //css('display','inline-block');
-            $('.' + noClassN).addClass(classN);
-            $('.' + noClassN).removeClass(noClassN);
-        } else {
-            $('.' + classN + '> .gram').removeClass('showit').addClass('dontshowit'); //css('display','none');
-            $('.' + classN).addClass(noClassN);
-            $('.' + classN).removeClass(classN);
-        }
     }
     util.showBorder = showBorder;
 
@@ -163,8 +150,8 @@ var util;
         var oldSepLin = val ? 'noseplin' : 'seplin';
         var newSepLin = val ? 'seplin' : 'noseplin';
 
-        $('.nolev' + level).removeClass(oldSepLin).addClass(newSepLin);
-        $('.lev' + level).removeClass(oldSepLin).addClass(newSepLin);
+        $('.notdummy.nolev' + level).removeClass(oldSepLin).addClass(newSepLin);
+        $('.notdummy.lev' + level).removeClass(oldSepLin).addClass(newSepLin);
     }
     util.separateLines = separateLines;
 
@@ -210,9 +197,18 @@ var util;
 })(util || (util = {}));
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+
+function localize(s) {
+    var str = l10n_js[s];
+
+    return str === undefined ? '??' + s + '??' : str;
+}
+// -*- js -*-
+/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 /// <reference path="jquery/jquery.d.ts" />
 /// <reference path="fontdetect.d.ts" />
 /// <reference path="util.ts" />
+/// <reference path="localization_general.ts" />
 var FontSelector = (function () {
     function FontSelector(alphabet, sample, direction) {
         this.alphabet = alphabet;
@@ -254,7 +250,7 @@ var FontSelector = (function () {
         this.myfont_text = $('<input type="text" name="{0}_myfont" value="{1}">'.format(this.alphabet, personal_font));
         this.myfont_radio_button = $('<input name="{0}" type="radio" data-family="XXmineXX" value="{1}_mine">'.format(this.inputName, this.alphabet));
 
-        var td1 = $('<td>').append('Or write you own font name:<br>').append(this.myfont_text);
+        var td1 = $('<td>').append(localize('or_write_preferred') + '<br>').append(this.myfont_text);
         var td2 = $('<td class="sample" id="{0}_mysample" style="direction:{1}; font-family:{2}; font-size:16pt;">'.format(this.alphabet, this.direction, personal_font)).append(this.sample);
         var td3 = $('<td class="centeralign">').append(this.myfont_radio_button);
         var tr = $('<tr>').append(td1).append(td2).append(td3);

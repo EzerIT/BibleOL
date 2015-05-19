@@ -10,6 +10,7 @@ class Ctrl_shebanq extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->lang->load('shebanq', $this->language);
     }
 
 	public function index() {
@@ -71,9 +72,9 @@ class Ctrl_shebanq extends MY_Controller {
             $this->mod_users->check_admin();
 
             if (!isset($_GET['id']) || !is_numeric($_GET['id']))
-                throw new DataException("Missing or bad SHEBANQ ID");
+                throw new DataException($this->lang->line('missing_shebanq_id'));
             if (!isset($_GET['version']))
-                throw new DataException("Missing SHEBANQ version");
+                throw new DataException($this->lang->line('missing_shebanq_version'));
 
             $tmpfname = tempnam(sys_get_temp_dir(), 'shebanq.'.getmypid());
 
@@ -96,10 +97,24 @@ class Ctrl_shebanq extends MY_Controller {
                 if (isset($data->data->versions->$_GET['version']))
                     $this->decode_mql($data->data->versions->$_GET['version']->mql, $sh_reply);
                 else
-                    throw new DataException('Version ' . $_GET['version'] . ' does not exist');
+                    throw new DataException(sprintf($this->lang->line('version_does_not_exist'), $_GET['version']));
             }
-            else
-                throw new DataException($data->msg[0][0] . ': ' . $data->msg[0][1]);
+            else {
+                $msg0 = $data->msg[0][0];
+                $msg1 = $data->msg[0][1];
+
+                // Localize errors relating to wrong query ID
+
+                if ($msg0==='error')
+                    $msg0 = $this->lang->line('shebanq_error');
+                else
+                    $msg0 .= ':';
+
+                if (preg_match('/^No query with id ([0-9]+)$/', $msg1, $matches))
+                    $msg1 = sprintf($this->lang->line('no_query_with_id'), $matches[1]);
+
+                throw new DataException("$msg0 $msg1");
+            }
         }
         catch (DataException $e) {
             $sh_reply->error = $e->getMessage();

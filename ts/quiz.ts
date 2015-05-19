@@ -71,7 +71,7 @@ class Quiz {
             
             // Send statistics to server
             $('.grammarselector').empty();
-            $('#textcontainer').html('<p>Sending statistics to server...</p>');
+            $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
             
             $.post(
                 site_url + 'statistics/update_stat',
@@ -79,7 +79,9 @@ class Quiz {
             )
                 .done(() => window.location.replace(site_url + 'text/select_quiz')) // Go to quiz selection
                 .fail((jqXHR: JQueryXHR, textStatus: string, errorThrow: string) => {
-                    $('#textcontainer').html('<div class="error"><h1>Error reply from server:</h1><p>{0}</p></div>'.format(errorThrow));
+                    $('#textcontainer').html('<div class="error"><h1>'
+                                             + localize('error_response')
+                                             + '</h1><p>{0}</p></div>'.format(errorThrow));
                 });
         }
     }

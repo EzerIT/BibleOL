@@ -4,6 +4,7 @@ class Ctrl_google extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->lang->load('login', $this->language);
         $this->config->load('ol');
     }
 
@@ -16,17 +17,17 @@ class Ctrl_google extends MY_Controller {
         try {
             if (isset($_GET['error'])) {
                 if ($_GET['error']==='access_denied')
-                    throw new DataException('Access denied from Google');
+                    throw new DataException($this->lang->line('access_denied_from_google'));
                 else
                     throw new DataException($_GET['error']);
             }
  
             // Check that it was indeed us who sent the authorization request
             if (!isset($_GET['state']) || $_GET['state']!==$this->session->userdata('state'))
-                throw new DataException("Bad state information");
+                throw new DataException($this->lang->line('bad_state_information'));
  
             if (!isset($_GET['code']))
-                throw new DataException("Wrong answer from Google");
+                throw new DataException($this->lang->line('wrong_answer_from_google'));
 
             // Ask Google to convert the authorization code into an access token
             $url = 'https://accounts.google.com/o/oauth2/token';
@@ -49,7 +50,7 @@ class Ctrl_google extends MY_Controller {
             $result = file_get_contents($url, false, $context);
  
             if (empty($result))
-                throw new DataException("No valid reply from Google");
+                throw new DataException($this->lang->line('google_no_valid_reply'));
  
             $google_access_info = json_decode($result);
             $this->session->set_userdata('access_token', $google_access_info->access_token);
@@ -65,7 +66,7 @@ class Ctrl_google extends MY_Controller {
             $result = file_get_contents($url, false, $context);
  
             if (empty($result))
-                throw new DataException("No valid reply from Google");
+                throw new DataException($this->lang->line('google_no_valid_reply'));
  
             $google_user_info = json_decode($result);
 
@@ -77,13 +78,14 @@ class Ctrl_google extends MY_Controller {
                                                   $google_user_info->email)) {
 
                 // VIEW:
-                $this->load->view('view_top1', array('title'=>'New Google User'));
+                $this->load->view('view_top1', array('title' => $this->lang->line('new_google_user')));
                 $this->load->view('view_top2');
-                $this->load->view('view_menu_bar');
+                $this->load->view('view_menu_bar', array('langselect' => false));
                 $center_text = $this->load->view('view_new_google_user',
                                                  array('google_user_info' => $google_user_info),
                                                  true);
-                $this->load->view('view_main_page',array('left' => '<h1>Welcome to Bible Online Learner</h1>',
+                $this->lang->load('intro_text', $this->language); // For 'welcome' below
+                $this->load->view('view_main_page',array('left' => '<h1>'.$this->lang->line('welcome').'</h1>',
                                                          'center' => $center_text));
                 $this->load->view('view_bottom');
             }
@@ -92,9 +94,9 @@ class Ctrl_google extends MY_Controller {
         }
         catch (DataException $e) {
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Users'));
+            $this->load->view('view_top1', array('title' => $this->lang->line('users')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
+            $this->load->view('view_menu_bar', array('langselect' => true));
             $this->load->view('view_error',array('text' => $e->getMessage()));
             $this->load->view('view_bottom');
         }

@@ -12,6 +12,7 @@ class Mod_quizpath extends CI_Model {
 
     public function __construct() {
         parent::__construct();
+        $this->lang->load('file_manager', $this->language);
     }
 
     public function init(string $path, boolean $must_be_dir, boolean $check_access, $must_exist = true) {
@@ -19,7 +20,7 @@ class Mod_quizpath extends CI_Model {
 
         $this->quizpath = realpath('quizzes');
         if (!$this->quizpath)
-            throw new DataException("Bad directory name: quizzes");
+            throw new DataException(sprintf($this->lang->line('cannot_open_folder'), 'quizzes'));
 
         $this->qpl1 = strlen($this->quizpath)+1;
         $this->check_access = $check_access;
@@ -28,7 +29,7 @@ class Mod_quizpath extends CI_Model {
 
         // Verify that we are below the quizzes directory
         if (strpos($this->canonical_absolute, $this->quizpath)!==0)
-            throw new DataException("Illegal directory: $path");
+            throw new DataException(sprintf($this->lang->line('illegal_folder'), $path));
 
         // Make $this->canonical_relative the relative directory name with . and .. removed and
         // terminated by a slash if it is not ''
@@ -36,7 +37,7 @@ class Mod_quizpath extends CI_Model {
 
         // Verify that this is a directory, if required
         if ($must_be_dir && !is_dir($this->canonical_absolute)) 
-            throw new DataException("Not a directory: $path");
+            throw new DataException(sprintf($this->lang->line('not_a_folder'), $path));
 
         // Verify that we have access to this directory
         if ($check_access) {
@@ -45,7 +46,7 @@ class Mod_quizpath extends CI_Model {
 
             $this->users_classes = $this->mod_userclass->get_classes_for_user( $this->mod_users->my_id() );
             if (!$this->mod_classdir->may_access($this->canonical_relative, $this->users_classes))
-                throw new DataException("Access denied to $path");
+                throw new DataException(sprintf($this->lang->line('access_denied_to'), $path));
         }
     }
 
@@ -84,7 +85,7 @@ class Mod_quizpath extends CI_Model {
         sort($directories);
 
         if ($d===false)
-            throw new DataException("Illegal directory: $dirname");
+            throw new DataException(sprintf($this->lang->line('illegal_folder'), $dirname));
 
         if ($this->is_top())
             $parentdir = null;
@@ -110,17 +111,17 @@ class Mod_quizpath extends CI_Model {
     public function mkdir(string $dir) {
         $res = @mkdir("$this->canonical_absolute/$dir");
         if (!$res)
-            throw new DataException("Cannot create folder '$dir'");
+            throw new DataException(sprintf($this->lang->line('cannot_create_folder'), $dir));
     }
 
     public function rename(string $oldname, string $newname) {
         $oldname .= '.3et';
         $newname .= '.3et';
         if (file_exists("$this->canonical_absolute/$newname"))
-            throw new DataException("$newname already exists");
+            throw new DataException(sprintf($this->lang->line('already_exists'), $newname));
         else
             if (!@rename("$this->canonical_absolute/$oldname","$this->canonical_absolute/$newname"))
-                throw new DataException("Cannot rename '$oldname' to '$newname'");
+                throw new DataException(sprintf($this->lang->line('cannot_rename'), $oldname, $newname));
 
     }
 
@@ -129,7 +130,7 @@ class Mod_quizpath extends CI_Model {
 
         $res = @rmdir("$this->canonical_absolute/$dir");
         if (!$res)
-            throw new DataException("Cannot remove folder '$dir'");
+            throw new DataException(sprintf($this->lang->line('cannot_delete_folder'), $dir));
         
         $this->load->model('mod_classdir');
         $this->mod_classdir->rmdir($relativedir);
@@ -139,7 +140,7 @@ class Mod_quizpath extends CI_Model {
         foreach ($files as $f) {
             $res = @unlink("$this->canonical_absolute/$f");
             if (!$res)
-                throw new DataException("Cannot delete file '$f'");
+                throw new DataException(sprintf($this->lang->line('cannot_delete_file'), $f));
         }
     }
 
@@ -148,11 +149,11 @@ class Mod_quizpath extends CI_Model {
         $real_path = realpath($path);
         if (!$real_path) {
             if ($must_exist)
-                throw new DataException("Bad file path: $path");
+                throw new DataException(sprintf($this->lang->line('cannot_open_file'), $path));
 
             $real_path = realpath(dirname($path));
             if (!$real_path)
-                throw new DataException("Bad file path: $path");
+                throw new DataException(sprintf($this->lang->line('cannot_open_file'), $path));
 
             $real_path .= '/' . basename($path);
         }
@@ -171,13 +172,13 @@ class Mod_quizpath extends CI_Model {
             return $real_path;
 
         if ($must_exist)
-            throw new DataException("Bad file path: $path");
+            throw new DataException(sprintf($this->lang->line('cannot_open_file'), $path));
 
         $real_path = realpath(dirname("quizzes/$path"));
         if ($real_path)
             return $real_path . '/' . basename($path);
 
-        throw new DataException("Bad file path: $path");
+        throw new DataException(sprintf($this->lang->line('cannot_open_file'), $path));
     }
 
     private static function endswith_nocase(string $haystack, string $needle) {

@@ -1,15 +1,15 @@
 <?php if (!$is_top): ?>
-  <h1>This is the Folder <i><?= rtrim($dirlist['relativedir'],'/') ?></i></h1>
+  <h1><?= sprintf($this->lang->line('this_is_folder'), rtrim($dirlist['relativedir'],'/')) ?></h1>
 
-  <p><a class="makebutton" href="<?= site_url("file_manager/edit_visibility?dir={$dirlist['relativedir']}") ?>">Edit visibility</a></p>
+  <p><a class="makebutton" href="<?= site_url("file_manager/edit_visibility?dir={$dirlist['relativedir']}") ?>"><?= $this->lang->line('edit_visibility_button') ?></a></p>
 <?php else: ?>
-  <h1>This is the Top Folder</h1>
+  <h1><?= $this->lang->line('this_is_top_folder') ?></h1>
 <?php endif; ?>
 
 
 <?php if (!is_null($dirlist['parentdir']) || !empty($dirlist['directories'])): ?>
 
-  <h2>Folders</h2>
+  <h2><?= $this->lang->line('folders') ?></h2>
 
   <table>
 
@@ -17,7 +17,7 @@
     <tr>
       <td>
         <span class="ui-icon ui-icon-arrowreturnthick-1-w" style="display:inline-block;"></span>
-        <a href="<?= site_url("file_manager?dir={$dirlist['parentdir']}") ?>">Parent</a>
+        <a href="<?= site_url("file_manager?dir={$dirlist['parentdir']}") ?>"><?= $this->lang->line('parent_folder') ?></a>
       </td>
       <td></td>
     </tr>
@@ -31,13 +31,13 @@
       </td>
       <?php if ($dirlist['is_empty'][$d]): ?>
 
-        <td><a class="makebutton" onclick="genericConfirm('Delete folder',
-                                     'Do you want to delete the folder \'<?= $d ?>\'?',
+        <td><a class="makebutton" onclick="genericConfirm('<?= $this->lang->line('delete_folder_confirm') ?>',
+                                     '<?= sprintf($this->lang->line('delete_folder_question'), "\'$d\'") ?>',
                                      '<?= site_url("file_manager/delete_folder?dir={$dirlist['relativedir']}&delete=$d") ?>');
                       return false;"
-             href="#">Delete folder</a></td>
+             href="#"><?= $this->lang->line('delete_folder_button') ?></a></td>
       <?php else: ?>
-          <td>Folder contains files</td>
+          <td><?= $this->lang->line('folder_not_empty') ?></td>
       <?php endif; ?>
     </tr>
   <?php endforeach; ?>
@@ -46,16 +46,20 @@
 
 <?php endif; ?>
 
-  <p><a class="makebutton" href="#" onclick="make_dir('<?= $dirlist['relativedir'] ?>'); return false;">Create folder</a></p>
+  <p><a class="makebutton" href="#" onclick="make_dir('<?= $dirlist['relativedir'] ?>'); return false;"><?= $this->lang->line('create_folder_button') ?></a></p>
 
 
 <?php if (!empty($dirlist['files'])): ?>
-  <h2>Exercises</h2>
+  <h2><?= $this->lang->line('exercises') ?></h2>
   <form id='copy-delete-form' action="<?= site_url('file_manager/copy_delete_files') ?>" method="post">
     <input type="hidden" name="dir" value="<?= $dirlist['relativedir'] ?>">
     <input type="hidden" name="operation" value="">
     <table class="type1">
-      <tr><th>Mark</th><th>Name</th><th>Operations</th></tr>
+      <tr>
+        <th><?= $this->lang->line('mark') ?></th>
+        <th><?= $this->lang->line('name') ?></th>
+        <th><?= $this->lang->line('operations') ?></th>
+      </tr>
     <?php foreach ($dirlist['files'] as $f): ?>
       <tr>
         <td><input type="checkbox" name="file[]" value="<?= $f ?>"></td>
@@ -67,32 +71,31 @@
                   // Adding the attibute 'download' to the <a ...> tag removes the error, but prevents
                   // the server from sending error messages during download.
             ?>
-            <a href="<?= site_url("file_manager/download_ex?dir={$dirlist['relativedir']}&file=$f") ?>">Download</a>
-            <a href="<?= site_url("text/edit_quiz?quiz={$dirlist['relativedir']}/$f") ?>">Edit</a>
-            <a href="#" onclick="rename('<?= substr($f,0,-4) ?>'); return false;">Rename</a>
+            <a href="<?= site_url("file_manager/download_ex?dir={$dirlist['relativedir']}&file=$f") ?>"><?= $this->lang->line('download') ?></a>
+            <a href="<?= site_url("text/edit_quiz?quiz={$dirlist['relativedir']}/$f") ?>"><?= $this->lang->line('edit') ?></a>
+            <a href="#" onclick="rename('<?= substr($f,0,-4) ?>'); return false;"><?= $this->lang->line('rename') ?></a>
         </td>
       </tr>
     <?php endforeach; ?>
     </table>
   </form>
   <p>
-    <a class="makebutton" onclick="deleteConfirm(); return false;" href="#">Delete marked files</a>
-    <a class="makebutton" onclick="copyWarning(); return false;" href="#">Copy marked files</a>
-    <a class="makebutton" onclick="moveWarning(); return false;" href="#">Move marked files</a>
+    <a class="makebutton" onclick="deleteConfirm(); return false;" href="#"><?= $this->lang->line('delete_marked') ?></a>
+    <a class="makebutton" onclick="copyWarning(); return false;" href="#"><?= $this->lang->line('copy_marked') ?></a>
+    <a class="makebutton" onclick="moveWarning(); return false;" href="#"><?= $this->lang->line('move_marked') ?></a>
   </p>
 <?php endif; ?>
 
 <?php if ($copy_or_move): ?>
-  <?php $past = $copy_or_move==='move' ? 'moved' : 'copied'; ?>
   <p>
-    <a class="makebutton" href="<?= site_url("file_manager/insert_files?dir={$dirlist['relativedir']}") ?>">Insert <?= $past ?> files</a>
-    <a class="makebutton" href="<?= site_url("file_manager/cancel_copy?dir={$dirlist['relativedir']}") ?>">Cancel <?= $copy_or_move ?> operation</a>
+  <a class="makebutton" href="<?= site_url("file_manager/insert_files?dir={$dirlist['relativedir']}") ?>"><?= $copy_or_move==='move' ? $this->lang->line('insert_moved_files') : $this->lang->line('insert_copied_files') ?></a>
+    <a class="makebutton" href="<?= site_url("file_manager/cancel_copy?dir={$dirlist['relativedir']}") ?>"><?= $copy_or_move==='move' ? $this->lang->line('cancel_move') : $this->lang->line('cancel_copy')?></a>
   </p>
 <? endif; ?>
 
   <p>
-    <a class="makebutton" href="<?= site_url("file_manager/upload_files?dir={$dirlist['relativedir']}") ?>">Upload exercises</a>
-    <a class="makebutton" href="#" onclick="create_exercise(); return false;">Create exercise</a>
+    <a class="makebutton" href="<?= site_url("file_manager/upload_files?dir={$dirlist['relativedir']}") ?>"><?= $this->lang->line('upload_exercises_button') ?></a>
+    <a class="makebutton" href="#" onclick="create_exercise(); return false;"><?= $this->lang->line('create_exercise_button') ?></a>
   </p>
 
 
@@ -101,12 +104,12 @@
 
   <!-- Make Directory dialog -->
 
-  <div id="mkdir-dialog-form" style="display:none" title="Enter Folder Name">
+  <div id="mkdir-dialog-form" style="display:none" title="<?= $this->lang->line('enter_folder_name') ?>">
     <p class="error" id="mkdir-error"></p>
     <form id="mkdir-form" action="<?= site_url('file_manager/create_folder') ?>" method="post">
         <table>
           <tr>
-            <td>Folder name</td>
+            <td><?= $this->lang->line('folder_name_prompt') ?></td>
             <td><input type="text" name="create" id="mkdir-name" size="35" class="text ui-widget-content ui-corner-all"></td>
           </tr>
         </table>
@@ -117,12 +120,12 @@
 
   <!-- Rename dialog -->
 
-  <div id="rename-dialog-form" style="display:none" title="Rename File">
+  <div id="rename-dialog-form" style="display:none" title="<?= $this->lang->line('rename_file') ?>">
     <p class="error" id="rename-error"></p>
     <form id="rename-form" action="<?= site_url('file_manager/rename_file') ?>" method="post">
         <table>
           <tr>
-            <td>New filename</td>
+            <td><?= $this->lang->line('new_filename_prompt') ?></td>
             <td><input type="text" name="newname" id="rename-newname" size="35" class="text ui-widget-content ui-corner-all"></td>
           </tr>
         </table>
@@ -134,11 +137,11 @@
 
   <!-- Create Quiz dialog -->
 
-  <div id="newquiz-dialog-form" style="display:none" title="Select Database">
+  <div id="newquiz-dialog-form" style="display:none" title="<?= $this->lang->line('select_database_heading') ?>">
     <form id="newquiz-form" action="<?= site_url('text/new_quiz') ?>" method="post">
         <table>
           <tr>
-            <td>Select database:</td>
+            <td><?= $this->lang->line('select_database_prompt') ?></td>
             <td>
             <?php $default = true; ?>
             <?php foreach($databases as $db): ?>
@@ -157,7 +160,7 @@
   <div id="copy-dialog-warning" style="display:none">
     <p>
       <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-      <span>Click 'OK' here, and then go to the destination folder and press 'Insert <span id="copiedmoved"></span> files'.</span>
+      <span><?= sprintf($this->lang->line('click_and_go_to'), '<span id="copiedmoved"></span>') ?></span>
     </p>
   </div>
 
@@ -166,7 +169,7 @@
   <div id="delete-dialog-confirm" style="display:none">
     <p>
       <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-      <span>Do you want to delete the indicated files?</span>
+      <span><?= $this->lang->line('delete_file_confirm') ?></span>
     </p>
   </div>
 
@@ -179,23 +182,23 @@
     $(function() {
         $('#mkdir-dialog-form').dialog({
             autoOpen: false,
-            width: 400,
+            width: 450,
             modal: true,
             buttons: {
-                'OK': function() {
+                '<?= $this->lang->line('OK_button') ?>': function() {
                     dirname = $('#mkdir-name').val().trim();
                     
                     if (dirname=='')
-                        $('#mkdir-error').text("Missing folder name");
+                        $('#mkdir-error').text('<?= $this->lang->line('missing_folder_name') ?>');
                     else if (filename_bad(dirname))
-                        $('#mkdir-error').text("Illegal character in folder name");
+                        $('#mkdir-error').text('<?= $this->lang->line('illegal_char_folder') ?>');
                     else {
                         $('#mkdir-form').submit();
                         $(this).dialog('close');
                     }
                 },
          
-                Cancel: function() {
+                '<?= $this->lang->line('cancel_button') ?>': function() {
                     $(this).dialog('close');
                 }
             },
@@ -210,20 +213,20 @@
             width: 400,
             modal: true,
             buttons: {
-                'OK': function() {
+                '<?= $this->lang->line('OK_button') ?>': function() {
                     filename = $('#rename-newname').val().trim();
 
                     if (filename=='')
-                        $('#rename-error').text("Missing filename");
+                        $('#rename-error').text('<?= $this->lang->line('missing_filename') ?>');
                     else if (filename_bad(filename))
-                        $('#rename-error').text("Illegal character in filename");
+                        $('#rename-error').text('<?= $this->lang->line('illegal_char_filename') ?>');
                     else {
                         $('#rename-form').submit();
                         $(this).dialog('close');
                     }
                 },
 
-                Cancel: function() {
+                '<?= $this->lang->line('cancel_button') ?>': function() {
                     $(this).dialog('close');
                 }
             },
@@ -238,11 +241,11 @@
             width: 600,
             modal: true,
             buttons: {
-                'OK': function() {
+                '<?= $this->lang->line('OK_button') ?>': function() {
                     $('#newquiz-form').submit();
                     $(this).dialog('close');
                 },
-                Cancel: function() {
+                '<?= $this->lang->line('cancel_button') ?>': function() {
                     $(this).dialog('close');
                 }
             },
@@ -255,11 +258,11 @@
             resizable: false,
             modal: true,
             buttons: {
-                "OK": function() {
+                "<?= $this->lang->line('OK_button') ?>": function() {
                     $('#copy-delete-form').submit();
                     $(this).dialog("close");
                 },
-                Cancel: function() {
+                '<?= $this->lang->line('cancel_button') ?>': function() {
                     $('input[name="operation"]').val(''); // Paranoia
                     $(this).dialog("close");
                 }
@@ -271,11 +274,11 @@
             resizable: false,
             modal: true,
             buttons: {
-                "Yes": function() {
+                "<?= $this->lang->line('yes') ?>": function() {
                     $('#copy-delete-form').submit();
                     $(this).dialog("close");
                 },
-                "No": function() {
+                "<?= $this->lang->line('no') ?>": function() {
                     $('input[name="operation"]').val(''); // Paranoia
                     $(this).dialog("close");
                 }
@@ -307,36 +310,36 @@
 
     function copyWarning() {
         if ($('input[name="file[]"]:checked').length===0) {
-            myalert('File selection','No files selected');
+            myalert('<?= $this->lang->line('file_selection') ?>','<?= $this->lang->line('no_files_selected') ?>');
             return;
         }
         $('input[name="operation"]').val('copy');
-        $('#copiedmoved').text('copied');
+        $('#copiedmoved').text('<?= $this->lang->line('insert_copied_files') ?>');
         $('#copy-dialog-warning')
-            .dialog('option', 'title', 'Copy Files')
+            .dialog('option', 'title', '<?= $this->lang->line('copy_files') ?>')
             .dialog('open');
     }
 
     function moveWarning() {
         if ($('input[name="file[]"]:checked').length===0) {
-            myalert('File selection','No files selected');
+            myalert('<?= $this->lang->line('file_selection') ?>','<?= $this->lang->line('no_files_selected') ?>');
             return;
         }
         $('input[name="operation"]').val('move');
-        $('#copiedmoved').text('moved');
+        $('#copiedmoved').text('<?= $this->lang->line('insert_moved_files') ?>');
         $('#copy-dialog-warning')
-            .dialog('option', 'title', 'Move Files')
+            .dialog('option', 'title', '<?= $this->lang->line('move_files') ?>')
             .dialog('open');
     }
 
     function deleteConfirm() {
         if ($('input[name="file[]"]:checked').length===0) {
-            myalert('File selection','No files selected');
+            myalert('<?= $this->lang->line('file_selection') ?>','<?= $this->lang->line('no_files_selected') ?>');
             return;
         }
         $('input[name="operation"]').val('delete');
         $('#delete-dialog-confirm')
-            .dialog('option', 'title', 'Confirm Deletion')
+            .dialog('option', 'title', '<?= $this->lang->line('confirm_deletion') ?>')
             .dialog('open');
     }
   </script>

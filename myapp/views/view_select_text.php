@@ -3,7 +3,7 @@
           echo "<div class=\"error\">$valerr</div>\n";
     ?>
 
-    <h2>Make a selection:</h2>
+      <h2><?= $this->lang->line('make_a_selection') ?></h2>
 
     <?= form_open('text/select_text') ?>
       <table>
@@ -12,9 +12,9 @@
           <tr>
             <td><input type="radio" name="db" value="<?= $db['name'] ?>" <?= set_radio('db', $db['name'], $default) ?>></td>
             <td><?= str_replace(" ","&nbsp;", $db['loc_desc']) ?></td>
-            <?php if ($db['loc_desc']==='Hebrew (ETCBC4, OT)'): ?>
+            <?php if ($db['name']==='ETCBC4'): ?>
             <td rowspan="2"><?= $db['loc_copyright'] ? "$db[loc_copyright]" : "" ?></td>
-            <?php elseif ($db['loc_desc']==='Hebrew (ETCBC4, Transliterated, OT)'): ?>
+            <?php elseif ($db['name']==='ETCBC4-translit'): ?>
             </tr><tr><td colspan="3">&nbsp;</td><!-- Make space -->
             <?php else: ?>
             <td><?= $db['loc_copyright'] ? "$db[loc_copyright]" : "" ?></td>
@@ -24,7 +24,7 @@
         <?php endforeach; ?>
       </table>
 
-      <p>Book:
+      <p><?= $this->lang->line('book_prompt') ?>
       <?php foreach($databases as $db): ?>
         <select name="book_<?= $db['name'] ?>">
           <?php foreach($db['order'] as $book_name): ?>
@@ -32,14 +32,14 @@
           <?php endforeach; ?>
         </select>
       <?php endforeach; ?></p>
-      <p>Chapter: <input type="text" name="chapter" value="<?= set_value('chapter') ?>"> <span id="valid_chap"></span></p>
-      <p>First verse (leave empty to view entire chapter): <input type="text" name="vfrom" value="<?= set_value('vfrom') ?>"></p>
-      <p>Last verse (leave empty to view only one verse): <input type="text" name="vto" value="<?= set_value('vto') ?>"></p>
+      <p><?= $this->lang->line('chapter_prompt') ?> <input type="text" name="chapter" value="<?= set_value('chapter') ?>"> <span id="valid_chap"></span></p>
+      <p><?= $this->lang->line('first_verse_leave') ?> <input type="text" name="vfrom" value="<?= set_value('vfrom') ?>"></p>
+      <p><?= $this->lang->line('last_verse_leave') ?> <input type="text" name="vto" value="<?= set_value('vto') ?>"></p>
 
-      <p><input id="showicons" name="showicons" value="on" type="checkbox" <?= set_checkbox('showicons','on') ?>>Show link icons</p>     
+      <p><input id="showicons" name="showicons" value="on" type="checkbox" <?= set_checkbox('showicons','on') ?>><?= $this->lang->line('show_link_icons') ?></p>     
 
 
-      <p><input type="submit" name="submit" value="Display"></p>
+      <p><input type="submit" name="submit" value="<?= $this->lang->line('display') ?>"></p>
     </form>
 
     <script>
@@ -48,7 +48,7 @@
 
           allSelectors.on('change', null, function(e) {
               var chaps = $($(this).find(":selected")[0]).data('chaps');
-              $("#valid_chap").text(chaps!='' ? ('(Valid chapters: ' + chaps + ')') : '');
+              $("#valid_chap").text(chaps!='' ? ('(<?= $this->lang->line('valid_chapters') ?> ' + chaps + ')') : '');
           });
 
 

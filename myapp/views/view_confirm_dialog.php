@@ -12,11 +12,11 @@
             resizable: false,
             modal: true,
             buttons: {
-                "Yes": function() {
+                "<?= $this->lang->line('yes') ?>": function() {
                     location = $("#generic-destination").text();
                     $( this ).dialog( "close" );
                 },
-                "No": function() {
+                "<?= $this->lang->line('no') ?>": function() {
                     $( this ).dialog( "close" );
                 }
             }

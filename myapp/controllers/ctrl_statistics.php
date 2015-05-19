@@ -2,13 +2,14 @@
 class Ctrl_statistics extends MY_Controller {
     public function __construct() {
         parent::__construct();
+        $this->lang->load('statistics', $this->language);
         $this->load->model('mod_statistics');
     }
 
     private function check_logged_in() {
         // MODEL:
         if (!$this->mod_users->is_logged_in())
-            throw new DataException('You must be logged in to access this function');
+            throw new DataException($this->lang->line('must_be_logged_in'));
     }
 
 	public function index() {
@@ -25,8 +26,8 @@ class Ctrl_statistics extends MY_Controller {
             foreach ($alltemplates as $templ) {
                 $allquizzes = $this->mod_statistics->allQuizzes(intval($templ->qtid));
                 if (count($allquizzes)>0) {
-                    $this->db_config->init_config($templ->dbname,$templ->dbpropname, 'en');
-                    $templ->localization = json_decode($this->db_config->localization_json);
+                    $this->db_config->init_config($templ->dbname,$templ->dbpropname, $this->language_short);
+                    $templ->l10n = json_decode($this->db_config->l10n_json);
                     $templ->obj2feat = $this->db_config->typeinfo->obj2feat;
                     $templ->quizzes = $allquizzes;
                     $templ->req_features = $this->mod_statistics->allReqFeatures(intval($templ->qtid));
@@ -35,9 +36,9 @@ class Ctrl_statistics extends MY_Controller {
             }
 
             
-            $this->load->view('view_top1', array('title' => 'Statistics'));
+            $this->load->view('view_top1', array('title' => $this->lang->line('statistics_title')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
+            $this->load->view('view_menu_bar', array('langselect' => true));
             $this->load->view('view_confirm_dialog');
             $center_text = $this->load->view('view_statistics', array('data' => $goodtemplates), true);
             $left_text = $this->load->view('view_statistics_left', array('name' => $this->mod_users->my_name()), true);
@@ -47,7 +48,7 @@ class Ctrl_statistics extends MY_Controller {
             
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Statistics');
+            $this->error_view($e->getMessage(), $this->lang->line('statistics_title'));
         }
     }
 

@@ -1,4 +1,4 @@
-<h1>Enter Password for &ldquo;<?= $classname ?>&rdquo;</h1>
+<h1><?= sprintf($this->lang->line('enter_password_for'), $classname) ?></h1>
 
 <?php $valerr = validation_errors('<p class="error">','</p>'); ?>
 
@@ -10,14 +10,14 @@
 
 <table class="form">
   <tr>
-    <td>Class password:</td>
+    <td><?= $this->lang->line('class_password') ?></td>
     <td>
       <input type="password" name="password" value="">
     </td>
   </tr>
 </table>
-<p><input class="makebutton" type="submit" name="submit" value="OK">
-   <a class="makebutton" href="<?= site_url('/userclass/enroll') ?>">Cancel</a></p>
+<p><input class="makebutton" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
+   <a class="makebutton" href="<?= site_url('/userclass/enroll') ?>"><?= $this->lang->line('cancel_button') ?></a></p>
 </p>
 </form>
 

@@ -14,6 +14,7 @@
 /// <reference path="monadobject.ts" />
 /// <reference path="displaymonadobject.ts" />
 /// <reference path="localization.ts" />
+/// <reference path="localization_general.ts" />
 /// <reference path="quizdata.ts" />
 /// <reference path="dictionary.ts" />
 /// <reference path="panelquestion.ts" />
@@ -89,7 +90,7 @@ class GenerateCheckboxes {
                 else if (whattype===WHAT.feature && getFeatureSetting(objType,featName).transliteratedText)
                     wordclass = charset.transliteratedClass;
                 else
-                    wordclass = "latin";
+                    wordclass = 'latin';
             }
             else
                 this.checkboxes += '{0}<input id="{1}_{2}_cb" type="checkbox" disabled>{3}'.format(this.addBr.getStr(),
@@ -107,12 +108,12 @@ class GenerateCheckboxes {
         if (level==0) {
             // Object is word
             if (charset.isHebrew)
-                return '{0}<input id="ws_cb" type="checkbox">Word spacing</span>'.format(this.addBr.getStr());
+                return '{0}<input id="ws_cb" type="checkbox">{1}</span>'.format(this.addBr.getStr(),localize('word_spacing'));
             else
                 return '';
         }
         else  // Object is phrase, clause etc.
-            return '{0}<input id="lev{1}_seplin_cb" type="checkbox">Separate lines</span><br><input id="lev{1}_sb_cb" type="checkbox">Show border</span>'.format(this.addBr.getStr(),level);
+            return '{0}<input id="lev{1}_seplin_cb" type="checkbox">{2}</span><br><input id="lev{1}_sb_cb" type="checkbox">{3}</span>'.format(this.addBr.getStr(),level,localize('separate_lines'),localize('show_border'));
     }
 
     public generateHtml() : string {
@@ -232,8 +233,8 @@ class GenerateCheckboxes {
 // Build accordion for grammar selector.
 // Returns its width
 function buildGrammarAccordion() : number {
-    var acc1 : JQuery = $('#gramselect').accordion({heightStyle: "content", collapsible: true, header: 'h1'});
-    var acc2 : JQuery = $('.subgrammargroup').accordion({heightStyle: "content", collapsible: true, header: 'h2'});
+    var acc1 : JQuery = $('#gramselect').accordion({heightStyle: 'content', collapsible: true, header: 'h1'});
+    var acc2 : JQuery = $('.subgrammargroup').accordion({heightStyle: 'content', collapsible: true, header: 'h2'});
 
     /// @todo Does this work if there are multiple '.subgrammargroup' divs?
     var max_width  = 0;

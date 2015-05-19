@@ -2,9 +2,9 @@
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 
 var urlTypeString = {
-    'u' : 'web site',
-    'v' : 'video',
-    'd' : 'document',
+    'u' : 'click_for_web_site',
+    'v' : 'click_for_video',
+    'd' : 'click_for_document',
 };
 
 class DisplayMonadObject {
@@ -117,7 +117,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
 
             // If this is not a quiz, add book, chapter, and verse, plus sof pasuq, if needed
             if (!this.inQuiz) {
-                document.title = localization.universe['book'][smo.bcv[0]];
+                document.title = l10n.universe['book'][smo.bcv[0]];
                 $('#textcontainer h1').html(document.title);
 
                 for (var i : number = 0; i<uhSize; ++i) {
@@ -161,18 +161,18 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         if (refs===null)
             refstring = '';
         else if (refs.length===4) // Only one reference
-            refstring = '<a target="_blank" title="Click for picture" href="http://resources.3bmoodle.dk/link.php?picno={0}"><img src="{1}images/p.png"></a>'
-            .format(refs[3],site_url);
+            refstring = '<a target="_blank" title="{2}" href="http://resources.3bmoodle.dk/link.php?picno={0}"><img src="{1}images/p.png"></a>'
+            .format(refs[3],site_url,localize('click_for_picture'));
         else // More than one reference
-            refstring = '<a target="_blank" title="Click for pictures" href="http://resources.3bmoodle.dk/img.php?book={0}&chapter={1}&verse={2}"><img src="{3}images/pblue.png"></a>'
-            .format(refs[0],refs[1],refs[2],site_url);
+            refstring = '<a target="_blank" title="{4}" href="http://resources.3bmoodle.dk/img.php?book={0}&chapter={1}&verse={2}"><img src="{3}images/pblue.png"></a>'
+            .format(refs[0],refs[1],refs[2],site_url,localize('click_for_pictures'));
         
         var urlstring : string = '';
         if (urls!==null) {
             var len = urls.length;
             for (var uix : number = 0; uix<urls.length; ++uix) {
-                urlstring += '<a target="_blank" title="Click for {0}" href="{1}"><img src="{2}images/{3}.png"></a>'
-                .format(urlTypeString[urls[uix][1]],urls[uix][0],site_url,urls[uix][1]);
+                urlstring += '<a target="_blank" title="{0}" href="{1}"><img src="{2}images/{3}.png"></a>'
+                .format(localize(urlTypeString[urls[uix][1]]),urls[uix][0],site_url,urls[uix][1]);
             }
         }
         var grammar = '';

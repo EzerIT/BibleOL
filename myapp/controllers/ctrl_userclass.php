@@ -20,6 +20,7 @@ function classname_cmp($c1, $c2) {
 class Ctrl_userclass extends MY_Controller {
     public function __construct() {
         parent::__construct();
+        $this->lang->load('userclass', $this->language);
         $this->load->model('mod_classes');
         $this->load->model('mod_userclass');
     }
@@ -31,7 +32,7 @@ class Ctrl_userclass extends MY_Controller {
             $classid = isset($_GET['classid']) ? intval($_GET['classid']) : 0;
         
             if ($classid<=0)
-                throw new DataException('Illegal class ID');
+                throw new DataException($this->lang->line('illegal_class_id'));
 
             $class_info = $this->mod_classes->get_class_by_id($classid);
 
@@ -55,9 +56,9 @@ class Ctrl_userclass extends MY_Controller {
             }
             else {
                 // VIEW:
-                $this->load->view('view_top1', array('title' => 'Edit class'));
+                $this->load->view('view_top1', array('title' => $this->lang->line('uc_edit_class')));
                 $this->load->view('view_top2');
-                $this->load->view('view_menu_bar');
+                $this->load->view('view_menu_bar', array('langselect' => true));
                 
                 $center_text = $this->load->view('view_edit_users_in_class',
                                                  array('classid' => $classid,
@@ -66,16 +67,17 @@ class Ctrl_userclass extends MY_Controller {
                                                        'old_users' => $old_users),
                                                  true);
              
-                $this->load->view('view_main_page', array('left' => "<h1>Assign Users to Class</h1>
-                                                                     <p>Select the users that should
-                                                                     belong to the class '$class_info->classname'.</p>",
+                $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('assign_users_to_class').'</h1>'
+                                                          .'<p>'
+                                                          . sprintf($this->lang->line('select_users_for_class'),$class_info->classname)
+                                                          .'</p>',
                                                           'center' => $center_text));
                 $this->load->view('view_bottom');
                 return;
             }
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Classes');
+            $this->error_view($e->getMessage(), $this->lang->line('uc_classes'));
         }
     }
 
@@ -86,7 +88,7 @@ class Ctrl_userclass extends MY_Controller {
             $userid = isset($_GET['userid']) ? intval($_GET['userid']) : 0;
         
             if ($userid<=0)
-                throw new DataException('Illegal user ID');
+                throw new DataException($this->lang->line('illegal_user_id'));
 
             $user_info = $this->mod_users->get_user_by_id($userid);
 
@@ -109,9 +111,9 @@ class Ctrl_userclass extends MY_Controller {
             }
             else {
                 // VIEW:
-                $this->load->view('view_top1', array('title' => 'Edit user'));
+                $this->load->view('view_top1', array('title' => $this->lang->line('uc_edit_user')));
                 $this->load->view('view_top2');
-                $this->load->view('view_menu_bar');
+                $this->load->view('view_menu_bar', array('langselect' => true));
                 
                 $center_text = $this->load->view('view_edit_classes_for_user',
                                                  array('userid' => $userid,
@@ -120,17 +122,17 @@ class Ctrl_userclass extends MY_Controller {
                                                        'old_classes' => $old_classes),
                                                  true);
              
-                $this->load->view('view_main_page', array('left' =>  "<h1>Assign User to Classes</h1>
-                                                                     <p>Select the classes to which 
-                                                                     $user_info->first_name $user_info->last_name
-                                                                     should belong.</p>",
+                $this->load->view('view_main_page', array('left' =>  '<h1>'.$this->lang->line('assign_user_to_classes').'</h1>'
+                                                          .'<p>'
+                                                          . sprintf($this->lang->line('select_classes_for_user'),$user_info->first_name,$user_info->last_name)
+                                                          .'<p>',
                                                           'center' => $center_text));
                 $this->load->view('view_bottom');
                 return;
             }
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Classes');
+            $this->error_view($e->getMessage(), $this->lang->line('uc_classes'));
         }
     }
 
@@ -159,9 +161,9 @@ class Ctrl_userclass extends MY_Controller {
                     $avail_classes[] = $ac->id;
 
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Enroll in Class'));
+            $this->load->view('view_top1', array('title' => $this->lang->line('enroll_in_class')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar');
+            $this->load->view('view_menu_bar', array('langselect' => true));
                 
             $center_text = $this->load->view('view_enroll_in_class',
                                              array('all_classes' => $all_classes,
@@ -169,12 +171,12 @@ class Ctrl_userclass extends MY_Controller {
                                                    'avail_classes' => $avail_classes),
                                              true);
              
-            $this->load->view('view_main_page', array('left' =>  "<h1>Enroll in Classes</h1>",
+            $this->load->view('view_main_page', array('left' =>  '<h1>'.$this->lang->line('enroll_in_classes').'</h1>',
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Classes');
+            $this->error_view($e->getMessage(), $this->lang->line('classes'));
         }
     }
 
@@ -184,7 +186,7 @@ class Ctrl_userclass extends MY_Controller {
         if ($password === $this->enroll_class->password)
             return true;
         else {
-			$this->form_validation->set_message('class_password_check', 'Wrong class password');
+			$this->form_validation->set_message('class_password_check', $this->lang->line('wrong_class_password'));
 			return false;
         }
     }
@@ -206,49 +208,50 @@ class Ctrl_userclass extends MY_Controller {
                     $avail_classes[] = $ac->id;
 
             if (in_array($classid, $old_classes))
-                throw new DataException('You are already enrolled in this class');
+                throw new DataException($this->lang->line('already_enrolled'));
 
             if (!in_array($classid, $avail_classes))
-                throw new DataException('You cannot enroll in this class');
+                throw new DataException($this->lang->line('cannot_enroll'));
 
             $this->enroll_class = $all_classes[$classid];
 
             $this->load->helper('form');
             $this->load->library('form_validation');
 
-            $this->form_validation->set_rules('password', 'Class password', 'trim|required|callback_class_password_check');
+            $this->form_validation->set_rules('password', $this->lang->line('class_password'), 'trim|required|callback_class_password_check');
 
             if (empty($this->enroll_class->password) || $this->form_validation->run()) {
                 $this->mod_userclass->enroll_user_in_class($userid, $classid);
 
                 // VIEW:
-                $this->load->view('view_top1', array('title' => 'Enroll in Class'));
+                $this->load->view('view_top1', array('title' => $this->lang->line('enroll_in_class')));
                 $this->load->view('view_top2');
-                $this->load->view('view_menu_bar');
+                $this->load->view('view_menu_bar', array('langselect' => true));
                 
-                $this->load->view('view_main_page', array('left' => '<h1>Enrolled</h1>',
-                                                          'center' => "<h1>You are now enrolled in 
-                                                                       &ldquo;{$this->enroll_class->classname}&rdquo;</h1>"));
+                $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('enrolled').'</h1>',
+                                                          'center' => '<h1>'
+                                                          .sprintf($this->lang->line('you_are_enrolled'),$this->enroll_class->classname)
+                                                          .'</h1>'));
                 $this->load->view('view_bottom');
             }
             else {
                 // VIEW:
-                $this->load->view('view_top1', array('title' => 'Enroll in Class'));
+                $this->load->view('view_top1', array('title' => $this->lang->line('enroll_in_class')));
                 $this->load->view('view_top2');
-                $this->load->view('view_menu_bar');
+                $this->load->view('view_menu_bar', array('langselect' => true));
                 
                 $center_text = $this->load->view('view_enroll_form',
                                                  array('classid' => $classid,
                                                        'classname' => $this->enroll_class->classname),
                                                  true);
 
-                $this->load->view('view_main_page', array('left' => '<h1>Enter class password</h1>',
+                $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('enter_class_password').'</h1>',
                                                           'center' => $center_text));
                 $this->load->view('view_bottom');
             }
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Classes');
+            $this->error_view($e->getMessage(), $this->lang->line('classes'));
         }
     }
 

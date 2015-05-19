@@ -320,15 +320,12 @@ p.error {
 #logincenter {
     width: 700px;
     font-size: 10pt;
-
-    h1 {
-        text-align: center;
-    }
+    text-align: center;
 
     #loginbox {
         border: solid black 1px;
         background-color: #fee78d;
-        width: 270px;
+        display: inline-block;
         padding: 5px;
         position: relative;
         margin-left: auto;
@@ -405,10 +402,19 @@ table.type1 {
 }
 
 table.form {
+    border-spacing: 0;
+
     td {
         background-color: #ffcc00;
         vertical-align: center;
         padding: 5px;
+        border: white solid 1px;
+        &.norb {
+            border-right-width: 0;
+        }
+        &.nolb {
+            border-left-width: 0;
+        }
     }
 
     input {

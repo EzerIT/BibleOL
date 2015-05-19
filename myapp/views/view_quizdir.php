@@ -1,24 +1,24 @@
 <?php if (!$is_logged_in): ?>
   <div class="warning">
-       <h1>Warning:</h1>
-       <p>You are not logged in. Statistics about your quizzes will not be recorded.</p>
+       <h1><?= $this->lang->line('warning') ?></h1>
+       <p><?= $this->lang->line('not_logged_in') ?></p>
   </div>
 <?php endif; ?>
 
 <?php if (!is_null($dirlist['parentdir'])): ?>
-  <h1>This is the Folder <i><?= rtrim($dirlist['relativedir'],'/') ?></i></h1>
+  <h1><?= sprintf($this->lang->line('this_is_folder'), rtrim($dirlist['relativedir'],'/')) ?></h1>
 <?php else: ?>
-  <h1>This is the Top Folder</h1>
+  <h1><?= $this->lang->line('this_is_top_folder') ?></h1>
 <?php endif; ?>
 
 <?php if (!is_null($dirlist['parentdir']) || !empty($dirlist['directories'])): ?>
 
-  <h2>Select a folder</h2>
+  <h2><?= $this->lang->line('select_folder') ?></h2>
 
   <?php if (!is_null($dirlist['parentdir'])): ?>
     <p>
       <span class="ui-icon ui-icon-arrowreturnthick-1-w" style="display:inline-block;"></span>
-      <?= anchor(site_url("text/select_quiz?dir={$dirlist['parentdir']}"), 'Parent') ?>
+      <?= anchor(site_url("text/select_quiz?dir={$dirlist['parentdir']}"), $this->lang->line('parent')) ?>
     </p>
   <?php endif; ?>
 
@@ -31,12 +31,12 @@
 <?php endif; ?>
 
 <?php if (!empty($dirlist['files'])): ?>
-  <h2>Select an Exercise</h2>
+  <h2><?= $this->lang->line('select_exercise') ?></h2>
   <table>
     <tr>
-      <th>Quiz name</th>
-      <th>Select number of questions<br>using preset passages</th>
-      <th>Select number of questions<br>and specify your own passages</th>
+      <th><?= $this->lang->line('quiz_name') ?></th>
+      <th><?= $this->lang->line('select_number_preset') ?></th>
+      <th><?= $this->lang->line('select_number_own') ?></th>
     </tr>
    
   <?php foreach ($dirlist['files'] as $f): ?>

@@ -105,7 +105,7 @@ class PanelQuestion {
             // TODO: This only works for Bible references
             switch (unixi) {
             case 0:
-                this.location += localization.universe[uniname][smo.bcv[unixi]] + ' ';
+                this.location += l10n.universe[uniname][smo.bcv[unixi]] + ' ';
                 location_realname += smo.bcv[unixi] + ', ';
                 break;
             case 2:
@@ -146,7 +146,7 @@ class PanelQuestion {
         var colcount = 0;
 
         if (dontShow) {
-            $("#quiztabhead").append('<th>Item number</th>');
+            $('#quiztabhead').append('<th>Item number</th>');
             this.question_stat.show_feat.names.push('item_number');
             ++colcount;
         }
@@ -154,7 +154,7 @@ class PanelQuestion {
         for (var sfi in showFeatures) {
             if (isNaN(+sfi)) continue; // Not numeric
 
-            $("#quiztabhead").append('<th>' + getFeatureFriendlyName(oType, showFeatures[sfi]) + '</th>');
+            $('#quiztabhead').append('<th>' + getFeatureFriendlyName(oType, showFeatures[sfi]) + '</th>');
             this.question_stat.show_feat.names.push(showFeatures[sfi]);
             ++colcount;
         }
@@ -162,7 +162,7 @@ class PanelQuestion {
         for (var sfi in requestFeatures) {
             if (isNaN(+sfi)) continue; // Not numeric
 
-            $("#quiztabhead").append('<th>' + getFeatureFriendlyName(oType, requestFeatures[sfi].name) + '</th>');
+            $('#quiztabhead').append('<th>' + getFeatureFriendlyName(oType, requestFeatures[sfi].name) + '</th>');
             this.question_stat.req_feat.names.push(requestFeatures[sfi].name);
             ++colcount;
         }
@@ -211,7 +211,7 @@ class PanelQuestion {
                     // This is an enumeration feature type
                     // Replace val with the appropriate friendly name or "Other value"
                     if (featset.otherValues && featset.otherValues.indexOf(val)!==-1)
-                        val = 'Other value';
+                        val = localize('other_value');
                     else
                         val = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, val, false));
                 }
@@ -347,13 +347,13 @@ class PanelQuestion {
                                 if (featset.otherValues && featset.otherValues.indexOf(s)!==-1) {
                                     if (!hasAddedOther) {
                                         hasAddedOther = true;
-                                        var item = new StringWithSort('#1000 Other value','othervalue');
+                                        var item = new StringWithSort('#1000 ' + localize('other_value'),'othervalue');
                                         var option : JQuery = $('<option value="{0}">{1}</option>'
                                                                 .format(item.getInternal(),item.getString()));
                                         option.data('sws',item);
                                         optArray.push(option);
                                         if (correctIsOther)
-					    this.vAnswers.push(new Answer(cwyn,item,'Other value',null));
+					    this.vAnswers.push(new Answer(cwyn,item,localize('other_value'),null));
                                     }
                                 }
                                 else {
@@ -373,14 +373,16 @@ class PanelQuestion {
                         }
                     }
                 }
-                else
+                else {
+                    alert('Unexpected correctAnswer==null');
                     v = $('<td>WHAT?</td>'); // TODO: When can this happen?
+                }
  
                 currentRow.append(v);
             }
-            $("#quiztab").append(currentRow);
+            $('#quiztab').append(currentRow);
             if (hasForeignInput) // Add row for storing keyboard
-                $("#quiztab").append('<tr><td colspan="{0}" id="row{1}" style="text-align:right;"></td></tr>'.format(colcount, +qoid+1));
+                $('#quiztab').append('<tr><td colspan="{0}" id="row{1}" style="text-align:right;"></td></tr>'.format(colcount, +qoid+1));
         }
 
         $('#quiztab').width($('#textcontainer').width()); // Initial table width

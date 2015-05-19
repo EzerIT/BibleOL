@@ -1,11 +1,13 @@
 <?php
-  $styles = array('text' => '<strong>Text display:</strong>',
-                  'feature' => '<strong>Features:</strong><br><span class="styleexplanation">(This is the grammar information under each word)</span>',
-                  'input' => '<strong>Input:</strong><br><span class="styleexplanation">(This is data you type)</span>',
-                  'tooltip' => '<strong>Popup:</strong><br><span class="styleexplanation">(This is the grammar information to the right of the display)</span>',
+  $styles = array('text'    => '<strong>'.$this->lang->line('style_text_display').'</strong>',
+                  'feature' => '<strong>'.$this->lang->line('style_features')    .'</strong><br><span class="styleexplanation">'.$this->lang->line('style_features_explain').'</span>',
+                  'input'   => '<strong>'.$this->lang->line('style_input')       .'</strong><br><span class="styleexplanation">'.$this->lang->line('style_input_explain').'</span>',
+                  'tooltip' => '<strong>'.$this->lang->line('style_tooltip')     .'</strong><br><span class="styleexplanation">'.$this->lang->line('style_tooltip_explain').'</span>',
                   );
 ?>
 <script>
+    var l10n_js = <?= $l10n_js_json ?>;
+
     function boldChange(e) {
         $('#' + e.data.alphabet + e.data.where + 'sample')
             .css('font-weight', $('#' + e.data.alphabet + e.data.where + 'bold').prop('checked') ? 'bold' : 'normal');     
@@ -27,22 +29,28 @@
   <div id="font_tabs">
     <ul>
       <?php foreach ($alphabets as $alph): ?>
-        <li><a href="#tab_<?= $alph ?>"><?= ucfirst($font_setting[$alph]->english) ?></a></li>
+        <li><a href="#tab_<?= $alph ?>"><?= ucfirst($this->lang->line('alphabet_'.$font_setting[$alph]->name)) ?></a></li>
       <?php endforeach; ?>
     </ul>
    
     <?php foreach ($alphabets as $alph): ?>
       <div id="tab_<?= $alph ?>" class="fontsetting">
-        <h1>Select Font Family</h1>
+        <h1><?= $this->lang->line('select_font_family') ?></h1>
         <table id="<?= $alph ?>font" class="fontfamily striped">
-          <tr><th class="leftalign">Name</th><th>Sample</th><th>Selected</th></tr>
+          <tr><th class="leftalign"><?= $this->lang->line('name') ?></th><th><?= $this->lang->line('sample') ?></th><th><?= $this->lang->line('selected') ?></th></tr>
         </table>
 
         <hr>
 
-        <h1>Select Font Attributes</h1>
+        <h1><?= $this->lang->line('select_attributes') ?></h1>
         <table class="striped fontattrib">
-          <tr><th class="settingsfor">Set settings for...</th><th>Bold</td><th>Italic</th><th>Size</th><th>Text sample</th></tr>
+          <tr>
+            <th class="settingsfor"><?= $this->lang->line('select_settings_for') ?></th>
+            <th><?= $this->lang->line('bold') ?></th>
+            <th><?= $this->lang->line('italic') ?></th>
+            <th><?= $this->lang->line('size') ?></th>
+            <th><?= $this->lang->line('text_sample') ?></th>
+          </tr>
           <?php foreach ($styles as $stylename => $styledesc): ?>
             <?php $stylename_bold = $stylename . '_bold';
                   $stylename_italic = $stylename . '_italic';
@@ -108,8 +116,8 @@
     <?php endforeach; ?>
   </div>
   <div class="buttons">
-    <button type="submit" value="Submit">OK</button>
-    <input type="button" onclick="window.location='<?=site_url() ?>';" value="Cancel">
+    <button type="submit" value="Submit"><?= $this->lang->line('OK_button') ?></button>
+    <input type="button" onclick="window.location='<?=site_url() ?>';" value="<?= $this->lang->line('cancel_button') ?>">
   </div>
 </form>
 <script>

@@ -32,7 +32,7 @@ class GrammarGroup implements SentenceGrammarItem {
     public getFeatName(objType : string,
                        callback : (whattype:number, objType:string, featName:string, featNameLoc:string, sgiObj : SentenceGrammarItem) => void) : void
     {
-        callback(WHAT.groupstart, objType, this.name, localization.grammargroup[objType][this.name], this);
+        callback(WHAT.groupstart, objType, this.name, l10n.grammargroup[objType][this.name], this);
         for (var i in this.items) {
             if (isNaN(+i)) continue; // Not numeric
             this.items[+i].getFeatName(objType, callback);
@@ -70,7 +70,7 @@ class GrammarSubFeature implements SentenceGrammarItem {
     public name : string;
 
     public getFeatValPart(monob : MonadObject, objType : string) : string {
-        return localization.grammarsubfeature[objType][this.name][monob.mo.features[this.name]];
+        return l10n.grammarsubfeature[objType][this.name][monob.mo.features[this.name]];
     }
 
     /** Does this object identify the specified feature?
@@ -126,7 +126,7 @@ class GrammarMetaFeature implements SentenceGrammarItem {
     public getFeatName(objType : string,
                        callback : (whattype:number, objType:string, featName:string, featNameLoc:string, sgiObj : SentenceGrammarItem) => void) : void
     {
-        callback(WHAT.metafeature, objType, this.name, localization.grammarmetafeature[objType][this.name], this);
+        callback(WHAT.metafeature, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
     }
 
     public getFeatVal(monob : MonadObject, objType : string, abbrev : boolean,
@@ -165,9 +165,9 @@ class GrammarFeature implements SentenceGrammarItem {
                        callback : (whattype:number, objType:string, featName:string, featNameLoc:string, sgiObj : SentenceGrammarItem) => void) : void
     {
         var locname : string = 
-            localization.grammarfeature && localization.grammarfeature[objType] && localization.grammarfeature[objType][this.name] 
-            ? localization.grammarfeature[objType][this.name]
-            : localization.emdrosobject[objType][this.name];
+            l10n.grammarfeature && l10n.grammarfeature[objType] && l10n.grammarfeature[objType][this.name] 
+            ? l10n.grammarfeature[objType][this.name]
+            : l10n.emdrosobject[objType][this.name];
 
         callback(WHAT.feature, objType, this.name, locname, this);
     }

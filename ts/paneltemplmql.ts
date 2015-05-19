@@ -257,7 +257,7 @@ class ListValuesHandler {
     public no_values : string[];
 
     constructor() {
-        this.type = "listvalues";
+        this.type = 'listvalues';
         this.yes_values = [];
         this.no_values = [];
     }
@@ -346,7 +346,7 @@ class PanelTemplMql {
             (<IntegerFeatureHandler>e.data.ifh).removeValue(e.data.i);
         else {
             if (s.match(/\D/g)!==null) // Note: Rejects minus sign
-                $('#' + e.data.err_id).html('Not an integer');
+                $('#' + e.data.err_id).html(localize('not_integer'));
             else
                 (<IntegerFeatureHandler>e.data.ifh).setValue(e.data.i, +s);
         }
@@ -361,7 +361,7 @@ class PanelTemplMql {
             (<RangeIntegerFeatureHandler>e.data.rfh)[e.data.i] = null;
         else {
             if (s.match(/\D/g)!==null) // Note: Rejects minus sign
-                $('#' + e.data.err_id).html('Not an integer');
+                $('#' + e.data.err_id).html(localize('not_integer'));
             else
                 (<RangeIntegerFeatureHandler>e.data.rfh)[e.data.i] = +s;
         }
@@ -458,7 +458,7 @@ class PanelTemplMql {
         });
 
 
-        this.clear = $('<button id="clear_button" type="button">Clear</button>');
+        this.clear = $('<button id="clear_button" type="button">' + localize('clear_button') + '</button>');
         //this.clear.button(); Don't use this. The JQuery UI theme works for buttons but not dropdowns
 
         this.clear.click(() => {
@@ -597,7 +597,7 @@ class PanelTemplMql {
 
                     var err_id : string = 'err_{0}_low'.format(key,i);
                     jtf.on('keyup', null, {rfh: rfh, i: 'value_low', err_id: err_id}, $.proxy(this.rangeIntegerTextModifiedListener,this));
-                    cellLab = $('<td>Low value</td>');
+                    cellLab = $('<td>' + localize('low_value_prompt') + '</td>');
                     cellInput = $('<td></td>');
                     cellInput.append(jtf);
                     cellErr = $('<td id="{0}"></td>'.format(err_id));
@@ -611,7 +611,7 @@ class PanelTemplMql {
                     err_id = 'err_{0}_high'.format(key,i);
                     jtf.on('keyup', null, {rfh: rfh, i: 'value_high', err_id: err_id}, $.proxy(this.rangeIntegerTextModifiedListener,this));
                     
-                    cellLab = $('<td>High value</td>');
+                    cellLab = $('<td>' + localize('high_value_prompt') + '</td>');
                     cellInput = $('<td></td>');
                     cellInput.append(jtf);
                     cellErr = $('<td id="{0}"></td>'.format(err_id));
@@ -674,7 +674,7 @@ class PanelTemplMql {
                     this.handlers.push(ifh);
                 }
  	    }
- 	    else if (valueType==="ascii" || valueType==="string") {
+ 	    else if (valueType==='ascii' || valueType==='string') {
                 var sfh : StringFeatureHandler = null;
                 if (fhs)
                     sfh = <StringFeatureHandler>fhs[key];
@@ -695,7 +695,7 @@ class PanelTemplMql {
                 }
 
                 var sel : JQuery = $('<span></span>');
-                sel.append(butEquals, "=", butDiffers, "&#x2260;", butMatches, "~");
+                sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
                 group.append(sel);
 
                 sel.click(sfh, (e : JQueryEventObject) => {
@@ -757,7 +757,7 @@ class PanelTemplMql {
                 group.append(group2);
                 this.handlers.push(sfh);
  	    }
-            else if (valueType.substr(0,8)==="list of ") {
+            else if (valueType.substr(0,8)==='list of ') {
                 var stripped_valueType : string = valueType.substr(8);
  	        var enumValues = typeinfo.enum2values[stripped_valueType];
 
@@ -776,7 +776,10 @@ class PanelTemplMql {
                 var group_ul : JQuery = $('<ul></ul>');
                 group_tabs.append(group_ul);
                 
-                var tab_labels : string[] = ['1st choice', '2nd choice', '3rd choice', '4th choice'];
+                var tab_labels : string[] = [localize('1st_choice'),
+                                             localize('2nd_choice'),
+                                             localize('3rd_choice'),
+                                             localize('4th_choice')];
                 for (var tabno=0; tabno<4; ++tabno) {
                     var lv : ListValuesHandler = elfh.listvalues[tabno];
 

@@ -6,43 +6,37 @@
     <?= form_open("users/profile") ?>
       <table class="form">
         <tr>
-          <td>User name:</td>
-          <td>
-            <?= $user_info->username ?> (Cannot be changed)
-          </td>
+          <td><?= $this->lang->line('user_name') ?></td>
+          <td class="norb"><?= $user_info->username ?></td>
+          <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
         </tr>
         <tr>
-          <td>First name:</td>
-          <td><input type="text" name="first_name" value="<?= set_value('first_name',$user_info->first_name) ?>"> (Required)</td>
+          <td><?= $this->lang->line('first_name') ?></td>
+          <td class="norb"><input type="text" name="first_name" value="<?= set_value('first_name',$user_info->first_name) ?>"></td>
+          <td class="nolb"><?= $this->lang->line('field_required') ?></td>
         </tr>
         <tr>
-          <td>Last name:</td>
-          <td><input type="text" name="last_name" value="<?= set_value('last_name',$user_info->last_name) ?>"> (Required)</td>
+          <td><?= $this->lang->line('last_name') ?></td>
+          <td class="norb"><input type="text" name="last_name" value="<?= set_value('last_name',$user_info->last_name) ?>"></td>
+          <td class="nolb"><?= $this->lang->line('field_required') ?></td>
         </tr>
         <tr>
-          <td>E-mail:</td>
-          <td><input type="text" name="email" value="<?= set_value('email',$user_info->email) ?>"></td>
+          <td><?= $this->lang->line('email') ?></td>
+          <td class="norb"><input type="text" name="email" value="<?= set_value('email',$user_info->email) ?>"></td>
+          <td class="nolb"></td>
         </tr>
         <tr>
-          <td>May see full WIVU database:</td>
-          <td>
-            <?= $user_info->may_see_wivu ? 'Yes' : 'No' ?> (Cannot be changed)
-          </td>
+          <td><?= $this->lang->line('new_password') ?></td>
+          <td class="norb"><input type="password" name="password1" value=""></td>
+          <td class="nolb"><?= $this->lang->line('leave_blank_pw') ?></td>
         </tr>
         <tr>
-          <td>New password:</td>
-          <td>
-            <input type="password" name="password1" value=""> (Leave blank if not changing password)
-          </td>
-        </tr>
-        <tr>
-          <td>Repeat new password:</td>
-          <td>
-            <input type="password" name="password2" value=""> (Leave blank if not changing password)
-          </td>
+          <td><?= $this->lang->line('repeat_new_password') ?></td>
+          <td class="norb"><input type="password" name="password2" value=""></td>
+          <td class="nolb"><?= $this->lang->line('leave_blank_pw') ?></td>
         </tr>
       </table>
-      <p><input class="makebutton" type="submit" name="submit" value="OK">
-            <a class="makebutton" href="<?= site_url('/') ?>">Cancel</a></p>
+      <p><input class="makebutton" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
+            <a class="makebutton" href="<?= site_url('/') ?>"><?= $this->lang->line('cancel_button') ?></a></p>
     </form>
 

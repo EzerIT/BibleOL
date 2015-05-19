@@ -66,37 +66,33 @@ class Mod_users extends CI_Model {
 
     public function check_admin() {
         if (!$this->mod_users->is_admin())
-            throw new DataException('You must be logged in as administrator to access this function');
+            throw new DataException($this->lang->line('must_be_admin'));
     }
 
     public function check_logged_in() {
         if (!$this->mod_users->is_logged_in())
-            throw new DataException('You must be logged in to access this function');
+            throw new DataException($this->lang->line('must_be_logged_in'));
     }
 
 
     public function check_logged_in_google(boolean $must_be_google) {
         if (!$this->mod_users->is_logged_in())
-            throw new DataException('You must be logged in to access this function');
+            throw new DataException($this->lang->line('must_be_logged_in'));
 
         $user_info = $this->mod_users->get_me();
         assert('!is_null($user_info)');
 
         if ($must_be_google) {
             if (!$user_info->google_login)
-                throw new DataException('You must be logged in with Google to access this function');
+                throw new DataException($this->lang->line('must_be_google'));
         }
         else {
             if ($user_info->google_login)
-                throw new DataException('You must not be logged in with Google to access this function');
+                throw new DataException($this->lang->line('must_not_be_google'));
         }
     }
 
 
-
-    public function may_see_wivu() {
-        return $this->is_logged_in() && ($this->is_admin() || $this->me->may_see_wivu);
-    }
 
     public function set_login_session(integer $user, $admin) {
         $this->session->set_userdata('ol_user', $user);
@@ -121,7 +117,6 @@ class Mod_users extends CI_Model {
             $user->username = '';
             $user->password = '';
             $user->isadmin = 0;
-            $user->may_see_wivu = 0;
             $user->email = '';
             $user->google_login = false;
         }
@@ -129,7 +124,7 @@ class Mod_users extends CI_Model {
             $query = $this->db->where('id',$userid)->get('user');
             $user = $query->row();
             if (!$user)
-                throw new DataException('Illegal user ID');
+                throw new DataException($this->lang->line('illegal_user_id'));
         }
         return $user;
     }
@@ -189,7 +184,7 @@ class Mod_users extends CI_Model {
     public function delete_user(integer $userid) {
         $this->db->where('id', $userid)->delete('user');
         if ($this->db->affected_rows()==0)
-            throw new DataException('Illegal user ID');
+            throw new DataException($this->lang->line('illegal_user_id'));
 
         $this->db->where('user_id', $userid)->delete('font');
         $this->db->where('user_id', $userid)->delete('personal_font');
@@ -233,7 +228,6 @@ class Mod_users extends CI_Model {
             $user->username = "ggl_$google_id";
             $user->password = 'NONE';
             $user->isadmin = 0;
-            $user->may_see_wivu = 0;
             $user->email = $email;
             $user->google_login = true;
    

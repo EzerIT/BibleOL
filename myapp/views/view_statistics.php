@@ -11,10 +11,17 @@
 <?php foreach ($data as $d): ?>
   <?php if ($first) $first = false; else echo "<hr>\n"; ?>
 
-  <h1>Exercise file: <?= substr(strrchr($d->pathname,'/'),1) ?></h1>  
+  <h1><?= $this->lang->line('exercise_file_colon') ?> <?= substr(strrchr($d->pathname,'/'),1) ?></h1>  
 
   <table class="striped">
-    <tr><th>No.</th><th>Time</th><th>Duration</th><th>Seconds per correct</th><th>Correct</th><th>Wrong</th></tr>
+    <tr>
+      <th><?= $this->lang->line('number_abbrev') ?></th>
+      <th><?= $this->lang->line('time') ?></th>
+      <th><?= $this->lang->line('duration') ?></th>
+      <th><?= $this->lang->line('sec_per_correct') ?></th>
+      <th><?= $this->lang->line('correct') ?></th>
+      <th><?= $this->lang->line('wrong') ?></th>
+    </tr>
 
     <?php foreach ($d->quizzes as $quiz): ?>
       <tr>
@@ -31,12 +38,17 @@
   <p></p>
 
   <table class="striped">
-    <tr><th>No.</th><th>Feature</th><th>Correct answer</th><th>Mistakes</th></tr>
+    <tr>
+      <th><?= $this->lang->line('number_abbrev') ?></th>
+      <th><?= $this->lang->line('feature') ?></th>
+      <th><?= $this->lang->line('correct_answer') ?></th>
+      <th><?= $this->lang->line('mistakes') ?></th>
+    </tr>
 
     <?php foreach ($d->req_features as $rf): ?>
       <tr>
         <td><?= $rf->id ?></td>
-        <td><?= $d->localization->emdrosobject->{$d->qoname}->{$rf->name} ?></td>
+        <td><?= $d->l10n->emdrosobject->{$d->qoname}->{$rf->name} ?></td>
 
         <?php
            if (isset($d->obj2feat->{$d->qoname}->{$rf->name}))
@@ -44,8 +56,8 @@
            else
                $featureType = 'string'; // This feature name is presumably 'visual'
 
-           if (isset($d->localization->emdrostype->$featureType->{$rf->value}))
-               $featureValue = $d->localization->emdrostype->$featureType->{$rf->value};
+           if (isset($d->l10n->emdrostype->$featureType->{$rf->value}))
+               $featureValue = $d->l10n->emdrostype->$featureType->{$rf->value};
            else
                $featureValue = $rf->value;
         ?>

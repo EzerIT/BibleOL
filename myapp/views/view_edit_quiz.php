@@ -1,10 +1,10 @@
 <div id="quiz_tabs">
   <ul>
-    <li><a href="#tab_description">Description</a></li>
-    <li><a href="#tab_universe">Passages</a></li>
-    <li><a href="#tab_sentences">Sentences</a></li>
-    <li><a href="#tab_sentence_units">Sentence Units</a></li>
-    <li><a href="#tab_features">Features</a></li>
+    <li><a href="#tab_description"><?= $this->lang->line('description') ?></a></li>
+    <li><a href="#tab_universe"><?= $this->lang->line('passages') ?></a></li>
+    <li><a href="#tab_sentences"><?= $this->lang->line('sentences') ?></a></li>
+    <li><a href="#tab_sentence_units"><?= $this->lang->line('sentence_units') ?></a></li>
+    <li><a href="#tab_features"><?= $this->lang->line('features') ?></a></li>
   </ul>
    
   <div id="tab_description">
@@ -28,13 +28,14 @@
 </div>
 
 <div class="buttons">
-  <a class="makebutton" href="#" onclick="save_quiz(); return false;">Save</a>
-  <a class="makebutton" href="<?=site_url('file_manager?dir=' . $dir) ?>">Cancel</a>
+  <a class="makebutton" href="#" onclick="save_quiz(); return false;"><?= $this->lang->line('save_button') ?></a>
+  <a class="makebutton" href="<?=site_url('file_manager?dir=' . $dir) ?>"><?= $this->lang->line('cancel_button') ?></a>
 </div>
 
 <script>
   var configuration = <?= $dbinfo_json ?>;
-  var localization = <?= $localization_json ?>;
+  var l10n = <?= $l10n_json ?>;
+  var l10n_js = <?= $l10n_js_json ?>;
   var typeinfo = <?= $typeinfo_json ?>;
   var decoded_3et = <?= $decoded_3et_json ?>;
   var initial_universe = <?= $universe ?>;
@@ -50,13 +51,13 @@
 
 <!-- Quiz Filename dialog -->
 
-<div id="filename-dialog" style="display:none" title="Specify File Name">
+<div id="filename-dialog" style="display:none" title="<?= $this->lang->line('specify_file_name') ?>">
   <p class="error" id="filename-error"></p>
   <table>
     <tr>
-      <td>Enter filename (without final '.3et')</td>
+      <td><?= $this->lang->line('enter_filename_no_3et') ?></td>
       <td>
-        <input type="text" name="filename" id="filename-name" value="<?= $quiz ?>" size="60" class="text ui-widget-content ui-corner-all">
+        <input type="text" name="filename" id="filename-name" value="<?= $quiz ?>" size="50" class="text ui-widget-content ui-corner-all">
       </td>
     </tr>
   </table>
@@ -64,26 +65,26 @@
 
 <!-- Confirm File Overwrite dialog -->
 
-<div id="overwrite-dialog-confirm" style="display:none" title="Overwrite?">
+<div id="overwrite-dialog-confirm" style="display:none" title="<?= $this->lang->line('overwrite') ?>">
   <p>
     <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-    The file already exists. Do you want to replace it?
+    <?= $this->lang->line('file_exists_overwrite') ?>
   </p>
 </div>
 
 <!-- Import from SHEBANQ dialog -->
 
-<div id="import-shebanq-dialog" style="display:none" title="Import from SHEBANQ">
+<div id="import-shebanq-dialog" style="display:none" title="<?= $this->lang->line('import_from_shebanq') ?>">
   <p class="error" id="import-shebanq-error"></p>
   <table>
     <tr>
-      <td>SHEBANQ query ID: </td>
+      <td><?= $this->lang->line('shebanq_query_id_prompt') ?></td>
       <td>
         <input type="text" name="query-id" id="import-shebanq-qid" value="" size="10" class="text ui-widget-content ui-corner-all">
       </td>
     </tr>
     <tr>
-      <td>SHEBANQ database version: </td>
+      <td><?= $this->lang->line('shebanq_version_prompt') ?></td>
       <td>
         <input type="text" name="db-version" id="import-shebanq-dbvers" value="4b" size="10" class="text ui-widget-content ui-corner-all">
       </td>
@@ -93,7 +94,7 @@
 
 <!-- Confirm Sentence Unit MQL dialog -->
 
-<div id="qo-dialog-confirm" style="display:none" title="MQL for sentence unit">
+<div id="qo-dialog-confirm" style="display:none" title="<?= $this->lang->line('mql_sentence_unit') ?>">
   <p id="qo-dialog-text"></p>
 </div>
 

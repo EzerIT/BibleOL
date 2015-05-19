@@ -70,7 +70,7 @@ var GrammarGroup = (function () {
     function GrammarGroup() {
     }
     GrammarGroup.prototype.getFeatName = function (objType, callback) {
-        callback(2 /* groupstart */, objType, this.name, localization.grammargroup[objType][this.name], this);
+        callback(2 /* groupstart */, objType, this.name, l10n.grammargroup[objType][this.name], this);
         for (var i in this.items) {
             if (isNaN(+i))
                 continue;
@@ -109,7 +109,7 @@ var GrammarSubFeature = (function () {
     function GrammarSubFeature() {
     }
     GrammarSubFeature.prototype.getFeatValPart = function (monob, objType) {
-        return localization.grammarsubfeature[objType][this.name][monob.mo.features[this.name]];
+        return l10n.grammarsubfeature[objType][this.name][monob.mo.features[this.name]];
     };
 
     /** Does this object identify the specified feature?
@@ -163,7 +163,7 @@ var GrammarMetaFeature = (function () {
     function GrammarMetaFeature() {
     }
     GrammarMetaFeature.prototype.getFeatName = function (objType, callback) {
-        callback(1 /* metafeature */, objType, this.name, localization.grammarmetafeature[objType][this.name], this);
+        callback(1 /* metafeature */, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
     };
 
     GrammarMetaFeature.prototype.getFeatVal = function (monob, objType, abbrev, callback) {
@@ -198,7 +198,7 @@ var GrammarFeature = (function () {
         this.coloring = {};
     }
     GrammarFeature.prototype.getFeatName = function (objType, callback) {
-        var locname = localization.grammarfeature && localization.grammarfeature[objType] && localization.grammarfeature[objType][this.name] ? localization.grammarfeature[objType][this.name] : localization.emdrosobject[objType][this.name];
+        var locname = l10n.grammarfeature && l10n.grammarfeature[objType] && l10n.grammarfeature[objType][this.name] ? l10n.grammarfeature[objType][this.name] : l10n.emdrosobject[objType][this.name];
 
         callback(0 /* feature */, objType, this.name, locname, this);
     };
@@ -278,48 +278,56 @@ function addMethodsSgi(sgi) {
 function getObjectFriendlyName(otype) {
     if (otype === 'Patriarch')
         return otype;
-    var fn = localization.emdrosobject[otype]._objname;
+    var fn = l10n.emdrosobject[otype]._objname;
     return fn ? fn : otype;
 }
 
 function getObjectShortFriendlyName(otype) {
-    if (localization.emdrosobject[otype + "_abbrev"] === undefined)
+    if (l10n.emdrosobject[otype + '_abbrev'] === undefined)
         return getObjectFriendlyName(otype);
     else
-        return localization.emdrosobject[otype + "_abbrev"]._objname;
+        return l10n.emdrosobject[otype + '_abbrev']._objname;
 }
 
 function getFeatureFriendlyName(otype, feature) {
     if (feature === 'visual')
-        return 'Text';
+        return localize('visual');
 
-    var fn = localization.emdrosobject[otype][feature];
+    var fn = l10n.emdrosobject[otype][feature];
     return fn ? fn : feature;
 }
 
 function getFeatureValueFriendlyName(featureType, value, abbrev) {
-    if (abbrev && localization.emdrostype[featureType + "_abbrev"] !== undefined)
+    if (abbrev && l10n.emdrostype[featureType + '_abbrev'] !== undefined)
         // TODO: We assume there is no "list of " types here
-        return localization.emdrostype[featureType + "_abbrev"][value];
+        return l10n.emdrostype[featureType + '_abbrev'][value];
 
     // TODO: For now we handle "list of ..." here. Is this OK with all the other locations where this is used?
-    if (featureType.substr(0, 8) === "list of ") {
+    if (featureType.substr(0, 8) === 'list of ') {
         featureType = featureType.substr(8); // Remove "list of "
         value = value.substr(1, value.length - 2); // Remove parenteses
         if (value.length == 0)
-            return localization.emdrostype[featureType]["NA"];
+            return l10n.emdrostype[featureType]['NA'];
 
         var verb_classes = value.split(',');
         var localized_verb_classes = [];
 
         for (var ix in verb_classes)
-            localized_verb_classes.push(localization.emdrostype[featureType][verb_classes[+ix]]);
+            localized_verb_classes.push(l10n.emdrostype[featureType][verb_classes[+ix]]);
 
         localized_verb_classes.sort();
         return localized_verb_classes.join(', ');
     }
 
-    return localization.emdrostype[featureType][value];
+    return l10n.emdrostype[featureType][value];
+}
+// -*- js -*-
+/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+
+function localize(s) {
+    var str = l10n_js[s];
+
+    return str === undefined ? '??' + s + '??' : str;
 }
 
 var FeatureHandler = (function () {
@@ -560,7 +568,7 @@ var EnumListFeatureHandler = (function (_super) {
 
 var ListValuesHandler = (function () {
     function ListValuesHandler() {
-        this.type = "listvalues";
+        this.type = 'listvalues';
         this.yes_values = [];
         this.no_values = [];
     }
@@ -701,7 +709,7 @@ var PanelTemplMql = (function () {
             _this.updateMql();
         });
 
-        this.clear = $('<button id="clear_button" type="button">Clear</button>');
+        this.clear = $('<button id="clear_button" type="button">' + localize('clear_button') + '</button>');
 
         //this.clear.button(); Don't use this. The JQuery UI theme works for buttons but not dropdowns
         this.clear.click(function () {
@@ -734,7 +742,7 @@ var PanelTemplMql = (function () {
             e.data.ifh.removeValue(e.data.i);
         else {
             if (s.match(/\D/g) !== null)
-                $('#' + e.data.err_id).html('Not an integer');
+                $('#' + e.data.err_id).html(localize('not_integer'));
             else
                 e.data.ifh.setValue(e.data.i, +s);
         }
@@ -748,7 +756,7 @@ var PanelTemplMql = (function () {
             e.data.rfh[e.data.i] = null;
         else {
             if (s.match(/\D/g) !== null)
-                $('#' + e.data.err_id).html('Not an integer');
+                $('#' + e.data.err_id).html(localize('not_integer'));
             else
                 e.data.rfh[e.data.i] = +s;
         }
@@ -865,7 +873,7 @@ var PanelTemplMql = (function () {
 
                     var err_id = 'err_{0}_low'.format(key, i);
                     jtf.on('keyup', null, { rfh: rfh, i: 'value_low', err_id: err_id }, $.proxy(this.rangeIntegerTextModifiedListener, this));
-                    cellLab = $('<td>Low value</td>');
+                    cellLab = $('<td>' + localize('low_value_prompt') + '</td>');
                     cellInput = $('<td></td>');
                     cellInput.append(jtf);
                     cellErr = $('<td id="{0}"></td>'.format(err_id));
@@ -878,7 +886,7 @@ var PanelTemplMql = (function () {
                     err_id = 'err_{0}_high'.format(key, i);
                     jtf.on('keyup', null, { rfh: rfh, i: 'value_high', err_id: err_id }, $.proxy(this.rangeIntegerTextModifiedListener, this));
 
-                    cellLab = $('<td>High value</td>');
+                    cellLab = $('<td>' + localize('high_value_prompt') + '</td>');
                     cellInput = $('<td></td>');
                     cellInput.append(jtf);
                     cellErr = $('<td id="{0}"></td>'.format(err_id));
@@ -941,7 +949,7 @@ var PanelTemplMql = (function () {
                     group.append(group2);
                     this.handlers.push(ifh);
                 }
-            } else if (valueType === "ascii" || valueType === "string") {
+            } else if (valueType === 'ascii' || valueType === 'string') {
                 var sfh = null;
                 if (fhs)
                     sfh = fhs[key];
@@ -965,7 +973,7 @@ var PanelTemplMql = (function () {
                 }
 
                 var sel = $('<span></span>');
-                sel.append(butEquals, "=", butDiffers, "&#x2260;", butMatches, "~");
+                sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
                 group.append(sel);
 
                 sel.click(sfh, function (e) {
@@ -1024,7 +1032,7 @@ var PanelTemplMql = (function () {
                 }
                 group.append(group2);
                 this.handlers.push(sfh);
-            } else if (valueType.substr(0, 8) === "list of ") {
+            } else if (valueType.substr(0, 8) === 'list of ') {
                 var stripped_valueType = valueType.substr(8);
                 var enumValues = typeinfo.enum2values[stripped_valueType];
 
@@ -1043,7 +1051,11 @@ var PanelTemplMql = (function () {
                 var group_ul = $('<ul></ul>');
                 group_tabs.append(group_ul);
 
-                var tab_labels = ['1st choice', '2nd choice', '3rd choice', '4th choice'];
+                var tab_labels = [
+                    localize('1st_choice'),
+                    localize('2nd_choice'),
+                    localize('3rd_choice'),
+                    localize('4th_choice')];
                 for (var tabno = 0; tabno < 4; ++tabno) {
                     var lv = elfh.listvalues[tabno];
 
@@ -1255,16 +1267,16 @@ var PanelTemplSentenceSelector = (function (_super) {
     function PanelTemplSentenceSelector(md, ttabs, where, qoselTab, featureTab) {
         var _this = this;
         _super.call(this, md, 'sensel');
-        this.questObjTypeLab = $('<span>Sentence unit type:</span>');
-        this.featSelLab = $('<span>Feature:</span>');
-        this.importShebanq = $('<button type="button">Import from SHEBANQ</button>');
+        this.questObjTypeLab = $('<span>' + localize('sentence_unit_type_prompt') + '</span>');
+        this.featSelLab = $('<span>' + localize('feature_prompt') + '</span>');
+        this.importShebanq = $('<button type="button">' + localize('import_shebanq') + '</button>');
         this.templTabs = ttabs;
         this.dirty = false;
         this.featureTab = featureTab;
         this.qoselTab = qoselTab;
 
         this.cbUseForQo = $('<input type="checkbox" name="useforqol">');
-        this.cbUseForQoLabel = $('<span>Use this for sentence unit selection</span>');
+        this.cbUseForQoLabel = $('<span>' + localize('use_for_qosel') + '</span>');
 
         this.cbUseForQo.click(function () {
             if (_this.cbUseForQo.is(':checked'))
@@ -1276,8 +1288,8 @@ var PanelTemplSentenceSelector = (function (_super) {
             _this.dirty = true;
         });
 
-        this.rbMqlLabel = $('<span>MQL statement to select sentences:</span>');
-        this.rbFriendlyLabel = $('<span>Friendly feature selector:</span>');
+        this.rbMqlLabel = $('<span>' + localize('mql_qosel_prompt') + '</span>');
+        this.rbFriendlyLabel = $('<span>' + localize('friendly_featsel_prompt') + '</span>');
 
         this.doLayout(where);
 
@@ -1323,7 +1335,7 @@ var PanelTemplSentenceSelector = (function (_super) {
     };
 
     PanelTemplSentenceSelector.prototype.makeMql = function () {
-        return "[" + this.getOtype() + " NORETRIEVE " + _super.prototype.makeMql.call(this) + "]";
+        return '[' + this.getOtype() + ' NORETRIEVE ' + _super.prototype.makeMql.call(this) + ']';
     };
 
     PanelTemplSentenceSelector.prototype.getMqlEmulQos = function () {
@@ -1429,11 +1441,11 @@ var PanelTemplQuizObjectSelector = (function (_super) {
     */
     function PanelTemplQuizObjectSelector(md, where, featureTab) {
         _super.call(this, md, 'qosel');
-        this.featSelLab = $('<span>Feature:</span>');
+        this.featSelLab = $('<span>' + localize('feature_prompt') + '</span>');
         this.featureTab = featureTab;
 
-        this.rbMqlLabel = $('<span>MQL feature selector:</span>');
-        this.rbFriendlyLabel = $('<span>Friendly feature selector:</span>');
+        this.rbMqlLabel = $('<span>' + localize('mql_featsel_prompt') + '</span>');
+        this.rbFriendlyLabel = $('<span>' + localize('friendly_featsel_prompt') + '</span>');
 
         this.doLayout(where);
 
@@ -1462,7 +1474,7 @@ var PanelTemplQuizObjectSelector = (function (_super) {
         var cell;
 
         row = $('<tr></tr>');
-        cell = $('<td>Sentence unit type:</td>');
+        cell = $('<td>' + localize('sentence_unit_type_prompt') + '</td>');
         row.append(cell);
 
         cell = $('<td></td>');
@@ -1562,7 +1574,7 @@ var ButtonsAndLabel = (function () {
         }
 
         if (useDropDown) {
-            this.ddCheck = $('<input type="checkbox" name="dd_{0}_{1}"">'.format(otype, featName));
+            this.ddCheck = $('<input type="checkbox" name="dd_{0}_{1}">'.format(otype, featName));
             this.ddCheck.prop('checked', select != 1 /* REQUEST */);
         } else
             this.ddCheck = $('<span></span>'); // Empty space filler
@@ -1658,10 +1670,10 @@ var PanelForOneOtype = (function () {
         this.panel = $('<table class="striped featuretable"></table>');
         var useSavedFeatures = otype === ptqf.initialOtype;
 
-        this.panel.append("<tr><th>Show</th><th>Request</th><th>Don't care</th><th>Don't show</th><th>Multiple choice</th><th class=\"leftalign\">Feature</th></tr>");
+        this.panel.append('<tr><th>{0}</th><th>{1}</th><th>{2}</th><th>{3}</th><th>{4}</th><th class="leftalign">{5}</th></tr>'.format(localize('show'), localize('request'), localize('dont_care'), localize('dont_show'), localize('multiple_choice'), localize('feature')));
 
         // First set up "visual" pseudo feature
-        this.visualBAL = new ButtonsAndLabel('Text', 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : 3 /* DONT_CARE */, configuration.objHasSurface === otype && !!getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql, true, configuration.objHasSurface === otype, false);
+        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : 3 /* DONT_CARE */, configuration.objHasSurface === otype && !!getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql, true, configuration.objHasSurface === otype, false);
 
         this.panel.append(this.visualBAL.getRow());
 
@@ -1900,7 +1912,7 @@ var PanelForOneVcChoice = (function () {
     function PanelForOneVcChoice(enumValues, valueType, prefix, lv) {
         this.allBAL = [];
         this.panel = $('<table class="striped featuretable"></table>');
-        this.panel.append("<tr><th>Yes</th><th>No</th><th>Don't care</th><th class=\"leftalign\">Verb class</th></tr>");
+        this.panel.append('<tr><th>{0}</th><th>{1}</th><th>{2}</th><th class="leftalign">{3}</th></tr>'.format(localize('verb_class_yes'), localize('verb_class_no'), localize('verb_class_dont_care'), localize('verb_class')));
 
         for (var ix = 0; ix < enumValues.length; ++ix) {
             var vc = enumValues[ix];
@@ -2217,6 +2229,7 @@ var util;
 /// <reference path="charset.ts" />
 /// <reference path="sentencegrammar.ts" />
 /// <reference path="localization.ts" />
+/// <reference path="localization_general.ts" />
 /// <reference path="paneltemplmql.ts" />
 /// <reference path="paneltemplsentenceselector.ts" />
 /// <reference path="paneltemplquizobjectselector.ts" />
@@ -2248,7 +2261,7 @@ function isDirty() {
     if (ckeditor.ckeditorGet().checkDirty())
         return true;
 
-    checked_passages = $("#passagetree").jstree("get_checked", null, false);
+    checked_passages = $('#passagetree').jstree('get_checked', null, false);
 
     if (checked_passages.length !== initial_universe.length)
         return true;
@@ -2304,7 +2317,7 @@ $(function () {
 
     ckeditor.val(decoded_3et.desc);
 
-    $("#quiz_tabs").tabs({ disabled: [3] });
+    $('#quiz_tabs').tabs({ disabled: [3] });
 
     $('button').button();
     $('input[type="button"]').button();
@@ -2316,79 +2329,91 @@ $(function () {
 });
 
 function save_quiz() {
-    checked_passages = $("#passagetree").jstree("get_checked", null, false);
+    checked_passages = $('#passagetree').jstree('get_checked', null, false);
 
     if (checked_passages.length == 0) {
-        myalert('Passage selection', 'No passages selected');
+        myalert(localize('passage_selection'), localize('no_passages'));
         return;
     }
 
     if (panelFeatures.noRequestFeatures()) {
-        myalert('Feature specification', 'No request features specified');
+        myalert(localize('feature_specification'), localize('no_request_feature'));
         return;
     }
 
     if (panelFeatures.noShowFeatures()) {
-        myalert('Feature specification', 'No show features specified');
+        myalert(localize('feature_specification'), localize('no_show_feature'));
         return;
     }
 
     $('#filename-error').text('');
 
-    $("#filename-dialog").dialog({
+    $('#filename-dialog').dialog({
         autoOpen: false,
         resizable: false,
         modal: true,
         width: 600,
-        buttons: {
-            "Save": function () {
-                var _this = this;
-                if ($('#filename-name').val().trim() == '')
-                    $('#filename-error').text("Missing filename");
-                else {
-                    quiz_name = $('#filename-name').val().trim();
+        buttons: [
+            {
+                text: localize('save'),
+                click: function () {
+                    var _this = this;
+                    if ($('#filename-name').val().trim() == '')
+                        $('#filename-error').text(localize('missing_filename'));
+                    else {
+                        quiz_name = $('#filename-name').val().trim();
 
-                    // Check if file may be written
-                    $.ajax('{0}?dir={1}&quiz={2}'.format(check_url, encodeURIComponent(dir_name), encodeURIComponent(quiz_name))).done(function (data, textStatus, jqXHR) {
-                        switch (data.trim()) {
-                            case 'OK':
-                                $(_this).dialog('close');
-                                save_quiz2();
-                                break;
-                            case 'EXISTS':
-                                $(_this).dialog('close');
-                                check_overwrite();
-                                break;
-                            default:
-                                $('#filename-error').text(data);
-                                break;
-                        }
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-                        $('#filename-error').text('Error response from server: ' + errorThrown);
-                    });
+                        // Check if file may be written
+                        $.ajax('{0}?dir={1}&quiz={2}'.format(check_url, encodeURIComponent(dir_name), encodeURIComponent(quiz_name))).done(function (data, textStatus, jqXHR) {
+                            switch (data.trim()) {
+                                case 'OK':
+                                    $(_this).dialog('close');
+                                    save_quiz2();
+                                    break;
+                                case 'EXISTS':
+                                    $(_this).dialog('close');
+                                    check_overwrite();
+                                    break;
+                                default:
+                                    $('#filename-error').text(data);
+                                    break;
+                            }
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            $('#filename-error').text('{0} {1}'.format(localize('error_response'), errorThrown));
+                        });
+                    }
                 }
             },
-            Cancel: function () {
-                $(this).dialog('close');
+            {
+                text: localize('cancel_button'),
+                click: function () {
+                    $(this).dialog('close');
+                }
             }
-        }
+        ]
     }).dialog('open');
 }
 
 function check_overwrite() {
-    $("#overwrite-dialog-confirm").dialog({
+    $('#overwrite-dialog-confirm').dialog({
         autoOpen: true,
         resizable: false,
         modal: true,
-        buttons: {
-            "Yes": function () {
-                $(this).dialog("close");
-                save_quiz2();
+        buttons: [
+            {
+                text: localize('yes'),
+                click: function () {
+                    $(this).dialog('close');
+                    save_quiz2();
+                }
             },
-            "No": function () {
-                $(this).dialog("close");
+            {
+                text: localize('no'),
+                click: function () {
+                    $(this).dialog('close');
+                }
             }
-        }
+        ]
     });
 }
 
@@ -2417,35 +2442,58 @@ function save_quiz2() {
 
 function shebanq_to_qo(qo, mql) {
     if (qo === null) {
-        $('#qo-dialog-text').html('<p>Sentence selection imported.</p><p>SHEBANQ query does not contain any FOCUS objects that can be used for sentence unit selection.</p>');
-        $("#qo-dialog-confirm").dialog({
+        $('#qo-dialog-text').html('<p>{0}</p><p>{1}</p>'.format(localize('sentence_selection_imported'), localize('no_focus')));
+        $('#qo-dialog-confirm').dialog({
             autoOpen: true,
             resizable: false,
             modal: true,
-            buttons: {
-                "OK": function () {
-                    $(this).dialog("close");
+            buttons: [
+                {
+                    text: localize('OK_button'),
+                    click: function () {
+                        $(this).dialog('close');
+                    }
                 }
-            }
+            ]
         });
     } else {
-        $('#qo-dialog-text').html('<p>Sentence selection imported.</p><p>Do you also wish to use<br><code>[{0} {1}]</code><br>for sentence unit selection?</p>'.format(qo, mql.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')));
+        // This is a multi-level format substitution
+        // Replace & < and > with HTML entities
+        var msg = mql.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-        $("#qo-dialog-confirm").dialog({
+        // Embded in HTML formatting
+        msg = '<br><code>[{0} {1}]</code><br>'.format(qo, msg);
+
+        // Embed in localized string
+        msg = localize('use_qo_selection').format(msg);
+
+        // Format for dialog
+        msg = '<p>{0}</p><p>{1}</p>'.format(localize('sentence_selection_imported'), msg);
+
+        // Set the dialog text
+        $('#qo-dialog-text').html(msg);
+
+        $('#qo-dialog-confirm').dialog({
             autoOpen: true,
             resizable: false,
             modal: true,
-            buttons: {
-                "Yes": function () {
-                    $(this).dialog("close");
-                    panelSentUnit.setOtype(qo);
-                    panelSentUnit.setUsemql();
-                    panelSentUnit.setMql(mql);
+            buttons: [
+                {
+                    text: localize('yes'),
+                    click: function () {
+                        $(this).dialog('close');
+                        panelSentUnit.setOtype(qo);
+                        panelSentUnit.setUsemql();
+                        panelSentUnit.setMql(mql);
+                    }
                 },
-                "No": function () {
-                    $(this).dialog("close");
+                {
+                    text: localize('no'),
+                    click: function () {
+                        $(this).dialog('close');
+                    }
                 }
-            }
+            ]
         });
     }
 }
@@ -2453,36 +2501,41 @@ function shebanq_to_qo(qo, mql) {
 function import_from_shebanq() {
     $('#import-shebanq-error').text('');
 
-    $("#import-shebanq-dialog").dialog({
+    $('#import-shebanq-dialog').dialog({
         autoOpen: true,
         resizable: false,
         modal: true,
         width: 400,
-        buttons: {
-            "Import": function () {
-                var _this = this;
-                $('.ui-dialog *').css('cursor', 'wait');
+        buttons: [
+            {
+                text: localize('import_button'),
+                click: function () {
+                    var _this = this;
+                    $('.ui-dialog *').css('cursor', 'wait');
 
-                $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url, encodeURIComponent($('#import-shebanq-qid').val().trim()), encodeURIComponent($('#import-shebanq-dbvers').val().trim()))).done(function (data, textStatus, jqXHR) {
-                    $('.ui-dialog *').css('cursor', 'auto');
+                    $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url, encodeURIComponent($('#import-shebanq-qid').val().trim()), encodeURIComponent($('#import-shebanq-dbvers').val().trim()))).done(function (data, textStatus, jqXHR) {
+                        $('.ui-dialog *').css('cursor', 'auto');
 
-                    var result = JSON.parse(data);
-                    if (result.error === null) {
-                        panelSent.setMql(result.sentence_mql);
-                        $(_this).dialog('close');
-                        shebanq_to_qo(result.sentence_unit, result.sentence_unit_mql);
-                    } else {
-                        $('#import-shebanq-error').text(result.error);
-                    }
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-                    $('.ui-dialog *').css('cursor', 'auto');
-
-                    $('#import-shebanq-error').text('Error response from server: ' + errorThrown);
-                });
+                        var result = JSON.parse(data);
+                        if (result.error === null) {
+                            panelSent.setMql(result.sentence_mql);
+                            $(_this).dialog('close');
+                            shebanq_to_qo(result.sentence_unit, result.sentence_unit_mql);
+                        } else {
+                            $('#import-shebanq-error').text(result.error);
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        $('.ui-dialog *').css('cursor', 'auto');
+                        $('#import-shebanq-error').text('{0} {1}'.format(localize('error_response'), errorThrown));
+                    });
+                }
             },
-            "Cancel": function () {
-                $(this).dialog("close");
+            {
+                text: localize('cancel_button'),
+                click: function () {
+                    $(this).dialog('close');
+                }
             }
-        }
+        ]
     });
 }

@@ -7,6 +7,7 @@
 /// <reference path="charset.ts" />
 /// <reference path="sentencegrammar.ts" />
 /// <reference path="localization.ts" />
+/// <reference path="localization_general.ts" />
 /// <reference path="paneltemplmql.ts" />
 /// <reference path="paneltemplsentenceselector.ts" />
 /// <reference path="paneltemplquizobjectselector.ts" />
@@ -62,7 +63,7 @@ function isDirty() : boolean {
     if (ckeditor.ckeditorGet().checkDirty())
         return true;
 
-    checked_passages = $("#passagetree").jstree("get_checked",null,false);
+    checked_passages = $('#passagetree').jstree('get_checked',null,false);
 
     if (checked_passages.length !== initial_universe.length)
         return true;
@@ -122,7 +123,7 @@ $(function() {
 
     ckeditor.val(decoded_3et.desc);
 
-    $("#quiz_tabs").tabs({ disabled: [3] });
+    $('#quiz_tabs').tabs({ disabled: [3] });
 
     $('button').button();
     $('input[type="button"]').button();
@@ -136,83 +137,96 @@ $(function() {
 });
 
 function save_quiz() {
-    checked_passages = $("#passagetree").jstree("get_checked",null,false);
+    checked_passages = $('#passagetree').jstree('get_checked',null,false);
 
     if (checked_passages.length==0) {
-        myalert('Passage selection', 'No passages selected');
+        myalert(localize('passage_selection'), localize('no_passages'));
         return;
     }
 
     if (panelFeatures.noRequestFeatures()) {
-        myalert('Feature specification','No request features specified');
+        myalert(localize('feature_specification'), localize('no_request_feature'));
         return;
     }
 
     if (panelFeatures.noShowFeatures()) {
-        myalert('Feature specification','No show features specified');
+        myalert(localize('feature_specification'), localize('no_show_feature'));
         return;
     }
     
 
     $('#filename-error').text('');
 
-    $("#filename-dialog").dialog({
+    $('#filename-dialog').dialog({
             autoOpen: false,
             resizable: false,
             modal: true,
             width: 600,
-            buttons: {
-                "Save": function() {
-                    if ($('#filename-name').val().trim()=='')
-                        $('#filename-error').text("Missing filename");
-                    else {
-                        quiz_name = $('#filename-name').val().trim();
+            buttons: [
+                {
+                    text: localize('save'),
+                    click: function() {
+                        if ($('#filename-name').val().trim()=='')
+                            $('#filename-error').text(localize('missing_filename'));
+                        else {
+                            quiz_name = $('#filename-name').val().trim();
 
-                        // Check if file may be written
-                        $.ajax('{0}?dir={1}&quiz={2}'.format(check_url,
-                                                             encodeURIComponent(dir_name),
-                                                             encodeURIComponent(quiz_name)))
-                            .done((data, textStatus, jqXHR) => {
-                                switch (data.trim()) {
-                                case 'OK':
-                                    $(this).dialog('close');
-                                    save_quiz2();
-                                    break;
-                                case 'EXISTS':
-                                    $(this).dialog('close');
-                                    check_overwrite();
-                                    break;
-                                default:
-                                    $('#filename-error').text(data);
-                                    break;
-                                }
-                            })
-                            .fail((jqXHR, textStatus, errorThrown) => {
-                                $('#filename-error').text('Error response from server: ' + errorThrown);
-                            });
+                            // Check if file may be written
+                            $.ajax('{0}?dir={1}&quiz={2}'.format(check_url,
+                                                                 encodeURIComponent(dir_name),
+                                                                 encodeURIComponent(quiz_name)))
+                                .done((data, textStatus, jqXHR) => {
+                                    switch (data.trim()) {
+                                    case 'OK':
+                                        $(this).dialog('close');
+                                        save_quiz2();
+                                        break;
+                                    case 'EXISTS':
+                                        $(this).dialog('close');
+                                        check_overwrite();
+                                        break;
+                                    default:
+                                        $('#filename-error').text(data);
+                                        break;
+                                    }
+                                })
+                                .fail((jqXHR, textStatus, errorThrown) => {
+                                    $('#filename-error').text('{0} {1}'
+                                                              .format(localize('error_response'), errorThrown));
+                                });
+                        }
                     }
                 },
-                Cancel: function() {
-                    $(this).dialog('close');
+                {
+                    text: localize('cancel_button'),
+                    click: function() {
+                        $(this).dialog('close');
+                    }
                 }
-            }
+            ]
          }).dialog('open');
 }
 
 function check_overwrite() {
-    $("#overwrite-dialog-confirm").dialog({
+    $('#overwrite-dialog-confirm').dialog({
         autoOpen: true,
         resizable: false,
         modal: true,
-        buttons: {
-            "Yes": function() {
-                $(this).dialog("close");
-                save_quiz2();
+        buttons: [
+            {
+                text: localize('yes'),
+                click: function() {
+                    $(this).dialog('close');
+                    save_quiz2();
+                }
             },
-            "No": function() {
-                $(this).dialog("close");
+            {
+                text: localize('no'),
+                click: function() {
+                    $(this).dialog('close');
+                }
             }
-        }
+        ]
     });
 }
 
@@ -245,36 +259,60 @@ function save_quiz2() {
 
 function shebanq_to_qo(qo : string, mql : string) {
     if (qo===null) {
-        $('#qo-dialog-text').html( '<p>Sentence selection imported.</p><p>SHEBANQ query does not contain any FOCUS objects that can be used for sentence unit selection.</p>');
-        $("#qo-dialog-confirm").dialog({
+        $('#qo-dialog-text').html('<p>{0}</p><p>{1}</p>'.format(localize('sentence_selection_imported'),
+                                                                localize('no_focus')));
+        $('#qo-dialog-confirm').dialog({
             autoOpen: true,
             resizable: false,
             modal: true,
-            buttons: {
-                "OK": function() {
-                    $(this).dialog("close");
+            buttons: [
+                {
+                    text: localize('OK_button'),
+                    click: function() {
+                        $(this).dialog('close');
+                    }
                 }
-            }
+            ]
         });
     }
     else {
-        $('#qo-dialog-text').html( '<p>Sentence selection imported.</p><p>Do you also wish to use<br><code>[{0} {1}]</code><br>for sentence unit selection?</p>'.format(qo, mql.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')) );
+        // This is a multi-level format substitution
+        // Replace & < and > with HTML entities
+        var msg = mql.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        
+        // Embded in HTML formatting
+        msg = '<br><code>[{0} {1}]</code><br>'.format(qo, msg);
 
-        $("#qo-dialog-confirm").dialog({
+        // Embed in localized string
+        msg = localize('use_qo_selection').format(msg);
+
+        // Format for dialog
+        msg = '<p>{0}</p><p>{1}</p>'.format(localize('sentence_selection_imported'), msg);
+
+        // Set the dialog text
+        $('#qo-dialog-text').html(msg);
+
+        $('#qo-dialog-confirm').dialog({
             autoOpen: true,
             resizable: false,
             modal: true,
-            buttons: {
-                "Yes": function() {
-                    $(this).dialog("close");
-                    panelSentUnit.setOtype(qo);
-                    panelSentUnit.setUsemql();
-                    panelSentUnit.setMql(mql);
+            buttons: [
+                {
+                    text: localize('yes'),
+                    click: function() {
+                        $(this).dialog('close');
+                        panelSentUnit.setOtype(qo);
+                        panelSentUnit.setUsemql();
+                        panelSentUnit.setMql(mql);
+                    }
                 },
-                "No": function() {
-                    $(this).dialog("close");
-            }
-            }
+                {
+                    text: localize('no'),
+                    click: function() {
+                        $(this).dialog('close');
+                    }
+                }
+            ]
         });
     }
 }
@@ -282,40 +320,46 @@ function shebanq_to_qo(qo : string, mql : string) {
 function import_from_shebanq() {
     $('#import-shebanq-error').text('');
 
-    $("#import-shebanq-dialog").dialog({
+    $('#import-shebanq-dialog').dialog({
         autoOpen: true,
         resizable: false,
         modal: true,
         width: 400,
-        buttons: {
-            "Import": function() {
-                $('.ui-dialog *').css('cursor', 'wait');
+        buttons: [
+            {
+                text: localize('import_button'),
+                click: function() {
+                    $('.ui-dialog *').css('cursor', 'wait');
 
-                $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url,
-                                                       encodeURIComponent($('#import-shebanq-qid').val().trim()),
-                                                       encodeURIComponent($('#import-shebanq-dbvers').val().trim())))
-                    .done((data, textStatus, jqXHR) => {
-                        $('.ui-dialog *').css('cursor', 'auto');
+                    $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url,
+                                                           encodeURIComponent($('#import-shebanq-qid').val().trim()),
+                                                           encodeURIComponent($('#import-shebanq-dbvers').val().trim())))
+                        .done((data, textStatus, jqXHR) => {
+                            $('.ui-dialog *').css('cursor', 'auto');
 
-                        var result = JSON.parse(data);
-                        if (result.error===null) {
-                            panelSent.setMql(result.sentence_mql);
-                            $(this).dialog('close');
-                            shebanq_to_qo(result.sentence_unit, result.sentence_unit_mql);
-                        }
-                        else {
-                            $('#import-shebanq-error').text(result.error);
-                        }
-                    })
-                    .fail((jqXHR, textStatus, errorThrown) => {
-                        $('.ui-dialog *').css('cursor', 'auto');
-
-                        $('#import-shebanq-error').text('Error response from server: ' + errorThrown);
-                    });
+                            var result = JSON.parse(data);
+                            if (result.error===null) {
+                                panelSent.setMql(result.sentence_mql);
+                                $(this).dialog('close');
+                                shebanq_to_qo(result.sentence_unit, result.sentence_unit_mql);
+                            }
+                            else {
+                                $('#import-shebanq-error').text(result.error);
+                            }
+                        })
+                        .fail((jqXHR, textStatus, errorThrown) => {
+                            $('.ui-dialog *').css('cursor', 'auto');
+                            $('#import-shebanq-error').text('{0} {1}'
+                                                            .format(localize('error_response'), errorThrown));
+                        });
+                }
             },
-            "Cancel": function() {
-                $(this).dialog("close");
+            {
+                text: localize('cancel_button'),
+                click: function() {
+                    $(this).dialog('close');
+                }
             }
-        }
+        ]
     });
 }

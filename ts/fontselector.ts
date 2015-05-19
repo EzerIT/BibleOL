@@ -5,7 +5,7 @@
 /// <reference path="jquery/jquery.d.ts" />
 /// <reference path="fontdetect.d.ts" />
 /// <reference path="util.ts" />
-
+/// <reference path="localization_general.ts" />
 
 class FontSelector {
     private alphabet : string;
@@ -61,7 +61,7 @@ class FontSelector {
         this.myfont_text = $('<input type="text" name="{0}_myfont" value="{1}">'.format(this.alphabet,personal_font));
         this.myfont_radio_button = $('<input name="{0}" type="radio" data-family="XXmineXX" value="{1}_mine">'.format(this.inputName,this.alphabet));
 
-        var td1 = $('<td>').append('Or write you own font name:<br>').append(this.myfont_text);
+        var td1 = $('<td>').append(localize('or_write_preferred')+'<br>').append(this.myfont_text);
         var td2 = $('<td class="sample" id="{0}_mysample" style="direction:{1}; font-family:{2}; font-size:16pt;">'
                     .format(this.alphabet,this.direction,personal_font))
             .append(this.sample);

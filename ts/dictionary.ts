@@ -165,7 +165,7 @@ class Dictionary {
                 res += '<tr><td colspan="2" class="tooltiphead">{0}</td></tr>'.format(getObjectFriendlyName(sengram.objType));
 
                 if (level===0 && (!qd || !qd.quizFeatures.dontShow))
-                    res += '<tr><td>Text</td><td class="tooltip leftalign {0}">{1}</td></tr>'.format(charset.foreignClass, monob.mo.features[configuration.surfaceFeature]);
+                    res += '<tr><td>{2}</td><td class="tooltip leftalign {0}">{1}</td></tr>'.format(charset.foreignClass, monob.mo.features[configuration.surfaceFeature],localize('visual'));
                 
                 var map : Array<string> = [];
     
