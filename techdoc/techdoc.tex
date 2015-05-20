@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{longtable}
 \usepackage{multirow}
+\usepackage{capt-of}
 \usepackage[final]{listings}
 \usepackage[unicode=true,xetex,colorlinks=true,linkcolor=blue,urlcolor=blue,bookmarksnumbered=true,bookmarksdepth=3]{hyperref}
 \usepackage{bidi} % Must be last
@@ -223,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Font matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{10 April 2015}
+\date{20 May 2015}
 
 \makeindex
 
@@ -2275,14 +2276,9 @@ so-called \emph{Database Localization Files}. If the \emph{propertiesName} key h
 the file \texttt{db/PRIM.LANG.prop.json} will contain localization information for the language LANG.
 For English, LANG should be ``en''.
 
-Note: Currently, only English localization files exist, and the language code ``en'' is hard-coded
-into the PHP files.\footnote{In the file \texttt{myapp/models/mod\_askemdros.php} in the functions
-  \emph{setup} and \emph{db\_and\_books,} and in the file
-  \texttt{myapp/controllers/ctrl\_statistics.php} in the function \emph{show\_stat.}}
-
 \textbf{On the client} the contents of the selected Database Localization File is available in a
-variable called \emph{localization.}%
-\index{localization JavaScript variable@\emph{localization} JavaScript variable|hyperit}
+variable called \emph{l10n.}%
+\index{l10n JavaScript variable@\emph{l10n} JavaScript variable|hyperit}
 Its structure is described in TypeScript as the \emph{Localization} interface%
 \index{Localization TypeScript interface@\emph{Localization} TypeScript interface}
  in the file \texttt{ts/localization.ts}.
@@ -2360,6 +2356,39 @@ of the Emdros object \emph{phrase\_atom} is ``Phrase~atom'', and that it has a f
 \emph{det} which in English should be rendered as ``Determination''. The \emph{phrase\_atom} feature
 \emph{rela} should be rendered ``Relation'' in English.
 
+If the value of the \emph{\_objname} key is long, it may not display well in the text area. An
+abbreviated version may be provided by appending the string \emph{\_abbrev} to the key in the
+\emph{emdrosobject}. This can be seen in Listing \ref{list-emdrosobject-abbrev}, which is taken from
+the English localization of the \emph{nestle1904} database (from the file
+\texttt{db/nestle1904.en.prop.json}).
+
+\begin{lstlisting}[numbers=left,caption=An abbreviated emdrosobject name,label=list-emdrosobject-abbrev]
+    "emdrosobject": {
+        "clause1": {
+            "_objname": "Clause level 1",
+            "typ": "Function"
+        },
+        "clause1_abbrev": {
+            "_objname": "Clause1"
+        },
+        ... %\textrm{\scriptsize(Additional Emdros object types omitted)}%
+    }
+\end{lstlisting}
+
+In this listing the Emdros object \emph{clause1} is normally translated ``Clause level 1'', but in
+the text display area it is simply ``Clause1'', as shown in Figure \ref{fig-clause1}. The
+\emph{\_objname} key is the only key under the abbreviated version.
+
+\begin{figure}[h]
+  \begin{center}
+    \parbox{0.5\textwidth}{
+      \includegraphics[width=0.5\textwidth]{clause1.png}
+      \caption{The term ``Clause level 1'' is used in the grammar selection box, but ``Clause1'' is
+        used in the text area.}\label{fig-clause1}
+    }
+  \end{center}
+\end{figure}
+
 
 \subsection{The \emph{emdrostype} Key}\label{enum-loc}\index{emdrostype|hyperit}
 
@@ -2413,6 +2442,40 @@ genders are sorted thus:
 
 \begin{center}
   \includegraphics[width=0.148\textwidth]{gender.png}
+\end{center}
+
+
+If the translation of an enumeration value is long, it may not display well in the text area.
+Abbreviated versions may be provided by appending the string \emph{\_abbrev} to the key in the
+\emph{emdrostype}. This can be seen in Listing \ref{list-emdrostype-abbrev}, which is taken from
+the English localization of the \emph{nestle1904} database (from the file
+\texttt{db/nestle1904.en.prop.json}).
+
+\begin{lstlisting}[numbers=left,caption=Abbreviated emdrostype values,label=list-emdrostype-abbrev]
+    "emdrostype": {
+        "clause_type_t": {
+            "ADV": "Adverbial",
+            "CL": "Clause",
+            ... %\textrm{\scriptsize(Additional enumeration values omitted)}%
+        },
+        "clause_type_t_abbrev": {
+            "ADV": "ADV",
+            "CL": "CL",
+            ... %\textrm{\scriptsize(Additional enumeration values omitted)}%
+        },
+        ... %\textrm{\scriptsize(Additional enumeration types omitted)}%
+    }
+\end{lstlisting}
+
+In this listing the enumeration value \emph{ADV} of type \emph{clause\_type\_t} is normally translated ``Adverbial'', but in
+the text display area it is simply ``ADV'', as shown in Figure \ref{fig-clause2}.
+
+\begin{center}
+  \parbox{0.7\textwidth}{
+    \includegraphics[width=0.7\textwidth]{clause2.png}
+    \captionof{figure}{The term ``Adverbial'' is used in the grammar information box, but ``ADV'' is
+      used in the text area.}\label{fig-clause2}
+  }
 \end{center}
 
 
@@ -3244,9 +3307,13 @@ headers, HTML code to lay out the menu, and these JavaScript variables:
   A JavaScript object whose value is the contents of the Database Specification File
   (Section \ref{sec-dsf}).\\
 
-  localization\hmmindex{localization JavaScript variable@\string\emph{localization} JavaScript variable} &
+  l10n\hmmindex{l10n JavaScript variable@\string\emph{l10n} JavaScript variable} &
   A JavaScript object whose value is the contents of the Database Localization File
   (Section \ref{sec-db-local}).\\
+
+  l10n\_js\hmmindex{l10n_js JavaScript variable@\string\emph{l10n\_js} JavaScript variable} & A
+  JavaScript object whose key/value pairs provide localized text for the user interface. (Chapter
+  \ref{chap-localize}.)\\
 
   typeinfo\hmmindex{typeinfo JavaScript variable@\string\emph{typeinfo} JavaScript variable} &
   A JavaScript object whose value is the contents of the Database Type Information File (Section
@@ -3319,7 +3386,9 @@ more than the relevant headers, HTML code to lay out the menu, and these JavaScr
 
   configuration & The same as in Section \ref{displaying-text}.\\
 
-  localization & The same as in Section \ref{displaying-text}.\\
+  l10n & The same as in Section \ref{displaying-text}.\\
+
+  l10n\_js & The same as in Section \ref{displaying-text}.\\
 
   typeinfo & The same as in Section \ref{displaying-text}.\\
 
@@ -4909,8 +4978,10 @@ stored in the directory \texttt{js}.
 The \emph{ol} client code is responsible for displaying text and running an exercise based on
 information provided by the server -- primarily in the JavaScript variables \emph{configuration,}%
 \index{configuration JavaScript variable@\emph{configuration} JavaScript variable}
-\emph{localization,}%
-\index{localization JavaScript variable@\emph{localization} JavaScript variable}
+\emph{l10n,}%
+\index{l10n JavaScript variable@\emph{l10n} JavaScript variable}
+\emph{l10n\_js,}%
+\index{l10n_js JavaScript variable@\emph{l10n\_js} JavaScript variable}
 \emph{typeinfo,}%
 \index{typeinfo JavaScript variable@\emph{typeinfo} JavaScript variable}
 \emph{dictionaries,}%
@@ -5205,6 +5276,124 @@ level the HTML simply looks like this:
 </span>
 \end{lstlisting}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Localization %%%%%%%%%%%%%%%%%%%%
+\chapter{Internationalization and Localization}\label{chap-localize}\index{localization}\index{internationalization}
+
+\textbf{As a developer, you must read this chapter.}
+
+\plainbreak{3}
+
+CodeIgniter provides a mechanism for developing internationalized software. The basic rule is never
+to write English text directly in the code. All text strings must be given a name, and a
+language-specific version of that text is stored in an array called \emph{\$lang}.
+
+The language specific strings are located in the directory \texttt{myapp/language}. This directory
+has a subdirectory for each supported language. The name of the subdirectory is the international
+two-letter abbreviation of the language as specified in the ISO~639-1 standard. For example, the
+Danish translation is stored in the subdirectory \texttt{da}, and the German translation is stored
+in the subdirectory \texttt{de}. The only exception is English which is stored in a subdirectory
+called \texttt{english} rather than \texttt{en}.
+
+\section{Internationalization of the Server Code}
+
+This section deals with creating an internationalized and localized version of the PHP server code.
+This uses the mechanism provided by CodeIgniter.
+
+As an example, let us assume that we want the server to display the text ``Roses are red''. In a
+non-internationalized version, this might be achieved by this code:
+
+\begin{lstlisting}[language=PHP]
+echo 'Roses are red';
+\end{lstlisting}
+
+To internationalize this code, three steps are necessary:
+
+First, we must first load a relevant localization file. For example, thus:
+
+\begin{lstlisting}[language=PHP]
+$this->lang->load('flowers', $language);
+\end{lstlisting}
+
+This will load the file \texttt{myapp/language/XX/flowers\_lang.php} where \texttt{XX} is replaced by
+the specified language.
+
+Second, we must add the English text to \texttt{myapp/language/english/flowers\_lang.php} thus:
+
+\begin{lstlisting}[language=PHP]
+$lang['rose_color'] = 'Roses are red';
+\end{lstlisting}
+
+The string \lstinline|'rose_color'| can be anything, as long as it is unique.
+
+Other localization information can be added as well. For example, a German translation can be
+written in \texttt{myapp/language/de/flowers\_lang.php}:
+
+\begin{lstlisting}[language=PHP]
+$lang['rose_color'] = 'Rosen sind rot';
+\end{lstlisting}
+
+Third, the original PHP code must be replaced by:
+
+\begin{lstlisting}[language=PHP]
+echo $this->lang->line('rose_color');
+\end{lstlisting}
+
+Depending on the language specified in the \emph{\$this->lang->load} call above, the \emph{echo}
+statement will output ``Roses are red'' in the appropriate language.
+
+\section{Internationalization of the Client Code}
+
+This section deals with creating an internationalized and localized version of the TypeScript client
+code.
+
+As an example, let us assume that we want the client to display the text ``Elephants are big''. In a
+non-internationalized version, this might be achieved by this code:
+
+\begin{lstlisting}[language=TypeScript]
+$('#xxx').text('Elephants are big');
+\end{lstlisting}
+
+(Here \emph{xxx} is the ID of the HTML element we wish to modify.)
+
+All localization information for the client is found in the server file
+\texttt{myapp/\allowbreak{}language/\allowbreak{}XX/\allowbreak{}js\_lang.php} where \texttt{XX} is
+replaced by the specified language. Before passing control to the client, the server reads the
+contents of this file and stores it as key/value pairs in the JavaScript variable
+\emph{l10n\_js}\index{l10n_js JavaScript variable@\emph{l10n\_js} JavaScript variable|hyperit}.
+
+To internationalize the above client code, two steps are necessary:
+
+First, \emph{in the server code} we must add the English text to
+\texttt{myapp/language/english/js\_lang.php} thus:
+
+\begin{lstlisting}[language=PHP]
+$lang['elephant_size'] = 'Elephants are big';
+\end{lstlisting}
+
+The string \lstinline|'elephant_size'| can be anything, as long as it is unique.
+
+Other localization information can be added as well. For example, a Danish translation can be
+written in \texttt{myapp/language/da/js\_lang.php}:
+
+\begin{lstlisting}[language=PHP]
+$lang['elephant_size'] = 'Elefanter er store';
+\end{lstlisting}
+
+Second, the original TypeScript code must be replaced by:
+
+\begin{lstlisting}[language=TypeScript]
+$('#xxx').text(localize('elephant_size'));
+\end{lstlisting}
+
+The \emph{localize} function loads the appropriate translation from the \emph{l10n\_js} variable.
+
+\section{Internationalization of the Databases}
+
+In addition to providing localized versions of the server and client strings, a translation must
+also provide localized versions of all the Database Localization Files. See Section \ref{sec-db-local}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
