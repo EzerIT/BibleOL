@@ -1,9 +1,9 @@
-techdoc.aux
-techdoc.log
-techdoc.out
-techdoc.toc
-techdoc.idx
-techdoc.ilg
-techdoc.ind
+*.aux
+*.log
+*.out
+*.toc
+*.idx
+*.ilg
+*.ind
 .aspell.en.pws
 .aspell.en.prepl
