@@ -243,7 +243,7 @@ class Ctrl_file_manager extends MY_Controller {
                                                  true);
              
                 $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('control_visibility').'</h1>'
-                                                                     .'<p>'.sprintf($this->lang->line('select_folder'),
+                                                                     .'<p>'.sprintf($this->lang->line('visibility_folder_desc'),
                                                                                     $this->mod_quizpath->get_relative())
                                                                      .'</p>',
                                                           'center' => $center_text));
