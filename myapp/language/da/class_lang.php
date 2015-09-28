@@ -20,3 +20,6 @@ $lang['edit_class_information'] = 'Redigér klasseoplysninger';
 $lang['leave_blank_if_no_pw'] = 'Udelades hvis klassen ikke skal have en adgangskode.';
 $lang['date_format_or_blank'] = 'Brug formatet: ÅÅÅÅ-MM-DD. Udelades hvis der ikke er nogen slutdato.';
 $lang['class_name_used'] = 'Klassenavnet "%s" er optaget';
+$lang['change_owner_class'] = 'Skift ejer';
+$lang['password_hidden'] = '(Skjult)';
+$lang['not_class_owner'] = 'Du ejer ikke denne klasse';

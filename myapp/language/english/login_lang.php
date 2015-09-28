@@ -4,6 +4,7 @@ $lang['please_log_in']           = 'Please Log In';
 $lang['user_name']               = 'User name';
 $lang['password']                = 'Password';
 $lang['forgotten']               = 'Forgotten user name or password?';
+$lang['sign_up']                 = 'Create new account';
 $lang['or']                      = 'or';
 $lang['sign_in_google']          = 'Sign in with Google+';
 $lang['login']                   = 'Login';  // Text in title bar

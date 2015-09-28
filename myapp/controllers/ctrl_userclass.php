@@ -21,13 +21,14 @@ class Ctrl_userclass extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->lang->load('userclass', $this->language);
+        $this->lang->load('class', $this->language);
         $this->load->model('mod_classes');
         $this->load->model('mod_userclass');
     }
 
     public function users_in_class() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             $classid = isset($_GET['classid']) ? intval($_GET['classid']) : 0;
         
@@ -35,6 +36,10 @@ class Ctrl_userclass extends MY_Controller {
                 throw new DataException($this->lang->line('illegal_class_id'));
 
             $class_info = $this->mod_classes->get_class_by_id($classid);
+
+            if ($class_info->ownerid!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
+                throw new DataException($this->lang->line('not_class_owner'));
+
 
             $all_users = $this->mod_users->get_all_users();
             usort($all_users, 'realname_cmp');
@@ -83,7 +88,7 @@ class Ctrl_userclass extends MY_Controller {
 
     public function classes_for_user() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             $userid = isset($_GET['userid']) ? intval($_GET['userid']) : 0;
         

@@ -54,16 +54,19 @@
   <form id='copy-delete-form' action="<?= site_url('file_manager/copy_delete_files') ?>" method="post">
     <input type="hidden" name="dir" value="<?= $dirlist['relativedir'] ?>">
     <input type="hidden" name="operation" value="">
+    <input type="hidden" name="newowner" value="">
     <table class="type1">
       <tr>
         <th><?= $this->lang->line('mark') ?></th>
         <th><?= $this->lang->line('name') ?></th>
+        <th><?= $this->lang->line('owner_name') ?></th>
         <th><?= $this->lang->line('operations') ?></th>
       </tr>
     <?php foreach ($dirlist['files'] as $f): ?>
       <tr>
-        <td><input type="checkbox" name="file[]" value="<?= $f ?>"></td>
-        <td class="leftalign"><?= substr($f,0,-4) ?></td>
+        <td><input type="checkbox" name="file[]" value="<?= $f->filename ?>"></td>
+        <td class="leftalign"><?= substr($f->filename,0,-4) ?></td>
+        <td class="leftalign"><?= $f->username ?></td>
         <td><span class="small">
             <?php // Note: The following download link will cause this error to be written on Chrome's console:
                   // "Resource interpreted as Document but transferred with MIME type application/octet-stream".
@@ -71,9 +74,9 @@
                   // Adding the attibute 'download' to the <a ...> tag removes the error, but prevents
                   // the server from sending error messages during download.
             ?>
-            <a href="<?= site_url("file_manager/download_ex?dir={$dirlist['relativedir']}&file=$f") ?>"><?= $this->lang->line('download') ?></a>
-            <a href="<?= site_url("text/edit_quiz?quiz={$dirlist['relativedir']}/$f") ?>"><?= $this->lang->line('edit') ?></a>
-            <a href="#" onclick="rename('<?= substr($f,0,-4) ?>'); return false;"><?= $this->lang->line('rename') ?></a>
+            <a href="<?= site_url("file_manager/download_ex?dir={$dirlist['relativedir']}&file=$f->filename") ?>"><?= $this->lang->line('download') ?></a>
+            <a href="<?= site_url("text/edit_quiz?quiz={$dirlist['relativedir']}/$f->filename") ?>"><?= $this->lang->line('edit') ?></a>
+            <a href="#" onclick="rename('<?= substr($f->filename,0,-4) ?>'); return false;"><?= $this->lang->line('rename') ?></a></span>
         </td>
       </tr>
     <?php endforeach; ?>
@@ -83,6 +86,9 @@
     <a class="makebutton" onclick="deleteConfirm(); return false;" href="#"><?= $this->lang->line('delete_marked') ?></a>
     <a class="makebutton" onclick="copyWarning(); return false;" href="#"><?= $this->lang->line('copy_marked') ?></a>
     <a class="makebutton" onclick="moveWarning(); return false;" href="#"><?= $this->lang->line('move_marked') ?></a>
+    <?php if ($isadmin): ?>
+      <a class="makebutton" onclick="changeOwner(); return false;" href="#"><?= $this->lang->line('change_owner_files') ?></a>
+    <?php endif; ?>
   </p>
 <?php endif; ?>
 
@@ -151,7 +157,7 @@
             </td>
           </tr>
         </table>
-        <input type="hidden" name="dir" id="mkdir-parent" value="<?= $dirlist['relativedir'] ?>">
+        <input type="hidden" name="dir" value="<?= $dirlist['relativedir'] ?>">
     </form>
   </div>
 
@@ -170,6 +176,20 @@
     <p>
       <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
       <span><?= $this->lang->line('delete_file_confirm') ?></span>
+    </p>
+  </div>
+
+  <!-- ChangeOwner dialog -->
+  <div id="chown-dialog" style="display:none">
+    <p>
+      <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+      <span><?= $this->lang->line('new_owner_prompt') ?></span>
+      <select id="chown-selector">
+        <option value="0" selected="selected"></option>
+        <?php foreach ($teachers as $t): ?>
+          <option value="<?= $t->id ?>"><?= $t->first_name . ' ' . $t->last_name ?></option>
+        <?php endforeach; ?>
+      </select>
     </p>
   </div>
 
@@ -285,6 +305,29 @@
             }
             });
 
+        $("#chown-dialog").dialog({
+            autoOpen: false,
+            resizable: false,
+            modal: true,
+            buttons: {
+                '<?= $this->lang->line('OK_button') ?>': function() {
+                    userid = $("#chown-selector option:selected").val();
+                    if (userid==0) {
+                        $(this).dialog('close');
+                        myalert('<?= $this->lang->line('no_user_selected_title') ?>', '<?= $this->lang->line('no_user_selected') ?>');
+                        return false;
+                    }    
+                    $('input[name="newowner"]').val(userid);
+                    $('#copy-delete-form').submit();
+                    $(this).dialog('close');
+                },
+         
+                '<?= $this->lang->line('cancel_button') ?>': function() {
+                    $(this).dialog('close');
+                }
+            }
+            });
+
         // Prevent 'return' key from submitting forms
         $(window).on("keydown",function(event) {
             if (event.keyCode == 13) {
@@ -340,6 +383,17 @@
         $('input[name="operation"]').val('delete');
         $('#delete-dialog-confirm')
             .dialog('option', 'title', '<?= $this->lang->line('confirm_deletion') ?>')
+            .dialog('open');
+    }
+
+    function changeOwner() {
+        if ($('input[name="file[]"]:checked').length===0) {
+            myalert('<?= $this->lang->line('file_selection') ?>','<?= $this->lang->line('no_files_selected') ?>');
+            return;
+        }
+        $('input[name="operation"]').val('chown');
+        $('#chown-dialog')
+            .dialog('option', 'title', '<?= $this->lang->line('change_owner_title') ?>')
             .dialog('open');
     }
   </script>

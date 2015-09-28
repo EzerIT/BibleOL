@@ -19,8 +19,8 @@ if ($this->session->userdata('ol_user')!==false && $this->session->userdata('ol_
     $content[$ix][] = anchor(site_url('users/profile'), $this->lang->line('profile'));
     $content[$ix][] = anchor(site_url('userclass/enroll'), $this->lang->line('enroll_in_class'));
     
-    if ($this->session->userdata('ol_admin')) {
-        // Administrator
+    if ($this->session->userdata('ol_teacher')) {
+        // Teacher
         $ix = count($head);
         $head[] = anchor('#', $this->lang->line('administration'));
         $content[$ix][] = anchor(site_url('users'), $this->lang->line('users'));

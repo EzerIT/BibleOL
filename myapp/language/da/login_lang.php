@@ -4,6 +4,7 @@ $lang['please_log_in']           = 'Log ind';
 $lang['user_name']               = 'Brugernavn';
 $lang['password']                = 'Adgangskode';
 $lang['forgotten']               = 'Glemt brugernavn eller adgangskode?';
+$lang['sign_up']                 = 'Opret ny konto';
 $lang['or']                      = 'eller';
 $lang['sign_in_google']          = 'Log ind med Google+';
 $lang['login']                   = 'Log ind';  // Text in title bar

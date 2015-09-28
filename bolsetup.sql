@@ -290,3 +290,18 @@ CREATE TABLE `bol_userconfig` (
 
 INSERT INTO `bol_userconfig` (`user_id`, `usetooltip`) VALUES
 (1, 0);
+
+--
+-- Table structure for table `bol_migrations`
+--
+
+CREATE TABLE IF NOT EXISTS `bol_migrations` (
+  `version` int(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `bol_migrations`
+--
+
+INSERT INTO `bol_migrations` (`version`) VALUES
+(1);

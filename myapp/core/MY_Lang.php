@@ -1,13 +1,15 @@
 <?php
 
 class MY_Lang extends CI_Lang {
-	function __construct()
+    private $secondary_lang = array(); // For handling multiple languages
+
+	public function __construct()
 	{
         parent::__construct();
 	}
 
 
-	function load($langfile = '', $idiom = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '')
+	public function load($langfile = '', $idiom = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '')
 	{
         if ($idiom == '') {
             $CI =& get_instance();
@@ -18,7 +20,7 @@ class MY_Lang extends CI_Lang {
         return parent::load($langfile, $idiom, $return, $add_suffix, $alt_path);
     }
 
-	function line($line = '')
+	public function line($line = '')
     {
         $txt = parent::line($line);
         if ($txt === false)
@@ -26,4 +28,28 @@ class MY_Lang extends CI_Lang {
         else
             return $txt;
     }
+
+    public function load_secondary($langfile, $idiom)
+    {
+        if ($idiom=='en' || $idiom=='none')
+            $idiom = 'english';
+
+        include(APPPATH . "/language/$idiom/{$langfile}_lang.php");
+        $this->secondary_lang = array_merge($this->secondary_lang, $lang);
+        unset($lang);
+    }
+
+    public function clear_secondary()
+    {
+        $this->secondary_lang = array();
+    }
+
+    public function line_secondary($line)
+    {
+        if (!isset($this->secondary_lang[$line]))
+            return "??$line??";
+        else
+            return $this->secondary_lang[$line];
+    }
+
   }

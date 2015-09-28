@@ -3,14 +3,16 @@
           echo "<div class=\"error\">$valerr</div>\n";
     ?>
 
-    <?= form_open("users/edit_one_user?userid=$userid") ?>
+    <?php // $userid is -1 when an administrator creates a new user, -2 when a user creates their own account ?>
+
+    <?= form_open($userid==-2 ? "users/sign_up" : "users/edit_one_user?userid=$userid") ?>
       <table class="form">
         <tr>
           <?php if ($user_info->google_login): ?>
             <td colspan="3"><?= $this->lang->line('this_user_google') ?></td>
           <?php else: ?>
             <td><?= $this->lang->line('user_name') ?></td>
-            <?php if ($userid==-1): ?>
+            <?php if ($userid==-1 || $userid==-2): ?>
               <td class="norb"><input type="text" name="username" value="<?= set_value('username',$user_info->username) ?>"></td>
               <td class="nolb"><?= $this->lang->line('field_required') ?></td>
             <?php else: ?>
@@ -46,18 +48,39 @@
             <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
           <?php else: ?>
             <td class="norb"><input type="text" name="email" value="<?= set_value('email',$user_info->email) ?>"></td>
-            <td class="nolb"></td>
+            <td class="nolb"><?= $userid==-2 ? $this->lang->line('field_required') : '' ?></td>
           <?php endif; ?>
         </tr>
         <tr>
-          <td><?= $this->lang->line('administrator') ?></td>
+          <td><?= $this->lang->line('preferred_language') ?></td>
           <td class="norb">
-            <input class="narrow" type="radio" name="isadmin" value="yes" <?= set_radio('isadmin', 'yes', !!$user_info->isadmin) ?>><?= $this->lang->line('yes') ?>
-            <input class="narrow" type="radio" name="isadmin" value="no" <?= set_radio('isadmin', 'no', !$user_info->isadmin) ?>><?= $this->lang->line('no') ?>
+            <select name="preflang">
+              <option value="none" <?= set_select('preflang', 'none', $curlang=='none') ?>><?= $this->lang->line('no_language') ?></option>
+              <option value="en" <?= set_select('preflang', 'en', $curlang=='en') ?>><?= $this->lang->line('english') ?></option>
+              <option value="da" <?= set_select('preflang', 'da', $curlang=='da') ?>><?= $this->lang->line('danish') ?></option>
+            </select>
           </td>
           <td class="nolb"></td>
         </tr>
-        <?php if (!$user_info->google_login): ?>
+        <?php if ($isadmin): ?>
+          <tr>
+            <td><?= $this->lang->line('administrator') ?></td>
+            <td class="norb">
+              <input class="narrow" type="radio" name="isadmin" value="yes" <?= set_radio('isadmin', 'yes', !!$user_info->isadmin) ?>><?= $this->lang->line('yes') ?>
+              <input class="narrow" type="radio" name="isadmin" value="no" <?= set_radio('isadmin', 'no', !$user_info->isadmin) ?>><?= $this->lang->line('no') ?>
+            </td>
+            <td class="nolb"></td>
+          </tr>
+          <tr>
+            <td><?= $this->lang->line('teacher') ?></td>
+            <td class="norb">
+              <input class="narrow" type="radio" name="isteacher" value="yes" <?= set_radio('isteacher', 'yes', !!$user_info->isteacher) ?>><?= $this->lang->line('yes') ?>
+              <input class="narrow" type="radio" name="isteacher" value="no" <?= set_radio('isteacher', 'no', !$user_info->isteacher) ?>><?= $this->lang->line('no') ?>
+            </td>
+            <td class="nolb"></td>
+          </tr>
+        <?php endif; ?>
+        <?php if (!$user_info->google_login && $userid!=-2): ?>
           <tr>
             <td><?= $userid==-1 ? $this->lang->line('password') : $this->lang->line('new_password') ?></td>
             <td class="norb"><input type="password" name="password1" value=""></td>
@@ -83,5 +106,5 @@
         <?php endif; ?>
       </table>
       <p><input class="makebutton" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
-          <a class="makebutton" href="<?= site_url('users') ?>"><?= $this->lang->line('cancel_button') ?></a></p>
+          <a class="makebutton" href="<?= site_url($userid==-2 ? '/' :'users') ?>"><?= $this->lang->line('cancel_button') ?></a></p>
     </form>

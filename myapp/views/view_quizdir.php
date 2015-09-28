@@ -41,16 +41,16 @@
    
   <?php foreach ($dirlist['files'] as $f): ?>
     <tr>
-      <td><span class="ui-icon ui-icon-document" style="display:inline-block;"></span><?= $f ?></td>
+      <td><span class="ui-icon ui-icon-document" style="display:inline-block;"></span><?= $f->filename ?></td>
       <td style="text-align: center;">
-        <?= anchor(site_url('text/show_quiz?quiz=' . composedir($dirlist['relativedir'], $f) . '.3et&count=5'), '5') ?>&nbsp;&nbsp;&nbsp;
-        <?= anchor(site_url('text/show_quiz?quiz=' . composedir($dirlist['relativedir'], $f) . '.3et&count=10'), '10') ?>&nbsp;&nbsp;&nbsp;
-        <?= anchor(site_url('text/show_quiz?quiz=' . composedir($dirlist['relativedir'], $f) . '.3et&count=25'), '25') ?>
+        <?= anchor(site_url('text/show_quiz?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=5'), '5') ?>&nbsp;&nbsp;&nbsp;
+        <?= anchor(site_url('text/show_quiz?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=10'), '10') ?>&nbsp;&nbsp;&nbsp;
+        <?= anchor(site_url('text/show_quiz?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=25'), '25') ?>
       </td>
       <td style="text-align: center;">
-        <?= anchor(site_url('text/show_quiz_univ?quiz=' . composedir($dirlist['relativedir'], $f) . '.3et&count=5'), '5') ?>&nbsp;&nbsp;&nbsp;
-        <?= anchor(site_url('text/show_quiz_univ?quiz=' . composedir($dirlist['relativedir'], $f) . '.3et&count=10'), '10') ?>&nbsp;&nbsp;&nbsp;
-        <?= anchor(site_url('text/show_quiz_univ?quiz=' . composedir($dirlist['relativedir'], $f) . '.3et&count=25'), '25') ?>
+        <?= anchor(site_url('text/show_quiz_univ?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=5'), '5') ?>&nbsp;&nbsp;&nbsp;
+        <?= anchor(site_url('text/show_quiz_univ?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=10'), '10') ?>&nbsp;&nbsp;&nbsp;
+        <?= anchor(site_url('text/show_quiz_univ?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=25'), '25') ?>
       </td>
     </tr>
   <?php endforeach; ?>

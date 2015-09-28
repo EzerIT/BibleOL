@@ -1,7 +1,21 @@
 <?php
 
+function teacher_cmp($t1, $t2) {
+    if ($t1->last_name < $t2->last_name)
+        return -1;
+    if ($t1->last_name > $t2->last_name)
+        return 1;
+    if ($t1->first_name < $t2->first_name)
+        return -1;
+    if ($t1->first_name > $t2->first_name)
+        return 1;
+    return 0;
+}
+
+
 class Mod_users extends CI_Model {
     private $admin;
+    private $teacher;
     private $user_id;
 
     private $me;
@@ -19,14 +33,22 @@ class Mod_users extends CI_Model {
             $this->user_id = intval($this->user_id);
             
         $query = $this->db->where('id',$this->user_id)->get('user');
-		if ($this->me = $query->row())
+		if ($this->me = $query->row()) {
 			$this->admin = $this->me->isadmin;
-		else
+			$this->teacher = $this->me->isteacher;
+        }
+		else {
 			$this->admin = false;
+			$this->teacher = false;
+        }
     }
 
     public function is_admin() {
         return $this->admin;
+    }
+
+    public function is_teacher() {
+        return $this->teacher || $this->admin; // All admins are teachers
     }
 
     public function my_id() {
@@ -58,8 +80,10 @@ class Mod_users extends CI_Model {
         $pw_md5 = md5($this->config->item('pw_salt') . $pw);
 
         $query = $this->db->where('username',$name)->where('password',$pw_md5)->get('user');
-		if ($row = $query->row())
+		if ($row = $query->row()) {
+            $this->db->where('id',$row->id)->update('user',array('last_login'=>time(), 'warning_sent'=>0));
             return $row;
+        }
         else
             return null;
     }
@@ -67,6 +91,11 @@ class Mod_users extends CI_Model {
     public function check_admin() {
         if (!$this->mod_users->is_admin())
             throw new DataException($this->lang->line('must_be_admin'));
+    }
+
+    public function check_teacher() {
+        if (!$this->mod_users->is_teacher())
+            throw new DataException($this->lang->line('must_be_teacher'));
     }
 
     public function check_logged_in() {
@@ -94,16 +123,28 @@ class Mod_users extends CI_Model {
 
 
 
-    public function set_login_session(integer $user, $admin) {
+    public function set_login_session(integer $user, $admin, $teacher, $preflang=null) {
         $this->session->set_userdata('ol_user', $user);
         $this->session->set_userdata('ol_admin', $admin);  // NOTE: 'ol_admin' is only a hint. Do not rely on it.
+        $this->session->set_userdata('ol_teacher', $teacher);  // NOTE: 'ol_teacher' is only a hint. Do not rely on it.
+        if (!is_null($preflang) && $preflang!='none')
+            $this->session->set_userdata('language', $preflang);
+
         $this->user_id = $user;
         $this->admin = $admin;
+        $this->teacher = $teacher;
     }
 
     public function get_all_users() {
         $query = $this->db->get('user');
         return $query->result();
+    }
+
+    public function get_teachers() {
+        $query = $this->db->where('`isteacher`=1 OR `isadmin`=1',null,false)->get('user');
+        $teachers = $query->result();
+        usort($teachers, 'teacher_cmp');
+        return $teachers;
     }
 
     // $userid==-1 means create new user
@@ -119,6 +160,12 @@ class Mod_users extends CI_Model {
             $user->isadmin = 0;
             $user->email = '';
             $user->google_login = false;
+            $user->created_time = time();
+            $user->last_login = time()-10; // Assume that the user has logged in at least once to prevent expiry.
+                                           // The -10 is used when listing users to indicate that this is a fake value.
+            $user->warning_sent = 0;
+            $user->isteacher = 0;
+            $user->preflang = 'none';
         }
         else {
             $query = $this->db->where('id',$userid)->get('user');
@@ -186,16 +233,12 @@ class Mod_users extends CI_Model {
         if ($this->db->affected_rows()==0)
             throw new DataException($this->lang->line('illegal_user_id'));
 
+        // Most deletions are handled by foreign keys. The font and exerciseowner tables are
+        // exceptions because entries here can have user_id/ownerid = 0
         $this->db->where('user_id', $userid)->delete('font');
-        $this->db->where('user_id', $userid)->delete('personal_font');
-        $this->db->where('userid', $userid)->delete('sta_displayfeature');
-        $this->db->where('userid', $userid)->delete('sta_question');
-        $this->db->where('userid', $userid)->delete('sta_quiz');
-        $this->db->where('userid', $userid)->delete('sta_quiztemplate');
-        $this->db->where('userid', $userid)->delete('sta_requestfeature');
-        $this->db->where('userid', $userid)->delete('sta_universe');
-        $this->db->where('user_id', $userid)->delete('userconfig');
-        $this->db->where('userid', $userid)->delete('userclass');
+
+        // Change ownership of exercises
+        $query = $this->db->where('ownerid',$userid)->update('exerciseowner',array('ownerid' => 0));
     }
 
     
@@ -206,16 +249,25 @@ class Mod_users extends CI_Model {
 		if ($row = $query->row()) {
             $this->me = $row;
 			$this->admin = $this->me->isadmin;
+			$this->teacher = $this->me->isteacher;
             $this->user_id = $this->me->id;
 
             $this->session->set_userdata('ol_user', $this->user_id);
             $this->session->set_userdata('ol_admin', $this->admin);  // NOTE: 'ol_admin' is only a hint. Do not rely on it.
+            $this->session->set_userdata('ol_teacher', $this->teacher);  // NOTE: 'ol_teacher' is only a hint. Do not rely on it.
+            if ($row->preflang!='none')
+                $this->session->set_userdata('language', $row->preflang);
 
             if ($first_name!==$this->me->first_name || $last_name!==$this->me->last_name || $email!==$this->me->email) {
                 $query = $this->db->where('id',$this->user_id)->update('user',array('first_name' => $first_name,
                                                                                     'last_name' => $last_name,
-                                                                                    'email' => $email));
+                                                                                    'email' => $email,
+                                                                                    'last_login' => time(),
+                                                                                    'warning_sent' => 0));
             }
+            else
+                $query = $this->db->where('id',$this->user_id)->update('user',array('last_login' => time(),
+                                                                                    'warning_sent' => 0));
 
             return false;
         }
@@ -228,18 +280,63 @@ class Mod_users extends CI_Model {
             $user->username = "ggl_$google_id";
             $user->password = 'NONE';
             $user->isadmin = 0;
+            $user->isteacher = 0;
             $user->email = $email;
             $user->google_login = true;
-   
+            $user->created_time = time();
+            $user->last_login = time();
+            $user->warning_sent = 0;
+            $user->preflang = $this->language_short;
+
             $query = $this->db->insert('user', $user);
       
 			$this->admin = false;
+			$this->teacher = false;
             $this->user_id = $this->db->insert_id();
 
             $this->session->set_userdata('ol_user', $this->user_id);
             $this->session->set_userdata('ol_admin', $this->admin);  // NOTE: 'ol_admin' is only a hint. Do not rely on it.
+            $this->session->set_userdata('ol_teacher', $this->teacher);  // NOTE: 'ol_teacher' is only a hint. Do not rely on it.
+            $this->session->set_userdata('language', $user->preflang);
 
             return true;
         }
+    }
+
+    // Delete accounts older than $time seconds where the user has never logged in
+    public function delete_new_inactive(integer $time) {
+        $now = time();
+        $query = $this->db->where('last_login',0)->where('created_time >',0)->where('created_time <',$now-$time)
+            ->get('user');
+        $users = $query->result();
+
+        foreach ($users as $u)
+            $this->delete_user(intval($u->id));
+
+        return $users;
+    }
+
+    // Handle accounts where the user has not logged in for the last $time seconds
+    // $level==0 means: Delete user
+    // $level!=0 means: Set warning_sent to $level
+    public function old_inactive(integer $level, integer $time) {
+        $now = time();
+        if ($level==0) {
+            $query = $this->db->where('last_login <',$now-$time)
+                ->get('user');
+            $users = $query->result();
+   
+            foreach ($users as $u)
+                $this->delete_user(intval($u->id));
+        }
+        else {
+            $query = $this->db->where('last_login <',$now-$time)->where('warning_sent <',$level)
+                ->get('user');
+            $users = $query->result();
+            $this->db->where('last_login <',$now-$time)->where('warning_sent <',$level)
+                ->update('user',array('warning_sent'=>$level));
+        }
+
+        return $users;
     }
   }

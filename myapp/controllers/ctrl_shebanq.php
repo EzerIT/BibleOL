@@ -69,7 +69,7 @@ class Ctrl_shebanq extends MY_Controller {
         $sh_reply = new shebanq_reply();
 
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             if (!isset($_GET['id']) || !is_numeric($_GET['id']))
                 throw new DataException($this->lang->line('missing_shebanq_id'));

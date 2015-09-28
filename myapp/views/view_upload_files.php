@@ -2,7 +2,7 @@
     $(function(){
             var uploader = new qq.FileUploader({
                   element: document.getElementById('file-uploader'),
-                  action: '<?= site_url("valums_uploader.php?dir=$dir") ?>',
+                  action: '<?= site_url("upload?dir=$dir") ?>',
                   allowedExtensions: ['3et'],        
                   template: '<div class="qq-uploader">' + 
                             '<div class="qq-upload-drop-area ui-corner-all"><span><?= $this->lang->line('drop_files_here') ?></span></div>' +

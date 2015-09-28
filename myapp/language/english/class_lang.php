@@ -20,3 +20,6 @@ $lang['edit_class_information'] = 'Edit class information';
 $lang['leave_blank_if_no_pw'] = 'Leave blank if no password is required.';
 $lang['date_format_or_blank'] = 'Use format: YYYY-MM-DD. Leave blank if there is no last date.';
 $lang['class_name_used'] = 'The class name "%s" is already in use';
+$lang['change_owner_class'] = 'Change owner';
+$lang['password_hidden'] = '(Hidden)';
+$lang['not_class_owner'] = 'You do not own this class';

@@ -10,12 +10,13 @@ class Ctrl_login extends MY_Controller {
         $user_info = $this->mod_users->verify_login($login_name, $password);
 
         if (is_null($user_info)) {
-            $this->mod_users->set_login_session(0,false); // Paranoia
+            $this->mod_users->set_login_session(0,false,false); // Paranoia
 			$this->form_validation->set_message('password_check', $this->lang->line('bad_password'));
 			return false;
         }
         else {
-            $this->mod_users->set_login_session($user_info->id, $user_info->isadmin);
+            assert($user_info->id === intval($user_info->id));
+            $this->mod_users->set_login_session($user_info->id, $user_info->isadmin, $user_info->isteacher, $user_info->preflang);
             return true;
         }
     }
@@ -23,7 +24,7 @@ class Ctrl_login extends MY_Controller {
     public function index() {
         if ($this->mod_users->is_logged_in()) {
             // Log out
-            $this->mod_users->set_login_session(0, false);
+            $this->mod_users->set_login_session(0, false, false);
             redirect("/");
         }
 
@@ -41,7 +42,7 @@ class Ctrl_login extends MY_Controller {
 
         // Set up parameters for Google authentication.
         // For details about the protocol, see https://developers.google.com/accounts/docs/OAuth2WebServer.
-        $this->session->unset_userdata(array('ol_user'=>'', 'ol_admin'=>'', 'files'=>'', 'operation'=>'', 'from_dir'=>''));
+        $this->session->unset_userdata(array('ol_user'=>'', 'ol_admin'=>'', 'ol_teacher'=>'', 'files'=>'', 'operation'=>'', 'from_dir'=>''));
 
         $this->session->set_userdata('state', md5(rand())); // Used to prevent forged Google requests
         $google_request = array('response_type' => 'code',

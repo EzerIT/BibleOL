@@ -95,3 +95,13 @@ $lang['already_exists'] = '\'%s\' findes allerede';
 $lang['cannot_rename'] = 'Kan ikke omdøbe \'%s\' til \'%s\'';
 $lang['cannot_delete_folder'] = 'Kan ikke slette folderen \'%s\'';
 $lang['cannot_delete_file'] = 'Kan ikke slette filen \'%s\'';
+$lang['ownership_updated'] = 'Ejerskab af øvelser opdateret';
+$lang['added_ownership'] = 'Ejerskab tilføjet for disse øvelser:';
+$lang['deleted_ownership'] = 'Ejerskab slettet for disse øvelser:';
+$lang['ownership_none']  = 'Ingen';
+$lang['change_owner_files']  = 'Skift ejer af markerede filer';
+$lang['no_user_selected_title']  = 'Ingen bruger valgt';  // Text in title bar
+$lang['no_user_selected']  = 'Ingen bruger valgt';
+$lang['not_owner'] = 'Du ejer ikke denne fil';
+$lang['not_owner_all'] = 'Du ejer ikke alle de markerede filer';
+

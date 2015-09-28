@@ -108,8 +108,8 @@ class qqFileUploader {
     /**
      * Returns array('success'=>true) or array('error'=>'error message')
      */
-    function handleUpload($uploadDirectory, $replaceOldFile = FALSE){
-        if (!is_writable($uploadDirectory)){
+    function handleUpload($uploadDirectory, $replaceOldFile, $mod_quizpath, $owner) {
+        if (!is_writable("quizzes/$uploadDirectory")){
             return array('error' => "Server error. Upload directory isn't writable.");
         }
         
@@ -139,12 +139,20 @@ class qqFileUploader {
         
         if(!$replaceOldFile){
             /// don't overwrite previous files that were uploaded
-            while (file_exists($uploadDirectory . '/' . $filename . '.' . $ext)) {
-                $filename .= rand(10, 99);
+
+            if (file_exists("quizzes/$uploadDirectory/$filename.$ext")) {
+                $num = 0;
+                do {
+                    ++$num;
+                } while (file_exists("quizzes/$uploadDirectory/{$filename}_$num.$ext"));
+                $filename .= "_$num";
             }
         }
         
-        if ($this->file->save($uploadDirectory . '/' . $filename . '.' . $ext)){
+        if ($this->file->save("quizzes/$uploadDirectory/$filename.$ext")){
+            $mod_quizpath->init($uploadDirectory, true, false);
+			$mod_quizpath->set_owner($owner, "$filename.$ext");
+
             return array('success'=>true);
         } else {
             return array('error'=> 'Could not save uploaded file.' .
@@ -154,12 +162,25 @@ class qqFileUploader {
     }    
 }
 
-// list of valid extensions, ex. array("jpeg", "xml", "bmp")
-$allowedExtensions = array();
-// max file size in bytes
-$sizeLimit = 10 * 1024 * 1024;
 
-$uploader = new qqFileUploader($allowedExtensions, $sizeLimit);
-$result = $uploader->handleUpload('quizzes/'.$_GET['dir'],true);
-// to pass data through iframe you will need to encode all html tags
-echo htmlspecialchars(json_encode($result), ENT_NOQUOTES);
+
+
+class Ctrl_upload extends MY_Controller {
+    public function __construct() {
+        parent::__construct();
+    }
+
+	public function index() {
+        $this->load->model('mod_quizpath');
+
+        // list of valid extensions, ex. array("jpeg", "xml", "bmp")
+        $allowedExtensions = array();
+        // max file size in bytes
+        $sizeLimit = 10 * 1024 * 1024;
+
+        $uploader = new qqFileUploader($allowedExtensions, $sizeLimit);
+        $result = $uploader->handleUpload($_GET['dir'], false, $this->mod_quizpath, $this->mod_users->my_id());
+        // to pass data through iframe you will need to encode all html tags
+        echo htmlspecialchars(json_encode($result), ENT_NOQUOTES);
+	}
+}

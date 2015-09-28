@@ -327,7 +327,7 @@ class Ctrl_text extends MY_Controller {
             if (!isset($_GET['quiz']))
                 throw new DataException($this->lang->line('missing_quiz_filename'));
 
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             $this->load->model('mod_quizpath');
             $this->load->model('mod_askemdros');
@@ -409,7 +409,7 @@ class Ctrl_text extends MY_Controller {
                 throw new DataException($this->lang->line('missing_database_name'));
             $db = $_POST['db'];
 
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             $this->load->model('mod_askemdros');
             $this->load->model('mod_localize');
@@ -483,7 +483,7 @@ class Ctrl_text extends MY_Controller {
 
     public function check_submit_quiz() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             if (!isset($_GET['dir']))
                 throw new DataException($this->lang->line('missing_folder_name'));
@@ -493,8 +493,14 @@ class Ctrl_text extends MY_Controller {
             // MODEL:
             $this->load->model('mod_quizpath');
             $this->mod_quizpath->init(rawurldecode($_GET['dir']) . '/' . rawurldecode($_GET['quiz']) . '.3et', false, false, false);
-            if ($this->mod_quizpath->file_exists())
-                echo "EXISTS\n";
+            if ($this->mod_quizpath->file_exists()) {
+                $owner = $this->mod_quizpath->get_excercise_owner();
+
+                if ($owner!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
+                    echo $this->lang->line('not_owner'),"\n";
+                else
+                    echo "EXISTS\n";
+            }
             else
                 echo "OK\n";
         }
@@ -505,7 +511,7 @@ class Ctrl_text extends MY_Controller {
 
     public function submit_quiz() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             if (!isset($_POST['dir']))
                 throw new DataException($this->lang->line('missing_folder_name'));
@@ -520,7 +526,17 @@ class Ctrl_text extends MY_Controller {
             $this->load->model('mod_askemdros');
 
             $this->mod_quizpath->init(rawurldecode($_POST['dir']) . '/' . rawurldecode($_POST['quiz']) . '.3et', false, false, false);
+            
+            // Protect against malicious posting:
+            if ($this->mod_quizpath->file_exists()) {
+                $owner = $this->mod_quizpath->get_excercise_owner();
+
+                if ($owner!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
+                    throw new DataException($this->lang->line('not_owner'));
+            }
+
             $this->mod_askemdros->save_quiz(json_decode(urldecode($_POST['quizdata'])));
+            $this->mod_quizpath->set_owner($this->mod_users->my_id());
 
             redirect("/file_manager?dir=" . $_POST['dir']);
         }

@@ -15,10 +15,17 @@ class Ctrl_file_manager extends MY_Controller {
 
 
     private function show_files_2() {
+        $this->lang->load('owner', $this->language);
+
         $dirlist = $this->mod_quizpath->dirlist(false);
 
         $this->load->model('mod_askemdros');
         $db_books = $this->mod_askemdros->db_and_books();
+
+        if ($this->mod_users->is_admin())
+            $teachers = $this->mod_users->get_teachers();
+        else
+            $teachers = array();
 
         // VIEW:
         $this->load->view('view_top1', array('title' => $this->lang->line('file_mgmt')));
@@ -31,6 +38,8 @@ class Ctrl_file_manager extends MY_Controller {
                                          array('dirlist' => $dirlist,
                                                'is_top' => $this->mod_quizpath->is_top(),
                                                'databases' => $db_books,
+                                               'isadmin' => $this->mod_users->is_admin(),
+                                               'teachers' => $teachers,
                                                'copy_or_move' => $this->session->userdata('operation')),
                                          true);
         $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('exercise_file_mgmt').'</h1>'
@@ -41,7 +50,7 @@ class Ctrl_file_manager extends MY_Controller {
 
 	public function show_files() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             $this->mod_quizpath->init(set_or_default($_GET['dir'], ''), true, false);
 
@@ -54,7 +63,7 @@ class Ctrl_file_manager extends MY_Controller {
 
 	public function create_folder() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             $this->mod_quizpath->init(set_or_default($_POST['dir'], ''), true, false);
 
@@ -76,7 +85,7 @@ class Ctrl_file_manager extends MY_Controller {
 
 	public function delete_folder() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             $this->mod_quizpath->init(set_or_default($_GET['dir'], ''), true, false);
 
@@ -92,7 +101,6 @@ class Ctrl_file_manager extends MY_Controller {
 
     public function copy_delete_files() {
         try {
-            $this->mod_users->check_admin();
 
             $this->mod_quizpath->init(set_or_default($_POST['dir'], ''), true, false);
 
@@ -100,12 +108,25 @@ class Ctrl_file_manager extends MY_Controller {
                 switch ($_POST['operation']) {
                   case 'copy':
                   case 'move':
+                        $this->mod_users->check_teacher();
+
+                        if ($_POST['operation']==='move')
+                            $this->mod_quizpath->check_delete_files($_POST['file']);
+
                         $this->session->set_userdata('files', $_POST['file']);
 						$this->session->set_userdata('operation', $_POST['operation']);
 						$this->session->set_userdata('from_dir', $_POST['dir']);
                         break;
 
+                  case 'chown':
+                        $this->lang->load('owner', $this->language);
+                        $this->mod_users->check_admin();
+                        if (isset($_POST['newowner']) && is_numeric($_POST['newowner']))
+                            $this->mod_quizpath->chown_files($_POST['file'], intval($_POST['newowner']));
+                        break;
+                        
                   case 'delete':
+                        $this->mod_users->check_teacher();
                         $this->mod_quizpath->delete_files($_POST['file']);
                         break;
                 }
@@ -119,7 +140,7 @@ class Ctrl_file_manager extends MY_Controller {
 
     public function insert_files() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             if ($this->session->userdata('files')===false ||
                 $this->session->userdata('operation')===false ||
@@ -133,18 +154,41 @@ class Ctrl_file_manager extends MY_Controller {
             $this->load->model('mod_quizpath','mod_source_quizpath');
             $this->mod_source_quizpath->init($this->session->userdata('from_dir'), true, false); // Source
 
-            foreach ($this->session->userdata('files') as $f)
+            $fileowner = array();
+
+            foreach ($this->session->userdata('files') as $f) {
                 if (file_exists($this->mod_quizpath->get_absolute() . '/' . $f))
                     throw new DataException(sprintf($this->lang->line('file_exists'), $f)
                                             .' '. ($this->session->userdata('operation')==='copy'
                                                ? $this->lang->line('file_exists_copied')
                                                : $this->lang->line('file_exists_moved')));
 
+                // $fileowner will hold the original owner of moved files.
+                // This is used to set the owner at the destination, because if an administrator
+                // is moving files, the ownership should not change
+                if ($this->session->userdata('operation') === 'move') {
+                    $owner = $this->mod_source_quizpath->get_excercise_owner($f);
+                    $fileowner[$f] = $owner;
+                    if ($owner!=$this->mod_users->my_id() && !$this->mod_users->is_admin()) {
+                        if (count($this->session->userdata('files'))==1)
+                            throw new DataException($this->lang->line('not_owner'));
+                        else
+                            throw new DataException($this->lang->line('not_owner_all'));
+                    }
+                }
+            }
+
             foreach ($this->session->userdata('files') as $f)
                 if (!@copy($this->mod_source_quizpath->get_absolute() . '/' . $f,
                           $this->mod_quizpath->get_absolute() . '/' . $f))
                     throw new DataException(sprintf($this->lang->line('cannot_copy'), $f));
-                
+                else {
+                    if ($this->session->userdata('operation') === 'move')
+                        $this->mod_quizpath->set_owner($fileowner[$f], $f);
+                    else
+                        $this->mod_quizpath->set_owner($this->mod_users->my_id(), $f);
+                }
+
             if ($this->session->userdata('operation') === 'move')
                 $this->mod_source_quizpath->delete_files($this->session->userdata('files'));
                 
@@ -159,7 +203,7 @@ class Ctrl_file_manager extends MY_Controller {
 
     public function cancel_copy() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             $this->session->unset_userdata(array('files'=>'', 'operation'=>'', 'from_dir'=>''));
 
@@ -172,7 +216,7 @@ class Ctrl_file_manager extends MY_Controller {
 
     public function upload_files() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             $this->mod_quizpath->init(set_or_default($_GET['dir'], ''), true, false);
 
@@ -204,7 +248,7 @@ class Ctrl_file_manager extends MY_Controller {
 
     public function edit_visibility() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             $this->mod_quizpath->init(set_or_default($_GET['dir'], ''), true, false);
 
@@ -258,7 +302,7 @@ class Ctrl_file_manager extends MY_Controller {
 
     public function download_ex() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
         
             if (!isset($_GET['dir']))
                 throw new DataException($this->lang->line('missing_folder_name'));
@@ -285,7 +329,7 @@ class Ctrl_file_manager extends MY_Controller {
 
     public function rename_file() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
         
             if (!isset($_POST['dir']))
                 throw new DataException($this->lang->line('missing_folder_name'));
@@ -301,6 +345,10 @@ class Ctrl_file_manager extends MY_Controller {
             
             $this->load->model('mod_quizpath');
             $this->mod_quizpath->init(rawurldecode($_POST['dir']), true, false);
+            $owner = $this->mod_quizpath->get_excercise_owner($_POST['oldname'] . '.3et');
+
+            if ($owner!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
+                throw new DataException($this->lang->line('not_owner'));
 
             $this->mod_quizpath->rename($_POST['oldname'], $newname);
 
@@ -308,6 +356,35 @@ class Ctrl_file_manager extends MY_Controller {
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('rename_exercise'));
+        }
+    }
+
+    public function update_ownership() {
+        try {
+            $this->mod_users->check_admin();
+
+            $this->load->model('mod_quizpath');
+
+            $added = array();
+            $deleted = array();
+            $this->mod_quizpath->fix_exerciseowner($added, $deleted);
+
+            // VIEW:
+            $this->load->view('view_top1', array('title' => $this->lang->line('file_mgmt')));
+            $this->load->view('view_top2');
+            $this->load->view('view_menu_bar', array('langselect' => true));
+                
+            $center_text = $this->load->view('view_update_ownership',
+                                             array('added' => $added,
+                                                   'deleted' => $deleted),
+                                             true);
+             
+            $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('ownership_updated').'</h1>',
+                                                      'center' => $center_text));
+            $this->load->view('view_bottom');
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('file_mgmt'));
         }
     }
 }

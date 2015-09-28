@@ -26,6 +26,17 @@
           <td class="nolb"></td>
         </tr>
         <tr>
+          <td><?= $this->lang->line('preferred_language') ?></td>
+          <td class="norb">
+            <select name="preflang">
+              <option value="none" <?= set_select('preflang', 'none', $user_info->preflang=='none') ?>><?= $this->lang->line('no_language') ?></option>
+              <option value="en" <?= set_select('preflang', 'en', $user_info->preflang=='en') ?>><?= $this->lang->line('english') ?></option>
+              <option value="da" <?= set_select('preflang', 'da', $user_info->preflang=='da') ?>><?= $this->lang->line('danish') ?></option>
+            </select>
+          </td>
+          <td class="nolb"></td>
+        </tr>
+        <tr>
           <td><?= $this->lang->line('new_password') ?></td>
           <td class="norb"><input type="password" name="password1" value=""></td>
           <td class="nolb"><?= $this->lang->line('leave_blank_pw') ?></td>

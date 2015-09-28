@@ -11,11 +11,11 @@ class Mod_classes extends CI_Model {
 
     /// Builds an array of all the classes index by class id.
     public function get_all_classes() {
-        $query = $this->db->get('class');
+        $query = $this->db->select('*, class.id as clid, user.id as uid, class.password as clpass')->from('class')->join('user','ownerid=user.id', 'left')->get();
 
         $all_classes = array();
         foreach ($query->result() as $row)
-            $all_classes[$row->id] = $row;
+            $all_classes[$row->clid] = $row;
 
         return $all_classes;
     }
@@ -29,6 +29,7 @@ class Mod_classes extends CI_Model {
 			$cl->classname = '';
 			$cl->password = '';
 			$cl->enrol_before = '';
+            $cl->ownerid = $this->mod_users->my_id();
         }
         else {
             $query = $this->db->where('id',$classid)->get('class');
@@ -62,5 +63,13 @@ class Mod_classes extends CI_Model {
         $this->db->where('classid', $classid)->delete('classexercise');
     }
 
+    public function chown_class(integer $classid, integer $userid) {
+        $query = $this->db->where("`id`=$userid AND (`isteacher`=1 OR `isadmin`=1)",null,false)->get('user');
+        if ($row = $query->row())
+            // User exists and is a teacher
+            $query = $this->db->where('id',$classid)->update('class',array('ownerid' => $userid));
+        else
+            throw new DataException($this->lang->line('not_teacher'));
+    }
 
   }

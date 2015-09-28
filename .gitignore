@@ -12,3 +12,5 @@ myapp/config/config.php
 myapp/config/database.php
 myapp/config/ol.php
 TAGS
+to_translator
+dumpsql.sh

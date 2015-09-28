@@ -18,7 +18,13 @@ class Ctrl_classes extends MY_Controller {
 
     public function classes() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
+            $this->lang->load('owner', $this->language);
+
+            if ($this->mod_users->is_admin())
+                $teachers = $this->mod_users->get_teachers();
+            else
+                $teachers = array();
 
             $allclasses = $this->mod_classes->get_all_classes();
             usort($allclasses, 'classname_cmp');
@@ -28,8 +34,13 @@ class Ctrl_classes extends MY_Controller {
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
             $this->load->view('view_confirm_dialog');
+            $this->load->view('view_alert_dialog');
+
             $center_text = $this->load->view('view_class_list',
-                                             array('allclasses' => $allclasses),
+                                             array('allclasses' => $allclasses,
+                                                   'teachers' => $teachers,
+                                                   'myid' => $this->mod_users->my_id(),
+                                                   'isadmin' => $this->mod_users->is_admin()),
                                              true);
             $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('class_list') . '</h1>'
                                                       . '<p>' . $this->lang->line('configure_your_classes') . '</p>',
@@ -41,15 +52,42 @@ class Ctrl_classes extends MY_Controller {
         }
     }
 
+    public function change_owner() {
+        try {
+            $this->lang->load('owner', $this->language);
+            $this->mod_users->check_admin();
+
+            $classid = isset($_GET['classid']) ? intval($_GET['classid']) : 0;
+            if ($classid<=0)
+                throw new DataException($this->lang->line('illegal_class_id'));
+
+            $newowner = isset($_GET['newowner']) ? intval($_GET['newowner']) : 0;
+            if ($newowner<=0)
+                throw new DataException($this->lang->line('illegal_user_id'));
+
+            $this->mod_classes->chown_class($classid, $newowner);
+
+            redirect('/classes');
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('classes'));
+        }
+    }
+
 
     public function delete_class() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             $classid = isset($_GET['classid']) ? intval($_GET['classid']) : 0;
         
             if ($classid<=0)
                 throw new DataException($this->lang->line('illegal_class_id'));
+
+            $class_info = $this->mod_classes->get_class_by_id($classid);
+
+            if ($class_info->ownerid!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
+                throw new DataException($this->lang->line('not_class_owner'));
 
             $this->mod_classes->delete_class($classid);
             redirect('/classes');
@@ -90,7 +128,7 @@ class Ctrl_classes extends MY_Controller {
 
    public function edit_one_class() {
         try {
-            $this->mod_users->check_admin();
+            $this->mod_users->check_teacher();
 
             $classid = isset($_GET['classid']) ? intval($_GET['classid']) : 0;
         
@@ -98,6 +136,10 @@ class Ctrl_classes extends MY_Controller {
                 throw new DataException($this->lang->line('illegal_class_id'));
 
             $class_info = $this->mod_classes->get_class_by_id($classid);
+
+            if ($class_info->ownerid!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
+                throw new DataException($this->lang->line('not_class_owner'));
+
 
             $this->load->helper('form');
             $this->load->library('form_validation');
