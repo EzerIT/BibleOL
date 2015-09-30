@@ -27,6 +27,8 @@ class Mod_users extends CI_Model {
         $this->load->database();
 
         $this->user_id = $this->session->userdata('ol_user');
+        //echo "<pre>",print_r($this->session, true);die;
+
         if ($this->user_id===false)
             $this->user_id = 0;
         else
@@ -104,24 +106,27 @@ class Mod_users extends CI_Model {
     }
 
 
-    public function check_logged_in_google(boolean $must_be_google) {
+    public function check_logged_in_local() {
         if (!$this->mod_users->is_logged_in())
             throw new DataException($this->lang->line('must_be_logged_in'));
 
         $user_info = $this->mod_users->get_me();
         assert('!is_null($user_info)');
 
-        if ($must_be_google) {
-            if (!$user_info->google_login)
-                throw new DataException($this->lang->line('must_be_google'));
-        }
-        else {
-            if ($user_info->google_login)
-                throw new DataException($this->lang->line('must_not_be_google'));
-        }
+        if (!empty($user_info->oauth2_login))
+            throw new DataException($this->lang->line("must_not_be_{$user_info->oauth2_login}"));
     }
 
+    public function check_logged_in_oauth2(string $authority) {
+        if (!$this->mod_users->is_logged_in())
+            throw new DataException($this->lang->line('must_be_logged_in'));
 
+        $user_info = $this->mod_users->get_me();
+        assert('!is_null($user_info)');
+
+        if ($user_info->oauth2_login!==$authority)
+            throw new DataException($this->lang->line("must_be_$authority"));
+    }
 
     public function set_login_session(integer $user, $admin, $teacher, $preflang=null) {
         $this->session->set_userdata('ol_user', $user);
@@ -159,7 +164,7 @@ class Mod_users extends CI_Model {
             $user->password = '';
             $user->isadmin = 0;
             $user->email = '';
-            $user->google_login = false;
+            $user->oauth2_login = null;
             $user->created_time = time();
             $user->last_login = time()-10; // Assume that the user has logged in at least once to prevent expiry.
                                            // The -10 is used when listing users to indicate that this is a fake value.
@@ -182,11 +187,11 @@ class Mod_users extends CI_Model {
     //          Array of user information structures if more than one user found
     public function get_user_by_name_or_email(string $username, string $email) {
         if ($username!='') {
-            $query = $this->db->where('username',$username)->where('google_login',0)->get('user');
+            $query = $this->db->where('username',$username)->where('oauth2_login',null)->get('user'); //TODO: Test this
             return $query->num_rows()>0 ? $query->row() : null;
         }
         
-        $query = $this->db->where('email',$email)->where('google_login',0)->get('user');
+        $query = $this->db->where('email',$email)->where('oauth2_login',null)->get('user'); //TODO: Test this
         $count = $query->num_rows();
 
         if ($count===1)
@@ -241,10 +246,20 @@ class Mod_users extends CI_Model {
         $query = $this->db->where('ownerid',$userid)->update('exerciseowner',array('ownerid' => 0));
     }
 
-    
-    /// @return True if this is the first time this Google user logs in.
-    public function new_google_user(string $google_id, string $first_name, string $last_name, string $email) {
-        $query = $this->db->where('google_login',1)->where('username',"ggl_$google_id")->get('user');
+
+    /// @return True if this is the first time this user logs in.
+    public function new_oauth2_user(string $authority, string $oauth2_user_id, string $first_name, string $last_name, string $email) {
+        switch ($authority) {
+          case 'google':
+                $username = "ggl_$oauth2_user_id";
+                break;
+
+          case 'facebook':
+                $username = "fcb_$oauth2_user_id";
+                break;
+        }
+
+        $query = $this->db->where('oauth2_login',$authority)->where('username',$username)->get('user');
 
 		if ($row = $query->row()) {
             $this->me = $row;
@@ -261,7 +276,7 @@ class Mod_users extends CI_Model {
             if ($first_name!==$this->me->first_name || $last_name!==$this->me->last_name || $email!==$this->me->email) {
                 $query = $this->db->where('id',$this->user_id)->update('user',array('first_name' => $first_name,
                                                                                     'last_name' => $last_name,
-                                                                                    'email' => $email,
+                                                                                    'email' => empty($email) ? null : $email,
                                                                                     'last_login' => time(),
                                                                                     'warning_sent' => 0));
             }
@@ -277,12 +292,12 @@ class Mod_users extends CI_Model {
             $user->id = null; // Indicates new user
             $user->first_name = $first_name;
             $user->last_name = $last_name;
-            $user->username = "ggl_$google_id";
+            $user->username = $username;
             $user->password = 'NONE';
             $user->isadmin = 0;
             $user->isteacher = 0;
-            $user->email = $email;
-            $user->google_login = true;
+            $user->email = empty($email) ? null : $email;
+            $user->oauth2_login = $authority;
             $user->created_time = time();
             $user->last_login = time();
             $user->warning_sent = 0;

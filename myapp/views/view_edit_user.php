@@ -8,8 +8,8 @@
     <?= form_open($userid==-2 ? "users/sign_up" : "users/edit_one_user?userid=$userid") ?>
       <table class="form">
         <tr>
-          <?php if ($user_info->google_login): ?>
-            <td colspan="3"><?= $this->lang->line('this_user_google') ?></td>
+          <?php if (!empty($user_info->oauth2_login)): ?>
+            <td colspan="3"><?= $this->lang->line("this_user_{$user_info->oauth2_login}") ?></td>
           <?php else: ?>
             <td><?= $this->lang->line('user_name') ?></td>
             <?php if ($userid==-1 || $userid==-2): ?>
@@ -23,7 +23,7 @@
       </tr>
         <tr>
           <td><?= $this->lang->line('first_name') ?></td>
-          <?php if ($user_info->google_login): ?>
+          <?php if (!empty($user_info->oauth2_login)): ?>
             <td class="norb"><?= $user_info->first_name ?></td>
             <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
           <?php else: ?>
@@ -33,7 +33,7 @@
         </tr>
         <tr>
           <td><?= $this->lang->line('last_name') ?></td>
-          <?php if ($user_info->google_login): ?>
+          <?php if (!empty($user_info->oauth2_login)): ?>
             <td class="norb"><?= $user_info->last_name ?></td>
             <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
           <?php else: ?>
@@ -43,7 +43,7 @@
         </tr>
         <tr>
           <td><?= $this->lang->line('email') ?></td>
-          <?php if ($user_info->google_login): ?>
+          <?php if (!empty($user_info->oauth2_login)): ?>
             <td class="norb"><?= $user_info->email ?></td>
             <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
           <?php else: ?>
@@ -80,7 +80,7 @@
             <td class="nolb"></td>
           </tr>
         <?php endif; ?>
-        <?php if (!$user_info->google_login && $userid!=-2): ?>
+        <?php if (empty($user_info->oauth2_login) && $userid!=-2): ?>
           <tr>
             <td><?= $userid==-1 ? $this->lang->line('password') : $this->lang->line('new_password') ?></td>
             <td class="norb"><input type="password" name="password1" value=""></td>

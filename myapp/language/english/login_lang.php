@@ -7,6 +7,7 @@ $lang['forgotten']               = 'Forgotten user name or password?';
 $lang['sign_up']                 = 'Create new account';
 $lang['or']                      = 'or';
 $lang['sign_in_google']          = 'Sign in with Google+';
+$lang['sign_in_facebook']        = 'Sign in with Facebook';
 $lang['login']                   = 'Login';  // Text in title bar
 $lang['login_button']            = 'Login';  // Button label
 $lang['bad_password']            = 'Illegal user name or password';
@@ -34,14 +35,27 @@ $lang['password_reset_message']  = "Dear %s %s,\n\n"  // First name, last name
                                    . "You may change your password by selecting 'Profile' from the 'My data' menu.\n";
 $lang['password_reset_sent']     = 'An email containing your user name and new password has been sent to %s'; // Email address
 $lang['access_denied_from_google'] = 'Access denied from Google';
+$lang['access_denied_from_facebook'] = 'Access denied from Facebook';
 $lang['bad_state_information'] = 'Bad state information';
 $lang['wrong_answer_from_google'] = 'Wrong answer from Google';
+$lang['wrong_answer_from_facebook'] = 'Wrong answer from Facebook';
 $lang['new_google_user'] = 'New Google User'; // Text in title bar
+$lang['new_facebook_user'] = 'New Facebook User'; // Text in title bar
 $lang['users'] = 'Users';  // Text in title bar
 $lang['welcome_new_google_user'] = 'Welcome, new Google User';
 $lang['your_google_name' ] =
     'Google has informed us that your name is “%s %s” and your email address is “%s”. If you need to
      change that, you must change your profile on Google.';
+$lang['your_google_name_no_email' ] =
+    'Google has informed us that your name is “%s %s”. Your email address is not given. If you need to
+     change that, you must change your profile on Google.';
+$lang['welcome_new_facebook_user'] = 'Welcome, new Facebook User';
+$lang['your_facebook_name' ] =
+    'Facebook has informed us that your name is “%s %s” and your email address is “%s”. If you need to
+     change that, you must change your profile on Facebook.';
+$lang['your_facebook_name_no_email' ] =
+    'Facebook has informed us that your name is “%s %s”. Your email address is not given. If you need to
+     change that, you must change your profile on Facebook.';
 $lang['enjoy'] = 'We hope you will enjoy using the Bible Online Learner.';
 $lang['use_menu'] = 'You can use the menu above to access the various functions on this website.';
 
@@ -49,3 +63,7 @@ $lang['no_email'] =
     '<h1>You do not have an e-mail address</h1>
     <p>Your e-mail address is not found in the user list. Therefore we cannot send you an e-mail with
     password information. Please contact your system administrator, who can set up a new password for you.</p>';
+
+$lang['warn_multiple_login'] =
+    'Always use the same mechanism for logging in: Either always use Facebook, always use Google, or always use a
+     user name or password. Otherwise, you will get multiple accounts on this system.';

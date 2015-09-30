@@ -39,18 +39,29 @@ class Ctrl_login extends MY_Controller {
 		if ($this->form_validation->run())
             redirect("/");
 
-
-        // Set up parameters for Google authentication.
-        // For details about the protocol, see https://developers.google.com/accounts/docs/OAuth2WebServer.
         $this->session->unset_userdata(array('ol_user'=>'', 'ol_admin'=>'', 'ol_teacher'=>'', 'files'=>'', 'operation'=>'', 'from_dir'=>''));
 
-        $this->session->set_userdata('state', md5(rand())); // Used to prevent forged Google requests
+        // Set up parameters for OAuth2 authentication.
+        $this->session->set_userdata('oauth2_state', md5(rand())); // Used to prevent forged requests
+
+        // For details about the Google protocol,
+        // see https://developers.google.com/accounts/docs/OAuth2WebServer.
+
         $google_request = array('response_type' => 'code',
                                 'client_id' => $this->config->item('google_client_id'),
-                                'redirect_uri' => site_url('/google/callback'),
+                                'redirect_uri' => site_url('/oauth2/google_callback'),
                                 'scope' => 'https://www.googleapis.com/auth/userinfo.profile '
                                          . 'https://www.googleapis.com/auth/userinfo.email',
-                                'state' => $this->session->userdata('state'));
+                                'state' => $this->session->userdata('oauth2_state'));
+
+        // For details about the Facebook protocol,
+        // see https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow.
+
+        $facebook_request = array('response_type' => 'code',
+                                  'client_id' => $this->config->item('facebook_client_id'),
+                                  'redirect_uri' => site_url('/oauth2/facebook_callback'),
+                                  'scope' => 'email',
+                                  'state' => $this->session->userdata('oauth2_state'));
 
         // VIEW:
         $this->load->view('view_top1', array('title' => $this->lang->line('login'),
@@ -58,7 +69,9 @@ class Ctrl_login extends MY_Controller {
         $this->load->view('view_top2');
         $this->load->view('view_menu_bar', array('langselect' => true));
         $this->load->view('view_login', array('google_login_enabled' => $this->config->item('google_login_enabled'),
-                                              'google_request' => http_build_query($google_request)));
+                                              'google_request' => http_build_query($google_request),
+                                              'facebook_login_enabled' => $this->config->item('facebook_login_enabled'),
+                                              'facebook_request' => http_build_query($facebook_request)));
         $this->load->view('view_bottom');
     }
   }

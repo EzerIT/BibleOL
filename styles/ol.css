@@ -313,8 +313,14 @@ p.error {
 #logincenter #loginbox input.logintext {
   width: 190px;
 }
-#logincenter #googlebox {
+#logincenter #oauth2box {
   width: 270px;
+  margin-left: auto;
+  margin-right: auto;
+}
+#logincenter #oauth2text {
+  width: 270px;
+  text-align: left;
   margin-left: auto;
   margin-right: auto;
 }

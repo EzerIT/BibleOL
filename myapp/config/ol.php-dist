@@ -9,3 +9,7 @@ $config['site_url'] = 'http://xxxxx.xx';
 $config['google_login_enabled'] = false;
 $config['google_client_id'] = 'xxxxxxxxxxxx.apps.googleusercontent.com';
 $config['google_client_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+
+$config['facebook_login_enabled'] = false;
+$config['facebook_client_id'] = 'xxxxxxxxxxxxxxxx';
+$config['facebook_client_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';

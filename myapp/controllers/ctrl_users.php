@@ -44,23 +44,27 @@ class Ctrl_users extends MY_Controller {
         }
     }
 
+    private function delete_common() {
+        $this->mod_users->delete_user($this->mod_users->my_id());
+
+        // Log out
+        $this->mod_users->set_login_session(0, false, false);
+
+        // VIEW:
+        $this->load->view('view_top1', array('title' => $this->lang->line('user_profile_deleted')));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => false));
+
+        $center_text = $this->load->view('view_user_deleted', null, true);
+
+        $this->load->view('view_main_page', array('center' => $center_text));
+        $this->load->view('view_bottom');
+    }
+
     public function delete_me() {
         try {
-            $this->mod_users->check_logged_in_google(false);
-            $this->mod_users->delete_user($this->mod_users->my_id());
-
-            // Log out
-            $this->mod_users->set_login_session(0, false, false);
-
-            // VIEW:
-            $this->load->view('view_top1', array('title' => $this->lang->line('user_profile_deleted')));
-            $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => false));
-
-            $center_text = $this->load->view('view_user_deleted', null, true);
-
-            $this->load->view('view_main_page', array('center' => $center_text));
-            $this->load->view('view_bottom');
+            $this->mod_users->check_logged_in_local();
+            $this->delete_common();
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('users'));
@@ -69,7 +73,7 @@ class Ctrl_users extends MY_Controller {
 
     public function delete_me_google() {
         try {
-            $this->mod_users->check_logged_in_google(true);
+            $this->mod_users->check_logged_in_oauth2('google');
  
             // Revoke user permissions
             $url = "https://accounts.google.com/o/oauth2/revoke?token=" . $this->session->userdata('access_token');
@@ -94,27 +98,26 @@ class Ctrl_users extends MY_Controller {
 
               case '200':
                     // Token successfully revoked
-
-                    $this->mod_users->delete_user($this->mod_users->my_id());
-
-                    // Log out
-                    $this->mod_users->set_login_session(0, false, false);
-
-                    // VIEW:
-                    $this->load->view('view_top1', array('title' => $this->lang->line('user_profile_deleted')));
-                    $this->load->view('view_top2');
-                    $this->load->view('view_menu_bar', array('langselect' => false));
-
-                    $center_text = $this->load->view('view_user_deleted', null, true);
-                    
-                    $this->load->view('view_main_page', array('center' => $center_text));
-                    $this->load->view('view_bottom');
+                    $this->delete_common();
                     break;
                     
               default:
                     // Other error
                     throw new DataException($this->lang->line('google_no_valid_reply'));
             }
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('users'));
+        }
+    }
+
+    public function delete_me_facebook() {
+        try {
+            $this->mod_users->check_logged_in_oauth2('facebook');
+ 
+            // Facebook does not allow revoking user permissions from the server
+
+            $this->delete_common();
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('users'));
@@ -263,7 +266,7 @@ class Ctrl_users extends MY_Controller {
                 $this->form_validation->set_rules('username', $this->lang->line('user_name'), 'trim|required|strip_tags|is_unique[user.username]');
             }
 
-            if ($user_info->google_login) {
+            if (!empty($user_info->oauth2_login)) {
                 $this->form_validation->set_rules('isadmin', '', '');
                 $this->form_validation->set_rules('isteacher', '', '');
                 $this->form_validation->set_rules('preflang', '', '');
@@ -296,7 +299,7 @@ class Ctrl_users extends MY_Controller {
                 }
             }
             else {
-                // This is not a Google user, or this is a new account
+                // This is a local user, or this is a new account
 
                 // Common validation rules
                 $this->form_validation->set_rules('first_name', $this->lang->line('first_name'), 'trim|required|strip_tags');
@@ -385,8 +388,8 @@ class Ctrl_users extends MY_Controller {
            $user_info = $this->mod_users->get_me();
            assert('!is_null($user_info)');
 
-           if ($user_info->google_login) {
-               // Google user
+           if (!empty($user_info->oauth2_login)) {
+               // OAuth2-authorized user
                $this->load->helper('form');
                $this->load->library('form_validation');
 
@@ -404,8 +407,10 @@ class Ctrl_users extends MY_Controller {
                    $this->load->view('view_menu_bar', array('langselect' => true));
                    $this->load->view('view_confirm_dialog');
             
-                   $left_text = $this->load->view('view_google_profile_left', null, true);
-                   $center_text = $this->load->view('view_google_profile',array('user_info' => $user_info), true);
+                   $left_text = $this->load->view('view_oauth2_profile_left',
+                                                  array('authority' => $user_info->oauth2_login),
+                                                  true);
+                   $center_text = $this->load->view('view_oauth2_profile',array('user_info' => $user_info), true);
 
                    $this->load->view('view_main_page', array('left' => $left_text,
                                                              'center' => $center_text));
@@ -413,7 +418,7 @@ class Ctrl_users extends MY_Controller {
                }
            }
            else {
-               // Not a Google user
+               // Local user
 
                $this->load->helper('form');
                $this->load->library('form_validation');

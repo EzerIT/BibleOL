@@ -14,10 +14,14 @@
         <p><a href="<?= site_url('/users/forgot_pw') ?>"><?= $this->lang->line('forgotten') ?></a></p>
         <p><a href="<?= site_url('/users/sign_up') ?>"><?= $this->lang->line('sign_up') ?></a></p>
       </div>
-      <? if ($google_login_enabled): ?>
-        <div id="googlebox">
+      <?php if ($google_login_enabled): ?>
+         <div id="oauth2box">
           <p><?= $this->lang->line('or') ?></p>
           <p><a class="zocial googleplus" href="https://accounts.google.com/o/oauth2/auth?<?= $google_request ?>"><?= $this->lang->line('sign_in_google') ?></a></p>
+          <p><a class="zocial facebook" href="https://www.facebook.com/dialog/oauth?<?= $facebook_request ?>"><?= $this->lang->line('sign_in_facebook') ?></a></p>
         </div>
-      <? endif; ?>
+        <div id="oauth2text">
+          <p><?= $this->lang->line('warn_multiple_login') ?></p>
+        </div>
+      <?php endif; ?>
     </div>   

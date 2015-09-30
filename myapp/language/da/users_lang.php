@@ -5,6 +5,7 @@ $lang['edit_user'] = 'Redigér bruger';  // Text in title bar
 $lang['create_account'] = 'Opret konto';  // Text in title bar
 $lang['users'] = 'Brugere';  // Text in title bar
 $lang['you_login_google'] = 'Du er logget ind med Google';
+$lang['you_login_facebook'] = 'Du er logget ind med Facebook';
 $lang['user_name'] = 'Brugernavn';
 $lang['first_name'] = 'Fornavn';
 $lang['last_name'] = 'Efternavn';
@@ -22,9 +23,11 @@ $lang['danish'] = 'Dansk';
 
 $lang['this_your_profile'] = 'Dette er din brugerprofil';
 $lang['change_through_google'] = 'Hvis du vil ændre dit navn eller email-adresse, skal du gøre det i din profil hos Google.';
+$lang['change_through_facebook'] = 'Hvis du vil ændre dit navn eller email-adresse, skal du gøre det i din profil hos Facebook.';
 $lang['delete_profile'] = 'Nedlæg profil'; // Text in title bar on pop-up dialog
-$lang['delete_google_profile1'] = 'Ønsker du at nedlægge din konto på denne server inklusive alle dine data på dette websted?';
+$lang['delete_oauth2_profile1'] = 'Ønsker du at nedlægge din konto på denne server inklusive alle dine data på dette websted?';
 $lang['delete_google_profile2'] = 'NB: Dette vil ikke ændre din konto hos Google, men det vil fjerne Bible Online Learner fra din liste over godkendte programmer.';
+$lang['delete_facebook_profile2'] = 'NB: Dette vil ikke ændre din konto hos Facebook, og det vil ikke fjerne Bible Online Learner fra din liste over godkendte programmer.';
 $lang['delete_profile_button'] = 'Nedlæg profilen';
 
 $lang['edit_user_profile'] = 'Redigér brugerprofil';
@@ -51,6 +54,7 @@ $lang['add_user'] = 'Tilføj ny bruger';
 $lang['edit_user_information'] = 'Redigér brugeroplysninger';
 $lang['specify_user_information'] = 'Angiv brugeroplysninger';
 $lang['this_user_google'] = 'Denne bruger logger ind med Google';
+$lang['this_user_facebook'] = 'Denne bruger logger ind med Facebook';
 
 $lang['user_name_used'] = 'Brugernavnet "%s" er optaget';
 

@@ -97,7 +97,7 @@
   <a class="makebutton" href="<?= site_url("file_manager/insert_files?dir={$dirlist['relativedir']}") ?>"><?= $copy_or_move==='move' ? $this->lang->line('insert_moved_files') : $this->lang->line('insert_copied_files') ?></a>
     <a class="makebutton" href="<?= site_url("file_manager/cancel_copy?dir={$dirlist['relativedir']}") ?>"><?= $copy_or_move==='move' ? $this->lang->line('cancel_move') : $this->lang->line('cancel_copy')?></a>
   </p>
-<? endif; ?>
+<?php endif; ?>
 
   <p>
     <a class="makebutton" href="<?= site_url("file_manager/upload_files?dir={$dirlist['relativedir']}") ?>"><?= $this->lang->line('upload_exercises_button') ?></a>

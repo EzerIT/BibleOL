@@ -5,6 +5,7 @@ $lang['edit_user'] = 'Edit user';  // Text in title bar
 $lang['create_account'] = 'Create account';  // Text in title bar
 $lang['users'] = 'Users';  // Text in title bar
 $lang['you_login_google'] = 'You have logged in with Google';
+$lang['you_login_facebook'] = 'You have logged in with Facebook';
 $lang['user_name'] = 'User name';
 $lang['first_name'] = 'First name';
 $lang['last_name'] = 'Last name';
@@ -22,9 +23,11 @@ $lang['danish'] = 'Danish';
 
 $lang['this_your_profile'] = 'This is your user profile';
 $lang['change_through_google'] = 'If your want to change your name or email address, you must do so in your Google profile.';
+$lang['change_through_facebook'] = 'If your want to change your name or email address, you must do so in your Facebook profile.';
 $lang['delete_profile'] = 'Delete profile'; // Text in title bar on pop-up dialog
-$lang['delete_google_profile1'] = 'Do you want to delete your account on this server including all your data on this site?';
+$lang['delete_oauth2_profile1'] = 'Do you want to delete your account on this server including all your data on this site?';
 $lang['delete_google_profile2'] = 'Note: This will not change your account on Google, but it will remove Bible Online Learner from your list of approved applications.';
+$lang['delete_facebook_profile2'] = 'Note: This will not change your account on Facebook, nor will it remove Bible Online Learner from your list of approved applications.';
 $lang['delete_profile_button'] = 'Delete the profile';
 
 $lang['edit_user_profile'] = 'Edit user profile';
@@ -51,6 +54,7 @@ $lang['add_user'] = 'Add new user';
 $lang['edit_user_information'] = 'Edit user information';
 $lang['specify_user_information'] = 'Specify user information';
 $lang['this_user_google'] = 'This user logs in with Google';
+$lang['this_user_facebook'] = 'This user logs in with Facebook';
 
 $lang['user_name_used'] = 'The user name "%s" is already in use';
 

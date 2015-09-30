@@ -6,7 +6,7 @@
     <?= form_open("users/profile") ?>
       <table class="form">
         <tr>
-          <td colspan="2"><?= $this->lang->line('you_login_google'); ?></td>
+          <td colspan="2"><?= $this->lang->line("you_login_{$user_info->oauth2_login}"); ?></td>
         </tr>
         <tr>
           <td><?= $this->lang->line('first_name'); ?></td>

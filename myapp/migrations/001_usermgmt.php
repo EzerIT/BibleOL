@@ -72,12 +72,22 @@ class Migration_Usermgmt extends CI_Migration {
         }
 
 
-        echo "Updating user table...\n";
+        echo "Updating user table stage 1...\n";
  
+        $this->dbforge->add_column('user', array('oauth2_login' => array('type' => 'TINYTEXT',
+                                                                         'null' => true)));
+ 
+        $this->db->where('google_login',1)->update('user',array('oauth2_login' => 'google'));
+
+
+        echo "Updating user table stage 2...\n";
+
         $this->dbforge->drop_column('user', 'may_see_wivu');
+        $this->dbforge->drop_column('user', 'google_login');
  
         $this->dbforge->add_column('user', array('created_time' => array('type' => 'INT', 'default' => '0'),
                                                  'last_login' => array('type' => 'INT', 'default' => '0'),
+                                                 'facebook_login' => array('type' => 'TINYINT(1)', 'default' => '0'),
                                                  'warning_sent' => array('type' => 'INT', 'default' => '0'),
                                                  // warning_sent:
                                                  // 0: No warning mail sent
