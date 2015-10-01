@@ -90,17 +90,19 @@ $lang['google_no_response_delete'] = 'Google svarede ikke på denne anmodning. D
 
 $lang['cannot_delete_self'] = 'Du kan ikke slette dig selv';
 
-$lang['expiry_warning_1_subject'] = 'Inaktiv konto på Bible Online Learner';
+$lang['expiry_warning_subject'] = 'Inaktiv konto på Bible Online Learner';
 $lang['expiry_warning_1_message'] = "Kære %s %s,\n\n"  // First name, last name
                                   . "Du har ikke benyttet din konto på %s i ni måneder.\n" // Site URL
-                                  . "Om yderligere ni måneder bliver din konto slettet.\n\n"
-                                  . "Hvis du ønsker at bevare din konto, skal du blot gå til ovennævnte websted\n"
-                                  . "og logge ind med brugernavnet %s."; // Username
-
-$lang['expiry_warning_2_subject'] = 'Inaktiv konto på Bible Online Learner';
+                                  . "Om yderligere ni måneder bliver din konto slettet.\n\n";
 $lang['expiry_warning_2_message'] = "Kære %s %s,\n\n"  // First name, last name
                                   . "Du har ikke benyttet din konto på %s i 17 måneder.\n" // Site URL
-                                  . "Om en måned bliver din konto slettet.\n\n"
-                                  . "Hvis du ønsker at bevare din konto, skal du blot gå til ovennævnte websted\n"
-                                  . "og logge ind med brugernavnet %s."; // Username
+                                  . "Om en måned bliver din konto slettet.\n\n";
+
+$lang['expiry_warning_message_local'] = "Hvis du ønsker at bevare din konto, skal du blot gå til ovennævnte\n"
+                                      . "websted og logge ind med brugernavnet '%s'."; // Username
+$lang['expiry_warning_message_google'] = "Hvis du ønsker at bevare din konto, skal du blot gå til ovennævnte\n"
+                                       . "websted og logge ind med din Google-konto.";
+$lang['expiry_warning_message_facebook'] = "Hvis du ønsker at bevare din konto, skal du blot gå til ovennævnte\n"
+                                         . "websted og logge ind med din Facebook-konto.";
+
 $lang['only_admin_delete'] = 'Kun administratorer kan slette lærere og administratorer';

@@ -88,18 +88,20 @@ $lang['google_no_response_delete'] = 'Google did not respond to this request. Th
 
 $lang['cannot_delete_self'] = 'You cannot delete yourself';
 
-$lang['expiry_warning_1_subject'] = 'Inactive account on Bible Online Learner';
+$lang['expiry_warning_subject'] = 'Inactive account on Bible Online Learner';
 $lang['expiry_warning_1_message'] = "Dear %s %s,\n\n"  // First name, last name
                                   . "You have not used your account on %s for nine months.\n" // Site URL
-                                  . "In another nine months, your account will be deleted.\n\n"
-                                  . "If you want to keep your account, simply go to the website mentioned above\n"
-                                  . "and log in using the user name %s."; // Username
-
-$lang['expiry_warning_2_subject'] = 'Inactive account on Bible Online Learner';
+                                  . "In another nine months, your account will be deleted.\n\n";
 $lang['expiry_warning_2_message'] = "Dear %s %s,\n\n"  // First name, last name
                                   . "You have not used your account on %s for 17 months.\n" // Site URL
-                                  . "In one more month, your account will be deleted.\n\n"
-                                  . "If you want to keep your account, simply go to the website mentioned above\n"
-                                  . "and log in using the user name %s."; // Username
+                                  . "In one more month, your account will be deleted.\n\n";
+
+$lang['expiry_warning_message_local'] = "If you want to keep your account, simply go to the website mentioned above\n"
+                                         . "and log in using the user name '%s'."; // Username
+$lang['expiry_warning_message_google'] = "If you want to keep your account, simply go to the website mentioned above\n"
+                                          . "and log in using your Google account.";
+$lang['expiry_warning_message_facebook'] = "If you want to keep your account, simply go to the website mentioned above\n"
+                                            . "and log in using your Facebook account.";
+
 
 $lang['only_admin_delete'] = 'Only administrators can delete teachers and administrators';

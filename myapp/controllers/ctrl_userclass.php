@@ -98,8 +98,9 @@ class Ctrl_userclass extends MY_Controller {
             $user_info = $this->mod_users->get_user_by_id($userid);
 
             $all_classes = $this->mod_classes->get_all_classes();
-            usort($all_classes, 'classname_cmp');
+            $owned_classes = $this->mod_userclass->get_classes_owned();
             $old_classes = $this->mod_userclass->get_classes_for_user($userid);
+            usort($all_classes, 'classname_cmp');
 
             $this->load->helper('form');
             $this->load->library('form_validation');
@@ -111,7 +112,7 @@ class Ctrl_userclass extends MY_Controller {
                 if (!$new_classes) // post() returns false when nothing is selected...
                     $new_classes = array(); // ...so we set the array to empty
 
-                $this->mod_userclass->update_classes_for_user($userid, $old_classes, $new_classes);
+                $this->mod_userclass->update_classes_for_user($userid, $old_classes, $new_classes, $owned_classes);
                 redirect('/users');
             }
             else {
@@ -124,6 +125,7 @@ class Ctrl_userclass extends MY_Controller {
                                                  array('userid' => $userid,
                                                        'user_name' => "$user_info->first_name $user_info->last_name",
                                                        'allclasses' => $all_classes,
+                                                       'owned_classes' => $owned_classes,
                                                        'old_classes' => $old_classes),
                                                  true);
              
@@ -162,8 +164,8 @@ class Ctrl_userclass extends MY_Controller {
             $avail_classes = array();
 
             foreach ($all_classes as $ix => $ac)
-                if (!in_array($ac->id, $old_classes) && (empty($ac->enrol_before) ||self::before_date($ac->enrol_before)))
-                    $avail_classes[] = $ac->id;
+                if (!in_array($ac->clid, $old_classes) && (empty($ac->enrol_before) ||self::before_date($ac->enrol_before)))
+                    $avail_classes[] = $ac->clid;
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('enroll_in_class')));
@@ -188,7 +190,7 @@ class Ctrl_userclass extends MY_Controller {
     private $enroll_class;
 
     public function class_password_check($password) {
-        if ($password === $this->enroll_class->password)
+        if ($password === $this->enroll_class->clpass)
             return true;
         else {
 			$this->form_validation->set_message('class_password_check', $this->lang->line('wrong_class_password'));
@@ -210,7 +212,7 @@ class Ctrl_userclass extends MY_Controller {
 
             foreach ($all_classes as $ix => $ac)
                 if (!in_array($ac->id, $old_classes))
-                    $avail_classes[] = $ac->id;
+                    $avail_classes[] = $ac->clid;
 
             if (in_array($classid, $old_classes))
                 throw new DataException($this->lang->line('already_enrolled'));
@@ -225,7 +227,7 @@ class Ctrl_userclass extends MY_Controller {
 
             $this->form_validation->set_rules('password', $this->lang->line('class_password'), 'trim|required|callback_class_password_check');
 
-            if (empty($this->enroll_class->password) || $this->form_validation->run()) {
+            if (empty($this->enroll_class->clpass) || $this->form_validation->run()) {
                 $this->mod_userclass->enroll_user_in_class($userid, $classid);
 
                 // VIEW:

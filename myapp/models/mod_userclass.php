@@ -44,10 +44,23 @@ class Mod_userclass extends CI_Model {
         return $res;
     }
      
-    public function update_classes_for_user(integer $userid, array $old_classes, array $new_classes) {
+    public function get_classes_owned() {
+        if ($this->mod_users->is_admin())
+            $query = $this->db->select('id')->get('class');
+        else
+            $query = $this->db->select('id')->where('ownerid',$this->mod_users->my_id())->get('class');
+
+        $res = array();
+        foreach ($query->result() as $row)
+            $res[] = $row->id;
+
+        return $res;
+    }
+     
+    public function update_classes_for_user(integer $userid, array $old_classes, array $new_classes, array $owned_classes) {
         // Insert new classes
         foreach ($new_classes as $newid) {
-            if (in_array($newid, $old_classes))
+            if (in_array($newid, $old_classes) || !in_array($newid, $owned_classes))
                 continue;
 
             $this->enroll_user_in_class($userid, $newid);
@@ -55,7 +68,7 @@ class Mod_userclass extends CI_Model {
 
         // Remove old classes
         foreach ($old_classes as $oldid) {
-            if (in_array($oldid, $new_classes))
+            if (in_array($oldid, $new_classes) || !in_array($oldid, $owned_classes))
                 continue;
 
             $this->unenroll_user_from_class($userid, $oldid);

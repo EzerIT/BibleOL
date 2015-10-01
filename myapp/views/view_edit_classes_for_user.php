@@ -5,10 +5,12 @@
   <tr><th><?= $this->lang->line('class') ?></th><th><?= $this->lang->line('in_this_class') ?></th></tr>
 
   <?php foreach ($allclasses as $cl): ?>
-    <tr>
-      <td><?= $cl->classname ?></td>
-     <td><input type="checkbox" name="foruser[]" value="<?= $cl->id ?>" <?= set_checkbox('foruser[]', $cl->id, in_array($cl->id, $old_classes)) ?>></td>
-    </tr>
+     <?php if (in_array($cl->clid, $owned_classes)): ?>
+      <tr>
+        <td><?= $cl->classname ?></td>
+        <td><input type="checkbox" name="foruser[]" value="<?= $cl->clid ?>" <?= set_checkbox('foruser[]', $cl->clid, in_array($cl->clid, $old_classes)) ?>></td>
+      </tr>
+    <?php endif; ?>
   <?php endforeach; ?>
 </table>
 

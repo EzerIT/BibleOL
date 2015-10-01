@@ -9,7 +9,7 @@ else {
         $cl = $all_classes[$clid];
         echo "<tr>\n";
         echo "<td>$cl->classname</td>\n";
-        echo "<td><a class=\"makebutton\" href=\"",site_url('userclass/enroll_in'),"?classid=$cl->id\">", $this->lang->line('enroll'), "</a></td>\n";
+        echo "<td><a class=\"makebutton\" href=\"",site_url('userclass/enroll_in'),"?classid=$cl->clid\">", $this->lang->line('enroll'), "</a></td>\n";
         echo "</tr>\n";
     }
     echo "</table>\n";

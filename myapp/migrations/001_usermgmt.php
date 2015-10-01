@@ -87,7 +87,6 @@ class Migration_Usermgmt extends CI_Migration {
  
         $this->dbforge->add_column('user', array('created_time' => array('type' => 'INT', 'default' => '0'),
                                                  'last_login' => array('type' => 'INT', 'default' => '0'),
-                                                 'facebook_login' => array('type' => 'TINYINT(1)', 'default' => '0'),
                                                  'warning_sent' => array('type' => 'INT', 'default' => '0'),
                                                  // warning_sent:
                                                  // 0: No warning mail sent
@@ -102,12 +101,17 @@ class Migration_Usermgmt extends CI_Migration {
 
         $query = $this->db->select('userid,max(start) maxstart')->group_by('userid')->get('sta_quiz');
  
-        foreach ($query->result() as $row)
-            $this->db->where('id',$row->userid)->update('user',array('last_login' => $row->maxstart));
+        $default_last_login = time()-9*30*24*3600; // 9 months ago
 
-        // Users who have not run an exercise are given a login time of 12 months ago
-        $this->db->where('last_login',0)->update('user',array('last_login' => time()-3600*24*365));
+        foreach ($query->result() as $row) {
+            if ($row->maxstart >= $default_last_login)
+                // User ran an exercise recently
+                $this->db->where('id',$row->userid)->update('user',array('last_login' => $row->maxstart));
+        }
 
+
+        // Users who have not run an exercise are given a login time of 9 months ago
+        $this->db->where('last_login',0)->update('user',array('last_login' => $default_last_login));
 
         echo "Updating class table...\n";
         $this->dbforge->add_column('class', array('ownerid' => array('type'=>'INT', 'default' => '0')));

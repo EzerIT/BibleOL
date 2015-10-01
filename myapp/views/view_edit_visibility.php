@@ -30,7 +30,7 @@
   <?php foreach ($allclasses as $cl): ?>
     <tr class="dirclasslist">
       <td><?= $cl->classname ?></td>
-      <td class="centeralign"><input type="checkbox" class="narrow" name="inclass[]" value="<?= $cl->id ?>" <?= set_checkbox('inclass[]', $cl->id, in_array($cl->id, $old_classes)) ?>></td>
+      <td class="centeralign"><input type="checkbox" class="narrow" name="inclass[]" value="<?= $cl->clid ?>" <?= set_checkbox('inclass[]', $cl->clid, in_array($cl->clid, $old_classes)) ?>></td>
     </tr>
   <?php endforeach; ?>
 </table>

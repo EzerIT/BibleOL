@@ -633,6 +633,32 @@ class Ctrl_users extends MY_Controller {
 
     }
 
+    private function warning_mail(stdClass $u, string $warning) {
+        $this->lang->clear_secondary();
+        $this->lang->load_secondary('users',$u->preflang);
+
+        $this->email->from($this->config->item('mail_sender_address'), $this->config->item('mail_sender_name'));
+        $this->email->to($u->email); 
+        $this->email->subject($this->lang->line_secondary('expiry_warning_subject'));
+
+        $message = sprintf($this->lang->line_secondary($warning),
+                           $u->first_name, $u->last_name, $this->config->item('site_url'));
+
+        switch ($u->oauth2_login) {
+          case 'google':
+          case 'facebook':
+                $message .= $this->lang->line_secondary("expiry_warning_message_{$u->oauth2_login}");
+                break;
+
+          default:
+                $message .= sprintf($this->lang->line_secondary('expiry_warning_message_local'), $u->username);
+                break;
+        }
+
+        $this->email->message($message);
+        $this->email->send();
+    }
+
     // Intended to be run from cron.
     // Performs three kinds of expiration:
     //   * New accounts where the user has not logged in are deleted after 48 hours.
@@ -653,30 +679,12 @@ class Ctrl_users extends MY_Controller {
          
         // Send mails:
         $this->load->library('email');
-
-        foreach ($users_old_17months as $u) {
-            $this->lang->clear_secondary();
-            $this->lang->load_secondary('users',$u->preflang);
-
-            $this->email->from($this->config->item('mail_sender_address'), $this->config->item('mail_sender_name'));
-            $this->email->to($u->email); 
-            $this->email->subject($this->lang->line_secondary('expiry_warning_2_subject'));
-            $this->email->message(sprintf($this->lang->line_secondary('expiry_warning_2_message'),
-                                          $u->first_name, $u->last_name, $this->config->item('site_url'), $u->username));
-            $this->email->send();
-        }
          
-        foreach ($users_old_9months as $u) {
-            $this->lang->clear_secondary();
-            $this->lang->load_secondary('users',$u->preflang);
-
-            $this->email->from($this->config->item('mail_sender_address'), $this->config->item('mail_sender_name'));
-            $this->email->to($u->email); 
-            $this->email->subject($this->lang->line_secondary('expiry_warning_1_subject'));
-            $this->email->message(sprintf($this->lang->line_secondary('expiry_warning_1_message'),
-                                          $u->first_name, $u->last_name, $this->config->item('site_url'), $u->username));
-            $this->email->send();
-        }
+        foreach ($users_old_17months as $u)
+            $this->warning_mail($u,'expiry_warning_2_message');
+         
+        foreach ($users_old_9months as $u)
+            $this->warning_mail($u,'expiry_warning_1_message');
          
         // VIEW:
         if (count($users_new_inactive)>0) {
