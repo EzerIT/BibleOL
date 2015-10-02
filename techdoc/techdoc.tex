@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Font matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{20 May 2015}
+\date{2 October 2015}
 
 \makeindex
 
@@ -573,6 +573,10 @@ $config['mail_sender_name'] = 'Bible Online Learner';
 $config['google_login_enabled'] = false;
 $config['google_client_id'] = 'xxxxxxxxxxxx.apps.googleusercontent.com';
 $config['google_client_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+
+$config['facebook_login_enabled'] = false;
+$config['facebook_client_id'] = 'xxxxxxxxxxxxxxxx';
+$config['facebook_client_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 \end{lstlisting}
 
 You should modify these values thus:
@@ -600,6 +604,16 @@ client ID. Used only if you enable Google login.\\
 
 \$config['google\_client\_secret']\index{Google!client secret}\index{client secret|see {Google, client secret}} & Your
 Google apps client secret, if any. Used only if you enable Google login.\\
+
+\$config['facebook\_login\_enabled']\index{login!Facebook}\index{Facebook!login|see {login, Facebook}} & Set to \emph{true} if
+you have a Facebook developers account\index{Facebook!developers account} that allows you to service Facebook logins;
+set to \emph{false} to disable Facebook login.\\
+
+\$config['facebook\_client\_id']\index{Facebook!app ID}\index{app ID|see {Facebook, app ID}} & Your Facebook app
+ID. Used only if you enable Facebook login.\\
+
+\$config['facebook\_client\_secret']\index{Facebook!app secret}\index{app secret|see {Facebook, app secret}} & Your
+Facebook app secret. Used only if you enable Facebook login.\\
   
 \end{my-longtabu}
 
@@ -1181,7 +1195,11 @@ Source: \url{https://github.com/vakata/jstree}.
 
 License: A choice between MIT and GPL.\\
 
-myapp & The server code. Chapter \ref{chap-server-code} gives more information.\\
+myapp & The server code. Chapter \ref{chap-server-code} gives more information.
+
+License: MIT, except for the file
+\texttt{myapp/\allowbreak{}controllers/\allowbreak{}ctrl\_upload.php}, which contains code take from
+\texttt{valums-\allowbreak{}file-\allowbreak{}uploader-\allowbreak{}b3b20b1} mentioned below.\\
 
 quizzes & Quiz templates\index{quiz template} available for the user. This directory
 is used only by the runtime system. Development files should not be stored here, and the contents of
@@ -1246,8 +1264,8 @@ Source: \url{http://freecode.com/projects/jsvk}.
 
 License: LGPL.\\
 
-zocial\index{zocial} & Icon\index{icon} and styles for setting up a Google
-login\index{login!Google} button.
+zocial\index{zocial} & Icon\index{icon} and styles for setting up a Google or Facebook
+login\index{login!Google}\index{login!Facebook} button.
 
 Website: \url{http://zocial.smcllns.com}.
 
@@ -4098,9 +4116,13 @@ registered users.\\
 mail\_sender\_name & The sender\index{email sender} name on email sent by Bible OL to registered
 users.\\
 
-google\_client\_id & Used by Google login\index{login!Google} (see Section \ref{sec-google-login}).\\
+google\_client\_id & Used by Google login\index{login!Google} (see Section \ref{sec-oauth-login}).\\
 
-google\_client\_secret & Used by Google login\index{login!Google} (see Section \ref{sec-google-login}).\\
+google\_client\_secret & Used by Google login\index{login!Google} (see Section \ref{sec-oauth-login}).\\
+
+facebook\_client\_id & Used by Facebook login\index{login!Facebook} (see Section \ref{sec-oauth-login}).\\
+
+facebook\_client\_secret & Used by Facebook login\index{login!Facebook} (see Section \ref{sec-oauth-login}).\\
 \end{my-tabu}
 
 
@@ -4135,8 +4157,6 @@ config & Allows users to change their font preferences.\\
 
 file\_manager & Management of files and directories in the \texttt{quizzes} directory.\\
 
-google & Handles login using a Google\index{login!Google} account.\\
-
 login & Handles login using the local\index{login!local} user database\index{user database}.\\
 
 main\_page & Displays the main page.\\
@@ -4145,16 +4165,24 @@ maketypeinfo & This controller can only be accessed from the command line, not t
 interface. It is used to create the Database Type Information File as described in Section
 \ref{sec-tif}.\\
 
+migrate & Handles upgrading from one version of Bible OL to another.\\
+
+oauth2 & Handles login using a Google or Facebook\index{login!Google}\index{login!Facebook} account.\\
+
 pic2db & This controller can only be accessed from the command line, not through the web interface.
 It is used to retrieve information from the resource website\index{resource website} (see Section
 \ref{sec-resource-web}).\\
 
 privacy & Displays the privacy policy.\\
 
+shebanq & Handles import of MQL from the SHEBANQ website (see Section \ref{sec-shebanq-import}).\\ % TODO: Shebanq import
+
 statistics & Updates and displays statistics\index{statistics} about the exercises executed by the
 user.\\
 
 text & Displays text or exercises. Also handles editing of exercises.\\
+
+upload & Recieves and stores uploaded exercises.\\
 
 userclass & Manages a user's relationship to a class.\\
 
@@ -4171,6 +4199,7 @@ mod\_classdir & Manages class permissions for an exercise directory.\\
 mod\_classes & Manages classes (that is, groups of users).\\
 mod\_config & Manages users' font\index{font} preferences.\\
 mod\_intro\_text & Generates the text on the front page.\\
+mod\_localize & Generates localization information for JavaScript code (see Section \ref{sec-localize-javascript}).\\
 mod\_quizpath & Exercise directory operations.\\
 mod\_statistics & Manages user statistics.\index{statistics}\\
 mod\_userclass & Manages a user's relationship to a class.\\
@@ -4381,17 +4410,23 @@ changed accordingly.
 Note that there is almost no error reporting from MQL when the external MQL command is used.
 
 
-%%%%%%%%%%%%%%%%%%%% Google Login %%%%%%%%%%%%%%%%%%%%
-\section{Google Login}\label{sec-google-login}\index{login!Google|hyperit}
+%%%%%%%%%%%%%%%%%%%% Google and Facebook Login %%%%%%%%%%%%%%%%%%%%
+\section{Google and Facebook Login}\label{sec-oauth-login}\index{login!Google|hyperit}\index{login!Facebook|hyperit}\index{login!OAuth2|hyperit}
 
 The server provides two different login mechanism. One uses a local\index{login!local} list of users
-(see Section \ref{sec-user-table}), the other relies on a user's Google login. Google's description
-of how login works can be found here:
-\url{https://developers.google.com/accounts/docs/OAuth2WebServer}. The following is a brief
-description of the mechanism as it is set up on the Bible OL installation that runs at
-\url{http://bibleol.3bmoodle.dk}.
+(see Section \ref{sec-user-table}), the other relies on a user's Google or Facebook login. Both
+Google and Facebook provide authentication using the OAuth~2 protocol.
 
-\subsection*{Step 1. The Browser Sends Authentication Request to Google}
+Google's description of how their OAuth implementation works can be found here:
+\url{https://developers.google.com/accounts/docs/OAuth2WebServer}. Facebook's implementation works
+in a similar manner.
+
+The following is a brief description of the mechanism as it is set up on the Bible OL installation
+that runs at \url{http://bibleol.3bmoodle.dk}.
+
+\subsection*{Step 1. The Browser Sends Authentication Request to Google or Facebook}
+
+\subsubsection*{Google:}
 
 When a user clicks ``Sign in with Google+'' on the login page, the browser sends an HTTP GET request
 to \texttt{https://accounts.google.com/o/oauth2/auth} with the following GET parameters:
@@ -4400,35 +4435,51 @@ to \texttt{https://accounts.google.com/o/oauth2/auth} with the following GET par
 response\_type & \texttt{'code'}\\
 client\_id     & Our Google client ID\index{Google!client ID}, configured in the file
                  \texttt{myapp/\allowbreak{}config/\allowbreak{}ol.php}\index{ol.php}.\\
-redirect\_uri  & \texttt{'http://bibleol.3bmoodle.dk/google/callback'}\\
+redirect\_uri  & \texttt{'http://bibleol.3bmoodle.dk/oauth2/google\_callback'}\\
 scope          & \texttt{'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'}\\
 state          & A random value, stored in CodeIgniter's session mechanism.\\
 \end{my-tabu}
 
+\subsubsection*{Facebook:}
 
-\subsection*{Step 2. Google Responds}
+When a user clicks ``Sign in with Facebook'' on the login page, the browser sends an HTTP GET request
+to \texttt{https://www.facebook.com/dialog/oauth} with the following GET parameters:
 
-Google checks if the user can be logged in to Bible OL. Google then sends a response to the browser,
+\begin{my-tabu}{lp{10cm}}{ \headii{Name}{Value} }
+response\_type & \texttt{'code'}\\
+client\_id     & Our Facebook app ID\index{Facebook!app ID}, configured in the file
+                 \texttt{myapp/\allowbreak{}config/\allowbreak{}ol.php}\index{ol.php}.\\
+redirect\_uri  & \texttt{'http://bibleol.3bmoodle.dk/oauth2/facebook\_callback'}\\
+scope          & \texttt{'email'}\\
+state          & A random value, stored in CodeIgniter's session mechanism.\\
+\end{my-tabu}
+
+
+\subsection*{Step 2. Google/Facebook Responds}
+
+Google or Facebook checks if the user can be logged in to Bible OL. Google/Facebook then sends a response to the browser,
 directing it to send a new HTTP GET command to the \emph{redirect\_uri} specified in the request
-above. The parameters for the new GET request depend on whether Google approved access or not.
+above. The parameters for the new GET request depend on whether Google/Facebook approved access or not.
 
 
 \subsection*{Step 3. Browser Sends Authentication Information to the Bible OL Server}
 
-As directed by the response from Google, the browser sends a HTTP GET request to
-\texttt{http://bibleol.3bmoodle.dk/google/callback} with the following GET parameters:
+As directed by the response from Google or Facebook, the browser sends an HTTP GET request to
+\texttt{http://bibleol.3bmoodle.dk/oauth2/*\_callback} with the following GET parameters:
 
 \begin{my-tabu}{ll}{ \headii{Name}{Value} }
 error & Error information if access is denied. If access is approved, this parameter is not present.\\
 state & The value of the \emph{state} parameter from Step 1.\\
-code & An authentication code generated by Google.\\
+code & An authentication code generated by Google/Facebook.\\
 \end{my-tabu}
 
 
-\subsection*{Step 4. The Bible OL Server Requests an Access Token from Google}
+\subsection*{Step 4. The Bible OL Server Requests an Access Token from Google/Facebook}
 
 In Bible OL, the request from the browser is handled by the function \emph{callback} in the
-\emph{Ctrl\_google} controller (in the file \texttt{myapp/controllers/ctrl\_google.php}). 
+\emph{Ctrl\_oauth2} controller (in the file \texttt{myapp/controllers/ctrl\_oauth2.php}). 
+
+\subsubsection*{Google:}
 
 If Google approved access, Bible OL does not respond immediately to the client, but sends an HTTP
 POST request to \texttt{https://accounts.google.com/o/oauth2/token} with the following POST
@@ -4439,15 +4490,34 @@ code           & The authentication code received in the \emph{code} parameter i
 client\_id     & Our Google client ID\index{Google!client ID}, configured in the file
                  \texttt{myapp/config/ol.php}\index{ol.php}.\\
 client\_secret & Our Google client secret\index{Google!client secret}, configured in the file \texttt{myapp/config/ol.php}.\\
-redirect\_uri  & \texttt{'http://bibleol.3bmoodle.dk/google/callback'}\\
+redirect\_uri  & \texttt{'http://bibleol.3bmoodle.dk/oauth2/google\_callback'}\\
 grant\_type    & \texttt{'authorization\_code'}\\
 \end{my-tabu}
 
 In response to the HTTP POST request, Google replies with a JSON string containing an
 \emph{access\_token}.
 
+\subsubsection*{Facebook:}
 
-\subsection*{Step 5. The Bible OL Server Requests User Information from Google}
+If Facebook approved access, Bible OL does not respond immediately to the client, but sends an HTTP
+GET request to \texttt{https://graph.facebook.com/v2.4/oauth/access\_token} with the following GET
+parameters:
+
+\begin{my-tabu}{ll}{ \headii{Name}{Value} }
+code           & The authentication code received in the \emph{code} parameter in Step 3.\\
+client\_id     & Our Facebook app ID\index{Facebook!app ID}, configured in the file
+                 \texttt{myapp/config/ol.php}\index{ol.php}.\\
+client\_secret & Our Facebook app secret\index{Facebook!app secret}, configured in the file \texttt{myapp/config/ol.php}.\\
+redirect\_uri  & \texttt{'http://bibleol.3bmoodle.dk/oauth2/facebook\_callback'}\\
+\end{my-tabu}
+
+In response to the HTTP GET request, Google replies with a JSON string containing an
+\emph{access\_token}.
+
+
+\subsection*{Step 5. The Bible OL Server Requests User Information from Google/Facebook}
+
+\subsubsection*{Google:}
 
 The Bible OL server sends an HTTP GET request to
 \texttt{https://www.googleapis.com/oauth2/\allowbreak{}v1/\allowbreak{}userinfo} with the following
@@ -4463,12 +4533,29 @@ OL, the user information is stored in the user table\index{user table} (Section
 \ref{sec-user-table}) of the user database\index{user database}. Bible OL generates a username by
 concatenating the string ``ggl\_'' with the user \emph{id} received from Google.
 
+
+\subsubsection*{Facebook:}
+
+The Bible OL server sends an HTTP GET request to
+\texttt{https://graph.facebook.com/v2.4/me} with the following
+GET parameters:
+
+\begin{my-tabu}{ll}{ \headii{Name}{Value} }
+access\_token & The \emph{access\_token} received from Google in Step 4.\\
+appsecret\_proof & A SHA256 hash of the \emph{access\_token} and the Facebook app secret.\\
+fields & \texttt{'id,first\_name,last\_name,email'}\\
+\end{my-tabu}
+
+In response to this request, Facebook replies with a JSON string containing \emph{id, first\_name,
+  last\_name,} and \emph{email} for the user. If this is the first time the user logs in to Bible
+OL, the user information is stored in the user table\index{user table} (Section
+\ref{sec-user-table}) of the user database\index{user database}. Bible OL generates a username by
+concatenating the string ``fcb\_'' with the user \emph{id} received from Facebook.
+
 \subsection*{Step 6. User is Logged In}
 
 The Bible OL server now responds to the request sent by the browser in Step 3. The response consists
 of web page informing the user that they are now logged in to the system.
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -4487,11 +4574,12 @@ The database contains these tables:
 \begin{center}
 \begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l}
 alphabet         & font                 & sta\_requestfeature \\
-bible\_refs      & personal\_font       & sta\_universe       \\
-bible\_urls      & sta\_displayfeature  & user                \\
-class            & sta\_question        & userclass           \\
-classexercise    & sta\_quiz            & userconfig          \\
-exercisedir      & sta\_quiztemplate    &                     \\
+bible\_refs      & migrations           & sta\_universe       \\
+bible\_urls      & personal\_font       & user                \\
+class            & sta\_displayfeature  & userclass           \\
+classexercise    & sta\_question        & userconfig          \\
+exercisedir      & sta\_quiz            &                     \\
+exerciseowner    & sta\_quiztemplate    &                     \\
 \end{tabu}
 \end{center}
 
@@ -4509,27 +4597,35 @@ The \emph{user} table contains information of each registered user. It has the f
 
 
 \begin{my-longtabu}{>{\itshape}lll}{ \headiii{\textup{Column}}{Type}{Contents} }
-  id               & Integer       & Unique number identifying the user.              \\
-  first\_name      & Text          & User's first name.                               \\
-  last\_name       & Text          & User's last name                                 \\
-  username         & Text          & Name used when logging in.                       \\
-  password         & Text          & Encrypted password.                              \\
-  reset            & Text          & Password reset code.                             \\
-  reset\_time      & Integer       & UNIX time when password reset code was issued.   \\
-  google\_login    & Boolean       & User uses Google login.                          \\
-  isadmin          & Boolean       & User is an administrator.                        \\
-  may\_see\_wivu   & Boolean       & User is allowed to see the entire WIVU database. \\
-  email            & Text          & User's email address.                            \\
+  id               & Integer       & Unique number identifying the user.                     \\
+  first\_name      & Text          & User's first name.                                      \\
+  last\_name       & Text          & User's last name                                        \\
+  username         & Text          & Name used when logging in.                              \\
+  password         & Text          & Encrypted password.                                     \\
+  reset            & Text          & Password reset code.                                    \\
+  reset\_time      & Integer       & UNIX time when password reset code was issued.          \\
+  isadmin          & Boolean       & User is an administrator.                               \\
+  isteacher        & Boolean       & User is a teacher.                                      \\
+  email            & Text          & User's email address.                                   \\
+  oauth2\_login    & Text          & OAuth~2 service used to log user in.                    \\
+  created\_time    & Integer       & UNIX time when the account was created.                 \\
+  last\_login      & Integer       & UNIX time when the user last logged in.                 \\
+  warning\_sent    & Integer       & Number of email warnings sent about account inactivity. \\
+  preflang         & Text          & User's preferred language.                              \\
 \end{my-longtabu}
 
-Local users have their username and password stored in this table. Their \emph{google\_login} field
-is set to \emph{false} (0).\index{login!local}
+Local users have their username and password stored in this table. Their \emph{oauth2\_login} field
+is set to \emph{NULL} (0).\index{login!local}
 
 Google users have usernames such as ``ggl\_106440263559736360192'', where 106440263559\-736\-360192 is
-the user ID provided by Google. Their \emph{google\_login} field is set to \emph{true} (1).\index{login!Google}
+the user ID provided by Google. Their \emph{oauth2\_login} field is set to \emph{`google'} (1).\index{login!Google}
 
-The \emph{may\_see\_wivu} was used previously for the WIVU database, which was available in two
-versions: the entire Old Testament and a subset containing about 20\% of the text.\index{WIVU}
+Facebook users have usernames such as ``fcb\_10206545794576996'', where 10206545794576996 is
+the user ID provided by Facebook. Their \emph{oauth2\_login} field is set to \emph{`facebook'} (1).\index{login!Facebook}
+
+The \emph{preflang} field is specified as either the two-letter ISO~639-1 code of the
+language\footnote{For example, `en' for English and `da' for Danish.} or `none' for no preferred
+language.
 
 %%%%%%%%%%%%%%%%%%%% The class Table %%%%%%%%%%%%%%%%%%%%
 \section{The \emph{class} Table}\index{class table}
@@ -4537,11 +4633,15 @@ versions: the entire Old Testament and a subset containing about 20\% of the tex
 The \emph{class} table contains information of each class (as in ``school class'', a group of
 students). It has the following fields:
 
-\begin{my-longtabu}{>{\itshape}lll}{ \headiii{\textup{Column}}{Type}{Contents} }
+\begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
   id             & Integer  & Unique number identifying the class.\\
   classname      & Text     & Name of the class.\\
   password       & Text     & An optional password required when a student enrols in a class.\\
   enrol\_before  & Date     & An optional deadline for enrolment.\\
+  ownerid        & Integer  & The \emph{id} field from an entry in the \emph{user} table.
+                              This field identifies the user who owns the class. Typically, this is
+                              the teacher who created the class. A field value of zero means that
+                              nobody owns the class.
 \end{my-longtabu}
 
 %%%%%%%%%%%%%%%%%%%% The userclass Table %%%%%%%%%%%%%%%%%%%%
@@ -4651,6 +4751,23 @@ the field \emph{pathid}.\\
 
 pathid & Integer & The \emph{id} field from an entry in the \emph{exercisedir} table.\\
 \end{my-tabu}
+
+%%%%%%%%%%%%%%%%%%%% The exerciseowner  Table %%%%%%%%%%%%%%%%%%%%
+\section{The \emph{exerciseowner} Table}%
+\index{exerciseowner table}
+
+The \emph{exerciseowner} table contains information about the owner of an exercise. It has the
+following fields:
+
+\begin{my-tabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
+id         & Integer & Unique number identifying this entry.\\
+pathname   & Text    & The pathname of the exercise file, relative to the \texttt{quizzes} directory.\\
+ownerid    & Integer & The \emph{id} field from an entry in the \emph{user} table.
+                       This field identifies the user who owns the exercise. Typically, this is
+                       the teacher who created the exercise. A field value of zero means that
+                       nobody owns the exercise.\\
+\end{my-tabu}
+
 
 %%%%%%%%%%%%%%%%%%%% The bible_refs Table %%%%%%%%%%%%%%%%%%%%
 \section{The \emph{bible\_refs} Table}\label{sec-bible-refs}\index{bible\_refs table|hyperit}
@@ -4836,6 +4953,18 @@ correct    & Boolean & \emph{True} if the user's answer is correct.\footnote{Thi
   testing if \emph{value}=\emph{answer}. For example, when providing an English translation of a
   word, a correct \emph{answer} may be ``do'' even if the \emph{value} is ``make, do; fix; deal with''.}\\
 \end{my-longtabu}
+
+%%%%%%%%%%%%%%%%%%%% The migrations Table %%%%%%%%%%%%%%%%%%%%
+\section{The \emph{migrations} Table}%
+\index{migrations table}
+
+The \emph{migrations} table is maintained by the migration mechanism of CodeIgniter. This mechanism
+keeps track of system updates. It contains this field:
+
+\begin{my-tabu}{>{\itshape}lll}{ \headiii{\textup{Column}}{Type}{Contents} }
+version & Integer & Current system version number as used by CodeIgniter.\\
+\end{my-tabu}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -5344,7 +5473,7 @@ echo $this->lang->line('rose_color');
 Depending on the language specified in the \emph{\$this->lang->load} call above, the \emph{echo}
 statement will output ``Roses are red'' in the appropriate language.
 
-\section{Internationalization of the Client Code}
+\section{Internationalization of the Client Code}\label{sec-localize-javascript}
 
 This section deals with creating an internationalized and localized version of the TypeScript client
 code.
