@@ -4175,14 +4175,14 @@ It is used to retrieve information from the resource website\index{resource webs
 
 privacy & Displays the privacy policy.\\
 
-shebanq & Handles import of MQL from the SHEBANQ website (see Section \ref{sec-shebanq-import}).\\ % TODO: Shebanq import
+shebanq & Handles import of MQL from the SHEBANQ website (see Section \ref{sec-shebanq-import}).\\
 
 statistics & Updates and displays statistics\index{statistics} about the exercises executed by the
 user.\\
 
 text & Displays text or exercises. Also handles editing of exercises.\\
 
-upload & Recieves and stores uploaded exercises.\\
+upload & Receives and stores uploaded exercises.\\
 
 userclass & Manages a user's relationship to a class.\\
 
@@ -4556,6 +4556,26 @@ concatenating the string ``fcb\_'' with the user \emph{id} received from Faceboo
 
 The Bible OL server now responds to the request sent by the browser in Step 3. The response consists
 of web page informing the user that they are now logged in to the system.
+
+\section{Account Expiry}
+
+A cron\index{cron job} job must be set up to run daily. The cron entry must execute this command:
+
+\begin{lstlisting}[language=bash,frame=,basicstyle={\ttfamily}]
+php index.php users expire_users
+\end{lstlisting}
+
+This command calls the \emph{expire\_users} function in the \emph{Ctrl\_users} controller (in the
+file \texttt{myapp/\allowbreak{}controllers/\allowbreak{}ctrl\_users.php}). The function does four
+things:
+
+\begin{itemize}
+\item If a user has not logged in 48 hours after creating an account, the account is deleted.
+\item If a user has not logged in for nine months, the system emails them a warning.
+\item If a user has not logged in for seventeen months, the system emails them a warning.
+\item If a user has not logged in for eighteen months, the account is deleted.
+\end{itemize}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -5405,6 +5425,35 @@ level the HTML simply looks like this:
 </span>
 \end{lstlisting}
 
+%%%%%%%%%%%%%%%%%%%% The editquiz Client Code %%%%%%%%%%%%%%%%%%%%
+\section{The \emph{editquiz} Client Code}\label{sec-editquiz}\index{editquiz (TypeScript
+  program)|hyperit}
+
+The \emph{editquiz} client code is not described in detail here. Its purpose is to allow users to
+edit a quiz template. There is, however, one feature that requires some explanation: The ability to
+import queries from SHEBANQ.
+
+\subsection{Import from SHEBANQ}\label{sec-shebanq-import}\index{SHEBANQ}
+
+The SHEBANQ website (see Section \ref{sec-shebanq}) allows its users to create MQL queries using the
+ETCBC4 Hebrew database. Such queries can be imported into Bible OL.
+
+First, the user must identify the query ID at the SHEBANQ website. The number is found in the
+upper left corner of a query page at SHEBANQ:
+
+\begin{center}
+  \includegraphics[width=0.5\textwidth]{shebanq.png}
+\end{center}
+
+In this example, the query ID is 799.
+
+When editing a quiz template on Bible OL, a user can request the client code to import this query
+from SHEBANQ.
+
+The \emph{editquiz} client code sends a request to the \emph{import\_shebanq} function in the
+\emph{ctrl\_shebanq} controller. This in turn sends a request to
+\url{https://shebanq.ancient-data.org/hebrew/query.json?id=799} which returns a JSON representation
+of the MQL query.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -5577,7 +5626,7 @@ php index.php pic2db
 \end{lstlisting}
 
 \noindent
-in a cron job. This command calls Bible OL's \emph{Ctrl\_pic2db} controller (in the file
+in a cron\index{cron job} job. This command calls Bible OL's \emph{Ctrl\_pic2db} controller (in the file
 \texttt{myapp/\allowbreak{}controllers/\allowbreak{}ctrl\_pic2db.php}), which requests information from the resource database.
 
 By accessing the URL \url{http://resources.3bmoodle.dk/jsonrefs.php}, the \emph{Ctrl\_pic2db}
@@ -5600,7 +5649,7 @@ table in the user database\index{user database} (see Section \ref{sec-bible-urls
 urls are displayed as ``V'', ``D'', or ``U'' icons.
 
 %%%%%%%%%%%%%%%%%%%% The SHEBANQ Website %%%%%%%%%%%%%%%%%%%%
-\section{The SHEBANQ Website}\index{SHEBANQ}
+\section{The SHEBANQ Website}\label{sec-shebanq}\index{SHEBANQ}
 
 SHEBANQ (System for HEBrew text: ANnotations for Queries and markup) is a website that uses the
 ETCBC4 database for displaying text and grammar information for the Hebrew Bible. The URL is
@@ -5608,7 +5657,8 @@ ETCBC4 database for displaying text and grammar information for the Hebrew Bible
 
 When Bible OL displays a text from the Old Testament, an icon in the upper right corner of the text
 area provides a link to the same chapter at the SHEBANQ website. A similar link to Bible OL is found
-on the SHEBANQ website.
+on the SHEBANQ website. Also, when a teacher is creating an exercise in Bible OL, they can import
+MQL queries from the SHEBANQ website (see Section \ref{sec-shebanq-import}).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
