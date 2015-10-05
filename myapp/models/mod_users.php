@@ -248,7 +248,7 @@ class Mod_users extends CI_Model {
 
 
     /// @return True if this is the first time this user logs in.
-    public function new_oauth2_user(string $authority, string $oauth2_user_id, string $first_name, string $last_name, string $email) {
+    public function new_oauth2_user(string $authority, string $oauth2_user_id, string $first_name, string $last_name, string__OR__null $email) {
         switch ($authority) {
           case 'google':
                 $username = "ggl_$oauth2_user_id";
@@ -276,7 +276,7 @@ class Mod_users extends CI_Model {
             if ($first_name!==$this->me->first_name || $last_name!==$this->me->last_name || $email!==$this->me->email) {
                 $query = $this->db->where('id',$this->user_id)->update('user',array('first_name' => $first_name,
                                                                                     'last_name' => $last_name,
-                                                                                    'email' => empty($email) ? null : $email,
+                                                                                    'email' => (empty($email) ? null : $email),
                                                                                     'last_login' => time(),
                                                                                     'warning_sent' => 0));
             }

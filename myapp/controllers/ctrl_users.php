@@ -681,37 +681,55 @@ class Ctrl_users extends MY_Controller {
         $this->load->library('email');
          
         foreach ($users_old_17months as $u)
-            $this->warning_mail($u,'expiry_warning_2_message');
+            if (!empty($u->email)) 
+                $this->warning_mail($u,'expiry_warning_2_message');
          
         foreach ($users_old_9months as $u)
-            $this->warning_mail($u,'expiry_warning_1_message');
+            if (!empty($u->email)) 
+                $this->warning_mail($u,'expiry_warning_1_message');
          
         // VIEW:
         if (count($users_new_inactive)>0) {
             echo "New accounts deleted because of 48 hours of inactivity:\n";
-            foreach ($users_new_inactive as $u)
-                echo "    $u->username ($u->first_name $u->last_name - $u->email)\n";
+            foreach ($users_new_inactive as $u) {
+                if (!empty($u->email)) 
+                    echo "    $u->username ($u->first_name $u->last_name - $u->email)\n";
+                else
+                    echo "    $u->username ($u->first_name $u->last_name - NO EMAIL)\n";
+            }
             echo "\n";
         }
 
         if (count($users_old_9months)>0) {
-            echo "Old accounts warned and hidden because of 9 months of inactivity:\n";
-            foreach ($users_old_9months as $u)
-                echo "    $u->username ($u->first_name $u->last_name - $u->email)\n";
+            echo "Old accounts warned because of 9 months of inactivity:\n";
+            foreach ($users_old_9months as $u) {
+                if (!empty($u->email)) 
+                    echo "    $u->username ($u->first_name $u->last_name - $u->email)\n";
+                else
+                    echo "    $u->username ($u->first_name $u->last_name - NO EMAIL)\n";
+            }
             echo "\n";
         }
          
         if (count($users_old_17months)>0) {
             echo "Old accounts warned because of 17 months of inactivity:\n";
-            foreach ($users_old_17months as $u)
-                echo "    $u->username ($u->first_name $u->last_name - $u->email)\n";
+            foreach ($users_old_17months as $u) {
+                if (!empty($u->email)) 
+                    echo "    $u->username ($u->first_name $u->last_name - $u->email)\n";
+                else
+                    echo "    $u->username ($u->first_name $u->last_name - NO EMAIL)\n";
+            }
             echo "\n";
         }
          
         if (count($users_old_18months)>0) {
             echo "Old accounts deleted because of 18 months of inactivity:\n";
-            foreach ($users_old_18months as $u)
-                echo "    $u->username ($u->first_name $u->last_name - $u->email)\n";
+            foreach ($users_old_18months as $u) {
+                if (!empty($u->email)) 
+                    echo "    $u->username ($u->first_name $u->last_name - $u->email)\n";
+                else
+                    echo "    $u->username ($u->first_name $u->last_name - NO EMAIL)\n";
+            }
             echo "\n";
         }
     }

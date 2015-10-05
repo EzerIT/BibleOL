@@ -120,6 +120,9 @@ class Ctrl_oauth2 extends MY_Controller {
                 $user_info->last_name = $user_info->family_name;
             }
 
+            if (!isset($user_info->email))
+                $user_info->email = null;
+
 
             // MODEL:
             if ($this->mod_users->new_oauth2_user($authority,

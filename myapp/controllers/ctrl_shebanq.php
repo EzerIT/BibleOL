@@ -78,7 +78,7 @@ class Ctrl_shebanq extends MY_Controller {
 
             $tmpfname = tempnam(sys_get_temp_dir(), 'shebanq.'.getmypid());
 
-            $ch = curl_init("http://shebanq.ancient-data.org/hebrew/query.json?id=".$_GET['id']);
+            $ch = curl_init("https://shebanq.ancient-data.org/hebrew/query.json?id=".$_GET['id']);
             $fp = fopen($tmpfname, "w");
 
             curl_setopt($ch, CURLOPT_FILE, $fp);
