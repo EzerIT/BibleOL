@@ -105,8 +105,8 @@ class Dictionary {
                 foreach ($str->get_matched_objects() as $mo) {
                     $mset2->addSet($mo->get_monadset());
 
-					// TODO: For now, we simply reduce the number of monads fetched to 1332 (which is the length of Ps 119)
-					if ($mset2->size() > 1332) {
+					// TODO: For now, we simply reduce the number of monads fetched to 1603 (which is the length of 1 Kings 8)
+					if ($mset2->size() > 1603) {
                         INFORMATION("The size of the passages is too large, it has been reduced"); // TODO: Fix this
 						break;
 					}
