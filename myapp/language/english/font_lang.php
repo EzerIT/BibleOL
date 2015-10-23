@@ -5,7 +5,7 @@ $lang['settings'] = 'Settings';
 $lang['configure_font'] = 'Configure your font preferences';
 
 $lang['style_text_display'] = 'Text display:';
-$lang['style_features'] = 'Fetures:';
+$lang['style_features'] = 'Features:';
 $lang['style_features_explain'] = '(This is the grammar information under each word)';
 $lang['style_input'] = 'Input:';
 $lang['style_input_explain'] = '(This is data you type)';
