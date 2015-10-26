@@ -1,0 +1,25 @@
+2015-10-16
+
+Upgrade from branch DBI_2015_05_05 to DBI_2015_10_24:
+
+(Assuming BibleOL is located in /var/www/html/bibleol:)
+
+cd  bibleol
+
+Backup MySQL:
+  mysqldump -u USERNAME -p -C -Q -e  -E DATABASENAME > bibleol_backup.sql
+
+git pull
+
+git checkout DBI_2015_10_24
+
+Add lines similar to these to ol.php:
+    $config['site_url'] = 'http://xxxxx.xx';
+    $config['facebook_login_enabled'] = false;
+    $config['facebook_client_id'] = 'xxxxxxxxxxxxxxxx';
+    $config['facebook_client_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+
+php index.php migrate
+
+Add to crontab:
+    cd /var/www/html/bibleol; php index.php users expire_users
