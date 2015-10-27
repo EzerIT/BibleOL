@@ -10,7 +10,7 @@ $lang['intro_center'] =
        <p>Bible OL is interlinked with the award-winning Hebrew query and text display site <a
        href="http://shebanq.ancient-data.org" target="shebanq">SHEBANQ</a>. From a chapter in Bible
        OL, click the SHEBANQ logo to jump directly to that chapter on their website. Furthermore,
-       teachers can use queries from SHEBANQ to generate exercises in Bible OL.</p>
+       facilitators can use queries from SHEBANQ to generate exercises in Bible OL.</p>
 
        <p>The source code for Bible OL is available at <a href="https://github.com/EzerIT/BibleOL"
        target="_blank">GitHub</a>. We hope developers will fork this code and join us to add

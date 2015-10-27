@@ -10,7 +10,7 @@ $lang['intro_center'] =
     <p>Bible OL har links til <a href="http://shebanq.ancient-data.org"
     target="shebanq">SHEBANQ</a>, som er et præmieret søge- og præsentationsværktøj til den
     hebraiske bibel. Fra et kapitel i Bible OL kan du klikke på SHEBANQ\'s logo og hoppe direkte til
-    det pågældende kapitel på deres websted. Endvidere kan undervisere benytte søgninger fra SHEBANQ
+    det pågældende kapitel på deres websted. Endvidere kan facilitatorer benytte søgninger fra SHEBANQ
     til at generere øvelser i Bible OL.</p>
 
     <p>Kildeteksten til Bible OL er tilgængelig på <a href="https://github.com/EzerIT/BibleOL"

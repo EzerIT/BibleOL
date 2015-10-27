@@ -231,6 +231,7 @@ class Ctrl_users extends MY_Controller {
                 $center_text = $this->load->view('view_edit_user',array('userid' => -2,
                                                                         'user_info' => $user_info,
                                                                         'isadmin' => false,
+                                                                        'isteacher' => false,
                                                                         'curlang' => $this->language_short), true);
 
                 $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('specify_user_information') . '</h1>',
@@ -272,10 +273,11 @@ class Ctrl_users extends MY_Controller {
                 $this->form_validation->set_rules('preflang', '', '');
 
                 if ($this->form_validation->run()) {
-                    if ($this->mod_users->is_admin()) {
+                    if ($this->mod_users->is_admin())
                         $user_info->isadmin = $this->input->post('isadmin')==='yes';
+                    if ($this->mod_users->is_teacher())
                         $user_info->isteacher = $this->input->post('isteacher')==='yes';
-                    }
+
                     $user_info->preflang = $this->input->post('preflang');
 
                     $query = $this->mod_users->set_user($user_info, null);
@@ -291,6 +293,7 @@ class Ctrl_users extends MY_Controller {
                     $center_text = $this->load->view('view_edit_user',array('userid' => $userid,
                                                                             'user_info' => $user_info,
                                                                             'isadmin' => $this->mod_users->is_admin(),
+                                                                            'isteacher' => $this->mod_users->is_teacher(),
                                                                             'curlang' => $user_info->preflang), true);
 
                     $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('edit_user_information') . '</h1>',
@@ -325,10 +328,11 @@ class Ctrl_users extends MY_Controller {
                 if ($this->form_validation->run()) {
                     $user_info->first_name = $this->input->post('first_name');
                     $user_info->last_name = $this->input->post('last_name');
-                    if ($this->mod_users->is_admin()) {
+                    if ($this->mod_users->is_admin())
                         $user_info->isadmin = $this->input->post('isadmin')==='yes';
+                    if ($this->mod_users->is_teacher())
                         $user_info->isteacher = $this->input->post('isteacher')==='yes';
-                    }
+
                     $user_info->email = $this->input->post('email');
                     $user_info->preflang = $this->input->post('preflang');
 
@@ -367,6 +371,7 @@ class Ctrl_users extends MY_Controller {
                     $center_text = $this->load->view('view_edit_user',array('userid' => $userid,
                                                                             'user_info' => $user_info,
                                                                             'isadmin' => $this->mod_users->is_admin(),
+                                                                            'isteacher' => $this->mod_users->is_teacher(),
                                                                             'curlang' => $user_info->preflang), true);
 
                     $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('edit_user_information') . '</h1>',

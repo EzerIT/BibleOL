@@ -37,8 +37,8 @@ $lang['pw_min_length'] = 'Adgangskoden skal bestå af mindst %d tegn.';
 
 $lang['user_list'] = 'Brugerfortegnelse';
 $lang['configure_your_users'] = 'Konfigurér dine brugere';
-$lang['administrator'] = 'Administrator';
-$lang['teacher'] = 'Lærer';
+$lang['administrator'] = 'Sysadmin';
+$lang['teacher'] = 'Facilitator';
 $lang['last_login'] = 'Sidste login';
 $lang['never'] = 'Aldrig';
 $lang['user_operations'] = 'Funktioner';
@@ -64,7 +64,7 @@ $lang['account_created_message1'] = "Kære %s %s,\n\n"  // First name, last name
                                     . "Dit brugernavn er: %s\n" // Username
                                     . "Din adgangskode er: %s\n\n"; // Password
 $lang['account_created_message2'] = "Du har fået tildelt administratorrettigheder.\n\n";
-$lang['account_created_message2t'] = "Du har fået tildelt lærerrettigheder.\n\n";
+$lang['account_created_message2t'] = "Du har fået tildelt facilitator-rettigheder.\n\n";
 $lang['account_created_message3'] = "Gå til %s, og log ind;\n" // Site URL
                                     . "derefter kan du ændre din adgangskode ved at vælge 'Profil' fra menuen 'Mine data'.\n";
 
@@ -105,4 +105,4 @@ $lang['expiry_warning_message_google'] = "Hvis du ønsker at bevare din konto, s
 $lang['expiry_warning_message_facebook'] = "Hvis du ønsker at bevare din konto, skal du blot gå til ovennævnte\n"
                                          . "websted og logge ind med din Facebook-konto.";
 
-$lang['only_admin_delete'] = 'Kun administratorer kan slette lærere og administratorer';
+$lang['only_admin_delete'] = 'Kun sysadmins kan slette facilitatorer og sysadmins';

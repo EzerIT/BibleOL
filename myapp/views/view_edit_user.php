@@ -71,6 +71,8 @@
             </td>
             <td class="nolb"></td>
           </tr>
+        <?php endif; ?>
+        <?php if ($isteacher): ?>
           <tr>
             <td><?= $this->lang->line('teacher') ?></td>
             <td class="norb">

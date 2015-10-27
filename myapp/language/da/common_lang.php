@@ -3,7 +3,7 @@
 $lang['error_colon'] = 'Fejl:';
 $lang['must_be_logged_in'] = 'Du skal være logget ind for at bruge denne funktion';
 $lang['must_be_admin'] = 'Du skal være logget ind som administrator for at bruge denne funktion';
-$lang['must_be_teacher'] = 'Du skal være logget ind som lærer for at bruge denne funktion';
+$lang['must_be_teacher'] = 'Du skal være logget ind som facilitator for at bruge denne funktion';
 $lang['must_be_google'] = 'Du skal være logget ind med Google for at bruge denne funktion';
 $lang['must_be_facebook'] = 'Du skal være logget ind med Facebook for at bruge denne funktion';
 $lang['must_not_be_google'] = 'Du må ikke være logget ind med Google for at bruge denne funktion';

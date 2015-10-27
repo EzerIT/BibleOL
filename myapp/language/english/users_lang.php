@@ -37,8 +37,8 @@ $lang['pw_min_length'] = 'The Password field, if specified, must be at least %d 
 
 $lang['user_list'] = 'User List';
 $lang['configure_your_users'] = 'Configure your users';
-$lang['administrator'] = 'Administrator';
-$lang['teacher'] = 'Teacher';
+$lang['administrator'] = 'Sysadmin';
+$lang['teacher'] = 'Facilitator';
 $lang['last_login'] = 'Last login';
 $lang['never'] = 'Never';
 $lang['user_operations'] = 'Operations';
@@ -64,7 +64,7 @@ $lang['account_created_message1'] = "Dear %s %s,\n\n"  // First name, last name
                                     . "Your user name is: %s\n" // Username
                                     . "Your password is: %s\n\n"; // Password
 $lang['account_created_message2'] = "You have been granted administrator privileges.\n\n";
-$lang['account_created_message2t'] = "You have been granted teacher privileges.\n\n";
+$lang['account_created_message2t'] = "You have been granted facilitator privileges.\n\n";
 $lang['account_created_message3'] = "Please visit %s, and log in;\n" // Site URL
                                     . "then change your password by selecting 'Profile' from the 'My data' menu.\n";
 
@@ -104,4 +104,4 @@ $lang['expiry_warning_message_facebook'] = "If you want to keep your account, si
                                             . "and log in using your Facebook account.";
 
 
-$lang['only_admin_delete'] = 'Only administrators can delete teachers and administrators';
+$lang['only_admin_delete'] = 'Only sysadmins can delete facilitators and sysadmins';
