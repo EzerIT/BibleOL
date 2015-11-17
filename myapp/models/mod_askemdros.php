@@ -342,7 +342,9 @@ class Mod_askemdros extends CI_Model {
 
     private static $sort_order = array("ETCBC4" => 1,
                                        "ETCBC4-translit" => 2,
-                                       "nestle1904" => 3);
+                                       "ETCBC4-test" => 3,
+                                       "ETCBC4-test-translit" => 4,
+                                       "nestle1904" => 5);
 
     public static function comp_books(array $a, array $b) {
         return self::$sort_order[$a['name']] > self::$sort_order[$b['name']];
@@ -417,7 +419,7 @@ class Mod_askemdros extends CI_Model {
 
 
     public function shebanq_link(string $db, string $book, integer $chapter) {
-        if ($db==='ETCBC4' || $db==='ETCBC4-translit')
+        if ($db==='ETCBC4' || $db==='ETCBC4-translit' || $db==='ETCBC4-test' || $db==='ETCBC4-test-translit')
             return "http://shebanq.ancient-data.org/hebrew/text?book=$book&amp;chapter=$chapter&mr=m";
         else
             return null;

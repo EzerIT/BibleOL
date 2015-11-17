@@ -135,8 +135,7 @@ class GenerateCheckboxes {
 
             configuration.sentencegrammar[leveli]
                 .getFeatName(configuration.sentencegrammar[leveli].objType,
-                             (whattype:number, objType:string, featName:string, featNameLoc:string, sgiObj:SentenceGrammarItem)
-                             => this.generatorCallback(whattype, objType, featName, featNameLoc, sgiObj));
+                             (whattype:number, objType:string, featName:string, featNameLoc:string, sgiObj:SentenceGrammarItem) => this.generatorCallback(whattype, objType, featName, featNameLoc, sgiObj));
 
             if (this.hasSeenGrammarGroup)
                 this.checkboxes += '</div>';
@@ -219,8 +218,7 @@ class GenerateCheckboxes {
             }
 
             sg.getFeatName(sg.objType,
-                           (whattype:number, objType:string, featName:string, featNameLoc:string)
-                           => this.setHandlerCallback(whattype, objType, featName, featNameLoc, leveli));
+                           (whattype:number, objType:string, featName:string, featNameLoc:string) => this.setHandlerCallback(whattype, objType, featName, featNameLoc, leveli));
         }
     }
 

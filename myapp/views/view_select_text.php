@@ -13,8 +13,10 @@
             <td><input type="radio" name="db" value="<?= $db['name'] ?>" <?= set_radio('db', $db['name'], $default) ?>></td>
             <td><?= str_replace(" ","&nbsp;", $db['loc_desc']) ?></td>
             <?php if ($db['name']==='ETCBC4'): ?>
-            <td rowspan="2"><?= $db['loc_copyright'] ? "$db[loc_copyright]" : "" ?></td>
+            <td rowspan="4"><div style="vertical-align:middle;"><?= $db['loc_copyright'] ? "$db[loc_copyright]" : "" ?></div></td>
             <?php elseif ($db['name']==='ETCBC4-translit'): ?>
+            <?php elseif ($db['name']==='ETCBC4-test'): ?>
+            <?php elseif ($db['name']==='ETCBC4-test-translit'): ?>
             </tr><tr><td colspan="3">&nbsp;</td><!-- Make space -->
             <?php else: ?>
             <td><?= $db['loc_copyright'] ? "$db[loc_copyright]" : "" ?></td>

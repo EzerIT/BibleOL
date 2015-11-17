@@ -4,6 +4,7 @@ dont_git
 quizzes
 db/*.name
 db/ETCBC4
+db/ETCBC4-test
 db/nestle1904
 ts/html
 myapp/html

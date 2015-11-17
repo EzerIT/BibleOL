@@ -45,7 +45,7 @@ body {
 }
 table#quiztab {
   text-align: center;
-  background-color: #ffc0cb;
+  background-color: pink;
 }
 span.verse {
   vertical-align: top;
@@ -66,7 +66,6 @@ span.verse {
   padding: 5px;
   vertical-align: middle;
   /* Required by Chrome */
-
 }
 .lev3.noseplin,
 .lev2.noseplin,
@@ -121,7 +120,6 @@ span.verse {
 .wordspace {
   display: inline-block;
   /* Allows line breaks at this point */
-
 }
 .dontshowit {
   display: none;
@@ -244,7 +242,7 @@ div.topbar {
   line-height: 43px;
 }
 div.contentouter {
-  background-color: #d2691e;
+  background-color: chocolate;
   padding: 10px;
 }
 div.contentinner {
@@ -294,7 +292,7 @@ div.warning h1 {
   text-align: left !important;
 }
 p.error {
-  background-color: #ffc0cb;
+  background-color: pink;
 }
 #logincenter {
   width: 700px;
@@ -476,7 +474,7 @@ ul.dropdown li {
   z-index: 1;
 }
 ul.dropdown li:hover {
-  background: #d2691e;
+  background: chocolate;
   position: relative;
 }
 ul.dropdown li a {
@@ -498,7 +496,7 @@ ul.dropdown ul li {
   border-bottom: 1px solid #c0c0c0;
 }
 ul.dropdown ul li:hover {
-  background-color: #d2691e;
+  background-color: chocolate;
 }
 ul.dropdown ul li a {
   padding-left: 10px;

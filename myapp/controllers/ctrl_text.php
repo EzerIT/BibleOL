@@ -81,7 +81,7 @@ class Ctrl_text extends MY_Controller {
             $showIcons = isset($_GET['icons']) && $_GET['icons']==='on';
 
             $db      = self::condval($this->uri->segment(3), 'ETCBC4');
-            $book    = self::condval($this->uri->segment(4), $db==='ETCBC4' ? 'Genesis' : 'Matthew');
+            $book    = self::condval($this->uri->segment(4), $db==='ETCBC4' ? 'Genesis' : 'Matthew'); // TODO ETCBC4-test?
             $chapter = self::condval($this->uri->segment(5), 1);
             $vfrom   = self::condval($this->uri->segment(6), 0);
             $vto     = self::condval($this->uri->segment(7), $vfrom);

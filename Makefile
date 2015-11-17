@@ -3,7 +3,7 @@ ALL_TARGETS = testversion js/ol.js js/fontselector.js js/editquiz.js styles/ol.c
 all:	$(ALL_TARGETS)
 
 testversion:
-	@tsc -v | grep 'Version 1.0.1.0' > /dev/null || { echo Wrong tsc version ; exit 255; }
+	@tsc -v | grep 'Version 1.6.2' > /dev/null || { echo Wrong tsc version ; exit 255; }
 
 js/ol.js:	ts/ol.ts ts/answer.ts ts/charset.ts ts/componentwithyesno.ts ts/configuration.ts ts/dictionary.ts \
 	ts/sentencegrammar.ts ts/displaymonadobject.ts \
