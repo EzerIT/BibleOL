@@ -10,6 +10,7 @@ $lang['last_verse_leave'] = 'Sidste vers (udelad for kun at se ét vers):';
 $lang['select_text'] = 'Vælg tekst';  // Text in title bar
 $lang['show_text'] = 'Vis tekst';  // Text in title bar
 $lang['select_a_passage'] = 'Vælg en tekst der skal vises';
+$lang['etcbc4_test'] = 'Brug ikke »ETCBC4-test« medmindre du ved hvad ud gør.';
 $lang['make_a_selection'] = 'Vælg:';
 $lang['show_link_icons'] = 'Vis link-ikoner';
 $lang['valid_chapters'] = 'Gyldige kapitler:';

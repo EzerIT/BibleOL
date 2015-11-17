@@ -58,7 +58,8 @@ class Ctrl_text extends MY_Controller {
 
             $center_text = $this->load->view('view_select_text',array('databases' => $db_books), true);
 
-            $this->load->view('view_main_page', array('left' => '<h1>' .$this->lang->line('select_a_passage') . '</h1>',
+            $this->load->view('view_main_page', array('left' => '<h1>' .$this->lang->line('select_a_passage') . '</h1>'
+                                                      . '<p>' . $this->lang->line('etcbc4_test') . '</p>',
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }

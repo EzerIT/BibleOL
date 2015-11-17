@@ -10,6 +10,7 @@ $lang['last_verse_leave'] = 'Last verse (leave empty to view only one verse):';
 $lang['select_text'] = 'Select text';  // Text in title bar
 $lang['show_text'] = 'Show text';  // Text in title bar
 $lang['select_a_passage'] = 'Select a Passage to Display';
+$lang['etcbc4_test'] = 'Do not use "ETCBC4-test" unless you know what you are doing.';
 $lang['make_a_selection'] = 'Make a selection:';
 $lang['show_link_icons'] = 'Show link icons';
 $lang['valid_chapters'] = 'Valid chapters:';
