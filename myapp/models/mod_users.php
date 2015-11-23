@@ -337,7 +337,7 @@ class Mod_users extends CI_Model {
     public function old_inactive(integer $level, integer $time) {
         $now = time();
         if ($level==0) {
-            $query = $this->db->where('last_login <',$now-$time)
+            $query = $this->db->where('last_login <',$now-$time)->where('last_login >',0)
                 ->get('user');
             $users = $query->result();
    
@@ -345,10 +345,10 @@ class Mod_users extends CI_Model {
                 $this->delete_user(intval($u->id));
         }
         else {
-            $query = $this->db->where('last_login <',$now-$time)->where('warning_sent <',$level)
+            $query = $this->db->where('last_login <',$now-$time)->where('last_login >',0)->where('warning_sent <',$level)
                 ->get('user');
             $users = $query->result();
-            $this->db->where('last_login <',$now-$time)->where('warning_sent <',$level)
+            $this->db->where('last_login <',$now-$time)->where('last_login >',0)->where('warning_sent <',$level)
                 ->update('user',array('warning_sent'=>$level));
         }
 
