@@ -1,11 +1,16 @@
-<?php /* Assumption isset($right) implies isset($left) */ ?>
+<?php /* Assumption isset($right_title) implies isset($left_title) */ ?>
 
-<?php if (isset($right)): ?>
+<?php if (isset($right_title)): ?>
 
   <div class="col-sm-3">
-    <div class="leftblock">
-      <?= $left ?>
-    </div>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><?= $left_title ?></h3>
+      </div>
+      <?php if (isset($left)): ?>
+        <div class="panel-body"><?= $left ?></div>
+      <?php endif; ?>  
+  </div>
   </div>
    
   <div class="col-sm-6">
@@ -15,16 +20,26 @@
   </div>
    
   <div class="col-sm-3">
-    <div class="rightblock">
-      <?= $right; ?>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><?= $right_title ?></h3>
+      </div>
+      <?php if (isset($right)): ?>
+        <div class="panel-body"><?= $right ?></div>
+      <?php endif; ?>  
     </div>
   </div>
 
-<?php elseif (isset($left)): ?>
+<?php elseif (isset($left_title)): ?>
 
   <div class="col-sm-3">
-    <div class="leftblock">
-      <?= $left ?>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><?= $left_title ?></h3>
+      </div>
+      <?php if (isset($left)): ?>
+        <div class="panel-body"><?= $left ?></div>
+      <?php endif; ?>  
     </div>
   </div>
    

@@ -62,8 +62,8 @@ class Ctrl_config extends MY_Controller {
                                                                     'avail_fonts' => $avail_fonts,
                                                                     'choice_values' => $choice_values,
                                                                     'personal_font' => $personal_fonts), true);
-        $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('settings').'</h1>'
-                                                  .'<p>'.$this->lang->line('configure_font').'</p>',
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line('settings'),
+                                                  'left' => $this->lang->line('configure_font'),
                                                   'center' => $center_text));
         $this->load->view('view_bottom');
     }

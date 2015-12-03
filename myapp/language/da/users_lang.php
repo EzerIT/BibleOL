@@ -33,6 +33,7 @@ $lang['delete_facebook_profile2'] = 'NB: Dette vil ikke ændre din konto hos Fac
 $lang['delete_profile_button'] = 'Nedlæg profilen';
 
 $lang['edit_user_profile'] = 'Redigér brugerprofil';
+$lang['click_to_delete_profile'] = 'Klik på denne knap for at nedlægge din profil:';
 $lang['delete_profile_confirm'] = 'Vil du nedlægge din konto og fjerne alle dine data fra dette websted?';
 
 $lang['pw_min_length'] = 'Adgangskoden skal bestå af mindst %d tegn.'; 

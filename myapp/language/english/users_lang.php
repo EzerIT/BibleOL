@@ -33,6 +33,7 @@ $lang['delete_facebook_profile2'] = 'Note: This will not change your account on 
 $lang['delete_profile_button'] = 'Delete the profile';
 
 $lang['edit_user_profile'] = 'Edit user profile';
+$lang['click_to_delete_profile'] = 'Click on this button to delete your profile:';
 $lang['delete_profile_confirm'] = 'Do you want to delete your account including all your data on this site?';
 
 $lang['pw_min_length'] = 'The Password field, if specified, must be at least %d characters in length.'; 

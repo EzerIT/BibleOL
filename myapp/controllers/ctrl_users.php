@@ -41,8 +41,8 @@ class Ctrl_users extends MY_Controller {
                                                    'isadmin' => $this->mod_users->is_admin(),
                                                    'my_id' => $this->mod_users->my_id()),
                                              true);
-            $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('user_list') . '</h1>'
-                                                      . '<p>' . $this->lang->line('configure_your_users') . '</p>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('user_list'),
+                                                      'left' => $this->lang->line('configure_your_users'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
@@ -64,7 +64,8 @@ class Ctrl_users extends MY_Controller {
 
         $center_text = $this->load->view('view_user_deleted', null, true);
 
-        $this->load->view('view_main_page', array('center' => $center_text));
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line('user_profile_deleted'),
+                                                  'center' => $center_text));
         $this->load->view('view_bottom');
     }
 
@@ -224,7 +225,7 @@ class Ctrl_users extends MY_Controller {
                 $this->load->view('view_top2');
                 $this->load->view('view_menu_bar', array('langselect' => true));
 
-                $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('you_created_account') . '</h1>',
+                $this->load->view('view_main_page', array('left_title' => $this->lang->line('you_created_account'),
                                                           'center' => '<h1>'
                                                           . sprintf($this->lang->line('password_sent'), $user_info->email)
                                                           . '</h1>'));
@@ -242,7 +243,7 @@ class Ctrl_users extends MY_Controller {
                                                                         'isteacher' => false,
                                                                         'curlang' => $this->language_short), true);
 
-                $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('specify_user_information') . '</h1>',
+                $this->load->view('view_main_page', array('left_title' => $this->lang->line('specify_user_information'),
                                                           'center' => $center_text));
                 $this->load->view('view_bottom');
             }
@@ -286,7 +287,7 @@ class Ctrl_users extends MY_Controller {
                         $user_info->isadmin = $this->input->post('isadmin')==='yes';
                     if ($this->mod_users->is_teacher())
                         $user_info->isteacher = $this->input->post('isteacher')==='yes';
-
+                    
                     $user_info->preflang = $this->input->post('preflang');
 
                     $query = $this->mod_users->set_user($user_info, null);
@@ -306,7 +307,7 @@ class Ctrl_users extends MY_Controller {
                                                                             'isteacher' => $this->mod_users->is_teacher(),
                                                                             'curlang' => $user_info->preflang), true);
 
-                    $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('edit_user_information') . '</h1>',
+                    $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_user_information'),
                                                               'center' => $center_text));
                     $this->load->view('view_bottom');
                 }
@@ -385,7 +386,7 @@ class Ctrl_users extends MY_Controller {
                                                                             'isteacher' => $this->mod_users->is_teacher(),
                                                                             'curlang' => $user_info->preflang), true);
 
-                    $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('edit_user_information') . '</h1>',
+                    $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_user_information'),
                                                               'center' => $center_text));
                     $this->load->view('view_bottom');
                 }
@@ -428,7 +429,8 @@ class Ctrl_users extends MY_Controller {
                                                   true);
                    $center_text = $this->load->view('view_oauth2_profile',array('user_info' => $user_info), true);
 
-                   $this->load->view('view_main_page', array('left' => $left_text,
+                   $this->load->view('view_main_page', array('left_title' => $this->lang->line('this_your_profile'),
+                                                             'left' => $left_text,
                                                              'center' => $center_text));
                    $this->load->view('view_bottom');
                }
@@ -471,7 +473,8 @@ class Ctrl_users extends MY_Controller {
                    $left_text = $this->load->view('view_edit_profile_left', null, true);
                    $center_text = $this->load->view('view_edit_profile', array('user_info' => $user_info), true);
 
-                   $this->load->view('view_main_page', array('left' => $left_text,
+                   $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_user_profile'),
+                                                             'left' => $left_text,
                                                              'center' => $center_text));
                    $this->load->view('view_bottom');
                }
@@ -529,7 +532,7 @@ class Ctrl_users extends MY_Controller {
                 $this->load->view('view_top2');
                 $this->load->view('view_menu_bar', array('langselect' => true));
 
-                $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('handle_forgotten') . '</h1>',
+                $this->load->view('view_main_page', array('left_title' => $this->lang->line('handle_forgotten'),
                                                           'center' => $this->lang->line('no_email')));
                 $this->load->view('view_bottom');
                 return;
@@ -565,7 +568,7 @@ class Ctrl_users extends MY_Controller {
 
         $center_text = $this->load->view('view_forgot_pw', array('user_found' => $this->user_found, 'sent' => $sent), true);
 
-        $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('handle_forgotten') . '</h1>',
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line('handle_forgotten'),
                                                   'center' => $center_text));
         $this->load->view('view_bottom');
     }
@@ -597,7 +600,7 @@ class Ctrl_users extends MY_Controller {
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
             
-            $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('password_reset') . '</h1>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('password_reset'),
                                                       'center' => '<h1>' . $this->lang->line('reset_link_bad') . '</h1>'));
             $this->load->view('view_bottom');
             return;
@@ -614,7 +617,7 @@ class Ctrl_users extends MY_Controller {
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
             
-            $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line_secondary('password_reset') . '</h1>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line_secondary('password_reset'),
                                                       'center' => $this->lang->line_secondary('no_email')));
 
             $this->load->view('view_bottom');
@@ -641,7 +644,7 @@ class Ctrl_users extends MY_Controller {
         $this->load->view('view_top1', array('title' => $this->lang->line_secondary('password_reset')));
         $this->load->view('view_top2');
         $this->load->view('view_menu_bar', array('langselect' => true));
-        $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line_secondary('password_reset') . '</h1>',
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line_secondary('password_reset'),
                                                   'center' => '<h1>' 
                                                               . sprintf($this->lang->line_secondary('password_reset_sent'), $user_info->email)
                                                               . '</h1>'));

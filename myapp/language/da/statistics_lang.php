@@ -1,7 +1,7 @@
 <?php
 
 $lang['statistics_title'] = 'Statistik'; // Text in title bar
-$lang['for_user'] = 'for bruger %s.';
+$lang['for_user'] = 'For bruger %s';
 $lang['exercise_file_colon'] = 'Øvelsesfil:';
 $lang['number_abbrev'] = 'Nr.';
 $lang['time'] = 'Tidspunkt';  // Date and time

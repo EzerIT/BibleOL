@@ -65,7 +65,8 @@ class Ctrl_text extends MY_Controller {
 
             $center_text = $this->load->view('view_select_text',array('databases' => $db_books), true);
 
-            $this->load->view('view_main_page', array('left' =>  '<h1>' .$this->lang->line('select_a_passage') . '</h1>'
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_a_passage_title'),
+                                                      'left' => $this->lang->line('select_a_passage')
                                                       . '<p>' . $this->lang->line('etcbc4_test') . '</p>',
                                                       'center' => $center_text,
                                                       'right' => sprintf($this->lang->line('corpus_copyright'),
@@ -143,8 +144,8 @@ class Ctrl_text extends MY_Controller {
                                              array('dirlist' => $dirlist,
                                                    'is_logged_in' => $this->mod_users->is_logged_in()),
                                              true);
-            $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('select_quiz') . '</h1>'
-                                                                . '<p>' . $this->lang->line('click_folder') . '</p>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_quiz'),
+                                                      'left' => $this->lang->line('click_folder'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
 
@@ -305,8 +306,8 @@ class Ctrl_text extends MY_Controller {
                                           'db' => $this->mod_askemdros->setup_db,
                                           'prop' => $this->mod_askemdros->setup_prop),
                                     true);
-            $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('quiz_instruct1').'</h1>'
-                                                               .'<p>'.$this->lang->line('quiz_instruct2').'</p>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('quiz_instruct1'),
+                                                      'left' => $this->lang->line('quiz_instruct2'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
@@ -395,12 +396,11 @@ class Ctrl_text extends MY_Controller {
                                           'prop' => $this->mod_askemdros->setup_prop),
                                     true);
 
-            $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('edit_quiz').'</h1>'
-                                                                .'<p>'.sprintf($this->lang->line('using_database'),
-                                                                               '<br>'.$this->loc->dbdescription)
-                                                               .'<br>'.sprintf($this->lang->line('using_database_version'),
-                                                                               $this->db_config->dbinfo->databaseVersion)
-                                                               .'</p>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_quiz'),
+                                                      'left' => sprintf($this->lang->line('using_database'),
+                                                                        '<br>'.$this->loc->dbdescription)
+                                                      .'<br>'.sprintf($this->lang->line('using_database_version'),
+                                                                      $this->db_config->dbinfo->databaseVersion),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
@@ -476,12 +476,11 @@ class Ctrl_text extends MY_Controller {
                                     true);
 
 
-            $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('edit_quiz').'</h1>'
-                                                                .'<p>'.sprintf($this->lang->line('using_database'),
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_quiz'),
+                                                      'left' => sprintf($this->lang->line('using_database'),
                                                                                '<br>'.$this->loc->dbdescription)
                                                                .'<br>'.sprintf($this->lang->line('using_database_version'),
-                                                                               $this->db_config->dbinfo->databaseVersion)
-                                                               .'</p>',
+                                                                               $this->db_config->dbinfo->databaseVersion),
                                                       'center' => $center_text));
 
             $this->load->view('view_bottom');

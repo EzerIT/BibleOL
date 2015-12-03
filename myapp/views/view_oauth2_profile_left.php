@@ -1,5 +1,3 @@
-<h1><?= $this->lang->line('this_your_profile') ?></h1>
-
 <p><?= $this->lang->line("change_through_$authority") ?></p>
 
 <p class="hidden-xs">&nbsp;</p>

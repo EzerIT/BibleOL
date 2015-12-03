@@ -19,9 +19,9 @@ $lang['only_cli'] = 'This command can only be run from the command line';
 $lang['quiz'] = 'Quiz';  // Text in title bar
 $lang['no_direct_url'] = 'Do not access this URL directly.';
 
+$lang['select_a_passage_title'] = 'Select a Passage to Display';
 $lang['select_a_passage'] =
-    '<h1>Select a Passage to Display</h1>
-     <p>Here, you can select a Bible passage to display.<p>
+    '<p>Here, you can select a Bible passage to display.<p>
      <p>If you omit “First verse”, an entire chapter will be displayed.</p>
      <p>If you omit “Last verse”, only one verse will be displayed.</p>';
 
