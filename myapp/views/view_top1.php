@@ -26,8 +26,10 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?= $title ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <?php
+       make_css('bootstrap/bibleol/css/bootstrap.css');
        make_css('jquery-ui-1.10.2.custom/css/sunny/jquery-ui-1.10.2.custom.min.css');
        make_css('styles/ol.css');
        make_css('styles/fonts.css');
@@ -39,6 +41,7 @@
            make_css($css);
 
        make_js('js/jquery-1.9.1.min.js');
+       make_js('bootstrap/dist/js/bootstrap.min.js');
        make_js('jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js');
        make_js('js/simpledropdown.js');
     

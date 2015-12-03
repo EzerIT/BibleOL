@@ -1,4 +1,15 @@
-<table class="type1 small">
+<h1><?= sprintf($this->lang->line('number_of_users'), $user_count) ?></h1>
+<h2><?= sprintf($this->lang->line('showing_per_page'), $users_per_page) ?></h1>
+<nav>
+  <ul class="pagination">
+    <?php for ($p=0; $p<$page_count; ++$p): ?>
+      <li <?= $p==$offset ? 'class="active"' : '' ?>><a href="<?= site_url("users?offset=$p") ?>"><?= $p+1 ?></a></li>
+    <?php endfor; ?>
+  </ul>
+</nav>
+
+<div class="table-responsive">
+<table class="type2 table table-striped">
   <tr>
     <th><?= $this->lang->line('user_name') ?></th>
     <th><?= $this->lang->line('first_name') ?></th>
@@ -19,14 +30,14 @@
       <td><?= $user->isteacher ? $this->lang->line('yes') : $this->lang->line('no') ?></td>
       <td class="leftalign"><?= $user->last_login<$user->created_time ? $this->lang->line('never') : date($this->lang->line('date_time_format'), $user->last_login) ?></td>
       <td class="leftalign">
-     <a href="<?= site_url("userclass/classes_for_user?userid=$user->id") ?>"><?= str_replace(' ', '&nbsp;', $this->lang->line('assign_to_class')) ?></a>
-     <a href="<?= site_url("users/edit_one_user?userid=$user->id") ?>"><?= $this->lang->line('user_edit') ?></a>
+     <a class="label label-primary" href="<?= site_url("userclass/classes_for_user?userid=$user->id&offset=$offset") ?>"><?= str_replace(' ', '&nbsp;', $this->lang->line('assign_to_class')) ?></a>
+     <a class="label label-primary" href="<?= site_url("users/edit_one_user?userid=$user->id&offset=$offset") ?>"><?= $this->lang->line('user_edit') ?></a>
      <?php // You cannot delete yourself.
            // You cannot delete a teacher or an administrator, unless you are an administrator.
            if ($my_id!=$user->id && ((!$user->isadmin && !$user->isteacher) || $isadmin)): ?>
-          <a onclick="genericConfirm('<?= $this->lang->line('delete_user') ?>',
+          <a  class="label label-danger" onclick="genericConfirmSm('<?= $this->lang->line('delete_user') ?>',
                                      '<?= sprintf($this->lang->line('delete_user_confirm'), "\'$user->username\'") ?>',
-                                     '<?= site_url("users/delete_user?userid=$user->id") ?>');
+                                     '<?= site_url("users/delete_user?userid=$user->id&offset=$offset") ?>');
                       return false;"
              href="#"><?= $this->lang->line('user_delete') ?></a>
         <?php endif; ?>
@@ -34,4 +45,5 @@
     </tr>
   <?php endforeach; ?>
 </table>
-<p><a class="makebutton" href="<?= site_url("users/edit_one_user?userid=-1") ?>"><?= $this->lang->line('add_user') ?></a></p>
+</div>
+<p><a class="btn btn-primary" href="<?= site_url("users/edit_one_user?userid=-1") ?>"><?= $this->lang->line('add_user') ?></a></p>

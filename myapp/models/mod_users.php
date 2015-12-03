@@ -145,6 +145,16 @@ class Mod_users extends CI_Model {
         return $query->result();
     }
 
+    public function get_all_users_part(integer $limit, integer $offset) {
+        $query = $this->db->order_by('username','asc')->get('user',$limit,$offset);
+        return $query->result();
+    }
+
+    public function count_users() {
+        $query = $this->db->select('count(*) as count')->get('user');
+        return $query->row()->count;
+    }
+
     public function get_teachers() {
         $query = $this->db->where('`isteacher`=1 OR `isadmin`=1',null,false)->get('user');
         $teachers = $query->result();
@@ -337,7 +347,7 @@ class Mod_users extends CI_Model {
     public function old_inactive(integer $level, integer $time) {
         $now = time();
         if ($level==0) {
-            $query = $this->db->where('last_login <',$now-$time)
+            $query = $this->db->where('last_login <',$now-$time)->where('last_login >',0)
                 ->get('user');
             $users = $query->result();
    
@@ -345,10 +355,10 @@ class Mod_users extends CI_Model {
                 $this->delete_user(intval($u->id));
         }
         else {
-            $query = $this->db->where('last_login <',$now-$time)->where('warning_sent <',$level)
+            $query = $this->db->where('last_login <',$now-$time)->where('last_login >',0)->where('warning_sent <',$level)
                 ->get('user');
             $users = $query->result();
-            $this->db->where('last_login <',$now-$time)->where('warning_sent <',$level)
+            $this->db->where('last_login <',$now-$time)->where('last_login >',0)->where('warning_sent <',$level)
                 ->update('user',array('warning_sent'=>$level));
         }
 

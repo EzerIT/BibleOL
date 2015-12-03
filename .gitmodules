@@ -13,3 +13,6 @@
 [submodule "virtualkeyboard"]
 	path = virtualkeyboard
 	url = https://github.com/EzerIT/virtualkeyboard
+[submodule "bootstrap"]
+	path = bootstrap
+	url = https://github.com/EzerIT/bootstrap.git

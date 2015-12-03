@@ -19,7 +19,6 @@ $lang['no'] = 'No';
 $lang['sentence_selection_imported'] = 'Sentence selection imported.';
 $lang['no_focus'] = 'SHEBANQ query does not contain any objects with FOCUS that can be used for sentence unit selection.';
 $lang['use_qo_selection'] = 'Do you also wish to use {0} for sentence unit selection?'; // MQL code
-$lang['import_button'] = 'Import';
 $lang['error_response'] = 'Error response from server:';
 $lang['passage_selection'] = 'Passage selection'; // Dialog box title
 $lang['no_passages'] = 'No passages selected';

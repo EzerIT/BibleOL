@@ -1,20 +1,24 @@
 <h1><?= sprintf($this->lang->line('classes_for_user'), $user_name) ?></h1>
 
-<?= form_open("userclass/classes_for_user?userid=$userid") ?>
-<table class="form">
-  <tr><th><?= $this->lang->line('class') ?></th><th><?= $this->lang->line('in_this_class') ?></th></tr>
+<?= form_open("userclass/classes_for_user?userid=$userid&offset=$offset") ?>
 
-  <?php foreach ($allclasses as $cl): ?>
-     <?php if (in_array($cl->clid, $owned_classes)): ?>
-      <tr>
-        <td><?= $cl->classname ?></td>
-        <td><input type="checkbox" name="foruser[]" value="<?= $cl->clid ?>" <?= set_checkbox('foruser[]', $cl->clid, in_array($cl->clid, $old_classes)) ?>></td>
-      </tr>
-    <?php endif; ?>
-  <?php endforeach; ?>
-</table>
+<div class="form-group" style="max-width:300px">
+  <table class="type2 table table-striped">
+    <tr><th><?= $this->lang->line('class') ?></th><th class="text-center"><?= $this->lang->line('in_this_class') ?></th></tr>
+   
+    <?php foreach ($allclasses as $cl): ?>
+       <?php if (in_array($cl->clid, $owned_classes)): ?>
+        <tr>
+          <td><?= $cl->classname ?></td>
+          <td class="text-center"><input class="narrow" type="checkbox" name="foruser[]" value="<?= $cl->clid ?>" <?= set_checkbox('foruser[]', $cl->clid, in_array($cl->clid, $old_classes)) ?>></td>
+        </tr>
+      <?php endif; ?>
+    <?php endforeach; ?>
+  </table>
+</div>
 
-<p><input class="makebutton" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
-   <a class="makebutton" href="<?= site_url('users') ?>"><?= $this->lang->line('cancel_button') ?></a>
+<p style="height:2px">&nbsp;</p>
+<p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
+   <a class="btn btn-default" href="<?= site_url("users?offset=$offset") ?>"><?= $this->lang->line('cancel_button') ?></a>
 </p>
 </form>

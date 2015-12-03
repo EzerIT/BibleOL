@@ -1,11 +1,11 @@
     <?php $valerr = validation_errors();
       if (!empty($valerr))
-          echo "<div class=\"error\">$valerr</div>\n";
+          echo "<div class=\"alert alert-danger\">$valerr</div>\n";
     ?>
 
     <?php // $userid is -1 when an administrator creates a new user, -2 when a user creates their own account ?>
 
-    <?= form_open($userid==-2 ? "users/sign_up" : "users/edit_one_user?userid=$userid") ?>
+    <?= form_open($userid==-2 ? "users/sign_up" : "users/edit_one_user?userid=$userid&offset=$offset") ?>
       <table class="form">
         <tr>
           <?php if (!empty($user_info->oauth2_login)): ?>
@@ -107,6 +107,7 @@
           </tr>
         <?php endif; ?>
       </table>
-      <p><input class="makebutton" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
-          <a class="makebutton" href="<?= site_url($userid==-2 ? '/' :'users') ?>"><?= $this->lang->line('cancel_button') ?></a></p>
+      <p style="height:2px">&nbsp;</p>
+      <p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
+          <a class="btn btn-default" href="<?= site_url($userid==-2 ? '/' : "users?offset=$offset") ?>"><?= $this->lang->line('cancel_button') ?></a></p>
     </form>

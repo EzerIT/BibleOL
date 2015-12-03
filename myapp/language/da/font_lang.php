@@ -22,6 +22,7 @@ $lang['bold'] = 'Fed';
 $lang['italic'] = 'Kursiv'; 
 $lang['size'] = 'Størrelse'; 
 $lang['text_sample'] = 'Eksempel'; 
+$lang['scrolling'] = '(Stryg eller scroll mod højre og venstre for at se hele tabellen)';
 
 $lang['alphabet_hebrew'] = 'hebraisk';
 $lang['alphabet_hebrew_translit'] = 'translittereret hebraisk';

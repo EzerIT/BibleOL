@@ -68,7 +68,7 @@ interface SingleMonadObject extends MonadObject {
     sameAsNext : boolean[];
     sameAsPrev : boolean[];
     pics : number[];
-    urls : any[];
+    urls : string[][];
 }
 
 interface MultipleMonadObject extends MonadObject {

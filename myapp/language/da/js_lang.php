@@ -19,7 +19,6 @@ $lang['no'] = 'Nej';
 $lang['sentence_selection_imported'] = 'Sætningsvalg importeret.';
 $lang['no_focus'] = 'SHEBANQ-forespørgslen indeholder ingen objekter med FOCUS som kan benyttes til valg af sætningsenhed.';
 $lang['use_qo_selection'] = 'Ønsker du også at bruge {0} til valg af sætningsenhed?'; // MQL code
-$lang['import_button'] = 'Importér';
 $lang['error_response'] = 'Fejlmeddelelse fra server:';
 $lang['passage_selection'] = 'Valg af bibelsteder'; // Dialog box title
 $lang['no_passages'] = 'Ingen bibelsteder valgt';

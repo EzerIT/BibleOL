@@ -1,10 +1,4 @@
 <?php
-function username_cmp($u1, $u2) {
-    if ($u1->username === $u2->username)
-        return 0;
-    return ($u1->username < $u2->username) ? -1 : 1;
-}
-
 class Ctrl_users extends MY_Controller {
     const MIN_PW_LENGTH = 5;
 
@@ -21,8 +15,17 @@ class Ctrl_users extends MY_Controller {
         try {
             $this->mod_users->check_teacher();
 
-            $allusers = $this->mod_users->get_all_users();
-            usort($allusers, 'username_cmp');
+            $users_per_page = $this->config->item('users_per_page');
+            $user_count = $this->mod_users->count_users();
+            $page_count = intval(ceil($user_count/$users_per_page));
+
+            $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+            if ($offset>=$page_count)
+                $offset = $page_count-1;
+            if ($offset<0)
+                $offset = 0;
+
+            $allusers = $this->mod_users->get_all_users_part($users_per_page,$offset*$users_per_page);
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('users')));
@@ -31,6 +34,10 @@ class Ctrl_users extends MY_Controller {
             $this->load->view('view_confirm_dialog');
             $center_text = $this->load->view('view_user_list',
                                              array('allusers' => $allusers,
+                                                   'offset' => $offset,
+                                                   'users_per_page' => $users_per_page,
+                                                   'user_count' => $user_count,
+                                                   'page_count' => $page_count,
                                                    'isadmin' => $this->mod_users->is_admin(),
                                                    'my_id' => $this->mod_users->my_id()),
                                              true);
@@ -129,6 +136,7 @@ class Ctrl_users extends MY_Controller {
             $this->mod_users->check_teacher();
 
             $userid = is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
+            $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
         
             if ($userid<=0)
                 throw new DataException($this->lang->line('illegal_user_id'));
@@ -143,7 +151,7 @@ class Ctrl_users extends MY_Controller {
                 throw new DataException($this->lang->line('only_admin_delete'));
 
             $this->mod_users->delete_user($userid);
-            redirect('/users');
+            redirect("/users?offset=$offset");
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('users'));
@@ -249,7 +257,8 @@ class Ctrl_users extends MY_Controller {
             $this->mod_users->check_teacher();
 
             $userid = isset($_GET['userid']) ? intval($_GET['userid']) : 0;
-        
+            $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+
             if ($userid==0)
                 throw new DataException($this->lang->line('illegal_user_id'));
 
@@ -282,7 +291,7 @@ class Ctrl_users extends MY_Controller {
 
                     $query = $this->mod_users->set_user($user_info, null);
 
-                    redirect('/users');
+                    redirect("/users?offset=$offset");
                 }
                 else {
                     // VIEW:
@@ -291,6 +300,7 @@ class Ctrl_users extends MY_Controller {
                     $this->load->view('view_menu_bar', array('langselect' => true));
 
                     $center_text = $this->load->view('view_edit_user',array('userid' => $userid,
+                                                                            'offset' => $offset,
                                                                             'user_info' => $user_info,
                                                                             'isadmin' => $this->mod_users->is_admin(),
                                                                             'isteacher' => $this->mod_users->is_teacher(),
@@ -360,7 +370,7 @@ class Ctrl_users extends MY_Controller {
                         $this->email->send();
                     }
 
-                    redirect('/users');
+                    redirect("/users?offset=$offset");
                 }
                 else {
                     // VIEW:
@@ -369,6 +379,7 @@ class Ctrl_users extends MY_Controller {
                     $this->load->view('view_menu_bar', array('langselect' => true));
 
                     $center_text = $this->load->view('view_edit_user',array('userid' => $userid,
+                                                                            'offset' => $offset,
                                                                             'user_info' => $user_info,
                                                                             'isadmin' => $this->mod_users->is_admin(),
                                                                             'isteacher' => $this->mod_users->is_teacher(),

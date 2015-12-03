@@ -91,7 +91,8 @@ class Ctrl_userclass extends MY_Controller {
             $this->mod_users->check_teacher();
 
             $userid = isset($_GET['userid']) ? intval($_GET['userid']) : 0;
-        
+            $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+
             if ($userid<=0)
                 throw new DataException($this->lang->line('illegal_user_id'));
 
@@ -113,7 +114,7 @@ class Ctrl_userclass extends MY_Controller {
                     $new_classes = array(); // ...so we set the array to empty
 
                 $this->mod_userclass->update_classes_for_user($userid, $old_classes, $new_classes, $owned_classes);
-                redirect('/users');
+                redirect("/users?offset=$offset");
             }
             else {
                 // VIEW:
@@ -123,6 +124,7 @@ class Ctrl_userclass extends MY_Controller {
                 
                 $center_text = $this->load->view('view_edit_classes_for_user',
                                                  array('userid' => $userid,
+                                                       'offset' => $offset,
                                                        'user_name' => "$user_info->first_name $user_info->last_name",
                                                        'allclasses' => $all_classes,
                                                        'owned_classes' => $owned_classes,

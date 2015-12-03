@@ -109,7 +109,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         var verse : string = null;
         var appendSofPasuq : boolean = false;
         var refs : number[] = null;
-        var urls : util.Pair[] = null;
+        var urls : string[][] = null;
 
         if (uhSize!=0) {
             if (uhSize!=smo.sameAsPrev.length) throw 'BAD2';
@@ -253,11 +253,11 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
 
 
     /** A collection colors to use for the unhightlighted and highlighted frames at various levels. */
-    static frameColors : util.Pair[] = [new util.Pair(new Color(0.000, 0.27, 0.98), new Color(0.000, 0.98, 0.71)),
-                                        new util.Pair(new Color(0.667, 0.27, 0.98), new Color(0.667, 0.98, 0.71)),
-                                        new util.Pair(new Color(0.39, 0.27, 0.98),  new Color(0.39, 0.98, 0.71))];
+    static frameColors : util.Pair<Color,Color>[] = [new util.Pair(new Color(0.000, 0.27, 0.98), new Color(0.000, 0.98, 0.71)),
+                                                     new util.Pair(new Color(0.667, 0.27, 0.98), new Color(0.667, 0.98, 0.71)),
+                                                     new util.Pair(new Color(0.39, 0.27, 0.98),  new Color(0.39, 0.98, 0.71))];
     
-    private myColors : util.Pair;
+    private myColors : util.Pair<Color,Color>;
 
 
 

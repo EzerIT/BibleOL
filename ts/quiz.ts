@@ -79,9 +79,10 @@ class Quiz {
             )
                 .done(() => window.location.replace(site_url + 'text/select_quiz')) // Go to quiz selection
                 .fail((jqXHR: JQueryXHR, textStatus: string, errorThrow: string) => {
-                    $('#textcontainer').html('<div class="error"><h1>'
-                                             + localize('error_response')
-                                             + '</h1><p>{0}</p></div>'.format(errorThrow));
+                    $('#textcontainer')
+                        .removeClass('textcontainer-background')
+                        .addClass('alert alert-danger')
+                        .html('<h1>' + localize('error_response') + '</h1><p>{0}</p>'.format(errorThrow));
                 });
         }
     }

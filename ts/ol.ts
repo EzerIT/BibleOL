@@ -5,7 +5,7 @@
 /// @brief Main functions for handling text display a quizzes.
 
 /// @if Ignore these in documentation
-/// <reference path="jquery/jquery.d.ts" />
+/// <reference path="bootstrap/bootstrap.d.ts" />
 /// <reference path="jqueryui/jqueryui.d.ts" />
 /// <reference path="util.ts" />
 /// <reference path="configuration.ts" />
@@ -20,6 +20,7 @@
 /// <reference path="panelquestion.ts" />
 /// <reference path="stringwithsort.ts" />
 /// <reference path="quiz.ts" />
+/// <reference path="resizer.ts" />
 /// @endif
 
 // If you want to compile with --noImplicitAny, you will now (as of TypeScript v1) get this error:
@@ -40,6 +41,9 @@ var supportsProgress : boolean; ///< Does the browser support &lt;progress&gt;?
 var charset : Charset;
 
 var quiz : Quiz;
+
+var accordion_width : number;
+
 
 /// Ensures that the width of a &lt;span class="levX"&gt; is at least as wide as the &lt;span
 /// class="gram"&gt; holding its grammar information.
@@ -135,8 +139,8 @@ class GenerateCheckboxes {
 
             configuration.sentencegrammar[leveli]
                 .getFeatName(configuration.sentencegrammar[leveli].objType,
-                             (whattype:number, objType:string, featName:string, featNameLoc:string, sgiObj:SentenceGrammarItem)
-                             => this.generatorCallback(whattype, objType, featName, featNameLoc, sgiObj));
+                             (whattype:number, objType:string, featName:string, featNameLoc:string, sgiObj:SentenceGrammarItem) =>
+                             this.generatorCallback(whattype, objType, featName, featNameLoc, sgiObj));
 
             if (this.hasSeenGrammarGroup)
                 this.checkboxes += '</div>';
@@ -219,8 +223,8 @@ class GenerateCheckboxes {
             }
 
             sg.getFeatName(sg.objType,
-                           (whattype:number, objType:string, featName:string, featNameLoc:string)
-                           => this.setHandlerCallback(whattype, objType, featName, featNameLoc, leveli));
+                           (whattype:number, objType:string, featName:string, featNameLoc:string) =>
+                           this.setHandlerCallback(whattype, objType, featName, featNameLoc, leveli));
         }
     }
 
@@ -258,6 +262,7 @@ function buildGrammarAccordion() : number {
     return max_width;
 }
 
+
 /// Main code executed when the page has been loaded.
 $(function() {
     // Does the browser support <progress>?
@@ -286,14 +291,7 @@ $(function() {
     generateCheckboxes.clearBoxes();
 
 
-    var accordion_width : number = buildGrammarAccordion();
-
-    $('#textcontainer').css('margin-left',accordion_width+10);
-    if (useTooltip)
-        $('#textcontainer').css('margin-right',0);
-    else
-        $('#textcontainer').css('margin-right',$('.grammardisplay').width()+10);
-
+    accordion_width = buildGrammarAccordion();
 
     var inQuiz : boolean = $('#quiztab').length>0;
     if (inQuiz) {
@@ -311,3 +309,5 @@ $(function() {
         currentDict.generateSentenceHtml(null);
     }
 });
+
+

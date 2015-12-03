@@ -1,29 +1,27 @@
 <script>
     function myalert(dialogtitle, dialogtext) {
-        $('#alert-text').text(dialogtext);
-        $('#alert-dialog')
-            .dialog('option', 'title', dialogtitle)
-            .dialog('open');
+        $('#alert-title').html(dialogtitle);
+        $('#alert-text').html(dialogtext);
+        $('#alert-dialog').modal('show');
     }
-
-    $(function() {
-        $("#alert-dialog").dialog({
-            autoOpen: false,
-            resizable: false,
-            modal: true,
-            buttons: {
-                "OK": function() {
-                    $( this ).dialog( "close" );
-                },
-            }
-         });
-    });
 </script>
 
 <!-- Generic alert dialog -->
-<div id="alert-dialog" style="display:none">
-  <p>
-    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-    <span id="alert-text"></span>
-  </p>
+<div id="alert-dialog" class="modal fade">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="alert-title">&nbsp;</h4>
+      </div>
+      <div class="modal-body">
+        <span class="glyphicon glyphicon-alert" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
+        <span id="alert-text"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('OK_button') ?></button>
+      </div>
+    </div>
+  </div>
 </div>
+

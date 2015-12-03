@@ -7,6 +7,7 @@ interface DictionaryIf {
     bookTitle : string;
 }
 
+
 declare var dictionaries : DictionaryIf;
 
 
@@ -19,6 +20,9 @@ class Dictionary {
     public level : number[] = []; // Maps id_d => object level
     private singleMonads : SingleMonadObject[] = [];
     public dispMonadObjects : DisplayMonadObject[][] = [];
+
+    private toolTipFunc : (x_this : Element, set_head : boolean) => util.Pair<string,string>; // first is content, second is heading
+
 
     constructor(dictif : DictionaryIf, index : number, inQuiz : boolean) {
         this.sentenceSet = dictif.sentenceSets[index];
@@ -146,6 +150,66 @@ class Dictionary {
         }
     }
 
+    private hoverForGrammar() {
+        var thisDict : Dictionary = this;
+
+        if (useTooltip) {
+            $(document).tooltip(
+                {
+                    items: "[data-idd]",
+                    disabled: false, 
+                    content: function() { return thisDict.toolTipFunc(this,true).first; }
+                });
+        }
+        else {
+            $("[data-idd]")
+                .hover(
+                    function() {
+                        // Calculate vertical position of '.grammardisplay'.
+                        // It should be placed at least 20px from top of window but not higher
+                        // than '#textcontainer'
+                        var scrTop   : number = $(window).scrollTop();
+                        var qcTop    : number = $('#textcontainer').offset().top;
+                        $('.grammardisplay')
+                            .html(thisDict.toolTipFunc(this,true).first)
+                            .css('top',Math.max(0,scrTop-qcTop+5))
+                            .outerWidth($('#grammardisplaycontainer').outerWidth()-25) // 25px is a littel mora than margin-right
+                            .show();
+                    },
+                    function () {
+                        $('.grammardisplay').hide();
+                    }
+                );
+            $("[data-idd]").off('click');
+        }
+    }
+ 
+    private clickForGrammar() {
+        if (useTooltip)
+            $(document).tooltip({items: "[data-idd]", disabled: true});
+        else
+            $("[data-idd]").off("mouseenter mouseleave");
+
+        $("[data-idd]").on('click', (event : any) => {
+            var info = this.toolTipFunc(event.currentTarget,false);
+            $('#grammar-info-label').html(info.second);
+            $('#grammar-info-body').html(info.first);
+            $('#grammar-info-dialog').modal('show');
+        });
+    }
+
+    private static handleDisplaySize(thisDict : Dictionary) {
+        switch (resizer.getWindowSize()) {
+        case 'xs':
+            thisDict.clickForGrammar();
+            break;
+
+        default:
+            thisDict.hoverForGrammar();
+            break;
+        }
+    }
+
     public generateSentenceHtml(qd : QuizData) : string {
         DisplaySingleMonadObject.itemIndex = 0;
         var sentenceTextArr : string[] = [''];
@@ -154,18 +218,19 @@ class Dictionary {
 
         var thisDict : Dictionary = this;
 
-        var toolTipFunc  =
-            function(x_this : Element) : string {
+        this.toolTipFunc  =
+            function(x_this : Element, set_head : boolean) : util.Pair<string,string> {
                 var monob : MonadObject = thisDict.monads[+($(x_this).attr("data-idd"))];
                 var level : number = thisDict.level[+($(x_this).attr("data-idd"))];
                 var sengram : SentenceGrammar = configuration.sentencegrammar[level];
 
                 var res : string = '<table>';
 
-                res += '<tr><td colspan="2" class="tooltiphead">{0}</td></tr>'.format(getObjectFriendlyName(sengram.objType));
+                if (set_head)
+                    res += '<tr><td colspan="2" class="tooltiphead">{0}</td></tr>'.format(getObjectFriendlyName(sengram.objType));
 
                 if (level===0 && (!qd || !qd.quizFeatures.dontShow))
-                    res += '<tr><td>{2}</td><td class="tooltip leftalign {0}">{1}</td></tr>'.format(charset.foreignClass, monob.mo.features[configuration.surfaceFeature],localize('visual'));
+                    res += '<tr><td>{2}</td><td class="bol-tooltip leftalign {0}">{1}</td></tr>'.format(charset.foreignClass, monob.mo.features[configuration.surfaceFeature],localize('visual'));
                 
                 var map : Array<string> = [];
     
@@ -192,13 +257,13 @@ class Dictionary {
                                                    wordclass = charset.transliteratedClass;
                                                else
                                                    wordclass = '';
-                                               res += '<tr><td>{0}</td><td class="tooltip leftalign {2}">{1}</td></tr>'.format(map[featName], featValLoc, featValLoc==='-' ? '' : wordclass);
+                                               res += '<tr><td>{0}</td><td class="bol-tooltip leftalign {2}">{1}</td></tr>'.format(map[featName], featValLoc, featValLoc==='-' ? '' : wordclass);
                                            }
                                            break;
 
                                        case WHAT.metafeature:
                                            if (mayShowFeature(objType, featName, sgiObj))
-                                               res += '<tr><td>{0}</td><td class="tooltip leftalign">{1}</td></tr>'.format(map[featName], featValLoc);
+                                               res += '<tr><td>{0}</td><td class="bol-tooltip leftalign">{1}</td></tr>'.format(map[featName], featValLoc);
                                            break;
 
 
@@ -208,26 +273,12 @@ class Dictionary {
                                        }
                                    });
                 
-                return res + '</table>';
+                return new util.Pair(res + '</table>', getObjectFriendlyName(sengram.objType));
             };
 
-        if (useTooltip) {
-            $(document).tooltip({items: "[data-idd]", content: function() { return toolTipFunc(this); }});
-        }
-        else {
-            $("[data-idd]").hover(function() {
-                                      // Calculate vertical position of '.grammardisplay'.
-                                      // It should be placed at least 20px from top of window but not higher
-                                      // than '#textcontainer'
-                                      var scrTop   : number = $(window).scrollTop();
-                                      var qcTop    : number = $('#textcontainer').offset().top;
-                                      $('.grammardisplay').html(toolTipFunc(this)).css('top',Math.max(qcTop,scrTop+20)).show();
-                                  },
-                                  function () {
-                                      $('.grammardisplay').hide();
-                                  }
-                                 );
-        }
+        resizer.addResizeListener(Dictionary.handleDisplaySize, this, 'xyzzy');
+        Dictionary.handleDisplaySize(this);
+
         return sentenceTextArr[0];
     }
 

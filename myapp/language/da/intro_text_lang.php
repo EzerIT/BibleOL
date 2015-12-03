@@ -1,7 +1,18 @@
 <?php
 
 $lang['intro_center'] = 
-    '<p>Bible Online Learner (Bible OL) giver fri adgang til den hebraiske bibel i ETCBC4-databasen og
+    '<h1>Nyt layout samt adgang fra smartphones og tablets</h1>
+
+    <p>Bible OL har fået et nyt layout der gør det lettere at bruge funktionerne på disse sider fra
+    smartphones og tablets.</p>
+
+    <p>Menuerne og udseendet af mange sider er blevet ændret, men funktionerne er stadig de samme.
+    Hvis du har en smartphone eller en tablet (fx en iPad), vil det nu være meget nemmere for dig at
+    bruge Bible OL på disse enheder.</p>
+
+    <h1>Hvad er Bible Online Learner?</h1>
+
+    <p>Bible Online Learner (Bible OL) giver fri adgang til den hebraiske bibel i ETCBC4-databasen og
     til øvelser som er knyttet til 12 indledende lektioner i <a
     href="http://bh.3bmoodle.dk/course/view.php?id=10" target="_blank">Persuasive Biblical Hebrew
     e-Learning (Log ind som gæst)</a>. Du kan også afprøve dit kendskab til græsk ud fra Nestles

@@ -17,14 +17,14 @@
 
   <?php if (!is_null($dirlist['parentdir'])): ?>
     <p>
-      <span class="ui-icon ui-icon-arrowreturnthick-1-w" style="display:inline-block;"></span>
+      <span class="glyphicon glyphicon-arrow-up" style="display:inline-block;"></span>
       <?= anchor(site_url("text/select_quiz?dir={$dirlist['parentdir']}"), $this->lang->line('parent')) ?>
     </p>
   <?php endif; ?>
 
   <?php foreach ($dirlist['directories'] as $d): ?>
     <p>
-      <span class="ui-icon ui-icon-folder-collapsed" style="display:inline-block;"></span>
+      <span class="glyphicon glyphicon-folder-close" style="display:inline-block;"></span>
       <?= anchor(site_url('text/select_quiz?dir=' . composedir($dirlist['relativedir'], $d)), $d) ?>
     </p>
   <?php endforeach; ?>
@@ -32,16 +32,16 @@
 
 <?php if (!empty($dirlist['files'])): ?>
   <h2><?= $this->lang->line('select_exercise') ?></h2>
-  <table>
+  <table class="type2 table table-striped">
     <tr>
       <th><?= $this->lang->line('quiz_name') ?></th>
-      <th><?= $this->lang->line('select_number_preset') ?></th>
-      <th><?= $this->lang->line('select_number_own') ?></th>
+      <th class="centeralign"><?= $this->lang->line('select_number_preset') ?></th>
+      <th class="centeralign"><?= $this->lang->line('select_number_own') ?></th>
     </tr>
    
   <?php foreach ($dirlist['files'] as $f): ?>
     <tr>
-      <td><span class="ui-icon ui-icon-document" style="display:inline-block;"></span><?= $f->filename ?></td>
+      <td><span class="glyphicon glyphicon-file" style="display:inline-block;"></span><?= $f->filename ?></td>
       <td style="text-align: center;">
         <?= anchor(site_url('text/show_quiz?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=5'), '5') ?>&nbsp;&nbsp;&nbsp;
         <?= anchor(site_url('text/show_quiz?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=10'), '10') ?>&nbsp;&nbsp;&nbsp;

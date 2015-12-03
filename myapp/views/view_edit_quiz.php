@@ -28,8 +28,8 @@
 </div>
 
 <div class="buttons">
-  <a class="makebutton" href="#" onclick="save_quiz(); return false;"><?= $this->lang->line('save_button') ?></a>
-  <a class="makebutton" href="<?=site_url('file_manager?dir=' . $dir) ?>"><?= $this->lang->line('cancel_button') ?></a>
+  <a class="btn btn-primary" href="#" onclick="save_quiz(); return false;"><?= $this->lang->line('save_button') ?></a>
+  <a class="btn btn-default" href="<?=site_url('file_manager?dir=' . $dir) ?>"><?= $this->lang->line('cancel_button') ?></a>
 </div>
 
 <script>
@@ -49,52 +49,114 @@
 
 <!-- Dialogs for this page follow -->
 
-<!-- Quiz Filename dialog -->
+  <?php //*********************************************************************
+        // Quiz Filename dialog 
+        //*********************************************************************
+    ?>
+  <div id="filename-dialog" class="modal fade">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title"><?= $this->lang->line('specify_file_name') ?></h4>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger" id="filename-error" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span id="filename-error-text"></span>
+          </div>
+          <div class="form-group">
+            <label for="filename-name"><?= $this->lang->line('enter_filename_no_3et') ?></label>
+            <input type="text" name="filename" id="filename-name" value="<?= $quiz ?>" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="filename-dialog-save" class="btn btn-primary"><?= $this->lang->line('save_button') ?></button>
+          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div id="filename-dialog" style="display:none" title="<?= $this->lang->line('specify_file_name') ?>">
-  <p class="error" id="filename-error"></p>
-  <table>
-    <tr>
-      <td><?= $this->lang->line('enter_filename_no_3et') ?></td>
-      <td>
-        <input type="text" name="filename" id="filename-name" value="<?= $quiz ?>" size="50" class="text ui-widget-content ui-corner-all">
-      </td>
-    </tr>
-  </table>
+
+ <?php //*********************************************************************
+        // Confirm File Overwrite dialog 
+        //*********************************************************************
+    ?>
+<div id="overwrite-dialog-confirm" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"><?= $this->lang->line('overwrite') ?></h4>
+      </div>
+      <div class="modal-body">
+        <span class="glyphicon glyphicon-question-sign" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
+        <span><?= $this->lang->line('file_exists_overwrite') ?></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="overwrite-yesbutton" class="btn btn-primary"><?= $this->lang->line('yes') ?></button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- Confirm File Overwrite dialog -->
+ <?php //*********************************************************************
+        // Import from SHEBANQ dialog
+        //*********************************************************************
+    ?>
+  <div id="import-shebanq-dialog" class="modal fade">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title"><?= $this->lang->line('import_from_shebanq') ?></h4>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger" id="import-shebanq-error" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span id="import-shebanq-error-text"></span>
+          </div>
+          <div class="form-group">
+            <label for="import-shebanq-qid"><?= $this->lang->line('shebanq_query_id_prompt') ?></label>
+            <input type="text" name="query-id" id="import-shebanq-qid" value="" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="import-shebanq-dbvers"><?= $this->lang->line('shebanq_query_id_prompt') ?></label>
+            <input type="text" name="db-version" id="import-shebanq-dbvers" value="4b" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="import-shebanq-button" class="btn btn-primary"><?= $this->lang->line('import_button') ?></button>
+          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div id="overwrite-dialog-confirm" style="display:none" title="<?= $this->lang->line('overwrite') ?>">
-  <p>
-    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-    <?= $this->lang->line('file_exists_overwrite') ?>
-  </p>
-</div>
 
-<!-- Import from SHEBANQ dialog -->
-
-<div id="import-shebanq-dialog" style="display:none" title="<?= $this->lang->line('import_from_shebanq') ?>">
-  <p class="error" id="import-shebanq-error"></p>
-  <table>
-    <tr>
-      <td><?= $this->lang->line('shebanq_query_id_prompt') ?></td>
-      <td>
-        <input type="text" name="query-id" id="import-shebanq-qid" value="" size="10" class="text ui-widget-content ui-corner-all">
-      </td>
-    </tr>
-    <tr>
-      <td><?= $this->lang->line('shebanq_version_prompt') ?></td>
-      <td>
-        <input type="text" name="db-version" id="import-shebanq-dbvers" value="4b" size="10" class="text ui-widget-content ui-corner-all">
-      </td>
-    </tr>
-  </table>
-</div>
-
-<!-- Confirm Sentence Unit MQL dialog -->
-
-<div id="qo-dialog-confirm" style="display:none" title="<?= $this->lang->line('mql_sentence_unit') ?>">
-  <p id="qo-dialog-text"></p>
+ <?php //*********************************************************************
+        // Confirm Sentence Unit MQL dialog
+        //*********************************************************************
+    ?>
+<div id="qo-dialog-confirm" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"><?= $this->lang->line('mql_sentence_unit') ?></h4>
+      </div>
+      <div class="modal-body">
+        <span class="glyphicon glyphicon-question-sign" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
+        <p id="qo-dialog-text"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="qo-yesbutton" class="btn btn-primary"><?= $this->lang->line('yes') ?></button>
+        <button type="button" id="qo-nobutton" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
+        <button type="button" id="qo-okbutton" class="btn btn-primary" data-dismiss="modal"><?= $this->lang->line('OK_button') ?></button>
+      </div>
+    </div>
+  </div>
 </div>
 

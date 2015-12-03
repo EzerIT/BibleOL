@@ -3,7 +3,7 @@
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 
-<p><a class="makebutton" onclick="genericConfirm('<?= $this->lang->line('delete_profile') ?>',
+<p><a class="btn btn-danger" onclick="genericConfirm('<?= $this->lang->line('delete_profile') ?>',
                             '<?= $this->lang->line('delete_profile_confirm') ?>',
                             '<?= site_url("users/delete_me") ?>');
              return false;"
