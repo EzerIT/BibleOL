@@ -18,9 +18,9 @@ $lang['only_cli'] = 'Denne kommando kan kun udføres på kommandolinjen';
 $lang['quiz'] = 'Øvelse';  // Text in title bar
 $lang['no_direct_url'] = 'Du må ikke benytte denne URL direkte.';
 
+$lang['select_a_passage_title'] = 'Vælg en tekst der skal vises';
 $lang['select_a_passage'] =
-    '<h1>Vælg en tekst der skal vises</h1>
-     <p>Her kan du vælge hvilken bibeltekst der skal vises.</p>
+    '<p>Her kan du vælge hvilken bibeltekst der skal vises.</p>
      <p>Hvis du udelader »Første vers«, vil et helt kapitel blive vist.</p>
      <p>Hvis du udelader »Sidste vers«, vil kun ét vers blive vist.</p>';
 

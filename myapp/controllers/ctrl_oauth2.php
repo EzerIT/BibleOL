@@ -140,7 +140,7 @@ class Ctrl_oauth2 extends MY_Controller {
                                                        'user_info' => $user_info),
                                                  true);
                 $this->lang->load('intro_text', $this->language); // For 'welcome' below
-                $this->load->view('view_main_page',array('left' => '<h1>'.$this->lang->line('welcome').'</h1>',
+                $this->load->view('view_main_page',array('left_title' => $this->lang->line('welcome'),
                                                          'center' => $center_text));
                 $this->load->view('view_bottom');
             }

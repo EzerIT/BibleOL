@@ -42,8 +42,8 @@ class Ctrl_file_manager extends MY_Controller {
                                                'teachers' => $teachers,
                                                'copy_or_move' => $this->session->userdata('operation')),
                                          true);
-        $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('exercise_file_mgmt').'</h1>'
-                                                             .$this->lang->line('file_mgmt_description'),
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line('exercise_file_mgmt'),
+                                                  'left' => $this->lang->line('file_mgmt_description'),
                                                   'center' => $center_text));
         $this->load->view('view_bottom');
     }
@@ -231,8 +231,8 @@ class Ctrl_file_manager extends MY_Controller {
             $center_text = $this->load->view('view_upload_files',
                                              array('dir' => $this->mod_quizpath->get_relative()),
                                              true);
-            $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('upload_exercise_files1').'</h1>'
-                                                                .'<p>'.$this->lang->line('upload_exercise_files2').'</p>'
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('upload_exercise_files1'),
+                                                      'left' => '<p>'.$this->lang->line('upload_exercise_files2').'</p>'
                                                                 .($this->mod_quizpath->is_top()
                                                                   ? $this->lang->line('upload_exercise_files3_top')
                                                                   : sprintf($this->lang->line('upload_exercise_files3_other'),
@@ -286,10 +286,9 @@ class Ctrl_file_manager extends MY_Controller {
                                                        'old_classes' => $old_classes),
                                                  true);
              
-                $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('control_visibility').'</h1>'
-                                                                     .'<p>'.sprintf($this->lang->line('visibility_folder_desc'),
-                                                                                    $this->mod_quizpath->get_relative())
-                                                                     .'</p>',
+                $this->load->view('view_main_page', array('left_title' => $this->lang->line('control_visibility'),
+                                                          'left' => sprintf($this->lang->line('visibility_folder_desc'),
+                                                                            $this->mod_quizpath->get_relative()),
                                                           'center' => $center_text));
                 $this->load->view('view_bottom');
                 return;
@@ -379,7 +378,7 @@ class Ctrl_file_manager extends MY_Controller {
                                                    'deleted' => $deleted),
                                              true);
              
-            $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('ownership_updated').'</h1>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('ownership_updated'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }

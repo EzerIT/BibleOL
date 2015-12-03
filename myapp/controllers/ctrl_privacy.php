@@ -11,7 +11,7 @@ class Ctrl_privacy extends MY_Controller {
         $this->load->view('view_top2');
         $this->load->view('view_menu_bar', array('langselect' => true));
 
-        $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('privacy_policy_title').'</h1>',
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line('privacy_policy_title'),
                                                   'center' => $this->lang->line('privacy_text')));
         $this->load->view('view_bottom');
     }

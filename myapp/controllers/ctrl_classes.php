@@ -42,8 +42,8 @@ class Ctrl_classes extends MY_Controller {
                                                    'myid' => $this->mod_users->my_id(),
                                                    'isadmin' => $this->mod_users->is_admin()),
                                              true);
-            $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('class_list') . '</h1>'
-                                                      . '<p>' . $this->lang->line('configure_your_classes') . '</p>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('class_list'),
+                                                      'left' => $this->lang->line('configure_your_classes'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
@@ -139,7 +139,7 @@ class Ctrl_classes extends MY_Controller {
 
             if ($class_info->ownerid!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
                 throw new DataException($this->lang->line('not_class_owner'));
-
+            
 
             $this->load->helper('form');
             $this->load->library('form_validation');
@@ -176,7 +176,7 @@ class Ctrl_classes extends MY_Controller {
                 
                 $center_text = $this->load->view('view_edit_class',array('classid' => $classid, 'class_info' => $class_info), true);
 
-                $this->load->view('view_main_page', array('left' => '<h1>' . $this->lang->line('edit_class_information') . '</h1>',
+                $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_class_information'),
                                                           'center' => $center_text));
                 $this->load->view('view_bottom');
             }

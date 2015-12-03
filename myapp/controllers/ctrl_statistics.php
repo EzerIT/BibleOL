@@ -42,7 +42,8 @@ class Ctrl_statistics extends MY_Controller {
             $this->load->view('view_confirm_dialog');
             $center_text = $this->load->view('view_statistics', array('data' => $goodtemplates), true);
             $left_text = $this->load->view('view_statistics_left', array('name' => $this->mod_users->my_name()), true);
-            $this->load->view('view_main_page', array('left' => $left_text,
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('statistics_title'),
+                                                      'left' => $left_text,
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
             

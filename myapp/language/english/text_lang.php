@@ -10,7 +10,6 @@ $lang['last_verse'] = 'Last verse';
 $lang['last_verse_prompt'] = 'Last verse:';
 $lang['select_text'] = 'Select text';  // Text in title bar
 $lang['show_text'] = 'Show text';  // Text in title bar
-$lang['select_a_passage'] = 'Select a Passage to Display';
 $lang['make_a_selection'] = 'Make a selection:';
 $lang['show_link_icons_prompt'] = 'Show link icons:';
 $lang['valid_chapters'] = 'Valid chapters:';
@@ -19,9 +18,9 @@ $lang['only_cli'] = 'This command can only be run from the command line';
 $lang['quiz'] = 'Quiz';  // Text in title bar
 $lang['no_direct_url'] = 'Do not access this URL directly.';
 
+$lang['select_a_passage_title'] = 'Select a Passage to Display';
 $lang['select_a_passage'] =
-    '<h1>Select a Passage to Display</h1>
-     <p>Here, you can select a Bible passage to display.<p>
+    '<p>Here, you can select a Bible passage to display.<p>
      <p>If you omit “First verse”, an entire chapter will be displayed.</p>
      <p>If you omit “Last verse”, only one verse will be displayed.</p>';
 

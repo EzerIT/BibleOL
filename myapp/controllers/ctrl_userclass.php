@@ -72,8 +72,8 @@ class Ctrl_userclass extends MY_Controller {
                                                        'old_users' => $old_users),
                                                  true);
              
-                $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('assign_users_to_class').'</h1>'
-                                                          .'<p>'
+                $this->load->view('view_main_page', array('left_title' => $this->lang->line('assign_users_to_class'),
+                                                          'left' => '<p>'
                                                           . sprintf($this->lang->line('select_users_for_class'),$class_info->classname)
                                                           .'</p>',
                                                           'center' => $center_text));
@@ -131,8 +131,8 @@ class Ctrl_userclass extends MY_Controller {
                                                        'old_classes' => $old_classes),
                                                  true);
              
-                $this->load->view('view_main_page', array('left' =>  '<h1>'.$this->lang->line('assign_user_to_classes').'</h1>'
-                                                          .'<p>'
+                $this->load->view('view_main_page', array('left_title' => $this->lang->line('assign_user_to_classes'),
+                                                          'left' => '<p>'
                                                           . sprintf($this->lang->line('select_classes_for_user'),$user_info->first_name,$user_info->last_name)
                                                           .'<p>',
                                                           'center' => $center_text));
@@ -180,7 +180,7 @@ class Ctrl_userclass extends MY_Controller {
                                                    'avail_classes' => $avail_classes),
                                              true);
              
-            $this->load->view('view_main_page', array('left' =>  '<h1>'.$this->lang->line('enroll_in_classes').'</h1>',
+            $this->load->view('view_main_page', array('left_title' =>  $this->lang->line('enroll_in_classes'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
@@ -237,7 +237,7 @@ class Ctrl_userclass extends MY_Controller {
                 $this->load->view('view_top2');
                 $this->load->view('view_menu_bar', array('langselect' => true));
                 
-                $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('enrolled').'</h1>',
+                $this->load->view('view_main_page', array('left_title' => $this->lang->line('enrolled'),
                                                           'center' => '<h1>'
                                                           .sprintf($this->lang->line('you_are_enrolled'),$this->enroll_class->classname)
                                                           .'</h1>'));
@@ -254,7 +254,7 @@ class Ctrl_userclass extends MY_Controller {
                                                        'classname' => $this->enroll_class->classname),
                                                  true);
 
-                $this->load->view('view_main_page', array('left' => '<h1>'.$this->lang->line('enter_class_password').'</h1>',
+                $this->load->view('view_main_page', array('left_title' => $this->lang->line('enter_class_password'),
                                                           'center' => $center_text));
                 $this->load->view('view_bottom');
             }

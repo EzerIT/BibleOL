@@ -10,9 +10,12 @@ class Mod_intro_text extends CI_Model {
         return $this->lang->line('intro_center');
     }
 
+    function right_text_title() {
+        return $this->lang->line('intro_right_head');
+    }
+
     function right_text() {
         return
-            '<h1>' . $this->lang->line('intro_right_head') . '</h1>' .
             $this->lang->line('intro_right1') .
             '<img style="float:right;" src="images/eplotlogo.png" alt="Logo">' .
             $this->lang->line('intro_right2') .
@@ -20,13 +23,14 @@ class Mod_intro_text extends CI_Model {
             $this->lang->line('intro_right3');
     }
 
-    function left_text() {
+    function left_text_title() {
         $name = $this->mod_users->my_name();
 
-        return
-            '<h1>' . (is_null($name)
-                      ? $this->lang->line('welcome')
-                      : sprintf($this->lang->line('welcome2'), $name)) . '</h1>'
-            . '<p>&nbsp;</p><p class="centeralign"><img alt="" src="images/BibleOL.png"></p>';
+        return is_null($name) ? $this->lang->line('welcome')
+                              : sprintf($this->lang->line('welcome2'), $name);
+    }
+
+    function left_text() {
+        return '<p class="centeralign"><img alt="" src="images/BibleOL.png"></p>';
     }
 }
