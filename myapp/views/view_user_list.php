@@ -46,4 +46,7 @@
   <?php endforeach; ?>
 </table>
 </div>
+
+<p style="height:2px">&nbsp;</p>
+
 <p><a class="btn btn-primary" href="<?= site_url("users/edit_one_user?userid=-1") ?>"><?= $this->lang->line('add_user') ?></a></p>
