@@ -35,7 +35,9 @@
   <?php endforeach; ?>
 </table>
 
-<p><input class="makebutton" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
-     <a class="makebutton" href="<?= site_url("file_manager?dir=$dir") ?>"><?= $this->lang->line('cancel_button') ?></a>
+<p style="height:2px">&nbsp;</p>
+
+<p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
+     <a class="btn btn-default" href="<?= site_url("file_manager?dir=$dir") ?>"><?= $this->lang->line('cancel_button') ?></a>
 </p>
 </form>

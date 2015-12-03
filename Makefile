@@ -8,14 +8,14 @@ testversion:
 js/ol.js:	ts/ol.ts ts/answer.ts ts/charset.ts ts/componentwithyesno.ts ts/configuration.ts ts/dictionary.ts \
 	ts/sentencegrammar.ts ts/displaymonadobject.ts \
 	ts/jquery/jquery.d.ts ts/jqueryui/jqueryui.d.ts ts/localization.ts ts/monadobject.ts ts/panelquestion.ts \
-	ts/statistics.ts ts/stringwithsort.ts ts/util.ts ts/quiz.ts ts/quizdata.ts 
+	ts/statistics.ts ts/stringwithsort.ts ts/util.ts ts/quiz.ts ts/quizdata.ts ts/resizer.ts
 	@#tsc --noImplicitAny --out $@ $<
 	tsc --out $@ $<
 
 js/editquiz.js:	ts/editquiz.ts ts/jquery/jquery.d.ts ts/configuration.ts ts/localization.ts \
 	ts/paneltemplmql.ts ts/paneltemplsentenceselector.ts ts/paneltemplquizobjectselector.ts \
 	ts/paneltemplquizfeatures.ts ts/sentencegrammar.ts \
-	ts/stringwithsort.ts ts/sortingcheckbox.ts ts/util.ts ts/verbclasspanel.ts
+	ts/stringwithsort.ts ts/sortingcheckbox.ts ts/util.ts ts/verbclasspanel.ts ts/resizer.ts
 	@#tsc --noImplicitAny --out $@ $<
 	tsc --out $@ $<
 

@@ -25,7 +25,27 @@ body {
     overflow: scroll; // Make sure scroll bar is always present (if not, popops may cause confusion)
 }
 
+h1 {
+    font-weight: bold;
+}
 
+div.hr-replacement {  // Because Bootstrap messes with <hr>
+    background-color: black;
+    height: 1px;
+    margin: 20px 0;
+}
+
+.navbar-brand {
+  font-size: 18pt;
+  color: blue !important;
+}
+
+.navbar-text.logo {
+    margin-top: 5px;
+    margin-bottom: 0;
+    margin-right: 5px;
+}
+    
 
 .textdisplay {
     padding: 0;
@@ -59,8 +79,18 @@ body {
 
 table#quiztab {
     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
     background-color: @pink;
-
+    th {
+        text-align: center;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    td {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
 }
 
 span.chapter {
@@ -140,27 +170,55 @@ div.objectlevel {
 }
 
 div.grammarselector {
-    float: left;
     font-size: 8pt;
+    display: inline-block;
+    margin-bottom: 10px;
 }
 
 div.grammardisplay {
-    width: 300px;
+    border-radius: 6px;
+    margin-right: 15px;
     float: right;
     font-size: 8pt;
     display: none;
     position: absolute;
     right: 0;
     top: 20px; // The 'top' value is overwritten by JavaScript
+    table {
+        width: 100%;
+        td, th {
+            padding: 1px 4px;
+        }
+    }
 }
 
+#grammar-info-body {
+    table {
+        margin-left: auto; // Center the table
+        margin-right: auto;
+        td, th {
+            padding: 1px 4px;
+        }
+    }
+}
+
+.like-label {
+    font-weight: bold;
+}
+
+
 div#textcontainer {
-    background-color: @textbackground;
     display: block;
     // Margins are set programatically
     h1 {
         text-align: center;
+        margin-top: 0;
+        font-size: 20pt;
     }
+}
+
+div.textcontainer-background {
+    background-color: @textbackground;
 }
 
 table.grammargroup {
@@ -168,6 +226,12 @@ table.grammargroup {
 }
 .attrshow {
     font-size: 12pt;
+}
+
+table.enroll {
+    td {
+        padding: 4px;
+    }
 }
 
 div#quizdesc {
@@ -245,62 +309,37 @@ img {
     border-style: none;
 }
 
-div.topbar {
-    background-color: @lightblue;
-    color: blue;
-    font-size: 20pt;
-    font-weight: bold;
-    text-align: center;
-    font-family: Segoe UI, Arial, sans-serif;
-    margin-right: 310px;
-    line-height: 43px;
-}
-
-div.contentouter {
-    background-color: @chocolate;
-    padding: 10px;
-}
-
-div.contentinner {
-    background-color: white;
-}
-
 
 div.leftblock {
-    vertical-align: top;
-    width: @leftblockwidth;
-    display: table-cell;
     background-color: @lightgray;
-    padding-left: 2px;
-    padding-right: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 6px;
     h1 {
+        margin-top: 0;
         font-size: 14pt;
     }
 }
 
 div.rightblock {
-    vertical-align: top;
-    width: @rightblockwidth;
-    display: table-cell;
     background-color: @lightgray;
-    padding-left: 2px;
-    padding-right: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 6px;
     h1 {
+        margin-top: 0;
         font-size: 14pt;
     }
 }
 
 div.centerblock {
-    vertical-align: top;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 12pt;
-    display: table-cell;
-}
-
-div.innerinner {
-    padding: 10px;
-    font-size: 12pt;
+    h1 {
+        margin-top: 0;
+        font-size: 16pt;
+    }
+    h2 {
+        font-size: 14pt;
+    }
 }
 
 div.error, div.warning {
@@ -316,37 +355,13 @@ p.error {
     background-color: @pink;
 }
 
-
 #logincenter {
-    width: 700px;
-    font-size: 10pt;
-    text-align: center;
+    max-width: 300px;
+}
 
-    #loginbox {
-        border: solid black 1px;
-        background-color: #fee78d;
-        display: inline-block;
-        padding: 5px;
-        position: relative;
-        margin-left: auto;
-        margin-right: auto;
-        input.logintext {
-            width: 190px;
-        }
-    }
-
-    #oauth2box {
-        width: 270px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    #oauth2text {
-        width: 270px;
-        text-align: left;
-        margin-left: auto;
-        margin-right: auto;
-    }
+table.padded td, th {
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 // For font settings display
@@ -356,6 +371,10 @@ table.striped {
 }
 
 table.fontattrib {
+    th, td {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
     th.settingsfor, td.settingsfor {
         text-align: left;
         width: 25%;
@@ -376,6 +395,16 @@ div.fontsetting {
     span.styleexplanation {
         font-size: small;
     }
+    // Fix jquery-ui customization to fit current Bootstrap theme:
+    .ui-widget-content {
+        background: white;
+        border-color: #3c3c3c;
+        font-size: 14px;
+    }
+    .ui-spinner-button {
+        background: #eeeeee;
+        border-color: #3c3c3c;
+    }
 }
 
 div.buttons {
@@ -383,28 +412,42 @@ div.buttons {
     margin-bottom: 5px;
 }
 
-table.type1,table.type2 {
+table.type1 {
     border-collapse: separate;
     th {
         padding: 0 6px;
         text-align: center;
         font-weight: normal;
-    }
-     
-    td {
-        padding: 0 6px;
-        text-align: center;
-    }
-}
-
-table.type1 {
-    th {
         background-color: #000077;
         color: white;
     }
      
     td {
+        padding: 0 6px;
+        text-align: center;
         background-color: #c0c0ff;
+    }
+}
+
+table.type2 {
+    background-color: #f0f8ff; // AliceBlue
+
+    // Override Bootstrap:
+    &.table-striped {
+        > tbody > tr:nth-of-type(odd) {
+            background-color: darken(#f0f8ff, 5%);
+        }
+    }
+}
+
+table.type3 {
+    background-color: #f5f5f5; // WhiteSmoke
+
+    // Override Bootstrap:
+    &.table-striped {
+        > tbody > tr:nth-of-type(odd) {
+            background-color: darken(#f5f5f5, 5%);
+        }
     }
 }
 
@@ -441,7 +484,7 @@ div.statistics {
         font-size: 16pt;
     }
     table {
-        td {
+        th, td {
             text-align: center;
         }
     }
@@ -449,6 +492,10 @@ div.statistics {
 
 div#virtualkbid {
     float: right;
+}
+
+div#virtualKeyboard {
+    box-sizing: content-box; // Overrides Bootstrap
 }
 
 
@@ -510,76 +557,5 @@ table.featuretable {
     th, td {
         padding-left: 10px;
         padding-right: 10px;
-    }
-}
-
-
-// For menu bar:
-// Code based on http://css-tricks.com/simple-jquery-dropdowns
-
-ul.dropdown {
-    padding: 0;
-    a {
-        text-decoration: none;
-    }
-
-    // Level 1
-    li {
-        display: inline-block; 
-        background: @beige;
-        margin-right: 5px;
-        z-index: 1;
-
-        &:hover {
-            background: @chocolate;
-            position: relative;
-        }
-
-        a {
-            color: black; 
-            display: block; 
-            padding: 4px;
-        }
-    }
-
-
-    // Level 2
-    ul {
-        padding: 0; width: 150px; 
-        visibility: hidden; 
-        position: absolute; 
-        top: 100%; 
-        left: 0;
-
-        li {
-            width: 150px;
-            background: @beige;
-            border-bottom: 1px solid @mediumgray;
-
-            &:hover {
-                background-color: @chocolate;
-            }
-
-            a { 
-                padding-left: 10px;
-                padding-right: 0;
-                width: 100%; 
-                display: inline-block; 
-                
-                &:hover {
-                    background-color: transparent;
-                }
-            } 
-        }
-    }
-
-    // Level 3
-    ul ul {
-        left: 100%;
-        top: 0;
-    }
-
-    li:hover > ul {
-        visibility: visible;
     }
 }

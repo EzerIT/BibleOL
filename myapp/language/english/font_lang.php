@@ -22,6 +22,7 @@ $lang['bold'] = 'Bold';
 $lang['italic'] = 'Italic'; 
 $lang['size'] = 'Size'; 
 $lang['text_sample'] = 'Text sample'; 
+$lang['scrolling'] = '(Slide or scroll right and left to view entire table)';
 
 $lang['alphabet_hebrew'] = 'Hebrew';
 $lang['alphabet_hebrew_translit'] = 'transliterated Hebrew';

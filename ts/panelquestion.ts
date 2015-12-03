@@ -385,10 +385,6 @@ class PanelQuestion {
                 $('#quiztab').append('<tr><td colspan="{0}" id="row{1}" style="text-align:right;"></td></tr>'.format(colcount, +qoid+1));
         }
 
-        $('#quiztab').width($('#textcontainer').width()); // Initial table width
-        // Resize '#quiztab' when main window is resized
-        $(window).resize(() => $('#quiztab').width($('#textcontainer').width()));
-
 	// Add "Check answer" button
         $('button#check_answer').off('click'); // Remove old handler
         $('button#check_answer').on('click',

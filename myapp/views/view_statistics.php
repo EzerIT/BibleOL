@@ -13,7 +13,7 @@
 
   <h1><?= $this->lang->line('exercise_file_colon') ?> <?= substr(strrchr($d->pathname,'/'),1) ?></h1>  
 
-  <table class="striped">
+  <table class="type2 table table-striped">
     <tr>
       <th><?= $this->lang->line('number_abbrev') ?></th>
       <th><?= $this->lang->line('time') ?></th>
@@ -37,7 +37,7 @@
 
   <p></p>
 
-  <table class="striped">
+  <table class="type3 table table-striped">
     <tr>
       <th><?= $this->lang->line('number_abbrev') ?></th>
       <th><?= $this->lang->line('feature') ?></th>

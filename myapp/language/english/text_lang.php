@@ -1,23 +1,33 @@
 <?php
 
+$lang['corpus_prompt'] = 'Corpus:';
 $lang['book_prompt'] = 'Book:';
 $lang['chapter'] = 'Chapter';
 $lang['chapter_prompt'] = 'Chapter:';
 $lang['first_verse'] = 'First verse';
-$lang['first_verse_leave'] = 'First verse (leave empty to view entire chapter):';
+$lang['first_verse_prompt'] = 'First verse:';
 $lang['last_verse'] = 'Last verse';
-$lang['last_verse_leave'] = 'Last verse (leave empty to view only one verse):';
+$lang['last_verse_prompt'] = 'Last verse:';
 $lang['select_text'] = 'Select text';  // Text in title bar
 $lang['show_text'] = 'Show text';  // Text in title bar
-$lang['select_a_passage'] = 'Select a Passage to Display';
 $lang['etcbc4_test'] = 'Do not use "ETCBC4-test" unless you know what you are doing.';
 $lang['make_a_selection'] = 'Make a selection:';
-$lang['show_link_icons'] = 'Show link icons';
+$lang['show_link_icons_prompt'] = 'Show link icons:';
 $lang['valid_chapters'] = 'Valid chapters:';
 $lang['display'] = 'Display'; // Button text
 $lang['only_cli'] = 'This command can only be run from the command line';
 $lang['quiz'] = 'Quiz';  // Text in title bar
 $lang['no_direct_url'] = 'Do not access this URL directly.';
+
+$lang['select_a_passage'] =
+    '<h1>Select a Passage to Display</h1>
+     <p>Here, you can select a Bible passage to display.<p>
+     <p>If you omit “First verse”, an entire chapter will be displayed.</p>
+     <p>If you omit “Last verse”, only one verse will be displayed.</p>';
+
+$lang['corpus_copyright'] =
+    '<h1>Copyright for the ETCBC4 database:</h1><p>%s</p>
+     <h1>Copyright for the Nestle 1904 database:</h1><p>%s</p>';
 
 $lang['select_quiz'] = 'Select a Quiz';
 $lang['click_folder'] = 'Click on a folder to open it, or select the number of questions you want from a particular quiz and whether you want to use the preset passage selection or specify your own passages.';
@@ -67,9 +77,12 @@ $lang['file_exists_overwrite'] = 'The file already exists. Do you want to replac
 $lang['import_from_shebanq'] = 'Import from SHEBANQ';  // Title in dialog box
 $lang['shebanq_query_id_prompt'] = 'SHEBANQ query ID:';
 $lang['shebanq_version_prompt'] = 'SHEBANQ database version:';
+$lang['import_button'] = 'Import';
 $lang['mql_sentence_unit'] = 'MQL for Sentence Unit';  // Title in dialog box
 $lang['no_sentences_found'] = 'No sentences found';
 $lang['mql_database_error_colon'] = 'MQL database error:';
 $lang['mql_compiler_error_colon'] = 'MQL compiler error:';
 $lang['cannot_write_to_quiz_file'] = 'Cannot write to quiz file';
 $lang['no_text_found'] = 'No text found';
+
+$lang['close_button'] = 'Close';

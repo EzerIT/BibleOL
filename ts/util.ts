@@ -51,10 +51,8 @@ module util {
     }
 
 
-
-    // TODO: Make generic, when available in TypeScript
-    export class Pair {
-        constructor(public first : any, public second : any) {}
+    export class Pair<T1, T2> {
+        constructor(public first : T1, public second : T2) {}
     }
 
 
@@ -115,6 +113,7 @@ module util {
         else
             --forceWideCount;
 
+        // TODO: Test this:
         if (val && forceWideCount==1) {
             $('.textblock').css('margin-left','30px').removeClass('inline').addClass('inlineblock');
         }
@@ -133,12 +132,12 @@ module util {
         var noClassN : string = 'nolev' + level;
 
         if (val) {
-            $('.' + noClassN + '> .gram').removeClass('dontshowit').addClass('showit'); //css('display','inline-block');
+            $('.' + noClassN + '> .gram').removeClass('dontshowit').addClass('showit');
             $('.' + noClassN).addClass(classN);
             $('.' + noClassN).removeClass(noClassN);
         }
         else {
-            $('.' + classN + '> .gram').removeClass('showit').addClass('dontshowit'); //css('display','none');
+            $('.' + classN + '> .gram').removeClass('showit').addClass('dontshowit');
             $('.' + classN).addClass(noClassN);
             $('.' + classN).removeClass(classN);
         }

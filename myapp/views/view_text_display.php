@@ -1,7 +1,8 @@
-<div class="grammarselector" id="gramselect"></div>
-<div class="grammardisplay ui-widget ui-widget-content ui-corner-all" id="aa2"></div>
- 
-<div id="textcontainer">
+<div class="col-md-3">
+  <div class="grammarselector" id="gramselect"></div>
+</div>
+
+<div  class="col-md-6 col-sm-8 textcontainer-background" id="textcontainer">
   <?php if ($is_quiz && !$is_logged_in): ?>
     <div class="warning">
          <h1><?= $this->lang->line('warning') ?></h1>
@@ -22,13 +23,15 @@
  
   <?php if ($is_quiz): ?>
     <div id="virtualkbcontainer"><div id="virtualkbid"></div></div>
-    <table id="quiztab"></table>
-     <p><input id="locate_cb" type="checkbox"><?= $this->lang->line('locate') ?> <span class="location"></span></p>
-     <?php /* <progess> works in most browsers, <div id="progressbar"> is for older browsers and uses JQuery UI*/ ?>
-     <p class="inline"><?= $this->lang->line('progress') ?></p>
-     <progress id="progress" value="0" max="1"></progress>
-     <div id="progressbar"></div>
-     <p id="progresstext" class="inline"></p>
+    <div style="overflow-x:auto; overflow-y:hidden">
+      <table id="quiztab"></table>
+    </div>
+    <p><input id="locate_cb" type="checkbox"><?= $this->lang->line('locate') ?> <span class="location"></span></p>
+    <?php /* <progess> works in most browsers, <div id="progressbar"> is for older browsers and uses JQuery UI*/ ?>
+    <p class="inline"><?= $this->lang->line('progress') ?></p>
+    <progress id="progress" value="0" max="1"></progress>
+    <div id="progressbar"></div>
+    <p id="progresstext" class="inline"></p>
     <div id="buttonlist1">
       <button id="check_answer" type="button"><?= $this->lang->line('check_answer') ?></button>
       <button id="show_answer" type="button"><?= $this->lang->line('show_answer') ?></button>
@@ -41,6 +44,27 @@
 
   <p><button id="togglemql"><?= $this->lang->line('toggle_mql') ?></button></p>
   <pre class="mqlarea"><?= $mql_list ?></pre>
+</div>
+
+<div id="grammardisplaycontainer" class="col-md-3 col-sm-4">
+  <div class="grammardisplay ui-widget ui-widget-content" id="aa2"></div>
+</div>
+
+<!-- Dialog for displaying grammar information -->
+<div class="modal fade" id="grammar-info-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="grammar-info-label"></h4>
+      </div>
+      <div class="modal-body" id="grammar-info-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('close_button') ?></button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>

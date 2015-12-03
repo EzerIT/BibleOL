@@ -1,5 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+$config['users_per_page'] = 30;
 $config['pw_salt'] = 'xxxxxxx';
 $config['mql_driver'] = 'native';
 $config['mail_sender_address'] = 'xxxxx@xxxxx.xx';

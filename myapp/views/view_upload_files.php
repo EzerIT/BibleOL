@@ -5,8 +5,8 @@
                   action: '<?= site_url("upload?dir=$dir") ?>',
                   allowedExtensions: ['3et'],        
                   template: '<div class="qq-uploader">' + 
-                            '<div class="qq-upload-drop-area ui-corner-all"><span><?= $this->lang->line('drop_files_here') ?></span></div>' +
-                            '<div class="qq-upload-button ui-corner-all"><?= $this->lang->line('upload_files_button') ?></div>' +
+                            '<div class="qq-upload-drop-area btn"><span><?= $this->lang->line('drop_files_here') ?></span></div>' +
+                            '<div class="qq-upload-button btn"><?= $this->lang->line('upload_files_button') ?></div>' +
                             '<ul class="qq-upload-list"></ul>' + 
                             '</div>',
 
@@ -20,4 +20,4 @@
 </div>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<p><a class="makebutton" href="<?= site_url("file_manager?dir=$dir") ?>"><?= $this->lang->line('view_folder') ?></a></p>
+<p><a class="btn btn-primary" href="<?= site_url("file_manager?dir=$dir") ?>"><?= $this->lang->line('view_folder') ?></a></p>

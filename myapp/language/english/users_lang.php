@@ -20,6 +20,8 @@ $lang['preferred_language'] = 'Preferred language';
 $lang['no_language'] = 'None specified';
 $lang['english'] = 'English';
 $lang['danish'] = 'Danish';
+$lang['number_of_users'] = 'Number of users: %s';
+$lang['showing_per_page'] = 'Each page shows %s users';
 
 $lang['this_your_profile'] = 'This is your user profile';
 $lang['change_through_google'] = 'If your want to change your name or email address, you must do so in your Google profile.';

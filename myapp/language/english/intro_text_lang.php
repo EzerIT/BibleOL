@@ -1,7 +1,18 @@
 <?php
 
-$lang['intro_center'] = 
-      '<p>Bible Online Learner (Bible OL) gives free access to the Hebrew Bible in the ETCBC4 database and
+$lang['intro_center'] =
+      '<h1>New Layout and Easy Access from Smartphones and Tablets</h1>
+
+      <p>Bible OL has a new layout which makes it easier to use the features on these pages from
+      smartphones and tablets.</p>
+
+      <p>The menus and the visual appearance of many pages have changed, but they still function in
+      the same way as before. If you have a smartphone or a tablet (such as an iPad), it will now be
+      much easier for you to use Bible OL on these devices.</p>
+
+      <h1>What Is Bible Online Learner?</h1>
+
+      <p>Bible Online Learner (Bible OL) gives free access to the Hebrew Bible in the ETCBC4 database and
        a number of exercises which are linked to 12 introductory lessons at <a
        href="http://bh.3bmoodle.dk/course/view.php?id=10" target="_blank">Persuasive Biblical Hebrew
        e-Learning (Login as guest)</a>. You can also test your knowledge of Greek on Nestle’s 1904
@@ -25,7 +36,7 @@ $lang['intro_right1'] =
        Nicolai Winther-Nielsen (nwn [at] dbi . edu) of <a
        href="http://fih.fjellhaug.no/om-oss/in-english" target="_blank">Fjellhaug International
        University College Denmark (FIUC-Dk)</a>.<br>
-             
+
        Bible Online Learner was developed by Claus Tøndering of <a href="http://www.ezer.dk"
        target="_blank">Ezer IT Consulting</a>.<br>
 

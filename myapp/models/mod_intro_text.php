@@ -26,7 +26,7 @@ class Mod_intro_text extends CI_Model {
         return
             '<h1>' . (is_null($name)
                       ? $this->lang->line('welcome')
-                      : sprintf($this->lang->line('welcome2'), $name)) . '</h2>'
+                      : sprintf($this->lang->line('welcome2'), $name)) . '</h1>'
             . '<p>&nbsp;</p><p class="centeralign"><img alt="" src="images/BibleOL.png"></p>';
     }
 }

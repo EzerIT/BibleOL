@@ -1,6 +1,6 @@
     <?php $valerr = validation_errors();
       if (!empty($valerr))
-          echo "<div class=\"error\">$valerr</div>\n";
+          echo "<div class=\"alert alert-danger\">$valerr</div>\n";
     ?>
 
     <?= form_open("classes/edit_one_class?classid=$classid") ?>
@@ -21,6 +21,7 @@
           <td class="nolb"><?= $this->lang->line('date_format_or_blank') ?></td>
         </tr>
       </table>
-      <p><input class="makebutton" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
-          <a class="makebutton" href="<?= site_url('classes') ?>"><?= $this->lang->line('cancel_button') ?></a></p>
+      <p style="height:2px">&nbsp;</p>
+      <p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
+          <a class="btn btn-default" href="<?= site_url('classes') ?>"><?= $this->lang->line('cancel_button') ?></a></p>
     </form>

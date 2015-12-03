@@ -45,7 +45,6 @@ var util;
         return dumped_text;
     }
     util.mydump = mydump;
-    // TODO: Make generic, when available in TypeScript
     var Pair = (function () {
         function Pair(first, second) {
             this.first = first;
@@ -106,6 +105,7 @@ var util;
             ++forceWideCount;
         else
             --forceWideCount;
+        // TODO: Test this:
         if (val && forceWideCount == 1) {
             $('.textblock').css('margin-left', '30px').removeClass('inline').addClass('inlineblock');
         }
@@ -124,12 +124,12 @@ var util;
         var classN = 'lev' + level;
         var noClassN = 'nolev' + level;
         if (val) {
-            $('.' + noClassN + '> .gram').removeClass('dontshowit').addClass('showit'); //css('display','inline-block');
+            $('.' + noClassN + '> .gram').removeClass('dontshowit').addClass('showit');
             $('.' + noClassN).addClass(classN);
             $('.' + noClassN).removeClass(noClassN);
         }
         else {
-            $('.' + classN + '> .gram').removeClass('showit').addClass('dontshowit'); //css('display','none');
+            $('.' + classN + '> .gram').removeClass('showit').addClass('dontshowit');
             $('.' + classN).addClass(noClassN);
             $('.' + classN).removeClass(classN);
         }

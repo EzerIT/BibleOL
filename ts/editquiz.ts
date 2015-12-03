@@ -1,6 +1,7 @@
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 
+/// <reference path="bootstrap/bootstrap.d.ts" />
 /// <reference path="jquery/jquery.d.ts" />
 /// <reference path="jqueryui/jqueryui.d.ts" />
 /// <reference path="configuration.ts" />
@@ -125,9 +126,6 @@ $(function() {
 
     $('#quiz_tabs').tabs({ disabled: [3] });
 
-    $('button').button();
-    $('input[type="button"]').button();
-
     panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
 
     panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'),
@@ -135,6 +133,15 @@ $(function() {
     panelSent = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'),
                                                panelSentUnit, panelFeatures);
 });
+
+function show_error(id : string, message : string) {
+    $(id + '-text').text(message);
+    $(id).show();
+}
+
+function hide_error(id : string) {
+    $(id).hide();
+}
 
 function save_quiz() {
     checked_passages = $('#passagetree').jstree('get_checked',null,false);
@@ -155,79 +162,50 @@ function save_quiz() {
     }
     
 
-    $('#filename-error').text('');
+    hide_error('#filename-error');
 
-    $('#filename-dialog').dialog({
-            autoOpen: false,
-            resizable: false,
-            modal: true,
-            width: 600,
-            buttons: [
-                {
-                    text: localize('save'),
-                    click: function() {
-                        if ($('#filename-name').val().trim()=='')
-                            $('#filename-error').text(localize('missing_filename'));
-                        else {
-                            quiz_name = $('#filename-name').val().trim();
+    $('#filename-dialog-save').off('click'); // Remove any previous handler
+    $('#filename-dialog-save').on('click',() => {
+        if ($('#filename-name').val().trim()=='')
+            show_error('#filename-error', localize('missing_filename'));
+        else {
+            quiz_name = $('#filename-name').val().trim();
 
-                            // Check if file may be written
-                            $.ajax('{0}?dir={1}&quiz={2}'.format(check_url,
-                                                                 encodeURIComponent(dir_name),
-                                                                 encodeURIComponent(quiz_name)))
-                                .done((data, textStatus, jqXHR) => {
-                                    switch (data.trim()) {
-                                    case 'OK':
-                                        $(this).dialog('close');
-                                        save_quiz2();
-                                        break;
-                                    case 'EXISTS':
-                                        $(this).dialog('close');
-                                        check_overwrite();
-                                        break;
-                                    default:
-                                        $('#filename-error').text(data);
-                                        break;
-                                    }
-                                })
-                                .fail((jqXHR, textStatus, errorThrown) => {
-                                    $('#filename-error').text('{0} {1}'
-                                                              .format(localize('error_response'), errorThrown));
-                                });
-                        }
+            // Check if file may be written
+            $.ajax('{0}?dir={1}&quiz={2}'.format(check_url,
+                                                 encodeURIComponent(dir_name),
+                                                 encodeURIComponent(quiz_name)))
+                .done((data, textStatus, jqXHR) => {
+                    switch (data.trim()) {
+                    case 'OK':
+                        $('#filename-dialog').modal('hide');
+                        save_quiz2();
+                        break;
+                    case 'EXISTS':
+                        $('#filename-dialog').modal('hide');
+                        check_overwrite();
+                        break;
+                    default:
+                        show_error('#filename-error', data);
+                        break;
                     }
-                },
-                {
-                    text: localize('cancel_button'),
-                    click: function() {
-                        $(this).dialog('close');
-                    }
-                }
-            ]
-         }).dialog('open');
+                })
+                .fail((jqXHR, textStatus, errorThrown) => {
+                    show_error('#filename-error',
+                               '{0} {1}'.format(localize('error_response'), errorThrown));
+                });
+        }
+    });
+    $('#filename-dialog').modal('show');        
 }
 
 function check_overwrite() {
-    $('#overwrite-dialog-confirm').dialog({
-        autoOpen: true,
-        resizable: false,
-        modal: true,
-        buttons: [
-            {
-                text: localize('yes'),
-                click: function() {
-                    $(this).dialog('close');
-                    save_quiz2();
-                }
-            },
-            {
-                text: localize('no'),
-                click: function() {
-                    $(this).dialog('close');
-                }
-            }
-        ]
+    $('#overwrite-yesbutton').off('click');
+    $('#overwrite-yesbutton').on('click',() => {
+        save_quiz2();
+        $('#overwrite-dialog-confirm').modal('hide');
     });
+    $('#overwrite-dialog-confirm').modal('show');
 }
 
 function save_quiz2() {
@@ -261,19 +239,11 @@ function shebanq_to_qo(qo : string, mql : string) {
     if (qo===null) {
         $('#qo-dialog-text').html('<p>{0}</p><p>{1}</p>'.format(localize('sentence_selection_imported'),
                                                                 localize('no_focus')));
-        $('#qo-dialog-confirm').dialog({
-            autoOpen: true,
-            resizable: false,
-            modal: true,
-            buttons: [
-                {
-                    text: localize('OK_button'),
-                    click: function() {
-                        $(this).dialog('close');
-                    }
-                }
-            ]
-        });
+        $('#qo-yesbutton').hide();
+        $('#qo-nobutton').hide();
+        $('#qo-okbutton').show();
+
+        $('#qo-dialog-confirm').modal('show');
     }
     else {
         // This is a multi-level format substitution
@@ -292,74 +262,51 @@ function shebanq_to_qo(qo : string, mql : string) {
         // Set the dialog text
         $('#qo-dialog-text').html(msg);
 
-        $('#qo-dialog-confirm').dialog({
-            autoOpen: true,
-            resizable: false,
-            modal: true,
-            buttons: [
-                {
-                    text: localize('yes'),
-                    click: function() {
-                        $(this).dialog('close');
-                        panelSentUnit.setOtype(qo);
-                        panelSentUnit.setUsemql();
-                        panelSentUnit.setMql(mql);
-                    }
-                },
-                {
-                    text: localize('no'),
-                    click: function() {
-                        $(this).dialog('close');
-                    }
-                }
-            ]
+        $('#qo-yesbutton').show();
+        $('#qo-nobutton').show();
+        $('#qo-okbutton').hide();
+
+        $('#qo-yesbutton').off('click');
+        $('#qo-yesbutton').on('click',() => {
+            $('#qo-dialog-confirm').modal('hide');
+            panelSentUnit.setOtype(qo);
+            panelSentUnit.setUsemql();
+            panelSentUnit.setMql(mql);
         });
+        $('#qo-dialog-confirm').modal('show');
     }
 }
 
 function import_from_shebanq() {
-    $('#import-shebanq-error').text('');
+    hide_error('#import-shebanq-error');
 
-    $('#import-shebanq-dialog').dialog({
-        autoOpen: true,
-        resizable: false,
-        modal: true,
-        width: 400,
-        buttons: [
-            {
-                text: localize('import_button'),
-                click: function() {
-                    $('.ui-dialog *').css('cursor', 'wait');
+    $('#import-shebanq-button').off('click');
+    $('#import-shebanq-button').on('click',() => {
+        $('.ui-dialog *').css('cursor', 'wait');
 
-                    $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url,
-                                                           encodeURIComponent($('#import-shebanq-qid').val().trim()),
-                                                           encodeURIComponent($('#import-shebanq-dbvers').val().trim())))
-                        .done((data, textStatus, jqXHR) => {
-                            $('.ui-dialog *').css('cursor', 'auto');
+        $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url,
+                                               encodeURIComponent($('#import-shebanq-qid').val().trim()),
+                                               encodeURIComponent($('#import-shebanq-dbvers').val().trim())))
+            .done((data, textStatus, jqXHR) => {
+                $('.ui-dialog *').css('cursor', 'auto');
 
-                            var result = JSON.parse(data);
-                            if (result.error===null) {
-                                panelSent.setMql(result.sentence_mql);
-                                $(this).dialog('close');
-                                shebanq_to_qo(result.sentence_unit, result.sentence_unit_mql);
-                            }
-                            else {
-                                $('#import-shebanq-error').text(result.error);
-                            }
-                        })
-                        .fail((jqXHR, textStatus, errorThrown) => {
-                            $('.ui-dialog *').css('cursor', 'auto');
-                            $('#import-shebanq-error').text('{0} {1}'
-                                                            .format(localize('error_response'), errorThrown));
-                        });
+                var result = JSON.parse(data);
+                if (result.error===null) {
+                    panelSent.setMql(result.sentence_mql);
+                    $('#import-shebanq-dialog').modal('hide');
+                    shebanq_to_qo(result.sentence_unit, result.sentence_unit_mql);
                 }
-            },
-            {
-                text: localize('cancel_button'),
-                click: function() {
-                    $(this).dialog('close');
+                else {
+                    show_error('#import-shebanq-error', result.error);
                 }
-            }
-        ]
+            })
+            .fail((jqXHR, textStatus, errorThrown) => {
+                $('.ui-dialog *').css('cursor', 'auto');
+                show_error('#import-shebanq-error',
+                           '{0} {1}'.format(localize('error_response'), errorThrown));
+            });
     });
+
+
+    $('#import-shebanq-dialog').modal('show');
 }

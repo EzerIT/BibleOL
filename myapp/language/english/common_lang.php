@@ -26,3 +26,4 @@ $lang['this_is_top_folder'] = 'This is the Top Folder';
 
 $lang['time_format'] = 'H:i';
 $lang['date_time_format'] = 'd M Y H:i';
+$lang['language'] = 'Language';

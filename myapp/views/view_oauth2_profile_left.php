@@ -2,10 +2,10 @@
 
 <p><?= $this->lang->line("change_through_$authority") ?></p>
 
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p class="hidden-xs">&nbsp;</p>
+<p class="hidden-xs">&nbsp;</p>
 
-<p><a class="makebutton" onclick="genericConfirm('<?= $this->lang->line('delete_profile'); ?>',
+<p><a class="btn btn-danger" onclick="genericConfirm('<?= $this->lang->line('delete_profile'); ?>',
                             '<?= $this->lang->line("delete_oauth2_profile1"); ?><br><br><?= $this->lang->line("delete_{$authority}_profile2"); ?>',
                             '<?= site_url("users/delete_me_{$authority}") ?>');
              return false;"

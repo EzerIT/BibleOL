@@ -5,3 +5,6 @@ $lang['owner_name']  = 'Ejer';
 $lang['no_owner']  = 'Ingen';
 $lang['new_owner_prompt']  = 'Ny ejer:';
 $lang['not_teacher'] = 'Den nye ejer er ikke facilitator';
+
+$lang['no_user_selected']  = 'Ingen bruger valgt';
+ 

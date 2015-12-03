@@ -1,23 +1,33 @@
 <?php
 
+$lang['corpus_prompt'] = 'Korpus:';
 $lang['book_prompt'] = 'Bog:';
 $lang['chapter'] = 'Kapitel';
 $lang['chapter_prompt'] = 'Kapitel:';
 $lang['first_verse'] = 'Første vers';
-$lang['first_verse_leave'] = 'Første vers (udelad for at se et helt kapitel):';
-$lang['last_verse'] = 'Sidste vers';
-$lang['last_verse_leave'] = 'Sidste vers (udelad for kun at se ét vers):';
+$lang['first_verse_prompt'] = 'Første vers:';
+$lang['last_verse'] = 'Sidste vers:';
+$lang['last_verse_prompt'] = 'Sidste vers:';
 $lang['select_text'] = 'Vælg tekst';  // Text in title bar
 $lang['show_text'] = 'Vis tekst';  // Text in title bar
-$lang['select_a_passage'] = 'Vælg en tekst der skal vises';
 $lang['etcbc4_test'] = 'Brug ikke »ETCBC4-test« medmindre du ved hvad ud gør.';
 $lang['make_a_selection'] = 'Vælg:';
-$lang['show_link_icons'] = 'Vis link-ikoner';
+$lang['show_link_icons_prompt'] = 'Vis link-ikoner:';
 $lang['valid_chapters'] = 'Gyldige kapitler:';
 $lang['display'] = 'Vis'; // Button text
 $lang['only_cli'] = 'Denne kommando kan kun udføres på kommandolinjen';
 $lang['quiz'] = 'Øvelse';  // Text in title bar
 $lang['no_direct_url'] = 'Du må ikke benytte denne URL direkte.';
+
+$lang['select_a_passage'] =
+    '<h1>Vælg en tekst der skal vises</h1>
+     <p>Her kan du vælge hvilken bibeltekst der skal vises.</p>
+     <p>Hvis du udelader »Første vers«, vil et helt kapitel blive vist.</p>
+     <p>Hvis du udelader »Sidste vers«, vil kun ét vers blive vist.</p>';
+
+$lang['corpus_copyright'] =
+    '<h1>Ophavsret til ETCBC4-databasen:</h1><p>%s</p>
+     <h1>Ophavsret til Nestle 1904-databasen:</h1><p>%s</p>';
 
 $lang['select_quiz'] = 'Vælg en quiz';
 $lang['click_folder'] = 'Klik på en folder for at åbne den, eller vælg det antal spørgsmål du ønsker fra en given quiz, samt om du ønsker at bruge de forudvalgte bibelsteder, eller om du selv vil vælge bibelsteder.';
@@ -67,6 +77,7 @@ $lang['file_exists_overwrite'] = 'Filen findes allerede. Vil du overskrive den?'
 $lang['import_from_shebanq'] = 'Import fra SHEBANQ';  // Title in dialog box
 $lang['shebanq_query_id_prompt'] = 'Forespørgsels-ID hos SHEBANQ:';
 $lang['shebanq_version_prompt'] = 'SHEBANQ-databaseversion:';
+$lang['import_button'] = 'Importér';
 $lang['mql_sentence_unit'] = 'MQL for sætningsenhed';  // Title in dialog box
 $lang['no_sentences_found'] = 'Ingen sætninger fundet';
 $lang['mql_database_error_colon'] = 'MQL-databasefejl:';
@@ -74,3 +85,4 @@ $lang['mql_compiler_error_colon'] = 'MQL-oversætterfejl:';
 $lang['cannot_write_to_quiz_file'] = 'Kan ikke skrive øvelsesfil';
 $lang['no_text_found'] = 'Ingen tekst fundet';
 
+$lang['close_button'] = 'Luk';

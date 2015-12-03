@@ -45,7 +45,6 @@ var util;
         return dumped_text;
     }
     util.mydump = mydump;
-    // TODO: Make generic, when available in TypeScript
     var Pair = (function () {
         function Pair(first, second) {
             this.first = first;
@@ -106,6 +105,7 @@ var util;
             ++forceWideCount;
         else
             --forceWideCount;
+        // TODO: Test this:
         if (val && forceWideCount == 1) {
             $('.textblock').css('margin-left', '30px').removeClass('inline').addClass('inlineblock');
         }
@@ -124,12 +124,12 @@ var util;
         var classN = 'lev' + level;
         var noClassN = 'nolev' + level;
         if (val) {
-            $('.' + noClassN + '> .gram').removeClass('dontshowit').addClass('showit'); //css('display','inline-block');
+            $('.' + noClassN + '> .gram').removeClass('dontshowit').addClass('showit');
             $('.' + noClassN).addClass(classN);
             $('.' + noClassN).removeClass(noClassN);
         }
         else {
-            $('.' + classN + '> .gram').removeClass('showit').addClass('dontshowit'); //css('display','none');
+            $('.' + classN + '> .gram').removeClass('showit').addClass('dontshowit');
             $('.' + classN).addClass(noClassN);
             $('.' + classN).removeClass(classN);
         }
@@ -878,68 +878,108 @@ var Dictionary = (function () {
             }
         }
     }
-    Dictionary.prototype.generateSentenceHtml = function (qd) {
-        DisplaySingleMonadObject.itemIndex = 0;
-        var sentenceTextArr = [''];
-        $('#textarea').append(this.dispMonadObjects[this.dispMonadObjects.length - 1][0].generateHtml(qd, sentenceTextArr));
+    Dictionary.prototype.hoverForGrammar = function () {
         var thisDict = this;
-        var toolTipFunc = function (x_this) {
-            var monob = thisDict.monads[+($(x_this).attr("data-idd"))];
-            var level = thisDict.level[+($(x_this).attr("data-idd"))];
-            var sengram = configuration.sentencegrammar[level];
-            var res = '<table>';
-            res += '<tr><td colspan="2" class="tooltiphead">{0}</td></tr>'.format(getObjectFriendlyName(sengram.objType));
-            if (level === 0 && (!qd || !qd.quizFeatures.dontShow))
-                res += '<tr><td>{2}</td><td class="tooltip leftalign {0}">{1}</td></tr>'.format(charset.foreignClass, monob.mo.features[configuration.surfaceFeature], localize('visual'));
-            var map = [];
-            sengram.getFeatName(sengram.objType, function (whattype, objType, featName, featNameLoc, sgiObj) {
-                if (whattype == WHAT.feature || whattype == WHAT.metafeature)
-                    if (!mayShowFeature(objType, featName, sgiObj))
-                        return;
-                if (whattype == WHAT.feature || whattype == WHAT.metafeature || whattype == WHAT.groupstart)
-                    map[featName] = featNameLoc;
-            });
-            sengram.getFeatVal(monob, sengram.objType, false, function (whattype, objType, featName, featVal, featValLoc, sgiObj) {
-                switch (whattype) {
-                    case WHAT.feature:
-                        if (mayShowFeature(objType, featName, sgiObj)) {
-                            var wordclass;
-                            var fs = getFeatureSetting(objType, featName);
-                            if (fs.foreignText)
-                                wordclass = charset.foreignClass;
-                            else if (fs.transliteratedText)
-                                wordclass = charset.transliteratedClass;
-                            else
-                                wordclass = '';
-                            res += '<tr><td>{0}</td><td class="tooltip leftalign {2}">{1}</td></tr>'.format(map[featName], featValLoc, featValLoc === '-' ? '' : wordclass);
-                        }
-                        break;
-                    case WHAT.metafeature:
-                        if (mayShowFeature(objType, featName, sgiObj))
-                            res += '<tr><td>{0}</td><td class="tooltip leftalign">{1}</td></tr>'.format(map[featName], featValLoc);
-                        break;
-                    case WHAT.groupstart:
-                        res += '<tr><td><b>{0}:</b></td><td class="leftalign"></td></tr>'.format(map[featName]);
-                        break;
-                }
-            });
-            return res + '</table>';
-        };
         if (useTooltip) {
-            $(document).tooltip({ items: "[data-idd]", content: function () { return toolTipFunc(this); } });
+            $(document).tooltip({
+                items: "[data-idd]",
+                disabled: false,
+                content: function () { return thisDict.toolTipFunc(this, true).first; }
+            });
         }
         else {
-            $("[data-idd]").hover(function () {
+            $("[data-idd]")
+                .hover(function () {
                 // Calculate vertical position of '.grammardisplay'.
                 // It should be placed at least 20px from top of window but not higher
                 // than '#textcontainer'
                 var scrTop = $(window).scrollTop();
                 var qcTop = $('#textcontainer').offset().top;
-                $('.grammardisplay').html(toolTipFunc(this)).css('top', Math.max(qcTop, scrTop + 20)).show();
+                $('.grammardisplay')
+                    .html(thisDict.toolTipFunc(this, true).first)
+                    .css('top', Math.max(0, scrTop - qcTop + 5))
+                    .outerWidth($('#grammardisplaycontainer').outerWidth() - 25) // 25px is a littel mora than margin-right
+                    .show();
             }, function () {
                 $('.grammardisplay').hide();
             });
+            $("[data-idd]").off('click');
         }
+    };
+    Dictionary.prototype.clickForGrammar = function () {
+        var _this = this;
+        if (useTooltip)
+            $(document).tooltip({ items: "[data-idd]", disabled: true });
+        else
+            $("[data-idd]").off("mouseenter mouseleave");
+        $("[data-idd]").on('click', function (event) {
+            var info = _this.toolTipFunc(event.currentTarget, false);
+            $('#grammar-info-label').html(info.second);
+            $('#grammar-info-body').html(info.first);
+            $('#grammar-info-dialog').modal('show');
+        });
+    };
+    Dictionary.handleDisplaySize = function (thisDict) {
+        switch (resizer.getWindowSize()) {
+            case 'xs':
+                thisDict.clickForGrammar();
+                break;
+            default:
+                thisDict.hoverForGrammar();
+                break;
+        }
+    };
+    Dictionary.prototype.generateSentenceHtml = function (qd) {
+        DisplaySingleMonadObject.itemIndex = 0;
+        var sentenceTextArr = [''];
+        $('#textarea').append(this.dispMonadObjects[this.dispMonadObjects.length - 1][0].generateHtml(qd, sentenceTextArr));
+        var thisDict = this;
+        this.toolTipFunc =
+            function (x_this, set_head) {
+                var monob = thisDict.monads[+($(x_this).attr("data-idd"))];
+                var level = thisDict.level[+($(x_this).attr("data-idd"))];
+                var sengram = configuration.sentencegrammar[level];
+                var res = '<table>';
+                if (set_head)
+                    res += '<tr><td colspan="2" class="tooltiphead">{0}</td></tr>'.format(getObjectFriendlyName(sengram.objType));
+                if (level === 0 && (!qd || !qd.quizFeatures.dontShow))
+                    res += '<tr><td>{2}</td><td class="bol-tooltip leftalign {0}">{1}</td></tr>'.format(charset.foreignClass, monob.mo.features[configuration.surfaceFeature], localize('visual'));
+                var map = [];
+                sengram.getFeatName(sengram.objType, function (whattype, objType, featName, featNameLoc, sgiObj) {
+                    if (whattype == WHAT.feature || whattype == WHAT.metafeature)
+                        if (!mayShowFeature(objType, featName, sgiObj))
+                            return;
+                    if (whattype == WHAT.feature || whattype == WHAT.metafeature || whattype == WHAT.groupstart)
+                        map[featName] = featNameLoc;
+                });
+                sengram.getFeatVal(monob, sengram.objType, false, function (whattype, objType, featName, featVal, featValLoc, sgiObj) {
+                    switch (whattype) {
+                        case WHAT.feature:
+                            if (mayShowFeature(objType, featName, sgiObj)) {
+                                var wordclass;
+                                var fs = getFeatureSetting(objType, featName);
+                                if (fs.foreignText)
+                                    wordclass = charset.foreignClass;
+                                else if (fs.transliteratedText)
+                                    wordclass = charset.transliteratedClass;
+                                else
+                                    wordclass = '';
+                                res += '<tr><td>{0}</td><td class="bol-tooltip leftalign {2}">{1}</td></tr>'.format(map[featName], featValLoc, featValLoc === '-' ? '' : wordclass);
+                            }
+                            break;
+                        case WHAT.metafeature:
+                            if (mayShowFeature(objType, featName, sgiObj))
+                                res += '<tr><td>{0}</td><td class="bol-tooltip leftalign">{1}</td></tr>'.format(map[featName], featValLoc);
+                            break;
+                        case WHAT.groupstart:
+                            res += '<tr><td><b>{0}:</b></td><td class="leftalign"></td></tr>'.format(map[featName]);
+                            break;
+                    }
+                });
+                return new util.Pair(res + '</table>', getObjectFriendlyName(sengram.objType));
+            };
+        resizer.addResizeListener(Dictionary.handleDisplaySize, this, 'xyzzy');
+        Dictionary.handleDisplaySize(this);
         return sentenceTextArr[0];
     };
     Dictionary.prototype.showattrs = function (idd) {
@@ -1480,9 +1520,6 @@ var PanelQuestion = (function () {
             if (hasForeignInput)
                 $('#quiztab').append('<tr><td colspan="{0}" id="row{1}" style="text-align:right;"></td></tr>'.format(colcount, +qoid + 1));
         }
-        $('#quiztab').width($('#textcontainer').width()); // Initial table width
-        // Resize '#quiztab' when main window is resized
-        $(window).resize(function () { return $('#quiztab').width($('#textcontainer').width()); });
         // Add "Check answer" button
         $('button#check_answer').off('click'); // Remove old handler
         $('button#check_answer').on('click', function () {
@@ -1716,17 +1753,56 @@ var Quiz = (function () {
             $.post(site_url + 'statistics/update_stat', this.quiz_statistics)
                 .done(function () { return window.location.replace(site_url + 'text/select_quiz'); }) // Go to quiz selection
                 .fail(function (jqXHR, textStatus, errorThrow) {
-                $('#textcontainer').html('<div class="error"><h1>'
-                    + localize('error_response')
-                    + '</h1><p>{0}</p></div>'.format(errorThrow));
+                $('#textcontainer')
+                    .removeClass('textcontainer-background')
+                    .addClass('alert alert-danger')
+                    .html('<h1>' + localize('error_response') + '</h1><p>{0}</p>'.format(errorThrow));
             });
         }
     };
     return Quiz;
 })();
 // -*- js -*-
+/* 2015 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// The idea for some of the following code is taken from
+// http://stackoverflow.com/questions/18575582/how-to-detect-responsive-breakpoints-of-twitter-bootstrap-3-using-javascript
+// This code provides information about Bootstrap's current concept of the window size
+var resizer;
+(function (resizer) {
+    // Returns the current window size, either 'xs', 'sm', 'md', or 'lg'.
+    function getWindowSize() {
+        return $('.device-sizer:visible').attr('data-size');
+    }
+    resizer.getWindowSize = getWindowSize;
+    // Checks if the current window size is siz (which is either 'xs', 'sm', 'md', or 'lg')
+    function sizeIs(siz) {
+        return $('.device-is-' + siz).is(':visible');
+    }
+    resizer.sizeIs = sizeIs;
+    var timers = {};
+    // Specify a function that listens for window resizings.
+    // Use a separate uniqueId for each instance that listens for a resize.
+    function addResizeListener(callback, data, uniqueId) {
+        // When the window resizes, wait for 500 ms and if no further resize occurs, call the callback function
+        $(window).resize(function () {
+            // If the window was recently resized, restart the timer, otherwize start the timer
+            if (timers[uniqueId])
+                clearTimeout(timers[uniqueId]);
+            timers[uniqueId] = setTimeout(function () { return callback(data); }, 500); // Call callback in 500 ms
+        });
+    }
+    resizer.addResizeListener = addResizeListener;
+    $(function () {
+        // Insert size detectors before </body>
+        var sizes = ['xs', 'sm', 'md', 'lg'];
+        for (var i = 0; i < sizes.length; ++i)
+            $('body').append('<div class="visible-{0}-block device-is-{0} device-sizer" data-size="{0}"></div>'
+                .format(sizes[i]));
+    });
+})(resizer || (resizer = {}));
+// -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-/// <reference path="jquery/jquery.d.ts" />
+/// <reference path="bootstrap/bootstrap.d.ts" />
 /// <reference path="jqueryui/jqueryui.d.ts" />
 /// <reference path="util.ts" />
 /// <reference path="configuration.ts" />
@@ -1741,9 +1817,11 @@ var Quiz = (function () {
 /// <reference path="panelquestion.ts" />
 /// <reference path="stringwithsort.ts" />
 /// <reference path="quiz.ts" />
+/// <reference path="resizer.ts" />
 var supportsProgress; ///< Does the browser support &lt;progress&gt;?
 var charset;
 var quiz;
+var accordion_width;
 /// Ensures that the width of a &lt;span class="levX"&gt; is at least as wide as the &lt;span
 /// class="gram"&gt; holding its grammar information.
 /// @param[in] level Object level (word=0, phrase=1, etc.)
@@ -1820,7 +1898,9 @@ var GenerateCheckboxes = (function () {
             /// and the grammargroups are not intermixed with grammarfeatures
             this.hasSeenGrammarGroup = false;
             configuration.sentencegrammar[leveli]
-                .getFeatName(configuration.sentencegrammar[leveli].objType, function (whattype, objType, featName, featNameLoc, sgiObj) { return _this.generatorCallback(whattype, objType, featName, featNameLoc, sgiObj); });
+                .getFeatName(configuration.sentencegrammar[leveli].objType, function (whattype, objType, featName, featNameLoc, sgiObj) {
+                return _this.generatorCallback(whattype, objType, featName, featNameLoc, sgiObj);
+            });
             if (this.hasSeenGrammarGroup)
                 this.checkboxes += '</div>';
             this.checkboxes += '</div></div>';
@@ -1889,7 +1969,9 @@ var GenerateCheckboxes = (function () {
                     adjustDivLevWidth(e.data);
                 });
             }
-            sg.getFeatName(sg.objType, function (whattype, objType, featName, featNameLoc) { return _this.setHandlerCallback(whattype, objType, featName, featNameLoc, leveli); });
+            sg.getFeatName(sg.objType, function (whattype, objType, featName, featNameLoc) {
+                return _this.setHandlerCallback(whattype, objType, featName, featNameLoc, leveli);
+            });
         }
     };
     GenerateCheckboxes.prototype.clearBoxes = function () {
@@ -1941,12 +2023,7 @@ $(function () {
     $('#gramselect').append(generateCheckboxes.generateHtml());
     generateCheckboxes.setHandlers();
     generateCheckboxes.clearBoxes();
-    var accordion_width = buildGrammarAccordion();
-    $('#textcontainer').css('margin-left', accordion_width + 10);
-    if (useTooltip)
-        $('#textcontainer').css('margin-right', 0);
-    else
-        $('#textcontainer').css('margin-right', $('.grammardisplay').width() + 10);
+    accordion_width = buildGrammarAccordion();
     var inQuiz = $('#quiztab').length > 0;
     if (inQuiz) {
         if (supportsProgress)

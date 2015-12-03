@@ -1,6 +1,6 @@
 <h1><?= sprintf($this->lang->line('enter_password_for'), $classname) ?></h1>
 
-<?php $valerr = validation_errors('<p class="error">','</p>'); ?>
+<?php $valerr = validation_errors('<p class="alert alert-danger">','</p>'); ?>
 
 
 <?= form_open("userclass/enroll_in?classid=$classid") ?>
@@ -16,8 +16,11 @@
     </td>
   </tr>
 </table>
-<p><input class="makebutton" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
-   <a class="makebutton" href="<?= site_url('/userclass/enroll') ?>"><?= $this->lang->line('cancel_button') ?></a></p>
+
+<p style="height:2px">&nbsp;</p>
+
+<p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
+   <a class="btn btn-default" href="<?= site_url('/userclass/enroll') ?>"><?= $this->lang->line('cancel_button') ?></a></p>
 </p>
 </form>
 

@@ -64,7 +64,7 @@ function heightsize($fs) {
         font-style: <?= $f->feature_italic ? 'italic' : 'normal' ?>;
     }
 
-    .tooltip.<?= $f->name ?> {
+    .bol-tooltip.<?= $f->name ?> {
         <?= fontsize($f->tooltip_size) ?>
         font-weight: <?= $f->tooltip_bold ? 'bold' : 'normal' ?>;
         font-style: <?= $f->tooltip_italic ? 'italic' : 'normal' ?>;

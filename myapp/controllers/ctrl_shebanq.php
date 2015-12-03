@@ -100,20 +100,17 @@ class Ctrl_shebanq extends MY_Controller {
                     throw new DataException(sprintf($this->lang->line('version_does_not_exist'), $_GET['version']));
             }
             else {
-                $msg0 = $data->msg[0][0];
-                $msg1 = $data->msg[0][1];
+                $message = $this->lang->line('shebanq_error');
+
+                $reply = $data->msg[0];
 
                 // Localize errors relating to wrong query ID
-
-                if ($msg0==='error')
-                    $msg0 = $this->lang->line('shebanq_error');
+                if (preg_match('/^No query with id ([0-9]+)$/', $reply, $matches))
+                    $message .= ' ' . sprintf($this->lang->line('no_query_with_id'), $matches[1]);
                 else
-                    $msg0 .= ':';
+                    $message .= ' ' . $reply;
 
-                if (preg_match('/^No query with id ([0-9]+)$/', $msg1, $matches))
-                    $msg1 = sprintf($this->lang->line('no_query_with_id'), $matches[1]);
-
-                throw new DataException("$msg0 $msg1");
+                throw new DataException($message);
             }
         }
         catch (DataException $e) {
