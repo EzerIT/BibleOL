@@ -21,8 +21,8 @@ $lang['OK_button'] = 'OK';
 $lang['cancel_button'] = 'Cancel';
 $lang['yes'] = 'Yes';
 $lang['no'] = 'No';
-$lang['this_is_folder'] = 'This is the Folder \'%s\'';
-$lang['this_is_top_folder'] = 'This is the Top Folder';
+$lang['this_is_folder'] = 'This Is the Folder \'%s\'';
+$lang['this_is_top_folder'] = 'This Is the Top Folder';
 
 $lang['time_format'] = 'H:i';
 $lang['date_time_format'] = 'd M Y H:i';

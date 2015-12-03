@@ -1,5 +1,5 @@
 <?php if (!$is_logged_in): ?>
-  <div class="warning">
+  <div class="alert alert-warning">
        <h1><?= $this->lang->line('warning') ?></h1>
        <p><?= $this->lang->line('not_logged_in') ?></p>
   </div>
