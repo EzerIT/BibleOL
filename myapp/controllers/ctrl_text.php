@@ -68,6 +68,7 @@ class Ctrl_text extends MY_Controller {
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_a_passage_title'),
                                                       'left' => $this->lang->line('select_a_passage'),
                                                       'center' => $center_text,
+                                                      'right_title' => $this->lang->line('corpus_copyright_title'),
                                                       'right' => sprintf($this->lang->line('corpus_copyright'),
                                                                          $copyright_ETCBC4, $copyright_nestle1904)));
             $this->load->view('view_bottom');

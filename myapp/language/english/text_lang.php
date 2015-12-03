@@ -24,9 +24,10 @@ $lang['select_a_passage'] =
      <p>If you omit “First verse”, an entire chapter will be displayed.</p>
      <p>If you omit “Last verse”, only one verse will be displayed.</p>';
 
+$lang['corpus_copyright_title'] = 'Copyright';
 $lang['corpus_copyright'] =
-    '<h1>Copyright for the ETCBC4 database:</h1><p>%s</p>
-     <h1>Copyright for the Nestle 1904 database:</h1><p>%s</p>';
+    '<h3>Copyright for the ETCBC4 database:</h3><p>%s</p>
+     <h3>Copyright for the Nestle 1904 database:</h3><p>%s</p>';
 
 $lang['select_quiz'] = 'Select a Quiz';
 $lang['click_folder'] = 'Click on a folder to open it, or select the number of questions you want from a particular quiz and whether you want to use the preset passage selection or specify your own passages.';
