@@ -5,6 +5,7 @@ quizzes
 db/*.name
 db/ETCBC4
 db/ETCBC4-test
+db/ETCBC4-test.1
 db/nestle1904
 ts/html
 myapp/html
