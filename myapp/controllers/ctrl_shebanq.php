@@ -25,6 +25,41 @@ class Ctrl_shebanq extends MY_Controller {
         }
         return $src;
     }
+
+    private function replace_in_quotes(string $needle, string $haystack, string $replacement) {
+        $string_del = ''; // Indicate not within quotes
+        $res = '';
+        $haylen = strlen($haystack);
+
+        for ($i=0; $i<$haylen; ++$i) {
+            $ch = $haystack[$i];
+            switch ($ch) {
+              case "'":
+              case '"':
+                    if ($string_del===$ch) // We are within quotes
+                        $string_del = ''; // Indicate that we are not within quotes
+                    elseif ($string_del==='') // We are within quotes
+                        $string_del = $ch; // Indicate that we are within quotes starting with $ch
+                    else
+                        throw new DataException($this->lang->line('shebanq_malformed_quotes'));
+                    $res .= $ch;
+              break;
+
+              case $needle:
+                    if ($string_del==='') // Not in string
+                        $res .= $ch;
+                    else
+                        $res .= $replacement;
+                    break;
+
+              default:
+                    $res .= $ch;
+                    break;
+            }
+        }
+    
+        return $res;
+    }
     
 
     private function decode_mql(string__OR__null $request, shebanq_reply $reply) {
@@ -41,22 +76,16 @@ class Ctrl_shebanq extends MY_Controller {
             // Replace FOCUS with NORETRIEVE for sentence MQL selection
             $reply->sentence_mql = preg_replace('/^\[ *([\w]+) *(FOCUS)?/i', '[$1 NORETRIEVE ', $txt);
 
-            // Replace all ] in quotes with ZZQQ
-            $txt = $this->preg_replace_repeat('/([^"]*)"([^"]*)\]([^"]*)"/', '$1"$2ZZQQ$3"', $txt);
-            $txt = $this->preg_replace_repeat("/([^']*)'([^']*)\]([^']*)'/", '$1\'$2ZZQQ$3\'', $txt);
-
-            // Replace all [ in quotes with ZZWW
-            $txt = $this->preg_replace_repeat('/([^"]*)"([^"]*)\[([^"]*)"/', '$1"$2ZZWW$3"', $txt);
-            $txt = $this->preg_replace_repeat("/([^']*)'([^']*)\[([^']*)'/", '$1\'$2ZZWW$3\'', $txt);
+            // Replace all ] in quotes with ZZQQ and all [ in quotes with ZZWW
+            $txt = $this->replace_in_quotes(']', $txt, 'ZZQQ');
+            $txt = $this->replace_in_quotes('[', $txt, 'ZZWW');
 
             // Find (last) block with focus
             $qo_sel = null;
             if (preg_match('/.*\[ *([\w]+) *FOCUS *([^\[\]]*)[\[\]].*/i', $txt, $qo_sel)) {
 
-                // Replace ZZQQ with ]
+                // Replace ZZQQ with ] and ZZWW with [
                 $qo_sel[2] = preg_replace('/ZZQQ/', ']', $qo_sel[2]);
-
-                // Replace ZZWW with [
                 $qo_sel[2] = preg_replace('/ZZWW/', '[', $qo_sel[2]);
             
                 $reply->sentence_unit = $qo_sel[1];
