@@ -185,10 +185,22 @@ class SingleMonadObject extends MonadObject {
 /// above the lowest level. Objects of this class correspond to multiple monads in an Emdros
 /// database. They typically represent a phrase, a clause, or a sentence.
 class MultipleMonadObject extends MonadObject {
+    public $subobjects; // MatchedObjects for any subobjects retrieved for this MultipleMonadObject
+
     /// Creates a MultipleMonadObject.
     /// @param $mo Emdros data about this text component.
     public function __construct(OlMatchedObject $mo) {
         parent::__construct($mo,true);
+
+        if (!empty($mo->sheaf)) {
+            $this->subobjects = array();
+
+            $str = $mo->sheaf->get_straws();
+            foreach ($str as $strx)
+                $this->subobjects[] = $strx->get_matched_objects();
+        }
+        else
+            $this->subobjects = null;
     }
 
     /// Determines if this object is a subset of another MonadObject.

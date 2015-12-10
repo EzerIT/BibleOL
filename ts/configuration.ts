@@ -65,12 +65,14 @@ function getFeatureSetting(otype : string, feature : string) : FeatureSetting {
         otype = configuration.objHasSurface;
         feature = configuration.surfaceFeature;
     }
-    return getObjectSetting(otype).featuresetting[feature];
+
+    var io = feature.indexOf(':');
+    if (io!=-1)
+        // This is a feature of a subobject
+        return getObjectSetting(feature.substr(0,io)).featuresetting[feature.substr(io+1)];
+    else
+        return getObjectSetting(otype).featuresetting[feature];
 }
-
-
-
-
 
 
 interface TypeInfo {

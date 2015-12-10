@@ -9,7 +9,12 @@ function getFeatureSetting(otype, feature) {
         otype = configuration.objHasSurface;
         feature = configuration.surfaceFeature;
     }
-    return getObjectSetting(otype).featuresetting[feature];
+    var io = feature.indexOf(':');
+    if (io != -1)
+        // This is a feature of a subobject
+        return getObjectSetting(feature.substr(0, io)).featuresetting[feature.substr(io + 1)];
+    else
+        return getObjectSetting(otype).featuresetting[feature];
 }
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
@@ -182,14 +187,41 @@ var GrammarFeature = (function () {
         this.coloring = {};
     }
     GrammarFeature.prototype.getFeatName = function (objType, callback) {
-        var locname = l10n.grammarfeature && l10n.grammarfeature[objType] && l10n.grammarfeature[objType][this.name]
-            ? l10n.grammarfeature[objType][this.name]
-            : l10n.emdrosobject[objType][this.name];
+        var locname;
+        var io = this.name.indexOf(':');
+        if (io != -1) {
+            // This is a feature of a subobject
+            var ot = this.name.substr(0, io);
+            var ft = this.name.substr(io + 1);
+            locname =
+                l10n.grammarfeature && l10n.grammarfeature[ot] && l10n.grammarfeature[ot][ft]
+                    ? l10n.grammarfeature[ot][ft]
+                    : l10n.emdrosobject[ot][ft];
+        }
+        else
+            locname =
+                l10n.grammarfeature && l10n.grammarfeature[objType] && l10n.grammarfeature[objType][this.name]
+                    ? l10n.grammarfeature[objType][this.name]
+                    : l10n.emdrosobject[objType][this.name];
         callback(WHAT.feature, objType, this.name, locname, this);
     };
     GrammarFeature.prototype.getFeatVal = function (monob, objType, abbrev, callback) {
-        var featType = typeinfo.obj2feat[objType][this.name];
-        var res1 = monob.mo.features ? monob.mo.features[this.name] : ''; // Empty for dummy objects
+        console.log("getFeatVal1", monob, objType, abbrev);
+        var featType;
+        var res1;
+        var io = this.name.indexOf(':');
+        if (io != -1) {
+            // This is a feature of a subobject
+            var ot = this.name.substr(0, io);
+            var ft = this.name.substr(io + 1);
+            featType = typeinfo.obj2feat[ot][ft];
+            res1 = monob.mo.features ? monob.mo.features[ft] : ''; // Empty for dummy objects
+            console.log("res1", res1);
+        }
+        else {
+            featType = typeinfo.obj2feat[objType][this.name];
+            res1 = monob.mo.features ? monob.mo.features[this.name] : ''; // Empty for dummy objects
+        }
         var res = res1;
         switch (featType) {
             case 'string':
@@ -204,6 +236,7 @@ var GrammarFeature = (function () {
                     res = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, res, abbrev));
                 break;
         }
+        console.log("getFeatVal2", objType, this.name, res1, res, this);
         callback(WHAT.feature, objType, this.name, res1, res, this);
     };
     /** Does this object identify the specified feature?

@@ -164,10 +164,23 @@ class GrammarFeature implements SentenceGrammarItem {
     public getFeatName(objType : string,
                        callback : (whattype:number, objType:string, featName:string, featNameLoc:string, sgiObj : SentenceGrammarItem) => void) : void
     {
-        var locname : string = 
-            l10n.grammarfeature && l10n.grammarfeature[objType] && l10n.grammarfeature[objType][this.name] 
-            ? l10n.grammarfeature[objType][this.name]
-            : l10n.emdrosobject[objType][this.name];
+        var locname : string;
+
+        var io = this.name.indexOf(':');
+        if (io!=-1) {
+            // This is a feature of a subobject
+            var ot = this.name.substr(0,io);
+            var ft = this.name.substr(io+1);
+            locname = 
+                l10n.grammarfeature && l10n.grammarfeature[ot] && l10n.grammarfeature[ot][ft] 
+                ? l10n.grammarfeature[ot][ft]
+                : l10n.emdrosobject[ot][ft];
+        }
+        else
+            locname = 
+                l10n.grammarfeature && l10n.grammarfeature[objType] && l10n.grammarfeature[objType][this.name] 
+                ? l10n.grammarfeature[objType][this.name]
+                : l10n.emdrosobject[objType][this.name];
 
         callback(WHAT.feature, objType, this.name, locname, this);
     }
@@ -175,9 +188,26 @@ class GrammarFeature implements SentenceGrammarItem {
     public getFeatVal(monob : MonadObject, objType : string, abbrev : boolean,
                    callback : (whattype:number, objType:string, featName:string, featVal:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void
     {
-        var featType : string = typeinfo.obj2feat[objType][this.name];
-        var res1 : string = monob.mo.features ? monob.mo.features[this.name] : ''; // Empty for dummy objects
+        console.log("getFeatVal1",monob,objType,abbrev);
+
+        var featType : string;
+        var res1 : string;
+
+        var io = this.name.indexOf(':');
+        if (io!=-1) {
+            // This is a feature of a subobject
+            var ot = this.name.substr(0,io);
+            var ft = this.name.substr(io+1);
+            featType = typeinfo.obj2feat[ot][ft];
+            res1 = monob.mo.features ? monob.mo.features[ft] : ''; // Empty for dummy objects
+            console.log("res1",res1);
+        }
+        else {
+            featType = typeinfo.obj2feat[objType][this.name];
+            res1 = monob.mo.features ? monob.mo.features[this.name] : ''; // Empty for dummy objects
+        }
         var res : string = res1;
+
 
         switch (featType) {
         case 'string':
@@ -194,6 +224,7 @@ class GrammarFeature implements SentenceGrammarItem {
                 res = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, res, abbrev));
             break;
         }
+        console.log("getFeatVal2",objType,this.name,res1,res,this);
         callback(WHAT.feature,objType,this.name,res1,res,this);
     }
 

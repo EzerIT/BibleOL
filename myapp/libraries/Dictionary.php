@@ -46,14 +46,22 @@ class Dictionary {
     /// (word/phrase/clause etc.), and returns it as an array.
     /// @param $gl The sentegrammar information for the relevant level
     /// @param $all Each feature is stored in this array.
-    private static function getOneLeveFeatureString($gl, array &$all) {
+    private static function getOneLeveFeatureString($gl, array &$all, string &$subtype, array &$subtypeall) {
         if (isset($gl->items)) {
             foreach ($gl->items as $it)
-                self::getOneLeveFeatureString($it,$all);
+                self::getOneLeveFeatureString($it,$all,$subtype,$subtypeall);
         }
         else {
-            if (isset($gl->name))
-                $all[] = $gl->name;
+            if (isset($gl->name)) {
+                if (strstr($gl->name, ':')===false)
+                    $all[] = $gl->name;
+                else {
+                    list($subt, $name) = explode(':', $gl->name);
+                    assert($subtype==='' || $subtype===$subt);
+                    $subtype = $subt;
+                    $subtypeall[] = $name;
+                }
+            }
         }
     }
  
@@ -62,9 +70,11 @@ class Dictionary {
     /// @param $dbi The database information struction
     /// @param $grammarListIx The level
     /// @return A comma-separated string of feature names
-    private static function getAllFeaturesString($dbi, $grammarListIx) {
+    private static function getAllFeaturesString($dbi, $grammarListIx, &$subtype, &$subtypeall) {
         $all = array();
-        self::getOneLeveFeatureString($dbi->sentencegrammar[$grammarListIx], $all);
+        $subtype = '';
+        $subtypeall = array();
+        self::getOneLeveFeatureString($dbi->sentencegrammar[$grammarListIx], $all, $subtype, $subtypeall);
         return implode(',',$all);
     }
 
@@ -141,16 +151,22 @@ class Dictionary {
             for ($sdiIndex=0; $sdiIndex<$this->maxLevels-1; ++$sdiIndex) {
                 $sg = $dbinfo->sentencegrammar[$sdiIndex];
 
-                $allFeat = self::getAllFeaturesString($dbinfo, $sdiIndex);
+                $allFeat = self::getAllFeaturesString($dbinfo, $sdiIndex, $subtype, $subtypeAllFeat);
                 if ($sdiIndex==0) {
                     $allFeat .= ",$dbinfo->surfaceFeature";
                     if (isset($dbinfo->suffixFeature))
                         $allFeat .= ",$dbinfo->suffixFeature";
                 }
 
-                $command .= "SELECT ALL OBJECTS IN $mset WHERE [$sg->objType "
-                    . (empty($allFeat) ? '' : " GET $allFeat")
-                    . "] GOqxqxqx\n";
+                if ($subtype!=='')
+                    $command .= "SELECT ALL OBJECTS IN $mset WHERE [$sg->objType "
+                        . (empty($allFeat) ? '' : "GET $allFeat")
+                        . " [$subtype GET " . implode($subtypeAllFeat, ',') . "]"
+                        . "] GOqxqxqx\n";
+                else
+                    $command .= "SELECT ALL OBJECTS IN $mset WHERE [$sg->objType "
+                        . (empty($allFeat) ? '' : "GET $allFeat")
+                        . "] GOqxqxqx\n";
             }
         }
 
@@ -161,16 +177,20 @@ class Dictionary {
 
         $mqlresult_index = 0;
 
+//        echo "<pre>";
 		for ($msetIndex=0; $msetIndex<$number_sets; ++$msetIndex) {
             for ($sdiIndex=0; $sdiIndex<$this->maxLevels-1; ++$sdiIndex) {
                 $sh = $emdros_data[$mqlresult_index++]->get_sheaf();
  
                 foreach ($sh->get_straws() as $str) {
-                    foreach ($str->get_matched_objects() as $mo)
+                    foreach ($str->get_matched_objects() as $mo) {
+//                        echo "msetIndex=$msetIndex sdIndex=$sdiIndex mo=",print_r($mo,true),"\n";
                         $this->addMonadObject($msetIndex, $sdiIndex, $mo);
+                    }
                 }
             }
 		}
+//        die;
 		
 		// Create artifical top-level object
 		for ($msetIndex=0; $msetIndex<$number_sets; ++$msetIndex) {
