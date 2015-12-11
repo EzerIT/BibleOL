@@ -12,11 +12,9 @@ $lang['intro_center'] =
 
     <h1>Hvad er Bible Online Learner?</h1>
 
-    <p>Bible Online Learner (Bible OL) giver fri adgang til den hebraiske bibel i ETCBC4-databasen og
-    til øvelser som er knyttet til 12 indledende lektioner i <a
-    href="http://bh.3bmoodle.dk/course/view.php?id=10" target="_blank">Persuasive Biblical Hebrew
-    e-Learning (Log ind som gæst)</a>. Du kan også afprøve dit kendskab til græsk ud fra Nestles
-    1904-tekst til det græske Ny Testamente med grammatiske annotationer.</p>
+    <p>Bible Online Learner (Bible OL) giver fri adgang til den hebraiske bibel i ETCBC4-databasen
+    og Nestles 1904-tekst til det græske Ny Testamente med grammatiske annotationer. Endvidere kan
+    lærere benytte øvelser der er udviklet til Bible OL, eller de kan oprette egne øvelser.</p>
 
     <p>Bible OL har links til <a href="http://shebanq.ancient-data.org"
     target="shebanq">SHEBANQ</a>, som er et præmieret søge- og præsentationsværktøj til den
@@ -40,7 +38,8 @@ $lang['intro_right1'] =
     Bible Online Learner blev udviklet af Claus Tøndering fra <a href="http://www.ezer.dk"
     target="_blank">Ezer IT Consulting</a>.<br>
 
-    Judith Gottschalk har udviklet Learning Journey, et websted som giver statistiske oplysninger om
+    For sit PhD-studium ved Aalborg universitet udvikler Judith Gottschalk <i>Learning Journey,</i>
+    et websted som giver statistiske oplysninger om
     hvorledes studerende klarer sig i Bible OL.</p>';
 
 $lang['intro_right2'] =
