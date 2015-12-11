@@ -18,8 +18,10 @@
 /// <reference path="sortingcheckbox.ts" />
 /// <reference path="util.ts" />
 
-// Dummy interface
+// Dummy interfaces
 interface MonadObject { mo : any}
+interface MultipleMonadObject extends MonadObject { subobjects : any }
+
 
 interface myalertInterface{
     (dialogtitle : string, dialogtext : string) : void;
@@ -79,7 +81,7 @@ function isDirty() : boolean {
 $(function() {
     for (var i in configuration.sentencegrammar) {
         if (isNaN(+i)) continue; // Not numeric
-        addMethodsSgi(configuration.sentencegrammar[+i]);
+        addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
     }
 
     $(window).on('beforeunload', function() {

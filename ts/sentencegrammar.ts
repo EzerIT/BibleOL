@@ -17,8 +17,8 @@ interface SentenceGrammarItem {
 
     getFeatName?(objType : string,
                 callback : (whattype:number, objType:string, featName:string, featNameLoc:string, sgiObj : SentenceGrammarItem) => void) : void;
-    getFeatVal?(monob : MonadObject, objType : string, abbrev : boolean,
-                callback : (whattype:number, objType:string, featName:string, featVal:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void;
+    getFeatVal?(monob : MonadObject, mix : number, objType : string, abbrev : boolean,
+                callback : (whattype:number, objType:string, featName:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void;
     getFeatValPart?(monob : MonadObject, objType : string) : string;
     containsFeature?(f : string) : boolean;
 }
@@ -40,15 +40,15 @@ class GrammarGroup implements SentenceGrammarItem {
         callback(WHAT.groupend, objType, this.name, null, this);
     }
 
-    public getFeatVal(monob : MonadObject, objType : string, abbrev : boolean,
-                      callback : (whattype:number, objType:string, featName:string, featVal:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void
+    public getFeatVal(monob : MonadObject, mix : number, objType : string, abbrev : boolean,
+                      callback : (whattype:number, objType:string, featName:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void
     {
-        callback(WHAT.groupstart, objType, this.name, null, null, this);
+        callback(WHAT.groupstart, objType, this.name, null, this);
         for (var i in this.items) {
             if (isNaN(+i)) continue; // Not numeric
-            this.items[+i].getFeatVal(monob, objType, abbrev, callback);
+            this.items[+i].getFeatVal(monob, mix, objType, abbrev, callback);
         }
-        callback(WHAT.groupend, objType, this.name, null, null, this);
+        callback(WHAT.groupend, objType, this.name, null, this);
     }
 
     /** Do the children of this object identify the specified feature?
@@ -95,12 +95,12 @@ class SentenceGrammar extends GrammarGroup {
         }
     }
 
-    public getFeatVal(monob : MonadObject, objType : string, abbrev : boolean,
-                      callback : (whattype:number, objType:string, featName:string, featVal:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void
+    public getFeatVal(monob : MonadObject, mix : number, objType : string, abbrev : boolean,
+                      callback : (whattype:number, objType:string, featName:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void
     {
         for (var i in this.items) {
             if (isNaN(+i)) continue; // Not numeric
-            this.items[+i].getFeatVal(monob, objType, abbrev, callback);
+            this.items[+i].getFeatVal(monob, mix, objType, abbrev, callback);
         }
     }
 
@@ -129,8 +129,8 @@ class GrammarMetaFeature implements SentenceGrammarItem {
         callback(WHAT.metafeature, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
     }
 
-    public getFeatVal(monob : MonadObject, objType : string, abbrev : boolean,
-                   callback : (whattype:number, objType:string, featName:string, featVal:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void
+    public getFeatVal(monob : MonadObject, mix : number, objType : string, abbrev : boolean,
+                   callback : (whattype:number, objType:string, featName:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void
     {
         var res : string = '';
         for (var i in this.items) {
@@ -138,7 +138,7 @@ class GrammarMetaFeature implements SentenceGrammarItem {
             res += this.items[+i].getFeatValPart(monob, objType);
         }
 
-        callback(WHAT.metafeature, objType, this.name, null, res, this);
+        callback(WHAT.metafeature, objType, this.name, res, this);
     }
 
     /** Do the children of this object identify the specified feature?
@@ -159,54 +159,46 @@ class GrammarMetaFeature implements SentenceGrammarItem {
 class GrammarFeature implements SentenceGrammarItem {
     public mytype : string;
     public name : string;
-    public coloring : { [index : string] : number[]; } = {};
+    private realObjectType;
+    private realFeatureName;
+    //public coloring : { [index : string] : number[]; } = {};
+    private isSubObj : boolean; 
+
+    public pseudoConstructor(objType : string) {
+        var io = this.name.indexOf(':');
+        if (io!=-1) {
+            // This is a feature of a subobject
+            this.isSubObj = true;
+            this.realObjectType = this.name.substr(0,io);
+            this.realFeatureName = this.name.substr(io+1);
+        }
+        else {
+            this.isSubObj = false;
+            this.realObjectType = objType;
+            this.realFeatureName = this.name;
+        }
+    }
 
     public getFeatName(objType : string,
                        callback : (whattype:number, objType:string, featName:string, featNameLoc:string, sgiObj : SentenceGrammarItem) => void) : void
     {
-        var locname : string;
+        var locname : string = 
+            l10n.grammarfeature && l10n.grammarfeature[this.realObjectType] && l10n.grammarfeature[this.realObjectType][this.realFeatureName] 
+            ? l10n.grammarfeature[this.realObjectType][this.realFeatureName]
+            : l10n.emdrosobject[this.realObjectType][this.realFeatureName];
 
-        var io = this.name.indexOf(':');
-        if (io!=-1) {
-            // This is a feature of a subobject
-            var ot = this.name.substr(0,io);
-            var ft = this.name.substr(io+1);
-            locname = 
-                l10n.grammarfeature && l10n.grammarfeature[ot] && l10n.grammarfeature[ot][ft] 
-                ? l10n.grammarfeature[ot][ft]
-                : l10n.emdrosobject[ot][ft];
-        }
-        else
-            locname = 
-                l10n.grammarfeature && l10n.grammarfeature[objType] && l10n.grammarfeature[objType][this.name] 
-                ? l10n.grammarfeature[objType][this.name]
-                : l10n.emdrosobject[objType][this.name];
-
-        callback(WHAT.feature, objType, this.name, locname, this);
+        callback(WHAT.feature, this.realObjectType, this.realFeatureName, locname, this);
     }
 
-    public getFeatVal(monob : MonadObject, objType : string, abbrev : boolean,
-                   callback : (whattype:number, objType:string, featName:string, featVal:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void
+    public getFeatVal(monob : MonadObject, mix : number, objType : string, abbrev : boolean,
+                   callback : (whattype:number, objType:string, featName:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void
     {
-        console.log("getFeatVal1",monob,objType,abbrev);
+        var featType : string = typeinfo.obj2feat[this.realObjectType][this.realFeatureName];
+        var res : string =
+            this.isSubObj
+                ? (<MultipleMonadObject>monob).subobjects[mix][0].features[this.realFeatureName]
+                : (monob.mo.features ? monob.mo.features[this.realFeatureName] : ''); // Empty for dummy objects
 
-        var featType : string;
-        var res1 : string;
-
-        var io = this.name.indexOf(':');
-        if (io!=-1) {
-            // This is a feature of a subobject
-            var ot = this.name.substr(0,io);
-            var ft = this.name.substr(io+1);
-            featType = typeinfo.obj2feat[ot][ft];
-            res1 = monob.mo.features ? monob.mo.features[ft] : ''; // Empty for dummy objects
-            console.log("res1",res1);
-        }
-        else {
-            featType = typeinfo.obj2feat[objType][this.name];
-            res1 = monob.mo.features ? monob.mo.features[this.name] : ''; // Empty for dummy objects
-        }
-        var res : string = res1;
 
 
         switch (featType) {
@@ -224,8 +216,8 @@ class GrammarFeature implements SentenceGrammarItem {
                 res = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, res, abbrev));
             break;
         }
-        console.log("getFeatVal2",objType,this.name,res1,res,this);
-        callback(WHAT.feature,objType,this.name,res1,res,this);
+
+        callback(WHAT.feature, this.realObjectType, this.realFeatureName, res, this);
     }
 
     /** Does this object identify the specified feature?
@@ -254,26 +246,27 @@ function copyFields(dst : any, src : any) {
 }
 
 // This function adds relevant methods to a data object of the specified class
-function addMethods(obj : any, classname : any) {
+function addMethods(obj : any, classname : any, objType : string) {
     // Copy all methods except constructor
     for (var f in classname.prototype) {
         if (f==='constructor')
             continue;
         obj[f] = classname.prototype[f];
     }
+    obj.pseudoConstructor && obj.pseudoConstructor(objType); // Call pseudoConstructor if it exiss
 }
 
 
 
 // This function adds relevant methods to a data object of a specific SentenceGrammarItem subtype
-function addMethodsSgi(sgi : SentenceGrammarItem) {
-    addMethods(sgi, eval(sgi.mytype)); // sgi.mytype is the name of the subclass, generated by the server
+function addMethodsSgi(sgi : SentenceGrammarItem, objType : string) {
+    addMethods(sgi, eval(sgi.mytype), objType); // sgi.mytype is the name of the subclass, generated by the server
 
     // Do the same with all members of the items array
     if (sgi.items) {
         for (var i in sgi.items) {
             if (isNaN(+i)) continue; // Not numeric
-            addMethodsSgi(sgi.items[+i]);
+            addMethodsSgi(sgi.items[+i], objType);
         }
     }
 }

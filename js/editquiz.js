@@ -79,14 +79,14 @@ var GrammarGroup = (function () {
         }
         callback(WHAT.groupend, objType, this.name, null, this);
     };
-    GrammarGroup.prototype.getFeatVal = function (monob, objType, abbrev, callback) {
-        callback(WHAT.groupstart, objType, this.name, null, null, this);
+    GrammarGroup.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
+        callback(WHAT.groupstart, objType, this.name, null, this);
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            this.items[+i].getFeatVal(monob, objType, abbrev, callback);
+            this.items[+i].getFeatVal(monob, mix, objType, abbrev, callback);
         }
-        callback(WHAT.groupend, objType, this.name, null, null, this);
+        callback(WHAT.groupend, objType, this.name, null, this);
     };
     /** Do the children of this object identify the specified feature?
      * @param f The name of the feature to look for.
@@ -130,11 +130,11 @@ var SentenceGrammar = (function (_super) {
             this.items[+i].getFeatName(objType, callback);
         }
     };
-    SentenceGrammar.prototype.getFeatVal = function (monob, objType, abbrev, callback) {
+    SentenceGrammar.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            this.items[+i].getFeatVal(monob, objType, abbrev, callback);
+            this.items[+i].getFeatVal(monob, mix, objType, abbrev, callback);
         }
     };
     /** Do the children of this object identify the specified feature?
@@ -158,14 +158,14 @@ var GrammarMetaFeature = (function () {
     GrammarMetaFeature.prototype.getFeatName = function (objType, callback) {
         callback(WHAT.metafeature, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
     };
-    GrammarMetaFeature.prototype.getFeatVal = function (monob, objType, abbrev, callback) {
+    GrammarMetaFeature.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
         var res = '';
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
             res += this.items[+i].getFeatValPart(monob, objType);
         }
-        callback(WHAT.metafeature, objType, this.name, null, res, this);
+        callback(WHAT.metafeature, objType, this.name, res, this);
     };
     /** Do the children of this object identify the specified feature?
      * @param f The name of the feature to look for.
@@ -184,45 +184,32 @@ var GrammarMetaFeature = (function () {
 })();
 var GrammarFeature = (function () {
     function GrammarFeature() {
-        this.coloring = {};
     }
-    GrammarFeature.prototype.getFeatName = function (objType, callback) {
-        var locname;
+    GrammarFeature.prototype.pseudoConstructor = function (objType) {
         var io = this.name.indexOf(':');
         if (io != -1) {
             // This is a feature of a subobject
-            var ot = this.name.substr(0, io);
-            var ft = this.name.substr(io + 1);
-            locname =
-                l10n.grammarfeature && l10n.grammarfeature[ot] && l10n.grammarfeature[ot][ft]
-                    ? l10n.grammarfeature[ot][ft]
-                    : l10n.emdrosobject[ot][ft];
-        }
-        else
-            locname =
-                l10n.grammarfeature && l10n.grammarfeature[objType] && l10n.grammarfeature[objType][this.name]
-                    ? l10n.grammarfeature[objType][this.name]
-                    : l10n.emdrosobject[objType][this.name];
-        callback(WHAT.feature, objType, this.name, locname, this);
-    };
-    GrammarFeature.prototype.getFeatVal = function (monob, objType, abbrev, callback) {
-        console.log("getFeatVal1", monob, objType, abbrev);
-        var featType;
-        var res1;
-        var io = this.name.indexOf(':');
-        if (io != -1) {
-            // This is a feature of a subobject
-            var ot = this.name.substr(0, io);
-            var ft = this.name.substr(io + 1);
-            featType = typeinfo.obj2feat[ot][ft];
-            res1 = monob.mo.features ? monob.mo.features[ft] : ''; // Empty for dummy objects
-            console.log("res1", res1);
+            this.isSubObj = true;
+            this.realObjectType = this.name.substr(0, io);
+            this.realFeatureName = this.name.substr(io + 1);
         }
         else {
-            featType = typeinfo.obj2feat[objType][this.name];
-            res1 = monob.mo.features ? monob.mo.features[this.name] : ''; // Empty for dummy objects
+            this.isSubObj = false;
+            this.realObjectType = objType;
+            this.realFeatureName = this.name;
         }
-        var res = res1;
+    };
+    GrammarFeature.prototype.getFeatName = function (objType, callback) {
+        var locname = l10n.grammarfeature && l10n.grammarfeature[this.realObjectType] && l10n.grammarfeature[this.realObjectType][this.realFeatureName]
+            ? l10n.grammarfeature[this.realObjectType][this.realFeatureName]
+            : l10n.emdrosobject[this.realObjectType][this.realFeatureName];
+        callback(WHAT.feature, this.realObjectType, this.realFeatureName, locname, this);
+    };
+    GrammarFeature.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
+        var featType = typeinfo.obj2feat[this.realObjectType][this.realFeatureName];
+        var res = this.isSubObj
+            ? monob.subobjects[mix][0].features[this.realFeatureName]
+            : (monob.mo.features ? monob.mo.features[this.realFeatureName] : ''); // Empty for dummy objects
         switch (featType) {
             case 'string':
             case 'ascii':
@@ -236,8 +223,7 @@ var GrammarFeature = (function () {
                     res = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, res, abbrev));
                 break;
         }
-        console.log("getFeatVal2", objType, this.name, res1, res, this);
-        callback(WHAT.feature, objType, this.name, res1, res, this);
+        callback(WHAT.feature, this.realObjectType, this.realFeatureName, res, this);
     };
     /** Does this object identify the specified feature?
      * @param f The name of the feature to look for.
@@ -260,23 +246,24 @@ function copyFields(dst, src) {
         dst[f] = src[f];
 }
 // This function adds relevant methods to a data object of the specified class
-function addMethods(obj, classname) {
+function addMethods(obj, classname, objType) {
     // Copy all methods except constructor
     for (var f in classname.prototype) {
         if (f === 'constructor')
             continue;
         obj[f] = classname.prototype[f];
     }
+    obj.pseudoConstructor && obj.pseudoConstructor(objType); // Call pseudoConstructor if it exiss
 }
 // This function adds relevant methods to a data object of a specific SentenceGrammarItem subtype
-function addMethodsSgi(sgi) {
-    addMethods(sgi, eval(sgi.mytype)); // sgi.mytype is the name of the subclass, generated by the server
+function addMethodsSgi(sgi, objType) {
+    addMethods(sgi, eval(sgi.mytype), objType); // sgi.mytype is the name of the subclass, generated by the server
     // Do the same with all members of the items array
     if (sgi.items) {
         for (var i in sgi.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            addMethodsSgi(sgi.items[+i]);
+            addMethodsSgi(sgi.items[+i], objType);
         }
     }
 }
@@ -580,22 +567,22 @@ var PanelTemplMql = (function () {
                 var vh = md.featHand.vhand[i];
                 switch (vh.type) {
                     case 'enumfeature':
-                        addMethods(vh, EnumFeatureHandler);
+                        addMethods(vh, EnumFeatureHandler, null);
                         break;
                     case 'enumlistfeature':
-                        addMethods(vh, EnumListFeatureHandler);
+                        addMethods(vh, EnumListFeatureHandler, null);
                         var elfh = vh;
                         for (var j = 0; j < elfh.listvalues.length; ++j)
-                            addMethods(elfh.listvalues[j], ListValuesHandler);
+                            addMethods(elfh.listvalues[j], ListValuesHandler, null);
                         break;
                     case 'stringfeature':
-                        addMethods(vh, StringFeatureHandler);
+                        addMethods(vh, StringFeatureHandler, null);
                         break;
                     case 'integerfeature':
-                        addMethods(vh, IntegerFeatureHandler);
+                        addMethods(vh, IntegerFeatureHandler, null);
                         break;
                     case 'rangeintegerfeature':
-                        addMethods(vh, RangeIntegerFeatureHandler);
+                        addMethods(vh, RangeIntegerFeatureHandler, null);
                         break;
                 }
                 vh.normalize();
@@ -1994,7 +1981,7 @@ $(function () {
     for (var i in configuration.sentencegrammar) {
         if (isNaN(+i))
             continue; // Not numeric
-        addMethodsSgi(configuration.sentencegrammar[+i]);
+        addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
     }
     $(window).on('beforeunload', function () {
         if (isDirty())

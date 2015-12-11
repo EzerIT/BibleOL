@@ -95,10 +95,11 @@ class Dictionary {
                     
                     for (var mix : number = 0; mix<segCount; ++mix) {
                         var mp : MonadPair = monadObject.mo.monadset.segments[mix];
-                        ldmo.push(new DisplayMultipleMonadObject(monadObject,
+                        ldmo.push(new DisplayMultipleMonadObject(<MultipleMonadObject>monadObject,
                                                                  objType,
                                                                  lev,
                                                                  mp,
+                                                                 mix,
                                                                  mix>0, 
                                                                  mix<segCount-1));
                     }
@@ -113,7 +114,7 @@ class Dictionary {
             else {
                 // At the top level there is always only one DisplayMultipleMonadObject
                 var monadObject : MonadObject = this.monadObjects1[lev][0];
-                ldmo.push(new DisplayMultipleMonadObject(monadObject,
+                ldmo.push(new DisplayMultipleMonadObject(<MultipleMonadObject>monadObject,
                                                          objType,
                                                          lev,
                                                          monadObject.mo.monadset));
@@ -222,6 +223,7 @@ class Dictionary {
             function(x_this : Element, set_head : boolean) : util.Pair<string,string> {
                 var monob : MonadObject = thisDict.monads[+($(x_this).attr("data-idd"))];
                 var level : number = thisDict.level[+($(x_this).attr("data-idd"))];
+                var mix : number = +$(x_this).attr("data-mix");
                 var sengram : SentenceGrammar = configuration.sentencegrammar[level];
 
                 var res : string = '<table>';
@@ -244,8 +246,8 @@ class Dictionary {
                                             map[featName] = featNameLoc;
                                     });
 
-                sengram.getFeatVal(monob,sengram.objType,false,
-                                   (whattype:number, objType:string, featName:string, featVal:string, featValLoc:string, sgiObj:SentenceGrammarItem) => {
+                sengram.getFeatVal(monob, mix, sengram.objType, false,
+                                   (whattype:number, objType:string, featName:string, featValLoc:string, sgiObj:SentenceGrammarItem) => {
                                        switch (whattype) {
                                        case WHAT.feature:
                                            if (mayShowFeature(objType, featName, sgiObj)) {
@@ -281,22 +283,6 @@ class Dictionary {
 
         return sentenceTextArr[0];
     }
-
-    private showattrs(idd : number) : void {
-        var monob : MonadObject = this.monads[idd];
-
-        for (var level=0; level<configuration.maxLevels-1; ++level) {
-            configuration.sentencegrammar[level]
-                .getFeatVal(monob,configuration.sentencegrammar[level].objType,false,
-                            (whattype:number, objType:string, featName:string, featVal:string, featValLoc:string, sgiObj:SentenceGrammarItem) => {
-                                if (whattype==WHAT.feature || whattype==WHAT.metafeature)
-                                    $('#{0}_{1}_show'.format(objType,featName)).html(featValLoc);
-                            });
-            monob = monob.parent;
-        }
-    }
-
-
 
     public getSingleMonadObject(monad : number) : SingleMonadObject {
         return this.singleMonads[monad];

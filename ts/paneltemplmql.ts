@@ -381,26 +381,26 @@ class PanelTemplMql {
                 var vh : FeatureHandler = md.featHand.vhand[i];
                 switch (vh.type) {
                 case 'enumfeature':
-                    addMethods(vh, EnumFeatureHandler);
+                    addMethods(vh, EnumFeatureHandler, null);
                     break;
 
                 case 'enumlistfeature':
-                    addMethods(vh, EnumListFeatureHandler);
+                    addMethods(vh, EnumListFeatureHandler, null);
                     var elfh : EnumListFeatureHandler = <EnumListFeatureHandler>vh;
                     for (var j=0; j < elfh.listvalues.length; ++j)
-                        addMethods(elfh.listvalues[j], ListValuesHandler);
+                        addMethods(elfh.listvalues[j], ListValuesHandler, null);
                     break;
 
                 case 'stringfeature':
-                    addMethods(vh, StringFeatureHandler);
+                    addMethods(vh, StringFeatureHandler, null);
                     break;
 
                 case 'integerfeature':
-                    addMethods(vh, IntegerFeatureHandler);
+                    addMethods(vh, IntegerFeatureHandler, null);
                     break;
 
                 case 'rangeintegerfeature':
-                    addMethods(vh, RangeIntegerFeatureHandler);
+                    addMethods(vh, RangeIntegerFeatureHandler, null);
                     break;
                 }
                 vh.normalize();

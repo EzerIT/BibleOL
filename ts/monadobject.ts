@@ -72,6 +72,5 @@ interface SingleMonadObject extends MonadObject {
 }
 
 interface MultipleMonadObject extends MonadObject {
+    subobjects : MatchedObject[][];
 }
-
-

@@ -224,14 +224,14 @@ var GrammarGroup = (function () {
         }
         callback(WHAT.groupend, objType, this.name, null, this);
     };
-    GrammarGroup.prototype.getFeatVal = function (monob, objType, abbrev, callback) {
-        callback(WHAT.groupstart, objType, this.name, null, null, this);
+    GrammarGroup.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
+        callback(WHAT.groupstart, objType, this.name, null, this);
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            this.items[+i].getFeatVal(monob, objType, abbrev, callback);
+            this.items[+i].getFeatVal(monob, mix, objType, abbrev, callback);
         }
-        callback(WHAT.groupend, objType, this.name, null, null, this);
+        callback(WHAT.groupend, objType, this.name, null, this);
     };
     /** Do the children of this object identify the specified feature?
      * @param f The name of the feature to look for.
@@ -275,11 +275,11 @@ var SentenceGrammar = (function (_super) {
             this.items[+i].getFeatName(objType, callback);
         }
     };
-    SentenceGrammar.prototype.getFeatVal = function (monob, objType, abbrev, callback) {
+    SentenceGrammar.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            this.items[+i].getFeatVal(monob, objType, abbrev, callback);
+            this.items[+i].getFeatVal(monob, mix, objType, abbrev, callback);
         }
     };
     /** Do the children of this object identify the specified feature?
@@ -303,14 +303,14 @@ var GrammarMetaFeature = (function () {
     GrammarMetaFeature.prototype.getFeatName = function (objType, callback) {
         callback(WHAT.metafeature, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
     };
-    GrammarMetaFeature.prototype.getFeatVal = function (monob, objType, abbrev, callback) {
+    GrammarMetaFeature.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
         var res = '';
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
             res += this.items[+i].getFeatValPart(monob, objType);
         }
-        callback(WHAT.metafeature, objType, this.name, null, res, this);
+        callback(WHAT.metafeature, objType, this.name, res, this);
     };
     /** Do the children of this object identify the specified feature?
      * @param f The name of the feature to look for.
@@ -329,45 +329,32 @@ var GrammarMetaFeature = (function () {
 })();
 var GrammarFeature = (function () {
     function GrammarFeature() {
-        this.coloring = {};
     }
-    GrammarFeature.prototype.getFeatName = function (objType, callback) {
-        var locname;
+    GrammarFeature.prototype.pseudoConstructor = function (objType) {
         var io = this.name.indexOf(':');
         if (io != -1) {
             // This is a feature of a subobject
-            var ot = this.name.substr(0, io);
-            var ft = this.name.substr(io + 1);
-            locname =
-                l10n.grammarfeature && l10n.grammarfeature[ot] && l10n.grammarfeature[ot][ft]
-                    ? l10n.grammarfeature[ot][ft]
-                    : l10n.emdrosobject[ot][ft];
-        }
-        else
-            locname =
-                l10n.grammarfeature && l10n.grammarfeature[objType] && l10n.grammarfeature[objType][this.name]
-                    ? l10n.grammarfeature[objType][this.name]
-                    : l10n.emdrosobject[objType][this.name];
-        callback(WHAT.feature, objType, this.name, locname, this);
-    };
-    GrammarFeature.prototype.getFeatVal = function (monob, objType, abbrev, callback) {
-        console.log("getFeatVal1", monob, objType, abbrev);
-        var featType;
-        var res1;
-        var io = this.name.indexOf(':');
-        if (io != -1) {
-            // This is a feature of a subobject
-            var ot = this.name.substr(0, io);
-            var ft = this.name.substr(io + 1);
-            featType = typeinfo.obj2feat[ot][ft];
-            res1 = monob.mo.features ? monob.mo.features[ft] : ''; // Empty for dummy objects
-            console.log("res1", res1);
+            this.isSubObj = true;
+            this.realObjectType = this.name.substr(0, io);
+            this.realFeatureName = this.name.substr(io + 1);
         }
         else {
-            featType = typeinfo.obj2feat[objType][this.name];
-            res1 = monob.mo.features ? monob.mo.features[this.name] : ''; // Empty for dummy objects
+            this.isSubObj = false;
+            this.realObjectType = objType;
+            this.realFeatureName = this.name;
         }
-        var res = res1;
+    };
+    GrammarFeature.prototype.getFeatName = function (objType, callback) {
+        var locname = l10n.grammarfeature && l10n.grammarfeature[this.realObjectType] && l10n.grammarfeature[this.realObjectType][this.realFeatureName]
+            ? l10n.grammarfeature[this.realObjectType][this.realFeatureName]
+            : l10n.emdrosobject[this.realObjectType][this.realFeatureName];
+        callback(WHAT.feature, this.realObjectType, this.realFeatureName, locname, this);
+    };
+    GrammarFeature.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
+        var featType = typeinfo.obj2feat[this.realObjectType][this.realFeatureName];
+        var res = this.isSubObj
+            ? monob.subobjects[mix][0].features[this.realFeatureName]
+            : (monob.mo.features ? monob.mo.features[this.realFeatureName] : ''); // Empty for dummy objects
         switch (featType) {
             case 'string':
             case 'ascii':
@@ -381,8 +368,7 @@ var GrammarFeature = (function () {
                     res = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, res, abbrev));
                 break;
         }
-        console.log("getFeatVal2", objType, this.name, res1, res, this);
-        callback(WHAT.feature, objType, this.name, res1, res, this);
+        callback(WHAT.feature, this.realObjectType, this.realFeatureName, res, this);
     };
     /** Does this object identify the specified feature?
      * @param f The name of the feature to look for.
@@ -405,23 +391,24 @@ function copyFields(dst, src) {
         dst[f] = src[f];
 }
 // This function adds relevant methods to a data object of the specified class
-function addMethods(obj, classname) {
+function addMethods(obj, classname, objType) {
     // Copy all methods except constructor
     for (var f in classname.prototype) {
         if (f === 'constructor')
             continue;
         obj[f] = classname.prototype[f];
     }
+    obj.pseudoConstructor && obj.pseudoConstructor(objType); // Call pseudoConstructor if it exiss
 }
 // This function adds relevant methods to a data object of a specific SentenceGrammarItem subtype
-function addMethodsSgi(sgi) {
-    addMethods(sgi, eval(sgi.mytype)); // sgi.mytype is the name of the subclass, generated by the server
+function addMethodsSgi(sgi, objType) {
+    addMethods(sgi, eval(sgi.mytype), objType); // sgi.mytype is the name of the subclass, generated by the server
     // Do the same with all members of the items array
     if (sgi.items) {
         for (var i in sgi.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            addMethodsSgi(sgi.items[+i]);
+            addMethodsSgi(sgi.items[+i], objType);
         }
     }
 }
@@ -556,6 +543,7 @@ var DisplaySingleMonadObject = (function (_super) {
         this.inQuiz = inQuiz;
         this.monad = smo.mo.monadset.segments[0].low;
         this.range = { low: this.monad, high: this.monad };
+        this.mix = 0;
     }
     DisplaySingleMonadObject.prototype.generateHtml = function (qd, sentenceTextArr) {
         var smo = this.displayedMo;
@@ -627,7 +615,7 @@ var DisplaySingleMonadObject = (function (_super) {
         }
         var grammar = '';
         configuration.sentencegrammar[0]
-            .getFeatVal(smo, this.objType, false, function (whattype, objType, featName, featVal, featValLoc) {
+            .getFeatVal(smo, 0, this.objType, false, function (whattype, objType, featName, featValLoc) {
             switch (whattype) {
                 case WHAT.feature:
                     var wordclass;
@@ -675,12 +663,13 @@ var Color = (function () {
 var DisplayMultipleMonadObject = (function (_super) {
     __extends(DisplayMultipleMonadObject, _super);
     // Implementation of the overloaded constructors
-    function DisplayMultipleMonadObject(mmo, objType, level, monadSet, hasPredecessor, hasSuccessor) {
+    function DisplayMultipleMonadObject(mmo, objType, level, monadSet, monadix, hasPredecessor, hasSuccessor) {
         _super.call(this, mmo, objType, level);
-        if (arguments.length == 6) {
+        if (arguments.length == 7) {
             // Non-patriarch
             this.isPatriarch = false;
             this.range = monadSet;
+            this.mix = monadix;
             this.children = [];
             this.hasPredecessor = hasPredecessor;
             this.hasSuccessor = hasSuccessor;
@@ -691,6 +680,7 @@ var DisplayMultipleMonadObject = (function (_super) {
             // Patriarch
             this.isPatriarch = true;
             this.range = { low: monadSet.segments[0].low, high: monadSet.segments[monadSet.segments.length - 1].high };
+            this.mix = 0;
             this.children = [];
             this.hasPredecessor = false;
             this.hasSuccessor = false;
@@ -703,20 +693,21 @@ var DisplayMultipleMonadObject = (function (_super) {
         if (this.hasSuccessor)
             spanclass += ' hass';
         var grammar = '';
-        if (configuration.sentencegrammar[this.level])
+        if (configuration.sentencegrammar[this.level]) {
             configuration.sentencegrammar[this.level]
-                .getFeatVal(this.displayedMo, this.objType, true, function (whattype, objType, featName, featVal, featValLoc) {
+                .getFeatVal(this.displayedMo, this.mix, this.objType, true, function (whattype, objType, featName, featValLoc) {
                 if (whattype == WHAT.feature || whattype == WHAT.metafeature)
                     grammar += '<span class="xgrammar dontshowit {0}_{1}">:{2}</span>'.format(objType, featName, featValLoc);
             });
+        }
         var jq;
         if (this.isPatriarch)
             jq = $('<span class="{0}"></span>'.format(spanclass));
         else {
             if (this.displayedMo.mo.name == "dummy")
-                jq = $('<span class="{0}"><span class="nogram dontshowit" data-idd="{1}"></span></span>'.format(spanclass, this.displayedMo.mo.id_d));
+                jq = $('<span class="{0}"><span class="nogram dontshowit" data-idd="{1}" data-mix="0"></span></span>'.format(spanclass, this.displayedMo.mo.id_d));
             else
-                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}">{2}{3}</span></span>'.format(spanclass, this.displayedMo.mo.id_d, getObjectShortFriendlyName(this.objType), grammar));
+                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span></span>'.format(spanclass, this.displayedMo.mo.id_d, this.mix, getObjectShortFriendlyName(this.objType), grammar));
         }
         for (var ch in this.children) {
             if (isNaN(+ch))
@@ -864,7 +855,7 @@ var Dictionary = (function () {
                     var segCount = monadObject.mo.monadset.segments.length;
                     for (var mix = 0; mix < segCount; ++mix) {
                         var mp = monadObject.mo.monadset.segments[mix];
-                        ldmo.push(new DisplayMultipleMonadObject(monadObject, objType, lev, mp, mix > 0, mix < segCount - 1));
+                        ldmo.push(new DisplayMultipleMonadObject(monadObject, objType, lev, mp, mix, mix > 0, mix < segCount - 1));
                     }
                 }
                 ldmo.sort(function (a, b) {
@@ -964,6 +955,7 @@ var Dictionary = (function () {
             function (x_this, set_head) {
                 var monob = thisDict.monads[+($(x_this).attr("data-idd"))];
                 var level = thisDict.level[+($(x_this).attr("data-idd"))];
+                var mix = +$(x_this).attr("data-mix");
                 var sengram = configuration.sentencegrammar[level];
                 var res = '<table>';
                 if (set_head)
@@ -978,7 +970,7 @@ var Dictionary = (function () {
                     if (whattype == WHAT.feature || whattype == WHAT.metafeature || whattype == WHAT.groupstart)
                         map[featName] = featNameLoc;
                 });
-                sengram.getFeatVal(monob, sengram.objType, false, function (whattype, objType, featName, featVal, featValLoc, sgiObj) {
+                sengram.getFeatVal(monob, mix, sengram.objType, false, function (whattype, objType, featName, featValLoc, sgiObj) {
                     switch (whattype) {
                         case WHAT.feature:
                             if (mayShowFeature(objType, featName, sgiObj)) {
@@ -1007,17 +999,6 @@ var Dictionary = (function () {
         resizer.addResizeListener(Dictionary.handleDisplaySize, this, 'xyzzy');
         Dictionary.handleDisplaySize(this);
         return sentenceTextArr[0];
-    };
-    Dictionary.prototype.showattrs = function (idd) {
-        var monob = this.monads[idd];
-        for (var level = 0; level < configuration.maxLevels - 1; ++level) {
-            configuration.sentencegrammar[level]
-                .getFeatVal(monob, configuration.sentencegrammar[level].objType, false, function (whattype, objType, featName, featVal, featValLoc, sgiObj) {
-                if (whattype == WHAT.feature || whattype == WHAT.metafeature)
-                    $('#{0}_{1}_show'.format(objType, featName)).html(featValLoc);
-            });
-            monob = monob.parent;
-        }
     };
     Dictionary.prototype.getSingleMonadObject = function (monad) {
         return this.singleMonads[monad];
@@ -2042,7 +2023,7 @@ $(function () {
     for (var i in configuration.sentencegrammar) {
         if (isNaN(+i))
             continue; // Not numeric
-        addMethodsSgi(configuration.sentencegrammar[+i]);
+        addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
     }
     // Create HTML for checkboxes that select what grammar to display
     var generateCheckboxes = new GenerateCheckboxes();

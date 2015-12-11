@@ -14,6 +14,9 @@ class DisplayMonadObject {
     /** The (single range) monad set being displayed by this object. */
     public range : MonadPair;
 
+    /** The index in the monad set ranges that make up this object. */
+    public mix : number;
+
     static uniqIdStatic : number = 0;
 
     public uniqId : number;
@@ -99,6 +102,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         this.inQuiz = inQuiz;
         this.monad = smo.mo.monadset.segments[0].low;
         this.range = {low: this.monad, high: this.monad};
+        this.mix = 0;
     }
 
 
@@ -177,8 +181,8 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         }
         var grammar = '';
         configuration.sentencegrammar[0]
-            .getFeatVal(smo, this.objType,false,
-                        (whattype:number, objType:string, featName:string, featVal:string, featValLoc:string) => {
+            .getFeatVal(smo, 0, this.objType, false,
+                        (whattype:number, objType:string, featName:string, featValLoc:string) => {
                             switch (whattype) {
                             case WHAT.feature:
                                 var wordclass : string;
@@ -251,7 +255,6 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
     private isPatriarch : boolean;
 
 
-
     /** A collection colors to use for the unhightlighted and highlighted frames at various levels. */
     static frameColors : util.Pair<Color,Color>[] = [new util.Pair(new Color(0.000, 0.27, 0.98), new Color(0.000, 0.98, 0.71)),
                                                      new util.Pair(new Color(0.667, 0.27, 0.98), new Color(0.667, 0.98, 0.71)),
@@ -269,7 +272,7 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
      * @param objType The Emdros object type represented by this {@code DisplayMonadObject}.
      * @param level The level of the object.
      */
-    constructor(mmo : MultipleMonadObject, objType : string, level : number,  monadPair : MonadPair, hasPredecessor : boolean, hasSuccessor : boolean);
+    constructor(mmo : MultipleMonadObject, objType : string, level : number,  monadPair : MonadPair, monadix : number, hasPredecessor : boolean, hasSuccessor : boolean);
 
     /** Creates a {@code DisplayMultipleMonadObject} for the partriarch (that is, top-level) textual component.
      * @param mmo The {@link MultipleMonadObject} displayed by this {@code DisplayMultipleMonadObject}.
@@ -280,13 +283,14 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
     constructor(mmo : MultipleMonadObject, objType : string, level : number, monadSet : MonadSet);
 
     // Implementation of the overloaded constructors
-    constructor(mmo : MultipleMonadObject, objType : string, level : number, monadSet : any, hasPredecessor? : boolean, hasSuccessor? : boolean) {
+    constructor(mmo : MultipleMonadObject, objType : string, level : number, monadSet : any, monadix? : number, hasPredecessor? : boolean, hasSuccessor? : boolean) {
         super(mmo,objType,level);
 
-        if (arguments.length == 6) {
+        if (arguments.length == 7) {
             // Non-patriarch
             this.isPatriarch = false;
             this.range = monadSet;
+            this.mix = monadix;
             this.children = [];
 
             this.hasPredecessor = hasPredecessor;
@@ -300,6 +304,7 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
             this.isPatriarch = true;
 
             this.range = {low: monadSet.segments[0].low, high: monadSet.segments[monadSet.segments.length-1].high};
+            this.mix = 0;
             this.children = [];
 
             this.hasPredecessor = false;
@@ -316,24 +321,25 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
 
         var grammar = '';
         
-        if (configuration.sentencegrammar[this.level])
+        if (configuration.sentencegrammar[this.level]) {
             configuration.sentencegrammar[this.level]
-            .getFeatVal(this.displayedMo, this.objType, true,
-                        (whattype:number, objType:string, featName:string, featVal:string, featValLoc:string) => {
+            .getFeatVal(this.displayedMo, this.mix, this.objType, true,
+                        (whattype:number, objType:string, featName:string, featValLoc:string) => {
                             if (whattype==WHAT.feature || whattype==WHAT.metafeature)
                                 grammar += '<span class="xgrammar dontshowit {0}_{1}">:{2}</span>'.format(objType,featName,featValLoc);
                         });
-
+        }
         var jq : JQuery;
         if (this.isPatriarch)
             jq = $('<span class="{0}"></span>'.format(spanclass));
         else {
             if (this.displayedMo.mo.name=="dummy")
-                jq = $('<span class="{0}"><span class="nogram dontshowit" data-idd="{1}"></span></span>'.format(spanclass,
+                jq = $('<span class="{0}"><span class="nogram dontshowit" data-idd="{1}" data-mix="0"></span></span>'.format(spanclass,
                                                                                                      this.displayedMo.mo.id_d));
             else
-                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}">{2}{3}</span></span>'.format(spanclass,
+                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span></span>'.format(spanclass,
                                                                                                      this.displayedMo.mo.id_d,
+                                                                                                     this.mix,
                                                                                                      getObjectShortFriendlyName(this.objType),
                                                                                                      grammar));
         }

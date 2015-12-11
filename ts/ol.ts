@@ -280,7 +280,7 @@ $(function() {
 
     for (var i in configuration.sentencegrammar) {
         if (isNaN(+i)) continue; // Not numeric
-        addMethodsSgi(configuration.sentencegrammar[+i]);
+        addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
     }
 
 
