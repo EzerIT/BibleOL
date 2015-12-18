@@ -27,3 +27,6 @@ $lang['this_is_top_folder'] = 'Dette er top-folderen';
 $lang['time_format'] = 'H:i';
 $lang['date_time_format'] = 'd.m.Y H:i';
 $lang['language'] = 'Sprog';
+
+$lang['swipe'] = 'Hvis din skærm ikke er bred nok til at vise en hel søjle i tabellen, kan du
+                  stryge til venstre og højre i hver søjle.';
