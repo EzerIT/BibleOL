@@ -52,3 +52,4 @@ $lang['1st_choice'] = '1. valg';
 $lang['2nd_choice'] = '2. valg'; 
 $lang['3rd_choice'] = '3. valg'; 
 $lang['4th_choice'] = '4. valg'; 
+$lang['badname'] = 'Ulovligt tegn i filnavn';

@@ -446,7 +446,7 @@
     // Miscellaneous functions
 
     function filename_bad(filename) {
-        badchars = /[\/?*:;{}\\]/;
+        badchars = /[\/?*;'"{}\\]/;
         return !!filename.match(badchars);
     }
 

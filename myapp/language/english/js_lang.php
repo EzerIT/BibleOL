@@ -52,3 +52,4 @@ $lang['1st_choice'] = '1st choice';
 $lang['2nd_choice'] = '2nd choice'; 
 $lang['3rd_choice'] = '3rd choice'; 
 $lang['4th_choice'] = '4th choice'; 
+$lang['badname'] = 'Illegal character in filename';
