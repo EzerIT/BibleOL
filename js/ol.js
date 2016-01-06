@@ -1961,7 +1961,7 @@ var GenerateCheckboxes = (function () {
                     $('.xgrammar.{0}_{1}'.format(objType, featName)).removeClass('dontshowit').addClass('showit');
                     if (leveli == 2 && objType == "clause_atom" && featName == "tab") {
                         _this.separateLinesBoxes[leveli].implicit(true);
-                        $('.lev2').css('padding-right', '4cm').css('text-indent', '-4cm');
+                        $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left', '4cm').css('text-indent', '-4cm');
                     }
                     else
                         _this.borderBoxes[leveli].implicit(true);
@@ -1970,7 +1970,7 @@ var GenerateCheckboxes = (function () {
                     $('.xgrammar.{0}_{1}'.format(objType, featName)).removeClass('showit').addClass('dontshowit');
                     if (leveli == 2 && objType == "clause_atom" && featName == "tab") {
                         _this.separateLinesBoxes[leveli].implicit(false);
-                        $('.lev2').css('padding-right', '0').css('text-indent', '0');
+                        $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left', '0').css('text-indent', '0');
                     }
                     else
                         _this.borderBoxes[leveli].implicit(false);
