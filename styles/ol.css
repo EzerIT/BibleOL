@@ -79,27 +79,11 @@ span.verse {
   vertical-align: top;
   font-size: 12pt;
 }
-.nolev3.seplin,
-.nolev2.seplin,
-.nolev1.seplin,
-.nolev0.seplin {
-  display: block;
-}
 .lev3,
 .lev2,
 .lev1,
 .lev0 {
-  position: relative;
-  margin: 15px;
-  padding: 5px;
-  vertical-align: middle;
-  /* Required by Chrome */
-}
-.lev3.noseplin,
-.lev2.noseplin,
-.lev1.noseplin,
-.lev0.noseplin {
-  display: inline-block;
+  text-indent: 0;
 }
 .lev3.seplin,
 .lev2.seplin,
@@ -107,13 +91,29 @@ span.verse {
 .lev0.seplin {
   display: block;
 }
-.notdummy.lev3 {
+.lev3.showborder,
+.lev2.showborder,
+.lev1.showborder,
+.lev0.showborder {
+  position: relative;
+  margin: 15px;
+  padding: 5px;
+  vertical-align: middle;
+  /* Required by Chrome */
+}
+.lev3.showborder.noseplin,
+.lev2.showborder.noseplin,
+.lev1.showborder.noseplin,
+.lev0.showborder.noseplin {
+  display: inline-block;
+}
+.lev3.showborder {
   border: solid 2px red;
 }
-.notdummy.lev2 {
+.lev2.showborder {
   border: solid 2px blue;
 }
-.notdummy.lev1 {
+.lev1.showborder {
   border: solid 2px green;
 }
 .rtl .hasp {
@@ -171,6 +171,7 @@ span.verse {
   padding-right: 2px;
   background-color: #e0e0ff;
   top: -10px;
+  text-indent: 0;
 }
 div.grammargroup {
   margin: 0 5px;

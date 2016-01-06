@@ -93,22 +93,25 @@ span.verse {
     font-size: 12pt; // TODO: Should depend on user configuration
 }
 
-.nolev3, .nolev2, .nolev1, .nolev0 {
+.lev3, .lev2, .lev1, .lev0 {
     &.seplin {display: block;}
+    text-indent: 0;
 }
 
-.lev3, .lev2, .lev1, .lev0 {
-    position: relative;
+.lev3.showborder,
+.lev2.showborder,
+.lev1.showborder,
+.lev0.showborder {
     &.noseplin {display: inline-block;}
-    &.seplin {display: block;}
+    position: relative;
     margin: 15px;
     padding: 5px;
     vertical-align: middle; /* Required by Chrome */
-}
+ }
 
-.notdummy.lev3 { border: solid 2px red; }
-.notdummy.lev2 { border: solid 2px blue; }
-.notdummy.lev1 { border: solid 2px green; }
+.lev3.showborder { border: solid 2px red; }
+.lev2.showborder { border: solid 2px blue; }
+.lev1.showborder { border: solid 2px green; }
 
 .rtl {
     .hasp { border-right-style: none; }
@@ -152,6 +155,7 @@ span.verse {
     padding-right: 2px;
     background-color: @textbackground;
     top: -10px;
+    text-indent: 0;
 }
 
 div.grammargroup {

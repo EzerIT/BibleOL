@@ -65,6 +65,9 @@ class GenerateCheckboxes {
     private checkboxes : string = '';
     private addBr = new util.AddBetween('<br>'); ///< AddBetween object to insert &lt;br&gt;
 
+    private borderBoxes : util.BorderFollowerBox[] = [];
+    private separateLinesBoxes : util.SeparateLinesFollowerBox[] = [];
+    private wordSpaceBox : util.WordSpaceFollowerBox;
     
     private generatorCallback(whattype:number, objType:string, featName:string,
                               featNameLoc:string, sgiObj:SentenceGrammarItem) : void {
@@ -159,16 +162,14 @@ class GenerateCheckboxes {
         if (leveli===0) {
             // Handling of words
 
-            $('#{0}_{1}_cb'.format(objType,featName)).change(function() {
-                if ($(this).prop('checked')) {
+            $('#{0}_{1}_cb'.format(objType,featName)).change( (e : JQueryEventObject) => {
+                if ($(e.currentTarget).prop('checked')) {
                     $('.wordgrammar.{0}'.format(featName)).removeClass('dontshowit').addClass('showit');
-                    util.forceWide(true);
-                    util.forceWordSpace(true);
+                    this.wordSpaceBox.implicit(true);
                 }
                 else {
                     $('.wordgrammar.{0}'.format(featName)).removeClass('showit').addClass('dontshowit');
-                    util.forceWide(false);
-                    util.forceWordSpace(false);
+                    this.wordSpaceBox.implicit(false);
                 }
                                            
                 for (var lev=1; lev<configuration.maxLevels-1; ++lev)
@@ -178,14 +179,24 @@ class GenerateCheckboxes {
         else {
             // Handling of clause, phrase, etc.
                                    
-            $('#{0}_{1}_cb'.format(objType,featName)).change(function() {
-                if ($(this).prop('checked')) {
+            $('#{0}_{1}_cb'.format(objType,featName)).change( (e : JQueryEventObject) => {
+                if ($(e.currentTarget).prop('checked')) {
                     $('.xgrammar.{0}_{1}'.format(objType,featName)).removeClass('dontshowit').addClass('showit');
-                    util.forceBorder(true,leveli);
+                    if (leveli==2 && objType=="clause_atom" && featName=="tab") {
+                        this.separateLinesBoxes[leveli].implicit(true);
+                        $('.lev2').css('padding-right','4cm').css('text-indent','-4cm');
+                    }
+                    else
+                        this.borderBoxes[leveli].implicit(true);
                 }
                 else {
                     $('.xgrammar.{0}_{1}'.format(objType,featName)).removeClass('showit').addClass('dontshowit');
-                    util.forceBorder(false,leveli);
+                    if (leveli==2 && objType=="clause_atom" && featName=="tab") {
+                        this.separateLinesBoxes[leveli].implicit(false);
+                        $('.lev2').css('padding-right','0').css('text-indent','0');
+                    }
+                    else
+                        this.borderBoxes[leveli].implicit(false);
                 }
                 
                 adjustDivLevWidth(leveli);
@@ -203,8 +214,10 @@ class GenerateCheckboxes {
         
             if (leveli===0) {
                 if (charset.isHebrew) {
-                    $('#ws_cb').change(function() {
-                        util.explicitWordSpace($(this).prop('checked'));
+                    this.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
+
+                    $('#ws_cb').change((e : JQueryEventObject) => {
+                        this.wordSpaceBox.explicit($(e.currentTarget).prop('checked'));
                         
                         for (var lev=1; lev<configuration.maxLevels-1; ++lev)
                             adjustDivLevWidth(lev);
@@ -212,12 +225,16 @@ class GenerateCheckboxes {
                 }
             }
             else {
+                this.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
+
                 $('#lev{0}_seplin_cb'.format(leveli)).change(leveli, (e : JQueryEventObject) => {
-                    util.separateLines($(e.currentTarget).prop('checked'), e.data);
-                    adjustDivLevWidth(e.data);
+                    this.separateLinesBoxes[e.data].explicit($(e.currentTarget).prop('checked'));
                 });
+
+                this.borderBoxes[leveli] = new util.BorderFollowerBox(leveli);
+                
                 $('#lev{0}_sb_cb'.format(leveli)).change(leveli, (e : JQueryEventObject) => {
-                    util.explicitBorder($(e.currentTarget).prop('checked'), e.data);
+                    this.borderBoxes[e.data].explicit($(e.currentTarget).prop('checked'));
                     adjustDivLevWidth(e.data);
                 });
             }

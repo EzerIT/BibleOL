@@ -121,7 +121,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
 
             // If this is not a quiz, add book, chapter, and verse, plus sof pasuq, if needed
             if (!this.inQuiz) {
-                document.title = l10n.universe['book'][smo.bcv[0]];
+                document.title = l10n.universe['book'][smo.bcv[0]] + ' ' + smo.bcv[1];
                 $('#textcontainer h1').html(document.title);
 
                 for (var i : number = 0; i<uhSize; ++i) {
@@ -222,7 +222,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         return $('<span class="textblock inline"><span class="textdisplay {0}" data-idd="{1}">{2}{3}{4}{5}{6}</span>{7}</span>{8}'
                  .format(charset.foreignClass + follow_class,
                          smo.mo.id_d,
-                         chapterstring,
+                         '', //chapterstring,
                          versestring,
                          refstring,
                          urlstring,
@@ -236,6 +236,20 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
 // TODO: Fix this
 class Color {
     constructor(a:number,b:number,c:number) {}
+}
+
+function boxes(num : number) : string {
+    var s = '';
+
+    for (var i=0; i<num; ++i)
+        s += '\u00a0';
+
+    s += num;
+
+    for (var i=num; i<13; ++i)
+        s += '\u25aa';
+
+    return s;
 }
 
 
@@ -313,20 +327,26 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
     }
 
     public generateHtml(qd : QuizData, sentenceTextArr : string[]) : JQuery {
-        var spanclass : string = 'nolev{0} noseplin'.format(this.level);
+        var spanclass : string = 'lev{0} dontshowborder noseplin'.format(this.level);
         if (this.hasPredecessor)
             spanclass += ' hasp';
         if (this.hasSuccessor)
             spanclass += ' hass';
 
         var grammar = '';
-        
+
+        var indent : number = 0;
+
         if (configuration.sentencegrammar[this.level]) {
             configuration.sentencegrammar[this.level]
             .getFeatVal(this.displayedMo, this.mix, this.objType, true,
                         (whattype:number, objType:string, featName:string, featValLoc:string) => {
-                            if (whattype==WHAT.feature || whattype==WHAT.metafeature)
-                                grammar += '<span class="xgrammar dontshowit {0}_{1}">:{2}</span>'.format(objType,featName,featValLoc);
+                            if (whattype==WHAT.feature || whattype==WHAT.metafeature) {
+                                if (objType=="clause_atom" && featName=="tab")
+                                    indent=+featValLoc;
+                                else
+                                    grammar += '<span class="xgrammar dontshowit {0}_{1}">:{2}</span>'.format(objType,featName,featValLoc);
+                            }
                         });
         }
         var jq : JQuery;
@@ -336,6 +356,12 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
             if (this.displayedMo.mo.name=="dummy")
                 jq = $('<span class="{0}"><span class="nogram dontshowit" data-idd="{1}" data-mix="0"></span></span>'.format(spanclass,
                                                                                                      this.displayedMo.mo.id_d));
+            else if (this.level==2)
+                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span><span style="font-family:courier" class="xgrammar clause_atom_tab dontshowit">{5}&nbsp;&nbsp;</span></span>'.format(spanclass,
+                                                                                                     this.displayedMo.mo.id_d,
+                                                                                                     this.mix,
+                                                                                                     getObjectShortFriendlyName(this.objType),
+                                                                                                     grammar,boxes(indent)));
             else
                 jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span></span>'.format(spanclass,
                                                                                                      this.displayedMo.mo.id_d,

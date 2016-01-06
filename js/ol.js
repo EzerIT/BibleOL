@@ -1,5 +1,10 @@
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 String.prototype.format = function () {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function (match, num) {
@@ -17,6 +22,106 @@ if (!String.prototype.trim) {
 }
 var util;
 (function (util) {
+    // A followerBox handles a checkbox that can either be set explicitly or implicitly. "Show border"
+    // is an example of this. The user case request "Show border" explicitly by clicking its checkbox,
+    // or implictly by choosing to display a feature.
+    var FollowerBox = (function () {
+        function FollowerBox(level, idstring) {
+            this.level = level;
+            this.idstring = idstring;
+            this.is_explicit = false;
+            this.resetCount();
+            addToResetChain(this);
+        }
+        FollowerBox.prototype.resetCount = function () {
+            this.count = 0;
+        };
+        FollowerBox.prototype.explicit = function (val) {
+            this.is_explicit = val;
+            this.setit(val);
+        };
+        FollowerBox.prototype.implicit = function (val) {
+            if (val)
+                ++this.count;
+            else
+                --this.count;
+            if (val && this.count == 1) {
+                $(this.idstring).prop('disabled', true);
+                $(this.idstring).prop('checked', true);
+                this.setit(true);
+            }
+            else if (!val && this.count == 0) {
+                $(this.idstring).prop('disabled', false);
+                $(this.idstring).prop('checked', this.is_explicit);
+                this.setit(this.is_explicit);
+            }
+        };
+        return FollowerBox;
+    })();
+    util.FollowerBox = FollowerBox;
+    var BorderFollowerBox = (function (_super) {
+        __extends(BorderFollowerBox, _super);
+        function BorderFollowerBox(level) {
+            _super.call(this, level, '#lev{0}_sb_cb'.format(level));
+        }
+        BorderFollowerBox.prototype.setit = function (val) {
+            if (val) {
+                $('.lev' + this.level + '> .gram').removeClass('dontshowit').addClass('showit');
+                $('.lev' + this.level).removeClass('dontshowborder').addClass('showborder');
+            }
+            else {
+                $('.lev' + this.level + '> .gram').removeClass('showit').addClass('dontshowit');
+                $('.lev' + this.level).removeClass('showborder').addClass('dontshowborder');
+            }
+        };
+        return BorderFollowerBox;
+    })(FollowerBox);
+    util.BorderFollowerBox = BorderFollowerBox;
+    var SeparateLinesFollowerBox = (function (_super) {
+        __extends(SeparateLinesFollowerBox, _super);
+        function SeparateLinesFollowerBox(level) {
+            _super.call(this, level, '#lev{0}_seplin_cb'.format(level));
+        }
+        SeparateLinesFollowerBox.prototype.setit = function (val) {
+            var oldSepLin = val ? 'noseplin' : 'seplin';
+            var newSepLin = val ? 'seplin' : 'noseplin';
+            $('.notdummy.lev' + this.level).removeClass(oldSepLin).addClass(newSepLin);
+        };
+        return SeparateLinesFollowerBox;
+    })(FollowerBox);
+    util.SeparateLinesFollowerBox = SeparateLinesFollowerBox;
+    var WordSpaceFollowerBox = (function (_super) {
+        __extends(WordSpaceFollowerBox, _super);
+        function WordSpaceFollowerBox(level) {
+            _super.call(this, level, '#ws_cb');
+        }
+        WordSpaceFollowerBox.prototype.implicit = function (val) {
+            _super.prototype.implicit.call(this, val);
+            if (val && this.count == 1) {
+                $('.textblock').css('margin-left', '30px').removeClass('inline').addClass('inlineblock');
+            }
+            else if (!val && this.count == 0) {
+                $('.textblock').css('margin-left', '0').removeClass('inlineblock').addClass('inline');
+                ;
+            }
+        };
+        WordSpaceFollowerBox.prototype.setit = function (val) {
+            if (val) {
+                $('.cont').removeClass('cont1');
+                $('.cont').addClass('cont2');
+                $('.contx').removeClass('cont1');
+                $('.contx').addClass('cont2x');
+            }
+            else {
+                $('.cont').removeClass('cont2');
+                $('.cont').addClass('cont1');
+                $('.contx').removeClass('cont2x');
+                $('.contx').addClass('cont1');
+            }
+        };
+        return WordSpaceFollowerBox;
+    })(FollowerBox);
+    util.WordSpaceFollowerBox = WordSpaceFollowerBox;
     function mydump(arr, level, maxlevel) {
         if (level === void 0) { level = 0; }
         if (maxlevel === void 0) { maxlevel = 5; }
@@ -53,113 +158,15 @@ var util;
         return Pair;
     })();
     util.Pair = Pair;
-    var setwordsp = false;
-    var forceWsCount = 0;
-    var forceWideCount = 0;
-    var setborder = [];
-    var forceBorderCount = [];
+    var resetChain = [];
+    function addToResetChain(fb) {
+        resetChain.push(fb);
+    }
     function resetCheckboxCounters() {
-        forceWsCount = 0;
-        forceWideCount = 0;
-        forceBorderCount = [];
+        for (var i in resetChain)
+            resetChain[i].resetCount();
     }
     util.resetCheckboxCounters = resetCheckboxCounters;
-    function explicitWordSpace(val) {
-        setwordsp = val;
-        setWordSpace(val);
-    }
-    util.explicitWordSpace = explicitWordSpace;
-    function setWordSpace(val) {
-        if (val) {
-            $('.cont').removeClass('cont1');
-            $('.cont').addClass('cont2');
-            $('.contx').removeClass('cont1');
-            $('.contx').addClass('cont2x');
-        }
-        else {
-            $('.cont').removeClass('cont2');
-            $('.cont').addClass('cont1');
-            $('.contx').removeClass('cont2x');
-            $('.contx').addClass('cont1');
-        }
-    }
-    function forceWordSpace(val) {
-        if (val)
-            ++forceWsCount;
-        else
-            --forceWsCount;
-        if (val && forceWsCount == 1) {
-            $('#ws_cb').prop('disabled', true);
-            $('#ws_cb').prop('checked', true);
-            setWordSpace(true);
-        }
-        else if (!val && forceWsCount == 0) {
-            $('#ws_cb').prop('disabled', false);
-            $('#ws_cb').prop('checked', setwordsp);
-            setWordSpace(setwordsp);
-        }
-    }
-    util.forceWordSpace = forceWordSpace;
-    function forceWide(val) {
-        if (val)
-            ++forceWideCount;
-        else
-            --forceWideCount;
-        // TODO: Test this:
-        if (val && forceWideCount == 1) {
-            $('.textblock').css('margin-left', '30px').removeClass('inline').addClass('inlineblock');
-        }
-        else if (!val && forceWideCount == 0) {
-            $('.textblock').css('margin-left', '0').removeClass('inlineblock').addClass('inline');
-            ;
-        }
-    }
-    util.forceWide = forceWide;
-    function explicitBorder(val, level) {
-        setborder[level] = val;
-        showBorder(val, level);
-    }
-    util.explicitBorder = explicitBorder;
-    function showBorder(val, level) {
-        var classN = 'lev' + level;
-        var noClassN = 'nolev' + level;
-        if (val) {
-            $('.' + noClassN + '> .gram').removeClass('dontshowit').addClass('showit');
-            $('.' + noClassN).addClass(classN);
-            $('.' + noClassN).removeClass(noClassN);
-        }
-        else {
-            $('.' + classN + '> .gram').removeClass('showit').addClass('dontshowit');
-            $('.' + classN).addClass(noClassN);
-            $('.' + classN).removeClass(classN);
-        }
-    }
-    util.showBorder = showBorder;
-    function separateLines(val, level) {
-        var oldSepLin = val ? 'noseplin' : 'seplin';
-        var newSepLin = val ? 'seplin' : 'noseplin';
-        $('.notdummy.nolev' + level).removeClass(oldSepLin).addClass(newSepLin);
-        $('.notdummy.lev' + level).removeClass(oldSepLin).addClass(newSepLin);
-    }
-    util.separateLines = separateLines;
-    function forceBorder(val, level) {
-        if (val)
-            forceBorderCount[level] ? ++forceBorderCount[level] : forceBorderCount[level] = 1;
-        else
-            --forceBorderCount[level];
-        var cbid = '#lev{0}_sb_cb'.format(level);
-        if (val && forceBorderCount[level] == 1) {
-            $(cbid).prop('disabled', true);
-            $(cbid).prop('checked', true);
-            showBorder(true, level);
-        }
-        else if (!val && forceBorderCount[level] == 0) {
-            $(cbid).prop('disabled', false);
-            $(cbid).prop('checked', setborder[level] === true);
-            showBorder(setborder[level] === true, level);
-        }
-    }
-    util.forceBorder = forceBorder;
     var AddBetween = (function () {
         function AddBetween(text) {
             this.text = text;
@@ -199,11 +206,6 @@ function getFeatureSetting(otype, feature) {
         return getObjectSetting(otype).featuresetting[feature];
 }
 // -*- js -*-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 var WHAT;
 (function (WHAT) {
@@ -560,7 +562,7 @@ var DisplaySingleMonadObject = (function (_super) {
                 throw 'BAD3';
             // If this is not a quiz, add book, chapter, and verse, plus sof pasuq, if needed
             if (!this.inQuiz) {
-                document.title = l10n.universe['book'][smo.bcv[0]];
+                document.title = l10n.universe['book'][smo.bcv[0]] + ' ' + smo.bcv[1];
                 $('#textcontainer h1').html(document.title);
                 for (var i = 0; i < uhSize; ++i) {
                     if (!smo.sameAsPrev[i]) {
@@ -649,7 +651,8 @@ var DisplaySingleMonadObject = (function (_super) {
         else
             sentenceTextArr[0] += text + ' ';
         return $('<span class="textblock inline"><span class="textdisplay {0}" data-idd="{1}">{2}{3}{4}{5}{6}</span>{7}</span>{8}'
-            .format(charset.foreignClass + follow_class, smo.mo.id_d, chapterstring, versestring, refstring, urlstring, text, grammar, follow_space));
+            .format(charset.foreignClass + follow_class, smo.mo.id_d, '', //chapterstring,
+        versestring, refstring, urlstring, text, grammar, follow_space));
     };
     DisplaySingleMonadObject.sof_pasuq = '&#x05c3;';
     return DisplaySingleMonadObject;
@@ -660,6 +663,15 @@ var Color = (function () {
     }
     return Color;
 })();
+function boxes(num) {
+    var s = '';
+    for (var i = 0; i < num; ++i)
+        s += '\u00a0';
+    s += num;
+    for (var i = num; i < 13; ++i)
+        s += '\u25aa';
+    return s;
+}
 var DisplayMultipleMonadObject = (function (_super) {
     __extends(DisplayMultipleMonadObject, _super);
     // Implementation of the overloaded constructors
@@ -687,17 +699,22 @@ var DisplayMultipleMonadObject = (function (_super) {
         }
     }
     DisplayMultipleMonadObject.prototype.generateHtml = function (qd, sentenceTextArr) {
-        var spanclass = 'nolev{0} noseplin'.format(this.level);
+        var spanclass = 'lev{0} dontshowborder noseplin'.format(this.level);
         if (this.hasPredecessor)
             spanclass += ' hasp';
         if (this.hasSuccessor)
             spanclass += ' hass';
         var grammar = '';
+        var indent = 0;
         if (configuration.sentencegrammar[this.level]) {
             configuration.sentencegrammar[this.level]
                 .getFeatVal(this.displayedMo, this.mix, this.objType, true, function (whattype, objType, featName, featValLoc) {
-                if (whattype == WHAT.feature || whattype == WHAT.metafeature)
-                    grammar += '<span class="xgrammar dontshowit {0}_{1}">:{2}</span>'.format(objType, featName, featValLoc);
+                if (whattype == WHAT.feature || whattype == WHAT.metafeature) {
+                    if (objType == "clause_atom" && featName == "tab")
+                        indent = +featValLoc;
+                    else
+                        grammar += '<span class="xgrammar dontshowit {0}_{1}">:{2}</span>'.format(objType, featName, featValLoc);
+                }
             });
         }
         var jq;
@@ -706,6 +723,8 @@ var DisplayMultipleMonadObject = (function (_super) {
         else {
             if (this.displayedMo.mo.name == "dummy")
                 jq = $('<span class="{0}"><span class="nogram dontshowit" data-idd="{1}" data-mix="0"></span></span>'.format(spanclass, this.displayedMo.mo.id_d));
+            else if (this.level == 2)
+                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span><span style="font-family:courier" class="xgrammar clause_atom_tab dontshowit">{5}&nbsp;&nbsp;</span></span>'.format(spanclass, this.displayedMo.mo.id_d, this.mix, getObjectShortFriendlyName(this.objType), grammar, boxes(indent)));
             else
                 jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span></span>'.format(spanclass, this.displayedMo.mo.id_d, this.mix, getObjectShortFriendlyName(this.objType), grammar));
         }
@@ -1845,6 +1864,8 @@ var GenerateCheckboxes = (function () {
     function GenerateCheckboxes() {
         this.checkboxes = '';
         this.addBr = new util.AddBetween('<br>'); ///< AddBetween object to insert &lt;br&gt;
+        this.borderBoxes = [];
+        this.separateLinesBoxes = [];
     }
     GenerateCheckboxes.prototype.generatorCallback = function (whattype, objType, featName, featNameLoc, sgiObj) {
         switch (whattype) {
@@ -1915,20 +1936,19 @@ var GenerateCheckboxes = (function () {
         return this.checkboxes;
     };
     GenerateCheckboxes.prototype.setHandlerCallback = function (whattype, objType, featName, featNameLoc, leveli) {
+        var _this = this;
         if (whattype != WHAT.feature && whattype != WHAT.metafeature)
             return;
         if (leveli === 0) {
             // Handling of words
-            $('#{0}_{1}_cb'.format(objType, featName)).change(function () {
-                if ($(this).prop('checked')) {
+            $('#{0}_{1}_cb'.format(objType, featName)).change(function (e) {
+                if ($(e.currentTarget).prop('checked')) {
                     $('.wordgrammar.{0}'.format(featName)).removeClass('dontshowit').addClass('showit');
-                    util.forceWide(true);
-                    util.forceWordSpace(true);
+                    _this.wordSpaceBox.implicit(true);
                 }
                 else {
                     $('.wordgrammar.{0}'.format(featName)).removeClass('showit').addClass('dontshowit');
-                    util.forceWide(false);
-                    util.forceWordSpace(false);
+                    _this.wordSpaceBox.implicit(false);
                 }
                 for (var lev = 1; lev < configuration.maxLevels - 1; ++lev)
                     adjustDivLevWidth(lev);
@@ -1936,14 +1956,24 @@ var GenerateCheckboxes = (function () {
         }
         else {
             // Handling of clause, phrase, etc.
-            $('#{0}_{1}_cb'.format(objType, featName)).change(function () {
-                if ($(this).prop('checked')) {
+            $('#{0}_{1}_cb'.format(objType, featName)).change(function (e) {
+                if ($(e.currentTarget).prop('checked')) {
                     $('.xgrammar.{0}_{1}'.format(objType, featName)).removeClass('dontshowit').addClass('showit');
-                    util.forceBorder(true, leveli);
+                    if (leveli == 2 && objType == "clause_atom" && featName == "tab") {
+                        _this.separateLinesBoxes[leveli].implicit(true);
+                        $('.lev2').css('padding-right', '4cm').css('text-indent', '-4cm');
+                    }
+                    else
+                        _this.borderBoxes[leveli].implicit(true);
                 }
                 else {
                     $('.xgrammar.{0}_{1}'.format(objType, featName)).removeClass('showit').addClass('dontshowit');
-                    util.forceBorder(false, leveli);
+                    if (leveli == 2 && objType == "clause_atom" && featName == "tab") {
+                        _this.separateLinesBoxes[leveli].implicit(false);
+                        $('.lev2').css('padding-right', '0').css('text-indent', '0');
+                    }
+                    else
+                        _this.borderBoxes[leveli].implicit(false);
                 }
                 adjustDivLevWidth(leveli);
             });
@@ -1959,20 +1989,22 @@ var GenerateCheckboxes = (function () {
             var sg = configuration.sentencegrammar[leveli];
             if (leveli === 0) {
                 if (charset.isHebrew) {
-                    $('#ws_cb').change(function () {
-                        util.explicitWordSpace($(this).prop('checked'));
+                    this.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
+                    $('#ws_cb').change(function (e) {
+                        _this.wordSpaceBox.explicit($(e.currentTarget).prop('checked'));
                         for (var lev = 1; lev < configuration.maxLevels - 1; ++lev)
                             adjustDivLevWidth(lev);
                     });
                 }
             }
             else {
+                this.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
                 $('#lev{0}_seplin_cb'.format(leveli)).change(leveli, function (e) {
-                    util.separateLines($(e.currentTarget).prop('checked'), e.data);
-                    adjustDivLevWidth(e.data);
+                    _this.separateLinesBoxes[e.data].explicit($(e.currentTarget).prop('checked'));
                 });
+                this.borderBoxes[leveli] = new util.BorderFollowerBox(leveli);
                 $('#lev{0}_sb_cb'.format(leveli)).change(leveli, function (e) {
-                    util.explicitBorder($(e.currentTarget).prop('checked'), e.data);
+                    _this.borderBoxes[e.data].explicit($(e.currentTarget).prop('checked'));
                     adjustDivLevWidth(e.data);
                 });
             }
