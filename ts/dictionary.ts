@@ -213,8 +213,9 @@ class Dictionary {
 
     private static boxes(num : number, minnum : number, maxnum : number) : string {
         var s = '';
+        var numspaces = num < 10 ? num : num-1;  // If num has two digits, we write one space less
 
-        for (var i=minnum; i<num; ++i)
+        for (var i=minnum; i<numspaces; ++i) 
             s += '\u00a0';
 
         s += num;
