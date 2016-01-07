@@ -1896,7 +1896,7 @@ var indentation_width;
 /// class="gram"&gt; holding its grammar information.
 /// @param[in] level Object level (word=0, phrase=1, etc.)
 function adjustDivLevWidth(level) {
-    $('.lev' + level).each(function (index) {
+    $('.showborder.lev' + level).each(function (index) {
         $(this).css('width', 'auto'); // Give div natural width
         var w = $(this).find('> .gram').width();
         if ($(this).width() < w)
