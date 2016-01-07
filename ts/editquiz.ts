@@ -187,6 +187,9 @@ function save_quiz() {
                         $('#filename-dialog').modal('hide');
                         check_overwrite();
                         break;
+                    case 'BADNAME':
+                        show_error('#filename-error', localize('badname'));
+                        break;
                     default:
                         show_error('#filename-error', data);
                         break;

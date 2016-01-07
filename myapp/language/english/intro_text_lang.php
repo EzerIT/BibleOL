@@ -1,7 +1,14 @@
 <?php
 
 $lang['intro_center'] =
-      '<h1>New Layout and Easy Access from Smartphones and Tablets</h1>
+      '<h1>New Hebrew Glosses</h1>
+
+      <p>The translations of Hebrew words into English have been extended and improved. When working
+      with the Hebrew Bible texts, you may therefore come across translations that are slightly
+      different from what you are used to.</p>
+
+
+      <h1>New Layout and Easy Access from Smartphones and Tablets</h1>
 
       <p>Bible OL has a new layout which makes it easier to use the features on these pages from
       smartphones and tablets.</p>
@@ -12,11 +19,9 @@ $lang['intro_center'] =
 
       <h1>What Is Bible Online Learner?</h1>
 
-      <p>Bible Online Learner (Bible OL) gives free access to the Hebrew Bible in the ETCBC4 database and
-       a number of exercises which are linked to 12 introductory lessons at <a
-       href="http://bh.3bmoodle.dk/course/view.php?id=10" target="_blank">Persuasive Biblical Hebrew
-       e-Learning (Login as guest)</a>. You can also test your knowledge of Greek on Nestle’s 1904
-       text of the Greek New Testament with grammatical annotations.</p>
+      <p>Bible Online Learner (Bible OL) gives free access to the Hebrew Bible in the ETCBC4
+       database and Nestle’s 1904 text of the Greek New Testament with grammatical annotations;
+       furthermore, teachers can use exercises developed for Bible OL or create their own.</p>
 
        <p>Bible OL is interlinked with the award-winning Hebrew query and text display site <a
        href="http://shebanq.ancient-data.org" target="shebanq">SHEBANQ</a>. From a chapter in Bible
@@ -40,8 +45,8 @@ $lang['intro_right1'] =
        Bible Online Learner was developed by Claus Tøndering of <a href="http://www.ezer.dk"
        target="_blank">Ezer IT Consulting</a>.<br>
 
-       Judith Gottschalk has developed Learning Journey, an associated website with statistics on
-       learner performance.</p>';
+       For her PhD at Aalborg University, Judith Gottschalk is developing <i>Learning Journey,</i>
+       an associated website with statistics on learner performance.</p>';
 
 $lang['intro_right2'] =
       '<p>Bible Online Learner is based on PLOTLearner, a PC program developed as part of the

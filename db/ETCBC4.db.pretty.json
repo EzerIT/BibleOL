@@ -2,7 +2,7 @@
     "version": 7,
     "databaseName": "ETCBC4",
     "propertiesName": "ETCBC4",
-    "databaseVersion": "3.0.7",
+    "databaseVersion": "3.1.0",
     "granularity": "sentence",
     "surfaceFeature": "text_utf8",
     "objHasSurface": "word",
@@ -53,11 +53,11 @@
                 },
                 "english": {
                     "ignoreSelect": true,
-                    "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i"
+                    "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i"
                 },
                 "german": {
                     "ignoreSelect": true,
-                    "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i"
+                    "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i"
                 },
                 "g_cons": {
                     "ignoreSelect": true,

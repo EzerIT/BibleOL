@@ -501,17 +501,23 @@ class Ctrl_text extends MY_Controller {
 
             // MODEL:
             $this->load->model('mod_quizpath');
-            $this->mod_quizpath->init(rawurldecode($_GET['dir']) . '/' . rawurldecode($_GET['quiz']) . '.3et', false, false, false);
-            if ($this->mod_quizpath->file_exists()) {
-                $owner = $this->mod_quizpath->get_excercise_owner();
 
-                if ($owner!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
-                    echo $this->lang->line('not_owner'),"\n";
+            $quizname = rawurldecode($_GET['quiz']);
+            if (preg_match('|[/?*;{}"\'\\\\]|',$quizname))
+                echo "BADNAME\n";
+            else {
+                $this->mod_quizpath->init(rawurldecode($_GET['dir']) . "/$quizname.3et", false, false, false);
+                if ($this->mod_quizpath->file_exists()) {
+                    $owner = $this->mod_quizpath->get_excercise_owner();
+
+                    if ($owner!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
+                        echo $this->lang->line('not_owner'),"\n";
+                    else
+                        echo "EXISTS\n";
+                }
                 else
-                    echo "EXISTS\n";
+                    echo "OK\n";
             }
-            else
-                echo "OK\n";
         }
         catch (DataException $e) {
             echo $e->getMessage(),"\n";

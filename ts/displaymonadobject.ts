@@ -193,6 +193,16 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
                                     wordclass = charset.transliteratedClass;
                                 else
                                     wordclass = 'ltr';
+
+                                // For English and German in ETCBC4, display only the first gloss
+                                
+                                if (configuration.databaseName=="ETCBC4"
+                                    && (featName=="english" || featName=="german")) {
+                                    featValLoc = featValLoc.replace(/(&[gl]t);/,'$1Q')
+                                                           .replace(/([^,;(]+).*/,'$1')
+                                                           .replace(/(&[gl]t)Q/,'$1;');
+                                }
+
                                 grammar += '<span class="wordgrammar dontshowit {0} {2}">{1}</span>'.format(featName,featValLoc,wordclass);
                                 break;
 

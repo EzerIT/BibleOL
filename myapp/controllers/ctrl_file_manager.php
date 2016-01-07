@@ -70,7 +70,7 @@ class Ctrl_file_manager extends MY_Controller {
             if (isset($_POST['create'])) {
                 $create = trim($_POST['create']);
 
-                if (preg_match('|[/?*:;{}\\\\]|',$create))
+                if (preg_match('|[/?*;{}"\'\\\\]|',$create))
                     throw new DataException($this->lang->line('illegal_char_folder_name'));
 
                 $this->mod_quizpath->mkdir($create);
@@ -339,7 +339,7 @@ class Ctrl_file_manager extends MY_Controller {
 
             $newname = trim($_POST['newname']);
 
-            if (preg_match('|[/?*:;{}\\\\]|',$newname))
+            if (preg_match('|[/?*;{}"\'\\\\]|',$newname))
                 throw new DataException($this->lang->line('illegal_char_filename'));
             
             $this->load->model('mod_quizpath');

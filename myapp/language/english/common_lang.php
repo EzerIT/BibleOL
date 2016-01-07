@@ -27,3 +27,6 @@ $lang['this_is_top_folder'] = 'This Is the Top Folder';
 $lang['time_format'] = 'H:i';
 $lang['date_time_format'] = 'd M Y H:i';
 $lang['language'] = 'Language';
+
+$lang['swipe'] = 'If your display is not wide enough to show a complete column in the table, you can swipe
+                  each column left and right.';
