@@ -1,5 +1,10 @@
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 String.prototype.format = function () {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function (match, num) {
@@ -17,6 +22,106 @@ if (!String.prototype.trim) {
 }
 var util;
 (function (util) {
+    // A followerBox handles a checkbox that can either be set explicitly or implicitly. "Show border"
+    // is an example of this. The user case request "Show border" explicitly by clicking its checkbox,
+    // or implictly by choosing to display a feature.
+    var FollowerBox = (function () {
+        function FollowerBox(level, idstring) {
+            this.level = level;
+            this.idstring = idstring;
+            this.is_explicit = false;
+            this.resetCount();
+            addToResetChain(this);
+        }
+        FollowerBox.prototype.resetCount = function () {
+            this.count = 0;
+        };
+        FollowerBox.prototype.explicit = function (val) {
+            this.is_explicit = val;
+            this.setit(val);
+        };
+        FollowerBox.prototype.implicit = function (val) {
+            if (val)
+                ++this.count;
+            else
+                --this.count;
+            if (val && this.count == 1) {
+                $(this.idstring).prop('disabled', true);
+                $(this.idstring).prop('checked', true);
+                this.setit(true);
+            }
+            else if (!val && this.count == 0) {
+                $(this.idstring).prop('disabled', false);
+                $(this.idstring).prop('checked', this.is_explicit);
+                this.setit(this.is_explicit);
+            }
+        };
+        return FollowerBox;
+    })();
+    util.FollowerBox = FollowerBox;
+    var BorderFollowerBox = (function (_super) {
+        __extends(BorderFollowerBox, _super);
+        function BorderFollowerBox(level) {
+            _super.call(this, level, '#lev{0}_sb_cb'.format(level));
+        }
+        BorderFollowerBox.prototype.setit = function (val) {
+            if (val) {
+                $('.lev' + this.level + '> .gram').removeClass('dontshowit').addClass('showit');
+                $('.lev' + this.level).removeClass('dontshowborder').addClass('showborder');
+            }
+            else {
+                $('.lev' + this.level + '> .gram').removeClass('showit').addClass('dontshowit');
+                $('.lev' + this.level).removeClass('showborder').addClass('dontshowborder');
+            }
+        };
+        return BorderFollowerBox;
+    })(FollowerBox);
+    util.BorderFollowerBox = BorderFollowerBox;
+    var SeparateLinesFollowerBox = (function (_super) {
+        __extends(SeparateLinesFollowerBox, _super);
+        function SeparateLinesFollowerBox(level) {
+            _super.call(this, level, '#lev{0}_seplin_cb'.format(level));
+        }
+        SeparateLinesFollowerBox.prototype.setit = function (val) {
+            var oldSepLin = val ? 'noseplin' : 'seplin';
+            var newSepLin = val ? 'seplin' : 'noseplin';
+            $('.notdummy.lev' + this.level).removeClass(oldSepLin).addClass(newSepLin);
+        };
+        return SeparateLinesFollowerBox;
+    })(FollowerBox);
+    util.SeparateLinesFollowerBox = SeparateLinesFollowerBox;
+    var WordSpaceFollowerBox = (function (_super) {
+        __extends(WordSpaceFollowerBox, _super);
+        function WordSpaceFollowerBox(level) {
+            _super.call(this, level, '#ws_cb');
+        }
+        WordSpaceFollowerBox.prototype.implicit = function (val) {
+            _super.prototype.implicit.call(this, val);
+            if (val && this.count == 1) {
+                $('.textblock').css('margin-left', '30px').removeClass('inline').addClass('inlineblock');
+            }
+            else if (!val && this.count == 0) {
+                $('.textblock').css('margin-left', '0').removeClass('inlineblock').addClass('inline');
+                ;
+            }
+        };
+        WordSpaceFollowerBox.prototype.setit = function (val) {
+            if (val) {
+                $('.cont').removeClass('cont1');
+                $('.cont').addClass('cont2');
+                $('.contx').removeClass('cont1');
+                $('.contx').addClass('cont2x');
+            }
+            else {
+                $('.cont').removeClass('cont2');
+                $('.cont').addClass('cont1');
+                $('.contx').removeClass('cont2x');
+                $('.contx').addClass('cont1');
+            }
+        };
+        return WordSpaceFollowerBox;
+    })(FollowerBox);
+    util.WordSpaceFollowerBox = WordSpaceFollowerBox;
     function mydump(arr, level, maxlevel) {
         if (level === void 0) { level = 0; }
         if (maxlevel === void 0) { maxlevel = 5; }
@@ -53,113 +158,18 @@ var util;
         return Pair;
     })();
     util.Pair = Pair;
-    var setwordsp = false;
-    var forceWsCount = 0;
-    var forceWideCount = 0;
-    var setborder = [];
-    var forceBorderCount = [];
+    var resetChain = [];
+    function addToResetChain(fb) {
+        resetChain.push(fb);
+    }
     function resetCheckboxCounters() {
-        forceWsCount = 0;
-        forceWideCount = 0;
-        forceBorderCount = [];
+        for (var i in resetChain) {
+            if (isNaN(+i))
+                continue; // Not numeric
+            resetChain[i].resetCount();
+        }
     }
     util.resetCheckboxCounters = resetCheckboxCounters;
-    function explicitWordSpace(val) {
-        setwordsp = val;
-        setWordSpace(val);
-    }
-    util.explicitWordSpace = explicitWordSpace;
-    function setWordSpace(val) {
-        if (val) {
-            $('.cont').removeClass('cont1');
-            $('.cont').addClass('cont2');
-            $('.contx').removeClass('cont1');
-            $('.contx').addClass('cont2x');
-        }
-        else {
-            $('.cont').removeClass('cont2');
-            $('.cont').addClass('cont1');
-            $('.contx').removeClass('cont2x');
-            $('.contx').addClass('cont1');
-        }
-    }
-    function forceWordSpace(val) {
-        if (val)
-            ++forceWsCount;
-        else
-            --forceWsCount;
-        if (val && forceWsCount == 1) {
-            $('#ws_cb').prop('disabled', true);
-            $('#ws_cb').prop('checked', true);
-            setWordSpace(true);
-        }
-        else if (!val && forceWsCount == 0) {
-            $('#ws_cb').prop('disabled', false);
-            $('#ws_cb').prop('checked', setwordsp);
-            setWordSpace(setwordsp);
-        }
-    }
-    util.forceWordSpace = forceWordSpace;
-    function forceWide(val) {
-        if (val)
-            ++forceWideCount;
-        else
-            --forceWideCount;
-        // TODO: Test this:
-        if (val && forceWideCount == 1) {
-            $('.textblock').css('margin-left', '30px').removeClass('inline').addClass('inlineblock');
-        }
-        else if (!val && forceWideCount == 0) {
-            $('.textblock').css('margin-left', '0').removeClass('inlineblock').addClass('inline');
-            ;
-        }
-    }
-    util.forceWide = forceWide;
-    function explicitBorder(val, level) {
-        setborder[level] = val;
-        showBorder(val, level);
-    }
-    util.explicitBorder = explicitBorder;
-    function showBorder(val, level) {
-        var classN = 'lev' + level;
-        var noClassN = 'nolev' + level;
-        if (val) {
-            $('.' + noClassN + '> .gram').removeClass('dontshowit').addClass('showit');
-            $('.' + noClassN).addClass(classN);
-            $('.' + noClassN).removeClass(noClassN);
-        }
-        else {
-            $('.' + classN + '> .gram').removeClass('showit').addClass('dontshowit');
-            $('.' + classN).addClass(noClassN);
-            $('.' + classN).removeClass(classN);
-        }
-    }
-    util.showBorder = showBorder;
-    function separateLines(val, level) {
-        var oldSepLin = val ? 'noseplin' : 'seplin';
-        var newSepLin = val ? 'seplin' : 'noseplin';
-        $('.notdummy.nolev' + level).removeClass(oldSepLin).addClass(newSepLin);
-        $('.notdummy.lev' + level).removeClass(oldSepLin).addClass(newSepLin);
-    }
-    util.separateLines = separateLines;
-    function forceBorder(val, level) {
-        if (val)
-            forceBorderCount[level] ? ++forceBorderCount[level] : forceBorderCount[level] = 1;
-        else
-            --forceBorderCount[level];
-        var cbid = '#lev{0}_sb_cb'.format(level);
-        if (val && forceBorderCount[level] == 1) {
-            $(cbid).prop('disabled', true);
-            $(cbid).prop('checked', true);
-            showBorder(true, level);
-        }
-        else if (!val && forceBorderCount[level] == 0) {
-            $(cbid).prop('disabled', false);
-            $(cbid).prop('checked', setborder[level] === true);
-            showBorder(setborder[level] === true, level);
-        }
-    }
-    util.forceBorder = forceBorder;
     var AddBetween = (function () {
         function AddBetween(text) {
             this.text = text;
