@@ -328,7 +328,7 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
             .getFeatVal(this.displayedMo, this.mix, this.objType, true,
                         (whattype:number, objType:string, featName:string, featValLoc:string) => {
                             if (whattype==WHAT.feature || whattype==WHAT.metafeature) {
-                                if (objType=="clause_atom" && featName=="tab")
+                                if (configuration.databaseName=='ETCBC4' && objType=="clause_atom" && featName=="tab")
                                     indent=+featValLoc;
                                 else
                                     grammar += '<span class="xgrammar dontshowit {0}_{1}">:{2}</span>'.format(objType,featName,featValLoc);
@@ -342,18 +342,20 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
             if (this.displayedMo.mo.name=="dummy")
                 jq = $('<span class="{0}"><span class="nogram dontshowit" data-idd="{1}" data-mix="0"></span></span>'.format(spanclass,
                                                                                                      this.displayedMo.mo.id_d));
-            else if (this.level==2)
-                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span><span style="font-family:courier" class="xgrammar clause_atom_tab dontshowit" data-indent={5}></span></span>'.format(spanclass,
-                                                                                                     this.displayedMo.mo.id_d,
-                                                                                                     this.mix,
-                                                                                                     getObjectShortFriendlyName(this.objType),
-                                                                                                     grammar,indent));
+            else if (configuration.databaseName=='ETCBC4' && this.level==2)
+                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span><span class="xgrammar clause_atom_tab dontshowit indentation" data-indent={5}></span></span>'
+                       .format(spanclass,
+                               this.displayedMo.mo.id_d,
+                               this.mix,
+                               getObjectShortFriendlyName(this.objType),
+                               grammar,indent));
             else
-                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span></span>'.format(spanclass,
-                                                                                                     this.displayedMo.mo.id_d,
-                                                                                                     this.mix,
-                                                                                                     getObjectShortFriendlyName(this.objType),
-                                                                                                     grammar));
+                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span></span>'
+                       .format(spanclass,
+                               this.displayedMo.mo.id_d,
+                               this.mix,
+                               getObjectShortFriendlyName(this.objType),
+                               grammar));
         }
 
         for (var ch in this.children) {

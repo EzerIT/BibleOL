@@ -142,6 +142,16 @@ span.verse {
 .ltr .cont2x {
   margin-right: 0.5em;
 }
+.indentation {
+  font-family: courier, monospace;
+}
+#testwidth {
+  position: absolute;
+  visibility: hidden;
+  height: auto;
+  width: auto;
+  white-space: nowrap;
+}
 .cont2:after {
   content: "-";
 }

@@ -127,6 +127,20 @@ span.verse {
     .cont2, .cont2x { margin-right: 0.5em; } // .cont2x is used when word ends in hyphen
 }
 
+.indentation {
+    font-family: courier, monospace;
+}
+
+#testwidth
+{
+    position: absolute;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+    white-space: nowrap;
+}
+
+
 .cont2:after {     // Hyphens are not added in the .cont2x case
     content: "-";
 }

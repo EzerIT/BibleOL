@@ -704,7 +704,7 @@ var DisplayMultipleMonadObject = (function (_super) {
             configuration.sentencegrammar[this.level]
                 .getFeatVal(this.displayedMo, this.mix, this.objType, true, function (whattype, objType, featName, featValLoc) {
                 if (whattype == WHAT.feature || whattype == WHAT.metafeature) {
-                    if (objType == "clause_atom" && featName == "tab")
+                    if (configuration.databaseName == 'ETCBC4' && objType == "clause_atom" && featName == "tab")
                         indent = +featValLoc;
                     else
                         grammar += '<span class="xgrammar dontshowit {0}_{1}">:{2}</span>'.format(objType, featName, featValLoc);
@@ -717,10 +717,12 @@ var DisplayMultipleMonadObject = (function (_super) {
         else {
             if (this.displayedMo.mo.name == "dummy")
                 jq = $('<span class="{0}"><span class="nogram dontshowit" data-idd="{1}" data-mix="0"></span></span>'.format(spanclass, this.displayedMo.mo.id_d));
-            else if (this.level == 2)
-                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span><span style="font-family:courier" class="xgrammar clause_atom_tab dontshowit" data-indent={5}></span></span>'.format(spanclass, this.displayedMo.mo.id_d, this.mix, getObjectShortFriendlyName(this.objType), grammar, indent));
+            else if (configuration.databaseName == 'ETCBC4' && this.level == 2)
+                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span><span class="xgrammar clause_atom_tab dontshowit indentation" data-indent={5}></span></span>'
+                    .format(spanclass, this.displayedMo.mo.id_d, this.mix, getObjectShortFriendlyName(this.objType), grammar, indent));
             else
-                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span></span>'.format(spanclass, this.displayedMo.mo.id_d, this.mix, getObjectShortFriendlyName(this.objType), grammar));
+                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span></span>'
+                    .format(spanclass, this.displayedMo.mo.id_d, this.mix, getObjectShortFriendlyName(this.objType), grammar));
         }
         for (var ch in this.children) {
             if (isNaN(+ch))
@@ -975,24 +977,34 @@ var Dictionary = (function () {
         DisplaySingleMonadObject.itemIndex = 0;
         var sentenceTextArr = [''];
         $('#textarea').append(this.dispMonadObjects[this.dispMonadObjects.length - 1][0].generateHtml(qd, sentenceTextArr));
-        var minindent;
-        var maxindent;
-        var all_c_a_t = $('#textarea').find('.xgrammar.clause_atom_tab');
-        all_c_a_t.each(function (index, el) {
-            var indent = +$(el).attr('data-indent');
-            if (index == 0)
-                minindent = maxindent = indent;
-            else {
-                if (indent < minindent)
-                    minindent = indent;
-                if (indent > maxindent)
-                    maxindent = indent;
-            }
-        });
-        all_c_a_t.each(function (index, el) {
-            var indent = +$(el).attr('data-indent');
-            $(el).html(Dictionary.boxes(indent, minindent, maxindent) + '&nbsp;&nbsp;');
-        });
+        if (configuration.databaseName == 'ETCBC4') {
+            // Generate indentation information
+            var minindent;
+            var maxindent;
+            var all_c_a_t = $('#textarea').find('.xgrammar.clause_atom_tab');
+            // Find minimum and maximum indentation
+            all_c_a_t.each(function (index, el) {
+                var indent = +$(el).attr('data-indent');
+                if (index == 0)
+                    minindent = maxindent = indent;
+                else {
+                    if (indent < minindent)
+                        minindent = indent;
+                    if (indent > maxindent)
+                        maxindent = indent;
+                }
+            });
+            // Calculate width of indentation indicators
+            $('#textarea').append('<div class="indentation" id="testwidth"></div>');
+            var tw = $('#testwidth');
+            tw.html(Dictionary.boxes(minindent, minindent, maxindent) + '&nbsp;&nbsp;');
+            indentation_width = tw.width() + 1;
+            // Set indentation indicators
+            all_c_a_t.each(function (index, el) {
+                var indent = +$(el).attr('data-indent');
+                $(el).html(Dictionary.boxes(indent, minindent, maxindent) + '&nbsp;&nbsp;');
+            });
+        }
         var thisDict = this;
         this.toolTipFunc =
             function (x_this, set_head) {
@@ -1872,6 +1884,7 @@ var supportsProgress; ///< Does the browser support &lt;progress&gt;?
 var charset;
 var quiz;
 var accordion_width;
+var indentation_width;
 /// Ensures that the width of a &lt;span class="levX"&gt; is at least as wide as the &lt;span
 /// class="gram"&gt; holding its grammar information.
 /// @param[in] level Object level (word=0, phrase=1, etc.)
@@ -1983,16 +1996,16 @@ var GenerateCheckboxes = (function () {
             $('#{0}_{1}_cb'.format(objType, featName)).change(function (e) {
                 if ($(e.currentTarget).prop('checked')) {
                     $('.xgrammar.{0}_{1}'.format(objType, featName)).removeClass('dontshowit').addClass('showit');
-                    if (leveli == 2 && objType == "clause_atom" && featName == "tab") {
+                    if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
                         _this.separateLinesBoxes[leveli].implicit(true);
-                        $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left', '4cm').css('text-indent', '-4cm');
+                        $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left', indentation_width + 'px').css('text-indent', -indentation_width + 'px');
                     }
                     else
                         _this.borderBoxes[leveli].implicit(true);
                 }
                 else {
                     $('.xgrammar.{0}_{1}'.format(objType, featName)).removeClass('showit').addClass('dontshowit');
-                    if (leveli == 2 && objType == "clause_atom" && featName == "tab") {
+                    if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
                         _this.separateLinesBoxes[leveli].implicit(false);
                         $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left', '0').css('text-indent', '0');
                     }

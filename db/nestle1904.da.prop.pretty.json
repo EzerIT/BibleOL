@@ -1,0 +1,240 @@
+{
+    "dbdescription": "Gr\u00e6sk (Nestle 1904, NT)",
+    "dbcopyright": "Ingen ophavsret.",
+    "emdrosobject": {
+        "word": {
+            "_objname": "Ord",
+            "person": "Person",
+            "voice": "Diatese",
+            "tense": "Tid",
+            "mood": "Modus",
+            "lemma": "Leksem",
+            "raw_lemma": "Leksem (sm\u00e5 bogstaver, ingen accenter)",
+            "normalized": "Normaliseret",
+            "raw_normalized": "Normaliseret (sm\u00e5 bogstaver, ingen accenter)",
+            "number": "Tal",
+            "possessor_number": "Ejers tal",
+            "suffix": "Ekstra",
+            "surface": "Tekst",
+            "english": "Engelsk",
+            "strongs": "Strongs tal",
+            "strongs_unreliable": "Strong utrov\u00e6rdig?",
+            "gender": "K\u00f8n",
+            "case": "Kasus",
+            "psp": "Ordklasse"
+        },
+        "clause1": {
+            "_objname": "Leds\u00e6tning niveau 1",
+            "typ": "Funktion"
+        },
+        "clause1_abbrev": {
+            "_objname": "Leds\u00e6tning1"
+        },
+        "clause2": {
+            "_objname": "Leds\u00e6tning niveau 2",
+            "typ": "Funktion"
+        },
+        "clause2_abbrev": {
+            "_objname": "Leds\u00e6tning2"
+        },
+        "sentence": {
+            "_objname": "S\u00e6tning"
+        }
+    },
+    "emdrostype": {
+        "boolean_t": {
+            "false": "nej",
+            "true": "ja"
+        },
+        "tense_t": {
+            "pluperfect": "Pluskvamperfektum",
+            "imperfect": "Imperfektum",
+            "second_future": "Anden futurum",
+            "present": "Pr\u00e6sens",
+            "aorist": "Aorist",
+            "second_aorist": "Anden aorist",
+            "second_pluperfect": "Anden puskvamperfektum",
+            "future": "Futurum",
+            "second_perfect": "Anden perfektum",
+            "NA": "-",
+            "perfect": "Perfektum"
+        },
+        "suffix_t": {
+            "crasis": "Crasis",
+            "interrogative": "Interrogativ",
+            "comparative": "Komparativ",
+            "negative": "Negativ",
+            "NA": "-",
+            "superlative": "Superlativ",
+            "attic": "Attisk",
+            "particle_attached": "Tilknyttet partikel"
+        },
+        "mood_t": {
+            "optative": "Optativ",
+            "participle": "Participium",
+            "imperative": "Imperativ",
+            "subjunctive": "Konjunktiv",
+            "imperative_participle": "Imperativ participium",
+            "indicative": "Indikativ",
+            "infinitive": "Infinitiv",
+            "NA": "-"
+        },
+        "gender_t": {
+            "neuter": "#4 Neutrum",
+            "masculine": "#2 Maskulinum",
+            "feminine": "#3 Femininum",
+            "NA": "#1 -"
+        },
+        "case_t": {
+            "nominative": "#2 Nominativ",
+            "dative": "#5 Dativ",
+            "vocative": "#6 Vokativ",
+            "accusative": "#3 Akkusativ",
+            "NA": "#1 -",
+            "genitive": "#4 Genitiv"
+        },
+        "psp_t": {
+            "letter_indeclinable": "Bogstav, ub\u00f8j.",
+            "hebrew": "Hebraisk",
+            "conjunction": "Konjunktion",
+            "reciprocal_pronoun": "Reciprokt pronomen",
+            "cond": "Kondition",
+            "particle": "Partikel",
+            "interjection": "Interjektion",
+            "adverb": "Adverbium",
+            "verb": "Verbum",
+            "correlative_or_interrogative_pronoun": "Korrel. el. interrog. pron.",
+            "possessive_pronoun": "Possessivt pronomen",
+            "personal_pronoun": "Personligt pronomen",
+            "aramaic": "Aram\u00e6isk",
+            "numeral_indeclinable": "Talord, ub\u00f8j.",
+            "reflexive_pronoun": "Refleksivt pronomen",
+            "correlative_pronoun": "Korrelativt pronomen",
+            "noun_other_type_indeclinable": "Substantive (anden type), ub\u00f8j.",
+            "adjective": "Adjektiv",
+            "demonstrative_pronoun": "Demonstrativt pronomen",
+            "relative_pronoun": "Relativt pronomen",
+            "preposition": "Pr\u00e6position",
+            "interrogative_pronoun": "Interrogativt pronomen",
+            "article": "Artikel",
+            "proper_noun_indeclinable": "Egennavn, ub\u00f8j.",
+            "noun": "Substantiv",
+            "indefinite_pronoun": "Indefinit pronomen",
+            "NA": "-"
+        },
+        "number_t": {
+            "NA": "#1 -",
+            "plural": "#3 Pluralis",
+            "singular": "#2 Singularis"
+        },
+        "voice_t": {
+            "middle_or_passive": "Medium eller passiv",
+            "passive": "Passiv",
+            "impersonal_active": "Upersonligt aktiv",
+            "active": "Aktiv",
+            "passive_deponent": "Passiv deponent",
+            "NA": "-",
+            "middle_or_passive_deponent": "Medium eller passiv deponent",
+            "middle_deponent": "Medium deponent",
+            "middle": "Medium"
+        },
+        "person_t": {
+            "second_person": "#3 2.",
+            "third_person": "#4 3.",
+            "first_person": "#2 1.",
+            "NA": "#1 -"
+        },
+        "clause_type_t_abbrev": {
+            "ADV": "ADV",
+            "CL": "CL",
+            "IO": "IO",
+            "O": "O",
+            "O2": "O2",
+            "P": "P",
+            "S": "S",
+            "V": "V",
+            "VC": "VC"
+        },
+        "clause_type_t": {
+            "ADV": "Adverbiel",
+            "CL": "S\u00e6tning",
+            "IO": "Indirekte objekt",
+            "O": "Objekt",
+            "O2": "Andet objekt",
+            "P": "Pr\u00e6dikat",
+            "S": "Subjekt",
+            "V": "Verbal",
+            "VC": "Verbal copula"
+        }
+    },
+    "grammargroup": {
+        "word": {
+            "lexeme": "Leksem",
+            "morphology": "Morfologi"
+        }
+    },
+    "grammarmetafeature": {
+        "word": {
+            "pgn": "Person, k\u00f8n, tal"
+        }
+    },
+    "grammarsubfeature": {
+        "word": {
+            "person": {
+                "first_person": "1",
+                "second_person": "2",
+                "third_person": "3",
+                "NA": "-"
+            },
+            "gender": {
+                "feminine": "F",
+                "masculine": "M",
+                "neuter": "N",
+                "NA": "-"
+            },
+            "number": {
+                "plural": "Pl",
+                "singular": "Sg",
+                "NA": "-"
+            }
+        }
+    },
+    "universe": {
+        "book": {
+            "_label": "%s",
+            "Matthew": "Matth\u00e6us",
+            "Mark": "Markus",
+            "Luke": "Lukas",
+            "John": "Johannes",
+            "Acts": "Apostlenes Gerninger",
+            "Romans": "Romerbrevet",
+            "I_Corinthians": "1. Korintherbrev",
+            "II_Corinthians": "2. Korintherbrev",
+            "Galatians": "Galaterbrevet",
+            "Ephesians": "Efeserbrevet",
+            "Philippians": "Filipperbrevet",
+            "Colossians": "Kolossenserbrevet",
+            "I_Thessalonians": "1. Thessalonikerbrev",
+            "II_Thessalonians": "2. Thessalonikerbrev",
+            "I_Timothy": "1. Timeotheousbrev",
+            "II_Timothy": "2. Timeotheousbrev",
+            "Titus": "Titusbrevet",
+            "Philemon": "Filemonbrevet",
+            "Hebrews": "Hebr\u00e6erbrevet",
+            "James": "Jakobsbrevet",
+            "I_Peter": "1. Petersbrev",
+            "II_Peter": "2. Petersbrev",
+            "I_John": "1. Johannesbrev",
+            "II_John": "2. Johannesbrev",
+            "III_John": "3. Johannesbrev",
+            "Jude": "Judasbrevet",
+            "Revelation": "Johannes' \u00c5benbaring"
+        },
+        "chapter": {
+            "_label": "Kapitel %s"
+        },
+        "verse": {
+            "_label": "Vers %s"
+        }
+    }
+}

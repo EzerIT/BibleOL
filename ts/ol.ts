@@ -44,6 +44,8 @@ var quiz : Quiz;
 
 var accordion_width : number;
 
+var indentation_width : number;
+
 
 /// Ensures that the width of a &lt;span class="levX"&gt; is at least as wide as the &lt;span
 /// class="gram"&gt; holding its grammar information.
@@ -182,16 +184,16 @@ class GenerateCheckboxes {
             $('#{0}_{1}_cb'.format(objType,featName)).change( (e : JQueryEventObject) => {
                 if ($(e.currentTarget).prop('checked')) {
                     $('.xgrammar.{0}_{1}'.format(objType,featName)).removeClass('dontshowit').addClass('showit');
-                    if (leveli==2 && objType=="clause_atom" && featName=="tab") {
+                    if (configuration.databaseName=='ETCBC4' && leveli==2 && objType=="clause_atom" && featName=="tab") {
                         this.separateLinesBoxes[leveli].implicit(true);
-                        $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left','4cm').css('text-indent','-4cm');
+                        $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left',indentation_width + 'px').css('text-indent',-indentation_width + 'px');
                     }
                     else
                         this.borderBoxes[leveli].implicit(true);
                 }
                 else {
                     $('.xgrammar.{0}_{1}'.format(objType,featName)).removeClass('showit').addClass('dontshowit');
-                    if (leveli==2 && objType=="clause_atom" && featName=="tab") {
+                    if (configuration.databaseName=='ETCBC4' && leveli==2 && objType=="clause_atom" && featName=="tab") {
                         this.separateLinesBoxes[leveli].implicit(false);
                         $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left','0').css('text-indent','0');
                     }

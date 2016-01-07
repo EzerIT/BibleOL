@@ -1,6 +1,6 @@
 ALL_TARGETS = testversion js/ol.js js/fontselector.js js/editquiz.js styles/ol.css
 
-all:	$(ALL_TARGETS)
+all:	$(ALL_TARGETS) allugly
 
 testversion:
 	@tsc -v | grep 'Version 1.6.2' > /dev/null || { echo Wrong tsc version ; exit 255; }
@@ -20,7 +20,6 @@ js/editquiz.js:	ts/editquiz.ts ts/jquery/jquery.d.ts ts/configuration.ts ts/loca
 	tsc --out $@ $<
 
 
-
 js/fontselector.js:	ts/fontselector.ts ts/fontdetect.d.ts
 	@#tsc --noImplicitAny --out $@ $<
 	tsc --out $@ $<
@@ -28,75 +27,22 @@ js/fontselector.js:	ts/fontselector.ts ts/fontdetect.d.ts
 styles/ol.css:	styles/ol.less
 	lessc $< > $@
 
-clean:
+clean: cleanugly
 	rm -f $(ALL_TARGETS)
 
-ALL_JSON = db/Tisch.en.prop.json \
-	db/WIVU.en.prop.json db/WIVU-a.en.prop.json db/WIVU-b.en.prop.json \
-	db/WIVU_part2.en.prop.json db/WIVU_part2-a.en.prop.json db/WIVU_part2-b.en.prop.json \
-	db/Tisch.db.json \
-	db/WIVU.db.json db/WIVU-a.db.json db/WIVU-b.db.json \
-	db/WIVU_part2.db.json db/WIVU_part2-a.db.json db/WIVU_part2-b.db.json \
-	db/Tisch.typeinfo.json db/WIVU.typeinfo.json db/WIVU_part2.typeinfo.json
-DB_SRC = ../../EclipseWorkspace/3ET.git/db/
-PHP = c:/xampp/php/php
+ALL_UGLY = db/ETCBC4.da.prop.json db/ETCBC4.db.json db/ETCBC4.en.prop.json db/ETCBC4-translit.da.prop.json \
+	db/ETCBC4-translit.db.json db/ETCBC4-translit.en.prop.json db/ETCBC4.typeinfo.json db/nestle1904.da.prop.json \
+	db/nestle1904.db.json db/nestle1904.en.prop.json db/nestle1904.typeinfo.json
+PHP = php
 
-alljson: $(ALL_JSON)
+allugly: $(ALL_UGLY)
 
-db/Tisch.en.prop.json: $(DB_SRC)Tisch.properties
-	$(PHP) prop2json.php $< > $@
-
-db/WIVU.en.prop.json: $(DB_SRC)WIVU.properties
-	$(PHP) prop2json.php $< > $@
-
-db/WIVU-a.en.prop.json: $(DB_SRC)WIVU-a.properties
-	$(PHP) prop2json.php $< > $@
-
-db/WIVU-b.en.prop.json: $(DB_SRC)WIVU-b.properties
-	$(PHP) prop2json.php $< > $@
-
-db/WIVU_part2.en.prop.json: $(DB_SRC)WIVU_part2.properties
-	$(PHP) prop2json.php $< > $@
-
-db/WIVU_part2-a.en.prop.json: $(DB_SRC)WIVU_part2-a.properties
-	$(PHP) prop2json.php $< > $@
-
-db/WIVU_part2-b.en.prop.json: $(DB_SRC)WIVU_part2-b.properties
-	$(PHP) prop2json.php $< > $@
-
-db/Tisch.json: $(DB_SRC)4_Tisch.dbxml
-	$(PHP) dbxml2json.php  $< > $@
-
-db/WIVU.db.json: $(DB_SRC)1_WIVU.dbxml
-	$(PHP) dbxml2json.php  $< > $@
-
-db/WIVU-a.db.json: $(DB_SRC)1a_WIVU.dbxml
-	$(PHP) dbxml2json.php  $< > $@
-
-db/WIVU-b.db.json: $(DB_SRC)1b_WIVU.dbxml
-	$(PHP) dbxml2json.php  $< > $@
-
-db/WIVU_part2.db.json: $(DB_SRC)2_WIVU_part2.dbxml
-	$(PHP) dbxml2json.php  $< > $@
-
-db/WIVU_part2-a.db.json: $(DB_SRC)2a_WIVU_part2.dbxml
-	$(PHP) dbxml2json.php  $< > $@
-
-db/WIVU_part2-b.db.json: $(DB_SRC)2b_WIVU_part2.dbxml
-	$(PHP) dbxml2json.php  $< > $@
-
-db/Tisch.typeinfo.json: db/Tisch
-	$(PHP) maketypeinfo.php $< > $@
-
-db/WIVU.typeinfo.json: db/WIVU
-	$(PHP) maketypeinfo.php $< > $@
-
-db/WIVU_part2.typeinfo.json: db/WIVU_part2
-	$(PHP) maketypeinfo.php $< > $@
+db/%.json: db/%.pretty.json
+	$(PHP) json_pretty_print.php -u $< > $@
 
 
-cleanjson:
-	rm -f $(ALL_JSON)
+cleanugly:
+	rm -f $(ALL_UGLY)
 
 TAGS:
 	find CodeIgniter myapp -name '*.php' -o -name '*.inc' | etags -l php -

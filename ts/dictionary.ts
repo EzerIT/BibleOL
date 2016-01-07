@@ -231,28 +231,38 @@ class Dictionary {
         var sentenceTextArr : string[] = [''];
         $('#textarea').append(this.dispMonadObjects[this.dispMonadObjects.length-1][0].generateHtml(qd,sentenceTextArr));
 
+        if (configuration.databaseName=='ETCBC4') {
+            // Generate indentation information
 
-        var minindent : number;
-        var maxindent : number;
-        var all_c_a_t = $('#textarea').find('.xgrammar.clause_atom_tab');
+            var minindent : number;
+            var maxindent : number;
+            var all_c_a_t = $('#textarea').find('.xgrammar.clause_atom_tab');
 
-        all_c_a_t.each( (index : number, el : Element) => {
-            var indent = +$(el).attr('data-indent');
-            if (index==0)
-                minindent = maxindent = indent;
-            else {
-                if (indent<minindent)
-                    minindent = indent;
-                if (indent>maxindent)
-                    maxindent = indent;
-            }
-        });
+            // Find minimum and maximum indentation
+            all_c_a_t.each( (index : number, el : Element) => {
+                var indent = +$(el).attr('data-indent');
+                if (index==0)
+                    minindent = maxindent = indent;
+                else {
+                    if (indent<minindent)
+                        minindent = indent;
+                    if (indent>maxindent)
+                        maxindent = indent;
+                }
+            });
 
-        all_c_a_t.each( (index : number, el : Element) => {
-            var indent = +$(el).attr('data-indent');
-            $(el).html(Dictionary.boxes(indent,minindent,maxindent) + '&nbsp;&nbsp;');
-        });
+            // Calculate width of indentation indicators
+            $('#textarea').append('<div class="indentation" id="testwidth"></div>');
+            var tw = $('#testwidth');
+            tw.html(Dictionary.boxes(minindent,minindent,maxindent) + '&nbsp;&nbsp;');
+            indentation_width = tw.width()+1;
 
+            // Set indentation indicators
+            all_c_a_t.each( (index : number, el : Element) => {
+                var indent = +$(el).attr('data-indent');
+                $(el).html(Dictionary.boxes(indent,minindent,maxindent) + '&nbsp;&nbsp;');
+            });
+        }
 
         var thisDict : Dictionary = this;
 
