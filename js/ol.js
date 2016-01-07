@@ -2032,14 +2032,15 @@ var GenerateCheckboxes = (function () {
                 continue; // Not numeric
             var sg = configuration.sentencegrammar[leveli];
             if (leveli === 0) {
-                if (charset.isHebrew) {
-                    this.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
-                    $('#ws_cb').change(function (e) {
-                        _this.wordSpaceBox.explicit($(e.currentTarget).prop('checked'));
-                        for (var lev = 1; lev < configuration.maxLevels - 1; ++lev)
-                            adjustDivLevWidth(lev);
-                    });
-                }
+                // Although only Hebrew uses a word spacing checkbox, the mechanism is also used by Greek,
+                // because we use it to set up the inline-blocks for word grammar information.
+                this.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
+                // Only Hebrew has a #ws_cb
+                $('#ws_cb').change(function (e) {
+                    _this.wordSpaceBox.explicit($(e.currentTarget).prop('checked'));
+                    for (var lev = 1; lev < configuration.maxLevels - 1; ++lev)
+                        adjustDivLevWidth(lev);
+                });
             }
             else {
                 this.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
