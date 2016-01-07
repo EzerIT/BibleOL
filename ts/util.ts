@@ -171,8 +171,10 @@ module util {
     }
 
     export function resetCheckboxCounters() {
-        for (var i in resetChain)
+        for (var i in resetChain) {
+            if (isNaN(+i)) continue; // Not numeric
             resetChain[i].resetCount();
+        }
     }
 
     export class AddBetween {

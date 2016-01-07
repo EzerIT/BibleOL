@@ -299,8 +299,11 @@ function getFeatureValueFriendlyName(featureType, value, abbrev) {
             return l10n.emdrostype[featureType]['NA'];
         var verb_classes = value.split(',');
         var localized_verb_classes = [];
-        for (var ix in verb_classes)
-            localized_verb_classes.push(l10n.emdrostype[featureType][verb_classes[+ix]]);
+        for (var ix in verb_classes) {
+            if (isNaN(+ix))
+                continue; // Not numeric
+            localized_verb_classes.push(l10n.emdrostype[featureType][verb_classes[ix]]);
+        }
         localized_verb_classes.sort();
         return localized_verb_classes.join(', ');
     }
@@ -1914,8 +1917,11 @@ var util;
         resetChain.push(fb);
     }
     function resetCheckboxCounters() {
-        for (var i in resetChain)
+        for (var i in resetChain) {
+            if (isNaN(+i))
+                continue; // Not numeric
             resetChain[i].resetCount();
+        }
     }
     util.resetCheckboxCounters = resetCheckboxCounters;
     var AddBetween = (function () {

@@ -87,8 +87,10 @@ function getFeatureValueFriendlyName(featureType : string, value : string, abbre
         var verb_classes : string[] = value.split(',');
         var localized_verb_classes : string[] = [];
 
-        for (var ix in verb_classes)
-            localized_verb_classes.push(l10n.emdrostype[featureType][verb_classes[+ix]]);
+        for (var ix in verb_classes) {
+            if (isNaN(+ix)) continue; // Not numeric
+            localized_verb_classes.push(l10n.emdrostype[featureType][verb_classes[ix]]);
+        }
                 
         localized_verb_classes.sort();
         return localized_verb_classes.join(', ');

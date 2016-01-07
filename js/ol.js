@@ -163,8 +163,11 @@ var util;
         resetChain.push(fb);
     }
     function resetCheckboxCounters() {
-        for (var i in resetChain)
+        for (var i in resetChain) {
+            if (isNaN(+i))
+                continue; // Not numeric
             resetChain[i].resetCount();
+        }
     }
     util.resetCheckboxCounters = resetCheckboxCounters;
     var AddBetween = (function () {
@@ -663,15 +666,6 @@ var Color = (function () {
     }
     return Color;
 })();
-function boxes(num) {
-    var s = '';
-    for (var i = 0; i < num; ++i)
-        s += '\u00a0';
-    s += num;
-    for (var i = num; i < 13; ++i)
-        s += '\u25aa';
-    return s;
-}
 var DisplayMultipleMonadObject = (function (_super) {
     __extends(DisplayMultipleMonadObject, _super);
     // Implementation of the overloaded constructors
@@ -724,7 +718,7 @@ var DisplayMultipleMonadObject = (function (_super) {
             if (this.displayedMo.mo.name == "dummy")
                 jq = $('<span class="{0}"><span class="nogram dontshowit" data-idd="{1}" data-mix="0"></span></span>'.format(spanclass, this.displayedMo.mo.id_d));
             else if (this.level == 2)
-                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span><span style="font-family:courier" class="xgrammar clause_atom_tab dontshowit">{5}&nbsp;&nbsp;</span></span>'.format(spanclass, this.displayedMo.mo.id_d, this.mix, getObjectShortFriendlyName(this.objType), grammar, boxes(indent)));
+                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span><span style="font-family:courier" class="xgrammar clause_atom_tab dontshowit" data-indent={5}></span></span>'.format(spanclass, this.displayedMo.mo.id_d, this.mix, getObjectShortFriendlyName(this.objType), grammar, indent));
             else
                 jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span></span>'.format(spanclass, this.displayedMo.mo.id_d, this.mix, getObjectShortFriendlyName(this.objType), grammar));
         }
@@ -773,8 +767,11 @@ function getFeatureValueFriendlyName(featureType, value, abbrev) {
             return l10n.emdrostype[featureType]['NA'];
         var verb_classes = value.split(',');
         var localized_verb_classes = [];
-        for (var ix in verb_classes)
-            localized_verb_classes.push(l10n.emdrostype[featureType][verb_classes[+ix]]);
+        for (var ix in verb_classes) {
+            if (isNaN(+ix))
+                continue; // Not numeric
+            localized_verb_classes.push(l10n.emdrostype[featureType][verb_classes[ix]]);
+        }
         localized_verb_classes.sort();
         return localized_verb_classes.join(', ');
     }
@@ -965,10 +962,37 @@ var Dictionary = (function () {
                 break;
         }
     };
+    Dictionary.boxes = function (num, minnum, maxnum) {
+        var s = '';
+        for (var i = minnum; i < num; ++i)
+            s += '\u00a0';
+        s += num;
+        for (var i = num; i <= maxnum; ++i)
+            s += '\u25aa';
+        return s;
+    };
     Dictionary.prototype.generateSentenceHtml = function (qd) {
         DisplaySingleMonadObject.itemIndex = 0;
         var sentenceTextArr = [''];
         $('#textarea').append(this.dispMonadObjects[this.dispMonadObjects.length - 1][0].generateHtml(qd, sentenceTextArr));
+        var minindent;
+        var maxindent;
+        var all_c_a_t = $('#textarea').find('.xgrammar.clause_atom_tab');
+        all_c_a_t.each(function (index, el) {
+            var indent = +$(el).attr('data-indent');
+            if (index == 0)
+                minindent = maxindent = indent;
+            else {
+                if (indent < minindent)
+                    minindent = indent;
+                if (indent > maxindent)
+                    maxindent = indent;
+            }
+        });
+        all_c_a_t.each(function (index, el) {
+            var indent = +$(el).attr('data-indent');
+            $(el).html(Dictionary.boxes(indent, minindent, maxindent) + '&nbsp;&nbsp;');
+        });
         var thisDict = this;
         this.toolTipFunc =
             function (x_this, set_head) {

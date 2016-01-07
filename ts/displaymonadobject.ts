@@ -238,20 +238,6 @@ class Color {
     constructor(a:number,b:number,c:number) {}
 }
 
-function boxes(num : number) : string {
-    var s = '';
-
-    for (var i=0; i<num; ++i)
-        s += '\u00a0';
-
-    s += num;
-
-    for (var i=num; i<13; ++i)
-        s += '\u25aa';
-
-    return s;
-}
-
 
 class DisplayMultipleMonadObject extends DisplayMonadObject {
     /** The title in the border. */
@@ -357,11 +343,11 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
                 jq = $('<span class="{0}"><span class="nogram dontshowit" data-idd="{1}" data-mix="0"></span></span>'.format(spanclass,
                                                                                                      this.displayedMo.mo.id_d));
             else if (this.level==2)
-                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span><span style="font-family:courier" class="xgrammar clause_atom_tab dontshowit">{5}&nbsp;&nbsp;</span></span>'.format(spanclass,
+                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span><span style="font-family:courier" class="xgrammar clause_atom_tab dontshowit" data-indent={5}></span></span>'.format(spanclass,
                                                                                                      this.displayedMo.mo.id_d,
                                                                                                      this.mix,
                                                                                                      getObjectShortFriendlyName(this.objType),
-                                                                                                     grammar,boxes(indent)));
+                                                                                                     grammar,indent));
             else
                 jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span></span>'.format(spanclass,
                                                                                                      this.displayedMo.mo.id_d,

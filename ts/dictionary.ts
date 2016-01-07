@@ -211,10 +211,47 @@ class Dictionary {
         }
     }
 
+    private static boxes(num : number, minnum : number, maxnum : number) : string {
+        var s = '';
+
+        for (var i=minnum; i<num; ++i)
+            s += '\u00a0';
+
+        s += num;
+
+        for (var i=num; i<=maxnum; ++i)
+            s += '\u25aa';
+
+        return s;
+    }
+
+
     public generateSentenceHtml(qd : QuizData) : string {
         DisplaySingleMonadObject.itemIndex = 0;
         var sentenceTextArr : string[] = [''];
         $('#textarea').append(this.dispMonadObjects[this.dispMonadObjects.length-1][0].generateHtml(qd,sentenceTextArr));
+
+
+        var minindent : number;
+        var maxindent : number;
+        var all_c_a_t = $('#textarea').find('.xgrammar.clause_atom_tab');
+
+        all_c_a_t.each( (index : number, el : Element) => {
+            var indent = +$(el).attr('data-indent');
+            if (index==0)
+                minindent = maxindent = indent;
+            else {
+                if (indent<minindent)
+                    minindent = indent;
+                if (indent>maxindent)
+                    maxindent = indent;
+            }
+        });
+
+        all_c_a_t.each( (index : number, el : Element) => {
+            var indent = +$(el).attr('data-indent');
+            $(el).html(Dictionary.boxes(indent,minindent,maxindent) + '&nbsp;&nbsp;');
+        });
 
 
         var thisDict : Dictionary = this;
