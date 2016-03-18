@@ -66,10 +66,10 @@ function getFeatureSetting(otype : string, feature : string) : FeatureSetting {
         feature = configuration.surfaceFeature;
     }
 
-    var io = feature.indexOf(':');
+    var io = feature.indexOf('_TYPE_'); // Separates feature from format
     if (io!=-1)
-        // This is a feature of a subobject
-        return getObjectSetting(feature.substr(0,io)).featuresetting[feature.substr(io+1)];
+        // This is a feature with a special format (which is not used here)
+        return getObjectSetting(otype).featuresetting[feature.substr(0,io)];
     else
         return getObjectSetting(otype).featuresetting[feature];
 }

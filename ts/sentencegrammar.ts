@@ -194,11 +194,15 @@ class GrammarFeature implements SentenceGrammarItem {
                    callback : (whattype:number, objType:string, featName:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void
     {
         var featType : string = typeinfo.obj2feat[this.realObjectType][this.realFeatureName];
+        var io = this.realFeatureName.indexOf('_TYPE_'); // Separates feature from format
         var res : string =
-            this.isSubObj
-                ? (<MultipleMonadObject>monob).subobjects[mix][0].features[this.realFeatureName]
-                : (monob.mo.features ? monob.mo.features[this.realFeatureName] : ''); // Empty for dummy objects
-
+            io==-1  // Test if the feature name contains _TYPE_
+                ? (this.isSubObj
+                   ? (<MultipleMonadObject>monob).subobjects[mix][0].features[this.realFeatureName]
+                   : (monob.mo.features ? monob.mo.features[this.realFeatureName] : '')) // Empty for dummy objects
+                : (this.isSubObj
+                    ? (<MultipleMonadObject>monob).subobjects[mix][0].features[this.realFeatureName.substr(0,io)]
+                    : (monob.mo.features ? monob.mo.features[this.realFeatureName.substr(0,io)] : ''));
 
 
         switch (featType) {
@@ -212,8 +216,13 @@ class GrammarFeature implements SentenceGrammarItem {
             break;
 
         default:
-            if (res!=='')
-                res = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, res, abbrev));
+            if (io==-1) {
+                if (res!=='')
+                    res = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, res, abbrev));
+            }
+            else {
+                res = getFeatureValueOtherFormat(this.realObjectType, this.realFeatureName, +res);
+            }
             break;
         }
 

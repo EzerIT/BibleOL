@@ -46,6 +46,12 @@ interface Localization {
     };
 }
 
+interface typeValues {
+    first : number,
+    last : number,
+    text : string
+}
+
 function getObjectFriendlyName(otype : string) : string {
     if (otype==='Patriarch') // Shouldn't happen
         return otype;
@@ -97,6 +103,16 @@ function getFeatureValueFriendlyName(featureType : string, value : string, abbre
     }
 
     return l10n.emdrostype[featureType][value]; // TODO Distinguish between friendly name A and S (Westminster)
+}
+
+function getFeatureValueOtherFormat(otype : string, featureName : string, value : number) : string {
+    var table : typeValues[] = <any>l10n.emdrosobject[otype][featureName + '_VALUES'];
+
+    for (var ix=0; ix<table.length; ++ix)
+        if (table[ix].first<=value && table[ix].last>=value)
+            return table[ix].text;
+
+    return '?';
 }
 
 

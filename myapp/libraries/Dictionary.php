@@ -59,7 +59,8 @@ class Dictionary {
                     list($subt, $name) = explode(':', $gl->name);
                     assert($subtype==='' || $subtype===$subt);
                     $subtype = $subt;
-                    $subtypeall[] = $name;
+                    $namecomponents = explode('_TYPE_', $name); // Split off format specification
+                    $subtypeall[] = $namecomponents[0];
                 }
             }
         }

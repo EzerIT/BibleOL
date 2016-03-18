@@ -58,7 +58,17 @@
         "clause_atom": {
             "_objname": "Leds\u00e6tningsatom",
             "tab": "Indrykning",
-            "code": "Kode",
+            "code_TYPE_text": "Kode (tekst)",
+            "code_TYPE_text_VALUES": [
+                { "first" : 0, "last" : 0, "text" : "Ingen relat." },
+                { "first" : 10, "last" : 16, "text" : "Relativ" },
+                { "first" : 50, "last" : 74, "text" : "Inf.konstr." },
+                { "first" : 100, "last" : 167, "text" : "Ing.konj." },
+                { "first" : 200, "last" : 201, "text" : "Parallel" },
+                { "first" : 300, "last" : 367, "text" : "Konj.adv." },
+                { "first" : 400, "last" : 967, "text" : "Konjunktion" },
+                { "first" : 999, "last" : 999, "text" : "Dir.tale" }],
+            "code": "Kode (tal)",
             "typ": "Type"
         },
         "clause": {

@@ -769,6 +769,10 @@
                 },
                 {
                     "mytype": "GrammarFeature",
+                    "name": "clause_atom:code_TYPE_text"
+                },
+                {
+                    "mytype": "GrammarFeature",
                     "name": "clause_atom:code"
                 }
             ]

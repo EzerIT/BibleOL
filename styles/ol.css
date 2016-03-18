@@ -170,6 +170,7 @@ span.verse {
 }
 .gram.showit {
   display: inline-block;
+  white-space: nowrap;
 }
 .gram {
   direction: ltr;

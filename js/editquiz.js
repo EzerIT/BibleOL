@@ -9,10 +9,10 @@ function getFeatureSetting(otype, feature) {
         otype = configuration.objHasSurface;
         feature = configuration.surfaceFeature;
     }
-    var io = feature.indexOf(':');
+    var io = feature.indexOf('_TYPE_'); // Separates feature from format
     if (io != -1)
-        // This is a feature of a subobject
-        return getObjectSetting(feature.substr(0, io)).featuresetting[feature.substr(io + 1)];
+        // This is a feature with a special format (which is not used here)
+        return getObjectSetting(otype).featuresetting[feature.substr(0, io)];
     else
         return getObjectSetting(otype).featuresetting[feature];
 }
@@ -207,9 +207,14 @@ var GrammarFeature = (function () {
     };
     GrammarFeature.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
         var featType = typeinfo.obj2feat[this.realObjectType][this.realFeatureName];
-        var res = this.isSubObj
-            ? monob.subobjects[mix][0].features[this.realFeatureName]
-            : (monob.mo.features ? monob.mo.features[this.realFeatureName] : ''); // Empty for dummy objects
+        var io = this.realFeatureName.indexOf('_TYPE_'); // Separates feature from format
+        var res = io == -1 // Test if the feature name contains _TYPE_
+            ? (this.isSubObj
+                ? monob.subobjects[mix][0].features[this.realFeatureName]
+                : (monob.mo.features ? monob.mo.features[this.realFeatureName] : '')) // Empty for dummy objects
+            : (this.isSubObj
+                ? monob.subobjects[mix][0].features[this.realFeatureName.substr(0, io)]
+                : (monob.mo.features ? monob.mo.features[this.realFeatureName.substr(0, io)] : ''));
         switch (featType) {
             case 'string':
             case 'ascii':
@@ -219,8 +224,13 @@ var GrammarFeature = (function () {
             case 'integer':
                 break;
             default:
-                if (res !== '')
-                    res = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, res, abbrev));
+                if (io == -1) {
+                    if (res !== '')
+                        res = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, res, abbrev));
+                }
+                else {
+                    res = getFeatureValueOtherFormat(this.realObjectType, this.realFeatureName, +res);
+                }
                 break;
         }
         callback(WHAT.feature, this.realObjectType, this.realFeatureName, res, this);
@@ -308,6 +318,13 @@ function getFeatureValueFriendlyName(featureType, value, abbrev) {
         return localized_verb_classes.join(', ');
     }
     return l10n.emdrostype[featureType][value]; // TODO Distinguish between friendly name A and S (Westminster)
+}
+function getFeatureValueOtherFormat(otype, featureName, value) {
+    var table = l10n.emdrosobject[otype][featureName + '_VALUES'];
+    for (var ix = 0; ix < table.length; ++ix)
+        if (table[ix].first <= value && table[ix].last >= value)
+            return table[ix].text;
+    return '?';
 }
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
