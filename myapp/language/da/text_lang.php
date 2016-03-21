@@ -30,14 +30,14 @@ $lang['corpus_copyright'] =
      <h3>Ophavsret til Nestle 1904-databasen:</h3><p>%s</p>';
 
 $lang['select_quiz'] = 'Vælg en quiz';
-$lang['click_folder'] = 'Klik på en folder for at åbne den, eller vælg det antal spørgsmål du ønsker fra en given quiz, samt om du ønsker at bruge de forudvalgte bibelsteder, eller om du selv vil vælge bibelsteder.';
+$lang['click_folder'] = 'Klik på en mappe for at åbne den, eller vælg det antal spørgsmål du ønsker fra en given quiz, samt om du ønsker at bruge de forudvalgte bibelsteder, eller om du selv vil vælge bibelsteder.';
 $lang['directory'] = 'Katalog';  // Text in title bar
 
 $lang['warning'] = 'Advarsel:';
 $lang['not_logged_in'] = 'Du er ikke logget ind. Der bliver derfor ikke indsamlet statistik om dine øvelser.';
 
-$lang['select_folder'] = 'Vælg en folder';
-$lang['parent'] = 'Øvre folder';
+$lang['select_folder'] = 'Vælg en mappe';
+$lang['parent'] = 'Øvre mappe';
 
 $lang['select_exercise'] = 'Vælg en øvlse';
 $lang['quiz_name'] = 'Øvelsens navn';
