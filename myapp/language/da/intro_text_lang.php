@@ -1,21 +1,11 @@
 <?php
 
 $lang['intro_center'] = 
-    '<h1>Nye hebraiske gloser</h1>
+    '<h1>Indrykningsinformation for ledsætninger på hebraisk</h1>
 
-    <p>De engelske oversættelser af hebraiske ord er blevet udvidet og forbedret. Når du arbejder
-    med tekst fra den hebraiske bibel, kan du derfor komme ud for oversættelser der er lidt anderledes
-    end hvad du er vant til.</p>
-
-
-    <h1>Nyt layout samt adgang fra smartphones og tablets</h1>
-
-    <p>Bible OL har fået et nyt layout der gør det lettere at bruge funktionerne på disse sider fra
-    smartphones og tablets.</p>
-
-    <p>Menuerne og udseendet af mange sider er blevet ændret, men funktionerne er stadig de samme.
-    Hvis du har en smartphone eller en tablet (fx en iPad), vil det nu være meget nemmere for dig at
-    bruge Bible OL på disse enheder.</p>
+    <p>Den hebraiske tekst er nu forsynet med oplysninger om ledsætningers relation til den
+    omgivende tekst. Dette angives ved et »indrykningsniveau«, som man kan se ved at vælge
+    <i>Ledsætning &gt; Indrykning</i> når man ser på en hebraisk tekst.</p>
 
     <h1>Hvad er Bible Online Learner?</h1>
 

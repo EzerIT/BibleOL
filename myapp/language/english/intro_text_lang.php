@@ -1,21 +1,11 @@
 <?php
 
 $lang['intro_center'] =
-      '<h1>New Hebrew Glosses</h1>
+     '<h1>Indentation Information for Hebrew Clauses</h1>
 
-      <p>The translations of Hebrew words into English have been extended and improved. When working
-      with the Hebrew Bible texts, you may therefore come across translations that are slightly
-      different from what you are used to.</p>
-
-
-      <h1>New Layout and Easy Access from Smartphones and Tablets</h1>
-
-      <p>Bible OL has a new layout which makes it easier to use the features on these pages from
-      smartphones and tablets.</p>
-
-      <p>The menus and the visual appearance of many pages have changed, but they still function in
-      the same way as before. If you have a smartphone or a tablet (such as an iPad), it will now be
-      much easier for you to use Bible OL on these devices.</p>
+      <p>The Hebrew text now contains information about how a clause relates to its surrounding
+      text. This is indicated by an “indentation level,” which can be displayed by selecting
+      <i>Clause &gt Indentation</i> when viewing a Hebrew text.</p>
 
       <h1>What Is Bible Online Learner?</h1>
 
