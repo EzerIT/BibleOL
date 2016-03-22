@@ -109,20 +109,20 @@ span.verse {
     vertical-align: middle; /* Required by Chrome */
  }
 
-.lev3.showborder { border: solid 2px red; }
-.lev2.showborder { border: solid 2px blue; }
-.lev1.showborder { border: solid 2px green; }
+.notdummy.lev3.showborder { border: solid 2px red; }
+.notdummy.lev2.showborder { border: solid 2px blue; }
+.notdummy.lev1.showborder { border: solid 2px green; }
 
 .rtl {
-    .hasp { border-right-style: none; }
-    .hass { border-left-style: none; }
+    .hasp { border-right-style: none !important; }
+    .hass { border-left-style: none !important; }
     .cont1 { margin-left: 0; }
     .cont2, .cont2x { margin-left: 0.5em; } // .cont2x is used when word ends in maqaf
 }
 
 .ltr {
-    .hasp { border-left-style: none; }
-    .hass { border-right-style: none; }
+    .hasp { border-left-style: none !important; }
+    .hass { border-right-style: none !important; }
     .cont1 { margin-right: 0; }
     .cont2, .cont2x { margin-right: 0.5em; } // .cont2x is used when word ends in hyphen
 }

@@ -107,20 +107,20 @@ span.verse {
 .lev0.showborder.noseplin {
   display: inline-block;
 }
-.lev3.showborder {
+.notdummy.lev3.showborder {
   border: solid 2px red;
 }
-.lev2.showborder {
+.notdummy.lev2.showborder {
   border: solid 2px blue;
 }
-.lev1.showborder {
+.notdummy.lev1.showborder {
   border: solid 2px green;
 }
 .rtl .hasp {
-  border-right-style: none;
+  border-right-style: none !important;
 }
 .rtl .hass {
-  border-left-style: none;
+  border-left-style: none !important;
 }
 .rtl .cont1 {
   margin-left: 0;
@@ -130,10 +130,10 @@ span.verse {
   margin-left: 0.5em;
 }
 .ltr .hasp {
-  border-left-style: none;
+  border-left-style: none !important;
 }
 .ltr .hass {
-  border-right-style: none;
+  border-right-style: none !important;
 }
 .ltr .cont1 {
   margin-right: 0;
