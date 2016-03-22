@@ -93,53 +93,36 @@ span.verse {
     font-size: 12pt; // TODO: Should depend on user configuration
 }
 
-.lev3, .lev2, .lev1, .lev0 {
+.nolev3, .nolev2, .nolev1, .nolev0 {
     &.seplin {display: block;}
-    text-indent: 0;
 }
 
-.lev3.showborder,
-.lev2.showborder,
-.lev1.showborder,
-.lev0.showborder {
-    &.noseplin {display: inline-block;}
+.lev3, .lev2, .lev1, .lev0 {
     position: relative;
+    &.noseplin {display: inline-block;}
+    &.seplin {display: block;}
     margin: 15px;
     padding: 5px;
     vertical-align: middle; /* Required by Chrome */
- }
+}
 
-.notdummy.lev3.showborder { border: solid 2px red; }
-.notdummy.lev2.showborder { border: solid 2px blue; }
-.notdummy.lev1.showborder { border: solid 2px green; }
+.notdummy.lev3 { border: solid 2px red; }
+.notdummy.lev2 { border: solid 2px blue; }
+.notdummy.lev1 { border: solid 2px green; }
 
 .rtl {
-    .hasp { border-right-style: none !important; }
-    .hass { border-left-style: none !important; }
+    .hasp { border-right-style: none; }
+    .hass { border-left-style: none; }
     .cont1 { margin-left: 0; }
     .cont2, .cont2x { margin-left: 0.5em; } // .cont2x is used when word ends in maqaf
 }
 
 .ltr {
-    .hasp { border-left-style: none !important; }
-    .hass { border-right-style: none !important; }
+    .hasp { border-left-style: none; }
+    .hass { border-right-style: none; }
     .cont1 { margin-right: 0; }
     .cont2, .cont2x { margin-right: 0.5em; } // .cont2x is used when word ends in hyphen
 }
-
-.indentation {
-    font-family: courier, monospace;
-}
-
-#testwidth
-{
-    position: absolute;
-    visibility: hidden;
-    height: auto;
-    width: auto;
-    white-space: nowrap;
-}
-
 
 .cont2:after {     // Hyphens are not added in the .cont2x case
     content: "-";
@@ -156,7 +139,7 @@ span.verse {
 .showit {
     .wordgrammar& { display: block; }
     .xgrammar& { display: inline; }
-    .gram& { display: inline-block; white-space: nowrap; }
+    .gram& { display: inline-block; }
 }
 
 .gram {
@@ -169,7 +152,6 @@ span.verse {
     padding-right: 2px;
     background-color: @textbackground;
     top: -10px;
-    text-indent: 0;
 }
 
 div.grammargroup {
