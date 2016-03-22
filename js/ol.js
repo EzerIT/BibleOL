@@ -2005,10 +2005,12 @@ var GenerateCheckboxes = (function () {
             // Handling of words
             $('#{0}_{1}_cb'.format(objType, featName)).change(function (e) {
                 if ($(e.currentTarget).prop('checked')) {
+                    sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.databaseName);
                     $('.wordgrammar.{0}'.format(featName)).removeClass('dontshowit').addClass('showit');
                     _this.wordSpaceBox.implicit(true);
                 }
                 else {
+                    sessionStorage.removeItem($(e.currentTarget).prop('id'));
                     $('.wordgrammar.{0}'.format(featName)).removeClass('showit').addClass('dontshowit');
                     _this.wordSpaceBox.implicit(false);
                 }
@@ -2020,6 +2022,7 @@ var GenerateCheckboxes = (function () {
             // Handling of clause, phrase, etc.
             $('#{0}_{1}_cb'.format(objType, featName)).change(function (e) {
                 if ($(e.currentTarget).prop('checked')) {
+                    sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.databaseName);
                     $('.xgrammar.{0}_{1}'.format(objType, featName)).removeClass('dontshowit').addClass('showit');
                     if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
                         _this.separateLinesBoxes[leveli].implicit(true);
@@ -2029,6 +2032,7 @@ var GenerateCheckboxes = (function () {
                         _this.borderBoxes[leveli].implicit(true);
                 }
                 else {
+                    sessionStorage.removeItem($(e.currentTarget).prop('id'));
                     $('.xgrammar.{0}_{1}'.format(objType, featName)).removeClass('showit').addClass('dontshowit');
                     if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
                         _this.separateLinesBoxes[leveli].implicit(false);
@@ -2055,7 +2059,14 @@ var GenerateCheckboxes = (function () {
                 this.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
                 // Only Hebrew has a #ws_cb
                 $('#ws_cb').change(function (e) {
-                    _this.wordSpaceBox.explicit($(e.currentTarget).prop('checked'));
+                    if ($(e.currentTarget).prop('checked')) {
+                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.databaseName);
+                        _this.wordSpaceBox.explicit(true);
+                    }
+                    else {
+                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                        _this.wordSpaceBox.explicit(false);
+                    }
                     for (var lev = 1; lev < configuration.maxLevels - 1; ++lev)
                         adjustDivLevWidth(lev);
                 });
@@ -2063,11 +2074,25 @@ var GenerateCheckboxes = (function () {
             else {
                 this.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
                 $('#lev{0}_seplin_cb'.format(leveli)).change(leveli, function (e) {
-                    _this.separateLinesBoxes[e.data].explicit($(e.currentTarget).prop('checked'));
+                    if ($(e.currentTarget).prop('checked')) {
+                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.databaseName);
+                        _this.separateLinesBoxes[e.data].explicit(true);
+                    }
+                    else {
+                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                        _this.separateLinesBoxes[e.data].explicit(false);
+                    }
                 });
                 this.borderBoxes[leveli] = new util.BorderFollowerBox(leveli);
                 $('#lev{0}_sb_cb'.format(leveli)).change(leveli, function (e) {
-                    _this.borderBoxes[e.data].explicit($(e.currentTarget).prop('checked'));
+                    if ($(e.currentTarget).prop('checked')) {
+                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.databaseName);
+                        _this.borderBoxes[e.data].explicit(true);
+                    }
+                    else {
+                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                        _this.borderBoxes[e.data].explicit(false);
+                    }
                     adjustDivLevWidth(e.data);
                 });
             }
@@ -2078,6 +2103,10 @@ var GenerateCheckboxes = (function () {
     };
     GenerateCheckboxes.prototype.clearBoxes = function () {
         $('input[type="checkbox"]').prop('checked', false);
+        for (var i in sessionStorage) {
+            if (sessionStorage[i] == configuration.databaseName)
+                $('#' + i).prop('checked', true);
+        }
     };
     return GenerateCheckboxes;
 })();
@@ -2139,5 +2168,7 @@ $(function () {
         // Display text
         var currentDict = new Dictionary(dictionaries, 0, false);
         currentDict.generateSentenceHtml(null);
+        util.resetCheckboxCounters();
+        $('.grammarselector input:enabled:checked').trigger('change'); // Make sure grammar is displayed for relevant checkboxe
     }
 });
