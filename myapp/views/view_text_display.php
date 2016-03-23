@@ -1,5 +1,8 @@
 <div class="col-md-3">
   <div class="grammarselector" id="gramselect"></div>
+  <?php if (!$is_quiz): ?>
+    <p><a class="btn btn-primary" id="cleargrammar" href="#"><?= $this->lang->line('clear_grammar') ?></a></p>
+  <?php endif; ?>
 </div>
 
 <div class="col-md-6 col-sm-8">

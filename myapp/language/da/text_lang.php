@@ -54,6 +54,8 @@ $lang['next'] = 'Næste';
 $lang['finish'] = 'Afslut';
 $lang['toggle_mql'] = 'Vis/skjul MQL';
 
+$lang['clear_grammar'] = 'Fjern grammatik';
+
 $lang['quiz_instruct1'] = 'Vælg de bibelsteder der skal bruges til øvelsen...';
 $lang['quiz_instruct2'] = '...og klik på knappen »Start øvelse« nederst på siden.';
 

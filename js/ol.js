@@ -1907,6 +1907,7 @@ var resizer;
 /// <reference path="resizer.ts" />
 var supportsProgress; ///< Does the browser support &lt;progress&gt;?
 var charset;
+var inQuiz;
 var quiz;
 var accordion_width;
 var indentation_width;
@@ -2005,12 +2006,14 @@ var GenerateCheckboxes = (function () {
             // Handling of words
             $('#{0}_{1}_cb'.format(objType, featName)).change(function (e) {
                 if ($(e.currentTarget).prop('checked')) {
-                    sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.databaseName);
+                    if (!inQuiz)
+                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
                     $('.wordgrammar.{0}'.format(featName)).removeClass('dontshowit').addClass('showit');
                     _this.wordSpaceBox.implicit(true);
                 }
                 else {
-                    sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                    if (!inQuiz)
+                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
                     $('.wordgrammar.{0}'.format(featName)).removeClass('showit').addClass('dontshowit');
                     _this.wordSpaceBox.implicit(false);
                 }
@@ -2022,7 +2025,8 @@ var GenerateCheckboxes = (function () {
             // Handling of clause, phrase, etc.
             $('#{0}_{1}_cb'.format(objType, featName)).change(function (e) {
                 if ($(e.currentTarget).prop('checked')) {
-                    sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.databaseName);
+                    if (!inQuiz)
+                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
                     $('.xgrammar.{0}_{1}'.format(objType, featName)).removeClass('dontshowit').addClass('showit');
                     if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
                         _this.separateLinesBoxes[leveli].implicit(true);
@@ -2032,7 +2036,8 @@ var GenerateCheckboxes = (function () {
                         _this.borderBoxes[leveli].implicit(true);
                 }
                 else {
-                    sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                    if (!inQuiz)
+                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
                     $('.xgrammar.{0}_{1}'.format(objType, featName)).removeClass('showit').addClass('dontshowit');
                     if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
                         _this.separateLinesBoxes[leveli].implicit(false);
@@ -2060,11 +2065,13 @@ var GenerateCheckboxes = (function () {
                 // Only Hebrew has a #ws_cb
                 $('#ws_cb').change(function (e) {
                     if ($(e.currentTarget).prop('checked')) {
-                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.databaseName);
+                        if (!inQuiz)
+                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
                         _this.wordSpaceBox.explicit(true);
                     }
                     else {
-                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                        if (!inQuiz)
+                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
                         _this.wordSpaceBox.explicit(false);
                     }
                     for (var lev = 1; lev < configuration.maxLevels - 1; ++lev)
@@ -2075,22 +2082,26 @@ var GenerateCheckboxes = (function () {
                 this.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
                 $('#lev{0}_seplin_cb'.format(leveli)).change(leveli, function (e) {
                     if ($(e.currentTarget).prop('checked')) {
-                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.databaseName);
+                        if (!inQuiz)
+                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
                         _this.separateLinesBoxes[e.data].explicit(true);
                     }
                     else {
-                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                        if (!inQuiz)
+                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
                         _this.separateLinesBoxes[e.data].explicit(false);
                     }
                 });
                 this.borderBoxes[leveli] = new util.BorderFollowerBox(leveli);
                 $('#lev{0}_sb_cb'.format(leveli)).change(leveli, function (e) {
                     if ($(e.currentTarget).prop('checked')) {
-                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.databaseName);
+                        if (!inQuiz)
+                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
                         _this.borderBoxes[e.data].explicit(true);
                     }
                     else {
-                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                        if (!inQuiz)
+                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
                         _this.borderBoxes[e.data].explicit(false);
                     }
                     adjustDivLevWidth(e.data);
@@ -2101,11 +2112,26 @@ var GenerateCheckboxes = (function () {
             });
         }
     };
-    GenerateCheckboxes.prototype.clearBoxes = function () {
+    GenerateCheckboxes.clearBoxes = function (force) {
         $('input[type="checkbox"]').prop('checked', false);
-        for (var i in sessionStorage) {
-            if (sessionStorage[i] == configuration.databaseName)
-                $('#' + i).prop('checked', true);
+        if (!inQuiz) {
+            if (force) {
+                // Remove all information about selected grammar items
+                for (var i in sessionStorage) {
+                    if (sessionStorage[i] == configuration.propertiesName) {
+                        sessionStorage.removeItem(i);
+                        $('#' + i).prop('checked', false);
+                        $('#' + i).trigger('change');
+                    }
+                }
+            }
+            else {
+                // Enforce selected grammar items
+                for (var i in sessionStorage) {
+                    if (sessionStorage[i] == configuration.propertiesName)
+                        $('#' + i).prop('checked', true);
+                }
+            }
         }
     };
     return GenerateCheckboxes;
@@ -2136,6 +2162,7 @@ function buildGrammarAccordion() {
 }
 /// Main code executed when the page has been loaded.
 $(function () {
+    inQuiz = $('#quiztab').length > 0;
     // Does the browser support <progress>?
     // (Use two statements because jquery.d.ts does not recognize .max)
     var x = document.createElement('progress');
@@ -2153,9 +2180,8 @@ $(function () {
     var generateCheckboxes = new GenerateCheckboxes();
     $('#gramselect').append(generateCheckboxes.generateHtml());
     generateCheckboxes.setHandlers();
-    generateCheckboxes.clearBoxes();
+    GenerateCheckboxes.clearBoxes(false);
     accordion_width = buildGrammarAccordion();
-    var inQuiz = $('#quiztab').length > 0;
     if (inQuiz) {
         if (supportsProgress)
             $('div#progressbar').hide();
@@ -2166,9 +2192,9 @@ $(function () {
     }
     else {
         // Display text
+        $('#cleargrammar').on('click', function () { GenerateCheckboxes.clearBoxes(true); });
         var currentDict = new Dictionary(dictionaries, 0, false);
         currentDict.generateSentenceHtml(null);
-        util.resetCheckboxCounters();
         $('.grammarselector input:enabled:checked').trigger('change'); // Make sure grammar is displayed for relevant checkboxe
     }
 });

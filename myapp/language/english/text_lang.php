@@ -54,6 +54,8 @@ $lang['next'] = 'Next';
 $lang['finish'] = 'Finish';
 $lang['toggle_mql'] = 'Toggle MQL';
 
+$lang['clear_grammar'] = 'Clear grammar';
+
 $lang['quiz_instruct1'] = 'Select the Passages to Use for the Quiz...';
 $lang['quiz_instruct2'] = '...and then press the “Start quiz” button at the bottom of the page.';
 
