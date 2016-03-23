@@ -25,7 +25,7 @@ $lang['intro_center'] =
        by pressing the “Clear grammar” button.</p>
 
        <p>Information about the chosen grammar items is local to a browser tab and, additionally,
-       have no effect on grammar display in exercises.</p>
+       has no effect on grammar display in exercises.</p>
 
        <h2>(21 March 2016) Indentation Information for Hebrew Clauses</h2>
     
