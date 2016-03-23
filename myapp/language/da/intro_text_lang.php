@@ -1,13 +1,7 @@
 <?php
 
 $lang['intro_center'] = 
-    '<h1>Indrykningsinformation for ledsætninger på hebraisk</h1>
-
-    <p>Den hebraiske tekst er nu forsynet med oplysninger om ledsætningers relation til den
-    omgivende tekst. Dette angives ved et »indrykningsniveau«, som man kan se ved at vælge
-    <i>Ledsætning &gt; Indrykning</i> når man ser på en hebraisk tekst.</p>
-
-    <h1>Hvad er Bible Online Learner?</h1>
+    '<h1>Hvad er Bible Online Learner?</h1>
 
     <p>Bible Online Learner (Bible OL) giver fri adgang til den hebraiske bibel i ETCBC4-databasen
     og Nestles 1904-tekst til det græske Ny Testamente med grammatiske annotationer. Endvidere kan
@@ -21,7 +15,24 @@ $lang['intro_center'] =
 
     <p>Kildeteksten til Bible OL er tilgængelig på <a href="https://github.com/EzerIT/BibleOL"
     target="_blank">GitHub</a>. Vi håber at udviklere vil fork\'e denne kode og hjælpe os med at
-    tilføje nye faciliteter.</p>';
+    tilføje nye faciliteter.</p>
+
+    <h1>Nyheder</h1>
+
+    <h2>(23.3.2016) Grammatikvisning huskes</h2>
+
+    <p>Når man i en browser-fane skifter fra et bibelsted til et andet, vil systemet nu huske hvilke
+    grammatiske oplysninger man har valgt at se. Valget kan nulstilles ved at trykke på knappen
+    »Fjern grammatik«.</p>
+
+    <p>Oplysninger om de valgte grammatikoplysninger er lokale for en browser-fane og har desuden
+    ingen effekt på grammatikvisning i øvelser.</p>
+
+    <h2>(21.3.2016) Indrykningsinformation for ledsætninger på hebraisk</h2>
+
+    <p>Den hebraiske tekst er nu forsynet med oplysninger om ledsætningers relation til den
+    omgivende tekst. Dette angives ved et »indrykningsniveau«, som man kan se ved at vælge
+    <i>Ledsætning &gt; Indrykning</i> når man ser på en hebraisk tekst.</p>';
 
 
 $lang['intro_right_head'] = 'Bible Online Learner &ndash; fri global læring';

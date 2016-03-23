@@ -1,13 +1,7 @@
 <?php
 
 $lang['intro_center'] =
-     '<h1>Indentation Information for Hebrew Clauses</h1>
-
-      <p>The Hebrew text now contains information about how a clause relates to its surrounding
-      text. This is indicated by an “indentation level,” which can be displayed by selecting
-      <i>Clause &gt Indentation</i> when viewing a Hebrew text.</p>
-
-      <h1>What Is Bible Online Learner?</h1>
+      '<h1>What Is Bible Online Learner?</h1>
 
       <p>Bible Online Learner (Bible OL) gives free access to the Hebrew Bible in the ETCBC4
        database and Nestle’s 1904 text of the Greek New Testament with grammatical annotations;
@@ -20,7 +14,24 @@ $lang['intro_center'] =
 
        <p>The source code for Bible OL is available at <a href="https://github.com/EzerIT/BibleOL"
        target="_blank">GitHub</a>. We hope developers will fork this code and join us to add
-       additional features.</p>';
+       additional features.</p>
+
+       <h1>News</h1>
+    
+       <h2>(23 March 2016) Grammar Selection Saved</h2>
+    
+       <p>If you move from one Bible passage to another in the same browser tab, the system will
+       now remember which grammatical items you have chosen to display. Your choice can be cleared
+       by pressing the “Clear grammar” button.</p>
+
+       <p>Information about the chosen grammar items is local to a browser tab and, additionally,
+       have no effect on grammar display in exercises.</p>
+
+       <h2>(21 March 2016) Indentation Information for Hebrew Clauses</h2>
+    
+      <p>The Hebrew text now contains information about how a clause relates to its surrounding
+      text. This is indicated by an “indentation level,” which can be displayed by selecting
+      <i>Clause &gt Indentation</i> when viewing a Hebrew text.</p>';
 
 
 $lang['intro_right_head'] = 'Bible Online Learner for Free Global Learning';
