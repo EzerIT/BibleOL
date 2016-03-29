@@ -78,6 +78,8 @@ table#quiztab td {
 span.verse {
   vertical-align: top;
   font-size: 12pt;
+  color: #3f3fff;
+  font-weight: bold;
 }
 .lev3,
 .lev2,
