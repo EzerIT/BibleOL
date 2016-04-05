@@ -26,7 +26,8 @@ class Ctrl_statistics extends MY_Controller {
             foreach ($alltemplates as $templ) {
                 $allquizzes = $this->mod_statistics->allQuizzes(intval($templ->qtid));
                 if (count($allquizzes)>0) {
-                    $this->db_config->init_config($templ->dbname,$templ->dbpropname, $this->language_short);
+                    if (!$this->db_config->init_config($templ->dbname,$templ->dbpropname, $this->language_short, false))
+                        continue;
                     $templ->l10n = json_decode($this->db_config->l10n_json);
                     $templ->obj2feat = $this->db_config->typeinfo->obj2feat;
                     $templ->quizzes = $allquizzes;

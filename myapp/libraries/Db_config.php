@@ -146,14 +146,18 @@ class Db_config {
     /// @param $pr The name of the properties file (localization) for the Emdros database.
     /// @param $language The selected localization language.
     /// @throws DataException if the database does not exist.
-    public function init_config(string $db, string $pr, string $language) {
+    public function init_config(string $db, string $pr, string $language, $dothrow=true) {
         $propname = empty($pr) ? $db : $pr;
         if (!isset($this->allfiles[$propname]))
-            throw new DataException("Illegal database name: $propname");
+            if ($dothrow)
+                throw new DataException("Illegal database name: $propname");
+            else
+                return false;
 
         $dbf = $this->allfiles[$propname];
 
         $this->init_config_dbf($dbf, $language);
+        return true;
     }
 
     /// Initializes this object with information about a single Emdros database.
