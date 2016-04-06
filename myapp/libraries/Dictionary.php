@@ -42,19 +42,56 @@ class Dictionary {
     }
 
 
+    private $indirectdb;
+    private $indirectLookupCache = array(); // Maps keys to value
+    
+    // Look up a feature outside Emdros
+    // Note: Features in $mo->features are HTML encoded
+    private function indirectLookup($feat, $mo, $sentenceg) {
+        assert(isset($sentenceg->indirdb));
+        assert(isset($sentenceg->sql));
+        assert(isset($sentenceg->sqlargs));
+
+        $key_array = array();
+        foreach ($sentenceg->sqlargs as $sqlarg)
+            $key_array[] = htmlspecialchars_decode($mo->features[$sqlarg]);
+
+        $key = implode(',',$key_array) . ',' . $feat;
+
+        if (!isset($this->indirectLookupCache[$key])) {
+            if (!isset($this->indirectdb))
+                $this->indirectdb = new SQLite3('db/' . $sentenceg->indirdb, SQLITE3_OPEN_READONLY);
+
+            $rs = $this->indirectdb->query(vsprintf($sentenceg->sql,$key_array));
+            $record = $rs->fetchArray();
+            $this->indirectLookupCache[$key] = $record ? htmlspecialchars($record[0]) : '';
+        }
+
+        $mo->features[$feat] = $this->indirectLookupCache[$key];
+    }
+
+
     /// Fetches the names of all the features for the Emdros object at a particular level
     /// (word/phrase/clause etc.), and returns it as an array.
-    /// @param $gl The sentegrammar information for the relevant level
+    /// @param $gl The sentencegrammar information for the relevant level
     /// @param $all Each feature is stored in this array.
-    private static function getOneLeveFeatureString($gl, array &$all, string &$subtype, array &$subtypeall) {
+    /// @param $indirect Maps features that are to be retrieved outside Emdros to sentencegrammar information
+    private static function getOneLeveFeatureString($gl, array &$all, string &$subtype, array &$subtypeall, array &$indirect) {
         if (isset($gl->items)) {
             foreach ($gl->items as $it)
-                self::getOneLeveFeatureString($it,$all,$subtype,$subtypeall);
+                self::getOneLeveFeatureString($it,$all,$subtype,$subtypeall,$indirect);
         }
         else {
             if (isset($gl->name)) {
-                if (strstr($gl->name, ':')===false)
-                    $all[] = $gl->name;
+                if (strstr($gl->name, ':')===false) {
+                    if (isset($gl->sqlargs)) {
+                        $indirect[$gl->name] = $gl;
+                        foreach($gl->sqlargs as $n)
+                            $all[$n] = $n;  // Uses an array to emulate a set
+                    }
+                    else
+                        $all[$gl->name] = $gl->name;  // Uses an array to emulate a set
+                }
                 else {
                     list($subt, $name) = explode(':', $gl->name);
                     assert($subtype==='' || $subtype===$subt);
@@ -70,12 +107,13 @@ class Dictionary {
     /// (word/phrase/clause etc.), and returns it as a string.
     /// @param $dbi The database information struction
     /// @param $grammarListIx The level
+    /// @param $indirect Maps features that are to be retrieved outside Emdros to sentencegrammar information
     /// @return A comma-separated string of feature names
-    private static function getAllFeaturesString($dbi, $grammarListIx, &$subtype, &$subtypeall) {
+    private static function getAllFeaturesString($dbi, $grammarListIx, &$subtype, &$subtypeall, array &$indirect) {
         $all = array();
         $subtype = '';
         $subtypeall = array();
-        self::getOneLeveFeatureString($dbi->sentencegrammar[$grammarListIx], $all, $subtype, $subtypeall);
+        self::getOneLeveFeatureString($dbi->sentencegrammar[$grammarListIx], $all, $subtype, $subtypeall, $indirect);
         return implode(',',$all);
     }
 
@@ -147,12 +185,13 @@ class Dictionary {
             $mset_union->addSetNoConsolidate($mset);
 
         $command = '';
+        $indirect = array();
 
         foreach ($msets as $mset) {
             for ($sdiIndex=0; $sdiIndex<$this->maxLevels-1; ++$sdiIndex) {
                 $sg = $dbinfo->sentencegrammar[$sdiIndex];
 
-                $allFeat = self::getAllFeaturesString($dbinfo, $sdiIndex, $subtype, $subtypeAllFeat);
+                $allFeat = self::getAllFeaturesString($dbinfo, $sdiIndex, $subtype, $subtypeAllFeat, $indirect);
                 if ($sdiIndex==0) {
                     $allFeat .= ",$dbinfo->surfaceFeature";
                     if (isset($dbinfo->suffixFeature))
@@ -178,20 +217,21 @@ class Dictionary {
 
         $mqlresult_index = 0;
 
-//        echo "<pre>";
 		for ($msetIndex=0; $msetIndex<$number_sets; ++$msetIndex) {
             for ($sdiIndex=0; $sdiIndex<$this->maxLevels-1; ++$sdiIndex) {
                 $sh = $emdros_data[$mqlresult_index++]->get_sheaf();
  
                 foreach ($sh->get_straws() as $str) {
                     foreach ($str->get_matched_objects() as $mo) {
-//                        echo "msetIndex=$msetIndex sdIndex=$sdiIndex mo=",print_r($mo,true),"\n";
+                        if ($sdiIndex==0) {
+                            foreach ($indirect as $feat => $sentenceg)
+                                $this->indirectLookup($feat, $mo, $sentenceg);
+                        }
                         $this->addMonadObject($msetIndex, $sdiIndex, $mo);
                     }
                 }
             }
 		}
-//        die;
 		
 		// Create artifical top-level object
 		for ($msetIndex=0; $msetIndex<$number_sets; ++$msetIndex) {

@@ -607,11 +607,17 @@
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "english"
+                            "name": "english",
+                            "indirdb": "glossdb_hebrew.db",
+                            "sql": "SELECT english FROM heb_en WHERE lex='%s' AND vs='%s' AND language='%s'",
+                            "sqlargs": [ "lex", "vs", "language" ]
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "german"
+                            "name": "german",
+                            "indirdb": "glossdb_hebrew.db",
+                            "sql": "SELECT german FROM heb_de WHERE lex='%s' AND vs='%s' AND language='%s'",
+                            "sqlargs": [ "lex", "vs", "language" ]
                         },
                         {
                             "mytype": "GrammarFeature",
