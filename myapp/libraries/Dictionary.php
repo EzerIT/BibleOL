@@ -42,8 +42,8 @@ class Dictionary {
     }
 
 
-    private $indirectdb;
-    private $indirectLookupCache = array(); // Maps keys to value
+    private $indirectdb = array(); // Maps databases to database handles
+    private $indirectLookupCache = array(); // Maps keys to values
     
     // Look up a feature outside Emdros
     // Note: Features in $mo->features are HTML encoded
@@ -51,6 +51,7 @@ class Dictionary {
         assert(isset($sentenceg->indirdb));
         assert(isset($sentenceg->sql));
         assert(isset($sentenceg->sqlargs));
+        assert(isset($sentenceg->multiple));
 
         $key_array = array();
         foreach ($sentenceg->sqlargs as $sqlarg)
@@ -59,15 +60,57 @@ class Dictionary {
         $key = implode(',',$key_array) . ',' . $feat;
 
         if (!isset($this->indirectLookupCache[$key])) {
-            if (!isset($this->indirectdb))
-                $this->indirectdb = new SQLite3('db/' . $sentenceg->indirdb, SQLITE3_OPEN_READONLY);
+            if (!isset($this->indirectdb[$sentenceg->indirdb]))
+                $this->indirectdb[$sentenceg->indirdb] = new SQLite3('db/' . $sentenceg->indirdb, SQLITE3_OPEN_READONLY);
 
-            $rs = $this->indirectdb->query(vsprintf($sentenceg->sql,$key_array));
-            $record = $rs->fetchArray();
-            $this->indirectLookupCache[$key] = $record ? htmlspecialchars($record[0]) : '';
+            $rs = $this->indirectdb[$sentenceg->indirdb]->query(vsprintf($sentenceg->sql,$key_array));
+
+            if ($sentenceg->multiple) {
+                // We may get more than one answer from the database
+                $this->indirectLookupCache[$key] = array();
+
+                while ($record = $rs->fetchArray(SQLITE3_NUM)) {
+                    foreach ($record as &$r)
+                        $r = htmlspecialchars($r);
+                    if (count($record)==1)
+                        $this->indirectLookupCache[$key][] = $record[0];
+                    else
+                        $this->indirectLookupCache[$key][] = $record;
+                }
+            }
+            else {
+                // We should get only one answer from the database
+                if ($record = $rs->fetchArray(SQLITE3_NUM)) {
+                    foreach ($record as &$r)
+                        $r = htmlspecialchars($r);
+                    if (count($record)==1)
+                        $this->indirectLookupCache[$key] = $record[0];
+                    else
+                        $this->indirectLookupCache[$key] = $record;
+                }
+                else
+                    $this->indirectLookupCache[$key] = '';
+            }
         }
 
         $mo->features[$feat] = $this->indirectLookupCache[$key];
+            
+        
+        
+
+//        switch (count($this->indirectLookupCache[$key])) {
+//          case 0:
+//                $mo->features[$feat] = '';
+//                break;
+// 
+//          case 1:
+//                $mo->features[$feat] = $this->indirectLookupCache[$key][0];
+//                break;
+// 
+//          default:
+//                $mo->features[$feat] = $this->indirectLookupCache[$key];
+//                break;
+//        }
     }
 
 

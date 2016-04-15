@@ -58,6 +58,7 @@
             "g_word_cons_utf8": "string",
             "g_word_utf8": "string",
             "german": "string",
+            "glossurl": "url",
             "lex": "string",
             "lex_cons_utf8": "string",
             "lex_utf8": "string",
