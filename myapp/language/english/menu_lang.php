@@ -13,6 +13,7 @@ $lang['administration']     = 'Administration';
 $lang['users']              = 'Users';
 $lang['classes']            = 'Classes';
 $lang['manage_exercises']   = 'Manage exercises';
+$lang['manage_gloss_links'] = 'Gloss links';
 $lang['user_access']        = 'User Access';
 $lang['login']              = 'Login';
 $lang['logout']             = 'Logout';

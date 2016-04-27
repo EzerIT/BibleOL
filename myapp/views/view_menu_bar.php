@@ -26,6 +26,8 @@ if ($this->session->userdata('ol_user')!==false && $this->session->userdata('ol_
         $content[$ix][] = anchor(site_url('users'), $this->lang->line('users'));
         $content[$ix][] = anchor(site_url('classes'), $this->lang->line('classes'));
         $content[$ix][] = anchor(site_url('file_manager'), $this->lang->line('manage_exercises'));
+        if ($this->session->userdata('ol_admin'))
+            $content[$ix][] = anchor(site_url('urls'), $this->lang->line('manage_gloss_links'));
     }
  
     $ix = count($head);

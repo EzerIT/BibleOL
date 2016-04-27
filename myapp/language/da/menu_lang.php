@@ -13,6 +13,7 @@ $lang['administration']     = 'Administration';
 $lang['users']              = 'Brugere';
 $lang['classes']            = 'Klasser';
 $lang['manage_exercises']   = 'Øvelseshåndtering';
+$lang['manage_gloss_links'] = 'Gloselinks';
 $lang['user_access']        = 'Brugeradgang';
 $lang['login']              = 'Log ind';
 $lang['logout']             = 'Log ud';

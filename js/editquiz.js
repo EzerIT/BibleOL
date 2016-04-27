@@ -228,14 +228,8 @@ var GrammarFeature = (function () {
                     // Assume res is an array, where each element is an array of two elements
                     var res2 = '';
                     for (var i = 0; i < res.length; ++i)
-                        res2 += '<a style="padding-right:1px;padding-left:1px;" href="{0}" target="_blank"><span class="glyphicon glyphicon-{1}" aria-hidden="true"></span></a>'
-                            .format(res[i][0], res[i][1]);
-                    //            else if (typeof res == 'string')
-                    //                res = '<a href="{0}" target="_blank"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>'.format(res);
-                    //            else { // Assume res is an array
-                    //                var res2 : string = '';
-                    //                for (var i=0; i<res.length; ++i)
-                    //                    res2 += '<a href="{0}" target="_blank"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>'.format(res[i]);
+                        res2 += '<a style="padding-right:1px;padding-left:1px;" href="{0}" target="_blank"><span class="glyphicon {1}" aria-hidden="true"></span></a>'
+                            .format(res[i]['url'], res[i]['icon']);
                     res = res2;
                 }
                 break;

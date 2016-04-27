@@ -651,9 +651,9 @@
                         {
                             "mytype": "GrammarFeature",
                             "name": "glossurl",
-                            "indirdb": "glossdb_heb_url.db",
-                            "sql": "SELECT url,icon FROM heb_urls WHERE lex='%s' AND vs='%s' AND language='%s'",
-                            "sqlargs": [ "lex", "vs", "language" ],
+                            "indirdb": "mysql",
+                            "sql": "SELECT url,icon FROM pl_heb_urls WHERE lex='%s' AND language='%s'",
+                            "sqlargs": [ "lex", "language" ],
                             "multiple": true
                         }
                     ]

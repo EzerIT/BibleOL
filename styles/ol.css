@@ -13,6 +13,10 @@ body {
 h1 {
   font-weight: bold;
 }
+.heb-default {
+  font-family: "Ezra SIL Webfont";
+  font-size: 120%;
+}
 div.hr-replacement {
   background-color: black;
   height: 1px;
@@ -476,4 +480,11 @@ table.featuretable th,
 table.featuretable td {
   padding-left: 10px;
   padding-right: 10px;
+}
+table.iconlist td {
+  padding-right: 30px;
+  text-align: right;
+}
+.bolicon {
+  font-weight: bold;
 }
