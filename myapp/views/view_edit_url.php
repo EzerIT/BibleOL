@@ -18,12 +18,6 @@ function make_icon_radio_button(string $name) {
 ?>
 
 
-<script>
-    $(function() {
-        $('.bolicon-logos').html('&#x24c1;');
-    });
-</script>
-
 <table class="table table-striped">
 
 <tr>

@@ -59,6 +59,9 @@
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i"
                 },
+                "glossurl": {
+                    "ignoreSelect": true
+                },
                 "g_cons": {
                     "ignoreSelect": true,
                     "ignoreShowRequest": true
@@ -610,14 +613,16 @@
                             "name": "english",
                             "indirdb": "glossdb_hebrew.db",
                             "sql": "SELECT english FROM heb_en WHERE lex='%s' AND vs='%s' AND language='%s'",
-                            "sqlargs": [ "lex", "vs", "language" ]
+                            "sqlargs": [ "lex", "vs", "language" ],
+                            "multiple": false
                         },
                         {
                             "mytype": "GrammarFeature",
                             "name": "german",
                             "indirdb": "glossdb_hebrew.db",
                             "sql": "SELECT german FROM heb_de WHERE lex='%s' AND vs='%s' AND language='%s'",
-                            "sqlargs": [ "lex", "vs", "language" ]
+                            "sqlargs": [ "lex", "vs", "language" ],
+                            "multiple": false
                         },
                         {
                             "mytype": "GrammarFeature",
@@ -642,6 +647,14 @@
                         {
                             "mytype": "GrammarFeature",
                             "name": "verb_class"
+                        },
+                        {
+                            "mytype": "GrammarFeature",
+                            "name": "glossurl",
+                            "indirdb": "mysql",
+                            "sql": "SELECT url,icon FROM pl_heb_urls WHERE lex='%s' AND language='%s'",
+                            "sqlargs": [ "lex", "language" ],
+                            "multiple": true
                         }
                     ]
                 },

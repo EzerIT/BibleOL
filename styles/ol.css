@@ -488,3 +488,6 @@ table.iconlist td {
 .bolicon {
   font-weight: bold;
 }
+.bolicon-logos:before {
+  content: "\24c1";
+}

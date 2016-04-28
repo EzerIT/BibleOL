@@ -190,6 +190,14 @@ class GrammarFeature implements SentenceGrammarItem {
         callback(WHAT.feature, this.realObjectType, this.realFeatureName, locname, this);
     }
 
+    private icon2class(icon : string) : string {
+        if (icon.substr(0,10)==='glyphicon-')
+            return 'glyphicon ' + icon;
+        if (icon.substr(0,8)==='bolicon-')
+            return 'bolicon ' + icon;
+        return '';
+    }
+
     public getFeatVal(monob : MonadObject, mix : number, objType : string, abbrev : boolean,
                    callback : (whattype:number, objType:string, featName:string, featValLoc:string, sgiObj : SentenceGrammarItem) => void) : void
     {
@@ -218,9 +226,9 @@ class GrammarFeature implements SentenceGrammarItem {
             else {
                 // Assume res is an array, where each element is an array of two elements
                 var res2 : string = '';
-                for (var i=0; i<res.length; ++i) // TODO NOW: Fix bolicon
-                    res2 += '<a style="padding-right:1px;padding-left:1px;" href="{0}" target="_blank"><span class="glyphicon {1}" aria-hidden="true"></span></a>'
-                    .format(res[i]['url'],res[i]['icon']);
+                for (var i=0; i<res.length; ++i)
+                    res2 += '<a style="padding-right:1px;padding-left:1px;" href="{0}" target="_blank"><span class="{1}" aria-hidden="true"></span></a>'
+                    .format(res[i]['url'],this.icon2class(res[i]['icon']));
 
                 res = res2;
             }

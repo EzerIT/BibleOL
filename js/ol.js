@@ -355,6 +355,13 @@ var GrammarFeature = (function () {
             : l10n.emdrosobject[this.realObjectType][this.realFeatureName];
         callback(WHAT.feature, this.realObjectType, this.realFeatureName, locname, this);
     };
+    GrammarFeature.prototype.icon2class = function (icon) {
+        if (icon.substr(0, 10) === 'glyphicon-')
+            return 'glyphicon ' + icon;
+        if (icon.substr(0, 8) === 'bolicon-')
+            return 'bolicon ' + icon;
+        return '';
+    };
     GrammarFeature.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
         var featType = typeinfo.obj2feat[this.realObjectType][this.realFeatureName];
         var io = this.realFeatureName.indexOf('_TYPE_'); // Separates feature from format
@@ -378,8 +385,8 @@ var GrammarFeature = (function () {
                     // Assume res is an array, where each element is an array of two elements
                     var res2 = '';
                     for (var i = 0; i < res.length; ++i)
-                        res2 += '<a style="padding-right:1px;padding-left:1px;" href="{0}" target="_blank"><span class="glyphicon {1}" aria-hidden="true"></span></a>'
-                            .format(res[i]['url'], res[i]['icon']);
+                        res2 += '<a style="padding-right:1px;padding-left:1px;" href="{0}" target="_blank"><span class="{1}" aria-hidden="true"></span></a>'
+                            .format(res[i]['url'], this.icon2class(res[i]['icon']));
                     res = res2;
                 }
                 break;
