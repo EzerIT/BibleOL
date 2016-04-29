@@ -685,7 +685,7 @@ class Ctrl_users extends MY_Controller {
     //   * Accounts where the user has not been active for 17 months are sent a warning.
     //   * Accounts where the user has not been active for 18 months are deleted.
     public function expire_users() {
-        if (!$this->input->is_cli_request()) {
+        if (!is_cli()) {
             echo '<pre>This command can only be run from the command line</pre>';
             die;
         }

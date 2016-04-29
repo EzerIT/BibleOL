@@ -117,7 +117,7 @@ class Ctrl_shebanq extends MY_Controller {
             fclose($fp);
 
             $this->load->helper('file');
-            $json_data = read_file($tmpfname);
+            $json_data = file_get_contents($tmpfname);
             @unlink($tmpfname);
 
             $data = json_decode($json_data);

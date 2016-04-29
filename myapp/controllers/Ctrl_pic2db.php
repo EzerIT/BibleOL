@@ -51,7 +51,7 @@ class Ctrl_pic2db extends CI_Controller {
     public function __construct() {
         parent::__construct();
 
-        if (!$this->input->is_cli_request()) {
+        if (!is_cli()) {
             echo '<pre>This command can only be run from the command line</pre>';
             die;
         }
@@ -76,7 +76,7 @@ class Ctrl_pic2db extends CI_Controller {
 		fclose($fp);
 
         $this->load->helper('file');
-        $data = read_file($this->tmpfname.'a');
+        $data = file_get_contents($this->tmpfname.'a');
         $biblerefs = json_decode($data);
 
         $ch = curl_init("http://resources.3bmoodle.dk/jsonurls.php");
@@ -90,13 +90,13 @@ class Ctrl_pic2db extends CI_Controller {
 		fclose($fp);
 
         $this->load->helper('file');
-        $data = read_file($this->tmpfname.'b');
+        $data = file_get_contents($this->tmpfname.'b');
         $bibleurls = json_decode($data);
 
 		$this->load->database();
 		$this->load->dbforge();
  
-		$this->dbforge->drop_table('bible_refs');
+		$this->dbforge->drop_table('bible_refs', true);
  
 		$this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
 										'book' => array('type'=>'VARCHAR', 'constraint'=>32),
@@ -107,7 +107,7 @@ class Ctrl_pic2db extends CI_Controller {
         $this->dbforge->add_key('id', TRUE);
         $this->dbforge->create_table('bible_refs');
 
-		$this->dbforge->drop_table('bible_urls');
+		$this->dbforge->drop_table('bible_urls', true);
  
 		$this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
 										'book' => array('type'=>'VARCHAR', 'constraint'=>32),

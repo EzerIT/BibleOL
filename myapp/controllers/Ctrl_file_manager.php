@@ -317,7 +317,7 @@ class Ctrl_file_manager extends MY_Controller {
             header('Content-Disposition: attachment; filename="' . $_GET['file'] . '"');
 
             $this->load->helper('file');
-            $contents = read_file($this->mod_quizpath->get_absolute());
+            $contents = file_get_contents($this->mod_quizpath->get_absolute());
 
             echo $contents;
         }

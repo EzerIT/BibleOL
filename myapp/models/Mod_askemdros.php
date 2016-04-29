@@ -196,7 +196,7 @@ class Mod_askemdros extends CI_Model {
         if (!is_file($filename) || !is_readable($filename))
             throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
 
-        $this->contents = read_file($filename);
+        $this->contents = file_get_contents($filename);
 
         if ($this->contents === false)
             throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
@@ -218,7 +218,7 @@ class Mod_askemdros extends CI_Model {
         if (!is_file($filename) || !is_readable($filename))
             throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
 
-        $this->contents = read_file($filename);
+        $this->contents = file_get_contents($filename);
 
         if ($this->contents === false)
             throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));

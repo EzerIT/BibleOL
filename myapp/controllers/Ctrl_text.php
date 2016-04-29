@@ -80,7 +80,7 @@ class Ctrl_text extends MY_Controller {
 
 
     private static function condval($val, $default) {
-        if ($val===false)
+        if ($val===null)
             return $default;
         if (is_numeric($val))
             return intval($val);
@@ -178,7 +178,7 @@ class Ctrl_text extends MY_Controller {
         // $config['permitted_uri_chars'] = 'a-z 0-9~%.:(),æÆ_\-';
 
 
-        if (!$this->input->is_cli_request()) {
+        if (!is_cli()) {
             echo '<pre>'.$this->lang->line('only_cli').'</pre>';
             die;
         }

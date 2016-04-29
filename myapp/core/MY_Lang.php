@@ -20,9 +20,9 @@ class MY_Lang extends CI_Lang {
         return parent::load($langfile, $idiom, $return, $add_suffix, $alt_path);
     }
 
-	public function line($line = '')
+	public function line($line, $log_errors = TRUE)
     {
-        $txt = parent::line($line);
+        $txt = parent::line($line, $log_errors);
         if ($txt === false)
             return "??$line??";
         else

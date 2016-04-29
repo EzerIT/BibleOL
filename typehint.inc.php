@@ -5,14 +5,14 @@
 // and bantam at banime dot com
 
 
-// This is a rewrite of the _exception_handler function found in CodeIgniter. By defining it before
+// This is a rewrite of the _error_handler function found in CodeIgniter. By defining it before
 // CodeIgniter does, it overwrites CodeIgniter's version.
 
 
 //Typehint::initializeHandler();
 
-function _exception_handler($severity, $message, $filepath, $line) {
-
+function _error_handler($severity, $message, $filepath, $line)
+{
     // Catch typehint errors and check if they are really errors
     if ($severity == E_RECOVERABLE_ERROR) { 
         if (preg_match('/^Argument (\d)+ passed to (?:(\w+)::)?(\w+)\(\) must be an instance of (\w+), (instance of )?(\w+) given/', $message, $match)) {
@@ -33,31 +33,40 @@ function _exception_handler($severity, $message, $filepath, $line) {
 
     // The rest of this code is identical to the one found in CodeIgniter
 
+    $is_error = (((E_ERROR | E_COMPILE_ERROR | E_CORE_ERROR | E_USER_ERROR) & $severity) === $severity);
 
-    // We don't bother with "strict" notices since they tend to fill up
-    // the log file with excess information that isn't normally very helpful.
-    // For example, if you are running PHP 5 and you use version 4 style
-    // class functions (without prefixes like "public", "private", etc.)
-    // you'll get notices telling you that these have been deprecated.
-    if ($severity == E_STRICT)
+    // When an error occurred, set the status header to '500 Internal Server Error'
+    // to indicate to the client something went wrong.
+    // This can't be done within the $_error->show_php_error method because
+    // it is only called when the display_errors flag is set (which isn't usually
+    // the case in a production environment) or when errors are ignored because
+    // they are above the error_reporting threshold.
+    if ($is_error)
+		{
+			set_status_header(500);
+		}
+
+    // Should we ignore the error? We'll get the current error_reporting
+    // level and add its bits with the severity bits to find out.
+    if (($severity & error_reporting()) !== $severity)
 		{
 			return;
 		}
 
     $_error =& load_class('Exceptions', 'core');
+    $_error->log_exception($severity, $message, $filepath, $line);
 
-    // Should we display the error? We'll get the current error_reporting
-    // level and add its bits with the severity bits to find out.
-    if (($severity & error_reporting()) == $severity)
+    // Should we display the error?
+    if (str_ireplace(array('off', 'none', 'no', 'false', 'null'), '', ini_get('display_errors')))
 		{
 			$_error->show_php_error($severity, $message, $filepath, $line);
 		}
 
-    // Should we log the error?  No?  We're done...
-    if (config_item('log_threshold') == 0)
+    // If the error is fatal, the execution of the script should be stopped because
+    // errors can't be recovered from. Halting the script conforms with PHP's
+    // default error handling. See http://www.php.net/manual/en/errorfunc.constants.php
+    if ($is_error)
 		{
-			return;
+			exit(1); // EXIT_ERROR
 		}
-
-    $_error->log_exception($severity, $message, $filepath, $line);
 }

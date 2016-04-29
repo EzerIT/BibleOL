@@ -114,7 +114,7 @@ class Db_config {
     /// @return The content of the file.
     /// @throws DataException if the file cannot be read.
     private function read_or_throw(string $filename) {
-        $data = read_file($filename);
+        $data = file_get_contents($filename);
         if ($data===false)
             throw new DataException("Missing file: $filename");
         return $data;

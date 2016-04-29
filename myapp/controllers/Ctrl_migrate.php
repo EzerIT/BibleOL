@@ -5,7 +5,7 @@ class Ctrl_migrate extends CI_Controller {
     }
 
     public function index() {
-        if (!$this->input->is_cli_request()) {
+        if (!is_cli()) {
             echo '<pre>This command can only be run from the command line</pre>';
             die;
         }

@@ -6,7 +6,7 @@ class Ctrl_maketypeinfo extends CI_Controller {
     public function __construct() {
         parent::__construct();
 
-        if (!$this->input->is_cli_request()) {
+        if (!is_cli()) {
             echo '<pre>This command can only be run from the command line</pre>';
             die;
         }

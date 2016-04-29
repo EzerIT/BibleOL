@@ -14,7 +14,7 @@ class MqlException extends Exception {
 
 
 class Mql extends CI_Driver_Library {
-	protected $valid_drivers	= array('mql_extern','mql_native');
+	protected $valid_drivers	= array('extern','native');
     public $emdros_db;
     public $mql_list = '';
     private $driver;
