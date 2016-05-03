@@ -76,12 +76,10 @@ class Db_config {
 
         // TODO: We could speed this up by storing it in a database table
         $this->allfiles = array();
-        $allf = directory_map('db',2); // A value of 2 allows us to recognize directories
+        $allf = directory_map('db',1);
 
         foreach ($allf as $af) {
-            if (is_array($af)) /* directory */
-                continue;
-            if (!self::endswith($af, '.db.json')) /* Not a database */
+            if (!self::endswith($af, '.db.json')) /* Not a database (Directory names end in slash) */
                 continue;
 
             $dbinfo_json = $this->read_or_throw("db/$af");

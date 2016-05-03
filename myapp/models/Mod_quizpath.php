@@ -66,7 +66,7 @@ class Mod_quizpath extends CI_Model {
     
     public function dirlist(boolean $doing_test) {
         $this->load->helper('directory');
-        $d = directory_map($this->canonical_absolute, 2); // A value of 2 allows us to recognize directories
+        $d = directory_map($this->canonical_absolute, 2); // A value of 2 allows us to recognize empty directories
 
         if ($d===false)
             throw new DataException(sprintf($this->lang->line('illegal_folder'), $dirname));
@@ -77,6 +77,7 @@ class Mod_quizpath extends CI_Model {
 
         foreach ($d as $ix => $nam)
             if (is_array($nam)) {
+                $ix = rtrim($ix, '/');
                 $directories[] = $ix;
                 $dir_is_empty[$ix] = count($nam)===0;
             }
@@ -289,20 +290,16 @@ class Mod_quizpath extends CI_Model {
     }
 
     private function create_exercise_entry($dirtree, $dir, &$added) {
-        if ($dir==='')
-            $dirslash = '';
-        else
-            $dirslash = "$dir/";
-
+        // $dir ends in a slash unless it is empty
         foreach ($dirtree as $ix => $nam) {
             if (is_array($nam))
-                $this->create_exercise_entry($nam, "$dirslash$ix", $added);
+                $this->create_exercise_entry($nam, $dir . $ix, $added);
             else
                 if (self::endswith_nocase($nam,'.3et')) {
-                    if ($this->db->from('exerciseowner')->where('pathname', $dirslash . $nam)->count_all_results() == 0) {
+                    if ($this->db->from('exerciseowner')->where('pathname', $dir . $nam)->count_all_results() == 0) {
                         // The exercise is not in the exerciseowner table
-                        $this->db->insert('exerciseowner', array('pathname' => $dirslash . $nam, 'ownerid' => 0));
-                        $added[] = $dirslash . $nam;
+                        $this->db->insert('exerciseowner', array('pathname' => $dir . $nam, 'ownerid' => 0));
+                        $added[] = $dir . $nam;
                     }
                 }
         }

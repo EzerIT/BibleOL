@@ -253,6 +253,11 @@ class Ctrl_users extends MY_Controller {
         }
    }
 
+    // Dummy validation function
+    public function always_true($field) {
+        return true;
+    }
+
    public function edit_one_user() {
         try {
             $this->mod_users->check_teacher();
@@ -278,7 +283,7 @@ class Ctrl_users extends MY_Controller {
             }
 
             if (!empty($user_info->oauth2_login)) {
-                $this->form_validation->set_rules('isadmin', '', '');
+                $this->form_validation->set_rules('isadmin', '', 'callback_always_true'); // At least one non-empty rule is required
                 $this->form_validation->set_rules('isteacher', '', '');
                 $this->form_validation->set_rules('preflang', '', '');
 
@@ -410,7 +415,7 @@ class Ctrl_users extends MY_Controller {
                $this->load->helper('form');
                $this->load->library('form_validation');
 
-               $this->form_validation->set_rules('preflang', '', '');
+               $this->form_validation->set_rules('preflang', '', 'callback_always_true'); // At least one non-empty rule is required
 
                if ($this->form_validation->run()) {
                    $user_info->preflang = $this->input->post('preflang');
@@ -520,6 +525,8 @@ class Ctrl_users extends MY_Controller {
     public function forgot_pw() {
         $this->lang->load('login', $this->language);
         $this->load->helper('form');
+        $this->load->helper('security'); // Provides xss_clean. TODO: This testing should be done on output instead of input
+                                         // TODO: Should xss_clean be replaced by strip_tags or vice versa?
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('username', $this->lang->line('user_name'), 'trim|xss_clean'); 

@@ -187,7 +187,7 @@ class Mod_statistics extends CI_Model {
     public function allQuizzes(integer $qtid) {
         $query = $this->db->select('sta_quiz.id, FROM_UNIXTIME(`start`) Time, '
                                    . '`end`-`start` Duration,'
-                                   . 'sum(correct) Correct, sum(1-correct) Wrong ')
+                                   . 'sum(correct) Correct, sum(1-correct) Wrong ', false)
             ->from('sta_quiz')
             ->join('sta_question','sta_quiz.id=sta_question.quizid')
             ->join('sta_requestfeature','sta_question.id=sta_requestfeature.questid')

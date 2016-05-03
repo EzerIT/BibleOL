@@ -27,9 +27,8 @@ class Mod_users extends CI_Model {
         $this->load->database();
 
         $this->user_id = $this->session->userdata('ol_user');
-        //echo "<pre>",print_r($this->session, true);die;
 
-        if ($this->user_id===false)
+        if ($this->user_id===null)
             $this->user_id = 0;
         else
             $this->user_id = intval($this->user_id);

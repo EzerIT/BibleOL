@@ -142,9 +142,9 @@ class Ctrl_file_manager extends MY_Controller {
         try {
             $this->mod_users->check_teacher();
 
-            if ($this->session->userdata('files')===false ||
-                $this->session->userdata('operation')===false ||
-                $this->session->userdata('from_dir')===false)
+            if ($this->session->userdata('files')===null ||
+                $this->session->userdata('operation')===null ||
+                $this->session->userdata('from_dir')===null)
                 throw new DataException($this->lang->line('missing_src_info'));
             if (!isset($_GET['dir']))
                 throw new DataException($this->lang->line('missing_dest_info'));
@@ -246,6 +246,11 @@ class Ctrl_file_manager extends MY_Controller {
         }
     }
 
+    // Dummy validation function
+    public function always_true($field) {
+        return true;
+    }
+
     public function edit_visibility() {
         try {
             $this->mod_users->check_teacher();
@@ -264,7 +269,7 @@ class Ctrl_file_manager extends MY_Controller {
             $this->load->helper('form');
             $this->load->library('form_validation');
 
-            $this->form_validation->set_rules('inclass[]', '', '');
+            $this->form_validation->set_rules('inclass[]', '', 'callback_always_true');  // Dummy rule. At least one rule is required
             
             if ($this->form_validation->run()) {
                 $new_classes = $this->input->post('inclass');

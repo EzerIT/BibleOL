@@ -49,7 +49,7 @@ class Ctrl_userclass extends MY_Controller {
             $this->load->helper('form');
             $this->load->library('form_validation');
 
-            $this->form_validation->set_rules('inclass[]', '', '');
+            $this->form_validation->set_rules('inclass[]', '', 'callback_always_true');  // Dummy rule. At least one rule is required
             
             if ($this->form_validation->run()) {
                 $new_users = $this->input->post('inclass');
@@ -86,6 +86,11 @@ class Ctrl_userclass extends MY_Controller {
         }
     }
 
+    // Dummy validation function
+    public function always_true($field) {
+        return true;
+    }
+
     public function classes_for_user() {
         try {
             $this->mod_users->check_teacher();
@@ -106,8 +111,8 @@ class Ctrl_userclass extends MY_Controller {
             $this->load->helper('form');
             $this->load->library('form_validation');
 
-            $this->form_validation->set_rules('foruser[]', '', '');
-            
+            $this->form_validation->set_rules('foruser[]', '', 'callback_always_true');  // Dummy rule. At least one rule is required
+
             if ($this->form_validation->run()) {
                 $new_classes = $this->input->post('foruser');
                 if (!$new_classes) // post() returns false when nothing is selected...

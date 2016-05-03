@@ -10,7 +10,7 @@ $head[] = $this->lang->line('text_and_exercises');
 $content[$ix][] = anchor(site_url('text/select_text'), $this->lang->line('display_text'));
 $content[$ix][] = anchor(site_url('text/select_quiz'), $this->lang->line('exercises'));
  
-if ($this->session->userdata('ol_user')!==false && $this->session->userdata('ol_user')>0) {
+if ($this->session->userdata('ol_user')!==null && $this->session->userdata('ol_user')>0) {
     // Logged in
     $ix = count($head);
     $head[] = $this->lang->line('my_data');

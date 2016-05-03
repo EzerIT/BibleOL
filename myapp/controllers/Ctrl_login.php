@@ -15,13 +15,14 @@ class Ctrl_login extends MY_Controller {
 			return false;
         }
         else {
-            assert($user_info->id === intval($user_info->id));
-            $this->mod_users->set_login_session($user_info->id, $user_info->isadmin, $user_info->isteacher, $user_info->preflang);
+            $this->mod_users->set_login_session(intval($user_info->id), $user_info->isadmin, $user_info->isteacher, $user_info->preflang);
             return true;
         }
     }
 
     public function index() {
+        $this->load->helper('security'); // Provides xss_clean. TODO: This testing should be done on output instead of input
+                                         // TODO: Should xss_clean be replaced by strip_tags or vice versa?
         if ($this->mod_users->is_logged_in()) {
             // Log out
             $this->mod_users->set_login_session(0, false, false);
