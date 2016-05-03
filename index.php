@@ -72,6 +72,7 @@ switch (ENVIRONMENT)
 	case 'development':
 		error_reporting(-1);
 		ini_set('display_errors', 'stderr');
+        assert_options(ASSERT_BAIL,1);
 	break;
 
 	case 'testing':
