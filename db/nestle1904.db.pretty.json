@@ -149,7 +149,7 @@
                             "mytype": "GrammarFeature",
                             "name": "english",
                             "indirdb": "glossdb_greek.db",
-                            "sql": "SELECT english FROM greek_en WHERE strongs=%d",
+                            "sql": ["english", "greek_en", "strongs=%d"],
                             "sqlargs": [ "strongs" ],
                             "multiple": false
                         },

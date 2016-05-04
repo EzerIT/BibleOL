@@ -612,7 +612,7 @@
                             "mytype": "GrammarFeature",
                             "name": "english",
                             "indirdb": "glossdb_hebrew.db",
-                            "sql": "SELECT english FROM heb_en WHERE lex='%s' AND vs='%s' AND language='%s'",
+                            "sql": [ "english", "heb_en", "lex='%s' AND vs='%s' AND language='%s'"],
                             "sqlargs": [ "lex", "vs", "language" ],
                             "multiple": false
                         },
@@ -620,7 +620,7 @@
                             "mytype": "GrammarFeature",
                             "name": "german",
                             "indirdb": "glossdb_hebrew.db",
-                            "sql": "SELECT german FROM heb_de WHERE lex='%s' AND vs='%s' AND language='%s'",
+                            "sql": [ "german", "heb_de", "lex='%s' AND vs='%s' AND language='%s'"],
                             "sqlargs": [ "lex", "vs", "language" ],
                             "multiple": false
                         },
@@ -652,7 +652,7 @@
                             "mytype": "GrammarFeature",
                             "name": "glossurl",
                             "indirdb": "mysql",
-                            "sql": "SELECT url,icon FROM pl_heb_urls WHERE lex='%s' AND language='%s'",
+                            "sql": ["url,icon", "heb_urls", "lex='%s' AND language='%s'"],
                             "sqlargs": [ "lex", "language" ],
                             "multiple": true
                         }
