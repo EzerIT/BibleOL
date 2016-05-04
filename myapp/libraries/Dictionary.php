@@ -46,23 +46,6 @@ class Dictionary {
     private $indirectLookupCache = array(); // Maps keys to values
     private static $firstrow;
 
-    private static function dbFetchArray($q, boolean $is_mysql) {
-        if ($is_mysql) {
-            if (self::$firstrow) {
-                self::$firstrow = false;
-                return $q->row_array();
-            }
-            else if ($q->current_row < $q->num_rows()-1) {
-                return $q->next_row('array');
-            }
-            else
-                return false;
-        }
-        else
-            return $q->fetchArray(SQLITE3_NUM);
-    }
-
-    
     // Look up a feature outside Emdros
     // Note: Features in $mo->features are HTML encoded
     private function indirectLookup($feat, $mo, $sentenceg) {
@@ -105,11 +88,11 @@ class Dictionary {
 
                 $result = $query->result_array();
                 foreach ($result as $row) {
-                    if (count($row)==1) {
-                        foreach ($row as $r) // Should only loop once
-                            $this->indirectLookupCache[$key][] = htmlspecialchars($r);
-                    }
+                    if (count($row)==1)
+                        // Several rows, one field
+                        $this->indirectLookupCache[$key][] = htmlspecialchars(current($row));
                     else {
+                        // Several rows, several fields
                         foreach ($row as &$r)
                             $r = htmlspecialchars($r);
                         $this->indirectLookupCache[$key][] = $row;
@@ -121,11 +104,11 @@ class Dictionary {
                 $row = $query->row_array();
                 
                 if (isset($row)) {
-                    if (count($row)==1) {
-                        foreach ($row as $r) // Should only loop once
-                            $this->indirectLookupCache[$key] = htmlspecialchars($r);
-                    }
+                    if (count($row)==1)
+                        // One row, one field
+                        $this->indirectLookupCache[$key] = htmlspecialchars(current($row));
                     else {
+                        // One row, several fields
                         foreach ($row as &$r)
                             $r = htmlspecialchars($r);
                         $this->indirectLookupCache[$key] = $row;

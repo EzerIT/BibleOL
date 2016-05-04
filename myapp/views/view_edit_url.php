@@ -30,45 +30,45 @@ function make_icon_radio_button(string $name) {
 
 <?php foreach ($words as $w): ?>
   <tr>
-    <td class="heb-default rtl"><?= $w['vocalized_lexeme_utf8'] ?></td>
-    <td><?= htmlspecialchars($w['english']) ?></td>
+    <td class="heb-default rtl"><?= $w->vocalized_lexeme_utf8 ?></td>
+    <td><?= htmlspecialchars($w->english) ?></td>
     <td>
-       <?php if (isset($w['urls'])): ?>
+       <?php if (isset($w->urls)): ?>
          <?php for ($i=0; $i<3; ++$i): ?>
-           <?php if (isset($w['urls'][$i])): ?>
-             <span class="<?= icon2class($w['urls'][$i]->icon) ?>" aria-hidden="true"></span><br/>
+           <?php if (isset($w->urls[$i])): ?>
+             <span class="<?= icon2class($w->urls[$i]->icon) ?>" aria-hidden="true"></span><br/>
            <?php endif; ?>
          <?php endfor; ?>
        <?php endif; ?>
      </td>
      <td>
-       <?php if (isset($w['urls'])): ?>
+       <?php if (isset($w->urls)): ?>
          <?php for ($i=0; $i<3; ++$i): ?>
-           <?php if (isset($w['urls'][$i])): ?>
-             <a href="<?= htmlspecialchars($w['urls'][$i]->url) ?>" target="_blank"><?= $this->lang->line('link') ?></a><br/>
+           <?php if (isset($w->urls[$i])): ?>
+             <a href="<?= htmlspecialchars($w->urls[$i]->url) ?>" target="_blank"><?= $this->lang->line('link') ?></a><br/>
            <?php endif; ?>
          <?php endfor; ?>
        <?php endif; ?>
      </td>
      <td>
-       <?php $make_add = !isset($w['urls']); /* Should we add an 'Add link' button */ ?>
-       <?php if (isset($w['urls'])): ?>
+       <?php $make_add = !isset($w->urls); /* Should we add an 'Add link' button */ ?>
+       <?php if (isset($w->urls)): ?>
          <?php for ($i=0; $i<3; ++$i): ?>
-           <?php if (isset($w['urls'][$i])): ?>
+           <?php if (isset($w->urls[$i])): ?>
              <a class="label label-primary"
-                onclick="edit_url(<?= $w['urls'][$i]->id ?>,
-                                  '<?= '<span class=&quot;heb-default rtl&quot;>' . $w['vocalized_lexeme_utf8'] . '</span>' ?>',
-                                  '<?= str_replace("'", 'QQzQQ', htmlspecialchars($w['urls'][$i]->url)) ?>',
-                                  '<?= $w['urls'][$i]->icon ?>');
+                onclick="edit_url(<?= $w->urls[$i]->id ?>,
+                                  '<?= '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . '</span>' ?>',
+                                  '<?= str_replace("'", 'QQzQQ', htmlspecialchars($w->urls[$i]->url)) ?>',
+                                  '<?= $w->urls[$i]->icon ?>');
                          return false;"><?= $this->lang->line('urls_edit') ?></a>
 
 
              <a class="label label-danger"
                 onclick="deleteUrlConfirm('<?= sprintf($this->lang->line('delete_url_confirm'),
-                                                       '<span class=&quot;heb-default rtl&quot;>' . $w['vocalized_lexeme_utf8'] . '</span>',
-                                                       str_replace("'", 'QQzQQ', htmlspecialchars($w['urls'][$i]->url))
+                                                       '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . '</span>',
+                                                       str_replace("'", 'QQzQQ', htmlspecialchars($w->urls[$i]->url))
                                                        ) ?>',
-                                                       <?= $w['urls'][$i]->id ?>);
+                                                       <?= $w->urls[$i]->id ?>);
                          return false;"
                href="#"><?= $this->lang->line('urls_delete') ?></a>
              <br/>
@@ -79,9 +79,9 @@ function make_icon_radio_button(string $name) {
        <?php endif; ?>
        <?php if ($make_add): ?>
           <a class="label label-primary"
-             onclick="create_url('<?= $w['lex'] ?>',
-                                 '<?= $w['language'] ?>',
-                                 '<?= '<span class=&quot;heb-default rtl&quot;>' . $w['vocalized_lexeme_utf8'] . '</span>' ?>');
+             onclick="create_url('<?= $w->lex ?>',
+                                 '<?= $w->language ?>',
+                                 '<?= '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . '</span>' ?>');
                       return false;"><?= $this->lang->line('urls_add') ?></a>
        <?php endif; ?>
      </td>

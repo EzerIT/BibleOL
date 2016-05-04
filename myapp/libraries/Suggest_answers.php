@@ -20,19 +20,29 @@ class Suggest_answers {
     static public function findSuggestions(string $database, string $sqlCommand, string $param1, /*TODO: More than one param?*/
                                     string $correct, integer $lower_limit, integer $upper_limit) {
 
-        if (!isset(self::$database_handles[$database])) {
-            $dbhandle = new SQLite3('db/' . $database, SQLITE3_OPEN_READONLY);
-            self::$database_handles[$database] = $dbhandle;
-        }
-        else
-            $dbhandle = self::$database_handles[$database];
+        if (empty($correct))
+            $correct = '-';
 
-        $rs = $dbhandle->query(sprintf($sqlCommand,$param1));
+        if (!isset(self::$database_handles[$database])) {
+            $CI =& get_instance();
+            self::$database_handles[$database] = $CI->load->database(array('database' => 'db/' . $database,
+                                                                           'dbdriver' => 'sqlite3',
+                                                                           'dbprefix' => '',
+                                                                           'pconnect' => FALSE,
+                                                                           'db_debug' => TRUE,
+                                                                           'cache_on' => FALSE,
+                                                                           'cachedir' => '',
+                                                                           'char_set' => 'utf8',
+                                                                           'dbcollat' => 'utf8_general_ci'),
+                                                                     true);
+        }
+
+        $query = self::$database_handles[$database]->query(sprintf($sqlCommand,$param1));
         
         $results = array();
 
-        while ($record = $rs->fetchArray())
-            $results[] = empty($record[0]) ? '-' : $record[0];
+        foreach ($query->result() as $row)
+            $results[] = empty(current($row)) ? '-' : current($row);
 
         if (count($results)<$lower_limit)
             return null;

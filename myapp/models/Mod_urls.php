@@ -51,36 +51,69 @@ class Mod_urls extends CI_Model {
     }
 
     public function get_glosses(string $language, string $from, string $to) {
-        $dbh = new SQLite3('db/glossdb_hebrew.db', SQLITE3_OPEN_READONLY);
-        $rs = $dbh->query("SELECT * FROM heb_en WHERE language='$language' AND sortorder>='$from' AND sortorder<'$to' ORDER BY sortorder");
+        $dbh = $this->load->database(array('database' => 'db/glossdb_hebrew.db',
+                                                'dbdriver' => 'sqlite3',
+                                                'dbprefix' => '',
+                                                'pconnect' => FALSE,
+                                                'db_debug' => TRUE,
+                                                'cache_on' => FALSE,
+                                                'cachedir' => '',
+                                                'char_set' => 'utf8',
+                                                'dbcollat' => 'utf8_general_ci'),
+                                          true);
+
+        $query = $dbh
+            ->where('language',$language)
+            ->where('sortorder >=',$from)
+            ->where('sortorder <',$to)
+            ->order_by('sortorder')
+            ->get('heb_en');
+
         $last_lex = '';
-        while ($record = $rs->fetchArray(SQLITE3_ASSOC)) {
+        $result = array();
+        foreach ($query->result() as $row) {
             // Only take each lexeme once, ignoring vs
-            if ($record['lex']!==$last_lex) {
-                $result[] = $record;
-                $last_lex = $record['lex'];
+            if ($row->lex!==$last_lex) {
+                $result[] = $row;
+                $last_lex = $row->lex;
             }
         }
         return $result;
     }
 
     public function get_common_glosses(string $language) {
-        $dbh = new SQLite3('db/glossdb_hebrew.db', SQLITE3_OPEN_READONLY);
-        $rs = $dbh->query("SELECT * FROM heb_en WHERE language='$language' ORDER BY tally DESC LIMIT " . (2*FREQUENT_GLOSSES));
+        $dbh = $this->load->database(array('database' => 'db/glossdb_hebrew.db',
+                                                'dbdriver' => 'sqlite3',
+                                                'dbprefix' => '',
+                                                'pconnect' => FALSE,
+                                                'db_debug' => TRUE,
+                                                'cache_on' => FALSE,
+                                                'cachedir' => '',
+                                                'char_set' => 'utf8',
+                                                'dbcollat' => 'utf8_general_ci'),
+                                          true);
+
+        $query = $dbh
+            ->where('language',$language)
+            ->order_by('tally','DESC')
+            ->limit(2*FREQUENT_GLOSSES)
+            ->get('heb_en');
+
+
         $last_lex = '';
         $result = array();
-        while ($record = $rs->fetchArray(SQLITE3_ASSOC)) {
+        foreach ($query->result() as $row) {
             // Only take each lexeme once, ignoring vs
-            if ($record['lex']!==$last_lex) {
+            if ($row->lex!==$last_lex) {
                 if (count($result)>=FREQUENT_GLOSSES) {
-                    // Break when we have a record with a smaller tally
-                    if ($tally > $record['tally'])
+                    // Break when we have a row with a smaller tally
+                    if ($tally > $row->tally)
                         break;
                 }
-                $result[] = $record;
-                $last_lex = $record['lex'];
+                $result[] = $row;
+                $last_lex = $row->lex;
                 if (count($result)==FREQUENT_GLOSSES)
-                    $tally = $record['tally'];
+                    $tally = $row->tally;
             }
         }
         assert(count($result)>=FREQUENT_GLOSSES); // To ensure that the SQL LIMIT is high enough
@@ -90,9 +123,9 @@ class Mod_urls extends CI_Model {
 
     public function get_heb_urls(string $language, array &$words) {
         foreach ($words as &$w) {
-            $query = $this->db->where('lex',$w['lex'])->where('language',$language)->get('heb_urls');
+            $query = $this->db->where('lex',$w->lex)->where('language',$language)->get('heb_urls');
             if ($query->num_rows()>0)
-                $w['urls'] = $query->result();
+                $w->urls = $query->result();
         }
     }
 
