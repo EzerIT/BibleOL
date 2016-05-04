@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Font matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{2 October 2015}
+\date{4 May 2016}
 
 \makeindex
 
@@ -234,7 +234,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \maketitle
 
 \begin{center}
-Copyright © 2015 by Claus Tøndering, claus@ezer.dk
+Copyright © 2016 by Claus Tøndering, claus@ezer.dk
 
 \vspace{5mm}
 
@@ -264,7 +264,7 @@ server and developers who need to modify or expand the way Bible OL works.
 \section{License and Copyright}\index{license}\index{copyright}
 
 Except where otherwise noted, the Bible OL source code is distributed under an MIT
-License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2015 by Claus
+License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2016 by Claus
 Tøndering, claus@ezer.dk.
 
 The present document is made available under a Creative Commons Attribution 4.0 International
@@ -621,11 +621,10 @@ Copy the file \texttt{myapp/config/config.php-dist} to \texttt{myapp/config/conf
 following line in the copy:
 
 \begin{lstlisting}[language=PHP]
-$config['encryption_key'] = 'xxxxxxxxxxxx';%\index{encryption key}%
+$config['base_url'] = 'http://example.com';%\index{base URL}%
 \end{lstlisting}
 
-Replace `xxxxxxxxxxxx' with a random string that will be used to encrypt session information within
-the PHP framework.
+Replace `http://example.com' with the top URL of the web site for your Bible OL installation.
 
 
 \subsection{Step 6. Add Administrator\index{administrator}}
@@ -940,6 +939,13 @@ On the client side Bible OL uses a JavaScript/TypeScript framework known as
 \emph{jQuery}\footnote{\url{http://jquery.com}.} and its associate user interface functions
 \emph{jQuery UI.}\footnote{\url{http://jqueryui.com}.}
 
+%%%%%%%%%%%%%%%%%%%% Bootstrap %%%%%%%%%%%%%%%%%%%%
+\section{Bootstrap}\index{Bootstrap|hyperit}
+
+On the client side Bible OL uses a JavaScript framework known as
+\emph{Bootstrap.}\footnote{\url{http://getbootstrap.com}.}
+
+
 %%%%%%%%%%%%%%%%%%%% What You Must Know %%%%%%%%%%%%%%%%%%%%
 \section{What You Must Know}
 
@@ -948,8 +954,8 @@ must understand the CodeIgniter framework. You may also need to have a good unde
 Less, CSS, SQL, MQL, and JSON.
 
 If you plan to modify the Bible OL client-side code, you must know how to program in TypeScript, and
-you must understand the jQuery framework and the jQuery UI functions. You may also need to have a
-good understanding of HTML, CSS, JavaScript, and JSON.
+you must understand the jQuery framework, the Bootstrap framework, and, perhaps, the jQuery UI
+functions. You may also need to have a good understanding of HTML, CSS, JavaScript, and JSON.
 
 Obviously, you also need a good understanding of how Bible OL works from a user's perspective.
 
@@ -1131,6 +1137,14 @@ examples can be found in \url{http://emdros.org/petersen-emdros-COLING-2004.pdf}
 The source code contains the following directories (in alphabetical order):
 
 \begin{my-longtabu}{>{\ttfamily}p{3.3cm}X}{ \headii{\textrm{Name}}{Contents} }
+bootstrap\index{Bootstrap} & A JavaScript framework used on the client side of Bible OL.
+
+Webpage: \url{http://getbootstrap.com}.
+
+Source: \url{https://github.com/twbs/bootstrap.git}.
+
+License: MIT.\\
+
 ckeditor\index{ckeditor} & An HTML text editor. It is used in the server code to allow the user to
 edit the description of an exercise.
 
@@ -1546,7 +1560,7 @@ reformers wished to differentiate their system from the polytonic, the tonos on 
 sign: typically a dot or wedge: α\hspace{-0.5mm}̍\hspace{0.5mm}. However, the Greek government
 decreed in 1986 that the tonos shall be the acute. So you must now write ά instead of
 α\hspace{-0.5mm}̍\hspace{0.5mm}.\footnote{Source:
-  \url{http://www.tlg.uci.edu/~opoudjis/unicode/unicode_gkbkgd.html}, accessed 20 February 2015.}
+  \url{http://www.opoudjis.net/unicode/unicode_gkbkgd.html}, accessed 4 May 2016.}
 
 This confusion has had an impact on the representation of the oxia and tonos accents in Unicode.
 Because of the decision from 1982, Unicode\index{Unicode} distinguishes between the oxia
@@ -1890,7 +1904,7 @@ in the ETCBC4 database.
         },
         "english": {
             "ignoreSelect": true,
-            "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i"
+            "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i"
         },
         "text_cons_utf8": {
             "hideWord": true,
@@ -2110,6 +2124,12 @@ feature. The format is given in Listing \ref{list-gf-syntax}.
     }
 \end{lstlisting}
 
+If the feature is a \emph{pseudofeature}\index{pseudofeature}, additional fields are present in the
+GrammarFeature structure. See Section \ref{sec-pseudofeature} for more information.
+
+The \emph{name} value may simply be the name of a feature of the current Emdros object type, or it
+may be a string in the form ``objectType:featureName'', if the feature belongs to another object type.
+
 \Needspace*{5cm}%
 In the grammar selection box\index{grammar selection box}, a GrammarFeature is displayed thus:
 
@@ -2267,6 +2287,61 @@ the subset includes the entire book of Genesis and the first three chapters of E
 If \emph{subsetOf} has the value \emph{null}, the current database is not a subset of any other
 database.
 
+
+\subsection{Pseudofeatures}\label{sec-pseudofeature}\index{pseudofeature|hyperit}
+
+The features listed in the \emph{featuresetting} information are normally genuine feature of Emdros
+objects. However, a few of them may be \emph{pseudofeatures}. A pseudofeature is logically
+associated with an Emdros object just as ordinary features are, but the values of pseudofeatures are
+retrieved from other data sources.
+
+Details about psuedofeatures are found in the \emph{Grammarfeature} for the relevant feature. If the
+feature is a pseudofeature, its GrammarFeature has the format exemplified in Listing
+\ref{list-gfps-syntax}.
+
+\begin{lstlisting}[escapechar=\#,caption=GrammarFeature syntax for a pseudofeature,label=list-gfps-syntax]
+    {
+        "mytype": "GrammarFeature",
+        "name": "english",
+        "indirdb": "glossdb_hebrew.db",
+        "sql": [ "english", "heb_en", "lex='%s' AND vs='%s' AND language='%s'" ],
+        "sqlargs": [ "lex", "vs", "language" ],
+        "multiple": false
+    }
+\end{lstlisting}
+
+The \emph{mytype} and \emph{name} values are common to all GrammarFeatures (see Section
+\ref{sec-grammarfeature}). The presence of the remaining values identify the feature as
+pseudofeature.
+
+\begin{itemize}
+\item \emph{indirdb} gives the name of a database in which the pseudofeature can be found. The value
+  is either the name of an SQLite3\index{SQLite3} database, or the string ``mysql'' if the
+  pseudofeature is found in the user database\index{user database} (see Section
+  \ref{chap-user-database}).
+\item \emph{sql} contains three values: The database field, database table, and database search
+  string used to find the pseudofeature within the database.
+\item \emph{sqlargs} contains the names of features used to build the database search string.
+\item \emph{multiple} is true if the datbase may contain more than one entry for a given pseudofeature.
+\end{itemize}
+
+Taking the pseudofeature \emph{english} from the above listing as an example, we see that the
+feature is found in an SQLite3 database file called \texttt{db/glossdb\_hebrew.db}.
+
+The value of the pseudofeature is found by executing the SQL query
+
+\begin{lstlisting}[language=SQL]
+SELECT english FROM heb_en WHERE lex='...' AND vs='...' AND language='...';
+\end{lstlisting}
+
+\noindent
+where the dots are replaced by the values of the features \emph{lex, vs,} and
+\emph{language,} respectively.
+
+The SQL query is expected to return a single value because \emph{multiple} is \emph{false.}
+
+Currently, pseudofeatures are used for glosses and hyperlinks associated with lexemes.
+
 %%%%%%%%%%%%%%%%%%%% Database Description Files for Old Databases %%%%%%%%%%%%%%%%%%%%
 \section{Database Description Files for Old Databases}\label{sec-old-db}
 
@@ -2276,10 +2351,9 @@ database (and various variants of it) and the Greek \emph{tisch}\index{tisch}\fo
   \emph{Tischendorf.}} database.
 
 The statistics\index{statistics} tables in the user database\index{user database} (see Section
-\ref{sec-statistics-tables}) may still contain data from these older databases. In order to display
-these statistics, Bible OL needs description and localization information for the databases. For
-this reason, Database Description Files for the old databases are still present in the \texttt{db}
-directory.
+\ref{sec-statistics-tables}) may still contain data from these older databases. If description and
+localization information for the old databases are not available, the corresponding statistics will
+not be displayed.
 
 
 
@@ -2692,6 +2766,9 @@ php index.php maketypeinfo index %\textrm{\textit{databasename}}%
 from the base of the source code tree will generate the type information form the specified Emdros
 database and write it to standard out in ugly JSON format.
 
+\emph{Note:} The Database Type Information File must also contain information about pseudofeatures
+(see Section \ref{sec-pseudofeature}). This information is not generated automatically by the above
+command, but must be added manually.
 
 The Database Type Information File contains the following key/value pairs:
 
@@ -4157,6 +4234,8 @@ config & Allows users to change their font preferences.\\
 
 file\_manager & Management of files and directories in the \texttt{quizzes} directory.\\
 
+lang & Switches user interface language.\\
+
 login & Handles login using the local\index{login!local} user database\index{user database}.\\
 
 main\_page & Displays the main page.\\
@@ -4184,6 +4263,8 @@ text & Displays text or exercises. Also handles editing of exercises.\\
 
 upload & Receives and stores uploaded exercises.\\
 
+urls & Manages hyperlinks associated with lexemes.\\
+
 userclass & Manages a user's relationship to a class.\\
 
 users & Manages users.\\
@@ -4202,6 +4283,7 @@ mod\_intro\_text & Generates the text on the front page.\\
 mod\_localize & Generates localization information for JavaScript code (see Section \ref{sec-localize-javascript}).\\
 mod\_quizpath & Exercise directory operations.\\
 mod\_statistics & Manages user statistics.\index{statistics}\\
+mod\_urls & Manages hyperlinks associated with lexemes.\\
 mod\_userclass & Manages a user's relationship to a class.\\
 mod\_users & Manages users.\\
 \end{my-longtabu}
@@ -4593,13 +4675,13 @@ The database contains these tables:
 
 \begin{center}
 \begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l}
-alphabet         & font                 & sta\_requestfeature \\
-bible\_refs      & migrations           & sta\_universe       \\
-bible\_urls      & personal\_font       & user                \\
-class            & sta\_displayfeature  & userclass           \\
-classexercise    & sta\_question        & userconfig          \\
-exercisedir      & sta\_quiz            &                     \\
-exerciseowner    & sta\_quiztemplate    &                     \\
+alphabet         & font                 & sta\_quiztemplate   \\
+bible\_refs      & heb\_urls            & sta\_requestfeature \\
+bible\_urls      & migrations           & sta\_universe       \\
+class            & personal\_font       & user                \\
+classexercise    & sta\_displayfeature  & userclass           \\
+exercisedir      & sta\_question        & userconfig          \\
+exerciseowner    & sta\_quiz            &                     \\
 \end{tabu}
 \end{center}
 
@@ -4943,7 +5025,7 @@ Figure \ref{fig-question} on page \pageref{fig-question} for a definition of ``q
 The table contains these fields:
 
 \begin{my-tabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
-id         & Integer & Unique number identifying this question.\\
+id         & Integer & Unique number identifying this entry.\\
 userid     & Integer & The \emph{id} field from an entry in the \emph{user} table.\\
 questid    & Integer & The \emph{id} field from an entry in the \emph{sta\_question} table.\\
 qono       & Integer & The index (starting from 1) of the question item within the question.\\
@@ -4961,7 +5043,7 @@ Figure \ref{fig-question} on page \pageref{fig-question} for a definition of ``q
 The table contains these fields:
 
 \begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
-id         & Integer & Unique number identifying this question.\\
+id         & Integer & Unique number identifying this entry.\\
 userid     & Integer & The \emph{id} field from an entry in the \emph{user} table.\\
 questid    & Integer & The \emph{id} field from an entry in the \emph{sta\_question} table.\\
 qono       & Integer & The index (starting from 1) of the question item within the question.\\
@@ -4973,6 +5055,23 @@ correct    & Boolean & \emph{True} if the user's answer is correct.\footnote{Thi
   testing if \emph{value}=\emph{answer}. For example, when providing an English translation of a
   word, a correct \emph{answer} may be ``do'' even if the \emph{value} is ``make, do; fix; deal with''.}\\
 \end{my-longtabu}
+
+%%%%%%%%%%%%%%%%%%%% The heb_urls Table %%%%%%%%%%%%%%%%%%%%
+\section{The \emph{heb\_urls} Table}%
+\index{heb\_urls table}
+
+The \emph{heb\_urls} table keeps track of the hyperlinks associated with Hebrew or Aramaic lexemes.
+
+The table contains these fields:
+
+\begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
+id       & Integer & Unique number identifying this entry.\\
+lex      & Text    & The value of the \emph{lex} feature from the ETCBC4 database.\\
+language & Text    & The value of the \emph{language} feature from the ETCBC4 database.\\
+url      & Text    & The URL that is the destination of the hyperlink.\\
+icon     & Text    & The name of an icon (typically taken from the list of Bootstrap icons) to use for this hyperlnk.\\
+\end{my-longtabu}
+
 
 %%%%%%%%%%%%%%%%%%%% The migrations Table %%%%%%%%%%%%%%%%%%%%
 \section{The \emph{migrations} Table}%
@@ -5846,17 +5945,6 @@ rank of each lexeme: The most frequent lexeme has rank 1, the second most freque
 
 These two features are counted separately for Hebrew and Aramaic parts of the Old Testament. 
 
-\subsection{Features: english and german}
-
-The features \emph{english} and \emph{german} give English and German glosses for the
-lexeme.\index{lexeme} The string may contain several meanings separated by commas and semicolons.
-Also, special information may be given between < and > characters. For example:
-
-\begin{my-tabu}{cl}{ \headii{Lexeme}{English gloss} }
-  \heb{רֵאשִׁית} & beginning; what is first; best\\
-  \heb{אֵת} & <object marker>\\
-\end{my-tabu}
-
 
 \subsection{Features: pfm, g\_pfm}
 
@@ -6301,20 +6389,20 @@ The following word features were generated by my program
 
 \begin{center}
   \begin{tabular}{lll}
-    continuation           & g\_qere\_utf8       &  suffix\_person                \\
-    continuation\_translit & g\_uvf\_cons\_utf8  &  suffix\_translit              \\
-    continuation\_utf8     & g\_uvf\_translit    &  suffix\_utf8                  \\
-    english                & g\_vbe\_cons\_utf8  &  text                          \\
-    frequency\_rank        & g\_vbe\_translit    &  text\_cons\_utf8              \\
-    g\_lex\_cons\_utf8     & g\_vbs\_cons\_utf8  &  text\_nocant\_utf8            \\
-    g\_nme\_cons\_utf8     & g\_vbs\_translit    &  text\_nopunct\_translit       \\
-    g\_nme\_translit       & g\_word\_cons\_utf8 &  text\_translit                \\
-    g\_pfm\_cons\_utf8     & german              &  text\_utf8                    \\
-    g\_pfm\_translit       & lex\_cons\_utf8     &  verb\_class                   \\
-    g\_prs\_cons\_utf8     & lexeme\_occurrences &  vocalized\_lexeme             \\
-    g\_prs\_translit       & suffix              &  vocalized\_lexeme\_cons\_utf8 \\
-    g\_qere                & suffix\_gender      &  vocalized\_lexeme\_translit   \\
-    g\_qere\_translit      & suffix\_number      &  vocalized\_lexeme\_utf8       \\
+    continuation           & g\_uvf\_cons\_utf8  &  suffix\_utf8                  \\
+    continuation\_translit & g\_uvf\_translit    &  text                          \\
+    continuation\_utf8     & g\_vbe\_cons\_utf8  &  text\_cons\_utf8              \\
+    frequency\_rank        & g\_vbe\_translit    &  text\_nocant\_utf8            \\
+    g\_lex\_cons\_utf8     & g\_vbs\_cons\_utf8  &  text\_nopunct\_translit       \\
+    g\_nme\_cons\_utf8     & g\_vbs\_translit    &  text\_translit                \\
+    g\_nme\_translit       & g\_word\_cons\_utf8 &  text\_utf8                    \\
+    g\_pfm\_cons\_utf8     & lex\_cons\_utf8     &  verb\_class                   \\
+    g\_pfm\_translit       & lexeme\_occurrences &  vocalized\_lexeme             \\
+    g\_prs\_cons\_utf8     & suffix              &  vocalized\_lexeme\_cons\_utf8 \\
+    g\_prs\_translit       & suffix\_gender      &  vocalized\_lexeme\_translit   \\
+    g\_qere                & suffix\_number      &  vocalized\_lexeme\_utf8       \\
+    g\_qere\_translit      & suffix\_person      &   \\
+    g\_qere\_utf8          & suffix\_translit    &   \\
   \end{tabular}
 \end{center}
 
