@@ -42,7 +42,7 @@ class Dictionary {
     }
 
 
-    private $indirectdb = array(); // Maps databases to database handles
+    private $indir_db_handle = array(); // Maps databases to database handles
     private $indirectLookupCache = array(); // Maps keys to values
     private static $firstrow;
 
@@ -78,45 +78,61 @@ class Dictionary {
         $key = implode(',',$key_array) . ',' . $feat;
 
         if (!isset($this->indirectLookupCache[$key])) {
-            if (!isset($this->indirectdb[$sentenceg->indirdb])) {
-                if ($sentenceg->indirdb=='mysql') {
-                    $CI =& get_instance();
-                    $this->indirectdb[$sentenceg->indirdb] = $CI->db;
-                    //$prefix = $this->db->dbprefix;
-                    // TODO NOW: Handle prefix. Better use SQLITE3 i CodeIgniter 3
-                }
-                else
-                    $this->indirectdb[$sentenceg->indirdb] = new SQLite3('db/' . $sentenceg->indirdb, SQLITE3_OPEN_READONLY);
+            if (!isset($this->indir_db_handle[$sentenceg->indirdb])) {
+                $CI =& get_instance();
+                $this->indir_db_handle[$sentenceg->indirdb] = 
+                    $sentenceg->indirdb=='mysql'
+                    ? $CI->db
+                    : $CI->load->database(array('database' => 'db/' . $sentenceg->indirdb,
+                                                'dbdriver' => 'sqlite3',
+                                                'dbprefix' => '',
+                                                'pconnect' => FALSE,
+                                                'db_debug' => TRUE,
+                                                'cache_on' => FALSE,
+                                                'cachedir' => '',
+                                                'char_set' => 'utf8',
+                                                'dbcollat' => 'utf8_general_ci'),
+                                          true);
             }
-            $rs = $this->indirectdb[$sentenceg->indirdb]->query(vsprintf($sentenceg->sql,$key_array));
+            $query = $this->indir_db_handle[$sentenceg->indirdb]
+                ->select($sentenceg->sql[0])
+                ->where(vsprintf($sentenceg->sql[2],$key_array))
+                ->get($sentenceg->sql[1]);
 
             if ($sentenceg->multiple) {
                 // We may get more than one answer from the database
                 $this->indirectLookupCache[$key] = array();
 
-                self::$firstrow=true;
-                while ($record = self::dbFetchArray($rs, $sentenceg->indirdb=='mysql')) {
-
-                    foreach ($record as &$r)
-                        $r = htmlspecialchars($r);
-                    if (count($record)==1)
-                        $this->indirectLookupCache[$key][] = $record[0];
-                    else
-                        $this->indirectLookupCache[$key][] = $record;
+                $result = $query->result_array();
+                foreach ($result as $row) {
+                    if (count($row)==1) {
+                        foreach ($row as $r) // Should only loop once
+                            $this->indirectLookupCache[$key][] = htmlspecialchars($r);
+                    }
+                    else {
+                        foreach ($row as &$r)
+                            $r = htmlspecialchars($r);
+                        $this->indirectLookupCache[$key][] = $row;
+                    }
                 }
             }
             else {
-                    // We should get only one answer from the database
-                    if ($record = self::dbFetchArray($rs, $sentenceg->indirdb=='mysql')) {
-                        foreach ($record as &$r)
-                            $r = htmlspecialchars($r);
-                        if (count($record)==1)
-                            $this->indirectLookupCache[$key] = $record[0];
-                        else
-                            $this->indirectLookupCache[$key] = $record;
+                // We should get only one answer from the database
+                $row = $query->row_array();
+                
+                if (isset($row)) {
+                    if (count($row)==1) {
+                        foreach ($row as $r) // Should only loop once
+                            $this->indirectLookupCache[$key] = htmlspecialchars($r);
                     }
-                    else
-                        $this->indirectLookupCache[$key] = '';
+                    else {
+                        foreach ($row as &$r)
+                            $r = htmlspecialchars($r);
+                        $this->indirectLookupCache[$key] = $row;
+                    }
+                }
+                else
+                    $this->indirectLookupCache[$key] = '';
             }
         }
 
