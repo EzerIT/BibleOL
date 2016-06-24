@@ -981,15 +981,16 @@ var Dictionary = (function () {
             }, function () {
                 $('.grammardisplay').hide();
             });
-            $("[data-idd]").off('click');
         }
     };
-    Dictionary.prototype.clickForGrammar = function () {
-        var _this = this;
+    Dictionary.prototype.dontHoverForGrammar = function () {
         if (useTooltip)
             $(document).tooltip({ items: "[data-idd]", disabled: true });
         else
             $("[data-idd]").off("mouseenter mouseleave");
+    };
+    Dictionary.prototype.clickForGrammar = function () {
+        var _this = this;
         $("[data-idd]").on('click', function (event) {
             var info = _this.toolTipFunc(event.currentTarget, false);
             $('#grammar-info-label').html(info.second);
@@ -997,10 +998,14 @@ var Dictionary = (function () {
             $('#grammar-info-dialog').modal('show');
         });
     };
+    //    Not used
+    //    private dontClickForGrammar() {
+    //        $("[data-idd]").off('click');
+    //    }
     Dictionary.handleDisplaySize = function (thisDict) {
         switch (resizer.getWindowSize()) {
             case 'xs':
-                thisDict.clickForGrammar();
+                thisDict.dontHoverForGrammar();
                 break;
             default:
                 thisDict.hoverForGrammar();
@@ -1096,6 +1101,7 @@ var Dictionary = (function () {
                 return new util.Pair(res + '</table>', getObjectFriendlyName(sengram.objType));
             };
         resizer.addResizeListener(Dictionary.handleDisplaySize, this, 'xyzzy');
+        this.clickForGrammar();
         Dictionary.handleDisplaySize(this);
         return sentenceTextArr[0];
     };

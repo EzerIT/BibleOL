@@ -181,16 +181,17 @@ class Dictionary {
                         $('.grammardisplay').hide();
                     }
                 );
-            $("[data-idd]").off('click');
         }
     }
- 
-    private clickForGrammar() {
+
+    private dontHoverForGrammar() {
         if (useTooltip)
             $(document).tooltip({items: "[data-idd]", disabled: true});
         else
             $("[data-idd]").off("mouseenter mouseleave");
-
+    }
+ 
+    private clickForGrammar() {
         $("[data-idd]").on('click', (event : any) => {
             var info = this.toolTipFunc(event.currentTarget,false);
             $('#grammar-info-label').html(info.second);
@@ -199,10 +200,15 @@ class Dictionary {
         });
     }
 
+//    Not used
+//    private dontClickForGrammar() {
+//        $("[data-idd]").off('click');
+//    }
+
     private static handleDisplaySize(thisDict : Dictionary) {
         switch (resizer.getWindowSize()) {
         case 'xs':
-            thisDict.clickForGrammar();
+            thisDict.dontHoverForGrammar();
             break;
 
         default:
@@ -327,6 +333,7 @@ class Dictionary {
             };
 
         resizer.addResizeListener(Dictionary.handleDisplaySize, this, 'xyzzy');
+        this.clickForGrammar();
         Dictionary.handleDisplaySize(this);
 
         return sentenceTextArr[0];
