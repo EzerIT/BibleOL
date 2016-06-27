@@ -26,6 +26,8 @@ class ExtendedQuizFeatures {
     public $useVirtualKeyboard;
     public $useDropdown = false;
     public $additionalFeatures;
+    public $allFeatures; // All showfeatures and requestfeatures (excluding 'visual') and additionalFeatures
+    public $pseudoFeatures;
 
     function __construct(array $sf, array $rf, array $dsf, string $oType) {
         $CI =& get_instance();
@@ -38,13 +40,30 @@ class ExtendedQuizFeatures {
         $this->dontShow = false;
         $this->useVirtualKeyboard = false;
 
-        $this->allFeatures = '';
-        foreach ($sf as $f)
-            if ($f!=='visual')
-                $this->allFeatures .= ',' . $f;
+        $all = array(); // In this array the index will be equal to the value, thus emulating a set
+        $this->pseudoFeatures = array();
+
+        foreach ($sf as $f) {
+            $gfs = getFeatureSetting($oType, $f);
+            if (isset($gfs->sqlargs)) {
+                $this->pseudoFeatures[] = $f;
+                foreach ($gfs->sqlargs as $sqlarg)
+                    $all[$sqlarg] = $sqlarg;
+            }
+            else if ($f!=='visual')
+                $all[$f] = $f;
+        }
 
         foreach ($rf as $f) {
             $gfs = getFeatureSetting($oType, $f->name);
+            if (isset($gfs->sqlargs)) {
+                $this->pseudoFeatures[] = $f->name;
+                foreach ($gfs->sqlargs as $sqlarg)
+                    $all[$sqlarg] = $sqlarg;
+            }
+            else if ($f->name!=='visual')
+                $all[$f->name] = $f->name;
+
             if (!empty($gfs->hideWord))
                 $this->dontShow = true;
             if (!empty($gfs->foreignText))
@@ -52,18 +71,15 @@ class ExtendedQuizFeatures {
 
             if ($f->usedropdown)
                 $this->useDropdown = true;
-
-            if ($f->name!=='visual')
-                $this->allFeatures .= ',' . $f->name;
         }
 
         if (isset($dbinfo->objectSettings->$oType->additionalfeatures)) {
             $this->additionalFeatures = $dbinfo->objectSettings->$oType->additionalfeatures;
             foreach ($this->additionalFeatures as $f)
-                $this->allFeatures .= ',' . $f;
+                $all[$f] = $f;
         }
 
-        $this->allFeatures = substr($this->allFeatures,1); // Remove initial ','
+        $this->allFeatures = implode(',', $all);
     }
 }
 
@@ -209,7 +225,12 @@ class Quiz_data {
                     $visual .= $this->CI->dictionary->getVisual($monad);
                 }
 
+                foreach ($this->quizFeatures->pseudoFeatures as $psf)
+                    $this->CI->dictionary->indirectLookup($psf, $mo,
+                                                          getFeatureSetting($this->oType, $psf));
+
                 $mo->set_feature('visual', trim($visual));// For simplicity, always add "visual" pseudo-feature
+
                 $this->id2FeatVal[$id_d] = $mo->get_features();
                 if ($this->quizFeatures->useDropdown) {
                     foreach ($this->quizFeatures->requestFeatures as $rf) {
@@ -259,4 +280,3 @@ class Quiz_data {
 
 }
 
-?>

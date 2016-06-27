@@ -53,14 +53,26 @@
                 },
                 "english": {
                     "ignoreSelect": true,
-                    "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i"
+                    "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
+                    "indirdb": "glossdb_hebrew.db",
+                    "sql": [ "english", "heb_en", "lex='%s' AND vs='%s' AND language='%s'"],
+                    "sqlargs": [ "lex", "vs", "language" ],
+                    "multiple": false
                 },
                 "german": {
                     "ignoreSelect": true,
-                    "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i"
+                    "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
+                    "indirdb": "glossdb_hebrew.db",
+                    "sql": [ "german", "heb_de", "lex='%s' AND vs='%s' AND language='%s'"],
+                    "sqlargs": [ "lex", "vs", "language" ],
+                    "multiple": false
                 },
                 "glossurl": {
-                    "ignoreSelect": true
+                    "ignoreSelect": true,
+                    "indirdb": "mysql",
+                    "sql": ["url,icon", "heb_urls", "lex='%s' AND language='%s'"],
+                    "sqlargs": [ "lex", "language" ],
+                    "multiple": true
                 },
                 "g_cons": {
                     "ignoreSelect": true,
@@ -610,19 +622,11 @@
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "english",
-                            "indirdb": "glossdb_hebrew.db",
-                            "sql": [ "english", "heb_en", "lex='%s' AND vs='%s' AND language='%s'"],
-                            "sqlargs": [ "lex", "vs", "language" ],
-                            "multiple": false
+                            "name": "english"
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "german",
-                            "indirdb": "glossdb_hebrew.db",
-                            "sql": [ "german", "heb_de", "lex='%s' AND vs='%s' AND language='%s'"],
-                            "sqlargs": [ "lex", "vs", "language" ],
-                            "multiple": false
+                            "name": "german"
                         },
                         {
                             "mytype": "GrammarFeature",
@@ -650,11 +654,7 @@
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "glossurl",
-                            "indirdb": "mysql",
-                            "sql": ["url,icon", "heb_urls", "lex='%s' AND language='%s'"],
-                            "sqlargs": [ "lex", "language" ],
-                            "multiple": true
+                            "name": "glossurl"
                         }
                     ]
                 },

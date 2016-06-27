@@ -29,6 +29,7 @@ class Dictionary {
                            ///< $this->monadObjects[$x][$y][$z] is the $z'th monad at level $y in sentence set $x.
     public $bookTitle;    ///< Book title
 
+
     /// Gets the title of the book.
     /// @return The title of the book
     public function get_book_title() {
@@ -48,25 +49,25 @@ class Dictionary {
 
     // Look up a feature outside Emdros
     // Note: Features in $mo->features are HTML encoded
-    private function indirectLookup($feat, $mo, $sentenceg) {
-        assert(isset($sentenceg->indirdb));
-        assert(isset($sentenceg->sql));
-        assert(isset($sentenceg->sqlargs));
-        assert(isset($sentenceg->multiple));
+    public function indirectLookup($feat, $mo, $fset) {
+        assert(isset($fset->indirdb));
+        assert(isset($fset->sql));
+        assert(isset($fset->sqlargs));
+        assert(isset($fset->multiple));
 
         $key_array = array();
-        foreach ($sentenceg->sqlargs as $sqlarg)
+        foreach ($fset->sqlargs as $sqlarg)
             $key_array[] = htmlspecialchars_decode($mo->features[$sqlarg]);
 
         $key = implode(',',$key_array) . ',' . $feat;
 
         if (!isset($this->indirectLookupCache[$key])) {
-            if (!isset($this->indir_db_handle[$sentenceg->indirdb])) {
+            if (!isset($this->indir_db_handle[$fset->indirdb])) {
                 $CI =& get_instance();
-                $this->indir_db_handle[$sentenceg->indirdb] = 
-                    $sentenceg->indirdb=='mysql'
+                $this->indir_db_handle[$fset->indirdb] = 
+                    $fset->indirdb=='mysql'
                     ? $CI->db
-                    : $CI->load->database(array('database' => 'db/' . $sentenceg->indirdb,
+                    : $CI->load->database(array('database' => 'db/' . $fset->indirdb,
                                                 'dbdriver' => 'sqlite3',
                                                 'dbprefix' => '',
                                                 'pconnect' => FALSE,
@@ -77,12 +78,13 @@ class Dictionary {
                                                 'dbcollat' => 'utf8_general_ci'),
                                           true);
             }
-            $query = $this->indir_db_handle[$sentenceg->indirdb]
-                ->select($sentenceg->sql[0])
-                ->where(vsprintf($sentenceg->sql[2],$key_array))
-                ->get($sentenceg->sql[1]);
 
-            if ($sentenceg->multiple) {
+            $query = $this->indir_db_handle[$fset->indirdb]
+                ->select($fset->sql[0])
+                ->where(vsprintf($fset->sql[2],$key_array), NULL, false)
+                ->get($fset->sql[1]);
+
+            if ($fset->multiple) {
                 // We may get more than one answer from the database
                 $this->indirectLookupCache[$key] = array();
 
@@ -120,23 +122,6 @@ class Dictionary {
         }
 
         $mo->features[$feat] = $this->indirectLookupCache[$key];
-            
-        
-        
-
-//        switch (count($this->indirectLookupCache[$key])) {
-//          case 0:
-//                $mo->features[$feat] = '';
-//                break;
-// 
-//          case 1:
-//                $mo->features[$feat] = $this->indirectLookupCache[$key][0];
-//                break;
-// 
-//          default:
-//                $mo->features[$feat] = $this->indirectLookupCache[$key];
-//                break;
-//        }
     }
 
 
@@ -144,25 +129,27 @@ class Dictionary {
     /// (word/phrase/clause etc.), and returns it as an array.
     /// @param $gl The sentencegrammar information for the relevant level
     /// @param $all Each feature is stored in this array.
-    /// @param $indirect Maps features that are to be retrieved outside Emdros to sentencegrammar information
-    private static function getOneLeveFeatureString($gl, array &$all, string &$subtype, array &$subtypeall, array &$indirect) {
+    /// @param $indirect Maps features that are to be retrieved outside Emdros to its feature configuration
+    private static function getOneLeveFeatureString($gl, string $objType, array &$all, string &$subtype, array &$subtypeall, array &$indirect) {
         if (isset($gl->items)) {
             foreach ($gl->items as $it)
-                self::getOneLeveFeatureString($it,$all,$subtype,$subtypeall,$indirect);
+                self::getOneLeveFeatureString($it,$objType,$all,$subtype,$subtypeall,$indirect);
         }
         else {
             if (isset($gl->name)) {
-                if (strstr($gl->name, ':')===false) {
-                    if (isset($gl->sqlargs)) {
-                        $indirect[$gl->name] = $gl;
-                        foreach($gl->sqlargs as $n)
+                $glName = $gl->name;
+                if (strstr($glName, ':')===false) {
+                    $objSettings =& get_instance()->db_config->dbinfo->objectSettings;
+                    if (isset($objSettings->$objType->featuresetting->$glName->sqlargs)) {
+                        $indirect[$glName] = $objSettings->$objType->featuresetting->$glName;
+                        foreach($objSettings->$objType->featuresetting->$glName->sqlargs as $n)
                             $all[$n] = $n;  // Uses an array to emulate a set
                     }
                     else
-                        $all[$gl->name] = $gl->name;  // Uses an array to emulate a set
+                        $all[$glName] = $glName;  // Uses an array to emulate a set
                 }
                 else {
-                    list($subt, $name) = explode(':', $gl->name);
+                    list($subt, $name) = explode(':', $glName);
                     assert($subtype==='' || $subtype===$subt);
                     $subtype = $subt;
                     $namecomponents = explode('_TYPE_', $name); // Split off format specification
@@ -182,7 +169,9 @@ class Dictionary {
         $all = array();
         $subtype = '';
         $subtypeall = array();
-        self::getOneLeveFeatureString($dbi->sentencegrammar[$grammarListIx], $all, $subtype, $subtypeall, $indirect);
+        self::getOneLeveFeatureString($dbi->sentencegrammar[$grammarListIx],
+                                      $dbi->sentencegrammar[$grammarListIx]->objType,
+                                      $all, $subtype, $subtypeall, $indirect);
         return implode(',',$all);
     }
 
@@ -293,8 +282,8 @@ class Dictionary {
                 foreach ($sh->get_straws() as $str) {
                     foreach ($str->get_matched_objects() as $mo) {
                         if ($sdiIndex==0) {
-                            foreach ($indirect as $feat => $sentenceg)
-                                $this->indirectLookup($feat, $mo, $sentenceg);
+                            foreach ($indirect as $feat => $fsetting)
+                                $this->indirectLookup($feat, $mo, $fsetting);
                         }
                         $this->addMonadObject($msetIndex, $sdiIndex, $mo);
                     }
