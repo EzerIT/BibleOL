@@ -18,6 +18,11 @@ if ($this->session->userdata('ol_user')!==null && $this->session->userdata('ol_u
     $content[$ix][] = anchor(site_url('config'), $this->lang->line('font_preferences'));
     $content[$ix][] = anchor(site_url('users/profile'), $this->lang->line('profile'));
     $content[$ix][] = anchor(site_url('userclass/enroll'), $this->lang->line('enroll_in_class'));
+
+    if ($this->config->item('lj_enabled')) {
+        $this->load->helper('lj_menu_helper');
+        lj_menu_add($head, $content);
+    }
     
     if ($this->session->userdata('ol_teacher') || $this->session->userdata('ol_admin')) {
         // Teacher
