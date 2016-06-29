@@ -170,6 +170,22 @@ CREATE TABLE `bol_personal_font` (
   CONSTRAINT `bol_personal_font_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `bol_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+--
+-- Table structure for table `bol_heb_urls`
+--
+
+DROP TABLE IF EXISTS `bol_heb_urls`;
+CREATE TABLE `bol_heb_urls` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lex` tinytext NOT NULL,
+  `language` enum('Hebrew','Aramaic') NOT NULL,
+  `url` text NOT NULL,
+  `icon` tinytext NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 --
 -- Table structure for table `bol_sta_displayfeature`
 --
@@ -217,6 +233,7 @@ CREATE TABLE `bol_sta_quiz` (
   `start` int(11) NOT NULL,
   `end` int(11) DEFAULT NULL,
   `valid` tinyint(1) NOT NULL,
+  `grading` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ui` (`userid`),
   CONSTRAINT `bol_sta_quiz_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `bol_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -333,4 +350,4 @@ CREATE TABLE IF NOT EXISTS `bol_migrations` (
 --
 
 INSERT INTO `bol_migrations` (`version`) VALUES
-(1);
+(2);

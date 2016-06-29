@@ -15,6 +15,16 @@ class Migration_Grading extends CI_Migration {
         $this->dbforge->add_column('sta_quiz', array('grading' => array('type' => 'TINYINT(4)',
                                                                         'null' => true,
                                                                         'default' => null)));
+        echo "Grading field added to sta_quiz\n";
+
+        $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
+                                        'lex' => array('type' => 'TINYTEXT'),
+                                        'language' => array('type' => "enum('Hebrew', 'Aramaic')"),
+                                        'url' => array('type' => 'TEXT'),
+                                        'icon' => array('type' => 'TINYTEXT')));
+        $this->dbforge->add_key('id', TRUE);
+        $this->dbforge->create_table('heb_urls');
+        echo "Table heb_urls added\n";
    }
 
 	public function down()
