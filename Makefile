@@ -1,9 +1,6 @@
-ALL_TARGETS = testversion js/ol.js js/fontselector.js js/editquiz.js styles/ol.css
+ALL_TARGETS = js/ol.js js/fontselector.js js/editquiz.js styles/ol.css
 
 all:	$(ALL_TARGETS) allugly
-
-testversion:
-	@tsc -v | grep 'Version 1.6.2' > /dev/null || { echo Wrong tsc version ; exit 255; }
 
 js/ol.js:	ts/ol.ts ts/answer.ts ts/charset.ts ts/componentwithyesno.ts ts/configuration.ts ts/dictionary.ts \
 	ts/sentencegrammar.ts ts/displaymonadobject.ts \
