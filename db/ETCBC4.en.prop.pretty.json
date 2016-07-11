@@ -65,7 +65,7 @@
         "clause_atom": {
             "_objname": "Clause atom",
             "tab": "Indentation",
-            "code_TYPE_text": "Code (text)",
+            "code_TYPE_text": "Linkage",
             "code_TYPE_text_VALUES": [
                 { "first" : 0, "last" : 0, "text" : "No relation" },
                 { "first" : 10, "last" : 16, "text" : "Relative" },
@@ -75,7 +75,7 @@
                 { "first" : 300, "last" : 367, "text" : "Conj.adv." },
                 { "first" : 400, "last" : 967, "text" : "Conjunction" },
                 { "first" : 999, "last" : 999, "text" : "Dir.speech" }],
-            "code": "Code (number)",
+            "code": "Syntactic code",
             "typ": "Type"
         },
         "clause": {
