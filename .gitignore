@@ -14,3 +14,4 @@ myapp/config/ol.php
 TAGS
 to_translator
 dumpsql.sh
+myapp/third_party/*
