@@ -90,7 +90,11 @@
                 },
                 "english": {
                     "ignoreSelect": true,
-                    "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i"
+                    "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i",
+                    "indirdb": "glossdb_greek.db",
+                    "sql": ["english", "greek_en", "strongs=%d"],
+                    "sqlargs": [ "strongs" ],
+                    "multiple": false
                 },
                 "strongs": {
                     "ignoreShowRequest": true
@@ -147,11 +151,7 @@
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "english",
-                            "indirdb": "glossdb_greek.db",
-                            "sql": ["english", "greek_en", "strongs=%d"],
-                            "sqlargs": [ "strongs" ],
-                            "multiple": false
+                            "name": "english"
                         },
                         {
                             "mytype": "GrammarFeature",

@@ -1,5 +1,7 @@
 php_flag short_open_tag on 
 
+php_value max_input_vars 5000
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /

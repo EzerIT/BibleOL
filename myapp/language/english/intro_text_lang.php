@@ -14,24 +14,11 @@ $lang['intro_center'] =
 
        <p>The source code for Bible OL is available at <a href="https://github.com/EzerIT/BibleOL"
        target="_blank">GitHub</a>. We hope developers will fork this code and join us to add
-       additional features.</p>
+       additional features.</p>';
 
-       <h1>News</h1>
+//       <h1>News</h1>
     
-       <h2>(23 March 2016) Grammar Selection Saved</h2>
-    
-       <p>If you move from one Bible passage to another in the same browser tab, the system will
-       now remember which grammatical items you have chosen to display. Your choice can be cleared
-       by pressing the “Clear grammar” button.</p>
-
-       <p>Information about the chosen grammar items is local to a browser tab and, additionally,
-       has no effect on grammar display in exercises.</p>
-
-       <h2>(21 March 2016) Indentation Information for Hebrew Clauses</h2>
-    
-      <p>The Hebrew text now contains information about how a clause relates to its surrounding
-      text. This is indicated by an “indentation level,” which can be displayed by selecting
-      <i>Clause &gt Indentation</i> when viewing a Hebrew text.</p>';
+//       <h2>(23 March 2016) Grammar Selection Saved</h2>
 
 
 $lang['intro_right_head'] = 'Bible Online Learner for Free Global Learning';
@@ -47,7 +34,7 @@ $lang['intro_right1'] =
        target="_blank">Ezer IT Consulting</a>.<br>
 
        For her PhD at Aalborg University, Judith Gottschalk is developing <i>Learning Journey,</i>
-       an associated website with statistics on learner performance.</p>';
+       a plugin with statistics on learner performance.</p>';
 
 $lang['intro_right2'] =
       '<p>Bible Online Learner is based on PLOTLearner, a PC program developed as part of the

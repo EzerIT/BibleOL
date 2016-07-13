@@ -15,24 +15,11 @@ $lang['intro_center'] =
 
     <p>Kildeteksten til Bible OL er tilgængelig på <a href="https://github.com/EzerIT/BibleOL"
     target="_blank">GitHub</a>. Vi håber at udviklere vil fork\'e denne kode og hjælpe os med at
-    tilføje nye faciliteter.</p>
+    tilføje nye faciliteter.</p>';
 
-    <h1>Nyheder</h1>
+//    <h1>Nyheder</h1>
 
-    <h2>(23.3.2016) Grammatikvisning huskes</h2>
-
-    <p>Når man i en browser-fane skifter fra et bibelsted til et andet, vil systemet nu huske hvilke
-    grammatiske oplysninger man har valgt at se. Valget kan nulstilles ved at trykke på knappen
-    »Fjern grammatik«.</p>
-
-    <p>Oplysninger om de valgte grammatikoplysninger er lokale for en browser-fane og har desuden
-    ingen effekt på grammatikvisning i øvelser.</p>
-
-    <h2>(21.3.2016) Indrykningsinformation for ledsætninger på hebraisk</h2>
-
-    <p>Den hebraiske tekst er nu forsynet med oplysninger om ledsætningers relation til den
-    omgivende tekst. Dette angives ved et »indrykningsniveau«, som man kan se ved at vælge
-    <i>Ledsætning &gt; Indrykning</i> når man ser på en hebraisk tekst.</p>';
+//    <h2>(23.3.2016) Grammatikvisning huskes</h2>
 
 
 $lang['intro_right_head'] = 'Bible Online Learner &ndash; fri global læring';
@@ -47,7 +34,7 @@ $lang['intro_right1'] =
     target="_blank">Ezer IT Consulting</a>.<br>
 
     For sit PhD-studium ved Aalborg universitet udvikler Judith Gottschalk <i>Learning Journey,</i>
-    et websted som giver statistiske oplysninger om
+    en plugin som giver statistiske oplysninger om
     hvorledes studerende klarer sig i Bible OL.</p>';
 
 $lang['intro_right2'] =
