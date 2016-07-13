@@ -25,7 +25,15 @@ class Ctrl_users extends MY_Controller {
             if ($offset<0)
                 $offset = 0;
 
-            $allusers = $this->mod_users->get_all_users_part($users_per_page,$offset*$users_per_page);
+            if (isset($_GET['orderby']) && in_array($_GET['orderby'],
+                                                    array('username','first_name','last_name','email','last_login','isteacher','isadmin'),true))
+                $orderby = $_GET['orderby'];
+            else
+                $orderby = 'username';
+
+            $desc = isset($_GET['desc']);
+
+            $allusers = $this->mod_users->get_all_users_part($users_per_page,$offset*$users_per_page,$orderby,$desc);
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('users')));
@@ -35,6 +43,8 @@ class Ctrl_users extends MY_Controller {
             $center_text = $this->load->view('view_user_list',
                                              array('allusers' => $allusers,
                                                    'offset' => $offset,
+                                                   'orderby' => $orderby,
+                                                   'sortorder' => $desc ? 'desc' : 'asc',
                                                    'users_per_page' => $users_per_page,
                                                    'user_count' => $user_count,
                                                    'page_count' => $page_count,
