@@ -5,7 +5,7 @@
 
     <?php // $userid is -1 when an administrator creates a new user, -2 when a user creates their own account ?>
 
-    <?= form_open($userid==-2 ? "users/sign_up" : "users/edit_one_user?userid=$userid&offset=$offset") ?>
+    <?= form_open($userid==-2 ? "users/sign_up" : "users/edit_one_user?userid=$userid&$extras") ?>
       <table class="form">
         <tr>
           <?php if (!empty($user_info->oauth2_login)): ?>
@@ -109,5 +109,5 @@
       </table>
       <p style="height:2px">&nbsp;</p>
       <p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
-          <a class="btn btn-default" href="<?= site_url($userid==-2 ? '/' : "users?offset=$offset") ?>"><?= $this->lang->line('cancel_button') ?></a></p>
+          <a class="btn btn-default" href="<?= site_url($userid==-2 ? '/' : "users?$extras") ?>"><?= $this->lang->line('cancel_button') ?></a></p>
     </form>

@@ -97,6 +97,11 @@ class Ctrl_userclass extends MY_Controller {
 
             $userid = isset($_GET['userid']) ? intval($_GET['userid']) : 0;
             $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+            $orderby = isset($_GET['orderby']) ? $_GET['orderby'] : 'username';
+            $sortorder = isset($_GET['desc']) ? 'desc' : 'asc';
+
+            $extras = "offset=$offset&orderby=$orderby&$sortorder";
+
 
             if ($userid<=0)
                 throw new DataException($this->lang->line('illegal_user_id'));
@@ -119,7 +124,7 @@ class Ctrl_userclass extends MY_Controller {
                     $new_classes = array(); // ...so we set the array to empty
 
                 $this->mod_userclass->update_classes_for_user($userid, $old_classes, $new_classes, $owned_classes);
-                redirect("/users?offset=$offset");
+                redirect("/users?$extras");
             }
             else {
                 // VIEW:
@@ -129,7 +134,7 @@ class Ctrl_userclass extends MY_Controller {
                 
                 $center_text = $this->load->view('view_edit_classes_for_user',
                                                  array('userid' => $userid,
-                                                       'offset' => $offset,
+                                                       'extras' => $extras,
                                                        'user_name' => "$user_info->first_name $user_info->last_name",
                                                        'allclasses' => $all_classes,
                                                        'owned_classes' => $owned_classes,

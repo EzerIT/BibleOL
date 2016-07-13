@@ -144,8 +144,8 @@ class Mod_users extends CI_Model {
         return $query->result();
     }
 
-    public function get_all_users_part(integer $limit, integer $offset, string $orderby, boolean $desc) {
-        $query = $this->db->order_by($orderby,$desc ? 'desc' : 'asc')->get('user',$limit,$offset);
+    public function get_all_users_part(integer $limit, integer $offset, string $orderby, string $sortorder) {
+        $query = $this->db->order_by($orderby,$sortorder)->get('user',$limit,$offset);
         return $query->result();
     }
 

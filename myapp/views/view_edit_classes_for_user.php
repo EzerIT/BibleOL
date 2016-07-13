@@ -1,6 +1,6 @@
 <h1><?= sprintf($this->lang->line('classes_for_user'), $user_name) ?></h1>
 
-<?= form_open("userclass/classes_for_user?userid=$userid&offset=$offset") ?>
+<?= form_open("userclass/classes_for_user?userid=$userid&$extras") ?>
 
 <div class="form-group" style="max-width:300px">
   <table class="type2 table table-striped">
@@ -19,6 +19,6 @@
 
 <p style="height:2px">&nbsp;</p>
 <p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
-   <a class="btn btn-default" href="<?= site_url("users?offset=$offset") ?>"><?= $this->lang->line('cancel_button') ?></a>
+   <a class="btn btn-default" href="<?= site_url("users?$extras") ?>"><?= $this->lang->line('cancel_button') ?></a>
 </p>
 </form>

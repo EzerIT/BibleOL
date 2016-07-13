@@ -31,9 +31,9 @@ class Ctrl_users extends MY_Controller {
             else
                 $orderby = 'username';
 
-            $desc = isset($_GET['desc']);
+            $sortorder = isset($_GET['desc']) ? 'desc' : 'asc';
 
-            $allusers = $this->mod_users->get_all_users_part($users_per_page,$offset*$users_per_page,$orderby,$desc);
+            $allusers = $this->mod_users->get_all_users_part($users_per_page,$offset*$users_per_page,$orderby,$sortorder);
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('users')));
@@ -44,7 +44,7 @@ class Ctrl_users extends MY_Controller {
                                              array('allusers' => $allusers,
                                                    'offset' => $offset,
                                                    'orderby' => $orderby,
-                                                   'sortorder' => $desc ? 'desc' : 'asc',
+                                                   'sortorder' => $sortorder,
                                                    'users_per_page' => $users_per_page,
                                                    'user_count' => $user_count,
                                                    'page_count' => $page_count,
@@ -148,6 +148,11 @@ class Ctrl_users extends MY_Controller {
 
             $userid = is_numeric($_GET['userid']) ? intval($_GET['userid']) : 0;
             $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+            $orderby = isset($_GET['orderby']) ? $_GET['orderby'] : 'username';
+            $sortorder = isset($_GET['desc']) ? 'desc' : 'asc';
+
+            $extras = "offset=$offset&orderby=$orderby&$sortorder";
+
         
             if ($userid<=0)
                 throw new DataException($this->lang->line('illegal_user_id'));
@@ -162,7 +167,7 @@ class Ctrl_users extends MY_Controller {
                 throw new DataException($this->lang->line('only_admin_delete'));
 
             $this->mod_users->delete_user($userid);
-            redirect("/users?offset=$offset");
+            redirect("/users?$extras");
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('users'));
@@ -274,6 +279,10 @@ class Ctrl_users extends MY_Controller {
 
             $userid = isset($_GET['userid']) ? intval($_GET['userid']) : 0;
             $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+            $orderby = isset($_GET['orderby']) ? $_GET['orderby'] : 'username';
+            $sortorder = isset($_GET['desc']) ? 'desc' : 'asc';
+
+            $extras = "offset=$offset&orderby=$orderby&$sortorder";
 
             if ($userid==0)
                 throw new DataException($this->lang->line('illegal_user_id'));
@@ -307,7 +316,7 @@ class Ctrl_users extends MY_Controller {
 
                     $query = $this->mod_users->set_user($user_info, null);
 
-                    redirect("/users?offset=$offset");
+                    redirect("/users?$extras");
                 }
                 else {
                     // VIEW:
@@ -316,7 +325,7 @@ class Ctrl_users extends MY_Controller {
                     $this->load->view('view_menu_bar', array('langselect' => true));
 
                     $center_text = $this->load->view('view_edit_user',array('userid' => $userid,
-                                                                            'offset' => $offset,
+                                                                            'extras' => $extras,
                                                                             'user_info' => $user_info,
                                                                             'isadmin' => $this->mod_users->is_admin(),
                                                                             'isteacher' => $this->mod_users->is_teacher(),
@@ -386,7 +395,7 @@ class Ctrl_users extends MY_Controller {
                         $this->email->send();
                     }
 
-                    redirect("/users?offset=$offset");
+                    redirect("/users?$extras");
                 }
                 else {
                     // VIEW:
@@ -395,7 +404,7 @@ class Ctrl_users extends MY_Controller {
                     $this->load->view('view_menu_bar', array('langselect' => true));
 
                     $center_text = $this->load->view('view_edit_user',array('userid' => $userid,
-                                                                            'offset' => $offset,
+                                                                            'extras' => $extras,
                                                                             'user_info' => $user_info,
                                                                             'isadmin' => $this->mod_users->is_admin(),
                                                                             'isteacher' => $this->mod_users->is_teacher(),
