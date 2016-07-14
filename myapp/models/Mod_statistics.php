@@ -176,10 +176,11 @@ class Mod_statistics extends CI_Model {
         }
     }
 
+    // Get all templates with finished quizzes for user $user_id
     public function allTemplates(integer $user_id) {
         $query = $this->db->select('sta_quiztemplate.id AS qtid,pathname,dbname,dbpropname,qoname')
             ->from('sta_quiz')->join('sta_quiztemplate','sta_quiztemplate.id=sta_quiz.templid')
-            ->where('sta_quiz.valid',1)->where('sta_quiz.userid',$user_id)
+            ->where('sta_quiz.valid',1)->where('sta_quiz.userid',$user_id)->where('sta_quiz.end IS NOT NULL')
             ->group_by('sta_quiztemplate.id')->order_by('pathname')->get();
         return $query->result();
     }
