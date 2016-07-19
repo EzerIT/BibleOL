@@ -1,0 +1,240 @@
+{
+  "dbdescription": "Grego (Nestle 1904, NT)",
+  "dbcopyright": "Domínio Público.",
+  "emdrosobject": {
+    "word": {
+      "_objname": "Palavra",
+      "person": "Pessoa",
+      "voice": "Voz",
+      "tense": "Tempo",
+      "mood": "Modo",
+      "lemma": "Lexema",
+      "raw_lemma": "Lexema (caixa baixa, sem acentos)",
+      "normalized": "Normalizado",
+      "raw_normalized": "Normalizado (caixa baixa, sem acentos)",
+      "number": "Número",
+      "possessor_number": "Número Possuidor",
+      "suffix": "Extra",
+      "surface": "Texto",
+      "english": "Inglês",
+      "strongs": "Número da concordância de Strong",
+      "strongs_unreliable": "Strong não é confiável?",
+      "gender": "Gênero",
+      "case": "Caso",
+      "psp": "Parte do Discurso"
+    },
+    "clause1": {
+      "_objname": "Clausula Nível 1",
+      "typ": "Função"
+    },
+    "clause1_abbrev": {
+      "_objname": "Cláusula1"
+    },
+    "clause2": {
+      "_objname": "Cláusula Nível 2",
+      "typ": "Função"
+    },
+    "clause2_abbrev": {
+      "_objname": "Cláusula2"
+    },
+    "sentence": {
+      "_objname": "Sentença"
+    }
+  },
+  "emdrostype": {
+    "boolean_t": {
+      "false": "não",
+      "true": "sim"
+    },
+    "tense_t": {
+      "pluperfect": "Pluperfeito",
+      "imperfect": "Imperfeito",
+      "second_future": "Segundo futuro",
+      "present": "Presente",
+      "aorist": "Aoristo",
+      "second_aorist": "Segundo aoristo",
+      "second_pluperfect": "Segundo pluperfeito",
+      "future": "Futuro",
+      "second_perfect": "Segundo perfeito",
+      "NA": "N/A",
+      "perfect": "Perfeito"
+    },
+    "suffix_t": {
+      "crasis": "Crase",
+      "interrogative": "Interrogativo",
+      "comparative": "Comparativo",
+      "negative": "Negativo",
+      "NA": "N/A",
+      "superlative": "Superlativo",
+      "attic": "Attico",
+      "particle_attached": "Partícula anexada"
+    },
+    "mood_t": {
+      "optative": "Optativo",
+      "participle": "Particípio",
+      "imperative": "Imperativo",
+      "subjunctive": "Subjuntivo",
+      "imperative_participle": "Particípio Imperativo",
+      "indicative": "Indicativo",
+      "infinitive": "Infinitivo",
+      "NA": "N/A"
+    },
+    "gender_t": {
+      "neuter": "#4 Neutro",
+      "masculine": "#2 Masculino",
+      "feminine": "#3 Feminino",
+      "NA": "#1 N/A"
+    },
+    "case_t": {
+      "nominative": "#2 Nominativo",
+      "dative": "#5 Dativo",
+      "vocative": "#6 Vocativo",
+      "accusative": "#3 Acusativo",
+      "NA": "#1 N/A",
+      "genitive": "#4 Genitivo"
+    },
+    "psp_t": {
+      "letter_indeclinable": "Letra, indecl.",
+      "hebrew": "Hebraico",
+      "conjunction": "Conjunção",
+      "reciprocal_pronoun": "Pronome Recíproco",
+      "cond": "Condição",
+      "particle": "Partícula",
+      "interjection": "Interjeição",
+      "adverb": "Advérbio",
+      "verb": "Verbo",
+      "correlative_or_interrogative_pronoun": "Correl. or pron. interrog.",
+      "possessive_pronoun": "Pronome Pssessivo",
+      "personal_pronoun": "Pronome Pessoal",
+      "aramaic": "Aramaico",
+      "numeral_indeclinable": "Numeral, indecl.",
+      "reflexive_pronoun": "Pronome Reflexivo",
+      "correlative_pronoun": "Pronome Correlativo",
+      "noun_other_type_indeclinable": "Substantivo (outro tipo), indecl.",
+      "adjective": "Adjetivo",
+      "demonstrative_pronoun": "Pronome Demonstrativo",
+      "relative_pronoun": "Pronome Relativo",
+      "preposition": "Preposição",
+      "interrogative_pronoun": "Pronome Interrogativo",
+      "article": "Artigo",
+      "proper_noun_indeclinable": "Nome Próprio, indecl.",
+      "noun": "Substantivo",
+      "indefinite_pronoun": "Pronome Indefinido",
+      "NA": "N/A"
+    },
+    "number_t": {
+      "NA": "#1 N/A",
+      "plural": "#3 Plural",
+      "singular": "#2 Singular"
+    },
+    "voice_t": {
+      "middle_or_passive": "Médio-passiva",
+      "passive": "Passiva",
+      "impersonal_active": "Ativa Impessoal",
+      "active": "Ativa",
+      "passive_deponent": "Passiva Deponente",
+      "NA": "N/A",
+      "middle_or_passive_deponent": "Médio-passiva deponente",
+      "middle_deponent": "Média deponente",
+      "middle": "Média"
+    },
+    "person_t": {
+      "second_person": "#3 2a",
+      "third_person": "#4 3a",
+      "first_person": "#2 1a",
+      "NA": "#1 N/A"
+    },
+    "clause_type_t_abbrev": {
+      "ADV": "ADV",
+      "CL": "CL",
+      "IO": "IO",
+      "O": "O",
+      "O2": "O2",
+      "P": "P",
+      "S": "S",
+      "V": "V",
+      "VC": "VC"
+    },
+    "clause_type_t": {
+      "ADV": "Adverbial",
+      "CL": "Cláusula",
+      "IO": "Objeto Indireto",
+      "O": "Objeto",
+      "O2": "Segundo Objeto",
+      "P": "Predicado",
+      "S": "Sujeito",
+      "V": "Verbal",
+      "VC": "Cópula Verbal"
+    }
+  },
+  "grammargroup": {
+    "word": {
+      "lexeme": "Lexema",
+      "morphology": "Morfologia"
+    }
+  },
+  "grammarmetafeature": {
+    "word": {
+      "pgn": "Pessoa, gênero, número"
+    }
+  },
+  "grammarsubfeature": {
+    "word": {
+      "person": {
+        "first_person": "1",
+        "second_person": "2",
+        "third_person": "3",
+        "NA": "-"
+      },
+      "gender": {
+        "feminine": "F",
+        "masculine": "M",
+        "neuter": "N",
+        "NA": "-"
+      },
+      "number": {
+        "plural": "Pl",
+        "singular": "Sg",
+        "NA": "-"
+      }
+    }
+  },
+  "universe": {
+    "book": {
+      "_label": "%s",
+      "Matthew": "Mateus",
+      "Mark": "Marcos",
+      "Luke": "Lucas",
+      "John": "João",
+      "Acts": "Atos",
+      "Romans": "Romanos",
+      "I_Corinthians": "1 Coríntios",
+      "II_Corinthians": "2 Coríntios",
+      "Galatians": "Gálatas",
+      "Ephesians": "Efésios",
+      "Philippians": "Filipenses",
+      "Colossians": "Colossenses",
+      "I_Thessalonians": "1 Tessalonicenses",
+      "II_Thessalonians": "2 Tessalonicenses",
+      "I_Timothy": "1 Timóteo",
+      "II_Timothy": "2 Timóteo",
+      "Titus": "Tito",
+      "Philemon": "Filemon",
+      "Hebrews": "Hebreus",
+      "James": "Tiago",
+      "I_Peter": "1 Pedro",
+      "II_Peter": "2 pedro",
+      "I_John": "1 João",
+      "II_John": "2 João",
+      "III_John": "3 João",
+      "Jude": "Judas",
+      "Revelation": "Apocalipse"
+    },
+    "chapter": {
+      "_label": "Capítulo %s"
+    },
+    "verse": {
+      "_label": "Verso %s"
+    }
+  }
+}

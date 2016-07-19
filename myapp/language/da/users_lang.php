@@ -20,6 +20,7 @@ $lang['preferred_language'] = 'Foretrukket sprog';
 $lang['no_language'] = 'Intet angivet';
 $lang['english'] = 'Engelsk';
 $lang['danish'] = 'Dansk';
+$lang['portuguese'] = 'Portugisisk';
 $lang['number_of_users'] = 'Antal brugere: %s';
 $lang['showing_per_page'] = 'Der vises %s brugere per side';
 
