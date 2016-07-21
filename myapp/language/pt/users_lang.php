@@ -36,7 +36,7 @@ $lang['assign_to_class'] = 'Especificar Classe';
 $lang['user_edit'] = 'Editar';
 $lang['user_delete'] = 'Deletar';
 
-$lang['delete_user'] = 'Delete user'; // Confirmation dialog title
+$lang['delete_user'] = 'Deletar usuário'; // Confirmation dialog title
 $lang['delete_user_confirm'] = 'Você quer deletar o usuário %s incluindo todas as informações dele neste site?';
 $lang['add_user'] = 'Adicionar novo usuário';
 
