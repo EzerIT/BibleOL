@@ -18,6 +18,7 @@ class QuestionStatistics {
     public location : string;
     public start_time : number; // UNIX time on client
     public end_time : number; // UNIX time on client
+    public grading: number;
     public show_feat : ShowFeatStatistics = new ShowFeatStatistics();
     public req_feat : ReqFeatStatistics = new ReqFeatStatistics();
 }

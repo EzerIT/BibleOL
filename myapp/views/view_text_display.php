@@ -44,6 +44,7 @@
       <div id="buttonlist2">
         <button id="next_question" type="button"><?= $this->lang->line('next') ?></button>
         <button id="finish" type="button"><?= $this->lang->line('finish') ?></button>
+        <button id="finishNoStats" type="button"><?= $this->lang->line('finish_no_grading') ?></button>
       </div>
     <?php endif; ?>
    

@@ -53,3 +53,6 @@ $lang['2nd_choice'] = '2nd choice';
 $lang['3rd_choice'] = '3rd choice'; 
 $lang['4th_choice'] = '4th choice'; 
 $lang['badname'] = 'Illegal character in filename';
+$lang['done_practicing'] = 'Are you done with practicing?';
+$lang['stop_practicing'] = 'Stop practicing?';
+$lang['go_on'] = 'Go on!';

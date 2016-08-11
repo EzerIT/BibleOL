@@ -172,7 +172,8 @@ class Mod_statistics extends CI_Model {
             }
 
             // Set end time for quiz
-            $query = $this->db->where('id',$quizid)->update('sta_quiz',array('end' => $time));
+            $query = $this->db->where('id',$quizid)->update('sta_quiz',array('end' => $time,
+                                                                             'grading' => $question['grading']));
         }
     }
 

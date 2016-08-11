@@ -25,8 +25,10 @@ class PanelQuestion {
     private question_stat : QuestionStatistics = new QuestionStatistics;
 
     private static kbid = 1; // Input field identification for virtual keyboard
+    
+    private gradingFlag : number;
 
-    public updateQuestionStat() : QuestionStatistics {
+    public updateQuestionStat(gradingFlag) : QuestionStatistics {
         this.question_stat.end_time = Math.round((new Date()).getTime() / 1000);
 
         this.commitAll()
@@ -36,6 +38,9 @@ class PanelQuestion {
             this.question_stat.req_feat.users_answer.push(ans.usersAnswer());
             this.question_stat.req_feat.users_answer_was_correct.push(ans.usersAnswerWasCorrect());
         }
+
+	this.question_stat.grading = gradingFlag;
+        
         return this.question_stat;
     }
 

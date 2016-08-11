@@ -52,6 +52,7 @@ $lang['show_answer'] = 'Vis svar';
 
 $lang['next'] = 'Næste';
 $lang['finish'] = 'Afslut';
+$lang['finish_no_grading'] = 'Afslut uden karakter';
 $lang['toggle_mql'] = 'Vis/skjul MQL';
 
 $lang['clear_grammar'] = 'Fjern grammatik';

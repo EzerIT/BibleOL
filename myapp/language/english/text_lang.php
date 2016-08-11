@@ -52,6 +52,7 @@ $lang['show_answer'] = 'Show answer';
 
 $lang['next'] = 'Next';
 $lang['finish'] = 'Finish';
+$lang['finish_no_grading'] = 'Finish without grading';
 $lang['toggle_mql'] = 'Toggle MQL';
 
 $lang['clear_grammar'] = 'Clear grammar';
