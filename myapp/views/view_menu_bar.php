@@ -97,7 +97,6 @@ $cols = $ix+1;
           </li>
         <?php endif; ?>
       </ul>
-        <div class="navbar-text navbar-right logo hidden-xs hidden-sm hidden-md"><a class="navbar-link" href="http://www.ezer.dk" target="_blank"><img alt="" src="<?= site_url('images/ezer_web_trans_lille.png') ?>"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="navbar-link" href="http://3bmoodle.dk" target="_blank"><img alt="" height="43" src="<?= site_url('images/3bm_logo.png') ?>"></a></div>
     </div>
 </nav>
 

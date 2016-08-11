@@ -10,7 +10,16 @@
       <?php if (isset($left)): ?>
         <div class="panel-body"><?= $left ?></div>
       <?php endif; ?>  
-  </div>
+    </div>
+    <?php if (isset($logos)): ?>
+      <div class="panel panel-primary hidden-xs">
+        <div class="panel-body centeralign">
+          <a class="navbar-link" href="http://www.ezer.dk" target="_blank"><img alt="" src="<?= site_url('images/ezer_web_trans_lille.png') ?>"></a>
+          <p>&nbsp;</p>
+          <a class="navbar-link" href="http://3bmoodle.dk" target="_blank"><img alt="" height="43" src="<?= site_url('images/3bm_logo.png') ?>"></a>
+        </div>
+      </div>
+    <?php endif; ?>
   </div>
    
   <div class="col-sm-6">

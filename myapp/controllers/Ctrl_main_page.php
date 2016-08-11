@@ -11,6 +11,7 @@ class Ctrl_main_page extends MY_Controller {
         $data['center'] = $this->mod_intro_text->center_text();
         $data['right_title'] = $this->mod_intro_text->right_text_title();
         $data['right'] = $this->mod_intro_text->right_text();
+        $data['logos'] = true;
         
         $this->load->view('view_top1', array('title'=>'Bible Online Learner'));
         $this->load->view('view_top2');
