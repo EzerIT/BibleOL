@@ -17,7 +17,21 @@ class MY_Lang extends CI_Lang {
                 $idiom = $CI->language;
         }
 
-        return parent::load($langfile, $idiom, $return, $add_suffix, $alt_path);
+        if ($return) {
+            if ($idiom!='english')
+                $l1 = parent::load($langfile, 'english', true, $add_suffix, $alt_path); // For fallback strings
+            else
+                $l1 = array();
+
+            $l2 = parent::load($langfile, $idiom, $return, $add_suffix, $alt_path);
+            return array_merge($l1,$l2);
+        }
+        else {
+            if ($idiom!='english')
+                parent::load($langfile, 'english', false, $add_suffix, $alt_path); // For fallback strings
+
+            parent::load($langfile, $idiom, false, $add_suffix, $alt_path);
+        }
     }
 
 	public function line($line, $log_errors = TRUE)
@@ -33,6 +47,9 @@ class MY_Lang extends CI_Lang {
     {
         if ($idiom=='en' || $idiom=='none')
             $idiom = 'english';
+
+        if ($idiom!='english')
+            include(APPPATH . "/language/english/{$langfile}_lang.php"); // For fallback strings
 
         include(APPPATH . "/language/$idiom/{$langfile}_lang.php");
         $this->secondary_lang = array_merge($this->secondary_lang, $lang);
