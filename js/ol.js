@@ -1121,6 +1121,7 @@ var COMPONENT_TYPE;
     COMPONENT_TYPE[COMPONENT_TYPE["translatedField"] = 2] = "translatedField";
     COMPONENT_TYPE[COMPONENT_TYPE["comboBox1"] = 3] = "comboBox1";
     COMPONENT_TYPE[COMPONENT_TYPE["comboBox2"] = 4] = "comboBox2";
+    COMPONENT_TYPE[COMPONENT_TYPE["checkBoxes"] = 5] = "checkBoxes";
 })(COMPONENT_TYPE || (COMPONENT_TYPE = {}));
 var ComponentWithYesNo = (function () {
     /// Creates a ComponentWithYesNo containing a specified component.
@@ -1233,6 +1234,10 @@ var Answer = (function () {
         this.answerSws = answerSws;
         this.answerString = answerString;
         this.matchRegexp = matchRegexp;
+        if (this.cType == COMPONENT_TYPE.checkBoxes) {
+            var aString = answerString.substr(1, answerString.length - 2); // Remove surrounding '(' and ')'
+            this.answerArray = aString.split(',');
+        }
     }
     /// Displays the correct answer.
     Answer.prototype.showIt = function () {
@@ -1247,6 +1252,14 @@ var Answer = (function () {
             case COMPONENT_TYPE.comboBox1:
             case COMPONENT_TYPE.comboBox2:
                 $(this.c).val(this.answerSws.getInternal()).prop('selected', true);
+                break;
+            case COMPONENT_TYPE.checkBoxes:
+                var inputs = $(this.c).find('input');
+                var xthis = this;
+                inputs.each(function () {
+                    var value = $(this).attr('value');
+                    $(this).prop('checked', xthis.answerArray.indexOf(value) != -1);
+                });
                 break;
         }
     };
@@ -1317,6 +1330,22 @@ var Answer = (function () {
                         isCorrect = userAnswerSws === this.answerSws;
                         userAnswer = userAnswerSws.getInternal();
                     }
+                    break;
+                case COMPONENT_TYPE.checkBoxes:
+                    var inputs = $(this.c).find('input');
+                    var xthis = this;
+                    isCorrect = true;
+                    userAnswer = '';
+                    inputs.each(function () {
+                        var value = $(this).attr('value');
+                        if ($(this).prop('checked')) {
+                            userAnswer += value + ',';
+                            isCorrect = isCorrect && xthis.answerArray.indexOf(value) != -1;
+                        }
+                        else
+                            isCorrect = isCorrect && xthis.answerArray.indexOf(value) == -1;
+                    });
+                    userAnswer = '(' + userAnswer.substr(0, userAnswer.length - 1) + ')';
                     break;
             }
             if (userAnswer && !this.hasAnswered) {
@@ -1565,6 +1594,26 @@ var PanelQuestion = (function () {
                         var intf = $('<input type="number">');
                         var cwyn = new ComponentWithYesNo(intf, COMPONENT_TYPE.textField);
                         cwyn.addKeypressListener();
+                        v = cwyn.appendMeTo($('<td></td>'));
+                        this.vAnswers.push(new Answer(cwyn, null, correctAnswer, null));
+                    }
+                    else if (featType.substr(0, 8) === 'list of ') {
+                        var subFeatType = featType.substr(8); // Remove "list of "
+                        var values = typeinfo.enum2values[subFeatType];
+                        var selections = $('<table class="list-of"></table>');
+                        var row = $('<tr></tr>');
+                        for (var i = 0, len = values.length; i < len; ++i) {
+                            row.append('<td style="text-align:left"><input type="checkbox" value="{0}">{1}</td>'
+                                .format(values[i], getFeatureValueFriendlyName(subFeatType, values[i], false)));
+                            if (i % 3 == 2) {
+                                selections.append(row);
+                                row = $('<tr></tr>');
+                            }
+                        }
+                        if (values.length % 3 != 0)
+                            selections.append(row);
+                        var cwyn = new ComponentWithYesNo(selections, COMPONENT_TYPE.checkBoxes);
+                        cwyn.addChangeListener();
                         v = cwyn.appendMeTo($('<td></td>'));
                         this.vAnswers.push(new Answer(cwyn, null, correctAnswer, null));
                     }

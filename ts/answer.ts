@@ -11,7 +11,8 @@ class Answer {
     private cType : COMPONENT_TYPE;     ///< The type of {@link #c}.
     private answerSws : StringWithSort; ///< The correct answer as a StringWithSort, when relevant.
     private answerString : string;      ///< The correct answer as as string.
-
+    private answerArray : string[];     ///< The correct answer as an array of values (only for COMPONENT_TYPE.checkBoxes)
+    
     /// Regular expression to find a match. If null, a full match is required. The characters %s
     /// will be replaced by the user's input. If, for example, the user types "horse" and this regular expression is
     /// <code>"(.+[;,] +)?%s([,;].+)?"</code>, a match will occur if the correct answer is "horse, stallion".
@@ -35,6 +36,10 @@ class Answer {
         this.answerSws = answerSws;
         this.answerString = answerString;
         this.matchRegexp = matchRegexp;
+        if (this.cType==COMPONENT_TYPE.checkBoxes) {
+            var aString : string = answerString.substr(1,answerString.length-2); // Remove surrounding '(' and ')'
+            this.answerArray = aString.split(',');
+        }
     }
 
     /// Displays the correct answer.
@@ -50,6 +55,16 @@ class Answer {
         case COMPONENT_TYPE.comboBox1:
         case COMPONENT_TYPE.comboBox2:
             $(this.c).val(this.answerSws.getInternal()).prop('selected', true);
+            break;
+        case COMPONENT_TYPE.checkBoxes:
+            var inputs = $(this.c).find('input');
+            var xthis = this;
+            inputs.each(
+                function() {
+                    var value : string = $(this).attr('value');
+                    $(this).prop('checked',xthis.answerArray.indexOf(value)!=-1);
+                }
+            );
             break;
         }
     }
@@ -132,7 +147,27 @@ class Answer {
                     userAnswer = userAnswerSws.getInternal();
                 }
                 break;
+
+            case COMPONENT_TYPE.checkBoxes:
+                var inputs = $(this.c).find('input');
+                var xthis  = this;
+                isCorrect  = true;
+                userAnswer = '';
+                inputs.each(
+                    function() {
+                        var value : string = $(this).attr('value');
+                        if ($(this).prop('checked')) {
+                            userAnswer += value + ',';
+                            isCorrect = isCorrect && xthis.answerArray.indexOf(value)!=-1;
+                        }
+                        else
+                            isCorrect = isCorrect && xthis.answerArray.indexOf(value)==-1;
+                    }
+                );
+                userAnswer = '(' + userAnswer.substr(0,userAnswer.length-1) + ')';
+                break;
             }
+            
             if (userAnswer && !this.hasAnswered) {
                 this.hasAnswered = true;
                 this.firstAnswer = userAnswer;

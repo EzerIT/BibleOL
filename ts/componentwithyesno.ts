@@ -10,6 +10,7 @@ enum COMPONENT_TYPE {
     translatedField,
     comboBox1, // An ordinary combobox (for Latin text)
     comboBox2, // A styled combobox (for Hebrew text)
+    checkBoxes,
 }
 
 declare var site_url : string; ///< The main URL of the website. Used for generating links to images.

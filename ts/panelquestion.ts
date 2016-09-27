@@ -320,6 +320,27 @@ class PanelQuestion {
                         v = cwyn.appendMeTo($('<td></td>'));
                         this.vAnswers.push(new Answer(cwyn,null,correctAnswer,null));
                     }
+                    else if (featType.substr(0,8)==='list of ') {
+                        var subFeatType = featType.substr(8); // Remove "list of "
+                        var values : string[] = typeinfo.enum2values[subFeatType];
+                        var selections : JQuery = $('<table class="list-of"></table>');
+                        var row : JQuery = $('<tr></tr>');
+                        for (var i:number=0, len=values.length; i<len; ++i) {
+                            row.append('<td style="text-align:left"><input type="checkbox" value="{0}">{1}</td>'
+                                       .format(values[i],getFeatureValueFriendlyName(subFeatType, values[i], false)));
+                            if (i%3==2) {
+                                selections.append(row);
+                                row = $('<tr></tr>');
+                            }
+                        }
+                        if (values.length%3!=0)
+                            selections.append(row);
+                        
+                        var cwyn : ComponentWithYesNo = new ComponentWithYesNo(selections,COMPONENT_TYPE.checkBoxes);
+                        cwyn.addChangeListener();
+                        v = cwyn.appendMeTo($('<td></td>'));
+                        this.vAnswers.push(new Answer(cwyn,null,correctAnswer,null));
+                    }
                     else {
                         // This is an enumeration feature type, get the collection of possible values
                         var values : string[] = typeinfo.enum2values[featType];
