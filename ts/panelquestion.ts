@@ -333,8 +333,11 @@ class PanelQuestion {
                                 row = $('<tr></tr>');
                             }
                         }
-                        if (values.length%3!=0)
+                        if (values.length%3!=0) {
+                            for (var i:number=values.length; i%3!=0; ++i)
+                                row.append('<td></td>');
                             selections.append(row);
+                        }
                         
                         var cwyn : ComponentWithYesNo = new ComponentWithYesNo(selections,COMPONENT_TYPE.checkBoxes);
                         cwyn.addChangeListener();

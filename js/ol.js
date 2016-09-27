@@ -1610,8 +1610,11 @@ var PanelQuestion = (function () {
                                 row = $('<tr></tr>');
                             }
                         }
-                        if (values.length % 3 != 0)
+                        if (values.length % 3 != 0) {
+                            for (var i = values.length; i % 3 != 0; ++i)
+                                row.append('<td></td>');
                             selections.append(row);
+                        }
                         var cwyn = new ComponentWithYesNo(selections, COMPONENT_TYPE.checkBoxes);
                         cwyn.addChangeListener();
                         v = cwyn.appendMeTo($('<td></td>'));
