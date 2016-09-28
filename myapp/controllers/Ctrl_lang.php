@@ -9,6 +9,7 @@ class Ctrl_lang extends MY_Controller {
             $newlang = $_GET['lang'];
             switch ($newlang) {
               case 'en':
+              case 'es':
               case 'pt':
               case 'da':
                     $this->session->set_userdata('language', $newlang);

@@ -21,6 +21,7 @@ $lang['no_language'] = 'Intet angivet';
 $lang['english'] = 'Engelsk';
 $lang['danish'] = 'Dansk';
 $lang['portuguese'] = 'Portugisisk';
+$lang['spanish'] = 'Spansk';
 $lang['number_of_users'] = 'Antal brugere: %s';
 $lang['showing_per_page'] = 'Der vises %s brugere per side';
 

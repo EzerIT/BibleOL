@@ -32,6 +32,10 @@ class MY_Controller extends CI_Controller {
                 $this->language_short = 'pt';
                 break;
 
+          case 'es':
+                $this->language_short = 'es';
+                break;
+
           default:
                 $this->language_short = 'en';
                 $this->language = 'english';  // English language files are not named 'en', but 'english'

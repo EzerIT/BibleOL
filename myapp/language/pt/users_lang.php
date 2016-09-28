@@ -69,6 +69,7 @@ $lang['no_language'] = 'Nenhuma especificada';
 $lang['english'] = 'Inglês';
 $lang['danish'] = 'Dinamarquês';
 $lang['portuguese'] = 'Português';
+$lang['spanish'] = 'Espanhol';
 $lang['number_of_users'] = 'Número de usuários: %s';
 $lang['showing_per_page'] = 'Cada página mostra %s usuários';
 $lang['change_through_facebook'] = 'Se você quer mudar o seu nome ou endereço de email, você precisa fazê-lo na sua conta do Facebook.';

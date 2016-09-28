@@ -21,6 +21,7 @@ $lang['no_language'] = 'None specified';
 $lang['english'] = 'English';
 $lang['danish'] = 'Danish';
 $lang['portuguese'] = 'Portuguese';
+$lang['spanish'] = 'Spanish';
 $lang['number_of_users'] = 'Number of users: %s';
 $lang['showing_per_page'] = 'Each page shows %s users';
 
