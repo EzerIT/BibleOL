@@ -61,9 +61,15 @@ class PanelForOneVcChoice  {
                                   localize('verb_class_dont_care'),
                                   localize('verb_class')));
 
+        var swsValues : StringWithSort[] = [];
+        for (var ix=0; ix<enumValues.length; ++ix)
+            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(valueType, enumValues[ix], false), enumValues[ix]));
+        swsValues.sort((a : StringWithSort, b : StringWithSort) => StringWithSort.compare(a,b));
+
+        
         // Next, loop through the keys in the sorted order
-        for (var ix=0; ix<enumValues.length; ++ix) {
-            var vc : string = enumValues[ix];
+        for (var ix=0; ix<swsValues.length; ++ix) {
+            var vc : string = swsValues[ix].getInternal();
             var vcsel : VerbClassSelection = VerbClassSelection.DONT_CARE;
 
             if (lv.yes_values.indexOf(vc)!=-1)
@@ -71,7 +77,7 @@ class PanelForOneVcChoice  {
             else if (lv.no_values.indexOf(vc)!=-1)
                 vcsel = VerbClassSelection.NO;
 
-            var bal = new VerbClassButtonsAndLabel(getFeatureValueFriendlyName(valueType,vc,false),
+            var bal = new VerbClassButtonsAndLabel(swsValues[ix].getString(),
                                                    '{0}_{1}'.format(prefix,vc),
                                                    vc,
                                                    vcsel);

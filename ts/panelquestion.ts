@@ -323,18 +323,24 @@ class PanelQuestion {
                     else if (featType.substr(0,8)==='list of ') {
                         var subFeatType = featType.substr(8); // Remove "list of "
                         var values : string[] = typeinfo.enum2values[subFeatType];
+                        var swsValues : StringWithSort[] = [];
+
+                        for (var i:number=0, len=values.length; i<len; ++i)
+                            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false), values[i]));
+                        swsValues.sort((a : StringWithSort, b : StringWithSort) => StringWithSort.compare(a,b));
+                        
                         var selections : JQuery = $('<table class="list-of"></table>');
                         var row : JQuery = $('<tr></tr>');
-                        for (var i:number=0, len=values.length; i<len; ++i) {
+                        for (var i:number=0, len=swsValues.length; i<len; ++i) {
                             row.append('<td style="text-align:left"><input type="checkbox" value="{0}">{1}</td>'
-                                       .format(values[i],getFeatureValueFriendlyName(subFeatType, values[i], false)));
+                                       .format(swsValues[i].getInternal(),swsValues[i].getString()));
                             if (i%3==2) {
                                 selections.append(row);
                                 row = $('<tr></tr>');
                             }
                         }
-                        if (values.length%3!=0) {
-                            for (var i:number=values.length; i%3!=0; ++i)
+                        if (swsValues.length%3!=0) {
+                            for (var i:number=swsValues.length; i%3!=0; ++i)
                                 row.append('<td></td>');
                             selections.append(row);
                         }

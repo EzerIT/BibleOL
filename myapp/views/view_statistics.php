@@ -63,18 +63,18 @@
                $loc_values = array();
                foreach ($rf_values as $rfv)
                    $loc_values[] = isset($d->l10n->emdrostype->$subFeatureType->{$rfv})
-                                      ? $d->l10n->emdrostype->$subFeatureType->{$rfv}
+                                      ? stripSortIndex($d->l10n->emdrostype->$subFeatureType->{$rfv})
                                       : $rfv;
 
                $featureValue = implode(', ', $loc_values);
            }
            elseif (isset($d->l10n->emdrostype->$featureType->{$rf->value}))
-               $featureValue = $d->l10n->emdrostype->$featureType->{$rf->value};
+               $featureValue = stripSortIndex($d->l10n->emdrostype->$featureType->{$rf->value});
            else
                $featureValue = $rf->value;
         ?>
 
-        <td><?= stripSortIndex($featureValue) ?></td>
+        <td><?= $featureValue ?></td>
         <td><?= $rf->cnt ?></td>
       </tr>
     <?php endforeach; ?>

@@ -1686,15 +1686,19 @@ var PanelForOneVcChoice = (function () {
         this.panel = $('<table class="striped featuretable"></table>');
         this.panel.append('<tr><th>{0}</th><th>{1}</th><th>{2}</th><th class="leftalign">{3}</th></tr>'
             .format(localize('verb_class_yes'), localize('verb_class_no'), localize('verb_class_dont_care'), localize('verb_class')));
+        var swsValues = [];
+        for (var ix = 0; ix < enumValues.length; ++ix)
+            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(valueType, enumValues[ix], false), enumValues[ix]));
+        swsValues.sort(function (a, b) { return StringWithSort.compare(a, b); });
         // Next, loop through the keys in the sorted order
-        for (var ix = 0; ix < enumValues.length; ++ix) {
-            var vc = enumValues[ix];
+        for (var ix = 0; ix < swsValues.length; ++ix) {
+            var vc = swsValues[ix].getInternal();
             var vcsel = VerbClassSelection.DONT_CARE;
             if (lv.yes_values.indexOf(vc) != -1)
                 vcsel = VerbClassSelection.YES;
             else if (lv.no_values.indexOf(vc) != -1)
                 vcsel = VerbClassSelection.NO;
-            var bal = new VerbClassButtonsAndLabel(getFeatureValueFriendlyName(valueType, vc, false), '{0}_{1}'.format(prefix, vc), vc, vcsel);
+            var bal = new VerbClassButtonsAndLabel(swsValues[ix].getString(), '{0}_{1}'.format(prefix, vc), vc, vcsel);
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }

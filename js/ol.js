@@ -1600,18 +1600,22 @@ var PanelQuestion = (function () {
                     else if (featType.substr(0, 8) === 'list of ') {
                         var subFeatType = featType.substr(8); // Remove "list of "
                         var values = typeinfo.enum2values[subFeatType];
+                        var swsValues = [];
+                        for (var i = 0, len = values.length; i < len; ++i)
+                            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false), values[i]));
+                        swsValues.sort(function (a, b) { return StringWithSort.compare(a, b); });
                         var selections = $('<table class="list-of"></table>');
                         var row = $('<tr></tr>');
-                        for (var i = 0, len = values.length; i < len; ++i) {
+                        for (var i = 0, len = swsValues.length; i < len; ++i) {
                             row.append('<td style="text-align:left"><input type="checkbox" value="{0}">{1}</td>'
-                                .format(values[i], getFeatureValueFriendlyName(subFeatType, values[i], false)));
+                                .format(swsValues[i].getInternal(), swsValues[i].getString()));
                             if (i % 3 == 2) {
                                 selections.append(row);
                                 row = $('<tr></tr>');
                             }
                         }
-                        if (values.length % 3 != 0) {
-                            for (var i = values.length; i % 3 != 0; ++i)
+                        if (swsValues.length % 3 != 0) {
+                            for (var i = swsValues.length; i % 3 != 0; ++i)
                                 row.append('<td></td>');
                             selections.append(row);
                         }
