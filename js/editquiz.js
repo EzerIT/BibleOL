@@ -245,7 +245,7 @@ var GrammarFeature = (function () {
             default:
                 if (io == -1) {
                     if (res !== '')
-                        res = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, res, abbrev));
+                        res = getFeatureValueFriendlyName(featType, res, abbrev, true);
                 }
                 else {
                     res = getFeatureValueOtherFormat(this.realObjectType, this.realFeatureName, +res);
@@ -316,22 +316,28 @@ function getFeatureFriendlyName(otype, feature) {
     var fn = l10n.emdrosobject[otype][feature];
     return fn ? fn : feature;
 }
-function getFeatureValueFriendlyName(featureType, value, abbrev) {
+function getFeatureValueFriendlyName(featureType, value, abbrev, doStripSort) {
     if (abbrev && l10n.emdrostype[featureType + '_abbrev'] !== undefined)
         // TODO: We assume there is no "list of " types here
-        return l10n.emdrostype[featureType + '_abbrev'][value];
+        return doStripSort
+            ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType + '_abbrev'][value])
+            : l10n.emdrostype[featureType + '_abbrev'][value];
     // TODO: For now we handle "list of ..." here. Is this OK with all the other locations where this is used?
     if (featureType.substr(0, 8) === 'list of ') {
         featureType = featureType.substr(8); // Remove "list of "
         value = value.substr(1, value.length - 2); // Remove parenteses
         if (value.length == 0)
-            return l10n.emdrostype[featureType]['NA'];
+            return doStripSort
+                ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType]['NA'])
+                : l10n.emdrostype[featureType]['NA'];
         var verb_classes = value.split(',');
         var localized_verb_classes = [];
         for (var ix in verb_classes) {
             if (isNaN(+ix))
                 continue; // Not numeric
-            localized_verb_classes.push(l10n.emdrostype[featureType][verb_classes[ix]]);
+            localized_verb_classes.push(doStripSort
+                ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType][verb_classes[ix]])
+                : l10n.emdrostype[featureType][verb_classes[ix]]);
         }
         localized_verb_classes.sort();
         return localized_verb_classes.join(', ');
@@ -1038,7 +1044,7 @@ var PanelTemplMql = (function () {
                         var ov = featset.otherValues;
                         if ((hv && hv.indexOf(s) !== -1) || ((ov && ov.indexOf(s) !== -1)))
                             continue;
-                        var scb = new SortingCheckBox(this.name_prefix + '_' + key, s, getFeatureValueFriendlyName(valueType, s, false));
+                        var scb = new SortingCheckBox(this.name_prefix + '_' + key, s, getFeatureValueFriendlyName(valueType, s, false, false));
                         if (!efh.values)
                             alert('Assert efh.values failed for type ' + key);
                         scb.setSelected(efh.values && efh.values.indexOf(s) !== -1);
@@ -1688,7 +1694,7 @@ var PanelForOneVcChoice = (function () {
             .format(localize('verb_class_yes'), localize('verb_class_no'), localize('verb_class_dont_care'), localize('verb_class')));
         var swsValues = [];
         for (var ix = 0; ix < enumValues.length; ++ix)
-            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(valueType, enumValues[ix], false), enumValues[ix]));
+            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(valueType, enumValues[ix], false, false), enumValues[ix]));
         swsValues.sort(function (a, b) { return StringWithSort.compare(a, b); });
         // Next, loop through the keys in the sorted order
         for (var ix = 0; ix < swsValues.length; ++ix) {

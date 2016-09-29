@@ -855,7 +855,7 @@ class PanelTemplMql {
                         if ((hv && hv.indexOf(s)!==-1) || ((ov && ov.indexOf(s)!==-1)))
                             continue;
 
-                        var scb = new SortingCheckBox(this.name_prefix + '_' + key, s, getFeatureValueFriendlyName(valueType, s, false));
+                        var scb = new SortingCheckBox(this.name_prefix + '_' + key, s, getFeatureValueFriendlyName(valueType, s, false, false));
                         if (!efh.values) alert('Assert efh.values failed for type ' + key);
                         scb.setSelected(efh.values && efh.values.indexOf(s)!==-1);
                         checkBoxes.push(scb);

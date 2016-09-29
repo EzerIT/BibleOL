@@ -395,7 +395,7 @@ var GrammarFeature = (function () {
             default:
                 if (io == -1) {
                     if (res !== '')
-                        res = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, res, abbrev));
+                        res = getFeatureValueFriendlyName(featType, res, abbrev, true);
                 }
                 else {
                     res = getFeatureValueOtherFormat(this.realObjectType, this.realFeatureName, +res);
@@ -793,22 +793,28 @@ function getFeatureFriendlyName(otype, feature) {
     var fn = l10n.emdrosobject[otype][feature];
     return fn ? fn : feature;
 }
-function getFeatureValueFriendlyName(featureType, value, abbrev) {
+function getFeatureValueFriendlyName(featureType, value, abbrev, doStripSort) {
     if (abbrev && l10n.emdrostype[featureType + '_abbrev'] !== undefined)
         // TODO: We assume there is no "list of " types here
-        return l10n.emdrostype[featureType + '_abbrev'][value];
+        return doStripSort
+            ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType + '_abbrev'][value])
+            : l10n.emdrostype[featureType + '_abbrev'][value];
     // TODO: For now we handle "list of ..." here. Is this OK with all the other locations where this is used?
     if (featureType.substr(0, 8) === 'list of ') {
         featureType = featureType.substr(8); // Remove "list of "
         value = value.substr(1, value.length - 2); // Remove parenteses
         if (value.length == 0)
-            return l10n.emdrostype[featureType]['NA'];
+            return doStripSort
+                ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType]['NA'])
+                : l10n.emdrostype[featureType]['NA'];
         var verb_classes = value.split(',');
         var localized_verb_classes = [];
         for (var ix in verb_classes) {
             if (isNaN(+ix))
                 continue; // Not numeric
-            localized_verb_classes.push(l10n.emdrostype[featureType][verb_classes[ix]]);
+            localized_verb_classes.push(doStripSort
+                ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType][verb_classes[ix]])
+                : l10n.emdrostype[featureType][verb_classes[ix]]);
         }
         localized_verb_classes.sort();
         return localized_verb_classes.join(', ');
@@ -1511,7 +1517,7 @@ var PanelQuestion = (function () {
                     if (featset.otherValues && featset.otherValues.indexOf(val) !== -1)
                         val = localize('other_value');
                     else
-                        val = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, val, false));
+                        val = getFeatureValueFriendlyName(featType, val, false, true);
                 }
                 if (val == null)
                     alert('Unexpected val==null in panelquestion.ts');
@@ -1602,21 +1608,22 @@ var PanelQuestion = (function () {
                         var values = typeinfo.enum2values[subFeatType];
                         var swsValues = [];
                         for (var i = 0, len = values.length; i < len; ++i)
-                            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false), values[i]));
+                            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false, false), values[i]));
                         swsValues.sort(function (a, b) { return StringWithSort.compare(a, b); });
                         var selections = $('<table class="list-of"></table>');
-                        var row = $('<tr></tr>');
-                        for (var i = 0, len = swsValues.length; i < len; ++i) {
-                            row.append('<td style="text-align:left"><input type="checkbox" value="{0}">{1}</td>'
-                                .format(swsValues[i].getInternal(), swsValues[i].getString()));
-                            if (i % 3 == 2) {
-                                selections.append(row);
-                                row = $('<tr></tr>');
+                        // Arrange in three columns
+                        var numberOfItems = swsValues.length;
+                        var numberOfRows = Math.floor((numberOfItems + 2) / 3);
+                        for (var r = 0; r < numberOfRows; ++r) {
+                            var row = $('<tr></tr>');
+                            for (var c = 0; c < 3; c++) {
+                                var ix = r + c * numberOfRows;
+                                if (ix < numberOfItems)
+                                    row.append('<td style="text-align:left"><input type="checkbox" value="{0}">{1}</td>'
+                                        .format(swsValues[ix].getInternal(), swsValues[ix].getString()));
+                                else
+                                    row.append('<td></td>');
                             }
-                        }
-                        if (swsValues.length % 3 != 0) {
-                            for (var i = swsValues.length; i % 3 != 0; ++i)
-                                row.append('<td></td>');
                             selections.append(row);
                         }
                         var cwyn = new ComponentWithYesNo(selections, COMPONENT_TYPE.checkBoxes);
@@ -1636,7 +1643,7 @@ var PanelQuestion = (function () {
                             var cwyn = new ComponentWithYesNo(jcb, COMPONENT_TYPE.comboBox1);
                             cwyn.addChangeListener();
                             jcb.append('<option value="NoValueGiven"></option>'); // Empty default choice
-                            var correctAnswerFriendly = getFeatureValueFriendlyName(featType, correctAnswer, false);
+                            var correctAnswerFriendly = getFeatureValueFriendlyName(featType, correctAnswer, false, false);
                             var hasAddedOther = false;
                             var correctIsOther = featset.otherValues && featset.otherValues.indexOf(correctAnswer) !== -1;
                             // Loop though all possible values and add the appropriate friendly name
@@ -1662,7 +1669,7 @@ var PanelQuestion = (function () {
                                     }
                                 }
                                 else {
-                                    var sFriendly = getFeatureValueFriendlyName(featType, s, false);
+                                    var sFriendly = getFeatureValueFriendlyName(featType, s, false, false);
                                     var item = new StringWithSort(sFriendly, s);
                                     var option = $('<option value="{0}">{1}</option>'
                                         .format(item.getInternal(), item.getString()));

@@ -77,10 +77,12 @@ function getFeatureFriendlyName(otype : string, feature : string) : string
 }
 
 
-function getFeatureValueFriendlyName(featureType : string, value : string, abbrev : boolean) : string {
+function getFeatureValueFriendlyName(featureType : string, value : string, abbrev : boolean, doStripSort : boolean) : string {
     if (abbrev && l10n.emdrostype[featureType + '_abbrev']!==undefined)
         // TODO: We assume there is no "list of " types here
-        return l10n.emdrostype[featureType + '_abbrev'][value];
+        return doStripSort
+                  ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType + '_abbrev'][value])
+                  : l10n.emdrostype[featureType + '_abbrev'][value];
     
 
     // TODO: For now we handle "list of ..." here. Is this OK with all the other locations where this is used?
@@ -88,14 +90,18 @@ function getFeatureValueFriendlyName(featureType : string, value : string, abbre
         featureType = featureType.substr(8); // Remove "list of "
         value = value.substr(1,value.length-2); // Remove parenteses
         if (value.length==0)
-            return l10n.emdrostype[featureType]['NA'];
+            return doStripSort
+                      ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType]['NA'])
+                      : l10n.emdrostype[featureType]['NA'];
 
         var verb_classes : string[] = value.split(',');
         var localized_verb_classes : string[] = [];
 
         for (var ix in verb_classes) {
             if (isNaN(+ix)) continue; // Not numeric
-            localized_verb_classes.push(l10n.emdrostype[featureType][verb_classes[ix]]);
+            localized_verb_classes.push(doStripSort
+                                            ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType][verb_classes[ix]])
+                                            : l10n.emdrostype[featureType][verb_classes[ix]]);
         }
                 
         localized_verb_classes.sort();

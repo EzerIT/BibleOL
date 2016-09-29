@@ -1,6 +1,6 @@
 {
     "dbdescription": "Hebraisk (ETCBC4, GT)",
-    "dbcopyright": "Ophavsret til denne database: \u00a9 2015 Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>Dette v\u00e6rk er licenseret under en <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/deed.da\">Creative Commons Navngivelse-IkkeKommerciel 4.0 International Licens<\/a>. (Selve databasen kan findes via denne bestandige identifikator: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
+    "dbcopyright": "Ophavsret til denne database: \u00a9 2015 Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>Dette værk er licenseret under en <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/deed.da\">Creative Commons Navngivelse-IkkeKommerciel 4.0 International Licens<\/a>. (Selve databasen kan findes via denne bestandige identifikator: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
     "emdrosobject": {
         "word": {
             "_objname": "Ord",
@@ -11,8 +11,8 @@
             "glossurl": "Link",
             "g_nme_utf8": "Nominel endelse",
             "g_nme_cons_utf8": "Nominel endelse (kun konsonanter)",
-            "g_pfm_utf8": "Pr\u00e6formativ",
-            "g_pfm_cons_utf8": "Pr\u00e6eformativ (kun konsonanter)",
+            "g_pfm_utf8": "Præformativ",
+            "g_pfm_cons_utf8": "Præeformativ (kun konsonanter)",
             "g_prs_utf8": "Pronominelt suffiks",
             "g_prs_cons_utf8": "Pronominelt suffiks (kun konsonanter)",
             "g_uvf_utf8": "Univalent finale",
@@ -29,16 +29,16 @@
             "vocalized_lexeme_utf8": "Leksem",
             "vocalized_lexeme_translit": "Leksem (translittereret)",
             "language": "Sprog",
-            "ls": "Leksikalt s\u00e6t",
+            "ls": "Leksikalt sæt",
             "vs": "Stamme",
             "vt": "Tid",
             "ps": "Person",
             "nu": "Tal",
-            "gn": "K\u00f8n",
+            "gn": "Køn",
             "st": "Status",
-            "pdp": "S\u00e6tningsafh\u00e6ngig ordklasse",
+            "pdp": "Sætningsafhængig ordklasse",
             "sp": "Ordklasse",
-            "suffix_gender": "K\u00f8nssuffiks",
+            "suffix_gender": "Kønssuffiks",
             "suffix_number": "Talsuffiks",
             "suffix_person": "Personsuffiks",
             "verb_class": "Verbalklasse",
@@ -46,24 +46,24 @@
             "g_qere_translit": "Qere (translittereret)"
         },
         "phrase_atom": {
-            "_objname": "S\u00e6tningsledatom",
+            "_objname": "Sætningsledatom",
             "det": "Determinering",
             "rela": "Relation",
             "typ": "Type"
         },
         "subphrase": {
-            "_objname": "Unders\u00e6tningsled",
+            "_objname": "Undersætningsled",
             "rela": "Relation"
         },
         "phrase": {
-            "_objname": "S\u00e6tningsled",
+            "_objname": "Sætningsled",
             "det": "Determinering",
             "typ": "Type",
             "rela": "Relation",
             "function": "Funktion"
         },
         "clause_atom": {
-            "_objname": "Leds\u00e6tningsatom",
+            "_objname": "Ledsætningsatom",
             "tab": "Indrykning",
             "code_TYPE_text": "Forbindelse",
             "code_TYPE_text_VALUES": [
@@ -79,15 +79,15 @@
             "typ": "Type"
         },
         "clause": {
-            "_objname": "Leds\u00e6tning",
-            "domain": "Dom\u00e6ne",
+            "_objname": "Ledsætning",
+            "domain": "Domæne",
             "txt": "Teksttype",
             "typ": "Type",
             "kind": "Art",
             "rela": "Relation"
         },
         "sentence": {
-            "_objname": "S\u00e6tning"
+            "_objname": "Sætning"
         }
     },
     "emdrostype": {
@@ -96,7 +96,7 @@
             "true": "Sandt"
         },
         "language_t": {
-            "Aramaic": "Aram\u00e6isk",
+            "Aramaic": "Aramæisk",
             "Hebrew": "Hebraisk"
         },
         "lexical_set_t": {
@@ -106,12 +106,12 @@
             "cjad": "Konjunktivt adverbium",
             "focp": "Fokuspartikel",
             "gntl": "Gentilisk",
-            "mult": "M\u00e6ngdesubstantiv",
+            "mult": "Mængdesubstantiv",
             "nmcp": "Kopulativt substantiv",
             "nmdi": "Distributivt substantiv",
             "ordn": "Ordinaltal",
             "padv": "Potentielt adverbium",
-            "ppre": "Potentiel pr\u00e6position",
+            "ppre": "Potentiel præposition",
             "ques": "Interrogativ partikel",
             "quot": "Citatverbum",
             "vbcp": "Kopulativt verbum"
@@ -122,7 +122,7 @@
             "subs": "Substantiv",
             "nmpr": "Egennavn",
             "advb": "Adverbium",
-            "prep": "Pr\u00e6position",
+            "prep": "Præposition",
             "conj": "Konjunktion",
             "prps": "Personligt pronomen",
             "prde": "Demonstrativt pronomen",
@@ -139,7 +139,7 @@
             "unknown": "#4 Unkendt"
         },
         "suffix_gender_t": {
-            "c": "#3 F\u00e6llesk\u00f8n",
+            "c": "#3 Fælleskøn",
             "f": "#2 Femininum",
             "m": "#1 Masculinum",
             "NA": "#4 Ingen"
@@ -177,23 +177,24 @@
             "unknown": "Ukendt"
         },
         "verb_class_t": {
-            "analog_i_nun": "Analog I nun",
-            "analog_i_waw": "Analog I waw",
-            "four_consonants": "Fire konsonanter",
-            "geminate": "Geminate",
-            "hjh_xjh": "HJH\/XJH",
-            "i_aleph": "I aleph",
-            "i_guttural": "I guttural",
-            "i_nun": "I nun",
-            "i_waw": "I waw",
-            "i_yod": "I yod",
-            "ii_guttural": "II guttural",
-            "ii_waw": "II waw",
-            "ii_yod": "II yod",
-            "iii_aleph": "III aleph",
-            "iii_guttural": "III guttural",
-            "iii_he": "III he",
-            "regular": "Regelm\u00e6ssig"
+            "NA": "-",
+            "analog_i_nun": "#15 Analog I nun",
+            "analog_i_waw": "#16 Analog I waw",
+            "four_consonants": "#17 Fire konsonanter",
+            "geminate": "#14 Geminate",
+            "hjh_xjh": "#13 HJH\/XJH",
+            "i_aleph": "#2 I aleph",
+            "i_guttural": "#3 I guttural",
+            "i_nun": "#4 I nun",
+            "i_waw": "#5 I waw",
+            "i_yod": "#6 I yod",
+            "ii_guttural": "#7 II guttural",
+            "ii_waw": "#8 II waw",
+            "ii_yod": "#9 II yod",
+            "iii_aleph": "#10 III aleph",
+            "iii_guttural": "#11 III guttural",
+            "iii_he": "#12 III he",
+            "regular": "#1 Regelmæssig"
         },
         "phrase_determination_t": {
             "NA": "-",
@@ -438,8 +439,8 @@
     },
     "grammarmetafeature": {
         "word": {
-            "pgn": "Person, k\u00f8n, tal",
-            "suffix_pgn": "Suffiks: Person, k\u00f8n, tal"
+            "pgn": "Person, køn, tal",
+            "suffix_pgn": "Suffiks: Person, køn, tal"
         }
     },
     "grammarsubfeature": {
@@ -498,16 +499,16 @@
             "Samuel_II": "2. Samuelsbog",
             "Reges_I": "1. Kongebog",
             "Reges_II": "2. Kongebog",
-            "Chronica_I": "1. Kr\u00f8nikebog",
-            "Chronica_II": "2. Kr\u00f8nikebog",
+            "Chronica_I": "1. Krønikebog",
+            "Chronica_II": "2. Krønikebog",
             "Esra": "Ezra",
             "Nehemia": "Nehemias",
             "Esther": "Ester",
             "Iob": "Job",
             "Psalmi": "Salmerne",
             "Proverbia": "Ordsprogene",
-            "Ecclesiastes": "Pr\u00e6dikeren",
-            "Canticum": "H\u00f8jsangen",
+            "Ecclesiastes": "Prædikeren",
+            "Canticum": "Højsangen",
             "Jesaia": "Esajas",
             "Jeremia": "Jeremias",
             "Threni": "Klagesangene",

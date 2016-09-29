@@ -63,7 +63,7 @@ class PanelForOneVcChoice  {
 
         var swsValues : StringWithSort[] = [];
         for (var ix=0; ix<enumValues.length; ++ix)
-            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(valueType, enumValues[ix], false), enumValues[ix]));
+            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(valueType, enumValues[ix], false, false), enumValues[ix]));
         swsValues.sort((a : StringWithSort, b : StringWithSort) => StringWithSort.compare(a,b));
 
         

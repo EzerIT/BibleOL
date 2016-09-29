@@ -218,7 +218,7 @@ class PanelQuestion {
                     if (featset.otherValues && featset.otherValues.indexOf(val)!==-1)
                         val = localize('other_value');
                     else
-                        val = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, val, false));
+                        val = getFeatureValueFriendlyName(featType, val, false, true);
                 }
 
                 if (val==null)
@@ -326,22 +326,25 @@ class PanelQuestion {
                         var swsValues : StringWithSort[] = [];
 
                         for (var i:number=0, len=values.length; i<len; ++i)
-                            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false), values[i]));
+                            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false, false), values[i]));
                         swsValues.sort((a : StringWithSort, b : StringWithSort) => StringWithSort.compare(a,b));
                         
                         var selections : JQuery = $('<table class="list-of"></table>');
-                        var row : JQuery = $('<tr></tr>');
-                        for (var i:number=0, len=swsValues.length; i<len; ++i) {
-                            row.append('<td style="text-align:left"><input type="checkbox" value="{0}">{1}</td>'
-                                       .format(swsValues[i].getInternal(),swsValues[i].getString()));
-                            if (i%3==2) {
-                                selections.append(row);
-                                row = $('<tr></tr>');
+
+                        // Arrange in three columns
+                        var numberOfItems = swsValues.length;
+                        var numberOfRows = Math.floor((numberOfItems+2)/3);
+
+                        for (var r=0; r<numberOfRows; ++r) {
+                            var row : JQuery = $('<tr></tr>');
+                            for (var c=0; c<3; c++) {
+                                var ix = r+c*numberOfRows;
+                                if (ix<numberOfItems)
+                                    row.append('<td style="text-align:left"><input type="checkbox" value="{0}">{1}</td>'
+                                               .format(swsValues[ix].getInternal(), swsValues[ix].getString()));
+                                else
+                                    row.append('<td></td>');
                             }
-                        }
-                        if (swsValues.length%3!=0) {
-                            for (var i:number=swsValues.length; i%3!=0; ++i)
-                                row.append('<td></td>');
                             selections.append(row);
                         }
                         
@@ -364,7 +367,7 @@ class PanelQuestion {
 
                             jcb.append('<option value="NoValueGiven"></option>'); // Empty default choice
                             
-                            var correctAnswerFriendly : string = getFeatureValueFriendlyName(featType, correctAnswer, false);
+                            var correctAnswerFriendly : string = getFeatureValueFriendlyName(featType, correctAnswer, false, false);
                             
                             var hasAddedOther : boolean = false;
                             var correctIsOther : boolean = featset.otherValues && featset.otherValues.indexOf(correctAnswer)!==-1;
@@ -392,7 +395,7 @@ class PanelQuestion {
                                     }
                                 }
                                 else {
-                                    var sFriendly : string = getFeatureValueFriendlyName(featType, s, false);
+                                    var sFriendly : string = getFeatureValueFriendlyName(featType, s, false, false);
                                     var item = new StringWithSort(sFriendly,s);
                                     var option : JQuery = $('<option value="{0}">{1}</option>'
                                                             .format(item.getInternal(),item.getString()));

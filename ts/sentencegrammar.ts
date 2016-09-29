@@ -240,7 +240,7 @@ class GrammarFeature implements SentenceGrammarItem {
         default:
             if (io==-1) {
                 if (res!=='')
-                    res = StringWithSort.stripSortIndex(getFeatureValueFriendlyName(featType, res, abbrev));
+                    res = getFeatureValueFriendlyName(featType, res, abbrev, true);
             }
             else {
                 res = getFeatureValueOtherFormat(this.realObjectType, this.realFeatureName, +res);
