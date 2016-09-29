@@ -83,7 +83,7 @@
             "domain": "Dominio",
             "txt": "Tipo de texto",
             "typ": "Tipo",
-            "kind": "Tipo",
+            "kind": "Clase",
             "rela": "Relación"
         },
         "sentence": {
