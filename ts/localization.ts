@@ -108,7 +108,10 @@ function getFeatureValueFriendlyName(featureType : string, value : string, abbre
         return localized_verb_classes.join(', ');
     }
 
-    return l10n.emdrostype[featureType][value]; // TODO Distinguish between friendly name A and S (Westminster)
+     // TODO Distinguish between friendly name A and S (Westminster)
+    return doStripSort
+             ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType][value])
+             : l10n.emdrostype[featureType][value];
 }
 
 function getFeatureValueOtherFormat(otype : string, featureName : string, value : number) : string {
