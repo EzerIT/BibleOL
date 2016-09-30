@@ -343,7 +343,6 @@
 
                 },
                 "verb_class": {
-                    "ignoreRequest": true
                 },
                 "g_qere": {
                     "ignoreSelect": true,

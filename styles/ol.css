@@ -462,6 +462,12 @@ table.main_menu th:last-child {
 span.disabled {
   color: #b0b0b0;
 }
+table.list-of {
+  display: inline-table;
+  border: solid black 1px;
+  vertical-align: middle;
+  margin-bottom: 5px;
+}
 .jstree {
   font-size: 10pt;
 }

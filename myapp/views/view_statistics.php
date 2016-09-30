@@ -56,13 +56,25 @@
            else
                $featureType = 'string'; // This feature name is presumably 'visual'
 
-           if (isset($d->l10n->emdrostype->$featureType->{$rf->value}))
-               $featureValue = $d->l10n->emdrostype->$featureType->{$rf->value};
+           if (substr($featureType, 0, 8)==='list of ') {
+               $subFeatureType = substr($featureType,8);
+               assert($rf->value[0] == '(' && $rf->value[strlen($rf->value)-1] == ')');
+               $rf_values = explode(',', substr($rf->value,1,strlen($rf->value)-2));
+               $loc_values = array();
+               foreach ($rf_values as $rfv)
+                   $loc_values[] = isset($d->l10n->emdrostype->$subFeatureType->{$rfv})
+                                      ? stripSortIndex($d->l10n->emdrostype->$subFeatureType->{$rfv})
+                                      : $rfv;
+
+               $featureValue = implode(', ', $loc_values);
+           }
+           elseif (isset($d->l10n->emdrostype->$featureType->{$rf->value}))
+               $featureValue = stripSortIndex($d->l10n->emdrostype->$featureType->{$rf->value});
            else
                $featureValue = $rf->value;
         ?>
 
-        <td><?= stripSortIndex($featureValue) ?></td>
+        <td><?= $featureValue ?></td>
         <td><?= $rf->cnt ?></td>
       </tr>
     <?php endforeach; ?>
