@@ -8,29 +8,57 @@ class MY_Lang extends CI_Lang {
         parent::__construct();
 	}
 
+    private function load_from_db(array__OR__string $langfile, string $idiom, boolean $return, boolean $add_suffix /*ignored*/, string $alt_path /*ignored*/)
+    {
+        if ($idiom==='english')
+            $idiom = 'en';
+        
+		if (is_array($langfile)) {
+            assert(!$return);
+            
+			foreach ($langfile as $value) {
+				$this->load_from_db($value, $idiom, $return, $add_suffix, $alt_path);
+			}
+			return;
+		}
 
-	public function load($langfile = '', $idiom = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '')
+        $CI =& get_instance();
+        $query = $CI->db->where('filename',$langfile)->get('language_'.$idiom);
+        $strings = $query->result();
+
+        $lang = array();
+        foreach ($strings as $s)
+            $lang[$s->key] = $s->text;
+            
+		if ($return)
+			return $lang;
+
+		$this->is_loaded[$langfile] = $idiom;
+		$this->language = array_merge($this->language, $lang);
+    }
+
+	public function load($langfile, $idiom = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '')
 	{
-        if ($idiom == '') {
-            $CI =& get_instance();
-            if (isset($CI->language))
-                $idiom = $CI->language;
-        }
+		if ($idiom == '') {  // This may happen if load() is called from CodeIgniter
+			$CI =& get_instance();
+			if (isset($CI->language))
+				$idiom = $CI->language;
+		}
 
         if ($return) {
             if ($idiom!='english')
-                $l1 = parent::load($langfile, 'english', true, $add_suffix, $alt_path); // For fallback strings
+                $l1 = $this->load_from_db($langfile, 'english', true, $add_suffix, $alt_path); // For fallback strings
             else
                 $l1 = array();
 
-            $l2 = parent::load($langfile, $idiom, $return, $add_suffix, $alt_path);
+            $l2 = $this->load_from_db($langfile, $idiom, $return, $add_suffix, $alt_path);
             return array_merge($l1,$l2);
         }
         else {
             if ($idiom!='english')
-                parent::load($langfile, 'english', false, $add_suffix, $alt_path); // For fallback strings
+                $this->load_from_db($langfile, 'english', false, $add_suffix, $alt_path); // For fallback strings
 
-            parent::load($langfile, $idiom, false, $add_suffix, $alt_path);
+            $this->load_from_db($langfile, $idiom, false, $add_suffix, $alt_path);
         }
     }
 
