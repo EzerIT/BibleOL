@@ -18,7 +18,7 @@ class Migration_Translatedb extends CI_Migration {
         global $application_folder;
         
         $this->load->helper('directory');
-        $d = directory_map($application_folder.DIRECTORY_SEPARATOR.'language/sav', 2); // A value of 2 allows us to recognize empty directories
+        $d = directory_map($application_folder.DIRECTORY_SEPARATOR.'language', 2); // A value of 2 allows us to recognize empty directories
 
         $allkeys = array();
         
@@ -65,7 +65,7 @@ class Migration_Translatedb extends CI_Migration {
                     $allkeys[$short_file] = array();
                 
                 $lang = array();
-                include($application_folder.DIRECTORY_SEPARATOR.'language/sav'.DIRECTORY_SEPARATOR.$lang_name.$file);
+                include($application_folder.DIRECTORY_SEPARATOR.'language'.DIRECTORY_SEPARATOR.$lang_name.$file);
                 
                 foreach ($lang as $key => $text) {
                     $toinsert[] = array('filename' => $short_file,

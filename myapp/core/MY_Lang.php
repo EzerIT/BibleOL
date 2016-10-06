@@ -73,15 +73,29 @@ class MY_Lang extends CI_Lang {
 
     public function load_secondary($langfile, $idiom)
     {
-        if ($idiom=='en' || $idiom=='none')
-            $idiom = 'english';
+        if ($idiom=='english' || $idiom=='none')
+            $idiom = 'en';
 
-        if ($idiom!='english')
-            include(APPPATH . "/language/english/{$langfile}_lang.php"); // For fallback strings
+        $CI =& get_instance();
+        
+        $lang = array();
 
-        include(APPPATH . "/language/$idiom/{$langfile}_lang.php");
+        if ($idiom!='en') {
+            $query = $CI->db->where('filename',$langfile)->get('language_en');  // For fallback strings
+            $strings = $query->result();
+            
+            foreach ($strings as $s)
+                $lang[$s->key] = $s->text;
+        }
+
+        $query = $CI->db->where('filename',$langfile)->get('language_'.$idiom);
+        $strings = $query->result();
+
+        $lang = array();
+        foreach ($strings as $s)
+            $lang[$s->key] = $s->text;
+            
         $this->secondary_lang = array_merge($this->secondary_lang, $lang);
-        unset($lang);
     }
 
     public function clear_secondary()
