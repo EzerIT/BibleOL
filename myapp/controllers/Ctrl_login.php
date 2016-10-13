@@ -10,12 +10,12 @@ class Ctrl_login extends MY_Controller {
         $user_info = $this->mod_users->verify_login($login_name, $password);
 
         if (is_null($user_info)) {
-            $this->mod_users->set_login_session(0,false,false); // Paranoia
+            $this->mod_users->set_login_session(0,false,false,false); // Paranoia
 			$this->form_validation->set_message('password_check', $this->lang->line('bad_password'));
 			return false;
         }
         else {
-            $this->mod_users->set_login_session(intval($user_info->id), $user_info->isadmin, $user_info->isteacher, $user_info->preflang);
+            $this->mod_users->set_login_session(intval($user_info->id), $user_info->isadmin, $user_info->isteacher, $user_info->istranslator, $user_info->preflang);
             return true;
         }
     }
@@ -25,7 +25,7 @@ class Ctrl_login extends MY_Controller {
                                          // TODO: Should xss_clean be replaced by strip_tags or vice versa?
         if ($this->mod_users->is_logged_in()) {
             // Log out
-            $this->mod_users->set_login_session(0, false, false);
+            $this->mod_users->set_login_session(0, false, false, false);
             redirect("/");
         }
 
@@ -40,7 +40,7 @@ class Ctrl_login extends MY_Controller {
 		if ($this->form_validation->run())
             redirect("/");
 
-        $this->session->unset_userdata(array('ol_user'=>'', 'ol_admin'=>'', 'ol_teacher'=>'', 'files'=>'', 'operation'=>'', 'from_dir'=>''));
+        $this->session->unset_userdata(array('ol_user'=>'', 'ol_admin'=>'', 'ol_teacher'=>'', 'ol_translator'=>'', 'files'=>'', 'operation'=>'', 'from_dir'=>''));
 
         // Set up parameters for OAuth2 authentication.
         $this->session->set_userdata('oauth2_state', md5(rand())); // Used to prevent forged requests

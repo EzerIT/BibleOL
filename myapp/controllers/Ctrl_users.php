@@ -26,7 +26,7 @@ class Ctrl_users extends MY_Controller {
                 $offset = 0;
 
             if (isset($_GET['orderby']) && in_array($_GET['orderby'],
-                                                    array('username','first_name','last_name','email','last_login','isteacher','isadmin'),true))
+                                                    array('username','first_name','last_name','email','last_login','isteacher','isadmin','istranslator'),true))
                 $orderby = $_GET['orderby'];
             else
                 $orderby = 'username';
@@ -65,7 +65,7 @@ class Ctrl_users extends MY_Controller {
         $this->mod_users->delete_user($this->mod_users->my_id());
 
         // Log out
-        $this->mod_users->set_login_session(0, false, false);
+        $this->mod_users->set_login_session(0, false, false, false);
 
         // VIEW:
         $this->load->view('view_top1', array('title' => $this->lang->line('user_profile_deleted')));
@@ -109,7 +109,7 @@ class Ctrl_users extends MY_Controller {
                     // Token not recognized by Google
 
                     // Log out
-                    $this->mod_users->set_login_session(0, false, false);
+                    $this->mod_users->set_login_session(0, false, false, false);
 
                     throw new DataException($this->lang->line('google_no_response_delete'));
                     break;
@@ -211,6 +211,7 @@ class Ctrl_users extends MY_Controller {
                 $user_info->last_name = $this->input->post('last_name');
                 $user_info->isadmin = false;
                 $user_info->isteacher = false;
+                $user_info->istranslator = false;
                 $user_info->email = $this->input->post('email');
                 $user_info->username = $this->input->post('username');
                 $user_info->created_time = time();
@@ -256,6 +257,7 @@ class Ctrl_users extends MY_Controller {
                                                                         'user_info' => $user_info,
                                                                         'isadmin' => false,
                                                                         'isteacher' => false,
+                                                                        'istranslator' => false,
                                                                         'curlang' => $this->language_short), true);
 
                 $this->load->view('view_main_page', array('left_title' => $this->lang->line('specify_user_information'),
@@ -304,6 +306,7 @@ class Ctrl_users extends MY_Controller {
             if (!empty($user_info->oauth2_login)) {
                 $this->form_validation->set_rules('isadmin', '', 'callback_always_true'); // At least one non-empty rule is required
                 $this->form_validation->set_rules('isteacher', '', '');
+                $this->form_validation->set_rules('istranslator', '', '');
                 $this->form_validation->set_rules('preflang', '', '');
 
                 if ($this->form_validation->run()) {
@@ -311,6 +314,8 @@ class Ctrl_users extends MY_Controller {
                         $user_info->isadmin = $this->input->post('isadmin')==='yes';
                     if ($this->mod_users->is_teacher())
                         $user_info->isteacher = $this->input->post('isteacher')==='yes';
+                    if ($this->mod_users->is_translator())
+                        $user_info->istranslator = $this->input->post('istranslator')==='yes';
                     
                     $user_info->preflang = $this->input->post('preflang');
 
@@ -329,6 +334,7 @@ class Ctrl_users extends MY_Controller {
                                                                             'user_info' => $user_info,
                                                                             'isadmin' => $this->mod_users->is_admin(),
                                                                             'isteacher' => $this->mod_users->is_teacher(),
+                                                                            'istranslator' => $this->mod_users->is_translator(),
                                                                             'curlang' => $user_info->preflang), true);
 
                     $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_user_information'),
@@ -344,6 +350,7 @@ class Ctrl_users extends MY_Controller {
                 $this->form_validation->set_rules('last_name', $this->lang->line('last_name'), 'trim|required|strip_tags');
                 $this->form_validation->set_rules('isadmin', '', '');
                 $this->form_validation->set_rules('isteacher', '', '');
+                $this->form_validation->set_rules('istranslator', '', '');
                 $this->form_validation->set_rules('email', $this->lang->line('email'), 'trim|valid_email|strip_tags');
                 $this->form_validation->set_rules('preflang', '', '');
 
@@ -367,6 +374,8 @@ class Ctrl_users extends MY_Controller {
                         $user_info->isadmin = $this->input->post('isadmin')==='yes';
                     if ($this->mod_users->is_teacher())
                         $user_info->isteacher = $this->input->post('isteacher')==='yes';
+                    if ($this->mod_users->is_translator())
+                        $user_info->istranslator = $this->input->post('istranslator')==='yes';
 
                     $user_info->email = $this->input->post('email');
                     $user_info->preflang = $this->input->post('preflang');
@@ -391,6 +400,7 @@ class Ctrl_users extends MY_Controller {
                                                       $pw)
                                               . ($user_info->isadmin ? $this->lang->line_secondary('account_created_message2') : '')
                                               . ($user_info->isteacher ? $this->lang->line_secondary('account_created_message2t') : '')
+                                              . ($user_info->istranslator ? $this->lang->line_secondary('account_created_message2trans') : '')
                                               . sprintf($this->lang->line_secondary('account_created_message3'), site_url('login')));
                         $this->email->send();
                     }
@@ -408,6 +418,7 @@ class Ctrl_users extends MY_Controller {
                                                                             'user_info' => $user_info,
                                                                             'isadmin' => $this->mod_users->is_admin(),
                                                                             'isteacher' => $this->mod_users->is_teacher(),
+                                                                            'istranslator' => $this->mod_users->is_translator(),
                                                                             'curlang' => $user_info->preflang), true);
 
                     $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_user_information'),

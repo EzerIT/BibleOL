@@ -85,6 +85,16 @@
             <td class="nolb"></td>
           </tr>
         <?php endif; ?>
+        <?php if ($istranslator): ?>
+          <tr>
+            <td><?= $this->lang->line('translator') ?></td>
+            <td class="norb">
+              <input class="narrow" type="radio" name="istranslator" value="yes" <?= set_radio('istranslator', 'yes', !!$user_info->istranslator) ?>><?= $this->lang->line('yes') ?>
+              <input class="narrow" type="radio" name="istranslator" value="no" <?= set_radio('istranslator', 'no', !$user_info->istranslator) ?>><?= $this->lang->line('no') ?>
+            </td>
+            <td class="nolb"></td>
+          </tr>
+        <?php endif; ?>
         <?php if (empty($user_info->oauth2_login) && $userid!=-2): ?>
           <tr>
             <td><?= $userid==-1 ? $this->lang->line('password') : $this->lang->line('new_password') ?></td>

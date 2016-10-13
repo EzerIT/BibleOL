@@ -1,173 +1,55 @@
 <?php
 
-function teacher_cmp($t1, $t2) {
-    if ($t1->last_name < $t2->last_name)
-        return -1;
-    if ($t1->last_name > $t2->last_name)
-        return 1;
-    if ($t1->first_name < $t2->first_name)
-        return -1;
-    if ($t1->first_name > $t2->first_name)
-        return 1;
-    return 0;
-}
-
-
-class Mod_users extends CI_Model {
-    private $admin;
-    private $teacher;
-    private $translator;
-    private $user_id;
-
-    private $me;
+class Mod_translate extends CI_Model {
+    private $langs = array('en' => 'English',
+                           'da' => 'Danish',
+                           'pt' => 'Portuguese',
+                           'es' => 'Spanish');
 
     public function __construct() {
         parent::__construct();
-
-        $this->config->load('ol');
         $this->load->database();
-
-        $this->user_id = $this->session->userdata('ol_user');
-
-        if ($this->user_id===null)
-            $this->user_id = 0;
-        else
-            $this->user_id = intval($this->user_id);
-            
-        $query = $this->db->where('id',$this->user_id)->get('user');
-		if ($this->me = $query->row()) {
-			$this->admin = $this->me->isadmin;
-			$this->teacher = $this->me->isteacher;
-			$this->translator = $this->me->istranslator;
-        }
-		else {
-			$this->admin = false;
-			$this->teacher = false;
-			$this->translator = false;
-        }
     }
 
-    public function is_admin() {
-        return $this->admin;
+    public function get_all_languages() {
+        return $this->langs;
     }
 
-    public function is_teacher() {
-        return $this->teacher || $this->admin; // All admins are teachers
-    }
-
-    public function is_translator() {
-        return $this->translator || $this->admin; // All admins are translator
-    }
-
-    public function my_id() {
-        return $this->user_id;
-    }
-
-    public function my_name() {
-        if (!$this->me)
-            return null;
-        return "{$this->me->first_name} {$this->me->last_name}";
-    }
-
-    public function get_me() {
-        if (!$this->me)
-            return null;
-        return $this->me;
-    }
-
-    public function is_logged_in() {
-        return $this->user_id>0;
-    }
-
-    public function is_me(integer $user_id) {
-        return $user_id==$this->user_id;
-    }
-
-    // Returns user info if login is successful, otherwise returns null
-    public function verify_login(string $name, string $pw) {
-        $pw_md5 = md5($this->config->item('pw_salt') . $pw);
-
-        $query = $this->db->where('username',$name)->where('password',$pw_md5)->get('user');
-		if ($row = $query->row()) {
-            $this->db->where('id',$row->id)->update('user',array('last_login'=>time(), 'warning_sent'=>0));
-            return $row;
-        }
-        else
-            return null;
-    }
-
-    public function check_admin() {
-        if (!$this->mod_users->is_admin())
-            throw new DataException($this->lang->line('must_be_admin'));
-    }
-
-    public function check_teacher() {
-        if (!$this->mod_users->is_teacher())
-            throw new DataException($this->lang->line('must_be_teacher'));
-    }
-
-    public function check_translator() {
-        if (!$this->mod_users->is_translator())
-            throw new DataException($this->lang->line('must_be_translator'));
-    }
-
-    public function check_logged_in() {
-        if (!$this->mod_users->is_logged_in())
-            throw new DataException($this->lang->line('must_be_logged_in'));
-    }
-
-
-    public function check_logged_in_local() {
-        if (!$this->mod_users->is_logged_in())
-            throw new DataException($this->lang->line('must_be_logged_in'));
-
-        $user_info = $this->mod_users->get_me();
-        assert('!is_null($user_info)');
-
-        if (!empty($user_info->oauth2_login))
-            throw new DataException($this->lang->line("must_not_be_{$user_info->oauth2_login}"));
-    }
-
-    public function check_logged_in_oauth2(string $authority) {
-        if (!$this->mod_users->is_logged_in())
-            throw new DataException($this->lang->line('must_be_logged_in'));
-
-        $user_info = $this->mod_users->get_me();
-        assert('!is_null($user_info)');
-
-        if ($user_info->oauth2_login!==$authority)
-            throw new DataException($this->lang->line("must_be_$authority"));
-    }
-
-    public function set_login_session(integer $user, $admin, $teacher, $translator, $preflang=null) {
-        $this->session->set_userdata('ol_user', $user);
-        $this->session->set_userdata('ol_admin', $admin);  // NOTE: 'ol_admin' is only a hint. Do not rely on it.
-        $this->session->set_userdata('ol_teacher', $teacher);  // NOTE: 'ol_teacher' is only a hint. Do not rely on it.
-        $this->session->set_userdata('ol_translator', $translator);  // NOTE: 'ol_translator' is only a hint. Do not rely on it.
-        if (!is_null($preflang) && $preflang!='none')
-            $this->session->set_userdata('language', $preflang);
-
-        $this->user_id = $user;
-        $this->admin = $admin;
-        $this->teacher = $teacher;
-        $this->translator = $translator;
-    }
-
+    
     public function get_all_users() {
         $query = $this->db->get('user');
         return $query->result();
     }
 
-    public function get_all_users_part(integer $limit, integer $offset, string $orderby, string $sortorder) {
-        $query = $this->db->order_by($orderby,$sortorder)->get('user',$limit,$offset);
+    public function get_if_lines_part(string $lang_edit, string $lang_show, string $textgroup, integer $limit, integer $offset, string $orderby, string $sortorder) {
+        $query = $this->db->select("language_comment.key, comment, s.text text_show, e.text text_edit")
+            ->from('language_comment')
+            ->join("language_$lang_show s", "s.key=language_comment.key AND s.filename=language_comment.filename")
+            ->join("language_$lang_edit e", "e.key=language_comment.key AND e.filename=language_comment.filename")
+            ->where('language_comment.filename',$textgroup)
+            ->order_by($orderby,$sortorder)->limit($limit,$offset)->get();
         return $query->result();
     }
 
-    public function count_users() {
-        $query = $this->db->select('count(*) as count')->get('user');
+    // The language_comment table is the canonical list of key values
+    public function count_if_lines(string $textgroup) {
+        $query = $this->db->select('count(*) as count')->where('filename',$textgroup)->get("language_comment");
         return $query->row()->count;
     }
 
+    public function get_textgroup_list() {
+        $query = $this->db->distinct()->select('filename')->get('language_comment');
+        $textgroups = $query->result();
+        $res = array();
+        
+        foreach ($textgroups as $tg)
+            $res[] = $tg->filename;
+
+        return $res;
+    }
+
+        
+    
     public function get_teachers() {
         $query = $this->db->where('`isteacher`=1 OR `isadmin`=1',null,false)->get('user');
         $teachers = $query->result();

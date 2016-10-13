@@ -33,6 +33,7 @@
      <?= make_user_header($this, 'email', 'email', $sortorder, $orderby) ?>
      <?= make_user_header($this, 'administrator', 'isadmin', $sortorder, $orderby) ?>
      <?= make_user_header($this, 'teacher', 'isteacher', $sortorder, $orderby) ?>
+     <?= make_user_header($this, 'translator', 'istranslator', $sortorder, $orderby) ?>
      <?= make_user_header($this, 'last_login', 'last_login', $sortorder, $orderby) ?>
     <th><?= $this->lang->line('user_operations') ?></th>
   </tr>
@@ -44,6 +45,7 @@
       <td class="leftalign"><?= $user->email ?></td>
       <td><?= $user->isadmin ? $this->lang->line('yes') : $this->lang->line('no') ?></td>
       <td><?= $user->isteacher ? $this->lang->line('yes') : $this->lang->line('no') ?></td>
+      <td><?= $user->istranslator ? $this->lang->line('yes') : $this->lang->line('no') ?></td>
       <td class="leftalign"><?= $user->last_login<$user->created_time ? $this->lang->line('never') : date($this->lang->line('date_time_format'), $user->last_login) ?></td>
       <td class="leftalign">
      <a class="label label-primary" href="<?= site_url("userclass/classes_for_user?userid=$user->id&offset=$offset&orderby=$orderby&$sortorder") ?>"><?= str_replace(' ', '&nbsp;', $this->lang->line('assign_to_class')) ?></a>
