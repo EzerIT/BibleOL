@@ -42,10 +42,10 @@ class Ctrl_translate extends MY_Controller {
             if ($offset<0)
                 $offset = 0;
 
-            if (isset($_GET['orderby']) && in_array($_GET['orderby'], array('key','text_show','text_edit'),true))
+            if (isset($_GET['orderby']) && in_array($_GET['orderby'], array('symbolic_name','text_show','text_edit'),true))
                 $orderby = $_GET['orderby'];
             else
-                $orderby = 'key';
+                $orderby = 'symbolic_name';
 
             
             $sortorder = isset($_GET['sortorder']) ? $_GET['sortorder'] : 'asc';
@@ -54,6 +54,9 @@ class Ctrl_translate extends MY_Controller {
 
             $alllines = $this->mod_translate->get_if_lines_part($lang_edit,$lang_show,$textgroup,$lines_per_page,$offset*$lines_per_page,$orderby,$sortorder);
 
+
+            $untranslated = $this->mod_translate->get_if_untranslated($lang_edit);
+            
             // VIEW:
             $this->load->view('view_top1', array('title' => 'Translate User Interface'));
             $this->load->view('view_top2');
@@ -72,6 +75,7 @@ class Ctrl_translate extends MY_Controller {
                                                    'textgroup_list' => $textgroup_list,
                                                    'lang_list' => $lang_list,
                                                    'alllines' => $alllines,
+                                                   'untranslated' => $untranslated,
                                                    'lines_per_page' => $lines_per_page,
                                                    'line_count' => $line_count,
                                                    'page_count' => $page_count),
@@ -87,9 +91,26 @@ class Ctrl_translate extends MY_Controller {
     }
 
 
-    function posted()
+    function update_if()
     {
-        echo "<pre>",print_r($_POST);die;
+        try {
+            $this->mod_users->check_translator();
+
+            if (!isset($_GET['lang_edit']))
+                throw new DataException('Missing language identification');
+            if (!isset($_GET['textgroup']))
+                throw new DataException('Missing text group identification');
+
+            $lang_edit = $_GET['lang_edit'];
+            $textgroup = $_GET['textgroup'];
+
+            $this->mod_translate->update_if_lines($lang_edit, $textgroup, $_POST);
+
+            redirect("/translate/translate_if?$_SERVER[QUERY_STRING]");
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), 'Translate User Interface');
+        }
     }
 
   }

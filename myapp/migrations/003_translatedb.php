@@ -12,6 +12,7 @@ class Migration_Translatedb extends CI_Migration {
     }
 
 	public function up() {
+        echo "TODO: Remove the following comment in the source code\n\n";
 //        $this->dbforge->add_column('user', array('istranslator' => array('type' => 'TINYINT(1)', 'default' => '0')));
 //        echo "istranslator field added to user table\n";
         
@@ -44,8 +45,8 @@ class Migration_Translatedb extends CI_Migration {
             echo "Handle language $short_langname:\n";
             
             $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
-                                            'filename' => array('type'=>'TINYTEXT'),
-                                            'key' => array('type'=>'TINYTEXT'),
+                                            'textgroup' => array('type'=>'TINYTEXT'),
+                                            'symbolic_name' => array('type'=>'TINYTEXT'),
                                             'text' => array('type'=>'TEXT')));
             $this->dbforge->add_key('id', TRUE);
             $this->dbforge->create_table('language_'.$short_langname);
@@ -68,10 +69,12 @@ class Migration_Translatedb extends CI_Migration {
                 include($application_folder.DIRECTORY_SEPARATOR.'language'.DIRECTORY_SEPARATOR.$lang_name.$file);
                 
                 foreach ($lang as $key => $text) {
-                    $toinsert[] = array('filename' => $short_file,
-                                        'key' => $key,
+                    $toinsert[] = array('textgroup' => $short_file,
+                                        'symbolic_name' => $key,
                                         'text' => $text);
                     $allkeys[$short_file][$key] = true;
+                    if ($short_langname=='en')
+                        $has_lf[$key] = strpos($text, "\n")!==false;
                 }
             }
 
@@ -81,18 +84,21 @@ class Migration_Translatedb extends CI_Migration {
         // Create translation comment table
         $toinsert = array();
         $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
-                                        'filename' => array('type'=>'TINYTEXT'),
-                                        'key' => array('type'=>'TINYTEXT'),
+                                        'textgroup' => array('type'=>'TINYTEXT'),
+                                        'symbolic_name' => array('type'=>'TINYTEXT'),
                                         'comment' => array('type'=>'TEXT',
                                                            'null' => true,
-                                                           'default' => null)));
+                                                           'default' => null),
+                                        'has_lf' => array('type' => 'TINYINT(1)')
+                                      ));
         $this->dbforge->add_key('id', TRUE);
         $this->dbforge->create_table('language_comment');
 
         foreach ($allkeys as $short_file => $keys) {
             foreach ($keys as $key => $value) {
-                $toinsert[] = array('filename' => $short_file,
-                                    'key' => $key);
+                $toinsert[] = array('textgroup' => $short_file,
+                                    'symbolic_name' => $key,
+                                    'has_lf' => isset($has_lf[$key]) && $has_lf[$key]);
             }
         }
         $this->db->insert_batch('language_comment', $toinsert);

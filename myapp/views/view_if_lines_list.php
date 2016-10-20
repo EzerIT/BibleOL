@@ -2,8 +2,14 @@
 
 function build_url($get_parms)
 {
-    return site_url('translate?' . http_build_query($get_parms));
+    return site_url('translate/translate_if?' . http_build_query($get_parms));
 }
+
+$short_target_lang = $get_parms['lang_edit'];
+$long_target_lang = $lang_list[$short_target_lang];
+$count_untrans = count($untranslated);
+$strings = $count_untrans>1 ? 'strings' : 'string';
+
 ?>
 
 <script>
@@ -98,6 +104,11 @@ function build_url($get_parms)
             .click(function() {
                     is_submitting = true;
                 });
+
+        $('#show-notrans')
+            .click(function() {
+                    $('#untranslated-info-dialog').modal('show');
+                });
         
         $(window)
             .on('beforeunload', function() {
@@ -109,16 +120,16 @@ function build_url($get_parms)
 </script>
 
 
-<p><strong>Edit Language:</strong>
+<p><strong>Target language:</strong>
 
 <select id="langeditsel">
   <?php foreach ($lang_list as $lshort => $llong): ?>
-     <option value="<?= $lshort ?>" <?= $lshort==$get_parms['lang_edit'] ? 'selected="selected"' : '' ?>><?= $llong ?></option>
+     <option value="<?= $lshort ?>" <?= $lshort==$short_target_lang ? 'selected="selected"' : '' ?>><?= $llong ?></option>
   <?php endforeach; ?>
 </select>
 </p>
 
-<p><strong>Text Group:</strong>
+<p><strong>Text group:</strong>
 
 <select id="textgroupsel">
   <?php foreach ($textgroup_list as $tg): ?>
@@ -131,6 +142,35 @@ function build_url($get_parms)
 <p>Number of items in this text group: <?= $line_count ?>.</p>
 <p>Each page shows <?= $lines_per_page ?> items.</p>
 
+<?php if ($count_untrans>0): ?>        
+  <p><input id="show-notrans" class="btn btn-danger" type="button" href="<?= build_url($get_parms) ?>"
+     value="Show <?= $count_untrans ?> <?= $strings ?> without <?= $long_target_lang ?> translation"></p>
+
+<!-- Dialog for displaying untranslated text -->
+<div class="modal fade" id="untranslated-info-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Untranslated <?= $long_target_lang ?> Strings</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+        <tr><th>Text Group</th><th>Symbolic Name</th></tr>
+        <?php foreach ($untranslated as $ut): ?>
+            <tr><td><?= $ut->textgroup ?></td><td><?= $ut->symbolic_name ?></td></tr>
+        <?php endforeach; ?>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+       
+<?php endif; ?>
+        
 <nav>
   <ul class="pagination">
     <?php for ($p=0; $p<$page_count; ++$p): ?>
@@ -167,28 +207,32 @@ function build_url($get_parms)
 ?>
 
     
-<form action="<?= site_url("translate/posted") ?>" method="post">
+<form action="<?= site_url('translate/update_if?' . http_build_query($get_parms)) ?>" method="post">
     
 <div class="table-responsive">
 <table id="trans_table" class="type2 table table-striped">
   <tr>
-     <?= make_if_line_header('Symbolic name', 'key', $get_parms) ?>
+     <?= make_if_line_header('Symbolic name', 'symbolic_name', $get_parms) ?>
      <th>Comment</th>
      <th><?= $language_selector ?></th>
-     <?= make_if_line_header($lang_list[$get_parms['lang_edit']], 'text_edit', $get_parms) ?>
+     <?= make_if_line_header($long_target_lang, 'text_edit', $get_parms) ?>
      <th>Modified?</th>
   </tr>
   <?php foreach ($alllines as $line): ?>
     <tr>
-      <td class="leftalign"><?= $line->key ?></td>
+      <td class="leftalign"><?= $line->symbolic_name ?></td>
       <td class="leftalign"><?= $line->comment ?></td>
-      <td class="leftalign"><?= $line->text_show ?></td>
+        <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>
       <td class="leftalign">
-        <input type="text" class="textinput" name="<?= $line->key ?>" size="40" value="<?= $line->text_edit ?>">
+        <?php if ($line->has_lf): ?>
+          <textarea name="<?= $line->symbolic_name ?>" rows="5" cols="40"><?= $line->text_edit ?></textarea>
+        <?php else: ?>
+          <input type="text" class="textinput" name="<?= $line->symbolic_name ?>" size="40" value="<?= $line->text_edit ?>">
+        <?php endif; ?>
       </td>
       <td class="centeralign">
-        <a class="label label-danger revertbutton" data-name="<?= $line->key ?>" href="#">Revert</a>
-        <input type="hidden" class="modif-indicator" name="modif-<?= $line->key ?>" value="false"></td>
+        <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name ?>" href="#">Revert</a>
+        <input type="hidden" class="modif-indicator" name="modif-<?= $line->symbolic_name ?>" value="false"></td>
       </td>
     </tr>
   <?php endforeach; ?>

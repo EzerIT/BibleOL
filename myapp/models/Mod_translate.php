@@ -1,3 +1,6 @@
+TODO: Revert at textarea
+TODO: Post textarea
+
 <?php
 
 class Mod_translate extends CI_Model {
@@ -15,253 +18,63 @@ class Mod_translate extends CI_Model {
         return $this->langs;
     }
 
-    
-    public function get_all_users() {
-        $query = $this->db->get('user');
-        return $query->result();
-    }
-
     public function get_if_lines_part(string $lang_edit, string $lang_show, string $textgroup, integer $limit, integer $offset, string $orderby, string $sortorder) {
-        $query = $this->db->select("language_comment.key, comment, s.text text_show, e.text text_edit")
-            ->from('language_comment')
-            ->join("language_$lang_show s", "s.key=language_comment.key AND s.filename=language_comment.filename")
-            ->join("language_$lang_edit e", "e.key=language_comment.key AND e.filename=language_comment.filename")
-            ->where('language_comment.filename',$textgroup)
+        $query = $this->db->select("c.symbolic_name, comment, c.has_lf, s.text text_show, e.text text_edit")
+            ->from('language_comment c')
+            ->join("language_$lang_show s", "s.symbolic_name=c.symbolic_name AND s.textgroup=c.textgroup",'left')
+            ->join("language_$lang_edit e", "e.symbolic_name=c.symbolic_name AND e.textgroup=c.textgroup",'left')
+            ->where('c.textgroup',$textgroup)
             ->order_by($orderby,$sortorder)->limit($limit,$offset)->get();
         return $query->result();
     }
 
-    // The language_comment table is the canonical list of key values
+    // The language_comment table is the canonical list of symbolic_name values
     public function count_if_lines(string $textgroup) {
-        $query = $this->db->select('count(*) as count')->where('filename',$textgroup)->get("language_comment");
+        $query = $this->db->select('count(*) as count')->where('textgroup',$textgroup)->get("language_comment");
         return $query->row()->count;
     }
 
     public function get_textgroup_list() {
-        $query = $this->db->distinct()->select('filename')->get('language_comment');
+        $query = $this->db->distinct()->select('textgroup')->get('language_comment');
         $textgroups = $query->result();
         $res = array();
         
         foreach ($textgroups as $tg)
-            $res[] = $tg->filename;
+            $res[] = $tg->textgroup;
 
         return $res;
     }
 
+    public function get_if_untranslated(string $lang_edit) {
+        $query = $this->db->select("c.symbolic_name, c.textgroup")
+            ->from('language_comment c')
+            ->join("language_$lang_edit e", "e.symbolic_name=c.symbolic_name AND e.textgroup=c.textgroup",'left')
+            ->where('e.text IS NULL')
+            ->order_by('textgroup,symbolic_name')->get();
+        return $query->result();
+    }
+
+    public function update_if_lines(string $lang_edit, string $textgroup, array $post) {
+        $updates = array();
         
-    
-    public function get_teachers() {
-        $query = $this->db->where('`isteacher`=1 OR `isadmin`=1',null,false)->get('user');
-        $teachers = $query->result();
-        usort($teachers, 'teacher_cmp');
-        return $teachers;
-    }
+        foreach ($post as $key => $value) {
+            if (substr($key,0,6)==='modif-' && $value=="true") {
+                $key2 = substr($key,6);
+                if ($this->db->from("language_$lang_edit")
+                    ->where('textgroup',$textgroup)->where('symbolic_name', $key2)
+                    ->count_all_results() == 0) {
+                    // A record does not exist, insert one.
+                    $this->db->insert("language_$lang_edit", array('textgroup' => $textgroup,
+                                                                   'symbolic_name' => $key2,
+                                                                   'text' => $this->security->xss_clean($post[$key2])));
+                }
+                else {
+                    // Update existing record
+                    $this->db->where('textgroup',$textgroup)->where('symbolic_name', $key2)
+                        ->update("language_$lang_edit", array('text' => $this->security->xss_clean($post[$key2])));
+                }
 
-    // $userid==-1 means create new user
-    public function get_user_by_id(integer $userid) {
-        if ($userid===-1) {
-            // Create new user
-            $user = new stdClass();
-            $user->id = null; // Indicates new user
-            $user->first_name = '';
-            $user->last_name = '';
-            $user->username = '';
-            $user->password = '';
-            $user->isadmin = 0;
-            $user->email = '';
-            $user->oauth2_login = null;
-            $user->created_time = time();
-            $user->last_login = time()-10; // Assume that the user has logged in at least once to prevent expiry.
-                                           // The -10 is used when listing users to indicate that this is a fake value.
-            $user->warning_sent = 0;
-            $user->isteacher = 0;
-            $user->istranslator = 0;
-            $user->preflang = 'none';
-        }
-        else {
-            $query = $this->db->where('id',$userid)->get('user');
-            $user = $query->row();
-            if (!$user)
-                throw new DataException($this->lang->line('illegal_user_id'));
-        }
-        return $user;
-    }
-
-
-    // Returns: Null if user not found
-    //          User information structure if one user found
-    //          Array of user information structures if more than one user found
-    public function get_user_by_name_or_email(string $username, string $email) {
-        if ($username!='') {
-            $query = $this->db->where('username',$username)->where('oauth2_login',null)->get('user'); //TODO: Test this
-            return $query->num_rows()>0 ? $query->row() : null;
-        }
-        
-        $query = $this->db->where('email',$email)->where('oauth2_login',null)->get('user'); //TODO: Test this
-        $count = $query->num_rows();
-
-        if ($count===1)
-            return $query->row();
-        else if ($count>1)
-            return $query->result();
-        else
-            return null;
-    }
-
-    // Returns: Null if user not found
-    //          User information structure if one user found
-    public function get_user_by_reset_key(string $reset_key) {
-        $query = $this->db->where('reset',$reset_key)->get('user');
-        if ($query->num_rows()===0)
-            return null;
-        else {
-            $row = $query->row();
-            if (time()-$row->reset_time > 48*3600) // Reset key has expired
-                return null;
-            return $row;
-        }
-    }
-
-    public function set_reset_key(stdClass $user_info, string $reset_key) {
-        $this->db->where('id',$user_info->id)->update('user',array('reset'=>$reset_key, 'reset_time'=>time()));
-    }
-
-    public function set_user(stdClass $user_info, string $pw) {
-        if (!empty($pw))
-            $user_info->password = md5($this->config->item('pw_salt') . $pw);
-
-        if (is_null($user_info->id)) // Insert new user
-            $query = $this->db->insert('user', $user_info);
-        else // Update existing user
-            $query = $this->db->where('id',$user_info->id)->update('user',$user_info);
-
-        return $query;
-    }
-
-    
-    public function delete_user(integer $userid) {
-        $this->db->where('id', $userid)->delete('user');
-        if ($this->db->affected_rows()==0)
-            throw new DataException($this->lang->line('illegal_user_id'));
-
-        // Most deletions are handled by foreign keys. The font and exerciseowner tables are
-        // exceptions because entries here can have user_id/ownerid = 0
-        $this->db->where('user_id', $userid)->delete('font');
-
-        // Change ownership of exercises
-        $query = $this->db->where('ownerid',$userid)->update('exerciseowner',array('ownerid' => 0));
-    }
-
-
-    /// @return True if this is the first time this user logs in.
-    public function new_oauth2_user(string $authority, string $oauth2_user_id, string $first_name, string $last_name, string__OR__null $email) {
-        switch ($authority) {
-          case 'google':
-                $username = "ggl_$oauth2_user_id";
-                break;
-
-          case 'facebook':
-                $username = "fcb_$oauth2_user_id";
-                break;
-        }
-
-        $query = $this->db->where('oauth2_login',$authority)->where('username',$username)->get('user');
-
-		if ($row = $query->row()) {
-            $this->me = $row;
-			$this->admin = $this->me->isadmin;
-			$this->teacher = $this->me->isteacher;
-			$this->translator = $this->me->istranslator;
-            $this->user_id = $this->me->id;
-
-            $this->session->set_userdata('ol_user', $this->user_id);
-            $this->session->set_userdata('ol_admin', $this->admin);  // NOTE: 'ol_admin' is only a hint. Do not rely on it.
-            $this->session->set_userdata('ol_teacher', $this->teacher);  // NOTE: 'ol_teacher' is only a hint. Do not rely on it.
-            $this->session->set_userdata('ol_translator', $this->translator);  // NOTE: 'ol_translator' is only a hint. Do not rely on it.
-            if ($row->preflang!='none')
-                $this->session->set_userdata('language', $row->preflang);
-
-            if ($first_name!==$this->me->first_name || $last_name!==$this->me->last_name || $email!==$this->me->email) {
-                $query = $this->db->where('id',$this->user_id)->update('user',array('first_name' => $first_name,
-                                                                                    'last_name' => $last_name,
-                                                                                    'email' => (empty($email) ? null : $email),
-                                                                                    'last_login' => time(),
-                                                                                    'warning_sent' => 0));
             }
-            else
-                $query = $this->db->where('id',$this->user_id)->update('user',array('last_login' => time(),
-                                                                                    'warning_sent' => 0));
-
-            return false;
         }
-        else {
-            // Create new user
-            $user = new stdClass();
-            $user->id = null; // Indicates new user
-            $user->first_name = $first_name;
-            $user->last_name = $last_name;
-            $user->username = $username;
-            $user->password = 'NONE';
-            $user->isadmin = 0;
-            $user->isteacher = 0;
-            $user->istranslator = 0;
-            $user->email = empty($email) ? null : $email;
-            $user->oauth2_login = $authority;
-            $user->created_time = time();
-            $user->last_login = time();
-            $user->warning_sent = 0;
-            $user->preflang = $this->language_short;
-
-            $query = $this->db->insert('user', $user);
-      
-			$this->admin = false;
-			$this->teacher = false;
-            $this->user_id = $this->db->insert_id();
-
-            $this->session->set_userdata('ol_user', $this->user_id);
-            $this->session->set_userdata('ol_admin', $this->admin);  // NOTE: 'ol_admin' is only a hint. Do not rely on it.
-            $this->session->set_userdata('ol_teacher', $this->teacher);  // NOTE: 'ol_teacher' is only a hint. Do not rely on it.
-            $this->session->set_userdata('ol_translator', $this->translator);  // NOTE: 'ol_translator' is only a hint. Do not rely on it.
-            $this->session->set_userdata('language', $user->preflang);
-
-            return true;
-        }
-    }
-
-    // Delete accounts older than $time seconds where the user has never logged in
-    public function delete_new_inactive(integer $time) {
-        $now = time();
-        $query = $this->db->where('last_login',0)->where('created_time >',0)->where('created_time <',$now-$time)
-            ->get('user');
-        $users = $query->result();
-
-        foreach ($users as $u)
-            $this->delete_user(intval($u->id));
-
-        return $users;
-    }
-
-    // Handle accounts where the user has not logged in for the last $time seconds
-    // $level==0 means: Delete user
-    // $level!=0 means: Set warning_sent to $level
-    public function old_inactive(integer $level, integer $time) {
-        $now = time();
-        if ($level==0) {
-            $query = $this->db->where('last_login <',$now-$time)->where('last_login >',0)
-                ->get('user');
-            $users = $query->result();
-   
-            foreach ($users as $u)
-                $this->delete_user(intval($u->id));
-        }
-        else {
-            $query = $this->db->where('last_login <',$now-$time)->where('last_login >',0)->where('warning_sent <',$level)
-                ->get('user');
-            $users = $query->result();
-            $this->db->where('last_login <',$now-$time)->where('last_login >',0)->where('warning_sent <',$level)
-                ->update('user',array('warning_sent'=>$level));
-        }
-
-        return $users;
     }
   }

@@ -24,13 +24,19 @@ if ($this->session->userdata('ol_user')!==null && $this->session->userdata('ol_u
         lj_menu_add($head, $content);
     }
     
-    if ($this->session->userdata('ol_teacher') || $this->session->userdata('ol_admin')) {
-        // Teacher
+    if ($this->session->userdata('ol_teacher') || $this->session->userdata('ol_admin') || $this->session->userdata('ol_translator')) {
+        // Teacher or translator
         $ix = count($head);
         $head[] = $this->lang->line('administration');
-        $content[$ix][] = anchor(site_url('users'), $this->lang->line('users'));
-        $content[$ix][] = anchor(site_url('classes'), $this->lang->line('classes'));
-        $content[$ix][] = anchor(site_url('file_manager'), $this->lang->line('manage_exercises'));
+        if ($this->session->userdata('ol_teacher') || $this->session->userdata('ol_admin')) {
+            // Teacher
+            $content[$ix][] = anchor(site_url('users'), $this->lang->line('users'));
+            $content[$ix][] = anchor(site_url('classes'), $this->lang->line('classes'));
+            $content[$ix][] = anchor(site_url('file_manager'), $this->lang->line('manage_exercises'));
+        }
+        if ($this->session->userdata('ol_translator') || $this->session->userdata('ol_admin')) {
+            $content[$ix][] = anchor(site_url('translate'), $this->lang->line('translation'));
+        }
         if ($this->session->userdata('ol_admin'))
             $content[$ix][] = anchor(site_url('urls'), $this->lang->line('manage_gloss_links'));
     }

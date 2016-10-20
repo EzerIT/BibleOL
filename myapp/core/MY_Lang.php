@@ -118,12 +118,12 @@ class MY_Lang extends CI_Lang {
 		}
 
         $CI =& get_instance();
-        $query = $CI->db->where('filename',$langfile)->get('language_'.$idiom);
+        $query = $CI->db->where('textgroup',$langfile)->get('language_'.$idiom);
         $strings = $query->result();
 
         $lang = array();
         foreach ($strings as $s)
-            $lang[$s->key] = $s->text;
+            $lang[$s->symbolic_name] = $s->text;
 
         if (empty($lang))
             // Load from file instead of database
@@ -180,19 +180,19 @@ class MY_Lang extends CI_Lang {
         $lang = array();
 
         if ($idiom!='en') {
-            $query = $CI->db->where('filename',$langfile)->get('language_en');  // For fallback strings
+            $query = $CI->db->where('textgroup',$langfile)->get('language_en');  // For fallback strings
             $strings = $query->result();
             
             foreach ($strings as $s)
-                $lang[$s->key] = $s->text;
+                $lang[$s->symbolic_name] = $s->text;
         }
 
-        $query = $CI->db->where('filename',$langfile)->get('language_'.$idiom);
+        $query = $CI->db->where('textgroup',$langfile)->get('language_'.$idiom);
         $strings = $query->result();
 
         $lang = array();
         foreach ($strings as $s)
-            $lang[$s->key] = $s->text;
+            $lang[$s->symbolic_name] = $s->text;
             
         $this->secondary_lang = array_merge($this->secondary_lang, $lang);
     }
