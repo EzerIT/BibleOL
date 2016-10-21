@@ -1,6 +1,3 @@
-TODO: Revert at textarea
-TODO: Post textarea
-
 <?php
 
 class Mod_translate extends CI_Model {
@@ -19,7 +16,7 @@ class Mod_translate extends CI_Model {
     }
 
     public function get_if_lines_part(string $lang_edit, string $lang_show, string $textgroup, integer $limit, integer $offset, string $orderby, string $sortorder) {
-        $query = $this->db->select("c.symbolic_name, comment, c.has_lf, s.text text_show, e.text text_edit")
+        $query = $this->db->select("c.symbolic_name, comment, c.use_textarea, s.text text_show, e.text text_edit")
             ->from('language_comment c')
             ->join("language_$lang_show s", "s.symbolic_name=c.symbolic_name AND s.textgroup=c.textgroup",'left')
             ->join("language_$lang_edit e", "e.symbolic_name=c.symbolic_name AND e.textgroup=c.textgroup",'left')

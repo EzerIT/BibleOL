@@ -224,8 +224,8 @@ $strings = $count_untrans>1 ? 'strings' : 'string';
       <td class="leftalign"><?= $line->comment ?></td>
         <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>
       <td class="leftalign">
-        <?php if ($line->has_lf): ?>
-          <textarea name="<?= $line->symbolic_name ?>" rows="5" cols="40"><?= $line->text_edit ?></textarea>
+        <?php if ($line->use_textarea): ?>
+          <textarea class="textinput" name="<?= $line->symbolic_name ?>" rows="5" cols="40"><?= $line->text_edit ?></textarea>
         <?php else: ?>
           <input type="text" class="textinput" name="<?= $line->symbolic_name ?>" size="40" value="<?= $line->text_edit ?>">
         <?php endif; ?>
