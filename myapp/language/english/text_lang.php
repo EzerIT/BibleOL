@@ -51,8 +51,8 @@ $lang['check_answer'] = 'Check answer';
 $lang['show_answer'] = 'Show answer';
 
 $lang['next'] = 'Next';
-$lang['finish'] = 'Finish';
-$lang['finish_no_grading'] = 'Finish without grading';
+$lang['finish'] = 'GRADE task';
+$lang['finish_no_grading'] = 'SAVE outcome';
 $lang['toggle_mql'] = 'Toggle MQL';
 
 $lang['clear_grammar'] = 'Clear grammar';

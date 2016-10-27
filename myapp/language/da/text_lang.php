@@ -51,8 +51,8 @@ $lang['check_answer'] = 'Tjek svar';
 $lang['show_answer'] = 'Vis svar';
 
 $lang['next'] = 'Næste';
-$lang['finish'] = 'Afslut';
-$lang['finish_no_grading'] = 'Afslut uden karakter';
+$lang['finish'] = 'BEDØM opgaven';
+$lang['finish_no_grading'] = 'GEM resultat';
 $lang['toggle_mql'] = 'Vis/skjul MQL';
 
 $lang['clear_grammar'] = 'Fjern grammatik';
