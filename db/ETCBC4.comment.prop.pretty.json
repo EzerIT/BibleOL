@@ -1,0 +1,537 @@
+{
+    "dbdescription": "",
+    "dbcopyright": "f:textarea ",
+    "emdrosobject": {
+        "word": {
+            "_objname": "",
+            "lexeme_occurrences": "",
+            "frequency_rank": "",
+            "english": "",
+            "german": "",
+            "glossurl": "",
+            "g_nme_utf8": "",
+            "g_nme_cons_utf8": "",
+            "g_pfm_utf8": "",
+            "g_pfm_cons_utf8": "",
+            "g_prs_utf8": "",
+            "g_prs_cons_utf8": "",
+            "g_uvf_utf8": "",
+            "g_uvf_cons_utf8": "",
+            "g_vbe_utf8": "",
+            "g_vbe_cons_utf8": "",
+            "g_vbs_utf8": "",
+            "g_vbs_cons_utf8": "",
+            "text_utf8": "",
+            "text_translit": "",
+            "text_cons_utf8": "",
+            "text_nocant_utf8": "",
+            "vocalized_lexeme_cons_utf8": "",
+            "vocalized_lexeme_utf8": "",
+            "vocalized_lexeme_translit": "",
+            "language": "",
+            "ls": "",
+            "vs": "",
+            "vt": "",
+            "ps": "",
+            "nu": "",
+            "gn": "",
+            "st": "",
+            "pdp": "",
+            "sp": "",
+            "suffix_gender": "",
+            "suffix_number": "",
+            "suffix_person": "",
+            "verb_class": "",
+            "g_qere_utf8": "",
+            "g_qere_translit": ""
+        },
+        "phrase_atom": {
+            "_objname": "",
+            "det": "",
+            "rela": "",
+            "typ": ""
+        },
+        "subphrase": {
+            "_objname": "",
+            "rela": ""
+        },
+        "phrase": {
+            "_objname": "",
+            "det": "",
+            "typ": "",
+            "rela": "",
+            "function": ""
+        },
+        "clause_atom": {
+            "_objname": "",
+            "tab": "",
+            "code_TYPE_text": "",
+            "code_TYPE_text_VALUES": [
+                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
+                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
+                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
+                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
+                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
+                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
+                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
+                { "first" : "f:num ", "last" : "f:num ", "text" : "" }],
+            "code": "",
+            "typ": ""
+        },
+        "clause": {
+            "_objname": "",
+            "domain": "",
+            "txt": "",
+            "typ": "",
+            "kind": "",
+            "rela": ""
+        },
+        "sentence": {
+            "_objname": ""
+        }
+    },
+    "emdrostype": {
+        "boolean": {
+            "false": "",
+            "true": ""
+        },
+        "language_t": {
+            "Aramaic": "",
+            "Hebrew": ""
+        },
+        "lexical_set_t": {
+            "none": "",
+            "afad": "",
+            "card": "",
+            "cjad": "",
+            "focp": "",
+            "gntl": "",
+            "mult": "",
+            "nmcp": "",
+            "nmdi": "",
+            "ordn": "",
+            "padv": "",
+            "ppre": "",
+            "ques": "",
+            "quot": "",
+            "vbcp": ""
+        },
+        "part_of_speech_t": {
+            "art": "",
+            "verb": "",
+            "subs": "",
+            "nmpr": "",
+            "advb": "",
+            "prep": "",
+            "conj": "",
+            "prps": "",
+            "prde": "",
+            "prin": "",
+            "intj": "",
+            "nega": "",
+            "inrg": "",
+            "adjv": ""
+        },
+        "gender_t": {
+            "f": "",
+            "m": "",
+            "NA": "",
+            "unknown": ""
+        },
+        "suffix_gender_t": {
+            "c": "",
+            "f": "",
+            "m": "",
+            "NA": ""
+        },
+        "number_t": {
+            "du": "",
+            "NA": "",
+            "pl": "",
+            "sg": "",
+            "unknown": ""
+        },
+        "suffix_number_t": {
+            "NA": "",
+            "pl": "",
+            "sg": ""
+        },
+        "person_t": {
+            "p1": "",
+            "NA": "",
+            "p2": "",
+            "p3": "",
+            "unknown": ""
+        },
+        "suffix_person_t": {
+            "NA": "",
+            "p1": "",
+            "p2": "",
+            "p3": ""
+        },
+        "state_t": {
+            "a": "",
+            "c": "",
+            "e": "",
+            "NA": "",
+            "unknown": ""
+        },
+        "verb_class_t": {
+            "NA": "",
+            "analog_i_nun": "",
+            "analog_i_waw": "",
+            "four_consonants": "",
+            "geminate": "",
+            "hjh_xjh": "",
+            "i_aleph": "",
+            "i_guttural": "",
+            "i_nun": "",
+            "i_waw": "",
+            "i_yod": "",
+            "ii_guttural": "",
+            "ii_waw": "",
+            "ii_yod": "",
+            "iii_aleph": "",
+            "iii_guttural": "",
+            "iii_he": "",
+            "regular": ""
+        },
+        "phrase_determination_t": {
+            "NA": "",
+            "det": "",
+            "und": ""
+        },
+        "verbal_stem_t": {
+            "NA": "",
+            "qal": "",
+            "hif": "",
+            "piel": "",
+            "nif": "",
+            "pual": "",
+            "hof": "",
+            "hit": "",
+            "afel": "",
+            "etpa": "",
+            "etpe": "",
+            "haf": "",
+            "hsht": "",
+            "htpa": "",
+            "htpe": "",
+            "hotp": "",
+            "nit": "",
+            "pael": "",
+            "peal": "",
+            "peil": "",
+            "shaf": "",
+            "tif": "",
+            "pasq": ""
+        },
+        "verbal_tense_t": {
+            "NA": "",
+            "impf": "",
+            "impv": "",
+            "infa": "",
+            "infc": "",
+            "perf": "",
+            "ptca": "",
+            "ptcp": "",
+            "wayq": "",
+            "weyq": "",
+            "coho": "",
+            "emim": "",
+            "juss": ""
+        },
+        "phrase_type_t": {
+            "AdjP": "",
+            "AdvP": "",
+            "CP": "",
+            "DPrP": "",
+            "IPrP": "",
+            "InjP": "",
+            "InrP": "",
+            "NP": "",
+            "NegP": "",
+            "PP": "",
+            "PPrP": "",
+            "PrNP": "",
+            "VP": ""
+        },
+        "phrase_function_t": {
+            "Adju": "",
+            "Cmpl": "",
+            "Conj": "",
+            "EPPr": "",
+            "ExsS": "",
+            "Exst": "",
+            "Frnt": "",
+            "IntS": "",
+            "Intj": "",
+            "Loca": "",
+            "ModS": "",
+            "Modi": "",
+            "NCoS": "",
+            "NCop": "",
+            "Nega": "",
+            "Objc": "",
+            "PrAd": "",
+            "PrcS": "",
+            "PreC": "",
+            "PreO": "",
+            "PreS": "",
+            "Pred": "",
+            "PtcO": "",
+            "Ques": "",
+            "Rela": "",
+            "Subj": "",
+            "Supp": "",
+            "Time": "",
+            "Unkn": "",
+            "Voct": ""
+        },
+        "phrase_atom_relation_t": {
+            "NA": "",
+            "Appo": "",
+            "Link": "",
+            "Para": "",
+            "Sfxs": "",
+            "Spec": ""
+        },
+        "phrase_relation_t": {
+            "NA": "",
+            "PrAd": "",
+            "Resu": ""
+        },
+        "subphrase_relation_t": {
+            "NA": "",
+            "adj": "",
+            "atr": "",
+            "dem": "",
+            "mod": "",
+            "par": "",
+            "rec": ""
+        },
+        "clause_type_t": {
+            "AjCl": "",
+            "CPen": "",
+            "Ellp": "",
+            "InfA": "",
+            "InfC": "",
+            "MSyn": "",
+            "NmCl": "",
+            "Ptcp": "",
+            "Reop": "",
+            "Unkn": "",
+            "Voct": "",
+            "WIm0": "",
+            "WImX": "",
+            "WQt0": "",
+            "WQtX": "",
+            "WXIm": "",
+            "WXQt": "",
+            "WXYq": "",
+            "WYq0": "",
+            "WYqX": "",
+            "Way0": "",
+            "WayX": "",
+            "WxI0": "",
+            "WxIX": "",
+            "WxQ0": "",
+            "WxQX": "",
+            "WxY0": "",
+            "WxYX": "",
+            "XImp": "",
+            "XPos": "",
+            "XQtl": "",
+            "XYqt": "",
+            "ZIm0": "",
+            "ZImX": "",
+            "ZQt0": "",
+            "ZQtX": "",
+            "ZYq0": "",
+            "ZYqX": "",
+            "xIm0": "",
+            "xImX": "",
+            "xQt0": "",
+            "xQtX": "",
+            "xYq0": "",
+            "xYqX": ""
+        },
+        "clause_atom_type_t": {
+            "AjCl": "",
+            "CPen": "",
+            "Defc": "",
+            "Ellp": "",
+            "InfA": "",
+            "InfC": "",
+            "MSyn": "",
+            "NmCl": "",
+            "Ptcp": "",
+            "Reop": "",
+            "Unkn": "",
+            "Voct": "",
+            "WIm0": "",
+            "WImX": "",
+            "WQt0": "",
+            "WQtX": "",
+            "WXIm": "",
+            "WXQt": "",
+            "WXYq": "",
+            "WYq0": "",
+            "WYqX": "",
+            "Way0": "",
+            "WayX": "",
+            "WxI0": "",
+            "WxIX": "",
+            "WxQ0": "",
+            "WxQX": "",
+            "WxY0": "",
+            "WxYX": "",
+            "XImp": "",
+            "XPos": "",
+            "XQtl": "",
+            "XYqt": "",
+            "ZIm0": "",
+            "ZImX": "",
+            "ZQt0": "",
+            "ZQtX": "",
+            "ZYq0": "",
+            "ZYqX": "",
+            "xIm0": "",
+            "xImX": "",
+            "xQt0": "",
+            "xQtX": "",
+            "xYq0": "",
+            "xYqX": ""
+        },
+        "clause_kind_t": {
+            "unknown": "",
+            "NC": "",
+            "VC": "",
+            "WP": ""
+        },
+        "clause_constituent_relation_t": {
+            "NA": "",
+            "Adju": "",
+            "Attr": "",
+            "Cmpl": "",
+            "CoVo": "",
+            "Coor": "",
+            "Objc": "",
+            "PrAd": "",
+            "PreC": "",
+            "Resu": "",
+            "RgRc": "",
+            "Spec": "",
+            "Subj": ""
+        }
+    },
+    "grammargroup": {
+        "word": {
+            "form_in_text": "",
+            "lexeme": "",
+            "morphology": ""
+        }
+    },
+    "grammarfeature": {
+        "word": {
+            "text_translit": ""
+        }
+    },
+    "grammarmetafeature": {
+        "word": {
+            "pgn": "",
+            "suffix_pgn": ""
+        }
+    },
+    "grammarsubfeature": {
+        "word": {
+            "ps": {
+                "p1": "",
+                "NA": "",
+                "p2": "",
+                "p3": "",
+                "unknown": ""
+            },
+            "gn": {
+                "f": "",
+                "m": "",
+                "NA": "",
+                "unknown": ""
+            },
+            "nu": {
+                "du": "",
+                "NA": "",
+                "pl": "",
+                "sg": "",
+                "unknown": ""
+            },
+            "suffix_person": {
+                "p1": "",
+                "NA": "",
+                "p2": "",
+                "p3": ""
+            },
+            "suffix_gender": {
+                "c": "",
+                "f": "",
+                "m": "",
+                "NA": ""
+            },
+            "suffix_number": {
+                "NA": "",
+                "pl": "",
+                "sg": ""
+            }
+        }
+    },
+    "universe": {
+        "book": {
+            "_label": "",
+            "Genesis": "",
+            "Exodus": "",
+            "Leviticus": "",
+            "Numeri": "",
+            "Deuteronomium": "",
+            "Josua": "",
+            "Judices": "",
+            "Ruth": "",
+            "Samuel_I": "",
+            "Samuel_II": "",
+            "Reges_I": "",
+            "Reges_II": "",
+            "Chronica_I": "",
+            "Chronica_II": "",
+            "Esra": "",
+            "Nehemia": "",
+            "Esther": "",
+            "Iob": "",
+            "Psalmi": "",
+            "Proverbia": "",
+            "Ecclesiastes": "",
+            "Canticum": "",
+            "Jesaia": "",
+            "Jeremia": "",
+            "Threni": "",
+            "Ezechiel": "",
+            "Daniel": "",
+            "Hosea": "",
+            "Joel": "",
+            "Amos": "",
+            "Obadia": "",
+            "Jona": "",
+            "Micha": "",
+            "Nahum": "",
+            "Habakuk": "",
+            "Zephania": "",
+            "Haggai": "",
+            "Sacharia": "",
+            "Maleachi": ""
+        },
+        "chapter": {
+            "_label": ""
+        },
+        "verse": {
+            "_label": ""            
+        }
+    }
+}

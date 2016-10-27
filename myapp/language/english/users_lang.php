@@ -44,6 +44,7 @@ $lang['user_list'] = 'User List';
 $lang['configure_your_users'] = 'Configure your users';
 $lang['administrator'] = 'Sysadmin';
 $lang['teacher'] = 'Facilitator';
+$lang['translator'] = 'Translator';
 $lang['last_login'] = 'Last login';
 $lang['never'] = 'Never';
 $lang['user_operations'] = 'Operations';

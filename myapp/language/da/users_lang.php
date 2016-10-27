@@ -44,6 +44,7 @@ $lang['user_list'] = 'Brugerfortegnelse';
 $lang['configure_your_users'] = 'Konfigurér dine brugere';
 $lang['administrator'] = 'Sysadmin';
 $lang['teacher'] = 'Facilitator';
+$lang['translator'] = 'Oversætter';
 $lang['last_login'] = 'Sidste login';
 $lang['never'] = 'Aldrig';
 $lang['user_operations'] = 'Funktioner';

@@ -4,6 +4,7 @@ $lang['error_colon'] = 'Error:';
 $lang['must_be_logged_in'] = 'You must be logged in to access this function';
 $lang['must_be_admin'] = 'You must be logged in as administrator to access this function';
 $lang['must_be_teacher'] = 'You must be logged in as facilitator to access this function';
+$lang['must_be_translator'] = 'You must be logged in as translator to access this function';
 $lang['must_be_google'] = 'You must be logged in with Google to access this function';
 $lang['must_be_facebook'] = 'You must be logged in with Facebook to access this function';
 $lang['must_not_be_google'] = 'You must not be logged in with Google to access this function';

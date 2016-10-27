@@ -1,14 +1,25 @@
 <?php
 
-function build_url($get_parms)
+function build_url($editing,$get_parms)
 {
-    return site_url('translate/translate_if?' . http_build_query($get_parms));
+    switch ($editing) {
+      case 'interface':
+            return site_url('translate/translate_if?' . http_build_query($get_parms));
+
+      case 'grammar':
+            return site_url('translate/translate_grammar?' . http_build_query($get_parms));
+    }
 }
 
 $short_target_lang = $get_parms['lang_edit'];
 $long_target_lang = $lang_list[$short_target_lang];
-$count_untrans = count($untranslated);
-$strings = $count_untrans>1 ? 'strings' : 'string';
+
+if ($editing=='interface') {
+    $count_untrans = count($untranslated);
+    $strings = $count_untrans>1 ? 'strings' : 'string';
+}
+else
+    $count_untrans = 0;
 
 ?>
 
@@ -24,13 +35,13 @@ $strings = $count_untrans>1 ? 'strings' : 'string';
     };
 
     $(function() {
-        $('#textgroupsel')
+        $('#groupsel')
             .on('change', function() {
-                    <?php $textgroupsel_parms = $get_parms;
-                          $textgroupsel_parms['offset'] = 0;
-                          $textgroupsel_parms['textgroup'] = '{0}';
+                    <?php $groupsel_parms = $get_parms;
+                          $groupsel_parms['offset'] = 0;
+                          $groupsel_parms['group'] = '{0}';
                     ?>
-                    document.location='<?= build_url($textgroupsel_parms) ?>'.format($(this).val());
+                    document.location='<?= build_url($editing,$groupsel_parms) ?>'.format($(this).val());
                 });
 
         $('#langeditsel')
@@ -38,7 +49,7 @@ $strings = $count_untrans>1 ? 'strings' : 'string';
                     <?php $langeditsel_parms = $get_parms;
                           $langeditsel_parms['lang_edit'] = '{0}';
                     ?>
-                    document.location='<?= build_url($langeditsel_parms) ?>'.format($(this).val());
+                    document.location='<?= build_url($editing,$langeditsel_parms) ?>'.format($(this).val());
                 });
 
         $('#langshowsel')
@@ -46,7 +57,7 @@ $strings = $count_untrans>1 ? 'strings' : 'string';
                     <?php $langshowsel_parms = $get_parms;
                           $langshowsel_parms['lang_show'] = '{0}';
                     ?>
-                    document.location='<?= build_url($langshowsel_parms) ?>'.format($(this).val());
+                    document.location='<?= build_url($editing,$langshowsel_parms) ?>'.format($(this).val());
                 });
 
 
@@ -129,21 +140,21 @@ $strings = $count_untrans>1 ? 'strings' : 'string';
 </select>
 </p>
 
-<p><strong>Text group:</strong>
+<p><strong><?= $editing=='interface' ? 'Text group' : 'Text database' ?>:</strong>
 
-<select id="textgroupsel">
-  <?php foreach ($textgroup_list as $tg): ?>
-        <option value="<?= $tg ?>" <?= $tg==$get_parms['textgroup'] ? 'selected="selected"' : '' ?>><?= $tg ?></option>
+<select id="groupsel">
+  <?php foreach ($group_list as $tg): ?>
+        <option value="<?= $tg ?>" <?= $tg==$get_parms['group'] ? 'selected="selected"' : '' ?>><?= $tg ?></option>
   <?php endforeach; ?>
 </select>
 </p>
 
 
-<p>Number of items in this text group: <?= $line_count ?>.</p>
+<p>Number of items in this <?= $editing=='interface' ? 'text group' : 'text database' ?>: <?= $line_count ?>.</p>
 <p>Each page shows <?= $lines_per_page ?> items.</p>
 
 <?php if ($count_untrans>0): ?>        
-  <p><input id="show-notrans" class="btn btn-danger" type="button" href="<?= build_url($get_parms) ?>"
+  <p><input id="show-notrans" class="btn btn-danger" type="button" href="<?= build_url($editing,$get_parms) ?>"
      value="Show <?= $count_untrans ?> <?= $strings ?> without <?= $long_target_lang ?> translation"></p>
 
 <!-- Dialog for displaying untranslated text -->
@@ -177,13 +188,13 @@ $strings = $count_untrans>1 ? 'strings' : 'string';
       <?php $page_parms = $get_parms;
             $page_parms['offset'] = $p;
       ?>
-      <li <?= $p==$get_parms['offset'] ? 'class="active"' : '' ?>><a href="<?= build_url($page_parms) ?>"><?= $p+1 ?></a></li>
+      <li <?= $p==$get_parms['offset'] ? 'class="active"' : '' ?>><a href="<?= build_url($editing,$page_parms) ?>"><?= $p+1 ?></a></li>
     <?php endfor; ?>
   </ul>
 </nav>
 
 <?php
-  function make_if_line_header($label, $field, $get_parms) {
+  function make_trans_line_header($editing, $label, $field, $get_parms) {
       if ($get_parms['orderby']===$field) {
           $link_sortorder = $get_parms['sortorder']=='desc' ? 'asc' : 'desc';
           $arrow = ' <span class="glyphicon glyphicon-triangle-' . ($get_parms['sortorder']=='desc' ? 'bottom' : 'top') . '" aria-hidden="true">';
@@ -195,7 +206,7 @@ $strings = $count_untrans>1 ? 'strings' : 'string';
       $get_parms['offset'] = 0;
       $get_parms['sortorder'] = $link_sortorder;
       $get_parms['orderby'] = $field;
-      return '<th style="white-space:nowrap"><a href="' . build_url($get_parms) . '">' . $label . $arrow . "</a></th>\n";
+      return '<th style="white-space:nowrap"><a href="' . build_url($editing,$get_parms) . '">' . $label . $arrow . "</a></th>\n";
     }
 
     $language_selector = "<select id=\"langshowsel\">\n";
@@ -206,25 +217,25 @@ $strings = $count_untrans>1 ? 'strings' : 'string';
     $language_selector .= "</select>\n";
 ?>
 
-    
-<form action="<?= site_url('translate/update_if?' . http_build_query($get_parms)) ?>" method="post">
+<form action="<?= site_url(($editing=='interface' ? 'translate/update_if?' : 'translate/update_grammar?'). http_build_query($get_parms)) ?>" method="post">
     
 <div class="table-responsive">
 <table id="trans_table" class="type2 table table-striped">
   <tr>
-     <?= make_if_line_header('Symbolic name', 'symbolic_name', $get_parms) ?>
-     <th>Comment</th>
+     <?= $editing=='interface' ? make_trans_line_header($editing, 'Symbolic name', 'symbolic_name', $get_parms) : '<th>Symbolic name</th>' ?>
+     <?= $editing=='interface' ? '<th>Comment</th>' : '' ?>
      <th><?= $language_selector ?></th>
-     <?= make_if_line_header($long_target_lang, 'text_edit', $get_parms) ?>
+     <?= $editing=='interface' ? make_trans_line_header($editing, $long_target_lang, 'text_edit', $get_parms) : "<th>$long_target_lang</th>" ?>
      <th>Modified?</th>
   </tr>
   <?php foreach ($alllines as $line): ?>
     <tr>
       <td class="leftalign"><?= $line->symbolic_name ?></td>
-      <td class="leftalign"><?= $line->comment ?></td>
-        <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>
+      <?= $editing=='interface' ? ('<td class="leftalign">'.$line->comment.'</td>') : '' ?>
+      <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>
       <td class="leftalign">
-        <?php if ($line->use_textarea): ?>
+        <?php if ($editing=='interface' && $line->use_textarea
+                  || $editing=='grammar' && substr($line->comment,0,10)=='f:textarea'): ?>
           <textarea class="textinput" name="<?= $line->symbolic_name ?>" rows="5" cols="40"><?= $line->text_edit ?></textarea>
         <?php else: ?>
           <input type="text" class="textinput" name="<?= $line->symbolic_name ?>" size="40" value="<?= $line->text_edit ?>">
@@ -240,6 +251,6 @@ $strings = $count_untrans>1 ? 'strings' : 'string';
 </div>
 
 <p><input class="btn btn-primary" type="submit" name="submit" value="Submit changes">
-   <a class="btn btn-default revert-all" href="<?= build_url($get_parms) ?>">Revert all</a></p>
+   <a class="btn btn-default revert-all" href="<?= build_url($editing,$get_parms) ?>">Revert all</a></p>
 
 <form>

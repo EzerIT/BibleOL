@@ -6,7 +6,7 @@ require_once('include/typeinfo.inc.php');
 class database_file {
     public $emdros_db;  ///< The name of the Emdros database file
     public $dbinfo;     ///< The name of the file containing database information (dbinfo) for the Emdros database
-    public $properties; ///< The name of the file containing properties (localization) for the Emdros database
+    public $propertiesName; 
     public $typeinfo;   ///< The name of the file containing type information for the Emdros database
     public $bookorder;  ///< The order of the books in the Emdros database
     private $subsetOf;  ///< The name of an Emdros database, if any, that is a superset of this one
@@ -17,10 +17,10 @@ class database_file {
         $db = $dbinfo->databaseName;
         $pr = $dbinfo->propertiesName;
 
+        $this->propertiesName = $pr;
         $this->subsetOf = $dbinfo->subsetOf;
         $this->emdros_db = "db/$db";
         $this->dbinfo = "db/$pr.db.json";
-        $this->properties = "db/$pr.%s.prop.json"; // %s will be replaced by the language
         $this->typeinfo = "db/$db.typeinfo.json";
         $this->bookorder = "db/$db.bookorder";
     }
@@ -165,7 +165,9 @@ class Db_config {
         $this->dbinfo_json = $this->read_or_throw($dbf->dbinfo);
         $this->dbinfo = json_decode($this->dbinfo_json);
 
-        $this->l10n_json = $this->read_or_throw(sprintf($dbf->properties,$language));
+        $CI =& get_instance();
+        $query = $CI->db->select('json')->where('db',$dbf->propertiesName)->where('lang',$language)->get('db_localize');
+        $this->l10n_json = $query->row()->json;
 
         $this->typeinfo_json = $this->read_or_throw($dbf->typeinfo);
         $this->typeinfo = new TypeInfo($this->typeinfo_json);

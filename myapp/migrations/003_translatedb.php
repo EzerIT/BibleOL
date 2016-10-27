@@ -210,19 +210,21 @@ class Migration_Translatedb extends CI_Migration {
 
 		$CI =& get_instance();
         $CI->language = 'english';
+
+        $this->load->helper('directory');
+    }
+    
+    private function add_translator() {
+        $this->dbforge->add_column('user', array('istranslator' => array('type' => 'TINYINT(1)', 'default' => '0')));
+        echo "istranslator field added to user table\n";
     }
 
-	public function up() {
+    private function add_if_translation() {
+        global $application_folder;
         global $comment, $format;
+
         setup_comments();
         
-        echo "***************************\nTODO: Remove the following comment in the source code\n********************\n";
-//        $this->dbforge->add_column('user', array('istranslator' => array('type' => 'TINYINT(1)', 'default' => '0')));
-//        echo "istranslator field added to user table\n";
-        
-        global $application_folder;
-        
-        $this->load->helper('directory');
         $d = directory_map($application_folder.DIRECTORY_SEPARATOR.'language', 2); // A value of 2 allows us to recognize empty directories
 
         $allkeys = array();
@@ -315,6 +317,39 @@ class Migration_Translatedb extends CI_Migration {
         $this->db->insert_batch('language_comment', $toinsert);
 
         echo "Language tables created\n";
+    }
+
+    private function add_grammar_translation() {
+        $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
+                                        'db' => array('type'=>'TINYTEXT'),
+                                        'lang' => array('type'=>'TINYTEXT'),
+                                        'json' => array('type'=>'MEDIUMTEXT')
+                                      ));
+        $this->dbforge->add_key('id', TRUE);
+        $this->dbforge->create_table('db_localize');
+
+        
+        $d = directory_map('db', 1); // A value of 2 allows us to recognize empty directories
+
+        foreach ($d as $file) {
+            if (preg_match('/(.*)\.(.*)\.prop.json$/', $file, $matches)) {
+                list($filename,$db,$lang) = $matches;
+                echo "Handling file $filename\n";
+                $this->db->insert('db_localize',array('db' => $db,
+                                                      'lang' => $lang,
+                                                      'json' => file_get_contents('db'.DIRECTORY_SEPARATOR.$filename)));
+            }
+        }
+    }
+
+
+    public function up() {
+        // $this->add_translator();
+
+        $this->add_if_translation();
+
+        //$this->add_grammar_translation();
+        
         die;
    }
 
