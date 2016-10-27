@@ -342,14 +342,97 @@ class Migration_Translatedb extends CI_Migration {
         }
     }
 
+    private function add_hebrew_lexicons() {
+        $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
+                                        'lex' => array('type'=>'TINYTEXT'),
+                                        'vs' => array('type'=>'TINYTEXT'),
+                                        'language' => array('type' => "enum('Hebrew', 'Aramaic')"),
+                                        'tally' => array('type'=>'INT'),
+                                        'vocalized_lexeme_utf8' => array('type'=>'TINYTEXT'),
+                                        'sortorder' => array('type'=>'TINYTEXT')
+                                      ));
+        $this->dbforge->add_key('id', TRUE);
+        $this->dbforge->create_table('lexicon_heb');
+ 
+        $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
+                                        'lex_id' => array('type'=>'INT'),
+                                        'gloss' => array('type'=>'TEXT')
+                                      ));
+        $this->dbforge->add_key('id', TRUE);
+        $this->dbforge->create_table('lexicon_heb_en');
+ 
+        $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
+                                        'lex_id' => array('type'=>'INT'),
+                                        'gloss' => array('type'=>'TEXT')
+                                      ));
+        $this->dbforge->add_key('id', TRUE);
+        $this->dbforge->create_table('lexicon_heb_de');
+
+
+        $dbh = $this->load->database(array('database' => 'db/glossdb_hebrew.db',
+                                           'dbdriver' => 'sqlite3',
+                                           'dbprefix' => '',
+                                           'pconnect' => FALSE,
+                                           'db_debug' => TRUE,
+                                           'cache_on' => FALSE,
+                                           'cachedir' => '',
+                                           'char_set' => 'utf8',
+                                           'dbcollat' => 'utf8_general_ci'),
+                                     true);
+
+        $query_en = $dbh
+            ->order_by('id')
+            ->get('heb_en');
+        
+        $query_de = $dbh
+            ->order_by('id')
+            ->get('heb_de');
+
+        $toinsert_heb = array();
+        $toinsert_heb_en = array();
+        $toinsert_heb_de = array();
+        
+        $row_de = $query_de->first_row();
+        foreach ($query_en->result() as $row_en) {
+            assert($row_en->id===$row_de->id);
+            assert($row_en->lex===$row_de->lex);
+            assert($row_en->vs===$row_de->vs);
+            assert($row_en->language===$row_de->language);
+
+            $toinsert_heb[] = array('id' => $row_en->id,
+                                    'lex' => $row_en->lex,
+                                    'vs' => $row_en->vs,
+                                    'language' => $row_en->language,
+                                    'tally' => $row_en->tally,
+                                    'vocalized_lexeme_utf8' => $row_en->vocalized_lexeme_utf8,
+                                    'sortorder' => $row_en->sortorder);
+            $toinsert_heb_en[] = array('lex_id' => $row_en->id,
+                                       'gloss' => $row_en->english);
+            $toinsert_heb_de[] = array('lex_id' => $row_de->id,
+                                       'gloss' => $row_de->german);
+
+            $row_de = $query_de->next_row();
+
+        }   
+
+        echo "Inserting lexicon_heb\n";
+        $this->db->insert_batch('lexicon_heb', $toinsert_heb);
+
+        echo "Inserting lexicon_heb_en\n";
+        $this->db->insert_batch('lexicon_heb_en', $toinsert_heb_en);
+
+        echo "Inserting lexicon_heb_de\n";
+        $this->db->insert_batch('lexicon_heb_de', $toinsert_heb_de);
+    }
+    
 
     public function up() {
         // $this->add_translator();
 
-        $this->add_if_translation();
+        // $this->add_if_translation();
 
         //$this->add_grammar_translation();
-        
+        $this->add_hebrew_lexicons();
         die;
    }
 
