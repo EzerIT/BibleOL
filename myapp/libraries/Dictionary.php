@@ -51,7 +51,7 @@ class Dictionary {
     // Note: Features in $mo->features are HTML encoded
     public function indirectLookup($feat, $mo, $fset) {
         assert(isset($fset->indirdb));
-        assert(isset($fset->sql));
+        assert(isset($fset->sql) || isset($fset->sql_command));
         assert(isset($fset->sqlargs));
         assert(isset($fset->multiple));
 
@@ -79,10 +79,14 @@ class Dictionary {
                                           true);
             }
 
-            $query = $this->indir_db_handle[$fset->indirdb]
-                ->select($fset->sql[0])
-                ->where(vsprintf($fset->sql[2],$key_array), NULL, false)
-                ->get($fset->sql[1]);
+            if (isset($fset->sql_command))
+                $query = $this->indir_db_handle[$fset->indirdb]->query(vsprintf($fset->sql_command,$key_array));
+            else 
+                $query = $this->indir_db_handle[$fset->indirdb]
+                    ->select($fset->sql[0])
+                    ->where(vsprintf($fset->sql[2],$key_array), NULL, false)
+                    ->get($fset->sql[1]);
+
 
             if ($fset->multiple) {
                 // We may get more than one answer from the database

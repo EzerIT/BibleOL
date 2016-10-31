@@ -54,23 +54,24 @@
                 "english": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
-                    "indirdb": "glossdb_hebrew.db",
-                    "sql": [ "english", "heb_en", "lex='%s' AND vs='%s' AND language='%s'"],
+                    "indirdb": "mysql",
+                    "sql_command": "SELECT gloss FROM {PRE}lexicon_heb heb JOIN {PRE}lexicon_heb_en en ON en.lex_id=heb.id WHERE lex='%s' AND vs='%s' AND language='%s'",
+
                     "sqlargs": [ "lex", "vs", "language" ],
                     "multiple": false
                 },
                 "german": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
-                    "indirdb": "glossdb_hebrew.db",
-                    "sql": [ "german", "heb_de", "lex='%s' AND vs='%s' AND language='%s'"],
+                    "indirdb": "mysql",
+                    "sql_command": "SELECT gloss FROM {PRE}lexicon_heb heb JOIN {PRE}lexicon_heb_de de ON de.lex_id=heb.id WHERE lex='%s' AND vs='%s' AND language='%s'",
                     "sqlargs": [ "lex", "vs", "language" ],
                     "multiple": false
                 },
                 "glossurl": {
                     "ignoreSelect": true,
                     "indirdb": "mysql",
-                    "sql": ["url,icon", "heb_urls", "lex='%s' AND language='%s'"],
+                    "sql_command": "SELECT url, icon FROM {PRE}heb_urls WHERE lex='%s' AND language='%s'",
                     "sqlargs": [ "lex", "language" ],
                     "multiple": true
                 },

@@ -31,7 +31,7 @@ function make_icon_radio_button(string $name) {
 <?php foreach ($words as $w): ?>
   <tr>
     <td class="heb-default rtl"><?= $w->vocalized_lexeme_utf8 ?></td>
-    <td><?= htmlspecialchars($w->english) ?></td>
+    <td><?= htmlspecialchars($w->gloss) ?></td>
     <td>
        <?php if (isset($w->urls)): ?>
          <?php for ($i=0; $i<3; ++$i): ?>

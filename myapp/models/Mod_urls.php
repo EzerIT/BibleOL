@@ -51,23 +51,12 @@ class Mod_urls extends CI_Model {
     }
 
     public function get_glosses(string $language, string $from, string $to) {
-        $dbh = $this->load->database(array('database' => 'db/glossdb_hebrew.db',
-                                                'dbdriver' => 'sqlite3',
-                                                'dbprefix' => '',
-                                                'pconnect' => FALSE,
-                                                'db_debug' => TRUE,
-                                                'cache_on' => FALSE,
-                                                'cachedir' => '',
-                                                'char_set' => 'utf8',
-                                                'dbcollat' => 'utf8_general_ci'),
-                                          true);
-
-        $query = $dbh
+        $query = $this->db->from('lexicon_heb he')->join('lexicon_heb_en en','en.lex_id=he.id')
             ->where('language',$language)
             ->where('sortorder >=',$from)
             ->where('sortorder <',$to)
             ->order_by('sortorder')
-            ->get('heb_en');
+            ->get();
 
         $last_lex = '';
         $result = array();
@@ -82,22 +71,11 @@ class Mod_urls extends CI_Model {
     }
 
     public function get_common_glosses(string $language) {
-        $dbh = $this->load->database(array('database' => 'db/glossdb_hebrew.db',
-                                                'dbdriver' => 'sqlite3',
-                                                'dbprefix' => '',
-                                                'pconnect' => FALSE,
-                                                'db_debug' => TRUE,
-                                                'cache_on' => FALSE,
-                                                'cachedir' => '',
-                                                'char_set' => 'utf8',
-                                                'dbcollat' => 'utf8_general_ci'),
-                                          true);
-
-        $query = $dbh
+        $query = $this->db->from('lexicon_heb he')->join('lexicon_heb_en en','en.lex_id=he.id')
             ->where('language',$language)
             ->order_by('tally','DESC')
             ->limit(2*FREQUENT_GLOSSES)
-            ->get('heb_en');
+            ->get();
 
 
         $last_lex = '';
