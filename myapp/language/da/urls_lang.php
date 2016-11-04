@@ -8,7 +8,7 @@ $lang['select_gloss_range'] = '<p>Vælg det sprog og de gloser hvis URL du ønsk
 eller du kan vælge gloserne alfabetisk.</p>';
 
 $lang['hebrew_glosses'] = 'Hebraiske gloser';
-$lang['aramaic_glosses'] = 'Aramæiske glsoer';
+$lang['aramaic_glosses'] = 'Aramæiske gloser';
 $lang['greek_glosses'] = 'Græske gloser';
 $lang['top_glosses'] = 'Hyppigste %d';
 
