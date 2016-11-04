@@ -17,6 +17,10 @@ class Mod_translate extends CI_Model {
     private $dbs = array('ETCBC4',
                          'ETCBC4-translit',
                          'nestle1904');
+
+    private $lexicon_langs = array('heb' => array('en' => 'English', 'de' => 'German'),
+                                   'aram' => array('en' => 'English', 'de' => 'German'),
+                                   'greek' => array('en' => 'English'));
     
     public function __construct() {
         parent::__construct();
@@ -29,6 +33,10 @@ class Mod_translate extends CI_Model {
 
     public function get_all_db() {
         return $this->dbs;
+    }
+
+    public function get_all_lexicon_langs() {
+        return $this->lexicon_langs;
     }
 
     public function get_if_lines_part(string $lang_edit, string $lang_show, string $textgroup, integer $limit, integer $offset, string $orderby, string $sortorder) {
@@ -241,4 +249,94 @@ class Mod_translate extends CI_Model {
         $this->db->where('db',$db)->where('lang',$lang_edit)
             ->update('db_localize', array('json' => $this->build_grammar_json($this->grammar_edit_array)) );
     }
+
+    public function count_lexicon_lines(string $src_lang) {
+        switch ($src_lang) {
+          case 'Hebrew':
+          case 'Aramaic':
+                $query = $this->db->select('count(*) as count')->where('language',$src_lang)->get('lexicon_heb');
+                break;
+                
+          case 'Greek':
+                $query = $this->db->select('count(*) as count')->get('lexicon_greek');
+                break;
+        }
+        return $query->row()->count;
+    }
+
+    public function get_glosses(string $src_lang, string $lang_edit, string $lang_show, string $from, string $to) {
+        switch ($src_lang) {
+          case 'heb':
+          case 'aram':
+                $query = $this->db->select('lex,vs,vocalized_lexeme_utf8 lexeme,firstref,s.gloss text_show, e.gloss text_edit,c.id lex_id')
+                    ->from('lexicon_heb c')
+                    ->join("lexicon_heb_$lang_show s", 's.lex_id=c.id','left')
+                    ->join("lexicon_heb_$lang_edit e", 'e.lex_id=c.id','left')
+                    ->where('language',$src_lang=='heb' ? 'Hebrew' : 'Aramaic')
+                    ->where('sortorder >=',$from)
+                    ->where('sortorder <',$to)
+                    ->order_by('sortorder')
+                    ->get();
+                break;
+
+          case 'greek':
+                $query = $this->db->select('strongs,strongs_unreliable,lemma lexeme,firstref,s.gloss text_show, e.gloss text_edit,c.id lex_id')
+                    ->from('lexicon_greek c')
+                    ->join("lexicon_greek_$lang_show s", 's.lex_id=c.id','left')
+                    ->join("lexicon_greek_$lang_edit e", 'e.lex_id=c.id','left')
+                    ->where('sortorder >=',$from)
+                    ->where('sortorder <',$to)
+                    ->order_by('sortorder')
+                    ->get();
+                break;
+        }
+                
+        return $query->result();
+    }
+
+    public function get_frequent_glosses(string $src_lang, string $lang_edit, string $lang_show, integer $gloss_count) {
+        switch ($src_lang) {
+          case 'heb':
+          case 'aram':
+                $query = $this->db->select('lex,vs,vocalized_lexeme_utf8 lexeme,firstref,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
+                    ->from('lexicon_heb c')
+                    ->join("lexicon_heb_$lang_show s", 's.lex_id=c.id','left')
+                    ->join("lexicon_heb_$lang_edit e", 'e.lex_id=c.id','left')
+                    ->where('language',$src_lang=='heb' ? 'Hebrew' : 'Aramaic')
+                    ->order_by('tally','DESC')
+                    ->limit(2*$gloss_count)
+                    ->get();
+
+                
+                $last_lex = '';
+                $result = array();
+                foreach ($query->result() as $row) {
+                    // Stop when we have enough lexemes and we reach a distinct lexeme with a low tally
+                    if ($row->lex!==$last_lex && count($result)>=$gloss_count && $tally > $row->tally)
+                        break;
+
+                    $tally = $row->tally;
+                    $result[] = $row;
+                    $last_lex = $row->lex;
+                }
+                assert(count($result)>=$gloss_count); // To ensure that the SQL LIMIT is high enough
+                break;
+
+          case 'greek':
+                $query = $this->db->select('strongs,strongs_unreliable,lemma lexeme,firstref,s.gloss text_show, e.gloss text_edit,c.id lex_id')
+                    ->from('lexicon_greek c')
+                    ->join("lexicon_greek_$lang_show s", 's.lex_id=c.id','left')
+                    ->join("lexicon_greek_$lang_edit e", 'e.lex_id=c.id','left')
+                    ->order_by('tally','DESC')
+                    ->limit($gloss_count)
+                    ->get();
+
+                $result = $query->result();
+                break;
+        }
+
+        return $result;
+        
+    }
+
   }

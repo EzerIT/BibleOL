@@ -8,6 +8,9 @@ function build_url($editing,$get_parms)
 
       case 'grammar':
             return site_url('translate/translate_grammar?' . http_build_query($get_parms));
+            
+      case 'lexicon':
+            return site_url('translate/edit_lex?' . http_build_query($get_parms));
     }
 }
 
@@ -35,15 +38,17 @@ else
     };
 
     $(function() {
+      <?php if ($editing!='lexicon'): ?>
         $('#groupsel')
             .on('change', function() {
                     <?php $groupsel_parms = $get_parms;
-                          $groupsel_parms['offset'] = 0;
-                          $groupsel_parms['group'] = '{0}';
+                    $groupsel_parms['offset'] = 0;
+                    $groupsel_parms['group'] = '{0}';
                     ?>
                     document.location='<?= build_url($editing,$groupsel_parms) ?>'.format($(this).val());
                 });
-
+      <?php endif; ?>
+            
         $('#langeditsel')
             .on('change', function() {
                     <?php $langeditsel_parms = $get_parms;
@@ -140,58 +145,62 @@ else
 </select>
 </p>
 
-<p><strong><?= $editing=='interface' ? 'Text group' : 'Text database' ?>:</strong>
+<?php if ($editing!='lexicon'): ?>
+    <p><strong><?= $editing=='interface' ? 'Text group' : 'Text database' ?>:</strong>
+  
+    <select id="groupsel">
+      <?php foreach ($group_list as $tg): ?>
+            <option value="<?= $tg ?>" <?= $tg==$get_parms['group'] ? 'selected="selected"' : '' ?>><?= $tg ?></option>
+      <?php endforeach; ?>
+    </select>
+    </p>
 
-<select id="groupsel">
-  <?php foreach ($group_list as $tg): ?>
-        <option value="<?= $tg ?>" <?= $tg==$get_parms['group'] ? 'selected="selected"' : '' ?>><?= $tg ?></option>
-  <?php endforeach; ?>
-</select>
-</p>
 
-
-<p>Number of items in this <?= $editing=='interface' ? 'text group' : 'text database' ?>: <?= $line_count ?>.</p>
-<p>Each page shows <?= $lines_per_page ?> items.</p>
+    <p>Number of items in this <?= $editing=='interface' ? 'text group' : 'text database' ?>: <?= $line_count ?>.</p>
+    <p>Each page shows <?= $lines_per_page ?> items.</p>
+<?php endif; ?>
 
 <?php if ($count_untrans>0): ?>        
   <p><input id="show-notrans" class="btn btn-danger" type="button" href="<?= build_url($editing,$get_parms) ?>"
      value="Show <?= $count_untrans ?> <?= $strings ?> without <?= $long_target_lang ?> translation"></p>
 
-<!-- Dialog for displaying untranslated text -->
-<div class="modal fade" id="untranslated-info-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Untranslated <?= $long_target_lang ?> Strings</h4>
-      </div>
-      <div class="modal-body">
-        <table class="table table-striped">
-        <tr><th>Text Group</th><th>Symbolic Name</th></tr>
-        <?php foreach ($untranslated as $ut): ?>
-            <tr><td><?= $ut->textgroup ?></td><td><?= $ut->symbolic_name ?></td></tr>
-        <?php endforeach; ?>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  <!-- Dialog for displaying untranslated text -->
+  <div class="modal fade" id="untranslated-info-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Untranslated <?= $long_target_lang ?> Strings</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-striped">
+          <tr><th>Text Group</th><th>Symbolic Name</th></tr>
+          <?php foreach ($untranslated as $ut): ?>
+              <tr><td><?= $ut->textgroup ?></td><td><?= $ut->symbolic_name ?></td></tr>
+          <?php endforeach; ?>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
        
 <?php endif; ?>
         
-<nav>
-  <ul class="pagination">
-    <?php for ($p=0; $p<$page_count; ++$p): ?>
-      <?php $page_parms = $get_parms;
-            $page_parms['offset'] = $p;
-      ?>
-      <li <?= $p==$get_parms['offset'] ? 'class="active"' : '' ?>><a href="<?= build_url($editing,$page_parms) ?>"><?= $p+1 ?></a></li>
-    <?php endfor; ?>
-  </ul>
-</nav>
+<?php if ($editing!='lexicon'): ?>
+  <nav>
+    <ul class="pagination">
+      <?php for ($p=0; $p<$page_count; ++$p): ?>
+        <?php $page_parms = $get_parms;
+              $page_parms['offset'] = $p;
+        ?>
+         <li <?= $p==$get_parms['offset'] ? 'class="active"' : '' ?>><a href="<?= build_url($editing,$page_parms) ?>"><?= $p+1 ?></a></li>
+      <?php endfor; ?>
+    </ul>
+  </nav>
+<?php endif; ?>
 
 <?php
   function make_trans_line_header($editing, $label, $field, $get_parms) {
@@ -217,40 +226,124 @@ else
     $language_selector .= "</select>\n";
 ?>
 
-<form action="<?= site_url(($editing=='interface' ? 'translate/update_if?' : 'translate/update_grammar?'). http_build_query($get_parms)) ?>" method="post">
+<form action="<?= site_url(($editing=='interface' ? 'translate/update_if?' 
+                            : $editing=='grammar' ? 'translate/update_grammar?'
+                            : 'translate/update_lexicon' ). http_build_query($get_parms)) ?>" method="post">
     
 <div class="table-responsive">
 <table id="trans_table" class="type2 table table-striped">
   <tr>
-     <?= $editing=='interface' ? make_trans_line_header($editing, 'Symbolic name', 'symbolic_name', $get_parms) : '<th>Symbolic name</th>' ?>
-     <?= $editing=='interface' ? '<th>Comment</th>' : '' ?>
-     <th><?= $language_selector ?></th>
-     <?= $editing=='interface' ? make_trans_line_header($editing, $long_target_lang, 'text_edit', $get_parms) : "<th>$long_target_lang</th>" ?>
-     <th>Modified?</th>
+    <?php
+        switch ($editing) {
+          case 'interface':
+              echo make_trans_line_header($editing, 'Symbolic name', 'symbolic_name', $get_parms);
+              echo '<th>Comment</th>';
+              echo "<th>$language_selector</th>";
+              echo make_trans_line_header($editing, $long_target_lang, 'text_edit', $get_parms);
+              echo '<th>Modified?</th>';
+              break;
+
+          case 'grammar':
+              echo '<th>Symbolic name</th>';
+              echo "<th>$language_selector</th>";
+              echo "<th>$long_target_lang</th>";
+              echo '<th>Modified?</th>';
+              break;
+
+          case 'lexicon':
+              if ($get_parms['src_lang']=='greek') {
+                  echo '<th>Strongs</th>';
+                  echo '<th>Lemma</th>';
+                  echo '<th>First occurence</th>';
+                  echo "<th>$language_selector</th>";
+                  echo "<th>$long_target_lang</th>";
+                  echo '<th>Modified?</th>';
+              }
+              else {
+                  echo '<th>Symbolic lexeme</th>';
+                  echo '<th>Lexeme</th>';
+                  echo '<th>Stem</th>';
+                  echo '<th>First occurence</th>';
+                  echo "<th>$language_selector</th>";
+                  echo "<th>$long_target_lang</th>";
+                  echo '<th>Modified?</th>';
+              }
+              break;
+        }
+    ?>
   </tr>
+
   <?php foreach ($alllines as $line): ?>
     <tr>
-      <td class="leftalign"><?= $line->symbolic_name ?></td>
-      <?= $editing=='interface' ? ('<td class="leftalign">'.$line->comment.'</td>') : '' ?>
-      <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>
-      <td class="leftalign">
-        <?php if ($editing=='interface' && $line->use_textarea
-                  || $editing=='grammar' && substr($line->comment,0,10)=='f:textarea'): ?>
-          <textarea class="textinput" name="<?= $line->symbolic_name ?>" rows="5" cols="40"><?= $line->text_edit ?></textarea>
-        <?php else: ?>
-          <input type="text" class="textinput" name="<?= $line->symbolic_name ?>" size="40" value="<?= $line->text_edit ?>">
-        <?php endif; ?>
-      </td>
-      <td class="centeralign">
-        <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name ?>" href="#">Revert</a>
-        <input type="hidden" class="modif-indicator" name="modif-<?= $line->symbolic_name ?>" value="false"></td>
-      </td>
+      <?php switch ($editing):
+        case 'interface': ?>
+          <td class="leftalign"><?= $line->symbolic_name ?></td>
+          <td class="leftalign"><?= $line->comment ?></td>
+          <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>
+
+          <td class="leftalign">
+            <?php if ($line->use_textarea): ?>
+              <textarea class="textinput" name="<?= $line->symbolic_name ?>" rows="5" cols="40"><?= $line->text_edit ?></textarea>
+            <?php else: ?>
+              <input type="text" class="textinput" name="<?= $line->symbolic_name ?>" size="40" value="<?= $line->text_edit ?>">
+            <?php endif; ?>
+          </td>
+          <td class="centeralign">
+            <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name ?>" href="#">Revert</a>
+            <input type="hidden" class="modif-indicator" name="modif-<?= $line->symbolic_name ?>" value="false"></td>
+          </td>
+
+        <?php break; ?>
+
+        
+        <?php case 'grammar': ?>
+          <td class="leftalign"><?= $line->symbolic_name ?></td>
+          <td class="leftalign"><?= htmlspecialchars($line->text_show) ?></td>
+
+          <td class="leftalign">
+            <?php if (substr($line->comment,0,10)=='f:textarea'): ?>
+              <textarea class="textinput" name="<?= $line->symbolic_name ?>" rows="5" cols="40"><?= $line->text_edit ?></textarea>
+            <?php else: ?>
+              <input type="text" class="textinput" name="<?= $line->symbolic_name ?>" size="40" value="<?= $line->text_edit ?>">
+            <?php endif; ?>
+          <td class="centeralign">
+            <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name ?>" href="#">Revert</a>
+            <input type="hidden" class="modif-indicator" name="modif-<?= $line->symbolic_name ?>" value="false"></td>
+          </td>
+          </td>
+
+        <?php break; ?>
+
+        <?php case 'lexicon': ?>
+          <?php if ($get_parms['src_lang']=='greek'): ?>
+            <td class="leftalign"><?= $line->strongs ?><?= $line->strongs_unreliable ? '?' : '' ?></td>
+            <td class="leftalign"><?= $line->lexeme ?></td>
+            <td class="leftalign"><?= $line->firstref ?></td>
+          <?php else: ?>
+            <td class="leftalign"><?= htmlspecialchars($line->lex) ?></td>
+            <td class="heb-default rtl"><?= $line->lexeme ?></td>
+            <td class="leftalign"><?= $line->vs ?></td>
+            <td class="leftalign"><?= $line->firstref ?></td>
+          <?php endif;  ?>
+
+          <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>
+          <td class="leftalign">
+            <input type="text" class="textinput" name="<?= $line->lex_id ?>" size="40" value="<?= $line->text_edit ?>">
+          </td>
+          <td class="centeralign">
+            <a class="label label-danger revertbutton" data-name="<?= $line->lex_id ?>" href="#">Revert</a>
+            <input type="hidden" class="modif-indicator" name="modif-<?= $line->lex_id ?>" value="false"></td>
+          </td>
+
+        <?php break; ?>
+      <?php endswitch; ?>
+
     </tr>
   <?php endforeach; ?>
 </table>
 </div>
 
 <p><input class="btn btn-primary" type="submit" name="submit" value="Submit changes">
-   <a class="btn btn-default revert-all" href="<?= build_url($editing,$get_parms) ?>">Revert all</a></p>
+   <a class="btn btn-default revert-all" href="#">Revert all</a></p>
 
 <form>

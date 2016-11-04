@@ -370,21 +370,32 @@ class Migration_Translatedb extends CI_Migration {
         $this->dbforge->create_table('lexicon_heb');
  
         $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
-                                        'lex_id' => array('type'=>'INT'),
+                                        'lex_id' => array('type'=>'INT',
+                                                          'null' => true),
                                         'gloss' => array('type'=>'TEXT')
                                       ));
         $this->dbforge->add_key('id', TRUE);
         $this->dbforge->add_key('lex_id');
         $this->dbforge->create_table('lexicon_heb_en');
- 
+        
+        if (!$this->db->query("ALTER TABLE {PRE}lexicon_heb_en ADD FOREIGN KEY lexid (lex_id) REFERENCES {PRE}lexicon_heb(id) ON DELETE SET NULL ON UPDATE CASCADE"))
+                echo "    ERROR: Foregin key (lex_id) on lexicon_heb_en failed\n";
+            else
+                echo "    Foregin key (lex_id) on lexicon_heb_en is OK\n";
+
         $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
-                                        'lex_id' => array('type'=>'INT'),
+                                        'lex_id' => array('type'=>'INT',
+                                                          'null' => true),
                                         'gloss' => array('type'=>'TEXT')
                                       ));
         $this->dbforge->add_key('id', TRUE);
         $this->dbforge->add_key('lex_id');
         $this->dbforge->create_table('lexicon_heb_de');
 
+        if (!$this->db->query("ALTER TABLE {PRE}lexicon_heb_de ADD FOREIGN KEY lexid (lex_id) REFERENCES {PRE}lexicon_heb(id) ON DELETE SET NULL ON UPDATE CASCADE"))
+                echo "    ERROR: Foregin key (lex_id) on lexicon_heb_de failed\n";
+            else
+                echo "    Foregin key (lex_id) on lexicon_heb_de is OK\n";
 
         $dbh = $this->load->database(array('database' => 'db/glossdb_hebrew.db',
                                            'dbdriver' => 'sqlite3',
@@ -482,12 +493,18 @@ class Migration_Translatedb extends CI_Migration {
 
         
         $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
-                                        'lex_id' => array('type'=>'INT'),
+                                        'lex_id' => array('type'=>'INT',
+                                                          'null' => true),
                                         'gloss' => array('type'=>'TEXT')
                                       ));
         $this->dbforge->add_key('id', TRUE);
         $this->dbforge->add_key('lex_id');
         $this->dbforge->create_table('lexicon_greek_en');
+
+        if (!$this->db->query("ALTER TABLE {PRE}lexicon_greek_en ADD FOREIGN KEY lexid (lex_id) REFERENCES {PRE}lexicon_greek(id) ON DELETE SET NULL ON UPDATE CASCADE"))
+                echo "    ERROR: Foregin key (lex_id) on lexicon_greek_en failed\n";
+            else
+                echo "    Foregin key (lex_id) on lexicon_greek_en is OK\n";
  
 
         $dbh = $this->load->database(array('database' => 'db/glossdb_greek.db',
@@ -519,8 +536,8 @@ class Migration_Translatedb extends CI_Migration {
         //$this->add_if_translation();
 
         //$this->add_grammar_translation();
-        $this->add_hebrew_lexicons();
-        //$this->add_greek_lexicon();
+        //$this->add_hebrew_lexicons();
+        $this->add_greek_lexicon();
         die;
    }
 

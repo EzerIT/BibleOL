@@ -1,8 +1,12 @@
 <?php
 class Ctrl_translate extends MY_Controller {
+    public $gloss_count = 100;
 
+    
     public function __construct() {
         parent::__construct();
+        $this->lang->load('translate', $this->language);
+        $this->lang->load('urls', $this->language);
         $this->load->model('mod_translate');
     }
 
@@ -61,7 +65,6 @@ class Ctrl_translate extends MY_Controller {
             $this->load->view('view_top1', array('title' => 'Translate User Interface'));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
-            $this->load->view('view_confirm_dialog');
 
             $get_parms = array('offset' => $offset,
                                'sortorder' => $sortorder,
@@ -92,8 +95,7 @@ class Ctrl_translate extends MY_Controller {
     }
 
 
-    function update_if()
-    {
+    function update_if() {
         try {
             $this->mod_users->check_translator();
 
@@ -153,7 +155,6 @@ class Ctrl_translate extends MY_Controller {
             $this->load->view('view_top1', array('title' => 'Translate Grammar Terms'));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
-            $this->load->view('view_confirm_dialog');
 
             $get_parms = array('offset' => $offset,
                                'group' => $db,
@@ -180,8 +181,7 @@ class Ctrl_translate extends MY_Controller {
         }
     }
 
-    function update_grammar()
-    {
+    function update_grammar() {
         try {
             $this->mod_users->check_translator();
 
@@ -201,5 +201,119 @@ class Ctrl_translate extends MY_Controller {
             $this->error_view($e->getMessage(), 'Translate Grammar Terms');
         }
     }
+
+    public function translate_lex() {
+        $this->load->model('mod_urls');
+        try {
+            $this->mod_users->check_translator();
+
+            $heb_buttons = $this->mod_urls->get_heb_buttons_long();
+            $aram_buttons = $this->mod_urls->get_aram_buttons_long();
+            $greek_buttons = $this->mod_urls->get_greek_buttons_long();
+
+            // VIEW:
+            $this->load->view('view_top1', array('title' => $this->lang->line('translate_lex')));
+            $this->load->view('view_top2');
+            $this->load->view('view_menu_bar', array('langselect' => true));
+
+            $get_parms = array('src_lang' => 'all-with-greek',
+                               'buttonix' => null);
+
+            $center_text = $this->load->view('view_select_gloss',
+                                             array('heb_buttons' => $heb_buttons,
+                                                   'aram_buttons' => $aram_buttons,
+                                                   'greek_buttons' => $greek_buttons,
+                                                   'gloss_count' => $this->gloss_count,
+                                                   'editing' => 'lexicon',
+                                                   'get_parms' => $get_parms),
+                                             true);
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_words_translate'),
+                                                      'left' => sprintf($this->lang->line('select_gloss_translate_range'),$this->gloss_count),
+                                                      'center' => $center_text));
+            $this->load->view('view_bottom');
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('translate_lex'));
+        }
+    }
+    
+    public function edit_lex() {
+        $this->load->model('mod_urls');
+        try {
+            $this->mod_users->check_translator();
+
+            $src_lang = isset($_GET['src_lang']) ? $_GET['src_lang'] : 'heb';
+            $button_index = isset($_GET['buttonix']) ? intval($_GET['buttonix']) : 0;
+
+            if (!is_numeric($button_index))
+                $button_index = 0;
+            else
+                $button_index = intval($button_index);
+
+            $lexicon_lang_list = $this->mod_translate->get_all_lexicon_langs();
+            $dst_langs = $lexicon_lang_list[$src_lang];
+            
+            $lang_show = isset($_GET['lang_show']) ? $_GET['lang_show'] : 'en';
+            if (!array_key_exists($lang_show, $dst_langs))
+                $lang_show = 'en';
+
+            $lang_edit = isset($_GET['lang_edit']) ? $_GET['lang_edit'] : 'en';
+            if (!array_key_exists($lang_edit, $dst_langs))
+                throw new DataException('Uknown destination language');
+
+            switch ($src_lang) {
+              case 'heb':
+                    $buttons = $this->mod_urls->get_heb_buttons_long();
+                    break;
+
+              case 'aram':
+                    $buttons = $this->mod_urls->get_aram_buttons_long();
+                    break;
+
+              case 'greek':
+                    $buttons = $this->mod_urls->get_greek_buttons_long();
+                    break;
+                    
+              default:
+                    throw new DataException($this->lang->line('illegal_lang_code'));
+            }
+
+            $words = $button_index==-1
+                ? $this->mod_translate->get_frequent_glosses($src_lang,$lang_edit,$lang_show,$this->gloss_count)
+                : $this->mod_translate->get_glosses($src_lang,$lang_edit,$lang_show,$buttons[$button_index][1],$buttons[$button_index][2]);
+
+            // VIEW:
+            $this->load->view('view_top1', array('title' => $this->lang->line('translate_lex')));
+            $this->load->view('view_top2');
+            $this->load->view('view_menu_bar', array('langselect' => true));
+
+            $get_parms = array('src_lang' => $src_lang,
+                               'lang_show' => $lang_show,
+                               'lang_edit' => $lang_edit,
+                               'buttonix' => $button_index);
+
+            $center_text = $this->load->view('view_select_gloss',
+                                             array('buttons' => $buttons,
+                                                   'gloss_count' => $this->gloss_count,
+                                                   'editing' => 'lexicon',
+                                                   'get_parms' => $get_parms),
+                                             true)
+                . $this->load->view('view_translate',
+                                             array('editing' => 'lexicon',
+                                                   'get_parms' => $get_parms,
+                                                   'lang_list' => $dst_langs,
+                                                   'alllines' => $words),
+                                             true);
+
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('translate_lex'),
+                                                      'left' => $this->lang->line('translate_lex_desc'),
+                                                      'center' => $center_text));
+            $this->load->view('view_bottom');
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('translate_lex'));
+        }
+    }
+
     
   }

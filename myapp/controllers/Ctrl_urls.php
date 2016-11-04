@@ -1,8 +1,7 @@
 <?php
-
-define('FREQUENT_GLOSSES',300);
-
 class Ctrl_urls extends MY_Controller {
+    public $gloss_count = 300;
+
     public function __construct() {
         parent::__construct();
         $this->lang->load('urls', $this->language);
@@ -25,13 +24,18 @@ class Ctrl_urls extends MY_Controller {
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
+            $get_parms = array('src_lang' => 'all',
+                               'buttonix' => null);
+
             $center_text = $this->load->view('view_select_gloss',
-                                             array('language' => 'all',
-                                                   'heb_buttons' => $heb_buttons,
-                                                   'aram_buttons' => $aram_buttons),
+                                             array('heb_buttons' => $heb_buttons,
+                                                   'aram_buttons' => $aram_buttons,
+                                                   'gloss_count' => $this->gloss_count,
+                                                   'editing' => 'url',
+                                                   'get_parms' => $get_parms),
                                              true);
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_gloss_range_head'),
-                                                      'left' => sprintf($this->lang->line('select_gloss_range'),FREQUENT_GLOSSES),
+                                                      'left' => sprintf($this->lang->line('select_gloss_range'),$this->gloss_count),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
      
@@ -46,19 +50,14 @@ class Ctrl_urls extends MY_Controller {
         try {
             $this->mod_users->check_admin();
 
-            $language = $this->uri->segment(3);
-            $button_index = $this->uri->segment(4);
-
-            if (!is_numeric($button_index))
-                $button_index = 0;
-            else
-                $button_index = intval($button_index);
+            $language = isset($_GET['src_lang']) ? $_GET['src_lang'] : 'heb';
+            $button_index = isset($_GET['buttonix']) ? intval($_GET['buttonix']) : 0;
 
             switch ($language) {
               case 'heb':
                     $buttons = $this->mod_urls->get_heb_buttons();
                     $words = $button_index==-1
-                        ? $this->mod_urls->get_common_glosses('Hebrew')
+                        ? $this->mod_urls->get_frequent_glosses('Hebrew',$this->gloss_count)
                         : $this->mod_urls->get_glosses('Hebrew',$buttons[$button_index][1],$buttons[$button_index][2]);
                     $this->mod_urls->get_heb_urls('Hebrew',$words);
                     break;
@@ -66,7 +65,7 @@ class Ctrl_urls extends MY_Controller {
               case 'aram':
                     $buttons = $this->mod_urls->get_aram_buttons();
                     $words = $button_index==-1
-                        ? $this->mod_urls->get_common_glosses('Aramaic')
+                        ? $this->mod_urls->get_frequent_glosses('Aramaic',$this->gloss_count)
                         : $this->mod_urls->get_glosses('Aramaic',$buttons[$button_index][1],$buttons[$button_index][2]);
                     $this->mod_urls->get_heb_urls('Aramaic',$words);
                     break;
@@ -81,18 +80,22 @@ class Ctrl_urls extends MY_Controller {
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
-//            $this->load->view('view_confirm_dialog');
+            $get_parms = array('src_lang' => $language,
+                               'buttonix' => $button_index);
+            
             $center_text = $this->load->view('view_select_gloss',
-                                             array('language' => $language,
-                                                   'buttons' => $buttons,
-                                                   'button_index' => $button_index),
+                                             array('buttons' => $buttons,
+                                                   'gloss_count' => $this->gloss_count,
+                                                   'editing' => 'url',
+                                                   'get_parms' => $get_parms),
                                              true)
                 . $this->load->view('view_edit_url',
                                     array('language' => $language,
-                                          'words' => $words),
+                                          'words' => $words,
+                                          'get_parms' => $get_parms),
                                     true);
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_gloss_range_head'),
-                                                      'left' => sprintf($this->lang->line('select_gloss_range'),FREQUENT_GLOSSES),
+                                                      'left' => sprintf($this->lang->line('select_gloss_range'),$this->gloss_count),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
@@ -123,11 +126,7 @@ class Ctrl_urls extends MY_Controller {
             else
                 $this->mod_urls->set_heb_url(intval($_POST['id']), $_POST['link'], $_POST['icon']);
 
-            $target = strstr($_POST['requesturi'],'?',true);
-            if ($target===false)
-                $target = $_POST['requesturi'];
-                           
-            header("Location: " . site_url($target) . '?scrolltop=' . $_POST['scrolltop']);
+            header("Location: " . site_url($_POST['requesturi']) . '&scrolltop=' . $_POST['scrolltop']);
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('urls'));
@@ -147,11 +146,7 @@ class Ctrl_urls extends MY_Controller {
 
             $this->mod_urls->delete_heb_url(intval($_POST['urlid']));
 
-            $target = strstr($_POST['requesturi'],'?',true);
-            if ($target===false)
-                $target = $_POST['requesturi'];
-                           
-            header("Location: " . site_url($target) . '?scrolltop=' . $_POST['scrolltop']);
+            header("Location: " . site_url($_POST['requesturi']) . '&scrolltop=' . $_POST['scrolltop']);
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('urls'));
