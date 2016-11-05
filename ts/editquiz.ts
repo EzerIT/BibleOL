@@ -78,7 +78,8 @@ function isDirty() : boolean {
     return panelSent.isDirty() || panelSentUnit.isDirty() || panelFeatures.isDirty();
 }
 
-$(function() {
+setTimeout(
+function() {
     for (var i in configuration.sentencegrammar) {
         if (isNaN(+i)) continue; // Not numeric
         addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
@@ -91,6 +92,18 @@ $(function() {
 
     charset = new Charset(configuration.charSet);
 
+
+//    alert('x');
+//    var date : any = new Date();
+//    var curDate : any = null;
+//    do {
+//        curDate = new Date();
+//        console.log('wait');
+//    }
+//    while(curDate-date < 1000);  // Wait for 1 sec
+
+
+    
     if (VirtualKeyboard) {
         VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
         VirtualKeyboard.toggle('firstinput','virtualkbid');
@@ -134,7 +147,7 @@ $(function() {
                                                      panelFeatures);
     panelSent = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'),
                                                panelSentUnit, panelFeatures);
-});
+},1000);
 
 function show_error(id : string, message : string) {
     $(id + '-text').text(message);
