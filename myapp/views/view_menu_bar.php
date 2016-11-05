@@ -94,6 +94,7 @@ $cols = $ix+1;
                <li><a href="<?= site_url('/lang?lang=en') ?>">English</a></li>
                <li><a href="<?= site_url('/lang?lang=pt') ?>">Português</a></li>
                <li><a href="<?= site_url('/lang?lang=es') ?>">Español</a></li>
+               <li><a href="<?= site_url('/lang?lang=zh') ?>">中文（简体）</a></li>
               </ul>
           </li>
         <?php endif; ?>

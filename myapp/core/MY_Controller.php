@@ -25,15 +25,10 @@ class MY_Controller extends CI_Controller {
             
         switch ($this->language) {
           case 'da':
-                $this->language_short = 'da';
-                break;
-
           case 'pt':
-                $this->language_short = 'pt';
-                break;
-
           case 'es':
-                $this->language_short = 'es';
+          case 'zh':
+                $this->language_short = $this->language;
                 break;
 
           default:

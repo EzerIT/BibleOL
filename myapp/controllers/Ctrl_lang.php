@@ -12,6 +12,7 @@ class Ctrl_lang extends MY_Controller {
               case 'es':
               case 'pt':
               case 'da':
+              case 'zh':
                     $this->session->set_userdata('language', $newlang);
                     break;
 

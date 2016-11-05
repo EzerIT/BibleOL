@@ -1,0 +1,533 @@
+{
+    "dbdescription": "Hebrew (ETCBC4, Transliterated, OT)",
+    "dbcopyright": "This database is Copyright \u00a9 2015 by Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>This work is licensed under a <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (The database itself can be found through this persistent identifier: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
+    "emdrosobject": {
+        "word": {
+            "_objname": "词",
+            "lexeme_occurrences": "出现次数",
+            "frequency_rank": "出现次数排名",
+            "english": "英文",
+            "german": "德文",
+            "glossurl": "链结",
+            "g_nme_translit": "名词后缀",
+            "g_pfm_translit": "前缀",
+            "g_prs_translit": "代词后缀",
+            "g_uvf_translit": "简单后缀",
+            "g_vbe_translit": "动词尾",
+            "g_vbs_translit": "语干元素",
+            "text_utf8": "希伯来经文词语",
+            "text_translit": "经文词语",
+            "text_nopunct_translit": "经文词语（无标点）",
+            "text_cons_utf8": "经文词语，只显示辅音",
+            "text_nocant_utf8": "经文词语（无读音符号）",
+            "vocalized_lexeme_cons_utf8": "基本词形，只显示辅音",
+            "vocalized_lexeme_utf8": "基本词形（希伯来文）",
+            "vocalized_lexeme_translit": "基本词形",
+            "language": "语言",
+            "ls": "词细类",
+            "vs": "语干",
+            "vt": "式态",
+            "ps": "人称",
+            "nu": "数",
+            "gn": "性",
+            "st": "形",
+            "pdp": "在词组里的词类",
+            "sp": "词类",
+            "suffix_gender": "后缀性",
+            "suffix_number": "后缀数",
+            "suffix_person": "后缀人称",
+            "verb_class": "根类",
+            "g_qere_translit": "读为"
+        },
+        "phrase_atom": {
+            "_objname": "词组半截",
+            "det": "确泛指",
+            "rela": "和母项的关系",
+            "typ": "种类"
+        },
+        "subphrase": {
+            "_objname": "词组成分",
+            "rela": "和母项的关系"
+        },
+        "phrase": {
+            "_objname": "词组",
+            "det": "确泛指",
+            "typ": "词组类",
+            "rela": "和母项的关系",
+            "function": "功能"
+        },
+        "clause_atom": {
+            "_objname": "分句半截",
+            "tab": "分层缩入",
+            "code_TYPE_text": "怎样和上句连接",
+            "code_TYPE_text_VALUES": [
+                { "first" : 0, "last" : 0, "text" : "#1 无关" },
+                { "first" : 10, "last" : 16, "text" : "#7 关系子句" },
+                { "first" : 50, "last" : 74, "text" : "#6 不定式附属形" },
+                { "first" : 100, "last" : 167, "text" : "#3 无连词" },
+                { "first" : 200, "last" : 201, "text" : "#5 平行" },
+                { "first" : 300, "last" : 367, "text" : "#4 作连词的副词" },
+                { "first" : 400, "last" : 967, "text" : "#2 连词" },
+                { "first" : 999, "last" : 999, "text" : "#8 直接引语" }],
+            "code": "和上句连接方式的代号",
+            "typ": "类别"
+        },
+        "clause": {
+            "_objname": "分句",
+            "domain": "发言类别",
+            "txt": "发言类别细类",
+            "typ": "细类",
+            "kind": "大类",
+            "rela": "和母项的关系"
+        },
+        "sentence": {
+            "_objname": "句子"
+        }
+    },
+    "emdrostype": {
+        "boolean": {
+            "false": "#2 否",
+            "true": "#1 是"
+        },
+        "language_t": {
+            "Aramaic": "#2 亚兰文",
+            "Hebrew": "#1 希伯来文"
+        },
+        "lexical_set_t": {
+            "none": "#1 无",
+            "afad": "#10 指前面的词的副词",
+            "card": "#13 基数词",
+            "cjad": "#11 作连词的副词",
+            "focp": "#15 焦点助词",
+            "gntl": "#6 族类名称",
+            "mult": "#5 指复数事物的单数形名词",
+            "nmcp": "#3 指有无的名词",
+            "nmdi": "#4 指每个的名词",
+            "ordn": "#14 序数词",
+            "padv": "#12 非副词作副词",
+            "ppre": "#2 名词作介词",
+            "ques": "#9 疑问词",
+            "quot": "#8 引语动词",
+            "vbcp": "#7 连系动词"
+        },
+        "part_of_speech_t": {
+            "art": "#8 冠词",
+            "verb": "#3 动词",
+            "subs": "#1 名词",
+            "nmpr": "#2 专有名词",
+            "advb": "#10 副词",
+            "prep": "#9 介词",
+            "conj": "#11 连词",
+            "prps": "#5 人称代词",
+            "prde": "#6 指示代词",
+            "prin": "#7 疑问代词",
+            "intj": "#14 感叹词",
+            "nega": "#12 否定词",
+            "inrg": "#13 疑问词",
+            "adjv": "#4 形容词"
+        },
+        "gender_t": {
+            "f": "#2 阴性",
+            "m": "#1 阳性",
+            "NA": "#3 无",
+            "unknown": "#4 不明"
+        },
+        "suffix_gender_t": {
+            "c": "#3 通性",
+            "f": "#2 阴性",
+            "m": "#1 阳性",
+            "NA": "#4 无"
+        },
+        "number_t": {
+            "du": "#3 双数",
+            "NA": "#4 无",
+            "pl": "#2 复数",
+            "sg": "#1 单数",
+            "unknown": "#5 不明"
+        },
+        "suffix_number_t": {
+            "NA": "#3 无",
+            "pl": "#2 复数",
+            "sg": "#1 单数"
+        },
+        "person_t": {
+            "p1": "#1 第一人称",
+            "NA": "#4 无",
+            "p2": "#2 第二人称",
+            "p3": "#3 第三人称",
+            "unknown": "#5 不明"
+        },
+        "suffix_person_t": {
+            "NA": "#4 无",
+            "p1": "#1 第一人称",
+            "p2": "#2 第二人称",
+            "p3": "#3 第三人称"
+        },
+        "state_t": {
+            "a": "独立形",
+            "c": "附属形",
+            "e": "强调形",
+            "NA": "无",
+            "unknown": "不明"
+        },
+        "verb_class_t": {
+            "NA": "不适用",
+            "analog_i_nun": "#15 似一nun",
+            "analog_i_waw": "#16 似一waw",
+            "four_consonants": "#17 四字",
+            "geminate": "#14 二双",
+            "hjh_xjh": "#13 היה和חיה",
+            "i_aleph": "#2 一aleph",
+            "i_guttural": "#3 一喉",
+            "i_nun": "#4 一nun",
+            "i_waw": "#5 一waw",
+            "i_yod": "#6 一yod",
+            "ii_guttural": "#7 二喉",
+            "ii_waw": "#8 二waw",
+            "ii_yod": "#9 二yod",
+            "iii_aleph": "#10 三aleph",
+            "iii_guttural": "#11 三喉",
+            "iii_he": "#12 三he",
+            "regular": "#1 规则根类"
+        },
+        "phrase_determination_t": {
+            "NA": "不适用",
+            "det": "确指",
+            "und": "泛指"
+        },
+        "verbal_stem_t": {
+            "NA": "#1 无",
+            "qal": "#2 Qal",
+            "hif": "#7 Hifil",
+            "piel": "#4 Piel",
+            "nif": "#3 Nifal",
+            "pual": "#5 Pual",
+            "hof": "#8 Hofal",
+            "hit": "#6 Hitpael",
+            "afel": "#10 Afel",
+            "etpa": "#11 Etpaal",
+            "etpe": "#12 Etpeel",
+            "haf": "#13 Hafel",
+            "hsht": "#14 Hishtafal",
+            "htpa": "#15 Hitpaal",
+            "htpe": "#16 Hitpeel",
+            "hotp": "#17 Hotpaal",
+            "nit": "#18 Nitpael",
+            "pael": "#19 Pael",
+            "peal": "#20 Peal",
+            "peil": "#21 Peil",
+            "shaf": "#22 Shafel",
+            "tif": "#23 Tifal",
+            "pasq": "#9 被动Qal"
+        },
+        "verbal_tense_t": {
+            "NA": "#1 无",
+            "impf": "#3 未完成式（yiqtol）",
+            "impv": "#4 命令式",
+            "infa": "#13 不定式独立形",
+            "infc": "#12 不定式附属形",
+            "perf": "#2 完成式（qatal）",
+            "ptca": "#8 分词",
+            "ptcp": "#9 被动分词",
+            "wayq": "#11 叙述式（wayyiqtol，即连续连缀＋未完成式）",
+            "weyq": "#10 连续未完成式（weyiqtol）",
+            "coho": "#5 鼓励式",
+            "emim": "#7 强调命令式",
+            "juss": "#6 祈愿式"
+        },
+        "phrase_type_t": {
+            "AdjP": "#4 形容词组",
+            "AdvP": "#9 状语词组",
+            "CP": "#10 连词组",
+            "DPrP": "#6 指示代词组",
+            "IPrP": "#7 疑问代词组",
+            "InjP": "#13 感叹词组",
+            "InrP": "#12 疑问词组",
+            "NP": "#1名词组",
+            "NegP": "#11 否定词组",
+            "PP": "#8 介词组",
+            "PPrP": "#5 人称代词组",
+            "PrNP": "#2 专有名词组",
+            "VP": "#3 动词组"
+        },
+        "phrase_function_t": {
+            "Adju": "#11 修饰性状语",
+            "Cmpl": "#12 补语",
+            "Conj": "#21 连词",
+            "EPPr": "#18 附属人称代词",
+            "ExsS": "#14 有主语后缀的存在词",
+            "Exst": "#13 存在词",
+            "Frnt": "#29 提前了的元素",
+            "IntS": "#25 有主语后缀的感叹词",
+            "Intj": "#24 感叹词",
+            "Loca": "#20 地点",
+            "ModS": "#10 有主语后缀的修饰语",
+            "Modi": "#9 修饰语",
+            "NCoS": "#16 有主语后缀的否定连系词",
+            "NCop": "#15 否定连系词",
+            "Nega": "#22 否定词",
+            "Objc": "#8 宾语",
+            "PrAd": "#5 修饰性状语作谓语",
+            "PrcS": "#7 有主语后缀的补语作谓语",
+            "PreC": "#6 补语作谓语",
+            "PreO": "#4 有宾语后缀的谓语",
+            "PreS": "#3 有主语后缀的谓语",
+            "Pred": "#2 谓语",
+            "PtcO": "#17 有宾语后缀的分词",
+            "Ques": "#23 问句",
+            "Rela": "#27 关系子句",
+            "Subj": "#1 主语",
+            "Supp": "#28 补充的句子成分",
+            "Time": "#19 时间",
+            "Unkn": "#30 不明",
+            "Voct": "#26 呼格词"
+        },
+        "phrase_atom_relation_t": {
+            "NA": "无",
+            "Appo": "同位",
+            "Link": "相连",
+            "Para": "平行",
+            "Sfxs": "说明后缀",
+            "Spec": "说明"
+        },
+        "phrase_relation_t": {
+            "NA": "无",
+            "PrAd": "修饰性状语作谓语",
+            "Resu": "接应"
+        },
+        "subphrase_relation_t": {
+            "NA": "#1 无",
+            "adj": "#5 修饰性状语",
+            "atr": "#2 定语",
+            "dem": "#6 指示",
+            "mod": "#3 修饰",
+            "par": "#7 平行",
+            "rec": "#4 修饰语或被修饰语"
+        },
+        "clause_type_t": {
+            "AjCl": "#39 形容分句",
+            "CPen": "#2 独立悬置名词组",
+            "Ellp": "#42 省略",
+            "InfA": "#38 不定式独立形分句",
+            "InfC": "#37 不定式附属形分句",
+            "MSyn": "#43 超句标记",
+            "NmCl": "#1 名词性分句",
+            "Ptcp": "#36 分词分句",
+            "Reop": "#40 重启分句",
+            "Unkn": "#44 不明",
+            "Voct": "#41 呼格分句",
+            "WIm0": "#16 We-命令式-空值分句",
+            "WImX": "#17 We-命令式-主语字串分句",
+            "WQt0": "#12 We-qatal-空值分句",
+            "WQtX": "#13 We-qatal-主语字串分句",
+            "WXIm": "#29 We-主语字串-命令式分句",
+            "WXQt": "#27 We-主语字串-qatal分句",
+            "WXYq": "#28 We-主语字串-yiqtol分句",
+            "WYq0": "#14 We-yiqtol-空值分句",
+            "WYqX": "#15 We-yiqtol-主语字串分句",
+            "Way0": "#4 Wayyiqtol-空值分句",
+            "WayX": "#5 Wayyiqtol-主语字串分句",
+            "WxI0": "#34 We-无主语字串-命令式-空值分句",
+            "WxIX": "#35 We-无主语字串-命令式-主语字串分句",
+            "WxQ0": "#30 We-无主语字串-qatal-空值分句",
+            "WxQX": "#31 We-无主语字串-qatal-主语字串分句",
+            "WxY0": "#32 We-无主语字串-yiqtol-空值分句",
+            "WxYX": "#33 We-无主语字串-yiqtol-主语字串分句",
+            "XImp": "#20 主语字串-命令式分句",
+            "XPos": "#3 外位语",
+            "XQtl": "#18 主语字串-qatal分句",
+            "XYqt": "#19 主语字串-yiqtol分句",
+            "ZIm0": "#10 动词最前-命令式-空值分句",
+            "ZImX": "#11 动词最前-命令式-主语字串分句",
+            "ZQt0": "#6 动词最前-qatal-空值分句",
+            "ZQtX": "#7 动词最前-qatal-主语字串分句",
+            "ZYq0": "#8 动词最前-yiqtol-空值分句",
+            "ZYqX": "#9 动词最前-yiqtol-主语字串分句",
+            "xIm0": "#25 无主语字串-命令式-空值分句",
+            "xImX": "#26 无主语字串-命令式-主语字串分句",
+            "xQt0": "#21 无主语字串-qatal-空值分句",
+            "xQtX": "#22 无主语字串-qatal-主语字串分句",
+            "xYq0": "#23 无主语字串-yiqtol-空值分句",
+            "xYqX": "#24 无主语字串-yiqtol-主语字串分句"
+        },
+        "clause_atom_type_t": {
+            "AjCl": "#39 形容分句",
+            "CPen": "#2 独立悬置名词组",
+            "Defc": "#43 没有谓语的分句半截",
+            "Ellp": "#42 省略",
+            "InfA": "#38 不定式独立形分句",
+            "InfC": "#37 不定式附属形分句",
+            "MSyn": "#44 超句标记",
+            "NmCl": "#1 名词性分句",
+            "Ptcp": "#36 分词分句",
+            "Reop": "#40 重启分句",
+            "Unkn": "#45 不明",
+            "Voct": "#41 呼格分句",
+            "WIm0": "#16 We-命令式-空值分句",
+            "WImX": "#17 We-命令式-主语字串分句",
+            "WQt0": "#12 We-qatal-空值分句",
+            "WQtX": "#13 We-qatal-主语字串分句",
+            "WXIm": "#29 We-主语字串-命令式分句",
+            "WXQt": "#27 We-主语字串-qatal分句",
+            "WXYq": "#28 We-主语字串-yiqtol分句",
+            "WYq0": "#14 We-yiqtol-空值分句",
+            "WYqX": "#15 We-yiqtol-主语字串分句",
+            "Way0": "#4 Wayyiqtol-空值分句",
+            "WayX": "#5 Wayyiqtol-主语字串分句",
+            "WxI0": "#34 We-无主语字串-命令式-空值分句",
+            "WxIX": "#35 We-无主语字串-命令式-主语字串分句",
+            "WxQ0": "#30 We-无主语字串-qatal-空值分句",
+            "WxQX": "#31 We-无主语字串-qatal-主语字串分句",
+            "WxY0": "#32 We-无主语字串-yiqtol-空值分句",
+            "WxYX": "#33 We-无主语字串-yiqtol-主语字串分句",
+            "XImp": "#20 主语字串-命令式分句",
+            "XPos": "#3 外位语",
+            "XQtl": "#18 主语字串-qatal分句",
+            "XYqt": "#19 主语字串-yiqtol分句",
+            "ZIm0": "#10 动词最前-命令式-空值分句",
+            "ZImX": "#11 动词最前-命令式-主语字串分句",
+            "ZQt0": "#6 动词最前-qatal-空值分句",
+            "ZQtX": "#7 动词最前-qatal-主语字串分句",
+            "ZYq0": "#8 动词最前-yiqtol-空值分句",
+            "ZYqX": "#9 动词最前-yiqtol-主语字串分句",
+            "xIm0": "#25 无主语字串-命令式-空值分句",
+            "xImX": "#26 无主语字串-命令式-主语字串分句",
+            "xQt0": "#21 无主语字串-qatal-空值分句",
+            "xQtX": "#22 无主语字串-qatal-主语字串分句",
+            "xYq0": "#23 无主语字串-yiqtol-空值分句",
+            "xYqX": "#24 无主语字串-yiqtol-主语字串分句"
+        },
+        "clause_kind_t": {
+            "unknown": "不明",
+            "NC": "名词性分句",
+            "VC": "动词性分句",
+            "WP": "没有谓语的字串"
+        },
+        "clause_constituent_relation_t": {
+            "NA": "#1 无",
+            "Adju": "#8 修饰性状语分句",
+            "Attr": "#6 定语分句",
+            "Cmpl": "#9 补语分句",
+            "CoVo": "#10 配合前面呼格词的分句",
+            "Coor": "#11 并列分句",
+            "Objc": "#5 宾语分句",
+            "PrAd": "#3 修饰性状语作谓语分句",
+            "PreC": "#4 补语作谓语分句",
+            "Resu": "#12 接应分句",
+            "RgRc": "#7 修饰语或被修饰语",
+            "Spec": "#13 说明分句",
+            "Subj": "#2 主语分句"
+        }
+    },
+    "grammargroup": {
+        "word": {
+            "form_in_text": "经文词语",
+            "lexeme": "基本词形",
+            "morphology": "词形变化"
+        }
+    },
+    "grammarfeature": {
+        "word": {
+            "text_utf8": "希伯来经文词语",
+            "vocalized_lexeme_utf8": "基本词形（希伯来文字母）",
+            "vocalized_lexeme_translit": "基本词形（音译）"
+        }
+    },
+    "grammarmetafeature": {
+        "word": {
+            "pgn": "人称、性、数",
+            "suffix_pgn": "后缀的人称、性、数"
+        }
+    },
+    "grammarsubfeature": {
+        "word": {
+            "ps": {
+                "p1": "一",
+                "NA": "／",
+                "p2": "二",
+                "p3": "三",
+                "unknown": "？"
+            },
+            "gn": {
+                "f": "阴",
+                "m": "阳",
+                "NA": "／",
+                "unknown": "？"
+            },
+            "nu": {
+                "du": "双",
+                "NA": "／",
+                "pl": "复",
+                "sg": "单",
+                "unknown": "？"
+            },
+            "suffix_person": {
+                "p1": "一",
+                "NA": "／",
+                "p2": "二",
+                "p3": "三"
+            },
+            "suffix_gender": {
+                "c": "通",
+                "f": "阴",
+                "m": "阳",
+                "NA": "／"
+            },
+            "suffix_number": {
+                "NA": "／",
+                "pl": "复",
+                "sg": "单"
+            }
+        }
+    },
+    "universe": {
+        "book": {
+            "_label": "%s",
+            "Genesis": "创世记",
+            "Exodus": "出埃及记",
+            "Leviticus": "利未记",
+            "Numeri": "民数记",
+            "Deuteronomium": "申命记",
+            "Josua": "约书亚记",
+            "Judices": "士师记",
+            "Ruth": "路得记",
+            "Samuel_I": "撒母耳记上",
+            "Samuel_II": "撒母耳记下",
+            "Reges_I": "列王纪上",
+            "Reges_II": "列王纪下",
+            "Chronica_I": "歷代志上",
+            "Chronica_II": "歷代志下",
+            "Esra": "以斯拉记",
+            "Nehemia": "尼希米记",
+            "Esther": "以斯帖记",
+            "Iob": "约伯记",
+            "Psalmi": "诗篇",
+            "Proverbia": "箴言",
+            "Ecclesiastes": "传道书",
+            "Canticum": "雅歌",
+            "Jesaia": "以赛亚书",
+            "Jeremia": "耶利米书",
+            "Threni": "耶利米哀歌",
+            "Ezechiel": "以西结书",
+            "Daniel": "但以理书",
+            "Hosea": "何西阿书",
+            "Joel": "约珥书",
+            "Amos": "阿摩司书",
+            "Obadia": "俄巴底亚书",
+            "Jona": "约拿书",
+            "Micha": "弥迦书",
+            "Nahum": "那鸿书",
+            "Habakuk": "哈巴谷书",
+            "Zephania": "西番雅书",
+            "Haggai": "哈该书",
+            "Sacharia": "撒迦利亚书",
+            "Maleachi": "玛拉基书"
+        },
+        "chapter": {
+            "_label": "%s章"
+        },
+        "verse": {
+            "_label": "%s节"
+        }
+    }
+}
