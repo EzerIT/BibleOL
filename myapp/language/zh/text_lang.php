@@ -17,6 +17,7 @@ $lang['display'] = '显示'; // Button text
 $lang['only_cli'] = '这个命令只可以用命令行来执行';
 $lang['quiz'] = '练习';  // Text in title bar
 $lang['no_direct_url'] = '请勿直接去这个网址。';
+$lang['everything'] = '全部';
 
 $lang['select_a_passage_title'] = '请选择要显示什么经文';
 $lang['select_a_passage'] =
