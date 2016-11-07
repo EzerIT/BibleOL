@@ -67,11 +67,11 @@ $lang['user_name_used'] = '使用者名称“%s”已经有人使用';
 $lang['account_created_subject']  = '建立了原文读经练习网账户';
 $lang['account_created_message1'] = "%s %s,\n\n"  //*** last name, First name
                                     . "现在您在原文读经练习网拥有账户了。\n\n"
-                                    . "您的使用者名称是%s\n" // Username
+                                    . "您的使用者名称是 %s\n" // Username
                                     . "您的密码是 %s\n\n"; // Password
 $lang['account_created_message2'] = "您是管理员，可以操作只有管理员才能操作的功能。\n\n";
 $lang['account_created_message2t'] = "您是助教，可以操作只有助教才能操作的功能。\n\n";
-$lang['account_created_message3'] = "请去%s，登入；\n" // Site URL
+$lang['account_created_message3'] = "请去%s, 登入；\n" // Site URL
                                     . "然后点选“我的资料”，再点选“账户资料”，以更改您的密码。.\n";
 
 $lang['account_you_created_message1'] = "%s %s,\n\n"  //*** last name, First name

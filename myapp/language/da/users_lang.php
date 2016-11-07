@@ -19,6 +19,7 @@ $lang['leave_blank_pw'] = '(Udelades hvis du ikke vil ændre adgangskode)';
 $lang['preferred_language'] = 'Foretrukket sprog';
 $lang['no_language'] = 'Intet angivet';
 $lang['english'] = 'Engelsk';
+$lang['simp_chinese'] = 'Kinesisk (forenklet)';
 $lang['danish'] = 'Dansk';
 $lang['portuguese'] = 'Portugisisk';
 $lang['spanish'] = 'Spansk';
