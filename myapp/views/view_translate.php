@@ -10,7 +10,7 @@ function build_url($editing,$get_parms)
             return site_url('translate/translate_grammar?' . http_build_query($get_parms));
             
       case 'lexicon':
-            return site_url('translate/edit_lex?' . http_build_query($get_parms));
+            return site_url('translate/edit_lex?' . http_build_query($get_parms) . '#targetlang');
     }
 }
 
@@ -136,7 +136,7 @@ else
 </script>
 
 
-<p><strong>Target language:</strong>
+<p id="targetlang"><strong>Target language:</strong>
 
 <select id="langeditsel">
   <?php foreach ($lang_list as $lshort => $llong): ?>

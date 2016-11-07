@@ -19,7 +19,7 @@ function build_url2(array $get_parms)
             return site_url('urls/edit_url?' . http_build_query($get_parms));
 
       case 'lexicon':
-            return site_url('translate/edit_lex?' . http_build_query($get_parms));
+            return site_url('translate/edit_lex?' . http_build_query($get_parms) . '#targetlang');
     }
 }
 
