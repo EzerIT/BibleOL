@@ -2034,6 +2034,11 @@ function isDirty() {
             return true;
     return panelSent.isDirty() || panelSentUnit.isDirty() || panelFeatures.isDirty();
 }
+// CT - 2016-11-07:
+// The execution of this function is postponed one second to ensure that ckeditor and VirtualKeyboard
+// have been loaded.
+// This delay needed to be inserted after adding the Chinese interface; but later it seemed to be unnecessary.
+// Maybe it can be removed again by replaceing setTimeout(....,1000) with $(....).
 setTimeout(function () {
     for (var i in configuration.sentencegrammar) {
         if (isNaN(+i))
