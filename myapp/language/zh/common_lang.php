@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['error_colon'] = '错误：';
 $lang['must_be_logged_in'] = '您必须先登入，才能使用这个功能。';

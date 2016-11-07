@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['intro_center'] =
       '<h1>什么是原文读经练习网？</h1>

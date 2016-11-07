@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['missing_shebanq_id'] = '欠SHEBANQ ID，或者SHEBANQ ID错误';
 $lang['missing_shebanq_version'] = '欠SHEBANQ版本编号';

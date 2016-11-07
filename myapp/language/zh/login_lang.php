@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['please_log_in']           = '请登入';
 $lang['user_name']               = '使用者名称';

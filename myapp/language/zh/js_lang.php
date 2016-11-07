@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['visual'] = '经文';
 $lang['separate_lines'] = '每节分多行显示';

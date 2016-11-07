@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['file_mgmt'] = '管理档案';  // Text in title bar
 $lang['create_folder'] = '建立资料夹';  // Text in title bar

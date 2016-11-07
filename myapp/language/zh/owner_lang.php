@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['change_owner_title'] = '更改拥有者'; // Text in title bar
 $lang['owner_name']  = '拥有者';

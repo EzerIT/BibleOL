@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['statistics_title'] = '成绩'; // Text in title bar
 $lang['for_user'] = '使用者%s的';

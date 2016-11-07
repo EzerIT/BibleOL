@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['class_list'] = '所有班别';
 $lang['configure_your_classes'] = '管理您的各个班别';

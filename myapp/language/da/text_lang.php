@@ -17,6 +17,7 @@ $lang['display'] = 'Vis'; // Button text
 $lang['only_cli'] = 'Denne kommando kan kun udføres på kommandolinjen';
 $lang['quiz'] = 'Øvelse';  // Text in title bar
 $lang['no_direct_url'] = 'Du må ikke benytte denne URL direkte.';
+$lang['everything'] = 'Alt';
 
 $lang['select_a_passage_title'] = 'Vælg en tekst der skal vises';
 $lang['select_a_passage'] =

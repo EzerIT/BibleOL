@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['uc_edit_user'] = '编辑使用者';  // Text in title bar
 $lang['uc_edit_class'] = '编辑班别';  // Text in title bar

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['display_user'] = '显示使用者';  // Text in title bar
 $lang['edit_user'] = '编辑使用者';  // Text in title bar

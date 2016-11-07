@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['home']               = '首页';
 $lang['text_and_exercises'] = '经文和练习';

@@ -17,6 +17,7 @@ $lang['display'] = 'Display'; // Button text
 $lang['only_cli'] = 'This command can only be run from the command line';
 $lang['quiz'] = 'Quiz';  // Text in title bar
 $lang['no_direct_url'] = 'Do not access this URL directly.';
+$lang['everything'] = 'Everything';
 
 $lang['select_a_passage_title'] = 'Select a Passage to Display';
 $lang['select_a_passage'] =

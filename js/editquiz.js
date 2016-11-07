@@ -2045,14 +2045,6 @@ setTimeout(function () {
             return 'You haven\'t saved your changes.';
     });
     charset = new Charset(configuration.charSet);
-    //    alert('x');
-    //    var date : any = new Date();
-    //    var curDate : any = null;
-    //    do {
-    //        curDate = new Date();
-    //        console.log('wait');
-    //    }
-    //    while(curDate-date < 1000);  // Wait for 1 sec
     if (VirtualKeyboard) {
         VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
         VirtualKeyboard.toggle('firstinput', 'virtualkbid');
@@ -2085,6 +2077,7 @@ setTimeout(function () {
     panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
     panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'), panelFeatures);
     panelSent = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'), panelSentUnit, panelFeatures);
+    $('.quizeditor').show();
 }, 1000);
 function show_error(id, message) {
     $(id + '-text').text(message);

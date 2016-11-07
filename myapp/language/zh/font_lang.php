@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['font_settings'] = '设定字型'; // Text in title bar
 $lang['settings'] = '设定';

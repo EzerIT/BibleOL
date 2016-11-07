@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['privacy_policy_title'] = '私隐政策';
 $lang['privacy_text'] =

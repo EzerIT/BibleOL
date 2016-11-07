@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $lang['corpus_prompt'] = '经文：';
 $lang['book_prompt'] = '书卷：';
