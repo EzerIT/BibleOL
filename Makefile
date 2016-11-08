@@ -1,4 +1,4 @@
-ALL_TARGETS = js/ol.js js/fontselector.js js/editquiz.js styles/ol.css
+ALL_TARGETS = js/ol.js js/fontselector.js js/editquiz.js styles/ol.css styles/ol_zh.css
 
 all:	$(ALL_TARGETS) allugly
 
@@ -24,6 +24,9 @@ js/fontselector.js:	ts/fontselector.ts ts/fontdetect.d.ts ts/jquery/jquery.d.ts 
 	tsc --out $@ $<
 
 styles/ol.css:	styles/ol.less
+	lessc $< > $@
+
+styles/ol_zh.css:	styles/ol_zh.less
 	lessc $< > $@
 
 clean: cleanugly

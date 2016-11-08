@@ -31,7 +31,10 @@
     <?php
        make_css('bootstrap/bibleol/css/bootstrap.css');
        make_css('jquery-ui-1.10.2.custom/css/sunny/jquery-ui-1.10.2.custom.min.css');
-       make_css('styles/ol.css');
+       if ($this->language=='zh-simp' || $this->language=='zh-trad')
+           make_css('styles/ol_zh.css');
+       else
+           make_css('styles/ol.css');
        make_css('styles/fonts.css');
 
        if (!isset($css_list))
