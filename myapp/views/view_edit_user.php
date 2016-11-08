@@ -61,6 +61,7 @@
               <option value="pt" <?= set_select('preflang', 'pt', $curlang=='pt') ?>><?= $this->lang->line('portuguese') ?></option>
               <option value="es" <?= set_select('preflang', 'es', $curlang=='es') ?>><?= $this->lang->line('spanish') ?></option>
               <option value="zh" <?= set_select('preflang', 'zh', $curlang=='zh') ?>><?= $this->lang->line('simp_chinese') ?></option>
+              <option value="zh" <?= set_select('preflang', 'zh-trad', $curlang=='zh-trad') ?>><?= $this->lang->line('trad_chinese') ?></option>
             </select>
           </td>
           <td class="nolb"></td>

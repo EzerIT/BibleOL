@@ -20,6 +20,7 @@ $lang['preferred_language'] = 'Preferred language';
 $lang['no_language'] = 'None specified';
 $lang['english'] = 'English';
 $lang['simp_chinese'] = 'Chinese (simplified)';
+$lang['trad_chinese'] = 'Chinese (traditional)';
 $lang['danish'] = 'Danish';
 $lang['portuguese'] = 'Portuguese';
 $lang['spanish'] = 'Spanish';

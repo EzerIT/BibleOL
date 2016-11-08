@@ -1,0 +1,240 @@
+{
+    "dbdescription": "希臘文新約聖經，奈瑟勒（Nestle）編，1904年版",
+    "dbcopyright": "公有著作",
+    "emdrosobject": {
+        "word": {
+            "_objname": "詞",
+            "person": "人稱",
+            "voice": "語態",
+            "tense": "時態",
+            "mood": "語氣",
+            "lemma": "基本詞形",
+            "raw_lemma": " no accents)”,基本詞形（小寫，無重音符號）",
+            "normalized": "正常化了的詞形",
+            "raw_normalized": "正常化了的詞形（小寫，無重音符號）",
+            "number": "數",
+            "possessor_number": "擁有者數",
+            "suffix": "其他資料",
+            "surface": "經文詞語",
+            "english": "英文",
+            "strongs": "原文編號",
+            "strongs_unreliable": "原文編號有誤？",
+            "gender": "性",
+            "case": "格",
+            "psp": "詞類"
+        },
+        "clause1": {
+            "_objname": "第一層分句",
+            "typ": "功能"
+        },
+        "clause1_abbrev": {
+            "_objname": "分句一"
+        },
+        "clause2": {
+            "_objname": "第二層分句",
+            "typ": "功能"
+        },
+        "clause2_abbrev": {
+            "_objname": "分句二"
+        },
+        "sentence": {
+            "_objname": "句子"
+        }
+    },
+    "emdrostype": {
+        "boolean_t": {
+            "false": "#2 否",
+            "true": "#1 是"
+        },
+        "tense_t": {
+            "pluperfect": "#9 過去完成時態",
+            "imperfect": "#2 過去未完時態",
+            "second_future": "#6 第二未來時態",
+            "present": "#1 現在時態",
+            "aorist": "#3 過去不定時時態",
+            "second_aorist": "#4 第二過去不定時時態",
+            "second_pluperfect": "#10 第二過去完成時態",
+            "future": "#5 未來時態",
+            "second_perfect": "#8 第二完成時態",
+            "NA": "#11 不適用",
+            "perfect": "#7 完成時態"
+        },
+        "suffix_t": {
+            "crasis": "元音融合",
+            "interrogative": "疑問",
+            "comparative": "比較",
+            "negative": "否定",
+            "NA": "不適用",
+            "superlative": "最高級",
+            "attic": "阿提喀",
+            "particle_attached": "附有助詞"
+        },
+        "mood_t": {
+            "optative": "#7 祈願語氣",
+            "participle": "#4 分詞",
+            "imperative": "#2 祈使語氣",
+            "subjunctive": "#6 虛擬語氣",
+            "imperative_participle": "#5 獨立祈使分詞",
+            "indicative": "#1 直說語氣",
+            "infinitive": "#3 不定詞",
+            "NA": "#8 不適用"
+        },
+        "gender_t": {
+            "neuter": "#4 中性",
+            "masculine": "#2 陽性",
+            "feminine": "#3 陰性",
+            "NA": "#1 不適用"
+        },
+        "case_t": {
+            "nominative": "#2 主格",
+            "dative": "#5 間接受格",
+            "vocative": "#6 呼格",
+            "accusative": "#3 直接受格",
+            "NA": "#1 不適用",
+            "genitive": "#4 所有格"
+        },
+        "psp_t": {
+            "letter_indeclinable": "#26 字母，詞尾不可變",
+            "hebrew": "#24 希伯來文",
+            "conjunction": "#20 連詞",
+            "reciprocal_pronoun": "#9 相互代詞",
+            "cond": "#22 條件助詞",
+            "particle": "#21 助詞",
+            "interjection": "#23 感嘆詞",
+            "adverb": "#19 副詞",
+            "verb": "#4 動詞",
+            "correlative_or_interrogative_pronoun": "#15 相關或疑問代詞",
+            "possessive_pronoun": "#7 物主代詞",
+            "personal_pronoun": "#6 人稱代詞",
+            "aramaic": "#25 亞蘭文",
+            "numeral_indeclinable": "#18 數詞，詞尾不可變",
+            "reflexive_pronoun": "#8 反身代詞",
+            "correlative_pronoun": "#13 相關代詞",
+            "noun_other_type_indeclinable": "#3 其他類別的名詞，詞尾不可變",
+            "adjective": "#5 形容詞",
+            "demonstrative_pronoun": "#10 指示代詞",
+            "relative_pronoun": "#14 關係代詞",
+            "preposition": "#17 介詞",
+            "interrogative_pronoun": "#11 疑問代詞",
+            "article": "#16 冠詞",
+            "proper_noun_indeclinable": "#2 專有名詞，詞尾不可變",
+            "noun": "#1 名詞",
+            "indefinite_pronoun": "#12 不定代詞",
+            "NA": "#27 不適用"
+        },
+        "number_t": {
+            "NA": "#1 不適用",
+            "plural": "#3 複數",
+            "singular": "#2 單數"
+        },
+        "voice_t": {
+            "middle_or_passive": "#5 關身或被動",
+            "passive": "#4 被動",
+            "impersonal_active": "#2 非人稱主動",
+            "active": "#1 主動",
+            "passive_deponent": "#7 被動形主動意",
+            "NA": "#9 不適用",
+            "middle_or_passive_deponent": "#8 關身或被動形主動意",
+            "middle_deponent": "#6 關身形主動意",
+            "middle": "#3 關身"
+        },
+        "person_t": {
+            "second_person": "#3 第二人稱",
+            "third_person": "#4 第三人稱",
+            "first_person": "#2 第一人稱",
+            "NA": "#1 不適用"
+        },
+        "clause_type_t_abbrev": {
+            "ADV": "#7 狀語",
+            "CL": "#8 分句",
+            "IO": "#5 間賓",
+            "O": "#4 賓語",
+            "O2": "#6 二賓",
+            "P": "#2 謂語",
+            "S": "#1 主語",
+            "V": "#9 動分",
+            "VC": "#3 連動"
+        },
+        "clause_type_t": {
+            "ADV": "#7 狀語",
+            "CL": "#8 分句",
+            "IO": "#5 間接賓語",
+            "O": "#4 賓語",
+            "O2": "#6 第二賓語",
+            "P": "#2 謂語",
+            "S": "#1 主語",
+            "V": "#9 動詞分句",
+            "VC": "#3 連繫動詞"
+        }
+    },
+    "grammargroup": {
+        "word": {
+            "lexeme": "基本詞形",
+            "morphology": "詞形變化"
+        }
+    },
+    "grammarmetafeature": {
+        "word": {
+            "pgn": "人稱、性、數"
+        }
+    },
+    "grammarsubfeature": {
+        "word": {
+            "person": {
+                "first_person": "一",
+                "second_person": "二",
+                "third_person": "三",
+                "NA": "／"
+            },
+            "gender": {
+                "feminine": "陰",
+                "masculine": "陽",
+                "neuter": "中",
+                "NA": "／"
+            },
+            "number": {
+                "plural": "複",
+                "singular": "單",
+                "NA": "／"
+            }
+        }
+    },
+    "universe": {
+        "book": {
+            "_label": "%s",
+            "Matthew": "馬太福音",
+            "Mark": "馬可福音",
+            "Luke": "路加福音",
+            "John": "約翰福音",
+            "Acts": "使徒行傳",
+            "Romans": "羅馬書",
+            "I_Corinthians": "哥林多前書",
+            "II_Corinthians": "哥林多後書",
+            "Galatians": "加拉太書",
+            "Ephesians": "以弗所書",
+            "Philippians": "腓立比書",
+            "Colossians": "歌羅西書",
+            "I_Thessalonians": "帖撒羅尼迦前書",
+            "II_Thessalonians": "帖撒羅尼迦後書",
+            "I_Timothy": "提摩太前書",
+            "II_Timothy": "提摩太後書",
+            "Titus": "提多書",
+            "Philemon": "腓利門書",
+            "Hebrews": "希伯來書",
+            "James": "雅各書",
+            "I_Peter": "彼得前書",
+            "II_Peter": "彼得後書",
+            "I_John": "約翰一書",
+            "II_John": "約翰二書",
+            "III_John": "約翰三書",
+            "Jude": "猶大書",
+            "Revelation": "啟示錄"
+        },
+        "chapter": {
+            "_label": "%s章"
+        },
+        "verse": {
+            "_label": "%s節"
+        }
+    }
+}

@@ -30,6 +30,7 @@
               <option value="pt" <?= set_select('preflang', 'pt', $user_info->preflang=='pt') ?>><?= $this->lang->line('portuguese') ?></option>
               <option value="es" <?= set_select('preflang', 'es', $user_info->preflang=='es') ?>><?= $this->lang->line('spanish') ?></option>
               <option value="zh" <?= set_select('preflang', 'zh', $user_info->preflang=='zh') ?>><?= $this->lang->line('simp_chinese') ?></option>
+              <option value="zh" <?= set_select('preflang', 'zh-trad', $user_info->preflang=='zh-trad') ?>><?= $this->lang->line('trad_chinese') ?></option>
             </select>
           </td>
       </table>

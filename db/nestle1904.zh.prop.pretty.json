@@ -1,6 +1,6 @@
 {
-    "dbdescription": "Greek (Nestle 1904, NT)",
-    "dbcopyright": "Public domain.",
+    "dbdescription": "希腊文新约圣经，奈瑟勒（Nestle）编，1904年版",
+    "dbcopyright": "公有著作",
     "emdrosobject": {
         "word": {
             "_objname": "词",
@@ -77,7 +77,7 @@
             "imperative_participle": "#5 独立祈使分词",
             "indicative": "#1 直说语气",
             "infinitive": "#3 不定词",
-            "NA": "N\/A"
+            "NA": "不适用"
         },
         "gender_t": {
             "neuter": "#4 中性",
@@ -117,7 +117,7 @@
             "preposition": "#17 介词",
             "interrogative_pronoun": "#11 疑问代词",
             "article": "#16 冠词",
-            "proper_noun_indeclinable": " indecl.”,#2 专有名词，词尾不可变",
+            "proper_noun_indeclinable": "#2 专有名词，词尾不可变",
             "noun": "#1 名词",
             "indefinite_pronoun": "#12 不定代词",
             "NA": "#27 不适用"
