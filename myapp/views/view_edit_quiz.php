@@ -1,3 +1,4 @@
+<div class="quizeditor" style="display:none;">
 <div id="quiz_tabs">
   <ul>
     <li><a href="#tab_description"><?= $this->lang->line('description') ?></a></li>
@@ -31,6 +32,8 @@
   <a class="btn btn-primary" href="#" onclick="save_quiz(); return false;"><?= $this->lang->line('save_button') ?></a>
   <a class="btn btn-default" href="<?=site_url('file_manager?dir=' . $dir) ?>"><?= $this->lang->line('cancel_button') ?></a>
 </div>
+</div>
+
 
 <script>
   var configuration = <?= $dbinfo_json ?>;

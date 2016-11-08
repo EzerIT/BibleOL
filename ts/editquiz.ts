@@ -78,7 +78,12 @@ function isDirty() : boolean {
     return panelSent.isDirty() || panelSentUnit.isDirty() || panelFeatures.isDirty();
 }
 
-$(function() {
+// CT - 2016-11-07:
+// The execution of this function is postponed one second to ensure that ckeditor and VirtualKeyboard
+// have been loaded.
+// This delay needed to be inserted after adding the Chinese interface; but later it seemed to be unnecessary.
+// Maybe it can be removed again by replaceing setTimeout(....,1000) with $(....).
+setTimeout(function() {
     for (var i in configuration.sentencegrammar) {
         if (isNaN(+i)) continue; // Not numeric
         addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
@@ -91,6 +96,7 @@ $(function() {
 
     charset = new Charset(configuration.charSet);
 
+    
     if (VirtualKeyboard) {
         VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
         VirtualKeyboard.toggle('firstinput','virtualkbid');
@@ -134,7 +140,9 @@ $(function() {
                                                      panelFeatures);
     panelSent = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'),
                                                panelSentUnit, panelFeatures);
-});
+
+    $('.quizeditor').show();
+},1000);
 
 function show_error(id : string, message : string) {
     $(id + '-text').text(message);

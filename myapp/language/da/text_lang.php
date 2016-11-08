@@ -17,6 +17,7 @@ $lang['display'] = 'Vis'; // Button text
 $lang['only_cli'] = 'Denne kommando kan kun udføres på kommandolinjen';
 $lang['quiz'] = 'Øvelse';  // Text in title bar
 $lang['no_direct_url'] = 'Du må ikke benytte denne URL direkte.';
+$lang['everything'] = 'Alt';
 
 $lang['select_a_passage_title'] = 'Vælg en tekst der skal vises';
 $lang['select_a_passage'] =
@@ -51,8 +52,8 @@ $lang['check_answer'] = 'Tjek svar';
 $lang['show_answer'] = 'Vis svar';
 
 $lang['next'] = 'Næste';
-$lang['finish'] = 'Afslut';
-$lang['finish_no_grading'] = 'Afslut uden karakter';
+$lang['finish'] = 'BEDØM opgaven';
+$lang['finish_no_grading'] = 'GEM resultat';
 $lang['toggle_mql'] = 'Vis/skjul MQL';
 
 $lang['clear_grammar'] = 'Fjern grammatik';

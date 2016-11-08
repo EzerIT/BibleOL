@@ -72,7 +72,7 @@ class Universe_tree {
             $this->markedList = $params['markedList'];
             
             $full_universe = self::$CI->mod_askemdros->fullUniverse();
-            $this->top = new Node('Everything', $full_universe, 0, false, '');
+            $this->top = new Node(self::$CI->lang->line('everything'), $full_universe, 0, false, '');
 
             $this->addLevel($this->top);
             $this->top->state = 'open'; // Top level is open
