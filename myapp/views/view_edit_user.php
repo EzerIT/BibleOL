@@ -60,8 +60,8 @@
               <option value="da" <?= set_select('preflang', 'da', $curlang=='da') ?>><?= $this->lang->line('danish') ?></option>
               <option value="pt" <?= set_select('preflang', 'pt', $curlang=='pt') ?>><?= $this->lang->line('portuguese') ?></option>
               <option value="es" <?= set_select('preflang', 'es', $curlang=='es') ?>><?= $this->lang->line('spanish') ?></option>
-              <option value="zh" <?= set_select('preflang', 'zh', $curlang=='zh') ?>><?= $this->lang->line('simp_chinese') ?></option>
-              <option value="zh" <?= set_select('preflang', 'zh-trad', $curlang=='zh-trad') ?>><?= $this->lang->line('trad_chinese') ?></option>
+              <option value="zh-simp" <?= set_select('preflang', 'zh-simp', $curlang=='zh-simp') ?>><?= $this->lang->line('simp_chinese') ?></option>
+              <option value="zh-trad" <?= set_select('preflang', 'zh-trad', $curlang=='zh-trad') ?>><?= $this->lang->line('trad_chinese') ?></option>
             </select>
           </td>
           <td class="nolb"></td>
