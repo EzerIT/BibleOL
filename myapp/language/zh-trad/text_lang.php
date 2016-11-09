@@ -89,4 +89,4 @@ $lang['mql_compiler_error_colon'] = 'MQL編譯器說有錯誤：';
 $lang['cannot_write_to_quiz_file'] = '無法寫入到練習檔案';
 $lang['no_text_found'] = '找不到經文';
 
-$lang['close_button'] = '关闭';
+$lang['close_button'] = '關閉';
