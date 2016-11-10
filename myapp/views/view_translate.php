@@ -14,6 +14,10 @@ function build_url($editing,$get_parms)
     }
 }
 
+function replace_quot($s) {
+    return preg_replace(array('/&/', '/"/'), array('&amp;','&quot;'),$s);
+}
+
 $short_target_lang = $get_parms['lang_edit'];
 $long_target_lang = $lang_list[$short_target_lang];
 
@@ -226,9 +230,10 @@ else
     $language_selector .= "</select>\n";
 ?>
 
-<form action="<?= site_url(($editing=='interface' ? 'translate/update_if?' 
-                            : $editing=='grammar' ? 'translate/update_grammar?'
-                            : 'translate/update_lexicon' ). http_build_query($get_parms)) ?>" method="post">
+<form action="<?= site_url(($editing=='interface'
+                            ? 'translate/update_if?' 
+                            : ($editing=='grammar' ? 'translate/update_grammar?'
+                                : 'translate/update_lexicon' )). http_build_query($get_parms)) ?>" method="post">
     
 <div class="table-responsive">
 <table id="trans_table" class="type2 table table-striped">
@@ -283,9 +288,9 @@ else
 
           <td class="leftalign">
             <?php if ($line->use_textarea): ?>
-              <textarea class="textinput" name="<?= $line->symbolic_name ?>" rows="5" cols="40"><?= $line->text_edit ?></textarea>
+              <textarea class="textinput" name="<?= $line->symbolic_name ?>" rows="5" cols="40"><?= replace_quot($line->text_edit) ?></textarea>
             <?php else: ?>
-              <input type="text" class="textinput" name="<?= $line->symbolic_name ?>" size="40" value="<?= $line->text_edit ?>">
+              <input type="text" class="textinput" name="<?= $line->symbolic_name ?>" size="40" value="<?= replace_quot($line->text_edit) ?>">
             <?php endif; ?>
           </td>
           <td class="centeralign">
@@ -302,9 +307,9 @@ else
 
           <td class="leftalign">
             <?php if (substr($line->comment,0,10)=='f:textarea'): ?>
-              <textarea class="textinput" name="<?= $line->symbolic_name ?>" rows="5" cols="40"><?= $line->text_edit ?></textarea>
+              <textarea class="textinput" name="<?= $line->symbolic_name ?>" rows="5" cols="40"><?= replace_quot($line->text_edit) ?></textarea>
             <?php else: ?>
-              <input type="text" class="textinput" name="<?= $line->symbolic_name ?>" size="40" value="<?= $line->text_edit ?>">
+              <input type="text" class="textinput" name="<?= $line->symbolic_name ?>" size="40" value="<?= replace_quot($line->text_edit) ?>">
             <?php endif; ?>
           <td class="centeralign">
             <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name ?>" href="#">Revert</a>
@@ -328,7 +333,7 @@ else
 
           <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>
           <td class="leftalign">
-            <input type="text" class="textinput" name="<?= $line->lex_id ?>" size="40" value="<?= $line->text_edit ?>">
+            <input type="text" class="textinput" name="<?= $line->lex_id ?>" size="40" value="<?= replace_quot($line->text_edit) ?>">
           </td>
           <td class="centeralign">
             <a class="label label-danger revertbutton" data-name="<?= $line->lex_id ?>" href="#">Revert</a>

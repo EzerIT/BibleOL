@@ -21,7 +21,7 @@ class Ctrl_translate extends MY_Controller {
             $textgroup_list = $this->mod_translate->get_textgroup_list();
             sort($textgroup_list);
             
-            $lang_list = $this->mod_translate->get_all_languages();
+            $lang_list = $this->mod_translate->get_all_if_languages();
             asort($lang_list);
             
             $lang_show = isset($_GET['lang_show']) ? $_GET['lang_show'] : 'en';
@@ -124,7 +124,7 @@ class Ctrl_translate extends MY_Controller {
             $db_list = $this->mod_translate->get_all_db();
             asort($db_list);
 
-            $lang_list = $this->mod_translate->get_all_languages();
+            $lang_list = $this->mod_translate->get_all_if_languages();
             asort($lang_list);
             
             $db = isset($_GET['group']) ? $_GET['group'] : 'ETCBC4';

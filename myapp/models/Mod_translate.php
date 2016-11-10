@@ -9,10 +9,12 @@ class Mod_translate extends CI_Model {
     private $grammar_comment_ordered;
     private $grammar_db;
     
-    private $langs = array('en' => 'English',
-                           'da' => 'Danish',
-                           'pt' => 'Portuguese',
-                           'es' => 'Spanish');
+    private $if_langs = array('en' => 'English',
+                              'da' => 'Danish',
+                              'pt' => 'Portuguese',
+                              'es' => 'Spanish',
+                              'zh-simp' => 'Chinese (simplified)',
+                              'zh-trad' => 'Chinese (traditional)');
 
     private $dbs = array('ETCBC4',
                          'ETCBC4-translit',
@@ -27,8 +29,8 @@ class Mod_translate extends CI_Model {
         $this->load->database();
     }
 
-    public function get_all_languages() {
-        return $this->langs;
+    public function get_all_if_languages() {
+        return $this->if_langs;
     }
 
     public function get_all_db() {
