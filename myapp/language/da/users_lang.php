@@ -66,7 +66,7 @@ $lang['this_user_facebook'] = 'Denne bruger logger ind med Facebook';
 $lang['user_name_used'] = 'Brugernavnet "%s" er optaget';
 
 $lang['account_created_subject']  = 'Bible Online Learner - konto oprettet';
-$lang['account_created_message1'] = "Kære %s %s,\n\n"  // First name, last name
+$lang['account_created_message1'] = "Kære %s,\n\n"  // First name, last name
                                     . "Du har nu en konto på webstedet Bible Online Learner.\n\n"
                                     . "Dit brugernavn er: %s\n" // Username
                                     . "Din adgangskode er: %s\n\n"; // Password
@@ -75,7 +75,7 @@ $lang['account_created_message2t'] = "Du har fået tildelt facilitator-rettighed
 $lang['account_created_message3'] = "Gå til %s, og log ind;\n" // Site URL
                                     . "derefter kan du ændre din adgangskode ved at vælge 'Profil' fra menuen 'Mine data'.\n";
 
-$lang['account_you_created_message1'] = "Kære %s %s,\n\n"  // First name, last name
+$lang['account_you_created_message1'] = "Kære %s,\n\n"  // First name, last name
                                     . "Du har oprettet en konto på webstedet Bible Online Learner.\n\n"
                                     . "Dit brugernavn er: %s\n" // Username
                                     . "Din adgangskode er: %s\n\n"; // Password
@@ -98,10 +98,10 @@ $lang['google_no_response_delete'] = 'Google svarede ikke på denne anmodning. D
 $lang['cannot_delete_self'] = 'Du kan ikke slette dig selv';
 
 $lang['expiry_warning_subject'] = 'Inaktiv konto på Bible Online Learner';
-$lang['expiry_warning_1_message'] = "Kære %s %s,\n\n"  // First name, last name
+$lang['expiry_warning_1_message'] = "Kære %s,\n\n"  // First name, last name
                                   . "Du har ikke benyttet din konto på %s i ni måneder.\n" // Site URL
                                   . "Om yderligere ni måneder bliver din konto slettet.\n\n";
-$lang['expiry_warning_2_message'] = "Kære %s %s,\n\n"  // First name, last name
+$lang['expiry_warning_2_message'] = "Kære %s,\n\n"  // First name, last name
                                   . "Du har ikke benyttet din konto på %s i 17 måneder.\n" // Site URL
                                   . "Om en måned bliver din konto slettet.\n\n";
 

@@ -16,7 +16,7 @@
           <?php for ($i=0; $i<$count/2; ++$i): ?>
             <?php $user = $allusers[$i]; ?>
             <tr>
-              <td><?= "$user->first_name $user->last_name" ?></td>
+              <td><?= make_full_name($user) ?></td>
               <td class="text-center"><input class="narrow" type="checkbox" name="inclass[]" value="<?= $user->id ?>" <?= set_checkbox('inclass[]', $user->id, in_array($user->id, $old_users)) ?>></td>
             </tr>
           <?php endfor; ?>
@@ -32,7 +32,7 @@
           <?php for (; $i<$count; ++$i): ?>
             <?php $user = $allusers[$i]; ?>
             <tr>
-              <td><?= "$user->first_name $user->last_name" ?></td>
+              <td><?= make_full_name($user) ?></td>
               <td class="text-center"><input class="narrow" type="checkbox" name="inclass[]" value="<?= $user->id ?>" <?= set_checkbox('inclass[]', $user->id, in_array($user->id, $old_users)) ?>></td>
             </tr>
           <?php endfor; ?>

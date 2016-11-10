@@ -19,7 +19,7 @@ $lang['specify_name']            = 'Angiv enten et brugernavn eller en email-adr
 $lang['user_not_found']          = 'Ukendt bruger';
 $lang['several_accounts']        = 'Din email-adresee er knyttet til flere brugerkonti. Angiv et af disse navne: %s'; // User names
 $lang['forgotten_subject']       = 'Bible Online Learner - kontoinformation';
-$lang['forgotten_message']       = "Kære %s %s,\n\n"  // First name, last name
+$lang['forgotten_message']       = "Kære %s,\n\n"  // First name, last name
                                    . "Dit brugernavn til Bible Online Learner er: %s\n" // Username
                                    . "Du kan danne en ny adgangskode ved at følge dette link:\n"
                                    . "%s\n" // Link
@@ -29,7 +29,7 @@ $lang['cannot_reset_password']   = 'Kan ikke gendanne adgangskode'; // Text in t
 $lang['password_reset']          = 'Dan ny adgangskode';
 $lang['reset_link_bad']          = 'Linket til dannelse af ny adgangskode eksisterer ikke eller er udløbet';
 $lang['password_reset_subject']  = 'Din adgangskode til Bible Online Learner er blevet ændret';
-$lang['password_reset_message']  = "Kære %s %s,\n\n"  // First name, last name
+$lang['password_reset_message']  = "Kære %s,\n\n"  // First name, last name
                                   . "Dit brugernavn til Bible Online Learner er: %s\n" // Username
                                   . "Din adgangskode er blevet sat til: %s\n\n" // Password
                                   . "Du kan ændre din adgangskode ved at vælge 'Profil' fra menuen 'Mine data'.\n";
@@ -44,17 +44,17 @@ $lang['new_facebook_user'] = 'Ny Facebook-bruger'; // Text in title bar
 $lang['users'] = 'Brugere';  // Text in title bar
 $lang['welcome_new_google_user'] = 'Velkommen, nye Google-bruger';
 $lang['your_google_name' ] =
-    'Google har oplyst at dit navn er »%s %s«, og din email-adresse er »%s«. Hvis du ønsker at ændre
+    'Google har oplyst at dit navn er »%s«, og din email-adresse er »%s«. Hvis du ønsker at ændre
     dette, skal du ændre din profil hos Google.';
 $lang['your_google_name_no_email' ] =
-    'Google har oplyst at dit navn er »%s %s«. Din email-adresse er ikke oplyst. Hvis du ønsker at ændre
+    'Google har oplyst at dit navn er »%s«. Din email-adresse er ikke oplyst. Hvis du ønsker at ændre
     dette, skal du ændre din profil hos Google.';
 $lang['welcome_new_facebook_user'] = 'Velkommen, nye Facebook-bruger';
 $lang['your_facebook_name' ] =
-    'Facebook har oplyst at dit navn er »%s %s«, og din email-adresse er »%s«. Hvis du ønsker at ændre
+    'Facebook har oplyst at dit navn er »%s«, og din email-adresse er »%s«. Hvis du ønsker at ændre
     dette, skal du ændre din profil hos Facebook.';
 $lang['your_facebook_name_no_email' ] =
-    'Facebook har oplyst at dit navn er »%s %s«. Din email-adresse er ikke oplyst. Hvis du ønsker at ændre
+    'Facebook har oplyst at dit navn er »%s«. Din email-adresse er ikke oplyst. Hvis du ønsker at ændre
     dette, skal du ændre din profil hos Facebook.';
 $lang['enjoy'] = 'Vi håber at du vil have glæde af at bruge Bible Online Learner.';
 $lang['use_menu'] = 'Via menuen ovenfor får du adgang til de forskellige funktioner på dette websted.';

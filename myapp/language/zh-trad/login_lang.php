@@ -19,7 +19,7 @@ $lang['specify_name']            = '您必須輸入使用者名稱或電郵地�
 $lang['user_not_found']          = '找不到這個使用者';
 $lang['several_accounts']        = '您的電郵地址聯繫於系統裡的多個使用者帳戶。請選取以下一個使用者名稱：%s'; // User names
 $lang['forgotten_subject']       = '原文讀經練習網帳戶資料';
-$lang['forgotten_message']       = "%s %s：\n\n"  // ***Last name, First name
+$lang['forgotten_message']       = "%s：\n\n"  // ***Last name, First name
                                    . "您在原文讀經練習網的使用者名稱是%s。\n" // Username
                                    . "如果想要重設密碼，請到\n"
                                    . "%s\n" // Link
@@ -29,7 +29,7 @@ $lang['cannot_reset_password']   = '無法重設密碼'; // Text in title bar
 $lang['password_reset']          = '已經重設密碼';
 $lang['reset_link_bad']          = '這個重設密碼的鏈結不存在，或者已經過期。';
 $lang['password_reset_subject']  = '您在原文讀經練習網的密碼已經更改';
-$lang['password_reset_message']  = "%s %s：\n\n"  // ***last name, first name
+$lang['password_reset_message']  = "%s：\n\n"  // ***last name, first name
                                    . "您在原文讀經練習網的使用者名稱是%s。\n" // Username
                                    . "您的密碼已經設定為%s。\n\n" // Password
                                    . "如需更改密碼，請按“我的資料”選單內的“帳戶資料”。\n";
@@ -44,14 +44,14 @@ $lang['new_facebook_user'] = '新的Facebook使用者'; // Text in title bar
 $lang['users'] = '使用者';  // Text in title bar
 $lang['welcome_new_google_user'] = '新的Google使用者，歡迎您！';
 $lang['your_google_name' ] =
-    'Google告訴我們，您的姓名是%s %s，您的電郵地址是%s。您如果需要更改姓名或電郵地址，必須在您的Google帳戶資料頁更改。';
+    'Google告訴我們，您的姓名是%s，您的電郵地址是%s。您如果需要更改姓名或電郵地址，必須在您的Google帳戶資料頁更改。';
 $lang['your_google_name_no_email' ] =
-    'Google告訴我們，您的姓名是%s %s。沒有提供電郵地址。您如果需要更改姓名或電郵地址，必須在您的Google帳戶資料頁更改。';
+    'Google告訴我們，您的姓名是%s。沒有提供電郵地址。您如果需要更改姓名或電郵地址，必須在您的Google帳戶資料頁更改。';
 $lang['welcome_new_facebook_user'] = '新的Facebook使用者，歡迎您！';
 $lang['your_facebook_name' ] =
-    'Facebook告訴我們，您的姓名是%s %s，您的電郵地址是%s。您如果需要更改姓名或電郵地址，必須在您的Facebook帳戶資料頁更改。';
+    'Facebook告訴我們，您的姓名是%s，您的電郵地址是%s。您如果需要更改姓名或電郵地址，必須在您的Facebook帳戶資料頁更改。';
 $lang['your_facebook_name_no_email' ] =
-    'Facebook告訴我們，您的姓名是%s %s。沒有提供電郵地址。您如果需要更改姓名或電郵地址，必須在您的Facebook帳戶資料頁更改。';
+    'Facebook告訴我們，您的姓名是%s。沒有提供電郵地址。您如果需要更改姓名或電郵地址，必須在您的Facebook帳戶資料頁更改。';
 $lang['enjoy'] = '請享用原文讀經練習網！';
 $lang['use_menu'] = '您可以用上面的選單來執行這個網站的各樣功能。';
 

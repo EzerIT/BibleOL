@@ -3,6 +3,32 @@
           echo "<div class=\"alert alert-danger\">$valerr</div>\n";
     ?>
 
+    <script>
+        $(function() {
+            function set_full_name() {
+                <?php if (!empty($user_info->oauth2_login)): ?>
+                    var first_name = '<?= $user_info->first_name ?>';
+                    var last_name = '<?= $user_info->last_name ?>';
+                <?php else: ?>
+                    var first_name = $('[name=first_name]').val();
+                    var last_name = $('[name=last_name]').val();
+                <?php endif; ?>
+                
+                if ($('[name=family_name_first]:checked').val()=='yes')
+                    $('#fullname').html('（' + last_name + first_name + '）');
+                else
+                    $('#fullname').html('(' + first_name + ' ' + last_name + ')');
+            }
+
+            set_full_name();
+                    
+            $('[name=family_name_first]').on('change', set_full_name);
+            $('[name=first_name]').on('input', set_full_name);
+            $('[name=last_name]').on('input', set_full_name);
+        });
+                
+    </script>
+      
     <?php // $userid is -1 when an administrator creates a new user, -2 when a user creates their own account ?>
 
     <?= form_open($userid==-2 ? "users/sign_up" : "users/edit_one_user?userid=$userid&$extras") ?>
@@ -40,6 +66,14 @@
             <td class="norb"><input type="text" name="last_name" value="<?= set_value('last_name',$user_info->last_name) ?>"></td>
             <td class="nolb"><?= $this->lang->line('field_required') ?></td>
           <?php endif; ?>
+        </tr>
+        <tr>
+          <td><?= $this->lang->line('chinese_name_order') ?></td>
+          <td class="norb">
+            <input class="narrow" type="radio" name="family_name_first" value="yes" <?= set_radio('family_name_first', 'yes', !!$user_info->family_name_first) ?>><?= $this->lang->line('yes') ?>
+            <input class="narrow" type="radio" name="family_name_first" value="no" <?= set_radio('family_name_first', 'no', !$user_info->family_name_first) ?>><?= $this->lang->line('no') ?>
+          </td>
+          <td id="fullname" class="nolb"></td>
         </tr>
         <tr>
           <td><?= $this->lang->line('email') ?></td>

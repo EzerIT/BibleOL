@@ -18,7 +18,7 @@
         <?php endif; ?>
       </td>
       <td class="leftalign"><?= empty($cl->enrol_before) ? '-' : $cl->enrol_before ?></td>
-      <td class="leftalign"><?= $cl->ownerid==0 ? $this->lang->line('no_owner') : "$cl->first_name $cl->last_name" ?></td>
+      <td class="leftalign"><?= $cl->ownerid==0 ? $this->lang->line('no_owner') : make_full_name($cl) ?></td>
       <td class="leftalign">
         <?php if ($myid==$cl->ownerid || $isadmin): ?>
           <a class="label label-primary" href="<?= site_url("userclass/users_in_class?classid=$cl->clid") ?>"><?= str_replace(' ', '&nbsp;', $this->lang->line('assign_users')) ?></a>
@@ -59,7 +59,7 @@
           <select id="chown-class-selector">
             <option value="0" selected="selected"></option>
             <?php foreach ($teachers as $t): ?>
-              <option value="<?= $t->id ?>"><?= $t->first_name . ' ' . $t->last_name ?></option>
+            <option value="<?= $t->id ?>"><?= make_full_name($t) ?></option>
             <?php endforeach; ?>
           </select>
 

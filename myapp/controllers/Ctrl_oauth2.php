@@ -96,7 +96,7 @@ class Ctrl_oauth2 extends MY_Controller {
                                   'appsecret_proof' => hash_hmac('sha256', 
                                                                  $access_info->access_token, 
                                                                  $this->config->item('facebook_client_secret')),
-                                  'fields' => 'id,first_name,last_name,email');
+                                  'fields' => 'id,first_name,last_name,email,name,name_format');
                     $url = 'https://graph.facebook.com/v2.4/me?' . http_build_query($data);
                     break;
             }
@@ -118,7 +118,13 @@ class Ctrl_oauth2 extends MY_Controller {
             if ($authority==="google") {
                 $user_info->first_name = $user_info->given_name;
                 $user_info->last_name = $user_info->family_name;
+                // Is this foolproof?:
+                $user_info->family_name_first = $user_info->name == $user_info->family_name . $user_info->given_name;
             }
+
+            if ($authority==='facebook')
+                // Is this foolproof?:
+                $user_info->family_name_first = $user_info->name_format=='{last}{first}';
 
             if (!isset($user_info->email))
                 $user_info->email = null;
@@ -129,6 +135,7 @@ class Ctrl_oauth2 extends MY_Controller {
                                                   $user_info->id,
                                                   $user_info->first_name,
                                                   $user_info->last_name,
+                                                  $user_info->family_name_first,
                                                   $user_info->email)) {
 
                 // VIEW:

@@ -64,7 +64,7 @@ $lang['this_user_facebook'] = 'Este usuario inicia sesión con Facebook';
 $lang['user_name_used'] = 'El nombre de usuario "%s" ya está en uso';
 
 $lang['account_created_subject']  = 'Cuenta Bible Online Learner creada';
-$lang['account_created_message1'] = "Querido/a %s %s,\n\n"  // First name, last name
+$lang['account_created_message1'] = "Querido/a %s,\n\n"  // First name, last name
                                     . "Usted tiene una cuenta en el sitio web Bible Online Learner.\n\n"
                                     . "Tu nombre de usuario es: %s\n" // Username
                                     . "Tu contraseña es: %s\n\n"; // Password
@@ -73,7 +73,7 @@ $lang['account_created_message2t'] = "Se le ha concedido privilegios de facilita
 $lang['account_created_message3'] = "Por favor de visitar %s, e inicie sesión;\n" // Site URL
                                     . "luego cambie su contraseña seleccionando 'Perfil' del menú 'Mi información'.\n";
 
-$lang['account_you_created_message1'] = "Querido/a %s %s,\n\n"  // First name, last name
+$lang['account_you_created_message1'] = "Querido/a %s,\n\n"  // First name, last name
                                     . "Usted ha creado una cuenta en el sitio web de Bible Online Learner.\n\n"
                                     . "Tu nombre de usuario es: %s\n" // Username
                                     . "Tu contraseña es: %s\n\n"; // Password
@@ -94,10 +94,10 @@ $lang['google_no_response_delete'] = 'Google no respondió a este pedido. Típic
 $lang['cannot_delete_self'] = 'No se puede eliminar a sí mismo';
 
 $lang['expiry_warning_subject'] = 'Cuenta inactiva en Bible Online Learner';
-$lang['expiry_warning_1_message'] = "Querido/a %s %s,\n\n"  // First name, last name
+$lang['expiry_warning_1_message'] = "Querido/a %s,\n\n"  // First name, last name
                                   . "Usted no ha usado su cuenta en %s por nueve meses.\n" // Site URL
                                   . "En otros nueve meses, tu cuenta será eliminada.\n\n";
-$lang['expiry_warning_2_message'] = "Querido/a %s %s,\n\n"  // First name, last name
+$lang['expiry_warning_2_message'] = "Querido/a %s,\n\n"  // First name, last name
                                   . "Usted no ha usado su cuenta en %s por 17 meses.\n" // Site URL
                                   . "En un mes más, su cuenta seráa eliminada.\n\n";
 

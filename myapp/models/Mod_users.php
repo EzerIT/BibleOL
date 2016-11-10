@@ -12,6 +12,12 @@ function teacher_cmp($t1, $t2) {
     return 0;
 }
 
+function make_full_name($u) {
+    if ($u->family_name_first)
+        return "$u->last_name$u->first_name"; // Note: No space
+    else
+        return "$u->first_name $u->last_name";
+}
 
 class Mod_users extends CI_Model {
     private $admin;
@@ -59,7 +65,7 @@ class Mod_users extends CI_Model {
     public function my_name() {
         if (!$this->me)
             return null;
-        return "{$this->me->first_name} {$this->me->last_name}";
+        return make_full_name($this->me);
     }
 
     public function get_me() {
@@ -169,6 +175,7 @@ class Mod_users extends CI_Model {
             $user->id = null; // Indicates new user
             $user->first_name = '';
             $user->last_name = '';
+            $user->family_name_first = 0;
             $user->username = '';
             $user->password = '';
             $user->isadmin = 0;
@@ -257,7 +264,7 @@ class Mod_users extends CI_Model {
 
 
     /// @return True if this is the first time this user logs in.
-    public function new_oauth2_user(string $authority, string $oauth2_user_id, string $first_name, string $last_name, string__OR__null $email) {
+    public function new_oauth2_user(string $authority, string $oauth2_user_id, string $first_name, string $last_name, boolean $family_name_first, string__OR__null $email) {
         switch ($authority) {
           case 'google':
                 $username = "ggl_$oauth2_user_id";
@@ -301,6 +308,7 @@ class Mod_users extends CI_Model {
             $user->id = null; // Indicates new user
             $user->first_name = $first_name;
             $user->last_name = $last_name;
+            $user->family_name_first = $family_name_first;
             $user->username = $username;
             $user->password = 'NONE';
             $user->isadmin = 0;
