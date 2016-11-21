@@ -203,13 +203,14 @@ class Ctrl_users extends MY_Controller {
             // Common validation rules
             $this->form_validation->set_rules('first_name', $this->lang->line('first_name'), 'trim|required|strip_tags');
             $this->form_validation->set_rules('last_name', $this->lang->line('last_name'), 'trim|required|strip_tags');
+            $this->form_validation->set_rules('family_name_first', '', '');
             $this->form_validation->set_rules('email', $this->lang->line('email'), 'trim|required|valid_email|strip_tags');
             $this->form_validation->set_rules('preflang', '', '');
             
             if ($this->form_validation->run()) {
                 $user_info->first_name = $this->input->post('first_name');
                 $user_info->last_name = $this->input->post('last_name');
-                $user_info->family_name_first = false;
+                $user_info->family_name_first = $this->input->post('family_name_first')==='yes';
                 $user_info->isadmin = false;
                 $user_info->isteacher = false;
                 $user_info->email = $this->input->post('email');
@@ -426,7 +427,6 @@ class Ctrl_users extends MY_Controller {
 
 
    public function profile() {
-       assert("TODO: Handle family_name_first");
        try {
            $this->mod_users->check_logged_in();
 
@@ -438,9 +438,11 @@ class Ctrl_users extends MY_Controller {
                $this->load->helper('form');
                $this->load->library('form_validation');
 
+               $this->form_validation->set_rules('family_name_first', '', '');
                $this->form_validation->set_rules('preflang', '', 'callback_always_true'); // At least one non-empty rule is required
 
                if ($this->form_validation->run()) {
+                   $user_info->family_name_first = $this->input->post('family_name_first')==='yes';
                    $user_info->preflang = $this->input->post('preflang');
                    $query = $this->mod_users->set_user($user_info, $pw);
                    redirect('/');
@@ -471,6 +473,7 @@ class Ctrl_users extends MY_Controller {
 
                $this->form_validation->set_rules('first_name', $this->lang->line('first_name'), 'trim|required|strip_tags');
                $this->form_validation->set_rules('last_name', $this->lang->line('last_name'), 'trim|required|strip_tags');
+               $this->form_validation->set_rules('family_name_first', '', '');
                $this->form_validation->set_rules('email', $this->lang->line('email'), 'trim|valid_email|strip_tags');
                $this->form_validation->set_rules('preflang', '', '');
 
