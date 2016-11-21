@@ -9,6 +9,7 @@ $lang['you_login_facebook'] = '您已經用Facebook登入';
 $lang['user_name'] = '使用者名稱';
 $lang['first_name'] = '名';
 $lang['last_name'] = '姓';
+$lang['chinese_name_order'] = '中式姓名次序';
 $lang['email'] = '電郵地址';
 $lang['password'] = '密碼';
 $lang['new_password'] = '新密碼';

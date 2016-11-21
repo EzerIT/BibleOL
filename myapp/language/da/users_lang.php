@@ -9,6 +9,7 @@ $lang['you_login_facebook'] = 'Du er logget ind med Facebook';
 $lang['user_name'] = 'Brugernavn';
 $lang['first_name'] = 'Fornavn';
 $lang['last_name'] = 'Efternavn';
+$lang['chinese_name_order'] = 'Kinesisk rækkefølge af navne';
 $lang['email'] = 'Email';
 $lang['password'] = 'Adgangskode';
 $lang['new_password'] = 'Ny adgangskode';

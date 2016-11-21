@@ -9,6 +9,7 @@ $lang['you_login_facebook'] = 'You have logged in with Facebook';
 $lang['user_name'] = 'User name';
 $lang['first_name'] = 'First name';
 $lang['last_name'] = 'Last name';
+$lang['chinese_name_order'] = 'Chinese name order';
 $lang['email'] = 'Email';
 $lang['password'] = 'Password';
 $lang['new_password'] = 'New password';
