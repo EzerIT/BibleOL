@@ -235,6 +235,36 @@
         },
         "verse": {
             "_label": "Verse %s"
+        },
+        "reference": {
+            "_label": "%s %d:%d",
+            "Matthew": "Mt",
+            "Mark": "Mk",
+            "Luke": "Lk",
+            "John": "Jn",
+            "Acts": "Acts",
+            "Romans": "Rom",
+            "I_Corinthians": "1 Cor",
+            "II_Corinthians": "2 Cor",
+            "Galatians": "Gal",
+            "Ephesians": "Eph",
+            "Philippians": "Phil",
+            "Colossians": "Col",
+            "I_Thessalonians": "1 Thess",
+            "II_Thessalonians": "2 Thess",
+            "I_Timothy": "1 Tim",
+            "II_Timothy": "2 Tim",
+            "Titus": "Titus",
+            "Philemon": "Philemon",
+            "Hebrews": "Heb",
+            "James": "Jas",
+            "I_Peter": "1 Pet",
+            "II_Peter": "2 Pet",
+            "I_John": "1 Jn",
+            "II_John": "2 Jn",
+            "III_John": "3 Jn",
+            "Jude": "Jude",
+            "Revelation": "Rev"
         }
     }
 }

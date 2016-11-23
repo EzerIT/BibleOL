@@ -353,7 +353,7 @@ class Migration_Translatedb extends CI_Migration {
         
         while (($line = fgets($hand)) !== false) {
             $fields = explode("\t",substr($line,0,-1));
-            $allheb[$fields[0].'+'.$fields[1].'+'.$fields[2]] = $fields[3];
+            $allheb[$fields[0].'+'.$fields[1].'+'.$fields[2]] = array($fields[3],$fields[4],$fields[5]);
         }
 
 
@@ -364,7 +364,9 @@ class Migration_Translatedb extends CI_Migration {
                                         'tally' => array('type'=>'INT'),
                                         'vocalized_lexeme_utf8' => array('type'=>'TINYTEXT'),
                                         'sortorder' => array('type'=>'TINYTEXT'),
-                                        'firstref' => array('type'=>'TINYTEXT')
+                                        'firstbook' => array('type'=>'TINYTEXT'),
+                                        'firstchapter' => array('type'=>'INT'),
+                                        'firstverse' => array('type'=>'INT')
                                       ));
         $this->dbforge->add_key('id', TRUE);
         $this->dbforge->add_key('lex');
@@ -428,6 +430,7 @@ class Migration_Translatedb extends CI_Migration {
 
             $allheb_key = "$row_en->lex+$row_en->vs+$row_en->language";
             assert(isset($allheb[$allheb_key]));
+            list($book,$chapter,$verse) = $allheb[$allheb_key];
             
             $toinsert_heb[] = array('id' => $row_en->id,
                                     'lex' => $row_en->lex,
@@ -436,7 +439,9 @@ class Migration_Translatedb extends CI_Migration {
                                     'tally' => $row_en->tally,
                                     'vocalized_lexeme_utf8' => $row_en->vocalized_lexeme_utf8,
                                     'sortorder' => $row_en->sortorder,
-                                    'firstref' => $allheb[$allheb_key]);
+                                    'firstbook' => $book,
+                                    'firstchapter' => $chapter,
+                                    'firstverse' => $verse);
             $toinsert_heb_en[] = array('lex_id' => $row_en->id,
                                        'gloss' => $row_en->english);
             $toinsert_heb_de[] = array('lex_id' => $row_de->id,
@@ -463,7 +468,9 @@ class Migration_Translatedb extends CI_Migration {
                                         'lemma' => array('type'=>'VARCHAR(50)'),
                                         'tally' => array('type'=>'INT'),
                                         'sortorder' => array('type'=>'TINYTEXT'),
-                                        'firstref' => array('type'=>'TINYTEXT')
+                                        'firstbook' => array('type'=>'TINYTEXT'),
+                                        'firstchapter' => array('type'=>'INT'),
+                                        'firstverse' => array('type'=>'INT')
                                       ));
         $this->dbforge->add_key('id', TRUE);
         $this->dbforge->add_key('strongs');
@@ -481,9 +488,11 @@ class Migration_Translatedb extends CI_Migration {
             $toinsert_greek[] = array('strongs' => $fields[0],
                                       'strongs_unreliable' => $fields[1],
                                       'lemma' => $fields[2],
-                                      'tally' => $fields[5],
+                                      'tally' => $fields[7],
                                       'sortorder' => $fields[3],
-                                      'firstref' => $fields[4]);
+                                      'firstbook' => $fields[4],
+                                      'firstchapter' => $fields[5],
+                                      'firstverse' => $fields[6]);
         }
  
         echo "Inserting lexicon_greek\n";
@@ -530,9 +539,9 @@ class Migration_Translatedb extends CI_Migration {
     public function up() {
         // $this->add_translator();
 
-        $this->add_if_translation();
+        //$this->add_if_translation();
 
-        //$this->add_grammar_translation();
+        $this->add_grammar_translation();
         //$this->add_hebrew_lexicons();
         //$this->add_greek_lexicon();
         die;

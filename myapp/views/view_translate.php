@@ -233,7 +233,7 @@ else
 <form action="<?= site_url(($editing=='interface'
                             ? 'translate/update_if?' 
                             : ($editing=='grammar' ? 'translate/update_grammar?'
-                                : 'translate/update_lexicon' )). http_build_query($get_parms)) ?>" method="post">
+                                : 'translate/update_lexicon?' )). http_build_query($get_parms)) ?>" method="post">
     
 <div class="table-responsive">
 <table id="trans_table" class="type2 table table-striped">
@@ -323,12 +323,20 @@ else
           <?php if ($get_parms['src_lang']=='greek'): ?>
             <td class="leftalign"><?= $line->strongs ?><?= $line->strongs_unreliable ? '?' : '' ?></td>
             <td class="leftalign"><?= $line->lexeme ?></td>
-            <td class="leftalign"><?= $line->firstref ?></td>
+            <td class="leftalign">
+                 <a target="_blank" href="<?=
+                    site_url(sprintf("/text/show_text/nestle1904/%s/%d/%d",$line->firstbook,$line->firstchapter,$line->firstverse))
+                  ?>"><?= sprintf($books['_label'], $books[$line->firstbook],$line->firstchapter,$line->firstverse) ?></a>
+            </td>
           <?php else: ?>
             <td class="leftalign"><?= htmlspecialchars($line->lex) ?></td>
             <td class="heb-default rtl"><?= $line->lexeme ?></td>
-            <td class="leftalign"><?= $line->vs ?></td>
-            <td class="leftalign"><?= $line->firstref ?></td>
+            <td class="leftalign"><?= stripSortIndex($stems[$line->vs]) ?></td>
+            <td class="leftalign">
+                 <a target="_blank" href="<?=
+                    site_url(sprintf("/text/show_text/ETCBC4/%s/%d/%d",$line->firstbook,$line->firstchapter,$line->firstverse))
+                  ?>"><?= sprintf($books['_label'], $books[$line->firstbook],$line->firstchapter,$line->firstverse) ?></a>
+            </td>
           <?php endif;  ?>
 
           <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>

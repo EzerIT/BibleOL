@@ -270,7 +270,7 @@ class Mod_translate extends CI_Model {
         switch ($src_lang) {
           case 'heb':
           case 'aram':
-                $query = $this->db->select('lex,vs,vocalized_lexeme_utf8 lexeme,firstref,s.gloss text_show, e.gloss text_edit,c.id lex_id')
+                $query = $this->db->select('lex,vs,vocalized_lexeme_utf8 lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,c.id lex_id')
                     ->from('lexicon_heb c')
                     ->join("lexicon_heb_$lang_show s", 's.lex_id=c.id','left')
                     ->join("lexicon_heb_$lang_edit e", 'e.lex_id=c.id','left')
@@ -282,7 +282,7 @@ class Mod_translate extends CI_Model {
                 break;
 
           case 'greek':
-                $query = $this->db->select('strongs,strongs_unreliable,lemma lexeme,firstref,s.gloss text_show, e.gloss text_edit,c.id lex_id')
+                $query = $this->db->select('strongs,strongs_unreliable,lemma lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,c.id lex_id')
                     ->from('lexicon_greek c')
                     ->join("lexicon_greek_$lang_show s", 's.lex_id=c.id','left')
                     ->join("lexicon_greek_$lang_edit e", 'e.lex_id=c.id','left')
@@ -296,11 +296,27 @@ class Mod_translate extends CI_Model {
         return $query->result();
     }
 
+    public function get_localized_ETCBC4() {
+        $this->load->library('db_config');
+
+        $this->db_config->init_config("ETCBC4","ETCBC4", $this->language_short, true);
+        $l10n = json_decode($this->db_config->l10n_json,true);
+        return array($l10n['emdrostype']['verbal_stem_t'], $l10n['universe']['reference']);
+    }
+
+    public function get_localized_nestle1904() {
+        $this->load->library('db_config');
+
+        $this->db_config->init_config("nestle1904","nestle1904", $this->language_short, true);
+        $l10n = json_decode($this->db_config->l10n_json,true);
+        return array(array(), $l10n['universe']['reference']);
+    }
+
     public function get_frequent_glosses(string $src_lang, string $lang_edit, string $lang_show, integer $gloss_count) {
         switch ($src_lang) {
           case 'heb':
           case 'aram':
-                $query = $this->db->select('lex,vs,vocalized_lexeme_utf8 lexeme,firstref,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
+                $query = $this->db->select('lex,vs,vocalized_lexeme_utf8 lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
                     ->from('lexicon_heb c')
                     ->join("lexicon_heb_$lang_show s", 's.lex_id=c.id','left')
                     ->join("lexicon_heb_$lang_edit e", 'e.lex_id=c.id','left')
@@ -325,7 +341,7 @@ class Mod_translate extends CI_Model {
                 break;
 
           case 'greek':
-                $query = $this->db->select('strongs,strongs_unreliable,lemma lexeme,firstref,s.gloss text_show, e.gloss text_edit,c.id lex_id')
+                $query = $this->db->select('strongs,strongs_unreliable,lemma lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,c.id lex_id')
                     ->from('lexicon_greek c')
                     ->join("lexicon_greek_$lang_show s", 's.lex_id=c.id','left')
                     ->join("lexicon_greek_$lang_edit e", 'e.lex_id=c.id','left')

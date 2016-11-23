@@ -1,4 +1,13 @@
 <?php
+function stripSortIndex(string $s) {
+    return (strlen($s)>0 && substr($s,0,1)==='#')
+              ? substr(strstr($s," "),1)
+              : $s;
+}
+
+
+
+
 class Ctrl_translate extends MY_Controller {
     public $gloss_count = 100;
 
@@ -264,14 +273,17 @@ class Ctrl_translate extends MY_Controller {
             switch ($src_lang) {
               case 'heb':
                     $buttons = $this->mod_urls->get_heb_buttons_long();
+                    list($stems,$books) = $this->mod_translate->get_localized_ETCBC4();
                     break;
 
               case 'aram':
                     $buttons = $this->mod_urls->get_aram_buttons_long();
+                    list($stems,$books) = $this->mod_translate->get_localized_ETCBC4();
                     break;
 
               case 'greek':
                     $buttons = $this->mod_urls->get_greek_buttons_long();
+                    list($stems,$books) = $this->mod_translate->get_localized_nestle1904();
                     break;
                     
               default:
@@ -302,7 +314,9 @@ class Ctrl_translate extends MY_Controller {
                                              array('editing' => 'lexicon',
                                                    'get_parms' => $get_parms,
                                                    'lang_list' => $dst_langs,
-                                                   'alllines' => $words),
+                                                   'alllines' => $words,
+                                                   'stems' => $stems,
+                                                   'books' => $books),
                                              true);
 
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('translate_lex'),

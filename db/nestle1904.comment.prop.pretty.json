@@ -235,6 +235,36 @@
         },
         "verse": {
             "_label": ""
+        },
+        "reference": {
+            "_label": "How to format a reference",
+            "Matthew": "Book abbreviation",
+            "Mark": "Book abbreviation",
+            "Luke": "Book abbreviation",
+            "John": "Book abbreviation",
+            "Acts": "Book abbreviation",
+            "Romans": "Book abbreviation",
+            "I_Corinthians": "Book abbreviation",
+            "II_Corinthians": "Book abbreviation",
+            "Galatians": "Book abbreviation",
+            "Ephesians": "Book abbreviation",
+            "Philippians": "Book abbreviation",
+            "Colossians": "Book abbreviation",
+            "I_Thessalonians": "Book abbreviation",
+            "II_Thessalonians": "Book abbreviation",
+            "I_Timothy": "Book abbreviation",
+            "II_Timothy": "Book abbreviation",
+            "Titus": "Book abbreviation",
+            "Philemon": "Book abbreviation",
+            "Hebrews": "Book abbreviation",
+            "James": "Book abbreviation",
+            "I_Peter": "Book abbreviation",
+            "II_Peter": "Book abbreviation",
+            "I_John": "Book abbreviation",
+            "II_John": "Book abbreviation",
+            "III_John": "Book abbreviation",
+            "Jude": "Book abbreviation",
+            "Revelation": "Book abbreviation"
         }
     }
 }
