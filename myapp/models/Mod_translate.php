@@ -357,6 +357,17 @@ class Mod_translate extends CI_Model {
         
     }
 
+    function gram_db2prop(string $dest) {
+        $this->load->helper('file');
+        $query = $this->db->get('db_localize');
+
+        foreach ($query->result() as $row) {
+            if (!write_file("$dest/$row->db.$row->lang.prop.pretty.json",
+                            json_encode(json_decode($row->json), JSON_PRETTY_PRINT)))
+                die("Cannot write to file \"$dest/$row->db.$row->lang.prop.pretty.json\"");
+        }
+    }
+    
     function gram_prop2db() {
         $this->load->helper('directory');
         $d = directory_map('db/property_files', 1); // A value of 2 allows us to recognize empty directories
@@ -364,22 +375,34 @@ class Mod_translate extends CI_Model {
         foreach ($d as $file) {
             if (preg_match('/(.*)\.(.*)\.prop.pretty.json$/', $file, $matches)) {
                 list($filename,$db,$lang) = $matches;
-                echo "Handling file $filename\n";
+                echo "Handling file $filename - ";
                 $input = file_get_contents("db/property_files/$filename");
                 $props = json_decode($input);
                 if (is_null($props))
                     die("Error in JSON input\n");
 
 
-                if ($this->db->from('db_localize')->where('db',$db)->where('lang',$lang)->count_all_results() == 0)
+                $query = $this->db->where('db',$db)->where('lang',$lang)->get('db_localize');
+
+                if ($query->num_rows() == 0) {
                     // A record does not exist, insert one.
                     $this->db->insert('db_localize',array('db' => $db,
                                                           'lang' => $lang,
                                                           'json' => json_encode($props)));
-                else
-                    // A record does exist, update it.
-                    $this->db->where('db',$db)->where('lang',$lang)
-                        ->update('db_localize',array('json' => json_encode($props)));
+                    echo "inserted +++++\n";
+                }
+                else {
+                    // A record exists, update it if it changes
+                    $encoded_json = json_encode($props);
+                        
+                    $row = $query->row();
+                    if ($row->json != $encoded_json) {
+                        $this->db->where('id',$row->id)->update('db_localize',array('json' => $encoded_json));
+                        echo "updated +++++\n";
+                    }
+                    else
+                        echo "unchanged\n";
+                }
             }
         }
     }

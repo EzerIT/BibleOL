@@ -11,7 +11,7 @@ function stripSortIndex(string $s) {
 class Ctrl_translate extends MY_Controller {
     public $gloss_count = 100;
 
-    
+
     public function __construct() {
         parent::__construct();
         $this->lang->load('translate', $this->language);
@@ -29,10 +29,10 @@ class Ctrl_translate extends MY_Controller {
 
             $textgroup_list = $this->mod_translate->get_textgroup_list();
             sort($textgroup_list);
-            
+
             $lang_list = $this->mod_translate->get_all_if_languages();
             asort($lang_list);
-            
+
             $lang_show = isset($_GET['lang_show']) ? $_GET['lang_show'] : 'en';
             if (!array_key_exists($lang_show, $lang_list))
                 $lang_show = 'en';
@@ -60,7 +60,7 @@ class Ctrl_translate extends MY_Controller {
             else
                 $orderby = 'symbolic_name';
 
-            
+
             $sortorder = isset($_GET['sortorder']) ? $_GET['sortorder'] : 'asc';
             if ($sortorder!='desc' && $sortorder!='asc')
                 $sortorder = 'asc';
@@ -69,7 +69,7 @@ class Ctrl_translate extends MY_Controller {
 
 
             $untranslated = $this->mod_translate->get_if_untranslated($lang_edit);
-            
+
             // VIEW:
             $this->load->view('view_top1', array('title' => 'Translate User Interface'));
             $this->load->view('view_top2');
@@ -135,7 +135,7 @@ class Ctrl_translate extends MY_Controller {
 
             $lang_list = $this->mod_translate->get_all_if_languages();
             asort($lang_list);
-            
+
             $db = isset($_GET['group']) ? $_GET['group'] : 'ETCBC4';
             if (!in_array($db, $db_list))
                 $lang_show = 'ETCBC4';
@@ -245,7 +245,7 @@ class Ctrl_translate extends MY_Controller {
             $this->error_view($e->getMessage(), $this->lang->line('translate_lex'));
         }
     }
-    
+
     public function edit_lex() {
         $this->load->model('mod_urls');
         try {
@@ -261,7 +261,7 @@ class Ctrl_translate extends MY_Controller {
 
             $lexicon_lang_list = $this->mod_translate->get_all_lexicon_langs();
             $dst_langs = $lexicon_lang_list[$src_lang];
-            
+
             $lang_show = isset($_GET['lang_show']) ? $_GET['lang_show'] : 'en';
             if (!array_key_exists($lang_show, $dst_langs))
                 $lang_show = 'en';
@@ -285,7 +285,7 @@ class Ctrl_translate extends MY_Controller {
                     $buttons = $this->mod_urls->get_greek_buttons_long();
                     list($stems,$books) = $this->mod_translate->get_localized_nestle1904();
                     break;
-                    
+
               default:
                     throw new DataException($this->lang->line('illegal_lang_code'));
             }
@@ -335,16 +335,19 @@ class Ctrl_translate extends MY_Controller {
             die;
         }
 
-        $this->mod_translate->gram_db2prop();     
+		if ($_SERVER['argc']!=4)
+			die("Usage: php index.php translate gram_db2prop <destination directory>\n");
+
+        $this->mod_translate->gram_db2prop($_SERVER['argv'][3]);
     }
-    
+
     function gram_prop2db() {
         if (!is_cli()) {
             echo '<pre>This command can only be run from the command line</pre>';
             die;
         }
 
-        $this->mod_translate->gram_prop2db();     
+        $this->mod_translate->gram_prop2db();
     }
-    
+
   }
