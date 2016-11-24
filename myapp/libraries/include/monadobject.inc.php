@@ -89,6 +89,7 @@ class SingleMonadObject extends MonadObject {
                                    ///  This is typically a space character.
     public $bcv = array();        ///< An array containing book, chapter, and verse information. Index will be the same
                                    ///  as in DatabaseInfo::universeHierarchy.
+    public $bcv_loc;              ///< Localized Bible reference
     public $sameAsNext = array(); ///< An array of booleans indicating if this monad belongs to the same book, chapter,
                                    ///  or verse, respectively as the previous monad.
     public $sameAsPrev = array(); ///< An array of booleans indicating if this monad belongs to the same book, chapter,
@@ -112,6 +113,13 @@ class SingleMonadObject extends MonadObject {
     /// @param $x The book name, chapter number, or verse number.
     public function add_bcv(string__OR__integer $x) {
         $this->bcv[] = $x;
+        // This only works for Bible references:
+        if (count($this->bcv)==3) {
+            // We now have a complete Bible reference. Add localisation.
+            $CI =& get_instance();
+            $loc = json_decode($CI->db_config->l10n_json,true);
+            $this->bcv_loc = sprintf($loc['universe']['reference']['_label'], $loc['universe']['reference'][$this->bcv[0]],$this->bcv[1],$this->bcv[2]);
+        }
     }
 
     /// Fetches book name, chapter number, and verse number for this word.

@@ -100,7 +100,7 @@ class PanelQuestion {
         // We base the location on the first monad in the sentence
         var smo : SingleMonadObject = dict.getSingleMonadObject(getFirst(this.sentence));
         var location_realname = ''; // Unlocalized
-        this.location = ''; // Localized
+        this.location = smo.bcv_loc; // Localized
         for (var unix in configuration.universeHierarchy) {
             var unixi : number = +unix;
             if (isNaN(unixi)) continue; // Not numeric
@@ -110,15 +110,12 @@ class PanelQuestion {
             // TODO: This only works for Bible references
             switch (unixi) {
             case 0:
-                this.location += l10n.universe[uniname][smo.bcv[unixi]] + ' ';
                 location_realname += smo.bcv[unixi] + ', ';
                 break;
             case 2:
-                this.location += ':';
                 location_realname += ', ';
                 // Fall through
             case 1:
-                this.location += smo.bcv[unixi];
                 location_realname += smo.bcv[unixi];
                 break;
             }

@@ -65,6 +65,7 @@ interface SingleMonadObject extends MonadObject {
     text : string;  // Not used, but set by server
     suffix : string;  // Not used, but set by server
     bcv : string[];
+    bcv_loc : string;
     sameAsNext : boolean[];
     sameAsPrev : boolean[];
     pics : number[];
