@@ -250,6 +250,7 @@ else
 
           case 'grammar':
               echo '<th>Symbolic name</th>';
+              echo '<th>Comment</th>';
               echo "<th>$language_selector</th>";
               echo "<th>$long_target_lang</th>";
               echo '<th>Modified?</th>';
@@ -283,7 +284,7 @@ else
       <?php switch ($editing):
         case 'interface': ?>
           <td class="leftalign"><?= $line->symbolic_name ?></td>
-          <td class="leftalign"><?= $line->comment ?></td>
+        <td class="leftalign"><?= htmlspecialchars($line->comment) ?></td>
           <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>
 
           <td class="leftalign">
@@ -303,6 +304,8 @@ else
         
         <?php case 'grammar': ?>
           <td class="leftalign"><?= $line->symbolic_name ?></td>
+          <td class="leftalign"><?= htmlspecialchars(substr($line->comment,0,2)=="f:" ?
+                                                     substr(strstr($line->comment," "),1) : $line->comment) ?></td>
           <td class="leftalign"><?= htmlspecialchars($line->text_show) ?></td>
 
           <td class="leftalign">
