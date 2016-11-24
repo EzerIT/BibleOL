@@ -332,18 +332,24 @@ class Migration_Translatedb extends CI_Migration {
         $this->dbforge->add_key('id', TRUE);
         $this->dbforge->create_table('db_localize');
 
-        
-        $d = directory_map('db', 1); // A value of 2 allows us to recognize empty directories
+        $this->load->model('mod_translate');
 
-        foreach ($d as $file) {
-            if (preg_match('/(.*)\.(.*)\.prop.json$/', $file, $matches)) {
-                list($filename,$db,$lang) = $matches;
-                echo "Handling file $filename\n";
-                $this->db->insert('db_localize',array('db' => $db,
-                                                      'lang' => $lang,
-                                                      'json' => file_get_contents('db'.DIRECTORY_SEPARATOR.$filename)));
-            }
-        }
+        $this->mod_translate->gram_prop2db();     
+
+//        $d = directory_map('db/property_files', 1); // A value of 2 allows us to recognize empty directories
+// 
+//        foreach ($d as $file) {
+//            if (preg_match('/(.*)\.(.*)\.prop.pretty.json$/', $file, $matches)) {
+//                list($filename,$db,$lang) = $matches;
+//                echo "Handling file $filename\n";
+//                $input = file_get_contents("db/property_files/$filename");
+//                $props = json_decode($input);
+//                assert(!is_null($props));
+//                $this->db->insert('db_localize',array('db' => $db,
+//                                                      'lang' => $lang,
+//                                                      'json' => json_encode($props)));
+//            }
+//        }
     }
 
     private function add_hebrew_lexicons() {

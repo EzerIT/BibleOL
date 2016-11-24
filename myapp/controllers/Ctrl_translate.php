@@ -329,5 +329,22 @@ class Ctrl_translate extends MY_Controller {
         }
     }
 
+    function gram_db2prop() {
+        if (!is_cli()) {
+            echo '<pre>This command can only be run from the command line</pre>';
+            die;
+        }
+
+        $this->mod_translate->gram_db2prop();     
+    }
+    
+    function gram_prop2db() {
+        if (!is_cli()) {
+            echo '<pre>This command can only be run from the command line</pre>';
+            die;
+        }
+
+        $this->mod_translate->gram_prop2db();     
+    }
     
   }

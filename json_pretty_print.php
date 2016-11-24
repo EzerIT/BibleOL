@@ -26,7 +26,8 @@ $filename = $_SERVER['argc']===3 ? $_SERVER['argv'][2] : 'php://stdin';
 $input = @file_get_contents($filename) or die ("Failed opening file {$filename}:\nError was '$php_errormsg'\n");
 
 $props = json_decode($input);
-
+if (is_null($props))
+    die("Error in JSON input\n");
 
 if ($_SERVER['argv'][1]==='-p')
     print(json_encode($props, JSON_PRETTY_PRINT));

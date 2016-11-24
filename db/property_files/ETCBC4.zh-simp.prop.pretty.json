@@ -1,5 +1,5 @@
 {
-    "dbdescription": "希伯来圣经（ETCBC4音译版，旧约）",
+    "dbdescription": "希伯来圣经（ETCBC4，旧约）",
     "dbcopyright": "This database is Copyright \u00a9 2015 by Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>This work is licensed under a <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (The database itself can be found through this persistent identifier: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
     "emdrosobject": {
         "word": {
@@ -9,20 +9,25 @@
             "english": "英文",
             "german": "德文",
             "glossurl": "链结",
-            "g_nme_translit": "名词后缀",
-            "g_pfm_translit": "前缀",
-            "g_prs_translit": "代词后缀",
-            "g_uvf_translit": "简单后缀",
-            "g_vbe_translit": "动词尾",
-            "g_vbs_translit": "语干元素",
-            "text_utf8": "希伯来经文词语",
-            "text_translit": "经文词语",
-            "text_nopunct_translit": "经文词语（无标点）",
-            "text_cons_utf8": "经文词语，只显示辅音",
-            "text_nocant_utf8": "经文词语（无读音符号）",
-            "vocalized_lexeme_cons_utf8": "基本词形，只显示辅音",
-            "vocalized_lexeme_utf8": "基本词形（希伯来文）",
-            "vocalized_lexeme_translit": "基本词形",
+            "g_nme_utf8": "名词后缀",
+            "g_nme_cons_utf8": "名词后缀字母",
+            "g_pfm_utf8": "前缀",
+            "g_pfm_cons_utf8": "前缀字母",
+            "g_prs_utf8": "代词后缀",
+            "g_prs_cons_utf8": " 代词后缀字母",
+            "g_uvf_utf8": "简单后缀",
+            "g_uvf_cons_utf8": "简单后缀字母",
+            "g_vbe_utf8": "动词尾",
+            "g_vbe_cons_utf8": "动词尾字母",
+            "g_vbs_utf8": "语干元素",
+            "g_vbs_cons_utf8": "语干元素字母",
+            "text_utf8": "经文词语",
+            "text_translit": "经文词语音译",
+            "text_cons_utf8": "经文词语字母",
+            "text_nocant_utf8": "经文词语，无读音符号",
+            "vocalized_lexeme_cons_utf8": "基本词形字母",
+            "vocalized_lexeme_utf8": "基本词形",
+            "vocalized_lexeme_translit": "基本词形音译",
             "language": "语言",
             "ls": "词细类",
             "vs": "语干",
@@ -37,7 +42,8 @@
             "suffix_number": "后缀数",
             "suffix_person": "后缀人称",
             "verb_class": "根类",
-            "g_qere_translit": "读为"
+            "g_qere_utf8": "读为",
+            "g_qere_translit": "读为（音译）"
         },
         "phrase_atom": {
             "_objname": "词组半截",
@@ -428,9 +434,7 @@
     },
     "grammarfeature": {
         "word": {
-            "text_utf8": "希伯来经文词语",
-            "vocalized_lexeme_utf8": "基本词形（希伯来文字母）",
-            "vocalized_lexeme_translit": "基本词形（音译）"
+            "text_translit": "音译"
         }
     },
     "grammarmetafeature": {
@@ -528,6 +532,48 @@
         },
         "verse": {
             "_label": "%s节"
+        },
+        "reference": {
+            "_label": "%s %d:%d",
+            "Genesis": "创世记",
+            "Exodus": "出埃及记",
+            "Leviticus": "利未记",
+            "Numeri": "民数记",
+            "Deuteronomium": "申命记",
+            "Josua": "约书亚记",
+            "Judices": "士师记",
+            "Ruth": "路得记",
+            "Samuel_I": "撒母耳记上",
+            "Samuel_II": "撒母耳记下",
+            "Reges_I": "列王纪上",
+            "Reges_II": "列王纪下",
+            "Chronica_I": "歷代志上",
+            "Chronica_II": "歷代志下",
+            "Esra": "以斯拉记",
+            "Nehemia": "尼希米记",
+            "Esther": "以斯帖记",
+            "Iob": "约伯记",
+            "Psalmi": "诗篇",
+            "Proverbia": "箴言",
+            "Ecclesiastes": "传道书",
+            "Canticum": "雅歌",
+            "Jesaia": "以赛亚书",
+            "Jeremia": "耶利米书",
+            "Threni": "耶利米哀歌",
+            "Ezechiel": "以西结书",
+            "Daniel": "但以理书",
+            "Hosea": "何西阿书",
+            "Joel": "约珥书",
+            "Amos": "阿摩司书",
+            "Obadia": "俄巴底亚书",
+            "Jona": "约拿书",
+            "Micha": "弥迦书",
+            "Nahum": "那鸿书",
+            "Habakuk": "哈巴谷书",
+            "Zephania": "西番雅书",
+            "Haggai": "哈该书",
+            "Sacharia": "撒迦利亚书",
+            "Maleachi": "玛拉基书"
         }
     }
 }

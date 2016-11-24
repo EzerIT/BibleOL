@@ -235,6 +235,36 @@
         },
         "verse": {
             "_label": "%s節"
+        },
+        "reference": {
+            "_label": "%s %d,%d",
+            "Matthew": "馬太福音",
+            "Mark": "馬可福音",
+            "Luke": "路加福音",
+            "John": "約翰福音",
+            "Acts": "使徒行傳",
+            "Romans": "羅馬書",
+            "I_Corinthians": "哥林多前書",
+            "II_Corinthians": "哥林多後書",
+            "Galatians": "加拉太書",
+            "Ephesians": "以弗所書",
+            "Philippians": "腓立比書",
+            "Colossians": "歌羅西書",
+            "I_Thessalonians": "帖撒羅尼迦前書",
+            "II_Thessalonians": "帖撒羅尼迦後書",
+            "I_Timothy": "提摩太前書",
+            "II_Timothy": "提摩太後書",
+            "Titus": "提多書",
+            "Philemon": "腓利門書",
+            "Hebrews": "希伯來書",
+            "James": "雅各書",
+            "I_Peter": "彼得前書",
+            "II_Peter": "彼得後書",
+            "I_John": "約翰一書",
+            "II_John": "約翰二書",
+            "III_John": "約翰三書",
+            "Jude": "猶大書",
+            "Revelation": "啟示錄"
         }
     }
 }

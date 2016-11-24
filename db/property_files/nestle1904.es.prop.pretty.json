@@ -231,10 +231,40 @@
             "Revelation": "Apocalipsis"
         },
         "chapter": {
-            "_label": "Capítulos %s"
+            "_label": "Capítulo %s"
         },
         "verse": {
-            "_label": "Versículos %s"
+            "_label": "Versículo %s"
+        },
+        "reference": {
+            "_label": "%s %d,%d",
+            "Matthew": "Mat",
+            "Mark": "Mar",
+            "Luke": "Luc",
+            "John": "Juan",
+            "Acts": "Hech",
+            "Romans": "Rom",
+            "I_Corinthians": "1 Cor",
+            "II_Corinthians": "2 Cor",
+            "Galatians": "Gál",
+            "Ephesians": "Efes",
+            "Philippians": "Fil",
+            "Colossians": "Col",
+            "I_Thessalonians": "1 Tes",
+            "II_Thessalonians": "2 Tes",
+            "I_Timothy": "1 Tim",
+            "II_Timothy": "2 Tim",
+            "Titus": "Tit",
+            "Philemon": "Filem",
+            "Hebrews": "Heb",
+            "James": "Sant",
+            "I_Peter": "1 Pe",
+            "II_Peter": "2 Pe",
+            "I_John": "1 Jn",
+            "II_John": "2 Jn",
+            "III_John": "3 Jn",
+            "Jude": "Jud",
+            "Revelation": "Apoc"
         }
     }
 }
