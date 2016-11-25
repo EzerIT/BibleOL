@@ -89,4 +89,3 @@ $lang['mql_compiler_error_colon'] = 'MQL-oversætterfejl:';
 $lang['cannot_write_to_quiz_file'] = 'Kan ikke skrive øvelsesfil';
 $lang['no_text_found'] = 'Ingen tekst fundet';
 
-$lang['close_button'] = 'Luk';

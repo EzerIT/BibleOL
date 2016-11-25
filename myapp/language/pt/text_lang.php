@@ -85,4 +85,3 @@ $lang['corpus_copyright'] =
 
 $lang['clear_grammar'] = 'Limpar gramática';
 $lang['import_button'] = 'Importar';
-$lang['close_button'] = 'Fechar';

@@ -88,4 +88,3 @@ $lang['mql_compiler_error_colon'] = 'Error de compilador de MQL:';
 $lang['cannot_write_to_quiz_file'] = 'No se puede escribir en el archivo de examen';
 $lang['no_text_found'] = 'No hay texto encontrado';
 
-$lang['close_button'] = 'Cerrar';

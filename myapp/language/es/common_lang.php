@@ -30,3 +30,4 @@ $lang['language'] = 'Lenguaje';
 
 $lang['swipe'] = 'Si la pantalla no es lo suficiente amplia como para mostrar una columna completa en la tabla, puedes deslizar
                   cada columna izquierda y derecha.';
+$lang['close_button'] = 'Cerrar';

@@ -9,24 +9,33 @@ class Mod_translate extends CI_Model {
     private $grammar_comment_ordered;
     private $grammar_db;
     
-    private $if_langs = array('en' => 'English',
-                              'da' => 'Danish',
-                              'pt' => 'Portuguese',
-                              'es' => 'Spanish',
-                              'zh-simp' => 'Chinese (simplified)',
-                              'zh-trad' => 'Chinese (traditional)');
+    private $if_langs;
+    private $lexicon_langs;
 
     private $dbs = array('ETCBC4',
                          'ETCBC4-translit',
                          'nestle1904');
 
-    private $lexicon_langs = array('heb' => array('en' => 'English', 'de' => 'German'),
-                                   'aram' => array('en' => 'English', 'de' => 'German'),
-                                   'greek' => array('en' => 'English'));
     
     public function __construct() {
         parent::__construct();
         $this->load->database();
+
+        $this->lang->load('users', $this->language);
+
+
+        $this->if_langs = array('en' => $this->lang->line('english'),
+                                'da' => $this->lang->line('danish'),
+                                'pt' => $this->lang->line('portuguese'),
+                                'es' => $this->lang->line('spanish'),
+                                'zh-simp' => $this->lang->line('simp_chinese'),
+                                'zh-trad' => $this->lang->line('trad_chinese'));
+
+        $this->lexicon_langs = array('heb' => array('en' => $this->lang->line('english'),
+                                                    'de' => $this->lang->line('german')),
+                                     'aram' => array('en' => $this->lang->line('english'),
+                                                     'de' => $this->lang->line('german')),
+                                     'greek' => array('en' => $this->lang->line('english')));
     }
 
     public function get_all_if_languages() {

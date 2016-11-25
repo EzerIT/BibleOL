@@ -140,7 +140,7 @@ else
 </script>
 
 
-<p id="targetlang"><strong>Target language:</strong>
+<p id="targetlang"><strong><?= $this->lang->line('target_language') ?></strong>
 
 <select id="langeditsel">
   <?php foreach ($lang_list as $lshort => $llong): ?>
@@ -150,7 +150,7 @@ else
 </p>
 
 <?php if ($editing!='lexicon'): ?>
-    <p><strong><?= $editing=='interface' ? 'Text group' : 'Text database' ?>:</strong>
+    <p><strong><?= $editing=='interface' ? $this->lang->line('text_group') : $this->lang->line('text_database') ?>:</strong>
   
     <select id="groupsel">
       <?php foreach ($group_list as $tg): ?>
@@ -160,13 +160,13 @@ else
     </p>
 
 
-    <p>Number of items in this <?= $editing=='interface' ? 'text group' : 'text database' ?>: <?= $line_count ?>.</p>
-    <p>Each page shows <?= $lines_per_page ?> items.</p>
+    <p><?= sprintf($this->lang->line($editing=='interface' ? 'items_text_group' : 'items_text_database'),$line_count) ?></p>
+    <p><?= sprintf($this->lang->line('each_page_shows'),$lines_per_page) ?></p>
 <?php endif; ?>
 
 <?php if ($count_untrans>0): ?>        
   <p><input id="show-notrans" class="btn btn-danger" type="button" href="<?= build_url($editing,$get_parms) ?>"
-     value="Show <?= $count_untrans ?> <?= $strings ?> without <?= $long_target_lang ?> translation"></p>
+     value="<?= sprintf($this->lang->line('show_strings_without_translation'),$count_untrans) ?>"></p>
 
   <!-- Dialog for displaying untranslated text -->
   <div class="modal fade" id="untranslated-info-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -174,18 +174,18 @@ else
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Untranslated <?= $long_target_lang ?> Strings</h4>
+          <h4 class="modal-title"><?= $this->lang->line('untranslated_strings') ?></h4>
         </div>
         <div class="modal-body">
           <table class="table table-striped">
-          <tr><th>Text Group</th><th>Symbolic Name</th></tr>
+          <tr><th><?= $this->lang->line('text_group') ?></th><th><?= $this->lang->line('symbolic_name') ?></th></tr>
           <?php foreach ($untranslated as $ut): ?>
               <tr><td><?= $ut->textgroup ?></td><td><?= $ut->symbolic_name ?></td></tr>
           <?php endforeach; ?>
           </table>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('close_button') ?></button>
         </div>
       </div>
     </div>
@@ -241,44 +241,45 @@ else
     <?php
         switch ($editing) {
           case 'interface':
-              echo make_trans_line_header($editing, 'Symbolic name', 'symbolic_name', $get_parms);
-              echo '<th>Comment</th>';
+          echo make_trans_line_header($editing, $this->lang->line('symbolic_name'), 'symbolic_name', $get_parms);
+              echo '<th>',$this->lang->line('comment'),'</th>';
               echo "<th>$language_selector</th>";
               echo make_trans_line_header($editing, $long_target_lang, 'text_edit', $get_parms);
-              echo '<th>Modified?</th>';
+              echo '<th>',$this->lang->line('modified'),'</th>';
               break;
 
           case 'grammar':
-              echo '<th>Symbolic name</th>';
-              echo '<th>Comment</th>';
+              echo '<th>',$this->lang->line('symbolic_name'),'</th>';
+              echo '<th>',$this->lang->line('comment'),'</th>';
               echo "<th>$language_selector</th>";
               echo "<th>$long_target_lang</th>";
-              echo '<th>Modified?</th>';
+              echo '<th>',$this->lang->line('modified'),'</th>';
               break;
 
           case 'lexicon':
               if ($get_parms['src_lang']=='greek') {
-                  echo '<th>Strongs</th>';
-                  echo '<th>Lemma</th>';
-                  echo '<th>First occurence</th>';
+                  echo '<th>',$this->lang->line('strongs'),'</th>';
+                  echo '<th>',$this->lang->line('lexeme'),'</th>';
+                  echo '<th>',$this->lang->line('first_occurence'),'</th>';
                   echo "<th>$language_selector</th>";
                   echo "<th>$long_target_lang</th>";
-                  echo '<th>Modified?</th>';
+                  echo '<th>',$this->lang->line('modified'),'</th>';
               }
               else {
-                  echo '<th>Symbolic lexeme</th>';
-                  echo '<th>Lexeme</th>';
-                  echo '<th>Stem</th>';
-                  echo '<th>First occurence</th>';
+                  echo '<th>',$this->lang->line('symbolic_lexeme'),'</th>';
+                  echo '<th>',$this->lang->line('lexeme'),'</th>';
+                  echo '<th>',$this->lang->line('stem'),'</th>';
+                  echo '<th>',$this->lang->line('first_occurence'),'</th>';
                   echo "<th>$language_selector</th>";
                   echo "<th>$long_target_lang</th>";
-                  echo '<th>Modified?</th>';
+                  echo '<th>',$this->lang->line('modified'),'</th>';
               }
               break;
         }
     ?>
   </tr>
 
+  <?php $lastlex = ''; ?>
   <?php foreach ($alllines as $line): ?>
     <tr>
       <?php switch ($editing):
@@ -295,7 +296,7 @@ else
             <?php endif; ?>
           </td>
           <td class="centeralign">
-            <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name ?>" href="#">Revert</a>
+        <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name ?>" href="#"><?= $this->lang->line('revert') ?></a>
             <input type="hidden" class="modif-indicator" name="modif-<?= $line->symbolic_name ?>" value="false"></td>
           </td>
 
@@ -315,7 +316,7 @@ else
               <input type="text" class="textinput" name="<?= $line->symbolic_name ?>" size="40" value="<?= replace_quot($line->text_edit) ?>">
             <?php endif; ?>
           <td class="centeralign">
-            <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name ?>" href="#">Revert</a>
+            <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name ?>" href="#"><?= $this->lang->line('revert') ?></a>
             <input type="hidden" class="modif-indicator" name="modif-<?= $line->symbolic_name ?>" value="false"></td>
           </td>
           </td>
@@ -332,8 +333,9 @@ else
                   ?>"><?= sprintf($books['_label'], $books[$line->firstbook],$line->firstchapter,$line->firstverse) ?></a>
             </td>
           <?php else: ?>
-            <td class="leftalign"><?= htmlspecialchars($line->lex) ?></td>
-            <td class="heb-default rtl"><?= $line->lexeme ?></td>
+            <td class="leftalign"><?= $lastlex!=$line->lex ? htmlspecialchars($line->lex) : '' ?></td>
+            <td class="heb-default rtl"><?= $lastlex!=$line->lex ? $line->lexeme : '&nbsp;&nbsp;&#x2033;' ?></td>
+            <?php $lastlex = $line->lex ?>
             <td class="leftalign"><?= stripSortIndex($stems[$line->vs]) ?></td>
             <td class="leftalign">
                  <a target="_blank" href="<?=
@@ -347,7 +349,7 @@ else
             <input type="text" class="textinput" name="<?= $line->lex_id ?>" size="40" value="<?= replace_quot($line->text_edit) ?>">
           </td>
           <td class="centeralign">
-            <a class="label label-danger revertbutton" data-name="<?= $line->lex_id ?>" href="#">Revert</a>
+            <a class="label label-danger revertbutton" data-name="<?= $line->lex_id ?>" href="#"><?= $this->lang->line('revert') ?></a>
             <input type="hidden" class="modif-indicator" name="modif-<?= $line->lex_id ?>" value="false"></td>
           </td>
 
@@ -359,7 +361,7 @@ else
 </table>
 </div>
 
-<p><input class="btn btn-primary" type="submit" name="submit" value="Submit changes">
-   <a class="btn btn-default revert-all" href="#">Revert all</a></p>
+<p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('submit_changes') ?>">
+   <a class="btn btn-default revert-all" href="#"><?= $this->lang->line('revert_all') ?></a></p>
 
 <form>

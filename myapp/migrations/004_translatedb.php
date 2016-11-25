@@ -163,6 +163,10 @@ function setup_comments() {
 
     //======================================================================
 
+    $comment['translate']['untranslated_strings'] = 'Title';
+    
+    //======================================================================
+
     $comment['users']['display_user'] = 'Text in title bar';
     $comment['users']['edit_user'] = 'Text in title bar';
     $comment['users']['create_account'] = 'Text in title bar';

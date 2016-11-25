@@ -89,4 +89,3 @@ $lang['mql_compiler_error_colon'] = 'MQL compiler error:';
 $lang['cannot_write_to_quiz_file'] = 'Cannot write to quiz file';
 $lang['no_text_found'] = 'No text found';
 
-$lang['close_button'] = 'Close';

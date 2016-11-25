@@ -29,3 +29,4 @@ $lang['date_time_format'] = '某年某月某日某时:某分';
 $lang['language'] = '语言';
 
 $lang['swipe'] = '如果您的荧光幕不够宽，不能显示表里的一整栏，您可以左右移动视窗的卷轴。';
+$lang['close_button'] = '关闭';

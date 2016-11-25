@@ -31,3 +31,4 @@ $lang['language'] = 'Sprog';
 
 $lang['swipe'] = 'Hvis din skærm ikke er bred nok til at vise en hel søjle i tabellen, kan du
                   stryge til venstre og højre i hver søjle.';
+$lang['close_button'] = 'Luk';

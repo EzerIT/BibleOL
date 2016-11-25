@@ -19,6 +19,7 @@ $lang['leave_blank_pw'] = '(Leave blank if not changing password)';
 $lang['preferred_language'] = 'Preferred language';
 $lang['no_language'] = 'None specified';
 $lang['english'] = 'English';
+$lang['german'] = 'German';
 $lang['simp_chinese'] = 'Chinese (simplified)';
 $lang['trad_chinese'] = 'Chinese (traditional)';
 $lang['danish'] = 'Danish';

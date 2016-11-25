@@ -31,3 +31,5 @@ $lang['language'] = 'Language';
 
 $lang['swipe'] = 'If your display is not wide enough to show a complete column in the table, you can swipe
                   each column left and right.';
+
+$lang['close_button'] = 'Close';

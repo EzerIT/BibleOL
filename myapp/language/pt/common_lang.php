@@ -28,3 +28,4 @@ $lang['time_format'] = 'H:i';
 $lang['date_time_format'] = 'd M Y H:i';
 $lang['language'] = 'Língua';
 $lang['swipe'] = 'Se o seu display/tela não é suficientemente largo para mortar uma coluna complete na tabela, você pode deslizar cada coluna para a direita e para esquerda.';
+$lang['close_button'] = 'Fechar';
