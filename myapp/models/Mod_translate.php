@@ -21,21 +21,24 @@ class Mod_translate extends CI_Model {
         parent::__construct();
         $this->load->database();
 
-        $this->lang->load('users', $this->language);
+        if (!is_cli()) {
+            // Not running from command line. This means we are not doing a migration
+            $this->lang->load('users', $this->language);
 
 
-        $this->if_langs = array('en' => $this->lang->line('english'),
-                                'da' => $this->lang->line('danish'),
-                                'pt' => $this->lang->line('portuguese'),
-                                'es' => $this->lang->line('spanish'),
-                                'zh-simp' => $this->lang->line('simp_chinese'),
-                                'zh-trad' => $this->lang->line('trad_chinese'));
+            $this->if_langs = array('en' => $this->lang->line('english'),
+                                    'da' => $this->lang->line('danish'),
+                                    'pt' => $this->lang->line('portuguese'),
+                                    'es' => $this->lang->line('spanish'),
+                                    'zh-simp' => $this->lang->line('simp_chinese'),
+                                    'zh-trad' => $this->lang->line('trad_chinese'));
 
-        $this->lexicon_langs = array('heb' => array('en' => $this->lang->line('english'),
-                                                    'de' => $this->lang->line('german')),
-                                     'aram' => array('en' => $this->lang->line('english'),
-                                                     'de' => $this->lang->line('german')),
-                                     'greek' => array('en' => $this->lang->line('english')));
+            $this->lexicon_langs = array('heb' => array('en' => $this->lang->line('english'),
+                                                        'de' => $this->lang->line('german')),
+                                         'aram' => array('en' => $this->lang->line('english'),
+                                                         'de' => $this->lang->line('german')),
+                                         'greek' => array('en' => $this->lang->line('english')));
+        }
     }
 
     public function get_all_if_languages() {
