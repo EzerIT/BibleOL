@@ -71,7 +71,7 @@ class Ctrl_translate extends MY_Controller {
             $untranslated = $this->mod_translate->get_if_untranslated($lang_edit);
 
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Translate User Interface'));
+            $this->load->view('view_top1', array('title' => $this->lang->line('translate_user_interface')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
@@ -93,13 +93,13 @@ class Ctrl_translate extends MY_Controller {
                                                    'line_count' => $line_count,
                                                    'page_count' => $page_count),
                                              true);
-            $this->load->view('view_main_page', array('left_title' => 'Translate User Interface',
-                                                      'left' => 'Provide a translation of each item for the user interface.',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('translate_user_interface'),
+                                                      'left' => $this->lang->line('translate_interface_desc'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Translate User Interface');
+            $this->error_view($e->getMessage(), $this->lang->line('translate_user_interface'));
         }
     }
 
@@ -121,7 +121,7 @@ class Ctrl_translate extends MY_Controller {
             redirect("/translate/translate_if?$_SERVER[QUERY_STRING]");
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Translate User Interface');
+            $this->error_view($e->getMessage(), $this->lang->line('translate_user_interface'));
         }
     }
 
@@ -161,7 +161,7 @@ class Ctrl_translate extends MY_Controller {
             $alllines = $this->mod_translate->get_grammar_lines_part($lines_per_page, $offset*$lines_per_page);
 
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Translate Grammar Terms'));
+            $this->load->view('view_top1', array('title' => $this->lang->line('translate_grammar_terms')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
@@ -180,13 +180,13 @@ class Ctrl_translate extends MY_Controller {
                                                    'line_count' => $line_count,
                                                    'page_count' => $page_count),
                                              true);
-            $this->load->view('view_main_page', array('left_title' => 'Translate Grammar Terms',
-                                                      'left' => 'Provide a translation of each grammatical term.',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('translate_grammar_terms'),
+                                                      'left' => $this->lang->line('translate_grammar_desc'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Translate Grammar Terms');
+            $this->error_view($e->getMessage(), $this->lang->line('translate_grammar_terms'));
         }
     }
 
@@ -207,7 +207,7 @@ class Ctrl_translate extends MY_Controller {
             redirect("/translate/translate_grammar?$_SERVER[QUERY_STRING]");
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Translate Grammar Terms');
+            $this->error_view($e->getMessage(), $this->lang->line('translate_grammar_terms'));
         }
     }
 
@@ -327,6 +327,33 @@ class Ctrl_translate extends MY_Controller {
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('translate_lex'));
         }
+    }
+
+    function if_db2php() {
+        if (!is_cli()) {
+            echo '<pre>This command can only be run from the command line</pre>';
+            die;
+        }
+
+		if ($_SERVER['argc']!=5)
+			die("Usage: php index.php translate if_db2php <language code> <destination directory>\n");
+
+        $this->mod_translate->if_db2php($_SERVER['argv'][3],$_SERVER['argv'][4]);
+    }
+
+    function if_php2db() {
+        if (!is_cli()) {
+            echo '<pre>This command can only be run from the command line</pre>';
+            die;
+        }
+
+		if ($_SERVER['argc']!=5)
+			die("Usage: php index.php translate if_php2db <language code> <source directory>\n");
+
+        if ($_SERVER['argv'][3] == 'comment')
+            $this->mod_translate->if_phpcomment2db($_SERVER['argv'][4]);
+        else
+            $this->mod_translate->if_php2db($_SERVER['argv'][3],$_SERVER['argv'][4]);
     }
 
     function gram_db2prop() {

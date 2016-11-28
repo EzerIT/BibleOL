@@ -1,7 +1,13 @@
 <?php
 
-$lang['select_words_translate'] = 'Vælg ord der skal oversættes';
+$lang['translate_user_interface'] = 'Oversæt brugergrænseflade';
+$lang['translate_interface_desc'] = '<p>Angiv en oversættelse for hvert element i brugergrænsefladen.</p>';
 
+$lang['translate_grammar_terms'] = 'Oversæt grammatiske termer';
+$lang['translate_grammar_desc'] = '<p>Vælg den relevante tekstdatabase (<i>ETCBC4</i> og <i>ETCBC4-translit</i>
+er hebraiske, <i>nestle1904</i> er græsk) og angiv en oversættelse af hver grammatisk term.</p>';
+
+$lang['select_words_translate'] = 'Vælg ord der skal oversættes';
 $lang['select_gloss_translate_range'] = '<p>Vælg det sprog og de gloser hvis oversættelse du ønsker at ændre.</p>
 <p>Du kan enten vælge de %d hyppigste gloser (de vil blive vist sorteret efter hyppighed),
 eller du kan vælge gloserne alfabetisk.</p>';

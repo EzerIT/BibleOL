@@ -1,5 +1,12 @@
 <?php
 
+$lang['translate_user_interface'] = 'Translate User Interface';
+$lang['translate_interface_desc'] = '<p>Provide a translation of each item for the user interface.</p>';
+
+$lang['translate_grammar_terms'] = 'Translate Grammar Terms';
+$lang['translate_grammar_desc'] = '<p>Select the relevant text database (<i>ETCBC4</i> and <i>ETCBC4-translit</i>
+are Hebrew, <i>nestle1904</i> is Greek) and provide a translation of each grammatical term.</p>';
+
 $lang['select_words_translate'] = 'Select words to translate';
 $lang['select_gloss_translate_range'] = '<p>Select the language and the range of glosses for which you wish to modify the translation.</p>
 <p>You can either select the %d most frequent glosses (they will be displayed sorted by frequency),

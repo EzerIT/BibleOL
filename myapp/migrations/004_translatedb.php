@@ -163,8 +163,14 @@ function setup_comments() {
 
     //======================================================================
 
+    $comment['translate']['translate_user_interface'] = 'Title';
+    $comment['translate']['translate_grammar_terms'] = 'Title';
     $comment['translate']['untranslated_strings'] = 'Title';
-    
+    $comment['translate']['translate_interface_desc'] = 'HTML';
+    $comment['translate']['translate_grammar_desc'] = 'HTML';
+    $comment['translate']['select_gloss_translate_range'] = 'HTML';
+    $comment['translate']['translate_lex_desc'] = 'HTML';
+
     //======================================================================
 
     $comment['users']['display_user'] = 'Text in title bar';
@@ -229,7 +235,7 @@ class Migration_Translatedb extends CI_Migration {
 
         setup_comments();
         
-        $d = directory_map($application_folder.DIRECTORY_SEPARATOR.'language', 2); // A value of 2 allows us to recognize empty directories
+        $d = directory_map($application_folder.DIRECTORY_SEPARATOR.'language'.DIRECTORY_SEPARATOR.'old_lang_files', 2); // A value of 2 allows us to recognize empty directories
 
         $allkeys = array();
         
@@ -280,7 +286,7 @@ class Migration_Translatedb extends CI_Migration {
                     $allkeys[$short_file] = array();
                 
                 $lang = array();
-                include($application_folder.DIRECTORY_SEPARATOR.'language'.DIRECTORY_SEPARATOR.$lang_name.$file);
+                include($application_folder.DIRECTORY_SEPARATOR.'language'.DIRECTORY_SEPARATOR.'old_lang_files'.DIRECTORY_SEPARATOR.$lang_name.$file);
                 
                 foreach ($lang as $key => $text) {
                     if ($short_langname=='en')
@@ -288,7 +294,6 @@ class Migration_Translatedb extends CI_Migration {
                     
                     if (!isset($format[$short_file][$key]) || $format[$short_file][$key]!='keep_blanks')
                         $text = preg_replace('/\s+/',' ',$text); // Remove extraneous whitespace
-//                      $text = preg_replace('/(\s)\s*/','\1',$text); // Remove extraneous whitespace
                     
                     $toinsert[] = array('textgroup' => $short_file,
                                         'symbolic_name' => $key,
@@ -308,6 +313,9 @@ class Migration_Translatedb extends CI_Migration {
                                         'comment' => array('type'=>'TEXT',
                                                            'null' => true,
                                                            'default' => null),
+                                        'format' => array('type'=>'TINYTEXT',
+                                                           'null' => true,
+                                                           'default' => null),
                                         'use_textarea' => array('type' => 'TINYINT(1)')
                                       ));
         $this->dbforge->add_key('id', TRUE);
@@ -318,6 +326,7 @@ class Migration_Translatedb extends CI_Migration {
                 $toinsert[] = array('textgroup' => $short_file,
                                     'symbolic_name' => $key,
                                     'comment' => isset($comment[$short_file][$key]) ? $comment[$short_file][$key] : null,
+                                    'format' => isset($format[$short_file][$key]) ? $format[$short_file][$key] : null,
                                     'use_textarea' => isset($use_textarea[$key]) && $use_textarea[$key]);
             }
         }
@@ -339,21 +348,6 @@ class Migration_Translatedb extends CI_Migration {
         $this->load->model('mod_translate');
 
         $this->mod_translate->gram_prop2db();     
-
-//        $d = directory_map('db/property_files', 1); // A value of 2 allows us to recognize empty directories
-// 
-//        foreach ($d as $file) {
-//            if (preg_match('/(.*)\.(.*)\.prop.pretty.json$/', $file, $matches)) {
-//                list($filename,$db,$lang) = $matches;
-//                echo "Handling file $filename\n";
-//                $input = file_get_contents("db/property_files/$filename");
-//                $props = json_decode($input);
-//                assert(!is_null($props));
-//                $this->db->insert('db_localize',array('db' => $db,
-//                                                      'lang' => $lang,
-//                                                      'json' => json_encode($props)));
-//            }
-//        }
     }
 
     private function add_hebrew_lexicons() {
@@ -549,9 +543,9 @@ class Migration_Translatedb extends CI_Migration {
     public function up() {
         // $this->add_translator();
 
-        //$this->add_if_translation();
+        $this->add_if_translation();
 
-        $this->add_grammar_translation();
+        //$this->add_grammar_translation();
         //$this->add_hebrew_lexicons();
         //$this->add_greek_lexicon();
         die;

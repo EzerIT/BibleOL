@@ -366,6 +366,154 @@ class Mod_translate extends CI_Model {
         
     }
 
+    // $lang may be 'comment'
+    function if_db2php(string $lang, string $dest) {
+        $this->load->helper('file');
+        @mkdir("$dest/$lang"); // Fails if directory exists, but that's OK
+
+        $query = $this->db->distinct()->select('textgroup')->get("language_$lang");
+
+        foreach ($query->result() as $row) {
+            $ofile = fopen("$dest/$lang/{$row->textgroup}_lang.php","w");
+            if (fwrite($ofile, "<?php\n\n")===false)
+                die("Cannot write to file \"$dest/$lang/{$row->textgroup}_lang.php\"\n");
+                
+            $query2 = $this->db->where('textgroup',$row->textgroup)->get("language_$lang");
+
+            if ($lang=='comment') {
+                foreach ($query2->result() as $row2) {
+                    $text = preg_replace(array('/"/',
+                                               "/\n$/",
+                                               "/\n/"),
+                                         array('\\"',
+                                               '\\n',
+                                               "\\n\"\n        . \""),
+                                         $row2->comment);
+                    if (fwrite($ofile, '$comment[\'' . $row2->symbolic_name . '\'] = "' . $text . "\";\n")===false ||
+                        fwrite($ofile, '$format[\'' . $row2->symbolic_name . '\'] = "' . $row2->format . "\";\n")===false ||
+                        fwrite($ofile, '$use_textarea[\'' . $row2->symbolic_name . '\'] = ' . ($row2->use_textarea?'true':'false') . ";\n\n")===false)
+                        die("Cannot write to file \"$dest/$lang/{$row->textgroup}_lang.php\"\n");
+                }
+            }
+            else {
+                foreach ($query2->result() as $row2) {
+                    $text = preg_replace(array('/"/',
+                                               "/\n$/",
+                                               "/\n/"),
+                                         array('\\"',
+                                               '\\n',
+                                               "\\n\"\n        . \""),
+                                         $row2->text);
+                    if (fwrite($ofile, '$lang[\'' . $row2->symbolic_name . '\'] = "' . $text . "\";\n")===false)
+                        die("Cannot write to file \"$dest/$lang/{$row->textgroup}_lang.php\"\n");
+                }
+            }
+            fclose($ofile);
+        }
+    }
+
+    // $src is the source directory where the php files are found
+    function if_php2db(string $short_langname, string $src) {
+        $this->load->helper('directory');
+        $this->load->dbforge();
+        $this->dbforge->drop_table('language_'.$short_langname,true);
+                
+        $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
+                                        'textgroup' => array('type'=>'VARCHAR(25)'),
+                                        'symbolic_name' => array('type'=>'TINYTEXT'),
+                                        'text' => array('type'=>'TEXT')));
+        $this->dbforge->add_key('id', TRUE);
+        $this->dbforge->add_key('textgroup');
+        $this->dbforge->create_table('language_'.$short_langname);
+
+        $d = directory_map($src, 1);
+
+        foreach ($d as $file) {
+            // Loop through files
+
+            if (!preg_match('/_lang.php$/', $file))
+                continue;
+
+            $short_file = substr($file, 0, -9); // Remove '_lang.php'
+            if ($short_file=='db' || $short_file=='email')
+                continue;
+
+            $comment_query = $this->db->where('textgroup',$short_file)->get('language_comment');
+            $format = array();
+            foreach ($comment_query->result() as $row)
+                $format[$row->symbolic_name] = is_null($row->format) ? "" : $row->format;
+            
+            $toinsert = array();
+                
+            $lang = array();
+            include($src.DIRECTORY_SEPARATOR.$file);
+                
+            foreach ($lang as $key => $text) {
+                if (!isset($format[$key]))
+                    die("Key $key missing from textgroup $short_file in comment table\n");
+                    
+                if ($format[$key]!='keep_blanks')
+                    $text = preg_replace('/\s+/',' ',$text); // Remove extraneous whitespace
+                    
+                $toinsert[] = array('textgroup' => $short_file,
+                                    'symbolic_name' => $key,
+                                    'text' => $text);
+            }
+
+            $this->db->insert_batch('language_'.$short_langname, $toinsert);
+        }
+    }
+
+    function if_phpcomment2db(string $src) {
+        $this->load->helper('directory');
+        $this->load->dbforge();
+        $this->dbforge->drop_table('language_comment',true);
+                
+        $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
+                                        'textgroup' => array('type'=>'TINYTEXT'),
+                                        'symbolic_name' => array('type'=>'TINYTEXT'),
+                                        'comment' => array('type'=>'TEXT',
+                                                           'null' => true,
+                                                           'default' => null),
+                                        'format' => array('type'=>'TINYTEXT',
+                                                           'null' => true,
+                                                           'default' => null),
+                                        'use_textarea' => array('type' => 'TINYINT(1)')
+                                      ));
+        $this->dbforge->add_key('id', TRUE);
+        $this->dbforge->create_table('language_comment');
+
+        $d = directory_map($src, 1);
+
+        foreach ($d as $file) {
+            // Loop through files
+
+            if (!preg_match('/_lang.php$/', $file))
+                continue;
+
+            $short_file = substr($file, 0, -9); // Remove '_lang.php'
+            if ($short_file=='db' || $short_file=='email')
+                continue;
+
+            $toinsert = array();
+                
+            $comment = array();
+            $format = array();
+            $use_textarea = array();
+            include($src.DIRECTORY_SEPARATOR.$file);
+                
+            foreach ($comment as $key => $text) {
+                $toinsert[] = array('textgroup' => $short_file,
+                                    'symbolic_name' => $key,
+                                    'comment' => empty($comment[$key]) ? null : $comment[$key],
+                                    'format' => empty($format[$key]) ? null : $format[$key],
+                                    'use_textarea' => $use_textarea[$key]);
+            }
+
+            $this->db->insert_batch('language_comment', $toinsert);
+        }
+    }
+        
     function gram_db2prop(string $dest) {
         $this->load->helper('file');
         $query = $this->db->get('db_localize');
@@ -373,7 +521,7 @@ class Mod_translate extends CI_Model {
         foreach ($query->result() as $row) {
             if (!write_file("$dest/$row->db.$row->lang.prop.pretty.json",
                             json_encode(json_decode($row->json), JSON_PRETTY_PRINT)))
-                die("Cannot write to file \"$dest/$row->db.$row->lang.prop.pretty.json\"");
+                die("Cannot write to file \"$dest/$row->db.$row->lang.prop.pretty.json\"\n");
         }
     }
     
