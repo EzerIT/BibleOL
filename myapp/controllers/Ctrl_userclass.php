@@ -1,7 +1,7 @@
 <?php
 function realname_cmp($u1, $u2) {
-    $un1 = "$u1->first_name $u1->last_name";
-    $un2 = "$u2->first_name $u2->last_name";
+    $un1 = make_full_name($u1);
+    $un2 = make_full_name($u2);
 
     if ($un1 === $un2)
         return 0;
@@ -135,7 +135,7 @@ class Ctrl_userclass extends MY_Controller {
                 $center_text = $this->load->view('view_edit_classes_for_user',
                                                  array('userid' => $userid,
                                                        'extras' => $extras,
-                                                       'user_name' => "$user_info->first_name $user_info->last_name",
+                                                       'user_name' => make_full_name($user_info),
                                                        'allclasses' => $all_classes,
                                                        'owned_classes' => $owned_classes,
                                                        'old_classes' => $old_classes),
@@ -143,7 +143,7 @@ class Ctrl_userclass extends MY_Controller {
              
                 $this->load->view('view_main_page', array('left_title' => $this->lang->line('assign_user_to_classes'),
                                                           'left' => '<p>'
-                                                          . sprintf($this->lang->line('select_classes_for_user'),$user_info->first_name,$user_info->last_name)
+                                                          . sprintf($this->lang->line('select_classes_for_user'),make_full_name($user_info))
                                                           .'<p>',
                                                           'center' => $center_text));
                 $this->load->view('view_bottom');

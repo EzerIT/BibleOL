@@ -155,9 +155,9 @@ class Mod_quizpath extends CI_Model {
         // Look up user names
         $people = array();
         foreach ($owners as $o) {
-            $query = $this->db->select('first_name, last_name')->where('id',$o)->get('user');
+            $query = $this->db->select('first_name, last_name, family_name_first')->where('id',$o)->get('user');
             if ($row = $query->row())
-                $people[$o] = "$row->first_name $row->last_name";
+                $people[$o] = make_full_name($row);
         }
 
         // Update $files array

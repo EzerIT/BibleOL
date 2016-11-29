@@ -2,10 +2,10 @@
 
 <?php if (empty($user_info->email)): ?>
     <p><?= sprintf($this->lang->line("your_{$authority}_name_no_email"),
-                   $user_info->first_name, $user_info->last_name) ?></p>
+                   make_full_name($user_info)) ?></p>
 <?php else: ?>
     <p><?= sprintf($this->lang->line("your_{$authority}_name"),
-                   $user_info->first_name, $user_info->last_name, $user_info->email) ?></p>
+                   make_full_name($user_info), $user_info->email) ?></p>
 <?php endif; ?>
 
 <p><?= $this->lang->line('enjoy') ?></p>

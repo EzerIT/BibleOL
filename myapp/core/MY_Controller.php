@@ -22,8 +22,21 @@ class MY_Controller extends CI_Controller {
             if (isset($langlist[0]))
                 $this->language = $langlist[0];
         }
-            
+
         switch ($this->language) {
+          case 'zh':
+          case 'zh-cn':
+          case 'zh-sg':
+                $this->language_short = 'zh-simp';
+                $this->language = 'zh-simp';
+                break;
+
+          case 'zh-tw':
+          case 'zh-hk':
+                $this->language_short = 'zh-trad';
+                $this->language = 'zh-trad';
+                break;
+
           case 'da':
           case 'pt':
           case 'es':

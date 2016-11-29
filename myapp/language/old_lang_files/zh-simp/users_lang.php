@@ -9,6 +9,7 @@ $lang['you_login_facebook'] = '您已经用Facebook登入';
 $lang['user_name'] = '使用者名称';
 $lang['first_name'] = '名';
 $lang['last_name'] = '姓';
+$lang['chinese_name_order'] = '中式姓名次序';
 $lang['email'] = '电邮地址';
 $lang['password'] = '密码';
 $lang['new_password'] = '新密码';
@@ -66,19 +67,19 @@ $lang['this_user_facebook'] = '这个使用者以Facebook登入';
 $lang['user_name_used'] = '使用者名称“%s”已经有人使用';
 
 $lang['account_created_subject']  = '建立了原文读经练习网账户';
-$lang['account_created_message1'] = "%2\$s%1\$s：\n\n"    //*** last name, First name
+$lang['account_created_message1'] = "%s：\n\n"    //*** last name, First name
                                     . "现在您在原文读经练习网拥有账户了。\n\n"
-                                    . "您的使用者名称是%3\$s\n" // Username
-                                    . "您的密码是%4\$s\n\n"; // Password
+                                    . "您的使用者名称是%s\n" // Username
+                                    . "您的密码是%s\n\n"; // Password
 $lang['account_created_message2'] = "您是管理员，可以操作只有管理员才能操作的功能。\n\n";
 $lang['account_created_message2t'] = "您是助教，可以操作只有助教才能操作的功能。\n\n";
 $lang['account_created_message3'] = "请去%s, 登入；\n" // Site URL
                                     . "然后点选“我的资料”，再点选“账户资料”，以更改您的密码。\n";
 
-$lang['account_you_created_message1'] = "%2\$s%1\$s：\n\n"  //*** last name, First name
+$lang['account_you_created_message1'] = "%s：\n\n"  //*** last name, First name
                                     . "您在原文读经练习网建立了账户。\n\n"
-                                    . "您的使用者名称是%3\$s\n" // Username
-                                    . "您的密码是%4\$s\n\n"; // Password
+                                    . "您的使用者名称是%s\n" // Username
+                                    . "您的密码是%s\n\n"; // Password
 $lang['account_you_created_message3'] = "请去%s, 登入；\n" // Site URL
                                     . "然后点选“我的资料”，再点选“账户资料”，以更改您的密码。\n\n"
                                     . "如果您四十八小时内不登入，我们就会删除您的账户。\n\n"
@@ -96,11 +97,11 @@ $lang['google_no_response_delete'] = 'Google没有回应这个请求。通常这
 $lang['cannot_delete_self'] = '您不能删除自己的账户';
 
 $lang['expiry_warning_subject'] = '这个账户很久没有使用原文读经练习网';
-$lang['expiry_warning_1_message'] = "%2\$s%1\$s：\n\n"  //*** last name, first name
-                                  . "您已经九个月没有使用您在%3\$s的账户。\n" // Site URL
+$lang['expiry_warning_1_message'] = "%s：\n\n"  //*** last name, first name
+                                  . "您已经九个月没有使用您在%s的账户。\n" // Site URL
                                   . "再过九个月我们就会删除您的账户。\n\n";
-$lang['expiry_warning_2_message'] = "%2\$s%1\$s：\n\n"  //*** last name, first name
-                                  . "您已经十七个月没有使用您在%3\$s的账户。\n" // Site URL
+$lang['expiry_warning_2_message'] = "%s：\n\n"  //*** last name, first name
+                                  . "您已经十七个月没有使用您在%s的账户。\n" // Site URL
                                   . "再过一个月我们就会删除您的账户。\n\n";
 
 $lang['expiry_warning_message_local'] = "您如果想要保留账户，请造访上述的网站，\n"

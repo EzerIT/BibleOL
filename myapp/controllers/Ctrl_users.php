@@ -203,12 +203,14 @@ class Ctrl_users extends MY_Controller {
             // Common validation rules
             $this->form_validation->set_rules('first_name', $this->lang->line('first_name'), 'trim|required|strip_tags');
             $this->form_validation->set_rules('last_name', $this->lang->line('last_name'), 'trim|required|strip_tags');
+            $this->form_validation->set_rules('family_name_first', '', '');
             $this->form_validation->set_rules('email', $this->lang->line('email'), 'trim|required|valid_email|strip_tags');
             $this->form_validation->set_rules('preflang', '', '');
             
             if ($this->form_validation->run()) {
                 $user_info->first_name = $this->input->post('first_name');
                 $user_info->last_name = $this->input->post('last_name');
+                $user_info->family_name_first = $this->input->post('family_name_first')==='yes';
                 $user_info->isadmin = false;
                 $user_info->isteacher = false;
                 $user_info->istranslator = false;
@@ -230,7 +232,7 @@ class Ctrl_users extends MY_Controller {
                 $this->email->to($user_info->email); 
                 $this->email->subject($this->lang->line_secondary('account_created_subject'));
                 $this->email->message(sprintf($this->lang->line_secondary('account_you_created_message1'),
-                                              $user_info->first_name, $user_info->last_name,
+                                              make_full_name($user_info),
                                               $user_info->username,
                                               $pw)
                                       . sprintf($this->lang->line_secondary('account_you_created_message3'), site_url('login')));
@@ -348,6 +350,7 @@ class Ctrl_users extends MY_Controller {
                 // Common validation rules
                 $this->form_validation->set_rules('first_name', $this->lang->line('first_name'), 'trim|required|strip_tags');
                 $this->form_validation->set_rules('last_name', $this->lang->line('last_name'), 'trim|required|strip_tags');
+                $this->form_validation->set_rules('family_name_first', '', '');
                 $this->form_validation->set_rules('isadmin', '', '');
                 $this->form_validation->set_rules('isteacher', '', '');
                 $this->form_validation->set_rules('istranslator', '', '');
@@ -370,6 +373,7 @@ class Ctrl_users extends MY_Controller {
                 if ($this->form_validation->run()) {
                     $user_info->first_name = $this->input->post('first_name');
                     $user_info->last_name = $this->input->post('last_name');
+                    $user_info->family_name_first = $this->input->post('family_name_first')==='yes';
                     if ($this->mod_users->is_admin())
                         $user_info->isadmin = $this->input->post('isadmin')==='yes';
                     if ($this->mod_users->is_teacher())
@@ -395,7 +399,7 @@ class Ctrl_users extends MY_Controller {
                         $this->email->to($user_info->email); 
                         $this->email->subject($this->lang->line_secondary('account_created_subject'));
                         $this->email->message(sprintf($this->lang->line_secondary('account_created_message1'),
-                                                      $user_info->first_name, $user_info->last_name,
+                                                      make_full_name($user_info),
                                                       $user_info->username,
                                                       $pw)
                                               . ($user_info->isadmin ? $this->lang->line_secondary('account_created_message2') : '')
@@ -445,9 +449,11 @@ class Ctrl_users extends MY_Controller {
                $this->load->helper('form');
                $this->load->library('form_validation');
 
+               $this->form_validation->set_rules('family_name_first', '', '');
                $this->form_validation->set_rules('preflang', '', 'callback_always_true'); // At least one non-empty rule is required
 
                if ($this->form_validation->run()) {
+                   $user_info->family_name_first = $this->input->post('family_name_first')==='yes';
                    $user_info->preflang = $this->input->post('preflang');
                    $query = $this->mod_users->set_user($user_info, $pw);
                    redirect('/');
@@ -478,6 +484,7 @@ class Ctrl_users extends MY_Controller {
 
                $this->form_validation->set_rules('first_name', $this->lang->line('first_name'), 'trim|required|strip_tags');
                $this->form_validation->set_rules('last_name', $this->lang->line('last_name'), 'trim|required|strip_tags');
+               $this->form_validation->set_rules('family_name_first', '', '');
                $this->form_validation->set_rules('email', $this->lang->line('email'), 'trim|valid_email|strip_tags');
                $this->form_validation->set_rules('preflang', '', '');
 
@@ -489,6 +496,7 @@ class Ctrl_users extends MY_Controller {
                if ($this->form_validation->run()) {
                    $user_info->first_name = $this->input->post('first_name');
                    $user_info->last_name = $this->input->post('last_name');
+                   $user_info->family_name_first = $this->input->post('family_name_first')==='yes';
                    $user_info->email = $this->input->post('email');
                    $user_info->preflang = $this->input->post('preflang');
 
@@ -587,7 +595,7 @@ class Ctrl_users extends MY_Controller {
             $this->email->to($this->user_found->email); 
             $this->email->subject($this->lang->line_secondary('forgotten_subject'));
             $this->email->message(sprintf($this->lang->line_secondary('forgotten_message'),
-                                          $this->user_found->first_name, $this->user_found->last_name,
+                                          make_full_name($this->user_found),
                                           $this->user_found->username,
                                           site_url("users/reset/$reset_key")));
             $this->email->send();
@@ -673,7 +681,7 @@ class Ctrl_users extends MY_Controller {
         $this->email->to($user_info->email); 
         $this->email->subject($this->lang->line_secondary('password_reset_subject'));
         $this->email->message(sprintf($this->lang->line_secondary('password_reset_message'),
-                                      $user_info->first_name, $user_info->last_name,
+                                      make_full_name($user_info),
                                       $user_info->username, $pw));
         $this->email->send();
 
@@ -698,7 +706,7 @@ class Ctrl_users extends MY_Controller {
         $this->email->subject($this->lang->line_secondary('expiry_warning_subject'));
 
         $message = sprintf($this->lang->line_secondary($warning),
-                           $u->first_name, $u->last_name, $this->config->item('site_url'));
+                           make_full_name($u), $this->config->item('site_url'));
 
         switch ($u->oauth2_login) {
           case 'google':
@@ -749,9 +757,9 @@ class Ctrl_users extends MY_Controller {
             echo "New accounts deleted because of 48 hours of inactivity:\n";
             foreach ($users_new_inactive as $u) {
                 if (!empty($u->email)) 
-                    echo "    $u->username ($u->first_name $u->last_name - $u->email)\n";
+                    echo "    $u->username (" . make_full_name($u) . "- $u->email)\n";
                 else
-                    echo "    $u->username ($u->first_name $u->last_name - NO EMAIL)\n";
+                    echo "    $u->username (" . make_full_name($u) . " - NO EMAIL)\n";
             }
             echo "\n";
         }
@@ -760,9 +768,9 @@ class Ctrl_users extends MY_Controller {
             echo "Old accounts warned because of 9 months of inactivity:\n";
             foreach ($users_old_9months as $u) {
                 if (!empty($u->email)) 
-                    echo "    $u->username ($u->first_name $u->last_name - $u->email)\n";
+                    echo "    $u->username (" . make_full_name($u) . " - $u->email)\n";
                 else
-                    echo "    $u->username ($u->first_name $u->last_name - NO EMAIL)\n";
+                    echo "    $u->username (" . make_full_name($u) . " - NO EMAIL)\n";
             }
             echo "\n";
         }
@@ -771,9 +779,9 @@ class Ctrl_users extends MY_Controller {
             echo "Old accounts warned because of 17 months of inactivity:\n";
             foreach ($users_old_17months as $u) {
                 if (!empty($u->email)) 
-                    echo "    $u->username ($u->first_name $u->last_name - $u->email)\n";
+                    echo "    $u->username (" . make_full_name($u) . " - $u->email)\n";
                 else
-                    echo "    $u->username ($u->first_name $u->last_name - NO EMAIL)\n";
+                    echo "    $u->username (" . make_full_name($u) . " - NO EMAIL)\n";
             }
             echo "\n";
         }
@@ -782,9 +790,9 @@ class Ctrl_users extends MY_Controller {
             echo "Old accounts deleted because of 18 months of inactivity:\n";
             foreach ($users_old_18months as $u) {
                 if (!empty($u->email)) 
-                    echo "    $u->username ($u->first_name $u->last_name - $u->email)\n";
+                    echo "    $u->username (" . make_full_name($u) . " - $u->email)\n";
                 else
-                    echo "    $u->username ($u->first_name $u->last_name - NO EMAIL)\n";
+                    echo "    $u->username (" . make_full_name($u) . " - NO EMAIL)\n";
             }
             echo "\n";
         }

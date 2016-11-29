@@ -9,6 +9,7 @@ $lang['you_login_facebook'] = '您已經用Facebook登入';
 $lang['user_name'] = '使用者名稱';
 $lang['first_name'] = '名';
 $lang['last_name'] = '姓';
+$lang['chinese_name_order'] = '中式姓名次序';
 $lang['email'] = '電郵地址';
 $lang['password'] = '密碼';
 $lang['new_password'] = '新密碼';
@@ -66,19 +67,19 @@ $lang['this_user_facebook'] = '這個使用者以Facebook登入';
 $lang['user_name_used'] = '使用者名稱“%s”已經有人使用';
 
 $lang['account_created_subject']  = '建立了原文讀經練習網帳戶';
-$lang['account_created_message1'] = "%2\$s%1\$s：\n\n"  //*** last name, First name
+$lang['account_created_message1'] = "%s：\n\n"  //*** last name, First name
                                     . "現在您在原文讀經練習網擁有帳戶了。\n\n"
-                                    . "您的使用者名稱是%3\$s\n" // Username
-                                    . "您的密碼是%4\$s\n\n"; // Password
+                                    . "您的使用者名稱是%s\n" // Username
+                                    . "您的密碼是%s\n\n"; // Password
 $lang['account_created_message2'] = "您是管理員，可以操作只有管理員才能操作的功能。\n\n";
 $lang['account_created_message2t'] = "您是助教，可以操作只有助教才能操作的功能。\n\n";
 $lang['account_created_message3'] = "請去%s, 登入；\n" // Site URL
                                     . "然後點選“我的資料”，再點選“帳戶資料”，以更改您的密碼。\n";
 
-$lang['account_you_created_message1'] = "%2\$s%1\$s：\n\n"  //*** last name, First name
+$lang['account_you_created_message1'] = "%s：\n\n"  //*** last name, First name
                                     . "您在原文讀經練習網建立了帳戶。\n\n"
-                                    . "您的使用者名稱是%3\$s\n" // Username
-                                    . "您的密碼是%4\$s\n\n"; // Password
+                                    . "您的使用者名稱是%s\n" // Username
+                                    . "您的密碼是%s\n\n"; // Password
 $lang['account_you_created_message3'] = "請去%s, 登入；\n" // Site URL
                                     . "然後點選“我的資料”，再點選“帳戶資料”，以更改您的密碼。\n\n"
                                     . "如果您四十八小時內不登入，我們就會刪除您的帳戶。\n\n"
@@ -96,11 +97,11 @@ $lang['google_no_response_delete'] = 'Google沒有回應這個請求。通常這
 $lang['cannot_delete_self'] = '您不能刪除自己的帳戶';
 
 $lang['expiry_warning_subject'] = '這個帳戶很久沒有使用原文讀經練習網';
-$lang['expiry_warning_1_message'] = "%2\$s%1\$s：\n\n"  //*** last name, first name
-                                  . "您已經九個月沒有使用您在%3\$s的帳戶。\n" // Site URL
+$lang['expiry_warning_1_message'] = "%s：\n\n"  //*** last name, first name
+                                  . "您已經九個月沒有使用您在%s的帳戶。\n" // Site URL
                                   . "再過九個月我們就會刪除您的帳戶。\n\n";
-$lang['expiry_warning_2_message'] = "%2\$s%1\$s：\n\n"  //*** last name, first name
-                                  . "您已經十七個月沒有使用您在%4\$s的帳戶。\n" // Site URL
+$lang['expiry_warning_2_message'] = "%s：\n\n"  //*** last name, first name
+                                  . "您已經十七個月沒有使用您在%s的帳戶。\n" // Site URL
                                   . "再過一個月我們就會刪除您的帳戶。\n\n";
 
 $lang['expiry_warning_message_local'] = "您如果想要保留帳戶，請造訪上述的網站，\n"

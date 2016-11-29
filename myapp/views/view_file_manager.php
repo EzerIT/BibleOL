@@ -402,7 +402,7 @@
           <select id="chown-selector">
             <option value="0" selected="selected"></option>
             <?php foreach ($teachers as $t): ?>
-              <option value="<?= $t->id ?>"><?= $t->first_name . ' ' . $t->last_name ?></option>
+            <option value="<?= $t->id ?>"><?= make_full_name($t) ?></option>
             <?php endforeach; ?>
           </select>
         </div>

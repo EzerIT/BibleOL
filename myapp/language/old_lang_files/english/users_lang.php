@@ -9,6 +9,7 @@ $lang['you_login_facebook'] = 'You have logged in with Facebook';
 $lang['user_name'] = 'User name';
 $lang['first_name'] = 'First name';
 $lang['last_name'] = 'Last name';
+$lang['chinese_name_order'] = 'Chinese name order';
 $lang['email'] = 'Email';
 $lang['password'] = 'Password';
 $lang['new_password'] = 'New password';
@@ -68,7 +69,7 @@ $lang['this_user_facebook'] = 'This user logs in with Facebook';
 $lang['user_name_used'] = 'The user name "%s" is already in use';
 
 $lang['account_created_subject']  = 'Bible Online Learner account created';
-$lang['account_created_message1'] = "Dear %s %s,\n\n"  // First name, last name
+$lang['account_created_message1'] = "Dear %s,\n\n"  // First name, last name
                                     . "You now have an account at the Bible Online Learner website.\n\n"
                                     . "Your user name is: %s\n" // Username
                                     . "Your password is: %s\n\n"; // Password
@@ -77,7 +78,7 @@ $lang['account_created_message2t'] = "You have been granted facilitator privileg
 $lang['account_created_message3'] = "Please visit %s, and log in;\n" // Site URL
                                     . "then change your password by selecting 'Profile' from the 'My data' menu.\n";
 
-$lang['account_you_created_message1'] = "Dear %s %s,\n\n"  // First name, last name
+$lang['account_you_created_message1'] = "Dear %s,\n\n"  // First name, last name
                                     . "You have created an account at the Bible Online Learner website.\n\n"
                                     . "Your user name is: %s\n" // Username
                                     . "Your password is: %s\n\n"; // Password
@@ -98,10 +99,10 @@ $lang['google_no_response_delete'] = 'Google did not respond to this request. Th
 $lang['cannot_delete_self'] = 'You cannot delete yourself';
 
 $lang['expiry_warning_subject'] = 'Inactive account on Bible Online Learner';
-$lang['expiry_warning_1_message'] = "Dear %s %s,\n\n"  // First name, last name
+$lang['expiry_warning_1_message'] = "Dear %s,\n\n"  // First name, last name
                                   . "You have not used your account on %s for nine months.\n" // Site URL
                                   . "In another nine months, your account will be deleted.\n\n";
-$lang['expiry_warning_2_message'] = "Dear %s %s,\n\n"  // First name, last name
+$lang['expiry_warning_2_message'] = "Dear %s,\n\n"  // First name, last name
                                   . "You have not used your account on %s for 17 months.\n" // Site URL
                                   . "In one more month, your account will be deleted.\n\n";
 

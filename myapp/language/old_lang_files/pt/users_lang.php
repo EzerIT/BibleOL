@@ -46,7 +46,7 @@ $lang['this_user_google'] = 'Este usuário entra com o Google';
 $lang['user_name_used'] = 'O nome de usuário "%s" já está sendo usado';
 
 $lang['account_created_subject']  = 'Conta do Bible Online Learner criada';
-$lang['account_created_message1'] = "Querido/a %s %s,\n\n"  // First name, last name
+$lang['account_created_message1'] = "Querido/a %s,\n\n"  // First name, last name
                                     . "Agora você tem uma conta no Bible Online Learner website.\n\n"
                                     . "Seu nome de usuário é: %s\n" // Username
                                     . "Sua Senha é: %s\n\n"; // Password
@@ -81,7 +81,7 @@ $lang['never'] = 'Nunca';
 $lang['specify_user_information'] = 'Especifique informação de usuário';
 $lang['this_user_facebook'] = 'Este usuário entra com o Facebook';
 $lang['account_created_message2t'] = "Você recebeu privilégios de facilitador.\n\n";
-$lang['account_you_created_message1'] = "Querido/a %s %s,\n\n"  // First name, last name
+$lang['account_you_created_message1'] = "Querido/a %s,\n\n"  // First name, last name
                                     . "Você criou uma conta no website Bible Online Learner.\n\n"
                                     . "Seu nome de usuário é: %s\n" // Username
                                     . "Sua senha é: %s\n\n"; // Password
@@ -93,10 +93,10 @@ $lang['account_you_created_message3'] = "Por favor visite %s, e faça o login;\n
 $lang['you_created_account'] = "Uma nova conta foi criada";
 $lang['password_sent']       = 'Um email contendo seu nome de usuário e sua senha foi enviado para %s'; // Email address
 $lang['expiry_warning_subject'] = 'Conta inativa no Bible Online Learner';
-$lang['expiry_warning_1_message'] = "Querido/a %s %s,\n\n"  // First name, last name
+$lang['expiry_warning_1_message'] = "Querido/a %s,\n\n"  // First name, last name
                                   . "Você não tem usado sua conta em %s por nove meses.\n" // Site URL
                                   . "Dentro de outros nove meses, sua conta será deletada .\n\n";
-$lang['expiry_warning_2_message'] = "Querido/a %s %s,\n\n"  // First name, last name
+$lang['expiry_warning_2_message'] = "Querido/a %s,\n\n"  // First name, last name
                                   . "Você não tem usado sua conta em %s por 17 meses.\n" // Site URL
                                   . "Dentro de mais um mês, sua conta será deletada.\n\n";
 $lang['expiry_warning_message_local'] = "Se você quer manter a sua conta, simplesmente vá para o website mencionado acima\n"

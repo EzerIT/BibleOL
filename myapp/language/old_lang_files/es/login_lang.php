@@ -19,7 +19,7 @@ $lang['specify_name']            = 'Un nombre de usuario o correo electrónico d
 $lang['user_not_found']          = 'Usuario no encontrado';
 $lang['several_accounts']        = 'Tu correo electrónico está asociado con varias cuentas de usuarios. Específica uno de estos nombres de usuarios: %s'; // User names
 $lang['forgotten_subject']       = 'Información de cuenta de Bible Online Learner';
-$lang['forgotten_message']       = "Querido/a %s %s,\n\n"  // First name, last name
+$lang['forgotten_message']       = "Querido/a %s,\n\n"  // First name, last name
                                    . "Tu nombre de usuario para Bible Online Learner es: %s\n" // Username
                                    . "Tú puedes restablecer tu contraseña siguiendo este enlace:\n"
                                    . "%s\n" // Link
@@ -29,7 +29,7 @@ $lang['cannot_reset_password']   = 'No se puede restablecer contraseña'; // Tex
 $lang['password_reset']          = 'Reestablecimiento de contraseña';
 $lang['reset_link_bad']          = 'El enlace para restablecer la contraseña no existe o ha caducado';
 $lang['password_reset_subject']  = 'Tu contraseña para Bible Online Learner ha sido cambiada';
-$lang['password_reset_message']  = "Querido/a %s %s,\n\n"  // First name, last name
+$lang['password_reset_message']  = "Querido/a %s,\n\n"  // First name, last name
                                    . "Tu nombre de usuario para Bible Online Learner es: %s\n" // Username
                                    . "Tu contraseña ha sido establecida para: %s\n\n" // Password
                                    . "Tú puedes cambiar tu contraseña seleccionando 'Perfil' del menú 'Mi información' menu.\n";
@@ -44,17 +44,17 @@ $lang['new_facebook_user'] = 'Nuevo usuario de Facebook'; // Text in title bar
 $lang['users'] = 'Usuarios';  // Text in title bar
 $lang['welcome_new_google_user'] = 'Bienvenido, nuevo Usuario de Google';
 $lang['your_google_name' ] =
-    'Google nos ha informado que tu nombre es “%s %s” y tu correo electrónico es “%s”. Si necesitas
+    'Google nos ha informado que tu nombre es “%s” y tu correo electrónico es “%s”. Si necesitas
      cambiar eso, debes cambiar tu perfil en Google.';
 $lang['your_google_name_no_email' ] =
-    'Google nos ha informado que tu nombre es “%s %s”. Tu correo electrónico no está dado. Si necesitas
+    'Google nos ha informado que tu nombre es “%s”. Tu correo electrónico no está dado. Si necesitas
      cambiar eso, debes cambiar tu perfil en Google.';
 $lang['welcome_new_facebook_user'] = 'Bienvenido, nuevo usuario de Facebook';
 $lang['your_facebook_name' ] =
-    'Facebook nos ha informado que tu nombre es “%s %s” y tu correo electrónico es “%s”. Si necesitas
+    'Facebook nos ha informado que tu nombre es “%s” y tu correo electrónico es “%s”. Si necesitas
      cambiar eso, debes cambiar tu perfil en Facebook.';
 $lang['your_facebook_name_no_email' ] =
-    'Facebook nos ha informado que tu nombre es “%s %s”. Tu correo electrónico no está dado. Si necesitas
+    'Facebook nos ha informado que tu nombre es “%s”. Tu correo electrónico no está dado. Si necesitas
      cambiar eso, debes cambiar tu perfil en Facebook.';
 $lang['enjoy'] = 'Esperamos que disfrute el uso de Bible Online Learner.';
 $lang['use_menu'] = 'Tú puedes usar el menú de arriba para acceder las varias funciones en este sitio web.';
