@@ -307,7 +307,11 @@ class PanelQuestion {
                         cwyn.addKeypressListener();
                         v = cwyn.appendMeTo($('<td></td>'));
                         
-                        var trimmedAnswer : string = correctAnswer.trim().replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+                        var trimmedAnswer : string = correctAnswer.trim()
+                            .replace(/&lt;/g,'<')
+                            .replace(/&gt;/g,'>')
+                            .replace(/&quot;/g,'"')
+                            .replace(/&amp;/g,'&');
                         this.vAnswers.push(new Answer(cwyn, null, trimmedAnswer, featset.matchregexp));
                     }
                     else if (featType==='integer') {

@@ -103,12 +103,8 @@ class Mod_translate extends CI_Model {
                 }
                 else {
                     // Update existing record
-                    echo "<pre>UPDATE $key2 to ",htmlspecialchars($this->security->xss_clean($post[$key2])),"</pre>";
                     $this->db->where('textgroup',$textgroup)->where('symbolic_name', $key2)
                         ->update("language_$lang_edit", array('text' => $this->security->xss_clean($post[$key2])));
-                    $query = $this->db->where('textgroup',$textgroup)->where('symbolic_name', $key2)->get("language_$lang_edit");
-                    echo "<pre>AFTER UPDATE: ";print_r($query->row());die;
-
                 }
 
             }
@@ -313,20 +309,14 @@ class Mod_translate extends CI_Model {
             if (substr($key,0,6)==='modif-' && $value=="true") {
                 $key2 = substr($key,6);
 
-                $update = array('lex_id' => $key2, 'gloss' => $this->security->xss_clean($post[$key2]));
+                $update = array('lex_id' => $key2, 'gloss' => $post[$key2]);
         
                 if ($this->db->from($table)->where('lex_id',$key2)->count_all_results() == 0)
                     // A record does not exist, insert one.
                     $this->db->insert($table, $update);
                 else {
                     // Update existing record
-                    echo "<pre>BEFORE clean:",htmlspecialchars($post[$key2]),"\n",
-                        "AFTER clean:",htmlspecialchars($this->security->xss_clean($post[$key2])),"</pre>";
-                    echo "<pre>UPDATE $key2 to ",htmlspecialchars($this->security->xss_clean($post[$key2])),"</pre>";
                     $this->db->where('lex_id',$key2)->update($table, $update);
-                    $query = $this->db->where('lex_id',$key2)->get($table);
-                    echo "<pre>AFTER UPDATE: ";print_r($query->row());die;
-                    
                 }
             }
         }

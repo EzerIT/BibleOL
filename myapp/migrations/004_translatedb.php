@@ -80,7 +80,7 @@ class Migration_Translatedb extends CI_Migration {
     }
 
     private function add_hebrew_lexicons() {
-        $hand = fopen('db/allheb.txt','r');
+        $hand = fopen('db/property_files/allheb.txt','r');
  
         $allheb = array();
         
@@ -211,7 +211,7 @@ class Migration_Translatedb extends CI_Migration {
         $this->dbforge->add_key('lemma');
         $this->dbforge->create_table('lexicon_greek');
 
-        $hand = fopen('db/allgreek.txt','r');
+        $hand = fopen('db/property_files/allgreek.txt','r');
  
         $toinsert_greek = array();
         
@@ -272,11 +272,11 @@ class Migration_Translatedb extends CI_Migration {
     public function up() {
         // $this->add_translator();
 
-        $this->add_if_translation();
+        //$this->add_if_translation();
 
         //$this->add_grammar_translation();
-        //$this->add_hebrew_lexicons();
-        //$this->add_greek_lexicon();
+        $this->add_hebrew_lexicons();
+        $this->add_greek_lexicon();
         die;
    }
 

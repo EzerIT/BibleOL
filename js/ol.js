@@ -1593,7 +1593,11 @@ var PanelQuestion = (function () {
                         }
                         cwyn.addKeypressListener();
                         v = cwyn.appendMeTo($('<td></td>'));
-                        var trimmedAnswer = correctAnswer.trim().replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+                        var trimmedAnswer = correctAnswer.trim()
+                            .replace(/&lt;/g, '<')
+                            .replace(/&gt;/g, '>')
+                            .replace(/&quot;/g, '"')
+                            .replace(/&amp;/g, '&');
                         this.vAnswers.push(new Answer(cwyn, null, trimmedAnswer, featset.matchregexp));
                     }
                     else if (featType === 'integer') {
