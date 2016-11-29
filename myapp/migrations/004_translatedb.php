@@ -270,14 +270,13 @@ class Migration_Translatedb extends CI_Migration {
     }
 
     public function up() {
-        // $this->add_translator();
+        $this->add_translator();
 
-        //$this->add_if_translation();
+        $this->add_if_translation();
 
-        //$this->add_grammar_translation();
+        $this->add_grammar_translation();
         $this->add_hebrew_lexicons();
         $this->add_greek_lexicon();
-        die;
    }
 
 	public function down()

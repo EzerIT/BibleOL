@@ -36,6 +36,10 @@ $comment['last_name'] = "";
 $format['last_name'] = "";
 $use_textarea['last_name'] = false;
 
+$comment['chinese_name_order'] = "";
+$format['chinese_name_order'] = "";
+$use_textarea['chinese_name_order'] = false;
+
 $comment['email'] = "";
 $format['email'] = "";
 $use_textarea['email'] = false;
