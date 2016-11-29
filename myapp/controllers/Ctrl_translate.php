@@ -6,8 +6,6 @@ function stripSortIndex(string $s) {
 }
 
 
-
-
 class Ctrl_translate extends MY_Controller {
     public $gloss_count = 100;
 
@@ -329,6 +327,24 @@ class Ctrl_translate extends MY_Controller {
         }
     }
 
+    function update_lex() {
+        try {
+            $this->mod_users->check_translator();
+
+            if (!isset($_GET['src_lang']) || !isset($_GET['lang_edit']))
+                throw new DataException('Missing language identification');
+
+            $this->mod_translate->update_glosses($_GET['src_lang'], $_GET['lang_edit'], $_POST);
+
+            redirect("/translate/edit_lex?$_SERVER[QUERY_STRING]");
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('translate_lex'));
+        }
+    }
+
+
+    
     function if_db2php() {
         if (!is_cli()) {
             echo '<pre>This command can only be run from the command line</pre>';

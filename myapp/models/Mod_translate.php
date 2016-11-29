@@ -90,8 +90,6 @@ class Mod_translate extends CI_Model {
     }
 
     public function update_if_lines(string $lang_edit, string $textgroup, array $post) {
-        $updates = array();
-        
         foreach ($post as $key => $value) {
             if (substr($key,0,6)==='modif-' && $value=="true") {
                 $key2 = substr($key,6);
@@ -105,28 +103,18 @@ class Mod_translate extends CI_Model {
                 }
                 else {
                     // Update existing record
+                    echo "<pre>UPDATE $key2 to ",htmlspecialchars($this->security->xss_clean($post[$key2])),"</pre>";
                     $this->db->where('textgroup',$textgroup)->where('symbolic_name', $key2)
                         ->update("language_$lang_edit", array('text' => $this->security->xss_clean($post[$key2])));
+                    $query = $this->db->where('textgroup',$textgroup)->where('symbolic_name', $key2)->get("language_$lang_edit");
+                    echo "<pre>AFTER UPDATE: ";print_r($query->row());die;
+
                 }
 
             }
         }
     }
 
-    function printit(string $prefix, array $a)
-    {
-        foreach ($a as $k => $v) {
-            $key = $prefix==="" ? $k : "$prefix.$k";
-            if (is_array($v))
-                printit($key, $v);
-            elseif (is_string($v))
-                echo "$key:s:$v\n";
-            else
-                echo "$key:n:$v\n";
-        }
-    }
-
-    
     private function build_grammar_array(string $prefix, array $src, array &$dst) {
         foreach ($src as $k => $v) {
             $key = $prefix==="" ? $k : "$prefix.$k";
@@ -242,8 +230,6 @@ class Mod_translate extends CI_Model {
         $this->build_grammar_array('', json_decode($l10n_edit,true), $this->grammar_edit_array);
         $this->build_grammar_array('', json_decode($l10n_comment,true), $this->grammar_comment_array);
 
-        $updates = array();
-        
         foreach ($post as $key => $value) {
             if (substr($key,0,6)==='modif-' && $value=="true") {
                 $key2 = substr($key,6);                    // Remove 'modif-'
@@ -308,6 +294,44 @@ class Mod_translate extends CI_Model {
         return $query->result();
     }
 
+    public function update_glosses(string $src_lang, string $dst_lang, array $post) {
+        switch ($src_lang) {
+          case 'heb':
+          case 'aram':
+                $table = "lexicon_heb_{$dst_lang}";
+                break;
+
+          case 'greek':
+                $table = "lexicon_greek_{$dst_lang}";
+                break;
+
+          default:
+                throw new DataException($this->lang->line('illegal_lang_code'));
+        }
+
+        foreach ($post as $key => $value) {
+            if (substr($key,0,6)==='modif-' && $value=="true") {
+                $key2 = substr($key,6);
+
+                $update = array('lex_id' => $key2, 'gloss' => $this->security->xss_clean($post[$key2]));
+        
+                if ($this->db->from($table)->where('lex_id',$key2)->count_all_results() == 0)
+                    // A record does not exist, insert one.
+                    $this->db->insert($table, $update);
+                else {
+                    // Update existing record
+                    echo "<pre>BEFORE clean:",htmlspecialchars($post[$key2]),"\n",
+                        "AFTER clean:",htmlspecialchars($this->security->xss_clean($post[$key2])),"</pre>";
+                    echo "<pre>UPDATE $key2 to ",htmlspecialchars($this->security->xss_clean($post[$key2])),"</pre>";
+                    $this->db->where('lex_id',$key2)->update($table, $update);
+                    $query = $this->db->where('lex_id',$key2)->get($table);
+                    echo "<pre>AFTER UPDATE: ";print_r($query->row());die;
+                    
+                }
+            }
+        }
+    }
+    
     public function get_localized_ETCBC4() {
         $this->load->library('db_config');
 

@@ -233,7 +233,7 @@ else
 <form action="<?= site_url(($editing=='interface'
                             ? 'translate/update_if?' 
                             : ($editing=='grammar' ? 'translate/update_grammar?'
-                                : 'translate/update_lexicon?' )). http_build_query($get_parms)) ?>" method="post">
+                                : 'translate/update_lex?' )). http_build_query($get_parms)) ?>" method="post">
     
 <div class="table-responsive">
 <table id="trans_table" class="type2 table table-striped">
