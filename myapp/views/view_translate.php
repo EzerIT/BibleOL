@@ -311,13 +311,13 @@ else
 
           <td class="leftalign">
             <?php if (substr($line->comment,0,10)=='f:textarea'): ?>
-              <textarea class="textinput" name="<?= $line->symbolic_name ?>" rows="5" cols="40"><?= replace_quot($line->text_edit) ?></textarea>
+              <textarea class="textinput" name="<?= $line->symbolic_name_dash ?>" rows="5" cols="40"><?= replace_quot($line->text_edit) ?></textarea>
             <?php else: ?>
-              <input type="text" class="textinput" name="<?= $line->symbolic_name ?>" size="40" value="<?= replace_quot($line->text_edit) ?>">
+              <input type="text" class="textinput" name="<?= $line->symbolic_name_dash ?>" size="40" value="<?= replace_quot($line->text_edit) ?>">
             <?php endif; ?>
           <td class="centeralign">
-            <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name ?>" href="#"><?= $this->lang->line('revert') ?></a>
-            <input type="hidden" class="modif-indicator" name="modif-<?= $line->symbolic_name ?>" value="false"></td>
+            <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name_dash ?>" href="#"><?= $this->lang->line('revert') ?></a>
+            <input type="hidden" class="modif-indicator" name="modif-<?= $line->symbolic_name_dash ?>" value="false"></td>
           </td>
           </td>
 

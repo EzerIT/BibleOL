@@ -200,10 +200,11 @@ class Mod_translate extends CI_Model {
         for ($i=$offset; $i<$endpos; ++$i) {
             $data = new stdClass;
             $key = $this->grammar_edit_ordered[$i];
-            $data->symbolic_name = preg_replace('/\./','--',$key); // Required because the symbolic
-                                                                   // name is used as an attribute
-                                                                   // in HTML and . is not allowed
-                                                                   // there
+            $data->symbolic_name = $key;
+            $data->symbolic_name_dash = preg_replace('/\./','--',$key); // Required because the symbolic
+                                                                        // name is used as an attribute
+                                                                        // in HTML and . is not allowed
+                                                                        // there
             $data->text_show = $this->grammar_show_array[$key];
             $data->text_edit = $this->grammar_edit_array[$key];
             $data->comment = $this->grammar_comment_array[$key];
