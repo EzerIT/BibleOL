@@ -52,6 +52,16 @@ else
                     document.location='<?= build_url($editing,$groupsel_parms) ?>'.format($(this).val());
                 });
       <?php endif; ?>
+
+      <?php if ($editing=='grammar'): ?>
+        $('#dbsel')
+            .on('change', function() {
+                    <?php $dbsel_parms = $get_parms;
+                    $dbsel_parms['db'] = '{0}';
+                    ?>
+                    document.location='<?= build_url($editing,$dbsel_parms) ?>'.format($(this).val());
+                });
+      <?php endif; ?>
             
         $('#langeditsel')
             .on('change', function() {
@@ -149,20 +159,42 @@ else
 </select>
 </p>
 
-<?php if ($editing!='lexicon'): ?>
-    <p><strong><?= $editing=='interface' ? $this->lang->line('text_group') : $this->lang->line('text_database') ?>:</strong>
-  
-    <select id="groupsel">
-      <?php foreach ($group_list as $tg): ?>
-            <option value="<?= $tg ?>" <?= $tg==$get_parms['group'] ? 'selected="selected"' : '' ?>><?= $tg ?></option>
-      <?php endforeach; ?>
-    </select>
-    </p>
+<?php
+  switch ($editing) {
+    case 'interface':
+          echo '<p><strong>',$this->lang->line('text_group'),":</strong>\n";
+          echo "<select id=\"groupsel\">\n";
+          foreach ($group_list as $tg)
+              echo "<option value=\"$tg\"", $tg==$get_parms['group'] ? 'selected="selected"' : '', ">$tg</option>\n";
+          echo "</select>\n";
+          echo "</p>\n";
 
+          echo '<p>',sprintf($this->lang->line('items_text_group'),$line_count),"</p>\n";
+          echo '<p>',sprintf($this->lang->line('each_page_shows'),$lines_per_page),"</p>\n";
+          break;
 
-    <p><?= sprintf($this->lang->line($editing=='interface' ? 'items_text_group' : 'items_text_database'),$line_count) ?></p>
-    <p><?= sprintf($this->lang->line('each_page_shows'),$lines_per_page) ?></p>
-<?php endif; ?>
+    case 'grammar':
+          echo '<p><strong>',$this->lang->line('text_database'),":</strong>\n";
+          echo "<select id=\"dbsel\">\n";
+          foreach ($db_list as $db)
+              echo "<option value=\"$db\"", $db==$get_parms['db'] ? 'selected="selected"' : '', ">$db</option>\n";
+          echo "</select>\n";
+          echo "</p>\n";
+
+          echo '<p><strong>',$this->lang->line('name_prefix'),":</strong>\n";
+          echo "<select id=\"groupsel\">\n";
+          foreach ($group_list as $tg)
+              echo "<option value=\"$tg\"", $tg==$get_parms['group'] ? 'selected="selected"' : '', ">$tg</option>\n";
+          echo "</select>\n";
+          echo "</p>\n";
+          break;
+// 
+//    case 'lexicon':
+//          echo '<p>',sprintf($this->lang->line('items_text_database'),$line_count),"</p>\n";
+//          echo '<p>',sprintf($this->lang->line('each_page_shows'),$lines_per_page),"</p>\n";
+//          break;
+  }
+?>
 
 <?php if ($count_untrans>0): ?>        
   <p><input id="show-notrans" class="btn btn-danger" type="button" href="<?= build_url($editing,$get_parms) ?>"
@@ -193,7 +225,7 @@ else
        
 <?php endif; ?>
         
-<?php if ($editing!='lexicon'): ?>
+<?php if ($editing=='interface'): ?>
   <nav>
     <ul class="pagination">
       <?php for ($p=0; $p<$page_count; ++$p): ?>
@@ -304,7 +336,7 @@ else
 
         
         <?php case 'grammar': ?>
-          <td class="leftalign"><?= $line->symbolic_name ?></td>
+          <td class="leftalign"><?= $get_parms['group']=='info' ? $line->symbolic_name : substr($line->symbolic_name,strlen($get_parms['group'])+1) ?></td>
           <td class="leftalign"><?= htmlspecialchars(substr($line->comment,0,2)=="f:" ?
                                                      substr(strstr($line->comment," "),1) : $line->comment) ?></td>
           <td class="leftalign"><?= htmlspecialchars($line->text_show) ?></td>

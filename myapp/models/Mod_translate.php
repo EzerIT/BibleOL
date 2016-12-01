@@ -8,6 +8,7 @@ class Mod_translate extends CI_Model {
     private $grammar_show_ordered;
     private $grammar_comment_ordered;
     private $grammar_db;
+    private $grammar_comment_full;
     
     private $if_langs;
     private $lexicon_langs;
@@ -24,7 +25,6 @@ class Mod_translate extends CI_Model {
         if (!is_cli()) {
             // Not running from command line. This means we are not doing a migration
             $this->lang->load('users', $this->language);
-
 
             $this->if_langs = array('en' => $this->lang->line('english'),
                                     'da' => $this->lang->line('danish'),
@@ -139,8 +139,81 @@ class Mod_translate extends CI_Model {
         return json_encode($json);
     }
 
+    public function get_grammargroup_list(string $db) {
+        $this->grammar_db = $db;
+        $query = $this->db->select('json')->where('db',$db)->where('lang','comment')->get('db_localize');
+        $this->grammar_comment_full = json_decode($query->row()->json, true);
+
+        $res = array('info');
+        
+        foreach ($this->grammar_comment_full as $l1 => $v1) {
+            if (is_array($v1))
+                foreach ($v1 as $l2 => $v2) {
+                    $res[] = "$l1.$l2";
+                }
+        }
+
+        return $res;
+    }
+
+    private function recursive_count(array $a) {
+        $count = 0;
+        foreach ($a as $v) {
+            if (is_array($v))
+                $count += $this->recursive_count($v);
+            else
+                ++$count;
+        }
+        return $count;
+    }
+          
+    private function count_non_array(array $a) {
+        $count = 0;
+        foreach ($a as $v) {
+            if (!is_array($v))
+                ++$count;
+        }
+        return $count;
+    }
+          
     
-    public function count_grammar_lines(string $db, string $lang_edit, string $lang_show) {
+    public function count_grammar_lines(string $grammargroup) {
+        if ($grammargroup=='info')
+            return $this->count_non_array($this->grammar_comment_full);
+        else {
+            list($l1, $l2) = explode('.', $grammargroup);
+            return $this->recursive_count($this->grammar_comment_full[$l1][$l2]);
+        }
+    }
+        
+
+    public function get_grammar_lines_part(string $lang_edit, string $lang_show, string $grammargroup) {
+        $this->count_grammar_lines_TODO_change($this->grammar_db, $lang_edit, $lang_show);
+
+        $res = array();
+
+        foreach ($this->grammar_comment_array as $key => $comment) {
+            if (($grammargroup=='info' && strpos($key, '.')===false) ||
+                substr($key, 0, strlen($grammargroup))===$grammargroup) {
+                $data = new stdClass;
+                $data->symbolic_name = $key;
+                $data->symbolic_name_dash = preg_replace('/\./','--',$key); // Required because the symbolic
+                                                                            // name is used as an attribute
+                                                                            // in HTML and . is not allowed
+                                                                            // there
+                $data->text_show = $this->grammar_show_array[$key];
+                $data->text_edit = $this->grammar_edit_array[$key];
+                $data->comment = $comment;
+                $res[] = $data;
+            }
+        }
+        return $res;
+    }
+
+
+    
+    
+    public function count_grammar_lines_TODO_change(string $db, string $lang_edit, string $lang_show) {
         $this->grammar_db = $db;
         
         $query = $this->db->select('json')->where('db',$db)->where('lang',$lang_edit)->get('db_localize');
@@ -193,25 +266,25 @@ class Mod_translate extends CI_Model {
         return $count;
     }
     
-    public function get_grammar_lines_part(integer $limit, integer $offset) {
-        $res = array();
-        $endpos = min($offset + $limit, count($this->grammar_show_array));
-        
-        for ($i=$offset; $i<$endpos; ++$i) {
-            $data = new stdClass;
-            $key = $this->grammar_edit_ordered[$i];
-            $data->symbolic_name = $key;
-            $data->symbolic_name_dash = preg_replace('/\./','--',$key); // Required because the symbolic
-                                                                        // name is used as an attribute
-                                                                        // in HTML and . is not allowed
-                                                                        // there
-            $data->text_show = $this->grammar_show_array[$key];
-            $data->text_edit = $this->grammar_edit_array[$key];
-            $data->comment = $this->grammar_comment_array[$key];
-            $res[] = $data;
-        }
-        return $res;
-    }
+//    public function get_grammar_lines_part(integer $limit, integer $offset) {
+//        $res = array();
+//        $endpos = min($offset + $limit, count($this->grammar_show_array));
+//        
+//        for ($i=$offset; $i<$endpos; ++$i) {
+//            $data = new stdClass;
+//            $key = $this->grammar_edit_ordered[$i];
+//            $data->symbolic_name = $key;
+//            $data->symbolic_name_dash = preg_replace('/\./','--',$key); // Required because the symbolic
+//                                                                        // name is used as an attribute
+//                                                                        // in HTML and . is not allowed
+//                                                                        // there
+//            $data->text_show = $this->grammar_show_array[$key];
+//            $data->text_edit = $this->grammar_edit_array[$key];
+//            $data->comment = $this->grammar_comment_array[$key];
+//            $res[] = $data;
+//        }
+//        return $res;
+//    }
 
     public function update_grammar_lines(string $lang_edit, string $db, array $post) {
         $this->grammar_db = $db;
