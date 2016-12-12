@@ -72,7 +72,7 @@ function show_buttons(string $head,
 
 <?php switch ($get_parms['src_lang']):
   case 'all-with-greek':
-  case 'all': ?>
+  case 'all-no-greek': ?>
     <?php show_buttons($this->lang->line('hebrew_glosses'),  array('src_lang'=>'heb')   + $get_parms, $heb_buttons,   'heb-default',$gloss_count); ?>
     <?php show_buttons($this->lang->line('aramaic_glosses'), array('src_lang'=>'aram')  + $get_parms, $aram_buttons,  'heb-default',$gloss_count); ?>
 

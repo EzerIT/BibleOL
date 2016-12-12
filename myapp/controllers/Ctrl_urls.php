@@ -24,7 +24,7 @@ class Ctrl_urls extends MY_Controller {
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
-            $get_parms = array('src_lang' => 'all',
+            $get_parms = array('src_lang' => 'all-no-greek',
                                'buttonix' => null);
 
             $center_text = $this->load->view('view_select_gloss',

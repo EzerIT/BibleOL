@@ -33,6 +33,7 @@ $lang['text_group'] = 'Tekstgruppe';
 $lang['text_database'] = 'Tekstdatabase';
 $lang['items_text_group'] = 'Antal emner i denne tekstgruppe: %d.';
 $lang['items_text_database'] = 'Antal emner i denne tekstdatabase: %d.';
+$lang['name_prefix'] = 'Navnepræfiks';
 $lang['each_page_shows'] = 'Hver side viser %d emner.';
 $lang['show_strings_without_translation'] = 'Vis %d emne(r) uden oversættelse';
 $lang['untranslated_strings'] = 'Emner uden oversættelse';

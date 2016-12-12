@@ -4,7 +4,6 @@ class Mod_urls extends CI_Model {
     public function __construct() {
         parent::__construct();
 
-//        $this->config->load('ol');
         $this->load->database();
     }
 

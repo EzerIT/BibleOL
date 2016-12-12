@@ -96,6 +96,10 @@ $comment['items_text_database'] = "";
 $format['items_text_database'] = "";
 $use_textarea['items_text_database'] = false;
 
+$comment['name_prefix'] = "";
+$format['name_prefix'] = "";
+$use_textarea['name_prefix'] = false;
+
 $comment['each_page_shows'] = "";
 $format['each_page_shows'] = "";
 $use_textarea['each_page_shows'] = false;

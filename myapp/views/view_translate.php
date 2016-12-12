@@ -21,7 +21,7 @@ function replace_quot($s) {
 $short_target_lang = $get_parms['lang_edit'];
 $long_target_lang = $lang_list[$short_target_lang];
 
-if ($editing=='interface') {
+if ($editing=='interface' || $editing=='grammar') {
     $count_untrans = count($untranslated);
     $strings = $count_untrans>1 ? 'strings' : 'string';
 }
@@ -210,10 +210,17 @@ else
         </div>
         <div class="modal-body">
           <table class="table table-striped">
-          <tr><th><?= $this->lang->line('text_group') ?></th><th><?= $this->lang->line('symbolic_name') ?></th></tr>
-          <?php foreach ($untranslated as $ut): ?>
-              <tr><td><?= $ut->textgroup ?></td><td><?= $ut->symbolic_name ?></td></tr>
-          <?php endforeach; ?>
+          <?php if ($editing=='grammar'): ?>
+            <tr><th><?= $this->lang->line('name_prefix') ?></th><th><?= $this->lang->line('symbolic_name') ?></th></tr>
+              <?php foreach ($untranslated as $ut): ?>
+                  <tr><td><?= $ut['grammargroup'] ?></td><td><?= $ut['symbolic_name'] ?></td></tr>
+              <?php endforeach; ?>
+          <?php else: ?>
+              <tr><th><?= $this->lang->line('text_group') ?></th><th><?= $this->lang->line('symbolic_name') ?></th></tr>
+              <?php foreach ($untranslated as $ut): ?>
+                  <tr><td><?= $ut['textgroup'] ?></td><td><?= $ut['symbolic_name'] ?></td></tr>
+              <?php endforeach; ?>
+          <?php endif; ?>
           </table>
         </div>
         <div class="modal-footer">

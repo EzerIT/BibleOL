@@ -4,9 +4,6 @@ class Mod_translate extends CI_Model {
     private $grammar_edit_array; // Used for caching grammar localization information
     private $grammar_show_array;
     private $grammar_comment_array;
-    private $grammar_edit_ordered;
-    private $grammar_show_ordered;
-    private $grammar_comment_ordered;
     private $grammar_db;
     private $grammar_comment_full;
     
@@ -86,7 +83,7 @@ class Mod_translate extends CI_Model {
             ->join("language_$lang_edit e", "e.symbolic_name=c.symbolic_name AND e.textgroup=c.textgroup",'left')
             ->where('e.text IS NULL')
             ->order_by('textgroup,symbolic_name')->get();
-        return $query->result();
+        return $query->result_array();
     }
 
     public function update_if_lines(string $lang_edit, string $textgroup, array $post) {
@@ -186,9 +183,46 @@ class Mod_translate extends CI_Model {
         }
     }
         
+    private function get_l10n_and_build(string $lang, &$dst) {
+        $l10n = $this->db->select('json')->where('db',$this->grammar_db)->where('lang',$lang)->get('db_localize')->row()->json;
+        $dst = array();
+        $this->build_grammar_array('', json_decode($l10n,true), $dst);
+    }
+
+    public function get_grammar_untranslated(string $lang_edit) {
+        $res = array();
+        
+        foreach ($this->grammar_comment_array as $k => $v) {
+            if (!isset($this->grammar_edit_array[$k]) || $this->grammar_edit_array[$k]==='') {
+                if (strpos($k, '.')===false)
+                    $res[] = array('grammargroup' => 'info', 'symbolic_name' => $k);
+                else {
+                    if (preg_match('/([^.]*\.[^.]*)\.(.*)/', $k, $matches)) {
+                        list($all,$group,$name) = $matches;
+                        $res[] = array('grammargroup' => $group, 'symbolic_name' => $name);
+                    }
+                    else
+                        throw new DataException("Illegal key found in grammar comment for $lang_edit");
+                }
+            }
+        }
+        return $res;
+    }
 
     public function get_grammar_lines_part(string $lang_edit, string $lang_show, string $grammargroup) {
-        $this->count_grammar_lines_TODO_change($this->grammar_db, $lang_edit, $lang_show);
+        $this->get_l10n_and_build($lang_edit, $this->grammar_edit_array);
+        $this->get_l10n_and_build($lang_show, $this->grammar_show_array);
+        $this->get_l10n_and_build('comment', $this->grammar_comment_array);
+
+        // Sanity check
+        $count = count($this->grammar_edit_array);
+
+        if ($count != count($this->grammar_show_array) ||
+            count(array_diff_key($this->grammar_edit_array,$this->grammar_show_array))!=0)
+            throw new DataException("Localization information for language $lang_edit is incompatible with language $lang_show");
+        if ($count != count($this->grammar_comment_array) ||
+            count(array_diff_key($this->grammar_edit_array,$this->grammar_comment_array))!=0)
+            throw new DataException("Localization information for language $lang_edit is incompatible with comments information");
 
         $res = array();
 
@@ -210,95 +244,11 @@ class Mod_translate extends CI_Model {
         return $res;
     }
 
-
-    
-    
-    public function count_grammar_lines_TODO_change(string $db, string $lang_edit, string $lang_show) {
-        $this->grammar_db = $db;
-        
-        $query = $this->db->select('json')->where('db',$db)->where('lang',$lang_edit)->get('db_localize');
-        $l10n_edit = $query->row()->json;
-
-        $query = $this->db->select('json')->where('db',$db)->where('lang',$lang_show)->get('db_localize');
-        $l10n_show = $query->row()->json;
-
-        $query = $this->db->select('json')->where('db',$db)->where('lang','comment')->get('db_localize');
-        $l10n_comment = $query->row()->json;
-
-        $this->grammar_edit_array = array();
-        $this->grammar_show_array = array();
-        $this->grammar_comment_array = array();
-        $this->build_grammar_array('', json_decode($l10n_edit,true), $this->grammar_edit_array);
-        $this->build_grammar_array('', json_decode($l10n_show,true), $this->grammar_show_array);
-        $this->build_grammar_array('', json_decode($l10n_comment,true), $this->grammar_comment_array);
-
-        // Sanity check
-        $count = count($this->grammar_edit_array);
-        if ($count != count($this->grammar_show_array))
-            throw new DataException("Localization information for language $lang_edit is incompatible with language $lang_show");
-        if ($count != count($this->grammar_comment_array))
-            throw new DataException("Localization information for language $lang_edit is incompatible with comments information");
-
-        $this->grammar_edit_ordered = array();
-        $this->grammar_show_ordered = array();
-        $this->grammar_comment_ordered = array();
-
-        foreach ($this->grammar_edit_array as $k => $v)
-            $this->grammar_edit_ordered[] = $k;
-
-        foreach ($this->grammar_show_array as $k => $v)
-            $this->grammar_show_ordered[] = $k;
-
-        foreach ($this->grammar_comment_array as $k => $v)
-            $this->grammar_comment_ordered[] = $k;
-
-        assert($count == count($this->grammar_edit_ordered));
-        assert($count == count($this->grammar_show_ordered));
-        assert($count == count($this->grammar_comment_ordered));
-        
-        for ($i=0; $i<$count; ++$i) {
-            if ($this->grammar_edit_ordered[$i]!=$this->grammar_show_ordered[$i])
-                throw new DataException("Localization information for language $lang_edit is incompatible with language $lang_show");
-            if ($this->grammar_edit_ordered[$i]!=$this->grammar_comment_ordered[$i])
-                throw new DataException("Localization information for language $lang_edit is incompatible with comments information");
-        }
-        
-        return $count;
-    }
-    
-//    public function get_grammar_lines_part(integer $limit, integer $offset) {
-//        $res = array();
-//        $endpos = min($offset + $limit, count($this->grammar_show_array));
-//        
-//        for ($i=$offset; $i<$endpos; ++$i) {
-//            $data = new stdClass;
-//            $key = $this->grammar_edit_ordered[$i];
-//            $data->symbolic_name = $key;
-//            $data->symbolic_name_dash = preg_replace('/\./','--',$key); // Required because the symbolic
-//                                                                        // name is used as an attribute
-//                                                                        // in HTML and . is not allowed
-//                                                                        // there
-//            $data->text_show = $this->grammar_show_array[$key];
-//            $data->text_edit = $this->grammar_edit_array[$key];
-//            $data->comment = $this->grammar_comment_array[$key];
-//            $res[] = $data;
-//        }
-//        return $res;
-//    }
-
     public function update_grammar_lines(string $lang_edit, string $db, array $post) {
         $this->grammar_db = $db;
-        
-        $query = $this->db->select('json')->where('db',$db)->where('lang',$lang_edit)->get('db_localize');
-        $l10n_edit = $query->row()->json;
 
-        $query = $this->db->select('json')->where('db',$db)->where('lang','comment')->get('db_localize');
-        $l10n_comment = $query->row()->json;
-
-        $this->grammar_edit_array = array();
-        $this->grammar_comment_array = array();
-        $this->build_grammar_array('', json_decode($l10n_edit,true), $this->grammar_edit_array);
-        $this->build_grammar_array('', json_decode($l10n_comment,true), $this->grammar_comment_array);
+        $this->get_l10n_and_build($lang_edit, $this->grammar_edit_array);
+        $this->get_l10n_and_build('comment', $this->grammar_comment_array);
 
         foreach ($post as $key => $value) {
             if (substr($key,0,6)==='modif-' && $value=="true") {
@@ -320,19 +270,19 @@ class Mod_translate extends CI_Model {
             ->update('db_localize', array('json' => $this->build_grammar_json($this->grammar_edit_array)) );
     }
 
-    public function count_lexicon_lines(string $src_lang) {
-        switch ($src_lang) {
-          case 'Hebrew':
-          case 'Aramaic':
-                $query = $this->db->select('count(*) as count')->where('language',$src_lang)->get('lexicon_heb');
-                break;
-                
-          case 'Greek':
-                $query = $this->db->select('count(*) as count')->get('lexicon_greek');
-                break;
-        }
-        return $query->row()->count;
-    }
+//    public function count_lexicon_lines(string $src_lang) {
+//        switch ($src_lang) {
+//          case 'Hebrew':
+//          case 'Aramaic':
+//                $query = $this->db->select('count(*) as count')->where('language',$src_lang)->get('lexicon_heb');
+//                break;
+//                
+//          case 'Greek':
+//                $query = $this->db->select('count(*) as count')->get('lexicon_greek');
+//                break;
+//        }
+//        return $query->row()->count;
+//    }
 
     public function get_glosses(string $src_lang, string $lang_edit, string $lang_show, string $from, string $to) {
         switch ($src_lang) {

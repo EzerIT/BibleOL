@@ -34,6 +34,7 @@ $lang['text_group'] = 'Text group';
 $lang['text_database'] = 'Text database';
 $lang['items_text_group'] = 'Number of items in this text group: %d.';
 $lang['items_text_database'] = 'Number of items in this text database: %d.';
+$lang['name_prefix'] = 'Name prefix';
 $lang['each_page_shows'] = 'Each page shows %d items.';
 $lang['show_strings_without_translation'] = 'Show %d item(s) without translation';
 $lang['untranslated_strings'] = 'Items Without Translation';
