@@ -136,7 +136,7 @@ pdftitle={Bible Online Learner: Localization Guide}
 %%% Font matter %%%
 \title{Bible Online Learner:\\Localization Guide}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{5 October 2015}
+\date{12 December 2016}
 
 %\makeindex
 
@@ -146,7 +146,7 @@ pdftitle={Bible Online Learner: Localization Guide}
 \maketitle
 
 \begin{center}
-Copyright © 2015 by Claus Tøndering, claus@ezer.dk
+Copyright © 2016 by Claus Tøndering, claus@ezer.dk
 
 \vspace{5mm}
 
@@ -170,86 +170,101 @@ This document tells you how to create a translation of the user interface of Bib
 
 You are expected to be familiar with the way Bible OL is used, both by teachers and by students.
 
-\section{Requirements}
+Before you start, you must have an account on the Bible OL website and an administrator must grant
+you ``translator'' privileges. Please be aware that as a translator you can modify all the available
+translations, so be careful.
 
-Before you start, you must have a copy of the following files:
+The system distinguishes between three types of translations:
 
-\begin{verbatim}
-class_lang.php
-common_lang.php
-ETCBC4.en.prop.json
-ETCBC4-translit.en.prop.json
-file_manager_lang.php
-font_lang.php
-form_validation_lang.php
-intro_text_lang.php
-js_lang.php
-login_lang.php
-menu_lang.php
-owner_lang.php
-nestle1904.en.prop.json
-privacy_lang.php
-shebanq_lang.php
-statistics_lang.php
-text_lang.php
-userclass_lang.php
-users_lang.php
-\end{verbatim}
+\begin{enumerate}
+\item The user interface, plus the grammatical terms for Hebrew and Greek.
+\item The Hebrew and Aramaic lexicons.
+\item The Greek lexicon.
+\end{enumerate}
 
-These files are so-called ``flat'' text files. This means that they contain no formatting. When you
-edit them, you must use a proper text editor, not a word processor such a Microsoft Word. Many text
-editors are available. On computers running Windows, the \emph{Notepad} program can be used, although
-it has an annoying tendency to add ``.txt'' to the end of file names.
-
-It is preferable that your text editor can read and write text using the UTF-8 encoding. In Windows
-Notepad you can select the text encoding in the ``Save As'' dialog.
+These three translations can be provided independently of one another.
 
 
+\section{Creating a Translation for a New Language}
+
+Bible OL already has translations for a number of languages, but if you want to add a new language,
+you must follow these steps:
+
+\begin{enumerate}
+\item Contact me at claus@ezer.dk and request that a new language be enabled.
+\item Provide the required translation.
+\item Inform me when the translation is ready, and I will activate it.
+\end{enumerate}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%% Editing PHP Files %%%%%%%%%%%%%%%%%%%%
-\chapter{Editing PHP Files}
+\section{Modifying a Translation for an Existing Language}
 
-Most of the files have file names that end in ``.php''. These are files that provide translations
-for the parts of the system that are not directly linked to a Greek or Hebrew database.
+An existing language translation can be modified on the live system. The changes takes effect
+immediately.
 
-A typical entry in one of the PHP files looks like this:
 
-\begin{lstlisting}
-$lang['file_exists_overwrite'] = 'The file already exists. Do you want to replace it?';
-\end{lstlisting}
+\section{Ongoing Work}
 
-When making your translation, you must not change anything to the left of the equals (=) sign. The
-text to the right of the equals sign is the translation. As shown above, it must be enclosed in
-single quotation marks (\verb|'|) and end with a semicolon.
+Please be aware that Bible OL is a dynamic program whose features change frequently. As new features
+are added to the system, I will contact you and ask you to translate text for the new features.
 
-So if you are making a translation into French, you should change the above line to something like:
 
-\begin{lstlisting}
-$lang['file_exists_overwrite'] = 'Le fichier déjà existe. Voulez-vous le remplacer?';
-\end{lstlisting}
 
-You are allowed to break the lines and insert extra spaces if you need to; it makes no difference to
-the displayed text. So the following entry would also be fine:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Translating the User Interface %%%%%%%%%%%%%%%%%%%%
+\chapter{Translating the User Interface}
 
-\begin{lstlisting}
-$lang['file_exists_overwrite'] = 'Le fichier déjà existe.
-                                  Voulez-vous le remplacer?';
-\end{lstlisting}
+The term ``user interface'' here refers to the parts of the system that are not directly linked to a
+Greek or Hebrew database.
 
-There is, however, a few cases where line breaks and spaces must not be inserted. This is described
-in Section \ref{sec-email-text}.
+To provide a translation, you must log in using an account that has ``translator'' privileges. Then,
+from the ``Administration'' menu select ``Translate interface.''
 
-In some cases the translation is followed by the characters \verb|//| and some text. This is a
-comment that may provide you with additional information. You need not translate it. For example:
+You will then see a web page that looks something like this:
 
-\begin{lstlisting}
-$lang['user_profile_deleted'] = 'User Profile Deleted'; // Text in title bar
-\end{lstlisting}
+\begin{center}
+  \includegraphics[width=0.9\linewidth]{interface.png}
+\end{center}
 
-Here the comment ``Text in title bar'' indicates the reason why the English words are capitalized.
-This is irrelevant in languages that do not use upper case in titles.
+From the drop-down menu labelled ``Target language'' select the language you are translating into.
+
+For convenience, related texts are grouped in so-called ``text groups.'' You must provide a
+translation for all text in all text groups. From the drop-down menu ``Text group,'' select the text
+group you want to work with.
+
+If there is text that you have not yet translated, clicking the red ``Show \ldots{} items without
+translation'' will bring up a list of untranslated items.
+
+The buttons labelled ``1'' and ``2'' in the above illustration allows you to switch between different
+pages. If you have worked on one page, be sure to save it before you move to another page.
+
+The area below the page buttons is divided into five columns:
+
+
+\newcommand*{\labeli}[1]{\normalfont\bfseries #1}
+
+\begin{flexlabelled}{labeli}{3cm}{*}{0cm}{4cm}{*}
+\item[Symbolic name:\hfill] This is used internally by the system.
+\item[Comment:] This column may provide some context for translation.
+\item[English (or some other language):] This is a drop down menu where you can select an existing
+  language to use as the basis for your translation. It is highly recommended that you use English
+  for this purpose; otherwise you will be working with something that is already a translation
+  from English, and the result may not be the best.
+\item[\emph{Target language:}\hfill]  Here you provide your translation.
+\item[Modified?] If you have modified an entry, a ``Revert'' button will appear in the ``Modified?''
+  column. If you click this button before you save your changes to the server, you will undo any
+  changes you have made to that entry.
+\end{flexlabelled}
+
+You can click on the headings of the ``Symbolic name'' column or the target language column to change
+the order of the items in the table. The fist time you click the heading, the items in that column
+will be sorted in alphabetical order; the second time you click the heading, the items will be sorted
+in reverse alphabetical order.
+
+At the bottom of the screen, you will find two buttons, one labelled ``Submit changes'' and one
+labelled ``Revert all.'' Clicking ``Submit changes'' will send your updated translations to the server;
+clicking ``Revert all'' will undo all the changes you have made but not yet submitted.
+
 
 \section{Special Characters}
 
@@ -265,27 +280,14 @@ quotation mark styles, which can very greatly from language to language:
 \item[] French: « abc »
 \end{itemize}
 
-But regardless of your language, the translated string must be enclosed in single quotation marks (\verb|'|) and end
-with a semicolon (\verb|;|).
-
-
-\subsection{Apostrophe or Quotation Mark}
-
-If you need to include the character \verb|'| in the text, you must precede it with the character
-\verb|\|. This tells the system that the \verb|'| does not end the string. For example:
-
-
-\begin{lstlisting}
-$lang['dont_care'] = 'Don\'t care';
-\end{lstlisting}
 
 \subsection{HTML Code}
 
 In a few places the translated string may contain HTML commands. For example:
 
-\begin{lstlisting}
-$lang['select_number_preset'] = 'Select number of questions<br>using preset passages';
-\end{lstlisting}
+\begin{verbatim}
+        Select number of questions<br>using preset passages
+\end{verbatim}
 
 HTML commands are enclosed in \verb|<| and \verb|>| characters. You should not change them in the
 translation.
@@ -296,147 +298,154 @@ In some cases the system needs to insert a value into the text string. This may,
 name of a file. Such values are indicated by \verb|%s|, \verb|%d|, or \verb|{0}| in the text
 strings. For example:
 
-\begin{lstlisting}
-$lang['user_name_used'] = 'The user name "%s" is already in use';
-\end{lstlisting}
+\begin{verbatim}
+        The user name "%s" is already in use
+\end{verbatim}
 
-or
-\begin{lstlisting}
-$lang['use_qo_selection'] = 'Do you also wish to use {0} for sentence unit selection?';
-\end{lstlisting}
+\noindent or
+\begin{verbatim}
+        Do you also wish to use {0} for sentence unit selection?
+\end{verbatim}
 
 Be sure to include the \verb|%s|, \verb|%d|, or \verb|{0}| in the translated string to indicate
 where the system should insert a value.
 
 \section{Email Text}\label{sec-email-text}
 
-A few of the text strings are not displayed on web pages but are sent to users in emails. The rules
-for writing these translations are a little different:
-
-\begin{enumerate}
-\item The strings are delimited by double quotes (\verb|"|) rather single quotes (\verb|'|).
-\item If you need to break a line in the PHP file, you must end the first line with a double quote
-  and start the second line with a period followed by a double quote.
-\item If you want a line break in the email you must write the string \verb|\n| at the place where
-  the line break is needed.
-\end{enumerate}
-
-The following example illustrates these three rules:
-
-\begin{lstlisting}
-$lang['email_text'] = "This is the text of an "
-                      . "email.\nThis is on a "
-                      . "new line.\n";
-\end{lstlisting}
-
-This will cause the actual text of the email to be:
+A few of the text strings are not displayed on web pages but are sent to users in emails. Be sure to
+include line breaks where it makes sense in the text. For example:
 
 \begin{verbatim}
         This is the text of an email.
         This is on a new line.
 \end{verbatim}
 
-(Strictly speaking, the reason double quotes are used instead of single quotes is that \verb|\n| does not work
-within single quotes.)
 
-\section{Overview of the PHP Files}
+\section{T-V Distinction}
 
-The following table lists the name of each PHP file an gives a little information about which parts
+Many languages need to consider the so-called ``t-v distinction.'' Such languages have more than one
+way to say ``you,'' depending on the level of politeness you want to use. For example, German has
+\emph{du/Sie}, French has \emph{tu/vous}, Spanish has \emph{tu/usted}, Russian has \emph{ты/Вы}. You
+must consider which form to use in your translations, and use it consistently.
+
+
+\section{Overview of the Text Groups}
+
+The following table lists the text groups an gives a little information about which parts
 of the program uses the translations is each file.
 
-\begin{my-longtabu}{>{\footnotesize\ttfamily}lX}{ \headii{\normalsize\textrm{File}}{Examples of use} }
-class\_lang.php & Class management under the ``Classes'' menu item.\\
+\begin{my-longtabu}{>{\footnotesize\ttfamily}lX}{ \headii{\normalsize\textrm{Text group}}{Examples of use} }
+class & Class management under the ``Classes'' menu item.\\
 
-common\_lang.php & Strings used in many different parts of the system.\\
+common & Strings used in many different parts of the system.\\
 
-file\_manager\_lang.php & Exercise management under the ``Manage exercises'' menu item.\\
+file\_manager & Exercise management under the ``Manage exercises'' menu item.\\
 
-font\_lang.php & Font management under the ``Font preferences'' menu item.\\
+font & Font management under the ``Font preferences'' menu item.\\
 
-form\_validation\_lang.php & Error messages for data input forms.\\
+form\_validation & Error messages for data input forms.\\
 
-intro\_text\_lang.php & Front page text.\\
+intro\_text & Front page text.\\
 
-js\_lang.php & Text display, exercise editing, exercise execution.\\
+js & Text display, exercise editing, exercise execution.\\
 
-login\_lang.php & Login mechanism.\\
+login & Login mechanism.\\
 
-menu\_lang.php & The menus.\\
+menu & The menus.\\
 
-owner\_lang.php & Ownership of exercises and classes.\\
+owner & Ownership of exercises and classes.\\
 
-privacy\_lang.php & Privacy statement.\\
+privacy & Privacy statement.\\
 
-shebanq\_lang.php & Strings used when importing queries from SHEBANQ.\\
+shebanq & Strings used when importing queries from SHEBANQ.\\
 
-statistics\_lang.php & Statistics display under the ``Statistics'' menu item.\\
+statistics & Statistics display under the ``Statistics'' menu item.\\
 
-text\_lang.php & Text and exercise display.\\
+text & Text and exercise display.\\
 
-userclass\_lang.php & Management of a user's membership of a class.\\
+translate & The translator's interface. \\
 
-users\_lang.php & User management under the ``Users'' menu item.\\
+urls & Defining URLs for different Hebrew or Greek glosses.\\
+
+userclass & Management of a user's membership of a class.\\
+
+users & User management under the ``Users'' menu item.\\
 
 \end{my-longtabu}
 
 The listed examples of use are not exhaustive.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%% Editing JSON Files %%%%%%%%%%%%%%%%%%%%
-\chapter{Editing JSON Files}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Translating Grammar Terms %%%%%%%%%%%%%%%%%%%%
+\chapter{Translating Grammar Terms}
 
-A few of the files have file names that end in ``.json''. These are files that provide translations
-for the grammatical terms that relate directly to the Hebrew and Greek databases. The format of
-these files is completely different from the format of the PHP files.
+Bible OL currently uses three text databases:
 
-A typical section in one of the JSON files might look like this:
+\begin{itemize}
+\item ETCBC4, which is the Hebrew/Aramaic text for the Old Testament.
+\item ETCBC4-translit, which is ETCBC4 transliterated into Latin characters.
+\item nestle1904, which is the Greek text for the New Testament.
+\end{itemize}
 
-\begin{lstlisting}
-   "part_of_speech_t": {
-       "prps": "Personal pronoun",
-       "verb": "Verb",
-       "adjv": "Adjective"
-   },
-\end{lstlisting}
+Each of these databases uses a number of grammatical terms (such as ``noun'', ``plural'',
+``imperative'') which need to be translated.
 
-When making your translation, you must not change anything to the left of a colon (:). The
-text to the right of the colon is the translation. As shown above, it must be enclosed in
-double quotation marks (\verb|"|) and end with a comma. If, however, the following line starts with
-a \verb|}|, the comma \emph{must} be omitted, as illustrated with the string \verb|"Adjective"| above.
+To provide a translation, you must log in using an account that has ``translator'' privileges. Then,
+from the ``Administration'' menu select ``Translate grammar terms''.
 
-So if you are making a translation into French, you should change the above lines to something like:
+You will then see a web page that looks something like this:
 
-\begin{lstlisting}
-   "part_of_speech_t": {
-       "prps": "Pronom personnel",
-       "verb": "Verbe",
-       "adjv": "Adjectif"
-   },
-\end{lstlisting}
+\begin{center}
+  \includegraphics[width=0.9\linewidth]{grammar.png}
+\end{center}
+
+From the drop-down menu labelled ``Target language'' select the language you are translating into.
+From the drop-down menu labelled ``Text database'' select the database whose grammatical terms you
+want to translate. (You must provide translations for all databases.)
+
+For convenience, related texts are grouped under a so-called ``name prefix''. You must provide a
+translation for all text under all name prefixes. From the drop-down menu ``Name prefix'', select
+the name prefix you want to work with.
+
+The area below the name prefix selector is divided into five columns:
+
+
+\begin{flexlabelled}{labeli}{3cm}{*}{0cm}{4cm}{*}
+\item[Symbolic name:\hfill] This is used internally by the system.
+\item[Comment:] This column may provide some context for translation.
+\item[English (or some other language):] This is a drop down menu where you can select an existing
+  language to use as the basis for your translation. It is highly recommended that you use English
+  for this purpose; otherwise you will be working with something that is already a translation
+  from English, and the result may not be the best.
+\item[\emph{Target language:}\hfill]  Here you provide your translation.
+\item[Modified?] If you have modified an entry, a ``Revert'' button will appear in the ``Modified?''
+  column. If you click this button before you save your changes to the server, you will undo any
+  changes you have made to that entry.
+\end{flexlabelled}
+
+At the bottom of the screen, you will find two buttons, one labelled ``Submit changes'' and one
+labelled ``Revert all''. Clicking ``Submit changes'' will send your updated translations to the server;
+clicking ``Revert all'' will undo all the changes you have made but not yet submitted.
+
 
 \section{Sorting Information}
 
-In the above example the values of the type \emph{part\_of\_speech\_t} have English translations
-such as ``Personal pronoun'', ``Verb'', and ``Adjective'' (and several others that were omitted above).
-
-When these values are displayed by the system, they are normally sorted alphabetically:
+In the above example the values with the name prefix \emph{emdrostype.part\_of\_speech\_t} have
+English translations such as ``Article'', ``Verb'', ``Noun'', and several others. When these values
+are displayed by the system, they are normally sorted alphabetically:
 
 \begin{center}
   \includegraphics[width=0.3\textwidth]{psp.png}
 \end{center}
 
 But sometimes you want another sorting order. If the translation starts with ``\#1'', ``\#2'' etc.
-these numbers indicate the sort order. For example:
+these numbers indicate the sort order. You can, for example, specify this (under name prefix
+\emph{emdrostype.gender\_t}):
 
-\begin{lstlisting}
-   "gender_t": {
-       "f": "#2 Feminine",
-       "m": "#1 Masculine",
-       "NA": "#3 None",
-       "unknown": "#4 Unknown"
-   },
-\end{lstlisting}
+\begin{center}
+  \includegraphics[width=0.3\textwidth]{gendertranslate.png}
+\end{center}
 
 Here, the strings ``\#1'', ``\#2'', etc. indicate the sorting order. Thus:
 
@@ -446,27 +455,106 @@ Here, the strings ``\#1'', ``\#2'', etc. indicate the sorting order. Thus:
 
 Be aware that the preferred sorting order in English may not be the preferred sorting order in your language.
 
-\section{Overview of the JSON Files}
+\section{Overview of the Name Prefixes}
 
-The following table lists the JSON files.
 
-\begin{my-tabu}{>{\footnotesize\ttfamily}lX}{ \headii{\normalsize\textrm{File}}{Use} }
-ETCBC4.en.prop.json & Grammatical terms for the Hebrew Old Testament.\\
-ETCBC4-translit.en.prop.json & Grammatical terms for the transliterated version of Hebrew Old
-Testament. (The contents of this file is very similar to the preceding file.)\\
-nestle1904.en.prop.json & Grammatical terms for the Greek New Testament.\\
+The following table gives an overview of the name prefixes and their use.
+
+\begin{my-tabu}{>{\footnotesize\ttfamily}lX}{ \headii{\normalsize\textrm{Name prefix}}{Use} }
+  info & Database name and copyright information. \\
+  emdrosobject\ldots & Grammatical units (such as word, phrase, clause) and their attributes.\\
+  emdrostype\ldots & Possible values of the grammatical attributes (for example, the gender
+  attribute can be masculine or feminine). \\
+  grammargroup\ldots & Groupings of attributes. \\
+  grammarfeature\ldots{}, grammarmetafeature\ldots & Names of some grammatical
+  attributes. \\
+  grammarsubfeature\ldots & Abbreviations of the values of some grammatical attributes. \\
+  universe.book& Names of the books of the Bible. \\
+  universe.chapter, universe.verse & How to identify a chapter and a verse. \\
+  universe.reference & How to format a Bible reference, plus a list of abbreviations of the books of
+  the Bible.\\
 \end{my-tabu}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%% Final Actions %%%%%%%%%%%%%%%%%%%%
-\chapter{Final Actions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Translating a Lexicon %%%%%%%%%%%%%%%%%%%%
+\chapter{Translating a Lexicon}
 
-When you have edited all the files, you must send them to me at claus@ezer.dk. I will then enter
-them into the system and you can verify that they are correct. Unfortunately, there is no way for
-you to see the result before I have installed the files.
+Bible OL uses three lexicons to provide translation of the Hebrew, Aramaic, and Greek words of the
+Bible.
 
-Please be aware that Bible OL is a dynamic program whose features change frequently. As new features
-are added to the system, I will contact you and ask you to translate text for the new features.
+To provide a translation, you must log in using an account that has ``translator'' privileges. Then,
+from the ``Administration'' menu select ``Translate lexicon''.
+
+You will then see a web page that looks something like this:
+
+\begin{center}
+  \includegraphics[width=0.9\linewidth]{lexicon.png}
+\end{center}
+
+If you scroll down the web page you will find Aramaic and Greek glosses as well.
+
+Clicking the ``Most frequent 100'' button will allow you to provide a translation of the most
+frequent 100 words of the language. Alternatively, you can click on one of the many buttons labelled
+with letters to bring up a small part of an alphabetically sorted lexicon.
+
+Once you click on a button, you will be shown a web page with a number of words to translate. You
+can scroll up the web page to find the collection of section selectors again.
+
+For the Hebrew and Aramaic lexicons, the web page will look like this:
+
+\begin{center}
+  \includegraphics[width=0.9\linewidth]{lexiconHeb.png}
+\end{center}
+
+For the Greek lexicon, the web page will look like this:
+
+\begin{center}
+  \includegraphics[width=0.9\linewidth]{lexiconGr.png}
+\end{center}
+
+From the drop-down menu labelled ``Target language'' select the language you are translating into.
+
+The area below the name target language selector is divided into six or seven columns.
+
+For Hebrew and Aramaic the columns are:
+
+\begin{flexlabelled}{labeli}{3cm}{*}{0cm}{4cm}{*}
+\item[Symbolic lexeme:\hfill] This is used internally by the system.
+\item[Lexeme:] This is Hebrew/Aramaic word to translate.
+\item[Stem:] For verbs, the lexicon requires that you provide a translation for each verbal stem.
+  Only the stems that actually occur in Bible are included.
+\item[First occurrence:\hfill] A link to the first occurrence of that word in the Bible. (This may
+  help you get some context for the word.)
+\item[English (or some other language):] This is a drop down menu where you can select an existing
+  language to guide you in your translation.
+\item[\emph{Target language:}\hfill]  Here you provide your translation.
+\item[Modified?] If you have modified an entry, a ``Revert'' button will appear in the ``Modified?''
+  column. If you click this button before you save your changes to the server, you will undo any
+  changes you have made to that entry.
+\end{flexlabelled}
+
+For Greek the columns are:
+
+
+\begin{flexlabelled}{labeli}{3cm}{*}{0cm}{4cm}{*}
+\item[Strongs:] This is the Strong's number for the word
+\item[Lexeme:] This is the Greek word to translate.
+\item[First occurrence:\hfill] A link to the first occurrence of that word in the Bible. (This may
+  help you get some context for the word.)
+\item[English (or some other language):] This is a drop down menu where you can select an existing
+  language to guide you in your translation. (For Greek we currently only have an English translation,
+  therefore the illustration above shows two columns labelled ``English.'')
+\item[\emph{Target language:}\hfill]  Here you provide your translation.
+\item[Modified?] If you have modified an entry, a ``Revert'' button will appear in the ``Modified?''
+  column. If you click this button before you save your changes to the server, you will undo any
+  changes you have made to that entry.
+\end{flexlabelled}
+
+At the bottom of the screen, you will find two buttons, one labelled ``Submit changes'' and one
+labelled ``Revert all''. Clicking ``Submit changes'' will send your updated translations to the server;
+clicking ``Revert all'' will undo all the changes you have made but not yet submitted.
+
+
 
 
 \end{document}
