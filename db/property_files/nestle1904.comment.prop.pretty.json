@@ -181,27 +181,27 @@
     "grammarsubfeature": {
         "word": {
             "person": {
-                "first_person": "",
-                "second_person": "",
-                "third_person": "",
-                "NA": ""
+                "first_person": "Abbrev. of 1st person",
+                "second_person": "Abbrev. of 2nd person",
+                "third_person": "Abbrev. of 3rd person",
+                "NA": "Indicates 'Not applicable'"
             },
             "gender": {
-                "feminine": "",
-                "masculine": "",
-                "neuter": "",
-                "NA": ""
+                "feminine": "Abbrev. of feminine",
+                "masculine": "Abbrev. of masculine",
+                "neuter": "Abbrev. of neuter",
+                "NA": "Indicates 'Not applicable'"
             },
             "number": {
-                "plural": "",
-                "singular": "",
-                "NA": ""
+                "plural": "Abbrev. of plural",
+                "singular": "Abbrev. of singular",
+                "NA": "Indicates 'Not applicable'"
             }
         }
     },
     "universe": {
         "book": {
-            "_label": "",
+            "_label": "Format for writing book name",
             "Matthew": "",
             "Mark": "",
             "Luke": "",
@@ -231,10 +231,10 @@
             "Revelation": ""
         },
         "chapter": {
-            "_label": ""
+            "_label": "Format for identifying chapter"
         },
         "verse": {
-            "_label": ""
+            "_label": "Format for identifying verse"
         },
         "reference": {
             "_label": "How to format a reference",

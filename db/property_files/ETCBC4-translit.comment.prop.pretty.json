@@ -442,47 +442,47 @@
     "grammarsubfeature": {
         "word": {
             "ps": {
-                "p1": "",
-                "NA": "",
-                "p2": "",
-                "p3": "",
+                "p1": "Abbrev. of 1st person",
+                "NA": "Indicates 'Not applicable'",
+                "p2": "Abbrev. of 2nd person",
+                "p3": "Abbrev. of 3rd person",
                 "unknown": ""
             },
             "gn": {
-                "f": "",
-                "m": "",
-                "NA": "",
-                "unknown": ""
+                "f": "Abbrev. of feminine",
+                "m": "Abbrev. of masculine",
+                "NA": "Indicates 'Not applicable'",
+                "unknown": "Abbrev. of unknown gender"
             },
             "nu": {
-                "du": "",
-                "NA": "",
-                "pl": "",
-                "sg": "",
+                "du": "Abbrev. of dual",
+                "NA": "Indicates 'Not applicable'",
+                "pl": "Abbrev. of plural",
+                "sg": "Abbrev. of singular",
                 "unknown": ""
             },
             "suffix_person": {
-                "p1": "",
-                "NA": "",
-                "p2": "",
-                "p3": ""
+                "p1": "Abbrev. of 1st person",
+                "NA": "Indicates 'Not applicable'",
+                "p2": "Abbrev. of 2nd person",
+                "p3": "Abbrev. of 3rd person"
             },
             "suffix_gender": {
-                "c": "",
-                "f": "",
-                "m": "",
-                "NA": ""
+                "c": "Abbrev. of common gender",
+                "f": "Abbrev. of feminine",
+                "m": "Abbrev. of masculine",
+                "NA": "Indicates 'Not applicable'"
             },
             "suffix_number": {
-                "NA": "",
-                "pl": "",
-                "sg": ""
+                "NA": "Indicates 'Not applicable'",
+                "pl": "Abbrev. of plural",
+                "sg": "Abbrev. of singular"
             }
         }
     },
     "universe": {
         "book": {
-            "_label": "",
+            "_label": "Format for writing book name",
             "Genesis": "",
             "Exodus": "",
             "Leviticus": "",
@@ -524,10 +524,10 @@
             "Maleachi": ""
         },
         "chapter": {
-            "_label": ""
+            "_label": "Format for identifying chapter"
         },
         "verse": {
-            "_label": ""
+            "_label": "Format for identifying verse"            
         },
         "reference": {
             "_label": "How to format a reference",
