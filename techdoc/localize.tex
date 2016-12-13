@@ -136,7 +136,7 @@ pdftitle={Bible Online Learner: Localization Guide}
 %%% Font matter %%%
 \title{Bible Online Learner:\\Localization Guide}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{12 December 2016}
+\date{13 December 2016}
 
 %\makeindex
 
@@ -165,12 +165,11 @@ The document is made available under a Creative Commons Attribution 4.0 Internat
 %%%%%%%%%%%%%%%%%%%% Introduction %%%%%%%%%%%%%%%%%%%%
 \chapter{Introduction}
 
-This document tells you how to create a translation of the user interface of Bible Online Learner
-(Bible OL).
+This document tells you how to create a translation of Bible Online Learner (Bible OL).
 
 You are expected to be familiar with the way Bible OL is used, both by teachers and by students.
 
-Before you start, you must have an account on the Bible OL website and an administrator must grant
+Before you start, you must have an account on the Bible OL website, and an administrator must grant
 you ``translator'' privileges. Please be aware that as a translator you can modify all the available
 translations, so be careful.
 
@@ -245,7 +244,7 @@ The area below the page buttons is divided into five columns:
 
 \begin{flexlabelled}{labeli}{3cm}{*}{0cm}{4cm}{*}
 \item[Symbolic name:\hfill] This is used internally by the system.
-\item[Comment:] This column may provide some context for translation.
+\item[Comment:] This column may provide some context for the translation.
 \item[English (or some other language):] This is a drop down menu where you can select an existing
   language to use as the basis for your translation. It is highly recommended that you use English
   for this purpose; otherwise you will be working with something that is already a translation
@@ -272,7 +271,7 @@ clicking ``Revert all'' will undo all the changes you have made but not yet subm
 
 If the English string contains punctuation marks -- in particular if it ends with a colon -- you should
 include similar punctuation in your own language if it makes sense. Be particularly conscious about
-quotation mark styles, which can very greatly from language to language:
+quotation mark styles, which can very greatly from language to language. For example:
 
 \begin{itemize}
 \item[] English: ``abc'' or `abc'
@@ -331,8 +330,8 @@ must consider which form to use in your translations, and use it consistently.
 
 \section{Overview of the Text Groups}
 
-The following table lists the text groups an gives a little information about which parts
-of the program uses the translations is each file.
+The following table lists the text groups and gives a little information about which parts
+of the program use the translations is each file.
 
 \begin{my-longtabu}{>{\footnotesize\ttfamily}lX}{ \headii{\normalsize\textrm{Text group}}{Examples of use} }
 class & Class management under the ``Classes'' menu item.\\
@@ -388,11 +387,11 @@ Bible OL currently uses three text databases:
 \item nestle1904, which is the Greek text for the New Testament.
 \end{itemize}
 
-Each of these databases uses a number of grammatical terms (such as ``noun'', ``plural'',
+Each of these databases uses a number of grammatical terms (such as ``noun,'' ``plural,''
 ``imperative'') which need to be translated.
 
 To provide a translation, you must log in using an account that has ``translator'' privileges. Then,
-from the ``Administration'' menu select ``Translate grammar terms''.
+from the ``Administration'' menu select ``Translate grammar terms.''
 
 You will then see a web page that looks something like this:
 
@@ -402,10 +401,11 @@ You will then see a web page that looks something like this:
 
 From the drop-down menu labelled ``Target language'' select the language you are translating into.
 From the drop-down menu labelled ``Text database'' select the database whose grammatical terms you
-want to translate. (You must provide translations for all databases.)
+want to translate. You must provide translations for all databases. Note that the terms for the
+ETCBC4 and ETCBC4-translit databases are very similar, but not completely identical.
 
-For convenience, related texts are grouped under a so-called ``name prefix''. You must provide a
-translation for all text under all name prefixes. From the drop-down menu ``Name prefix'', select
+For convenience, related texts are grouped under a so-called ``name prefix.'' You must provide a
+translation for all text under all name prefixes. From the drop-down menu ``Name prefix,'' select
 the name prefix you want to work with.
 
 The area below the name prefix selector is divided into five columns:
@@ -425,21 +425,21 @@ The area below the name prefix selector is divided into five columns:
 \end{flexlabelled}
 
 At the bottom of the screen, you will find two buttons, one labelled ``Submit changes'' and one
-labelled ``Revert all''. Clicking ``Submit changes'' will send your updated translations to the server;
+labelled ``Revert all.'' Clicking ``Submit changes'' will send your updated translations to the server;
 clicking ``Revert all'' will undo all the changes you have made but not yet submitted.
 
 
 \section{Sorting Information}
 
 In the above example the values with the name prefix \emph{emdrostype.part\_of\_speech\_t} have
-English translations such as ``Article'', ``Verb'', ``Noun'', and several others. When these values
+English translations such as ``Article,'' ``Verb,'' ``Noun,'' and several others. When these values
 are displayed by the system, they are normally sorted alphabetically:
 
 \begin{center}
   \includegraphics[width=0.3\textwidth]{psp.png}
 \end{center}
 
-But sometimes you want another sorting order. If the translation starts with ``\#1'', ``\#2'' etc.
+But sometimes you want another sorting order. If the translation starts with ``\#1,'' ``\#2,'' etc.
 these numbers indicate the sort order. You can, for example, specify this (under name prefix
 \emph{emdrostype.gender\_t}):
 
@@ -447,7 +447,7 @@ these numbers indicate the sort order. You can, for example, specify this (under
   \includegraphics[width=0.3\textwidth]{gendertranslate.png}
 \end{center}
 
-Here, the strings ``\#1'', ``\#2'', etc. indicate the sorting order. Thus:
+Here, the strings ``\#1,'' ``\#2,'' etc. indicate the sorting order. Thus:
 
 \begin{center}
   \includegraphics[width=0.148\textwidth]{gender.png}
@@ -483,7 +483,7 @@ Bible OL uses three lexicons to provide translation of the Hebrew, Aramaic, and 
 Bible.
 
 To provide a translation, you must log in using an account that has ``translator'' privileges. Then,
-from the ``Administration'' menu select ``Translate lexicon''.
+from the ``Administration'' menu select ``Translate lexicon.''
 
 You will then see a web page that looks something like this:
 
@@ -498,7 +498,7 @@ frequent 100 words of the language. Alternatively, you can click on one of the m
 with letters to bring up a small part of an alphabetically sorted lexicon.
 
 Once you click on a button, you will be shown a web page with a number of words to translate. You
-can scroll up the web page to find the collection of section selectors again.
+can scroll up the web page to find the list of section selectors again.
 
 For the Hebrew and Aramaic lexicons, the web page will look like this:
 
@@ -514,7 +514,7 @@ For the Greek lexicon, the web page will look like this:
 
 From the drop-down menu labelled ``Target language'' select the language you are translating into.
 
-The area below the name target language selector is divided into six or seven columns.
+The area below the target language selector is divided into six or seven columns.
 
 For Hebrew and Aramaic the columns are:
 
@@ -522,7 +522,7 @@ For Hebrew and Aramaic the columns are:
 \item[Symbolic lexeme:\hfill] This is used internally by the system.
 \item[Lexeme:] This is Hebrew/Aramaic word to translate.
 \item[Stem:] For verbs, the lexicon requires that you provide a translation for each verbal stem.
-  Only the stems that actually occur in Bible are included.
+  Only the stems that actually occur in Bible are listed.
 \item[First occurrence:\hfill] A link to the first occurrence of that word in the Bible. (This may
   help you get some context for the word.)
 \item[English (or some other language):] This is a drop down menu where you can select an existing
@@ -551,7 +551,7 @@ For Greek the columns are:
 \end{flexlabelled}
 
 At the bottom of the screen, you will find two buttons, one labelled ``Submit changes'' and one
-labelled ``Revert all''. Clicking ``Submit changes'' will send your updated translations to the server;
+labelled ``Revert all.'' Clicking ``Submit changes'' will send your updated translations to the server;
 clicking ``Revert all'' will undo all the changes you have made but not yet submitted.
 
 
