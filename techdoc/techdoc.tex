@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Font matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{4 May 2016}
+\date{15 December 2016}
 
 \makeindex
 
@@ -454,14 +454,14 @@ following instructions are aimed at people with a computer running the Linux ope
 
 \subsection{Step 1. Server Software}
 
-The following software must be installed on your server:
+The following software must be installed on your server (please pay attention to the PHP version number):
 
 \begin{itemize}
-\item Apache\index{Apache} (web server\index{web server}). I use version 2.4.7, but version 2.2.22 also works.
-\item MySQL\index{MySQL} (database system). I use version 5.5.41.
-\item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.8.2.
-\item PHP\index{PHP}. I use version 5.5, but version 5.3 also works.
-\item git\index{Git}. I use version 1.9.1.
+\item Apache\index{Apache} (web server\index{web server}). I use version 2.4.18, but version 2.2.22 also works.
+\item MySQL\index{MySQL} (database system). I use version 5.7.13.
+\item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.11.0.
+\item PHP\index{PHP}. I use version 5.6. \emph{Note: Version 7.0 and later does not work!}
+\item git\index{Git}. I use version 2.7.4.
 \end{itemize}
 
 
@@ -497,7 +497,7 @@ will need to change this command.
 When you have compiled and installed Emdros (using the ``make'' and ``sudo make install'' commands,
 respectively) you need to enable access to Emdros in PHP. The correct way to do this depends on your
 Apache\index{Apache} and PHP installation. In my case, I had to add a file with this contents to the
-directory \texttt{/etc/php5/mods-available}:
+directory \texttt{/etc/php/5.6/apache2/conf.d/}:
 
 \begin{lstlisting}
 extension=/usr/local/lib/emdros/EmdrosPHP.so
@@ -541,16 +541,16 @@ This will install a Git hook\index{hook, Git} that automatically downloads the n
 from Dropbox\index{Dropbox} when needed.
 
 
-\subsection{Step 4. Configure MySQL\index{MySQL}}
+\subsection{Step 4. Configure MySQL\index{MySQL}}\label{sec-database-php}
 
 Create an empty database\index{user database}\index{database, user|see {user database}} in MySQL. Then copy the file
 \texttt{myapp/config/database.php-dist} to \texttt{myapp/config/database.php} and modify the
 following lines in the copy:
 
 \begin{lstlisting}[language=PHP]
-$db['default']['username'] = 'USERNAME';
-$db['default']['password'] = 'PASSWORD';
-$db['default']['database'] = 'DATABASE';
+'username' => 'USERNAME',
+'password' => 'PASSWORD',
+'database' => 'DATABASE',
 \end{lstlisting}
 
 Change the text USERNAME, PASSWORD, and DATABASE to be the database username, password, and database
@@ -569,6 +569,7 @@ $config['pw_salt'] = 'xxxxxxx';
 $config['mql_driver'] = 'native';
 $config['mail_sender_address'] = 'xxxxx@xxxxx.xx';
 $config['mail_sender_name'] = 'Bible Online Learner';
+$config['site_url'] = 'http://xxxxx.xx';
 
 $config['google_login_enabled'] = false;
 $config['google_client_id'] = 'xxxxxxxxxxxx.apps.googleusercontent.com';
@@ -594,6 +595,8 @@ be used as sender when Bible OL sends email to users.\\
 
 \$config['mail\_sender\_name']\index{email sender}\index{sender|see {email sender}} & The name to be used as
 sender when Bible OL sends email to users.\\
+
+\$config['site\_url']\index{site URL|see {URL, site}}\index{URL!site} & The URL used to access the site.\\
 
 \$config['google\_login\_enabled']\index{login!Google}\index{Google!login|see {login, Google}} & Set to \emph{true} if
 you have a Google apps account\index{Google!apps account} that allows you to service Google logins;
@@ -622,9 +625,12 @@ following line in the copy:
 
 \begin{lstlisting}[language=PHP]
 $config['base_url'] = 'http://example.com';%\index{base URL}%
+$config['lj_enabled'] = false;
 \end{lstlisting}
 
 Replace `http://example.com' with the top URL of the web site for your Bible OL installation.
+
+If you plan to use \emph{Learning Journey} (see Chapter \ref{chap-lj}, set \texttt{\$config['lj\_enabled']} to \texttt{true}.
 
 
 \subsection{Step 6. Add Administrator\index{administrator}}
@@ -712,13 +718,13 @@ instructions how to do it here.
 The following should be installed:
 
 \begin{itemize}
-\item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.8.2.
-\item PHP\index{PHP}. I use version 5.5, but version 5.3 also works.
+\item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.11.0.
+\item PHP\index{PHP}. I use version 5.6. \emph{Note: Version 7.0 and later does not work!}
 \item nodejs\index{nodejs} (JavaScript runtime, used for compiling TypeScript and Less). I use version
-  0.10.25.
-\item npm\index{npm} (package manager for nodejs). I use version 1.3.10.
+  4.2.6.
+\item npm\index{npm} (package manager for nodejs). I use version 3.5.2.
   This package may not strictly be required, but it is useful for installing nodejs modules.
-\item git\index{Git}. I use version 1.9.1.
+\item git\index{Git}. I use version 2.7.4.
 \end{itemize}
 
 
@@ -804,9 +810,8 @@ npm install -g less
 You may not need the ``-g'' option. If you do include it, you may need to prefix the command by
 ``sudo''.
  
-I use version 1.3.3 of \emph{lessc}, but the current version on GitHub is 2.4.0. I have not studied
-what impact, if any, using a new version of the compiler will have on the Less source files in Bible
-OL.
+I use version 2.5.3 of \emph{lessc}. I have not studied what impact, if any, using a newer version
+of the compiler will have on the Less source files in Bible OL.
 
 \subsection{Installing Tsc\index{tsc!installation}\index{TypeScript!compiler|see {tsc}}}\label{sec-installing-tsc}\label{sec-install-end}
  
@@ -823,10 +828,8 @@ npm install -g typescript
 You may not need the ``-g'' option. If you do include it, you may need to prefix the command by
 ``sudo''.
  
-I use version 1.0.1.0 of \emph{tsc}, but the current version on GitHub is 1.4. I have not studied
-what impact, if any, using a new version of the compiler will have on the TypeScript source files in
-Bible OL. Currently, the Makefile\index{Makefile} that comes with Bible OL checks that the compiler version is
-1.0.1.0. This is probably unnecessary.
+I use version 1.6.2 of \emph{tsc}. I have not studied what impact, if any, using a newer version of
+the compiler will have on the TypeScript source files in Bible OL.
 
 
 
@@ -980,7 +983,9 @@ that supports PHP, MySQL, and Emdros. It is programmed in PHP\index{PHP} and has
 databases:
 
 \begin{itemize}
-\item The user database\index{user database}, which contains information about registered users.
+\item The user database\index{user database} which contains information about registered users and
+  translations of Bible OL into various languages.\footnote{The term ``user database'' is thus
+    somewhat misleading, but the name is retained in this document, nevertheless.}
 \item A number of Emdros databases, which contain the text and grammatical information for the Old
   and New Testaments (and potentially other texts as well).
 \end{itemize}
@@ -1010,14 +1015,16 @@ If the client requests an exercise to be displayed, the data exchange is:
 \item The client requests the server to load a particular URL. The URL contains information about which
   quiz template to use and how many questions to generate.
 \item The server sends the requested exercise to the client.
-\item When the user click on the ``Finish''\index{finish button@``Finish'' button} button, the
-  client sends the user's answers to the server.
+\item When the user clicks on the ``GRADE task''\index{grade task button@``GRADE task''
+  button}\index{finish button@``Finish'' button|see {``GRADE task'' button}} or ``SAVE
+  outcome''\index{save outcome button@``SAVE outcome'' button} button, the client sends the user's
+  answers to the server.
 \end{enumerate}
 
 Note that there is no data exchange between the client and the server when the user presses the
 ``Check answer''\index{check answer button@``Check answer'' button} or ``Show answer''%
 \index{show answer button@``Show answer'' button}
-buttons. These buttons execute code that is local on the server. (This means, that in theory a
+buttons. These buttons execute code that is local on the server. (This means that in theory a
 student can find the correct answers to the questions by looking at the source code for the web
 page. This is, however, quite difficult to do, and it is not considered a serious flaw in the design
 since it would require considerable knowledge on the part of the student.)
@@ -1560,7 +1567,7 @@ reformers wished to differentiate their system from the polytonic, the tonos on 
 sign: typically a dot or wedge: α\hspace{-0.5mm}̍\hspace{0.5mm}. However, the Greek government
 decreed in 1986 that the tonos shall be the acute. So you must now write ά instead of
 α\hspace{-0.5mm}̍\hspace{0.5mm}.\footnote{Source:
-  \url{http://www.opoudjis.net/unicode/unicode_gkbkgd.html}, accessed 4 May 2016.}
+  \url{http://www.opoudjis.net/unicode/unicode_gkbkgd.html}, accessed 15 December 2016.}
 
 This confusion has had an impact on the representation of the oxia and tonos accents in Unicode.
 Because of the decision from 1982, Unicode\index{Unicode} distinguishes between the oxia
@@ -1630,10 +1637,6 @@ The following table lists the suffixes of various Database Description Files:
 .db.json &
 Database Specification File\index{Database Specification File}\index{Specification File|see {Database Specification File}} &
 \ref{sec-dsf}\\
-
-.LANG.prop.json &
-Database Localization File\index{Database Localization File}\index{Localization File|see {Database Localization File}} &
-\ref{sec-db-local}\\
 
 .typeinfo.json &
 Database Type Information File\index{Database Type Information File}\index{Type Information File|see {Database Type Information File}} &
@@ -1811,7 +1814,10 @@ The Database Specification File is a JSON file containing the following key/valu
   objects of type \emph{book}, the second reference level is found in the
   \emph{chapter}\index{chapter} feature of Emdros objects of type \emph{chapter}, and the third
   reference level is found in the \emph{verse}\index{verse} feature of Emdros objects of type
-  \emph{verse}.\\
+  \emph{verse}.
+  
+  Note that in several locations, code in Bible OL is hard-coded to rely on the book/chapter/verse
+  structure used in the Bible.\\
 
   picDb & The URL of the resource website\index{resource website} (see Section
   \ref{sec-resource-web}). This value may be \emph{null.}\\
@@ -1934,7 +1940,7 @@ equivalent to a Boolean value of \emph{false}. Thus, the absence of a \emph{hide
 The following table lists the keys and values that can be associated with a feature of an Emdros
 object:
 
-\begin{my-longtabu}{lX}{ \headii{Key}{Value} }
+\begin{my-longtabu}{X[0.3,l]X[0.7]}{ \headii{Key}{Value} }
   ignoreSelect & A value of \emph{true} means: Do not use this feature for object selection (see
   below).\\
 
@@ -1973,7 +1979,7 @@ object:
   values.\\
 
   otherValues & An array of enumeration\index{Emdros!enumeration} feature values that should be lumped together as ``Other'' in
-  the user interface.\\
+  the user interface. (This is not currently used by any Emdros databases in Bible OL.)\\
 
   matchregexp & A regular expression used to check if an answer provided by a learner matches the
   value of a feature. For example, the \emph{english} feature for the Hebrew word \heb{אֶרֶץ} has the value
@@ -1987,6 +1993,10 @@ object:
   alternateshowrequestSql & An SQL statement used to access the multiple choice%
   \index{multiple-choice}
   database (see Chapter \ref{chap-multiple-choice}).\\
+
+  indirdb, sql\_command, sqlargs, multiple & These keys are used for pseudofeatures. See Section
+  \ref{sec-pseudofeature}. \\
+  
 \end{my-longtabu}
 
 
@@ -2012,6 +2022,64 @@ questions:
 \begin{center}
   \includegraphics[width=0.9\textwidth]{numbers.png}
 \end{center}
+
+\subsubsection{Pseudofeatures}\label{sec-pseudofeature}\index{pseudofeature|hyperit}
+
+The features listed in the \emph{featuresetting} information are normally genuine feature of Emdros
+objects. However, a few of them may be \emph{pseudofeatures}. A pseudofeature is logically
+associated with an Emdros object just as ordinary features are, but the values of pseudofeatures are
+retrieved from other data sources.
+
+As an example of a pseudofeature, consider Listing \ref{list-ps-syntax}.
+
+\begin{lstlisting}[escapechar=\#,caption=Featuresetting syntax for a pseudofeature,label=list-ps-syntax]
+    "english": {
+        "ignoreSelect": true,
+        "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
+        "indirdb": "mysql",
+        "sql_command": "SELECT gloss FROM {PRE}lexicon_heb heb JOIN {PRE}lexicon_heb_en en ON en.lex_id=heb.id WHERE lex='%s' AND vs='%s' AND language='%s'",
+        "sqlargs": [ "lex", "vs", "language" ],
+        "multiple": false
+    }
+\end{lstlisting}
+
+A pseudofeature uses the keys \emph{indirdb, sql\_command, sqlargs,} and \emph{multiple.}
+
+\begin{itemize}
+\item \emph{indirdb} gives the name of a database in which the pseudofeature can be found. The value
+  is either the name of an SQLite3\index{SQLite3} database, or the string ``mysql'' if the
+  pseudofeature is found in the user database\index{user database} (see Section
+  \ref{chap-user-database}). (Currently, only \emph{mysql} is used by Bible OL.)
+\item \emph{sql\_command} is the SQL command required to retrieve the value of the feature. A
+  typical example is given in the listing above. The system will replace the string
+  \texttt{\{PRE\}} with the correct database table prefix. The string \texttt{\%d} or \texttt{\%s}
+  indicates the position of the parameters required for the request. These parameters are specified
+  under the key \emph{sqlargs}.
+\item \emph{sqlargs} is an array of features whose values are to be used in place of the
+  \texttt{\%d} or \texttt{\%s} strings in \emph{sql\_command}.
+\item \emph{multiple} is true if the database may contain more than one record for a given pseudofeature.
+\end{itemize}
+
+Taking the pseudofeature \emph{english} from Listing \ref{list-ps-syntax} as an example, we see that
+the feature is found in the user database because \emph{indirdb} has the value ``mysql''.
+
+If we assume that the database table prefix\footnote{The database table prefix can be set in the
+  file \texttt{myapp/config/database.php} (See Section \ref{sec-database-php}).} is ``bol\_'',
+the value of the pseudofeature is found by executing the SQL query
+
+\begin{lstlisting}[language=SQL]
+SELECT gloss FROM bol_lexicon_heb heb JOIN bol_lexicon_heb_en en ON en.lex_id=heb.id
+    WHERE lex='...' AND vs='...' AND language='...'
+\end{lstlisting}
+
+\noindent
+where the dots are replaced by the values of the features \emph{lex, vs,} and
+\emph{language,} respectively.
+
+The SQL query is expected to return a single value because \emph{multiple} is \emph{false.}
+
+Currently, pseudofeatures are used for glosses and hyperlinks associated with lexemes.
+
 
 \subsection{The \emph{sentencegrammar} Key}\label{sentencegrammar}\index{sentencegrammar}
 
@@ -2123,9 +2191,6 @@ feature. The format is given in Listing \ref{list-gf-syntax}.
         "name": %\textrm{\emph{an Emdros feature name}}%
     }
 \end{lstlisting}
-
-If the feature is a \emph{pseudofeature}\index{pseudofeature}, additional fields are present in the
-GrammarFeature structure. See Section \ref{sec-pseudofeature} for more information.
 
 The \emph{name} value may simply be the name of a feature of the current Emdros object type, or it
 may be a string in the form ``objectType:featureName'', if the feature belongs to another object type.
@@ -2288,59 +2353,6 @@ If \emph{subsetOf} has the value \emph{null}, the current database is not a subs
 database.
 
 
-\subsection{Pseudofeatures}\label{sec-pseudofeature}\index{pseudofeature|hyperit}
-
-The features listed in the \emph{featuresetting} information are normally genuine feature of Emdros
-objects. However, a few of them may be \emph{pseudofeatures}. A pseudofeature is logically
-associated with an Emdros object just as ordinary features are, but the values of pseudofeatures are
-retrieved from other data sources.
-
-Details about psuedofeatures are found in the \emph{Grammarfeature} for the relevant feature. If the
-feature is a pseudofeature, its GrammarFeature has the format exemplified in Listing
-\ref{list-gfps-syntax}.
-
-\begin{lstlisting}[escapechar=\#,caption=GrammarFeature syntax for a pseudofeature,label=list-gfps-syntax]
-    {
-        "mytype": "GrammarFeature",
-        "name": "english",
-        "indirdb": "glossdb_hebrew.db",
-        "sql": [ "english", "heb_en", "lex='%s' AND vs='%s' AND language='%s'" ],
-        "sqlargs": [ "lex", "vs", "language" ],
-        "multiple": false
-    }
-\end{lstlisting}
-
-The \emph{mytype} and \emph{name} values are common to all GrammarFeatures (see Section
-\ref{sec-grammarfeature}). The presence of the remaining values identify the feature as
-pseudofeature.
-
-\begin{itemize}
-\item \emph{indirdb} gives the name of a database in which the pseudofeature can be found. The value
-  is either the name of an SQLite3\index{SQLite3} database, or the string ``mysql'' if the
-  pseudofeature is found in the user database\index{user database} (see Section
-  \ref{chap-user-database}).
-\item \emph{sql} contains three values: The database field, database table, and database search
-  string used to find the pseudofeature within the database.
-\item \emph{sqlargs} contains the names of features used to build the database search string.
-\item \emph{multiple} is true if the datbase may contain more than one entry for a given pseudofeature.
-\end{itemize}
-
-Taking the pseudofeature \emph{english} from the above listing as an example, we see that the
-feature is found in an SQLite3 database file called \texttt{db/glossdb\_hebrew.db}.
-
-The value of the pseudofeature is found by executing the SQL query
-
-\begin{lstlisting}[language=SQL]
-SELECT english FROM heb_en WHERE lex='...' AND vs='...' AND language='...';
-\end{lstlisting}
-
-\noindent
-where the dots are replaced by the values of the features \emph{lex, vs,} and
-\emph{language,} respectively.
-
-The SQL query is expected to return a single value because \emph{multiple} is \emph{false.}
-
-Currently, pseudofeatures are used for glosses and hyperlinks associated with lexemes.
 
 %%%%%%%%%%%%%%%%%%%% Database Description Files for Old Databases %%%%%%%%%%%%%%%%%%%%
 \section{Database Description Files for Old Databases}\label{sec-old-db}
@@ -2357,6 +2369,7 @@ not be displayed.
 
 
 
+% TODO: MOVE THIS - START
 %%%%%%%%%%%%%%%%%%%% Database Localization Files: PRIM.LANG.prop.json %%%%%%%%%%%%%%%%%%%%
 \section{Database Localization Files: PRIM.LANG.prop.json}\label{sec-db-local}\index{Database Localization File|hyperit}
 
@@ -2736,6 +2749,7 @@ the actual reference. So, when line \ref{line-chapter-label} gives the \emph{\_l
 For the \emph{book} object, the \emph{\_label} key (line \ref{line-book-label}) is simply the string
 ``\%s'', but additionally English translations of the book names used in ETCBC4 are given in lines
 \ref{line-first-book}-\ref{line-last-book}.
+% TODO: MOVE THIS - END
 
 
 %%%%%%%%%%%%%%%%%%%% Database Type Information Files: PRIM.typeinfo.json %%%%%%%%%%%%%%%%%%%%
@@ -3511,13 +3525,18 @@ panel, and constructing the grammar selection box\index{grammar selection box} a
 information box.\index{grammar information box}
 
 As the user answers the questions, the client keeps track of the answers, but no communication with
-the server takes place before the user presses the ``Finish'' button%
-\index{finish button@``Finish'' button}.
-What happens when the ``Finish'' button is pressed, depends on whether the user is logged
-in or not. If the user is logged in, the client sends the result to the server URL
+the server takes place before the user presses the ``GRADE task''\index{grade task button@``GRADE
+  task'' button} or ``SAVE outcome''\index{save outcome button@``SAVE outcome'' button} button. What
+happens when one of these buttons is pressed, depends on whether the user is logged in or not. If
+the user not logged in, the client instructs the server to display the \emph{Select a Quiz} web
+page. But if the user is logged in, the client sends the result to the server URL
 \texttt{http://}\textit{hostname}\texttt{/statistics/update\_stat}, which updates the
-statistics\index{statistics} for the user; if the user not logged in, the client instructs the
-server to display the \emph{Select a Quiz} web page.
+statistics\index{statistics} for the user. The record in the user statistics table has a field
+called \emph{grading}; this field is set to 0 if the user pressed the ``SAVE outcome'' button, the
+field is set to 1 if the use pressed the ``GRADE task'' button. The \emph{grading} field is used by
+Learning Journey (see Chapter \ref{chap-lj}).
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% The dictionaries Variable %%%%%%%%%%%%%%%%%%%%
@@ -3711,7 +3730,8 @@ Consider, for example, the middle sentence of \bibleref{Genesis}{1}{7}:\footnote
   here because a left-to-right orientation will make the following illustrations easier to read.}
 
 \begin{center}
-\em{wayyavdēl bên hammayim ʔᵃšer mittaḥat lārāqîₐʕ ûvên hammayim ʔᵃšer mēʕal lārāqîₐʕ}\thinspace\footnote{In English: ``and separated the waters that were under the expanse from the waters that were above
+% The character ᵃ is placed outside \emph{...} because of font problems
+\emph{wayyavdēl bên hammayim ʔ}ᵃ\emph{šer mittaḥat lārāqîₐʕ ûvên hammayim ʔ}ᵃ\emph{šer mēʕal lārāqîₐʕ}\thinspace\footnote{In English: ``and separated the waters that were under the expanse from the waters that were above
 the expanse.''}
 \end{center}
 
@@ -4070,7 +4090,7 @@ software.
 
 Bible OL uses a PHP\index{PHP} framework known as \emph{CodeIgniter,} which provides a simple
 decoding of URLs, forces a model-view-controller approach to the software structure, and provides a
-large library for performing a number of tasks.
+large library for performing a number of tasks. Currently, Bible OL uses CodeIgniter version 3.0.
 
 If you are going to modify server\index{server} code, you will need a good understanding of how
 CodeIgniter works, and you should therefore read the documentation at
@@ -4261,6 +4281,8 @@ user.\\
 
 text & Displays text or exercises. Also handles editing of exercises.\\
 
+translate & Allows translators to provide localization of Bible OL.\\
+
 upload & Receives and stores uploaded exercises.\\
 
 urls & Manages hyperlinks associated with lexemes.\\
@@ -4283,6 +4305,7 @@ mod\_intro\_text & Generates the text on the front page.\\
 mod\_localize & Generates localization information for JavaScript code (see Section \ref{sec-localize-javascript}).\\
 mod\_quizpath & Exercise directory operations.\\
 mod\_statistics & Manages user statistics.\index{statistics}\\
+mod\_translate & Manages translating Bible OL into different languages.\\
 mod\_urls & Manages hyperlinks associated with lexemes.\\
 mod\_userclass & Manages a user's relationship to a class.\\
 mod\_users & Manages users.\\
@@ -4675,15 +4698,27 @@ The database contains these tables:
 
 \begin{center}
 \begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l}
-alphabet         & font                 & sta\_quiztemplate   \\
-bible\_refs      & heb\_urls            & sta\_requestfeature \\
-bible\_urls      & migrations           & sta\_universe       \\
-class            & personal\_font       & user                \\
-classexercise    & sta\_displayfeature  & userclass           \\
-exercisedir      & sta\_question        & userconfig          \\
-exerciseowner    & sta\_quiz            &                     \\
+alphabet      &  heb\_urls            &  sta\_displayfeature \\
+bible\_refs   &  language\_comment    &  sta\_question       \\
+bible\_urls   &  language\_LANG       &  sta\_quiz           \\
+class         &  lexicon\_greek       &  sta\_quiztemplate   \\
+classexercise &  lexicon\_greek\_LANG &  sta\_requestfeature \\
+db\_localize  &  lexicon\_heb         &  sta\_universe       \\
+exercisedir   &  lexicon\_heb\_LANG   &  user                \\
+exerciseowner &  migrations           &  userclass           \\
+font          &  personal\_font       &  userconfig          \\
 \end{tabu}
 \end{center}
+
+
+HERTIL
+
+| sta\_grading        |
+| sta\_gradingfeature |
+| sta\_gradingpath    |
+
+
+
 
 The names are typically prefixed by a common text string found in
 \emph{\$db[\q default\q][\q dbprefix\q]} in the file \texttt{myapp/config/database.php}. If that
@@ -5279,7 +5314,8 @@ server. The skeleton looks like this (somewhat simplified):
     </div>
     <div id="buttonlist2">
         <button id="next_question" type="button">Next</button>
-        <button id="finish" type="button">Finish</button>
+        <button id="finish" type="button">GRADE task</button>
+        <button id="finishNoStats" type="button">SAVE outcome</button>
     </div>
 
     <p><button id="togglemql">Toggle MQL</button></p>
@@ -5671,6 +5707,16 @@ The \emph{localize} function loads the appropriate translation from the \emph{l1
 
 In addition to providing localized versions of the server and client strings, a translation must
 also provide localized versions of all the Database Localization Files. See Section \ref{sec-db-local}.
+
+TODO: Here are copies of text from old versions:
+
+%.LANG.prop.json &
+%Database Localization File\index{Database Localization File}\index{Localization File|see {Database Localization File}} &
+%\ref{sec-db-local}\\
+
+
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -6772,6 +6818,25 @@ The Emdros database has been created based on these sources using my program
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Index %%%%%%%%%%%%%%%%%%%%
 \printindex
+
+\chapter{TODO}
+
+\begin{itemize}
+\item Explain the function of the installed git-hook.
+\item Update \texttt{bolsetup.sql} to include translator privileges and translation files.
+\item Plug-ins.
+\item Learning Journey.
+\item In the code, switch from using \texttt{\$config['site\_url']} to the already existant
+  \texttt{\$config['base\_url']} (with an optional final '/' removed). Also remove
+  \texttt{\$config['site\_url']} from this documentation.
+\item Search this document for ``Database Localization File''.
+\item Move everything between ``TODO: MOVE THIS - START'' and ``TODO: MOVE THIS - END'' to a section
+  on localization.
+\item Describe the ``.pretty.json'' files in \texttt{db}.
+\item \texttt{php index.php maketypeinfo index \textit{databasename}} doesn't work.
+
+  
+\end{itemize}
 
 \end{document}
 
