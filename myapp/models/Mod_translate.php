@@ -228,7 +228,7 @@ class Mod_translate extends CI_Model {
 
         foreach ($this->grammar_comment_array as $key => $comment) {
             if (($grammargroup=='info' && strpos($key, '.')===false) ||
-                substr($key, 0, strlen($grammargroup))===$grammargroup) {
+                (substr($key, 0, strlen($grammargroup))===$grammargroup && $key[strlen($grammargroup)]=='.')) {
                 $data = new stdClass;
                 $data->symbolic_name = $key;
                 $data->symbolic_name_dash = preg_replace('/\./','--',$key); // Required because the symbolic
