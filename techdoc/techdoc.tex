@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Font matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{15 December 2016}
+\date{6 January 2017}
 
 \makeindex
 
@@ -234,7 +234,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \maketitle
 
 \begin{center}
-Copyright © 2016 by Claus Tøndering, claus@ezer.dk
+Copyright © 2017 by Claus Tøndering, claus@ezer.dk
 
 \vspace{5mm}
 
@@ -264,7 +264,7 @@ server and developers who need to modify or expand the way Bible OL works.
 \section{License and Copyright}\index{license}\index{copyright}
 
 Except where otherwise noted, the Bible OL source code is distributed under an MIT
-License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2016 by Claus
+License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2017 by Claus
 Tøndering, claus@ezer.dk.
 
 The present document is made available under a Creative Commons Attribution 4.0 International
@@ -630,7 +630,7 @@ $config['lj_enabled'] = false;
 
 Replace `http://example.com' with the top URL of the web site for your Bible OL installation.
 
-If you plan to use \emph{Learning Journey} (see Chapter \ref{chap-lj}, set \texttt{\$config['lj\_enabled']} to \texttt{true}.
+If you plan to use \emph{Learning Journey} (see Section \ref{sec-lj}), set \texttt{\$config['lj\_enabled']} to \texttt{true}.
 
 
 \subsection{Step 6. Add Administrator\index{administrator}}
@@ -1368,7 +1368,7 @@ Text in the database comes in three different alphabets:
   \index{alphabet!transliterated|hyperit}\index{transliterated alphabet|see {alphabet, transliterated}}
 
 \item Hebrew/Aramaic characters in \emph{ETCBC4 transcription}.%
-  \index{alphabet!transcribed|hyperit}\index{transcribed alphabet|see {alphabet, transcribed}}
+  \index{alphabet!transcribed|hyperit}\index{transcribed alphabet|see {alphabet, transcribed}}\label{page-transcribed}
   This transcription is defined in the document \texttt{ETCBC4-transcription.pdf} which is located
   together with the current document or can be downloaded from
   \url{http://shebanq.ancient-data.org/shebanq/static/docs/ETCBC4-transcription.pdf}. (In the
@@ -1720,9 +1720,12 @@ php json_pretty_print.php -u xxx.json
 \noindent
 will write the data in ugly format to standard output.
 
-Note that \emph{json\_pretty\_print.php} is completely unforgiving about errors in its input. If the
-input file contains the slightest error (such as a missing or extra comma), the script will
-simply output the word ``null''.
+The directory \texttt{db} contains JSON files in both the ugly and the pretty format. For example,
+the file \texttt{ETCBC4.db.json} is the ugly version of \texttt{ETCBC4.db.pretty.json}. The
+developer should only modify the \texttt{.pretty.json} files and then run the
+\emph{Makefile} in the top source directory, which will generate the corresponding ugly JSON files.
+
+
 
 
 %%%%%%%%%%%%%%%%%%%% Database Specification File: PRIM.db.json %%%%%%%%%%%%%%%%%%%%
@@ -1758,8 +1761,8 @@ The Database Specification File is a JSON file containing the following key/valu
   Type Information File\index{Database Type Information File} (see Section \ref{sec-tif}) and
   Database Book Order File\index{Database Book Order File} (see Section \ref{sec-bookorder}).\\
 
-  propertiesName\label{propname} & The primary name of the Database Localization
-  Files\index{Database Localization File} (see Section \ref{sec-db-local}).\\
+  propertiesName\label{propname} & The name of the Grammar Localization
+    Struture\index{Grammar Localization Structure} (see Section \ref{sec-gram-loc-struct}).\\
 
   databaseVersion & A string containing the version number of the database. This number is only used
   for display purposes. Whenever an Emdros database is changed, this number should also be changed.\\
@@ -2342,9 +2345,8 @@ Specification File:
 \end{lstlisting}
 
 Here, \emph{name} is the name of the Emdros database file for the superset, and \emph{properties} is
-the primary name\index{primary name} of the Database Localization File%
-\index{Database Localization File}
-(see Section \ref{sec-db-local}) for the superset.
+the name of the Grammar Localization Struture\index{Grammar Localization Structure} (see
+Section \ref{sec-gram-loc-struct}) for the superset.
 
 The \emph{provides} array identifies the books and chapters provided by the subset. In this example,
 the subset includes the entire book of Genesis and the first three chapters of Exodus.
@@ -2369,387 +2371,6 @@ not be displayed.
 
 
 
-% TODO: MOVE THIS - START
-%%%%%%%%%%%%%%%%%%%% Database Localization Files: PRIM.LANG.prop.json %%%%%%%%%%%%%%%%%%%%
-\section{Database Localization Files: PRIM.LANG.prop.json}\label{sec-db-local}\index{Database Localization File|hyperit}
-
-
-All keys and values in the Database Specification File (Section \ref{sec-dsf}) are language
-independent. \textbf{On the server} the \emph{propertiesName} key (page \pageref{propname}) of the
-Database Specification File is used to locate language specific files for the database, the
-so-called \emph{Database Localization Files}. If the \emph{propertiesName} key has a value of PRIM,
-the file \texttt{db/PRIM.LANG.prop.json} will contain localization information for the language LANG.
-For English, LANG should be ``en''.
-
-\textbf{On the client} the contents of the selected Database Localization File is available in a
-variable called \emph{l10n.}%
-\index{l10n JavaScript variable@\emph{l10n} JavaScript variable|hyperit}
-Its structure is described in TypeScript as the \emph{Localization} interface%
-\index{Localization TypeScript interface@\emph{Localization} TypeScript interface}
- in the file \texttt{ts/localization.ts}.
-
-The Database Localization File is a JSON file containing the following key/value pairs:
-
-\begin{my-longtabu}{lX}{ \headii{Key}{Value} }
-  dbdescription & A short description of the database.\\
-
-  dbcopyright & An HTML string containing copyright\index{copyright} information for the database.\\
-
-  emdrosobject\index{emdrosobject} & A collection of key/value pairs containing the localized names for the Emdros
-  object types and their features (see Section \ref{emdrosobject-loc}).\\
-
-  emdrostype\index{emdrostype} & A collection of key/value pairs containing the localized names for the values in the
-  Emdros enumeration\index{Emdros!enumeration} types (see Section \ref{enum-loc}).\\
-
-  grammarfeature & A collection of key/value pairs giving the names of
-  GrammarFeatures\index{GrammarFeature} (see Section \ref{grammar-loc}).\\
-
-  grammarmetafeature & A collection of key/value pairs giving the names of
-  GrammarMetaFeatures\index{GrammarMetaFeature} (see Section \ref{grammar-loc}).\\
-
-  grammarsubfeature\index{GrammarSubFeature} & A collection of key/value pairs giving the names of
-  features within a GrammarMetaFeature (see Section \ref{grammar-loc}).\\
-
-  grammargroup & A collection of key/value pairs giving the names of GrammarGroups\index{GrammarGroup} (see Section
-  \ref{grammar-loc}).\\
-
-  universe\index{passages} & A collection of key/value pairs describing how to display book,
-  chapter, and verse references (see Section \ref{universe-loc}).\\
-\end{my-longtabu}
-
-
-\subsection{The \emph{emdrosobject} Key}\label{emdrosobject-loc}\index{emdrosobject|hyperit}
-
-The value of \emph{emdrosobject} is a collection of key/value pairs containing the localized names
-for the Emdros object\index{Emdros!object} types and their features\index{Emdros!feature}. As an
-example, Listing \ref{list-emdrosobject-sample} shows a subset of the \emph{emdrosobject} for
-English localization of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
-
-\begin{lstlisting}[numbers=left,caption=A sample emdrosobject value,label=list-emdrosobject-sample]
-    "emdrosobject": {
-        "word": {%\label{line-word-start}%
-            "_objname": "Word",
-            "vt": "Tense",
-            "sp": "Part of speech",
-            ... %\textrm{\scriptsize(Additional features omitted)}%
-        },%\label{line-word-end}%
-        "phrase_atom": {%\label{line-phrase-atom-start}%
-            "_objname": "Phrase atom",
-            "det": "Determination",
-            "rela": "Relation",
-            ... %\textrm{\scriptsize(Additional feature omitted)}%
-        },%\label{line-phrase-atom-end}%
-        ... %\textrm{\scriptsize(Additional Emdros object types omitted)}%
-    }
-\end{lstlisting}
-
-
-Each key within the \emph{emdrosobject} is the name of an Emdros object, so the above example gives
-information about the \emph{word} and the \emph{phrase\_atom} Emdros objects.
-
-Each key has a value which is a collection of key/value pairs. One of those keys is always
-\emph{\_objname}, and its value is the English name for the Emdros object; the remaining keys are
-features of the Emdros object, and their values are the English name for the feature.
-
-So in the above example, lines \ref{line-word-start}-\ref{line-word-end} state that the English name
-of the Emdros object \emph{word} is ``Word'', and that it has a feature called \emph{vt} which
-in English should be rendered as ``Tense''. The \emph{word} feature \emph{sp} should be rendered
-``Part of speech'' in English.
-
-Similarly, lines \ref{line-phrase-atom-start}-\ref{line-phrase-atom-end} state that the English name
-of the Emdros object \emph{phrase\_atom} is ``Phrase~atom'', and that it has a feature called
-\emph{det} which in English should be rendered as ``Determination''. The \emph{phrase\_atom} feature
-\emph{rela} should be rendered ``Relation'' in English.
-
-If the value of the \emph{\_objname} key is long, it may not display well in the text area. An
-abbreviated version may be provided by appending the string \emph{\_abbrev} to the key in the
-\emph{emdrosobject}. This can be seen in Listing \ref{list-emdrosobject-abbrev}, which is taken from
-the English localization of the \emph{nestle1904} database (from the file
-\texttt{db/nestle1904.en.prop.json}).
-
-\begin{lstlisting}[numbers=left,caption=An abbreviated emdrosobject name,label=list-emdrosobject-abbrev]
-    "emdrosobject": {
-        "clause1": {
-            "_objname": "Clause level 1",
-            "typ": "Function"
-        },
-        "clause1_abbrev": {
-            "_objname": "Clause1"
-        },
-        ... %\textrm{\scriptsize(Additional Emdros object types omitted)}%
-    }
-\end{lstlisting}
-
-In this listing the Emdros object \emph{clause1} is normally translated ``Clause level 1'', but in
-the text display area it is simply ``Clause1'', as shown in Figure \ref{fig-clause1}. The
-\emph{\_objname} key is the only key under the abbreviated version.
-
-\begin{figure}[h]
-  \begin{center}
-    \parbox{0.5\textwidth}{
-      \includegraphics[width=0.5\textwidth]{clause1.png}
-      \caption{The term ``Clause level 1'' is used in the grammar selection box, but ``Clause1'' is
-        used in the text area.}\label{fig-clause1}
-    }
-  \end{center}
-\end{figure}
-
-
-\subsection{The \emph{emdrostype} Key}\label{enum-loc}\index{emdrostype|hyperit}
-
-The value of \emph{emdrostype} is a collection of key/value pairs containing the localized names for
-the value of Emdros enumeration\index{Emdros!enumeration} types. As an example, Listing \ref{list-emdrostype-sample} shows
-a subset of the \emph{emdrostype} for English localization of the ETCBC4 database (taken from the
-file \texttt{db/ETCBC4.en.prop.json}).
-
-\begin{lstlisting}[numbers=left,caption=A sample emdrostype value,label=list-emdrostype-sample]
-    "emdrostype": {
-        "part_of_speech_t": {%\label{line-pos-start}%
-            "verb": "Verb",
-            "subs": "Noun",
-            "nmpr": "Proper noun",
-            ... %\textrm{\scriptsize(Additional values omitted)}%
-        },%\label{line-pos-end}%
-        "gender_t": {%\label{line-gender-start}%
-            "f": "#2 Feminine",
-            "m": "#1 Masculine",
-            "NA": "#3 None",
-            "unknown": "#4 Unknown"
-        },%\label{line-gender-end}%
-        ... %\textrm{\scriptsize(Additional enumeration types omitted)}%
-    }
-\end{lstlisting}
-
-Each key within the \emph{emdrostype} is the name of an Emdros enumeration type, so the above
-example gives information about the \emph{part\_of\_speech\_t} and the \emph{gender\_t} enumeration
-types.
-
-Each key has a value which is a collection of key/value pairs, giving the names and the English
-translation of the values of the enumeration type.
-
-In the above example, lines \ref{line-pos-start}-\ref{line-pos-end} indicate that the type
-\emph{part\_of\_speech\_t} has values such as \emph{verb, subs,} and \emph{nmpr}, whose English
-translations are ``Verb'', ``Noun'', and ``Proper~noun'', respectively.
-
-Lines \ref{line-gender-start}-\ref{line-gender-end} indicate that type \emph{gender\_t} has values
-\emph{f, m, NA,} and \emph{unknown}, whose English translations are ``Feminine'', ``Masculine'',
-``None'', and ``Unknown'', respectively. The strings ``\#1'', ``\#2'' etc. indicate the order in
-which these values should be sorted when presented to the user. Normally, the values would be sorted
-alphabetically thus:
-
-\begin{center}
-  \includegraphics[width=0.3\textwidth]{psp.png}
-\end{center}
-
-But if the English translation starts with ``\#1'', ``\#2'' etc. these numbers indicate the sort
-order. So with the contents of \emph{gender\_t} given in Listing \ref{list-emdrostype-sample},
-genders are sorted thus:
-
-\begin{center}
-  \includegraphics[width=0.148\textwidth]{gender.png}
-\end{center}
-
-
-If the translation of an enumeration value is long, it may not display well in the text area.
-Abbreviated versions may be provided by appending the string \emph{\_abbrev} to the key in the
-\emph{emdrostype}. This can be seen in Listing \ref{list-emdrostype-abbrev}, which is taken from
-the English localization of the \emph{nestle1904} database (from the file
-\texttt{db/nestle1904.en.prop.json}).
-
-\begin{lstlisting}[numbers=left,caption=Abbreviated emdrostype values,label=list-emdrostype-abbrev]
-    "emdrostype": {
-        "clause_type_t": {
-            "ADV": "Adverbial",
-            "CL": "Clause",
-            ... %\textrm{\scriptsize(Additional enumeration values omitted)}%
-        },
-        "clause_type_t_abbrev": {
-            "ADV": "ADV",
-            "CL": "CL",
-            ... %\textrm{\scriptsize(Additional enumeration values omitted)}%
-        },
-        ... %\textrm{\scriptsize(Additional enumeration types omitted)}%
-    }
-\end{lstlisting}
-
-In this listing the enumeration value \emph{ADV} of type \emph{clause\_type\_t} is normally translated ``Adverbial'', but in
-the text display area it is simply ``ADV'', as shown in Figure \ref{fig-clause2}.
-
-\begin{center}
-  \parbox{0.7\textwidth}{
-    \includegraphics[width=0.7\textwidth]{clause2.png}
-    \captionof{figure}{The term ``Adverbial'' is used in the grammar information box, but ``ADV'' is
-      used in the text area.}\label{fig-clause2}
-  }
-\end{center}
-
-
-\subsection{The \emph{grammarfeature, grammarmetafeature, grammarsubfeature,} and \emph{grammargroup} Keys}%
-\label{grammar-loc}\index{GrammarFeature}\index{GrammarMetaFeature}\index{GrammarSubFeature}\index{GrammarGroup}
-
-Section \ref{sentencegrammar} describes how the Database Specification File specifies how grammar
-information should be grouped in the grammar selection box and the grammar information box on the
-Bible OL webpage. Sections \ref{sec-grammarfeature}, \ref{sec-grammarmetafeature}, and
-\ref{sec-grammargroup} describe the GrammarFeature, GrammarMetaFeature, and GrammarGroup
-specifications and the GrammarSubFeature which is part of a GrammarMetaFeature.
-
-In the Database Localization File, the \emph{grammarfeature, grammarmetafeature, grammargroup,} and
-\emph{grammarsubfeature} keys give the translation of these items, as detailed below.
-
-\subsubsection{\emph{grammarfeature}}
-
-As an example, Listing \ref{list-grammarfeature-sample} shows the \emph{grammarfeature} for the
-English localization of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
-
-\begin{lstlisting}[caption=A sample grammarfeature value,label=list-grammarfeature-sample]
-    "grammarfeature": {
-        "word": {
-            "text_translit": "Transliteration"
-        }
-    }
-\end{lstlisting}
-
-Section \ref{emdrosobject-loc} describes how the \emph{emdrosobject}\index{emdrosobject} key is used
-to provide translations for Emdros object features. The \emph{grammarfeature} in the above example
-gives an alternative translation. Normally the translation of a feature is taken from
-\emph{emdrosobject}, but in the case of the grammar selection box\index{grammar selection box} and
-the grammar information box\index{grammar information box}, the translation in \emph{grammarfeature}
-is used, if present. If no translation is given in \emph{grammarfeature}, the translation from
-\emph{emdrosobject} is used.
-
-
-\subsubsection{\emph{grammarmetafeature}}\index{GrammarMetaFeature}
-
-Listing \ref{list-grammarmetafeature-sample} shows the \emph{grammarmetafeature} for the English
-localization of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
-
-\begin{lstlisting}[numbers=left,caption=A sample grammarmetafeature value,label=list-grammarmetafeature-sample]
-    "grammarmetafeature": {
-        "word": {
-            "pgn": "Person, gender, number",%\label{line-pgn}%
-            "suffix_pgn": "Suffix: Person, gender, number"
-        }
-    }
-\end{lstlisting}
-
-In line \ref{line-pgn} the GrammarMetaFeature \emph{pgn} of the \emph{word} object is given the
-English translation ``Person, gender, number''. (Listing \ref{list-gmf-sample} on page
-\pageref{list-gmf-sample} specifies that the \emph{word} object has a GrammarMetaFeature called
-\emph{pgn}.)
-
-\subsubsection{\emph{grammarsubfeature}}\index{GrammarSubFeature}
-
-Listing \ref{list-grammarsubfeature-sample} shows a subset of the \emph{grammarsubfeature} for the
-English localization of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
-
-\begin{lstlisting}[caption=A sample grammarsubfeature value,label=list-grammarsubfeature-sample]
-    "grammarsubfeature": {
-        "word": {
-            "ps": {
-                "p1": "1",
-                "NA": "-",
-                "p2": "2",
-                "p3": "3",
-                "unknown": "?"
-            },
-            "gn": {
-                "f": "F",
-                "m": "M",
-                "NA": "-",
-                "unknown": "?"
-            },
-            "nu": {
-                "du": "Du",
-                "NA": "-",
-                "pl": "Pl",
-                "sg": "Sg",
-                "unknown": "?"
-            },
-            ... %\textrm{\scriptsize(Additional features omitted)}%
-        }
-    }
-\end{lstlisting}
-
-The example in Listing \ref{list-gmf-sample} on page \pageref{list-gmf-sample} specifies that the
-\emph{word} object has a GrammarMetaFeature called \emph{pgn} which is made up of the
-GrammarSubFeatures \emph{ps, gn,} and \emph{nu}. The \emph{grammarsubfeature} value in Listing
-\ref{list-grammarsubfeature-sample} above specifies the English translation for these three
-GrammarSubFeatures. So if, for example, a word has features \emph{ps=p2, gn=m,} and \emph{nu=sg}
-(corresponding to second person, masculine, singular), the \emph{pgn} GrammarMetaFeature should be
-rendered as ``2MSg''.
-
-
-\subsubsection{\emph{grammargroup}}\index{GrammarGroup}
-
-Listing \ref{list-grammargroup-sample} shows the \emph{grammargroup} for the English localization of
-the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
-
-\begin{lstlisting}[caption=A sample grammargroup value,label=list-grammargroup-sample]
-    "grammargroup": {
-        "word": {
-            "form_in_text": "Form in text",
-            "lexeme": "Lexeme",
-            "morphology": "Morphology"
-        }
-    },
-\end{lstlisting}
-
-The Database Specification File for the ETCBC4 database defines three GrammarGroups for the
-\emph{word} object with the names \emph{form\_in\_text,\footnote{Shown in Listing
-    \ref{list-itemssample} on page \pageref{list-itemssample}.} lexeme,} and \emph{morphology.} The
-localization information above specifies the English names for these GrammarGroups. The two
-illustrations in Section \ref{sentencegrammar} show these translations in the grammar selection
-box\index{grammar selection box} and the grammar information box\index{grammar information box}.
-
-\subsection{The \emph{universe} Key}\label{universe-loc}\index{passages}
-
-The value of \emph{universe} is collection of key/value pairs describing how to display book,
-chapter, and verse references.\footnote{Strictly speaking, references do not have to be Bible
-  references, since Bible OL can handle any other text corpuses. But book, chapter, and verse are
-  used here as a useful illustration.}
-
-As an example, Listing \ref{list-universe-sample} shows a subset of the \emph{universe} for English
-localization of the ETCBC4 database (taken from the file \texttt{db/ETCBC4.en.prop.json}).
-
-\begin{lstlisting}[escapechar=\#,numbers=left,caption=A subset of the universe value,label=list-universe-sample]
-    "universe": {
-        "book": {
-            "_label": "%s", #\label{line-book-label}#
-            "Genesis": "Genesis", #\label{line-first-book}#
-            "Exodus": "Exodus",
-            "Leviticus": "Leviticus",
-            "Numeri": "Numbers",
-            "Deuteronomium": "Deuteronomy",
-            "Josua": "Joshua",
-            "Judices": "Judges",
-            "Ruth": "Ruth",
-            "Samuel_I": "1 Samuel",
-            "Samuel_II": "2 Samuel",
-            ... #\textrm{\scriptsize(Additional books omitted)}\label{line-last-book}#
-        },
-        "chapter": {
-            "_label": "Chapter %s" #\label{line-chapter-label}#
-        },
-        "verse": {
-            "_label": "Verse %s" #\label{line-verse-label}#
-        }
-    }
-\end{lstlisting}
-
-The \emph{universeHierarchy} key of the Database Specification File (see page
-\pageref{universe-hierarchy}) defines the reference hierarchy of ETCBC4 as consisting of the Emdros
-object types \emph{book, chapter,} and \emph{verse.} The \emph{universe} key in Listing
-\ref{list-universe-sample} above defines how these three object types should be rendered:
-
-The \emph{\_label} key presents the general format as a string where ``\%s'' is to be replaced by
-the actual reference. So, when line \ref{line-chapter-label} gives the \emph{\_label} key of
-\emph{chapter} a value of ``Chapter~\%s'', it means that chapter 18 will be displayed as
-``Chapter~18''.
-
-For the \emph{book} object, the \emph{\_label} key (line \ref{line-book-label}) is simply the string
-``\%s'', but additionally English translations of the book names used in ETCBC4 are given in lines
-\ref{line-first-book}-\ref{line-last-book}.
-% TODO: MOVE THIS - END
 
 
 %%%%%%%%%%%%%%%%%%%% Database Type Information Files: PRIM.typeinfo.json %%%%%%%%%%%%%%%%%%%%
@@ -2969,8 +2590,7 @@ is the text entered under the ``Description'' tab when creating a quiz template.
 \xml{database} & The name of the Emdros database and the primary name\index{primary name} of the
 Database Specification File\index{Database Specification File}.\\
 
-\xml{properties} & The primary name\index{primary name} of the Database Localization
-File\index{Database Localization File}.\\
+\xml{properties} & The name of the Grammar Localization Struture\index{Grammar Localization Structure}.\\
 
 \xml{path} & This element may occur several times in the file. It describes a component of the
 passages\index{passages} used for the exercise. This is the data entered under the ``Passages'' tab
@@ -3417,8 +3037,8 @@ headers, HTML code to lay out the menu, and these JavaScript variables:
   (Section \ref{sec-dsf}).\\
 
   l10n\hmmindex{l10n JavaScript variable@\string\emph{l10n} JavaScript variable} &
-  A JavaScript object whose value is the contents of the Database Localization File
-  (Section \ref{sec-db-local}).\\
+  A JavaScript object whose value is the Grammar Localization Structure\index{Grammar Localization Structure}
+  (Section \ref{sec-gram-loc-struct}).\\
 
   l10n\_js\hmmindex{l10n_js JavaScript variable@\string\emph{l10n\_js} JavaScript variable} & A
   JavaScript object whose key/value pairs provide localized text for the user interface. (Chapter
@@ -3534,7 +3154,7 @@ page. But if the user is logged in, the client sends the result to the server UR
 statistics\index{statistics} for the user. The record in the user statistics table has a field
 called \emph{grading}; this field is set to 0 if the user pressed the ``SAVE outcome'' button, the
 field is set to 1 if the use pressed the ``GRADE task'' button. The \emph{grading} field is used by
-Learning Journey (see Chapter \ref{chap-lj}).
+Learning Journey (see Section \ref{sec-lj}).
 
 
 
@@ -4691,10 +4311,16 @@ things:
   use the user database}
 \plainbreak{3}
 
-The user database is a MySQL database that contains information about the users and classes
-registered on the system.
+The user database is a MySQL database that contains information about
 
-The database contains these tables:
+\begin{itemize}
+\item Users and classes registered on the system,
+\item Statistics about exercises,
+\item Localization strings,
+\item URLs linked to glosses.
+\end{itemize}
+
+The user database contains these tables:
 
 \begin{center}
 \begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l}
@@ -4710,22 +4336,23 @@ font          &  personal\_font       &  userconfig          \\
 \end{tabu}
 \end{center}
 
+The characters ``LANG'' in the names above should be replaced with language codes, such as ``en''
+for English or ``da'' for Danish.
 
-HERTIL
+Additionally, the user database contains these tables that are used by Learning Journey (see Section \ref{sec-lj}):
 
-| sta\_grading        |
-| sta\_gradingfeature |
-| sta\_gradingpath    |
-
-
-
+\begin{center}
+\begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l}
+sta\_grading & sta\_gradingfeature & sta\_gradingpath \\
+\end{tabu}
+\end{center}
 
 The names are typically prefixed by a common text string found in
 \emph{\$db[\q default\q][\q dbprefix\q]} in the file \texttt{myapp/config/database.php}. If that
 value is \emph{`bol\_',} the database tables will be named \emph{bol\_alphabet,
   bol\_bible\_refs} etc.
 
-The tables are described in the following sections.
+The tables (except for those used by Learning Journey) are described in the following sections.
 
 %%%%%%%%%%%%%%%%%%%% The user Table %%%%%%%%%%%%%%%%%%%%
 \section{The \emph{user} Table}\label{sec-user-table}\index{user table|hyperit}
@@ -4734,34 +4361,36 @@ The \emph{user} table contains information of each registered user. It has the f
 
 
 \begin{my-longtabu}{>{\itshape}lll}{ \headiii{\textup{Column}}{Type}{Contents} }
-  id               & Integer       & Unique number identifying the user.                     \\
-  first\_name      & Text          & User's first name.                                      \\
-  last\_name       & Text          & User's last name                                        \\
-  username         & Text          & Name used when logging in.                              \\
-  password         & Text          & Encrypted password.                                     \\
-  reset            & Text          & Password reset code.                                    \\
-  reset\_time      & Integer       & UNIX time when password reset code was issued.          \\
-  isadmin          & Boolean       & User is an administrator.                               \\
-  isteacher        & Boolean       & User is a teacher.                                      \\
-  email            & Text          & User's email address.                                   \\
-  oauth2\_login    & Text          & OAuth~2 service used to log user in.                    \\
-  created\_time    & Integer       & UNIX time when the account was created.                 \\
-  last\_login      & Integer       & UNIX time when the user last logged in.                 \\
-  warning\_sent    & Integer       & Number of email warnings sent about account inactivity. \\
-  preflang         & Text          & User's preferred language.                              \\
+  id                  & Integer       & Unique number identifying the user.                     \\
+  first\_name         & Text          & User's first name.                                      \\
+  last\_name          & Text          & User's last name                                        \\
+  family\_name\_first & Boolean       & True if Chinese name order is used.                     \\
+  username            & Text          & Name used when logging in.                              \\
+  password            & Text          & Encrypted password.                                     \\
+  reset               & Text          & Password reset code.                                    \\
+  reset\_time         & Integer       & UNIX time when password reset code was issued.          \\
+  isadmin             & Boolean       & User is an administrator.                               \\
+  isteacher           & Boolean       & User is a teacher.                                      \\
+  istranslator        & Boolean       & User is a translator.                                   \\
+  email               & Text          & User's email address.                                   \\
+  oauth2\_login       & Text          & OAuth~2 service used to log user in.                    \\
+  created\_time       & Integer       & UNIX time when the account was created.                 \\
+  last\_login         & Integer       & UNIX time when the user last logged in.                 \\
+  warning\_sent       & Integer       & Number of email warnings sent about account inactivity. \\
+  preflang            & Text          & User's preferred language.                              \\
 \end{my-longtabu}
 
 Local users have their username and password stored in this table. Their \emph{oauth2\_login} field
 is set to \emph{NULL} (0).\index{login!local}
 
 Google users have usernames such as ``ggl\_106440263559736360192'', where 106440263559\-736\-360192 is
-the user ID provided by Google. Their \emph{oauth2\_login} field is set to \emph{`google'} (1).\index{login!Google}
+the user ID provided by Google. Their \emph{oauth2\_login} field is set to \emph{``google''}.\index{login!Google}
 
 Facebook users have usernames such as ``fcb\_10206545794576996'', where 10206545794576996 is
-the user ID provided by Facebook. Their \emph{oauth2\_login} field is set to \emph{`facebook'} (1).\index{login!Facebook}
+the user ID provided by Facebook. Their \emph{oauth2\_login} field is set to \emph{``facebook''}.\index{login!Facebook}
 
 The \emph{preflang} field is specified as either the two-letter ISO~639-1 code of the
-language\footnote{For example, `en' for English and `da' for Danish.} or `none' for no preferred
+language\footnote{For example, ``en'' for English and ``da'' for Danish.} or ``none'' for no preferred
 language.
 
 %%%%%%%%%%%%%%%%%%%% The class Table %%%%%%%%%%%%%%%%%%%%
@@ -4975,6 +4604,9 @@ end        & Integer & The end time (UNIX time). This value is NULL if the exerc
                        exercise was aborted without saving the result.\\
 valid      & Boolean & \emph{False} if the user has deleted the entry, \emph{true} otherwise. (There
                         is currently no user interface for deleting statistics.\\
+grading    & Boolean & \emph{True} if this entry is to be used by Learning Journey for grading
+                       purposes, \emph{false} otherwise. (This is controlled by the user clicking
+                       ``GRADE task'' or ``SAVE outcome'' at the end of an exercise.) \\
 \end{my-longtabu}
 
 
@@ -4999,14 +4631,14 @@ pathname      & Text     & The full pathname of the quiz template file.\\
 
 dbname        & Text     & The name of the Emdros database on which the quiz template is based.\\
 
-dbpropname    & Text     & The primary name of the Database Localization File for the Emdros database on
+dbpropname    & Text     & The name of the Grammar Localization Structure for the Emdros database on
                             which the quiz template is based.\\
 
 qoname        & Text     & The Emdros type name of the sentence unit (quiz object) on which the
                            exercise is based.\\
 
 quizcode      & Text     & The actual XML text of the quiz template. Since this text contains both
-                           the database name, the database localization name, and the sentence unit,
+                           the database name, the name of the Grammar Localization Structure, and the sentence unit,
                            the table fields \emph{dbname, dbpropname,} and \emph{qoname} are
                            actually superfluous, but they are included as separate fields to make
                            decoding the XML text unnecessary in most cases.\\
@@ -5118,6 +4750,151 @@ keeps track of system updates. It contains this field:
 \begin{my-tabu}{>{\itshape}lll}{ \headiii{\textup{Column}}{Type}{Contents} }
 version & Integer & Current system version number as used by CodeIgniter.\\
 \end{my-tabu}
+
+
+
+%%%%%%%%%%%%%%%%%%%% The Localization Tables %%%%%%%%%%%%%%%%%%%%
+
+\section{The Localization Tables}\label{sec-localization-tables}\index{localization}
+
+The \emph{db\_localize} table and the tables with names starting with \emph{language\_} or
+\emph{lexicon\_} contain information for the localization of text.
+
+
+\subsection{The \emph{db\_localize} Table}\label{sec-db-localize}\index{db\_localize table|hyperit}
+
+The \emph{db\_localize} table contains the Grammar Localization Structures\index{Grammar
+  Localization Structure}, that is, the translation of grammar terms into various languages. For details, see
+Section \ref{sec-gram-loc-struct}.
+
+The table contains these fields:
+
+\begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
+id     & Integer & Unique number identifying this entry.     \\
+db     & Text    & The name of the Grammar Localization Structure. \\
+lang   & Text    & The language code code for the translation (``en'' for English, ``da''
+                   for Danish, etc.). The special value ``comment'' is used for an entry
+                   providing context and formatting information used in the tranlator's interface
+                   (see Section \ref{sec-gram-loc-comments}). \\
+json   & Text    & A JSON string containing the Grammar Localization Structure. \\
+\end{my-longtabu}
+
+
+\subsection{The \emph{language\_comment} Table}\label{sec-language-comment}\index{language\_comment
+  table|hyperit}
+
+The \emph{language\_comment} table contains information describing the available translation strings
+for the user interface. This table is used by the translator's interface. Each
+\emph{textgroup}/\emph{symbolic\_name} pair in this table matches an entry in each
+\emph{language\_LANG} table.
+
+The table contains these fields:
+
+\begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
+id             & Integer & Unique number identifying this entry.     \\
+textgroup      & Text    & See Section \ref{sec-loc-user-interface}. \\
+symbolic\_name & Text    & See Section \ref{sec-loc-user-interface}. \\
+comment        & Text    & A string providing the human translator with context for when the string is used. \\
+format         & Text    & If this value is ``keep\_blanks'', whitespace characters in the string
+                           are important. If the value is \emph{NULL}, multiple contiguous
+                           whitespace characters are replaced by a single space. \\
+use\_textarea  & Boolean & \emph{True} if the translator's interface should use a
+                           \xml{textarea} HTML element for input. \emph{False} if an
+                           \xml{input type="text"} HTML element should be used.\\
+\end{my-longtabu}
+
+
+\subsection{The \emph{language\_LANG} Tables}\label{sec-language-lang}\index{language\_LANG table|hyperit}
+
+The system contains a number of tables with names such as \emph{language\_en} for English,
+\emph{language\_da} for Danish, etc. They provide translations of the user interface.
+
+The tables contain these fields:
+
+\begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
+id             & Integer & Unique number identifying this entry.     \\
+textgroup      & Text    & See Section \ref{sec-loc-user-interface}. \\
+symbolic\_name & Text    & See Section \ref{sec-loc-user-interface}. \\
+text           & Text    & The relevant string translated into language \emph{LANG}. \\
+\end{my-longtabu}
+
+
+\subsection{The \emph{lexicon\_heb} Table}\label{sec-lexicon-heb}\index{lexicon\_heb table|hyperit}
+
+The \emph{lexicon\_heb} table contains information about all the Hebrew and Aramaic lexemes used by
+the system.
+
+The tables contain these fields:
+
+\begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
+id                      & Integer & Unique number identifying this entry.     \\
+lex                     & Text    & The lexeme in the \emph{transcribed alphabet} (see page \pageref{page-transcribed}). \\
+vs                      & Text    & The verbal stem of the word. ``NA'' if the word is not a verb. \\
+language                & Enumeration & ``Hebrew'' or ``Aramaic''. \\
+tally                   & Integer & The number of occurrences of this word in the text. \\
+vocalized\_lexeme\_utf8 & Text    & The lexeme in Hebrew characters. \\
+sortorder               & Text    & A string that can be used to sort the words alphabetically. \\
+firstbook               & Text    & \multirow{3}{\linewidth}{The book, chapter, and verse of the first occurrence of the word.} \\
+firstchapter            & Integer & \\
+firstverse              & Integer & \\
+\end{my-longtabu}
+
+An entry is uniquely defined by its \emph{lex, vs,} and \emph{language} fields.
+
+\subsection{The \emph{lexicon\_heb\_LANG} Table}\label{sec-lexicon-heb-lang}\index{lexicon\_heb\_LANG table|hyperit}
+
+The system contains a number of tables with names such as \emph{lexicon\_heb\_en} for English,
+\emph{lexicon\_heb\_de} for German. They provide translations for the lexemes listed in the
+\emph{lexicon\_heb} table.
+
+The tables contain these fields:
+
+\begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
+id      & Integer & Unique number identifying this entry. \\
+lex\_id & Integer & The \emph{id} field of the entry in the \emph{lexicon\_heb} table for
+                    which the current entry provides a translation. \\
+gloss   & Text    & The translation of the lexeme into language \emph{LANG}. \\
+\end{my-longtabu}
+
+
+\subsection{The \emph{lexicon\_greek} Table}\label{sec-lexicon-greek}\index{lexicon\_greek table|hyperit}
+
+The \emph{lexicon\_greek} table contains information about all the Greek lexemes used by
+the system.
+
+The tables contain these fields:
+
+\begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
+id                  & Integer & Unique number identifying this entry.     \\
+strongs             & Integer & The Strong's number for the lexeme. \\
+strongs\_unreliable & Boolean & \emph{True} if the indicated Strong's number is considered unreliable.\\
+lemma               & Text    & The lexeme in accented Greek characters.\\
+tally               & Integer & The number of occurrences of this word in the text. \\
+sortorder           & Text    & The lexeme in unaccented, lowercase Greek characters, which can be
+                                used to sort the words alphabetically. \\
+firstbook           & Text    & \multirow{3}{\linewidth}{The book, chapter, and verse of the first occurrence of the word.} \\
+firstchapter        & Integer & \\
+firstverse          & Integer & \\
+\end{my-longtabu}
+
+
+\subsection{The \emph{lexicon\_greek\_LANG} Table}\label{sec-lexicon-greek-lang}\index{lexicon\_greek\_LANG table|hyperit}
+
+The system contains a number of tables with names such as \emph{lexicon\_greek\_en} for English.
+They provide translations for the lexemes listed in the \emph{lexicon\_greek} table.
+
+The tables contain these fields:
+
+\begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
+id      & Integer & Unique number identifying this entry. \\
+lex\_id & Integer & The \emph{id} field of the entry in the \emph{lexicon\_greek} table for
+                    which the current entry provides a translation. \\
+gloss   & Text    & The translation of the lexeme into language \emph{LANG}. \\
+\end{my-longtabu}
+
+
+
+
 
 
 
@@ -5599,6 +5376,8 @@ of the MQL query.
 
 \plainbreak{3}
 
+\section{CodeIgniter's Internationalization Mechanism}
+
 CodeIgniter provides a mechanism for developing internationalized software. The basic rule is never
 to write English text directly in the code. All text strings must be given a name, and a
 language-specific version of that text is stored in an array called \emph{\$lang}.
@@ -5610,52 +5389,57 @@ Danish translation is stored in the subdirectory \texttt{da}, and the German tra
 in the subdirectory \texttt{de}. The only exception is English which is stored in a subdirectory
 called \texttt{english} rather than \texttt{en}.
 
-\section{Internationalization of the Server Code}
-
-This section deals with creating an internationalized and localized version of the PHP server code.
-This uses the mechanism provided by CodeIgniter.
-
-As an example, let us assume that we want the server to display the text ``Roses are red''. In a
-non-internationalized version, this might be achieved by this code:
+Accessing the translation of a string is a two-stage process. First, the relevant file must be loaded
+from \texttt{myapp/language}; this is done thus:
 
 \begin{lstlisting}[language=PHP]
-echo 'Roses are red';
+$this->lang->load($filename, $language);
 \end{lstlisting}
 
-To internationalize this code, three steps are necessary:
+\noindent
+where \emph{\$filename} is the name of the relevant file in \texttt{myapp/language}, and
+\emph{\$language} is the language code.
 
-First, we must first load a relevant localization file. For example, thus:
+Secondly, the actual string must be loaded:
 
 \begin{lstlisting}[language=PHP]
-$this->lang->load('flowers', $language);
+$x = $this->lang->line($string_index);
 \end{lstlisting}
 
-This will load the file \texttt{myapp/language/XX/flowers\_lang.php} where \texttt{XX} is replaced by
-the specified language.
+\noindent
+where \emph{\$string\_index} is a string that identifies the relevant text.
 
-Second, we must add the English text to \texttt{myapp/language/english/flowers\_lang.php} thus:
+
+
+\section{Bible OL's Modifications to CodeIgniter's Mechanism}\label{sec-loc-user-interface}
+
+CodeIgniter's mechanism is based on having translations located in PHP files. This is not convenient
+when online updates of the translations are required. In Bible OL the mechanism has therefore been modified
+so that the translation texts are primarily taken from the user database.
+
+The file \texttt{myapp/core/MY\_Lang.php} provides an extended mechanism for loading localization
+information. When executing the statement
 
 \begin{lstlisting}[language=PHP]
-$lang['rose_color'] = 'Roses are red';
+$this->lang->load($filename, $language);
 \end{lstlisting}
 
-The string \lstinline|'rose_color'| can be anything, as long as it is unique.
+\noindent
+the system will look in the table \emph{language\_\$language} in the user database (see Section
+\ref{sec-language-lang}). Here, it will search for all strings whose \emph{textgroup} field is the
+value specified in the \emph{\$filename} parameter. All these strings are loaded into memory, and
+can be indexed using the value of the \emph{symbolic\_name} field as \emph{\$string\_index}:
 
-Other localization information can be added as well. For example, a German translation can be
-written in \texttt{myapp/language/de/flowers\_lang.php}:
 
 \begin{lstlisting}[language=PHP]
-$lang['rose_color'] = 'Rosen sind rot';
+$x = $this->lang->line($string_index);
 \end{lstlisting}
 
-Third, the original PHP code must be replaced by:
+If the relevant \emph{textgroup} is not found in the user database, the system reverts to the old
+mechanism.
 
-\begin{lstlisting}[language=PHP]
-echo $this->lang->line('rose_color');
-\end{lstlisting}
 
-Depending on the language specified in the \emph{\$this->lang->load} call above, the \emph{echo}
-statement will output ``Roses are red'' in the appropriate language.
+
 
 \section{Internationalization of the Client Code}\label{sec-localize-javascript}
 
@@ -5671,31 +5455,13 @@ $('#xxx').text('Elephants are big');
 
 (Here \emph{xxx} is the ID of the HTML element we wish to modify.)
 
-All localization information for the client is found in the server file
-\texttt{myapp/\allowbreak{}language/\allowbreak{}XX/\allowbreak{}js\_lang.php} where \texttt{XX} is
-replaced by the specified language. Before passing control to the client, the server reads the
-contents of this file and stores it as key/value pairs in the JavaScript variable
+All localization information for the client is found in the \emph{language\_LANG} table as records
+with the \emph{textgroup} field set to ``js''. Before passing control to the client, the server
+reads all these records and stores them as key/value pairs in the JavaScript variable
 \emph{l10n\_js}\index{l10n_js JavaScript variable@\emph{l10n\_js} JavaScript variable|hyperit}.
 
-To internationalize the above client code, two steps are necessary:
-
-First, \emph{in the server code} we must add the English text to
-\texttt{myapp/language/english/js\_lang.php} thus:
-
-\begin{lstlisting}[language=PHP]
-$lang['elephant_size'] = 'Elephants are big';
-\end{lstlisting}
-
-The string \lstinline|'elephant_size'| can be anything, as long as it is unique.
-
-Other localization information can be added as well. For example, a Danish translation can be
-written in \texttt{myapp/language/da/js\_lang.php}:
-
-\begin{lstlisting}[language=PHP]
-$lang['elephant_size'] = 'Elefanter er store';
-\end{lstlisting}
-
-Second, the original TypeScript code must be replaced by:
+Now, if the translation of ``Elephans are big'' is found under the \emph{symbolic\_name}
+``elephant\_size'', the original TypeScript code must be replaced by:
 
 \begin{lstlisting}[language=TypeScript]
 $('#xxx').text(localize('elephant_size'));
@@ -5703,18 +5469,498 @@ $('#xxx').text(localize('elephant_size'));
 
 The \emph{localize} function loads the appropriate translation from the \emph{l10n\_js} variable.
 
-\section{Internationalization of the Databases}
 
-In addition to providing localized versions of the server and client strings, a translation must
-also provide localized versions of all the Database Localization Files. See Section \ref{sec-db-local}.
-
-TODO: Here are copies of text from old versions:
-
-%.LANG.prop.json &
-%Database Localization File\index{Database Localization File}\index{Localization File|see {Database Localization File}} &
-%\ref{sec-db-local}\\
+%%%%%%%%%%%%%%%%%%%% Grammar Localization Structure %%%%%%%%%%%%%%%%%%%%
+\section{Grammar Localization Structure}\label{sec-gram-loc-struct}\index{Grammar Localization Structure|hyperit}
 
 
+All keys and values in the Database Specification File (Section \ref{sec-dsf}) are language
+independent. \textbf{On the server} the \emph{propertiesName} key (page \pageref{propname}) of the
+Database Specification File contains the name of the so-called \emph{Grammar Localization
+  Structure}. To retrieve the structure, the system looks in the user database for a record in the
+\emph{db\_localize} table (see Section \ref{sec-db-localize}) whose \emph{db} field is the name of
+the Grammar Localization Structure, and whose \emph{lang} field is the requested target language.
+The \emph{json} field will then contain the Grammar Localization Structure.
+
+\textbf{On the client} the Grammar Localization Structure is available in a
+variable called \emph{l10n.}%
+\index{l10n JavaScript variable@\emph{l10n} JavaScript variable|hyperit}
+The structure is described in TypeScript as the \emph{Localization} interface%
+\index{Localization TypeScript interface@\emph{Localization} TypeScript interface}
+ in the file \texttt{ts/localization.ts}.
+
+The Grammar Localization Structure is specified in JSON and contains the following key/value pairs:
+
+\begin{my-longtabu}{lX}{ \headii{Key}{Value} }
+  dbdescription & A short description of the associated Emdros database.\\
+
+  dbcopyright & An HTML string containing copyright\index{copyright} information for the associated Emdros database.\\
+
+  emdrosobject\index{emdrosobject} & A collection of key/value pairs containing the localized names for the Emdros
+  object types and their features (see Section \ref{emdrosobject-loc}).\\
+
+  emdrostype\index{emdrostype} & A collection of key/value pairs containing the localized names for the values in the
+  Emdros enumeration\index{Emdros!enumeration} types (see Section \ref{enum-loc}).\\
+
+  grammarfeature & A collection of key/value pairs giving the names of
+  GrammarFeatures\index{GrammarFeature} (see Section \ref{grammar-loc}).\\
+
+  grammarmetafeature & A collection of key/value pairs giving the names of
+  GrammarMetaFeatures\index{GrammarMetaFeature} (see Section \ref{grammar-loc}).\\
+
+  grammarsubfeature\index{GrammarSubFeature} & A collection of key/value pairs giving the names of
+  features within a GrammarMetaFeature (see Section \ref{grammar-loc}).\\
+
+  grammargroup & A collection of key/value pairs giving the names of GrammarGroups\index{GrammarGroup} (see Section
+  \ref{grammar-loc}).\\
+
+  universe\index{passages} & A collection of key/value pairs describing how to display book,
+  chapter, and verse references (see Section \ref{universe-loc}).\\
+\end{my-longtabu}
+
+
+\subsection{The \emph{emdrosobject} Key}\label{emdrosobject-loc}\index{emdrosobject|hyperit}
+
+The value of \emph{emdrosobject} is a collection of key/value pairs containing the localized names
+for the Emdros object\index{Emdros!object} types and their features\index{Emdros!feature}. As an
+example, Listing \ref{list-emdrosobject-sample} shows a subset of the \emph{emdrosobject} for
+English localization of the ETCBC4 database.
+
+\begin{lstlisting}[numbers=left,caption=A sample emdrosobject value,label=list-emdrosobject-sample]
+    "emdrosobject": {
+        "word": {%\label{line-word-start}%
+            "_objname": "Word",
+            "vt": "Tense",
+            "sp": "Part of speech",
+            ... %\textrm{\scriptsize(Additional features omitted)}%
+        },%\label{line-word-end}%
+        "phrase_atom": {%\label{line-phrase-atom-start}%
+            "_objname": "Phrase atom",
+            "det": "Determination",
+            "rela": "Relation",
+            ... %\textrm{\scriptsize(Additional feature omitted)}%
+        },%\label{line-phrase-atom-end}%
+        ... %\textrm{\scriptsize(Additional Emdros object types omitted)}%
+    }
+\end{lstlisting}
+
+
+Each key within the \emph{emdrosobject} is the name of an Emdros object, so the above example gives
+information about the \emph{word} and the \emph{phrase\_atom} Emdros objects.
+
+Each key has a value which is a collection of key/value pairs. One of those keys is always
+\emph{\_objname}, and its value is the English name for the Emdros object; the remaining keys are
+features of the Emdros object, and their values are the English name for the feature.
+
+So in the above example, lines \ref{line-word-start}-\ref{line-word-end} state that the English name
+of the Emdros object \emph{word} is ``Word'', and that it has a feature called \emph{vt} which
+in English should be rendered as ``Tense''. The \emph{word} feature \emph{sp} should be rendered
+``Part of speech'' in English.
+
+Similarly, lines \ref{line-phrase-atom-start}-\ref{line-phrase-atom-end} state that the English name
+of the Emdros object \emph{phrase\_atom} is ``Phrase~atom'', and that it has a feature called
+\emph{det} which in English should be rendered as ``Determination''. The \emph{phrase\_atom} feature
+\emph{rela} should be rendered ``Relation'' in English.
+
+If the value of the \emph{\_objname} key is long, it may not display well in the text area. An
+abbreviated version may be provided by appending the string \emph{\_abbrev} to the key in the
+\emph{emdrosobject}. This can be seen in Listing \ref{list-emdrosobject-abbrev}, which is taken from
+the English localization of the \emph{nestle1904} database.
+
+\begin{lstlisting}[numbers=left,caption=An abbreviated emdrosobject name,label=list-emdrosobject-abbrev]
+    "emdrosobject": {
+        "clause1": {
+            "_objname": "Clause level 1",
+            "typ": "Function"
+        },
+        "clause1_abbrev": {
+            "_objname": "Clause1"
+        },
+        ... %\textrm{\scriptsize(Additional Emdros object types omitted)}%
+    }
+\end{lstlisting}
+
+In this listing the Emdros object \emph{clause1} is normally translated ``Clause level 1'', but in
+the text display area it is simply ``Clause1'', as shown in Figure \ref{fig-clause1}. The
+\emph{\_objname} key is the only key under the abbreviated version.
+
+\begin{figure}[h]
+  \begin{center}
+    \parbox{0.5\textwidth}{
+      \includegraphics[width=0.5\textwidth]{clause1.png}
+      \caption{The term ``Clause level 1'' is used in the grammar selection box, but ``Clause1'' is
+        used in the text area.}\label{fig-clause1}
+    }
+  \end{center}
+\end{figure}
+
+
+\subsection{The \emph{emdrostype} Key}\label{enum-loc}\index{emdrostype|hyperit}
+
+The value of \emph{emdrostype} is a collection of key/value pairs containing the localized names for
+the value of Emdros enumeration\index{Emdros!enumeration} types. As an example, Listing \ref{list-emdrostype-sample} shows
+a subset of the \emph{emdrostype} for English localization of the ETCBC4 database.
+
+\begin{lstlisting}[numbers=left,caption=A sample emdrostype value,label=list-emdrostype-sample]
+    "emdrostype": {
+        "part_of_speech_t": {%\label{line-pos-start}%
+            "verb": "Verb",
+            "subs": "Noun",
+            "nmpr": "Proper noun",
+            ... %\textrm{\scriptsize(Additional values omitted)}%
+        },%\label{line-pos-end}%
+        "gender_t": {%\label{line-gender-start}%
+            "f": "#2 Feminine",
+            "m": "#1 Masculine",
+            "NA": "#3 None",
+            "unknown": "#4 Unknown"
+        },%\label{line-gender-end}%
+        ... %\textrm{\scriptsize(Additional enumeration types omitted)}%
+    }
+\end{lstlisting}
+
+Each key within the \emph{emdrostype} is the name of an Emdros enumeration type, so the above
+example gives information about the \emph{part\_of\_speech\_t} and the \emph{gender\_t} enumeration
+types.
+
+Each key has a value which is a collection of key/value pairs, giving the names and the English
+translation of the values of the enumeration type.
+
+In the above example, lines \ref{line-pos-start}-\ref{line-pos-end} indicate that the type
+\emph{part\_of\_speech\_t} has values such as \emph{verb, subs,} and \emph{nmpr}, whose English
+translations are ``Verb'', ``Noun'', and ``Proper~noun'', respectively.
+
+Lines \ref{line-gender-start}-\ref{line-gender-end} indicate that type \emph{gender\_t} has values
+\emph{f, m, NA,} and \emph{unknown}, whose English translations are ``Feminine'', ``Masculine'',
+``None'', and ``Unknown'', respectively. The strings ``\#1'', ``\#2'' etc. indicate the order in
+which these values should be sorted when presented to the user. Normally, the values would be sorted
+alphabetically thus:
+
+\begin{center}
+  \includegraphics[width=0.3\textwidth]{psp.png}
+\end{center}
+
+But if the English translation starts with ``\#1'', ``\#2'' etc. these numbers indicate the sort
+order. So with the contents of \emph{gender\_t} given in Listing \ref{list-emdrostype-sample},
+genders are sorted thus:
+
+\begin{center}
+  \includegraphics[width=0.148\textwidth]{gender.png}
+\end{center}
+
+
+If the translation of an enumeration value is long, it may not display well in the text area.
+Abbreviated versions may be provided by appending the string \emph{\_abbrev} to the key in the
+\emph{emdrostype}. This can be seen in Listing \ref{list-emdrostype-abbrev}, which is taken from
+the English localization of the \emph{nestle1904} database.
+
+\begin{lstlisting}[numbers=left,caption=Abbreviated emdrostype values,label=list-emdrostype-abbrev]
+    "emdrostype": {
+        "clause_type_t": {
+            "ADV": "Adverbial",
+            "CL": "Clause",
+            ... %\textrm{\scriptsize(Additional enumeration values omitted)}%
+        },
+        "clause_type_t_abbrev": {
+            "ADV": "ADV",
+            "CL": "CL",
+            ... %\textrm{\scriptsize(Additional enumeration values omitted)}%
+        },
+        ... %\textrm{\scriptsize(Additional enumeration types omitted)}%
+    }
+\end{lstlisting}
+
+In this listing the enumeration value \emph{ADV} of type \emph{clause\_type\_t} is normally translated ``Adverbial'', but in
+the text display area it is simply ``ADV'', as shown in Figure \ref{fig-clause2}.
+
+\begin{center}
+  \parbox{0.7\textwidth}{
+    \includegraphics[width=0.7\textwidth]{clause2.png}
+    \captionof{figure}{The term ``Adverbial'' is used in the grammar information box, but ``ADV'' is
+      used in the text area.}\label{fig-clause2}
+  }
+\end{center}
+
+
+\subsection{The \emph{grammarfeature, grammarmetafeature, grammarsubfeature,} and \emph{grammargroup} Keys}%
+\label{grammar-loc}\index{GrammarFeature}\index{GrammarMetaFeature}\index{GrammarSubFeature}\index{GrammarGroup}
+
+Section \ref{sentencegrammar} describes how the Database Specification File specifies how grammar
+information should be grouped in the grammar selection box and the grammar information box on the
+Bible OL webpage. Sections \ref{sec-grammarfeature}, \ref{sec-grammarmetafeature}, and
+\ref{sec-grammargroup} describe the GrammarFeature, GrammarMetaFeature, and GrammarGroup
+specifications and the GrammarSubFeature which is part of a GrammarMetaFeature.
+
+In the Grammar Localization Structure, the \emph{grammarfeature, grammarmetafeature, grammargroup,} and
+\emph{grammarsubfeature} keys give the translation of these items, as detailed below.
+
+\subsubsection{\emph{grammarfeature}}
+
+As an example, Listing \ref{list-grammarfeature-sample} shows the \emph{grammarfeature} for the
+English localization of the ETCBC4 database.
+
+\begin{lstlisting}[caption=A sample grammarfeature value,label=list-grammarfeature-sample]
+    "grammarfeature": {
+        "word": {
+            "text_translit": "Transliteration"
+        }
+    }
+\end{lstlisting}
+
+Section \ref{emdrosobject-loc} describes how the \emph{emdrosobject}\index{emdrosobject} key is used
+to provide translations for Emdros object features. The \emph{grammarfeature} in the above example
+gives an alternative translation. Normally the translation of a feature is taken from
+\emph{emdrosobject}, but in the case of the grammar selection box\index{grammar selection box} and
+the grammar information box\index{grammar information box}, the translation in \emph{grammarfeature}
+is used, if present. If no translation is given in \emph{grammarfeature}, the translation from
+\emph{emdrosobject} is used.
+
+
+\subsubsection{\emph{grammarmetafeature}}\index{GrammarMetaFeature}
+
+Listing \ref{list-grammarmetafeature-sample} shows the \emph{grammarmetafeature} for the English
+localization of the ETCBC4 database.
+
+\begin{lstlisting}[numbers=left,caption=A sample grammarmetafeature value,label=list-grammarmetafeature-sample]
+    "grammarmetafeature": {
+        "word": {
+            "pgn": "Person, gender, number",%\label{line-pgn}%
+            "suffix_pgn": "Suffix: Person, gender, number"
+        }
+    }
+\end{lstlisting}
+
+In line \ref{line-pgn} the GrammarMetaFeature \emph{pgn} of the \emph{word} object is given the
+English translation ``Person, gender, number''. (Listing \ref{list-gmf-sample} on page
+\pageref{list-gmf-sample} specifies that the \emph{word} object has a GrammarMetaFeature called
+\emph{pgn}.)
+
+\subsubsection{\emph{grammarsubfeature}}\index{GrammarSubFeature}
+
+Listing \ref{list-grammarsubfeature-sample} shows a subset of the \emph{grammarsubfeature} for the
+English localization of the ETCBC4 database.
+
+\begin{lstlisting}[caption=A sample grammarsubfeature value,label=list-grammarsubfeature-sample]
+    "grammarsubfeature": {
+        "word": {
+            "ps": {
+                "p1": "1",
+                "NA": "-",
+                "p2": "2",
+                "p3": "3",
+                "unknown": "?"
+            },
+            "gn": {
+                "f": "F",
+                "m": "M",
+                "NA": "-",
+                "unknown": "?"
+            },
+            "nu": {
+                "du": "Du",
+                "NA": "-",
+                "pl": "Pl",
+                "sg": "Sg",
+                "unknown": "?"
+            },
+            ... %\textrm{\scriptsize(Additional features omitted)}%
+        }
+    }
+\end{lstlisting}
+
+The example in Listing \ref{list-gmf-sample} on page \pageref{list-gmf-sample} specifies that the
+\emph{word} object has a GrammarMetaFeature called \emph{pgn} which is made up of the
+GrammarSubFeatures \emph{ps, gn,} and \emph{nu}. The \emph{grammarsubfeature} value in Listing
+\ref{list-grammarsubfeature-sample} above specifies the English translation for these three
+GrammarSubFeatures. So if, for example, a word has features \emph{ps=p2, gn=m,} and \emph{nu=sg}
+(corresponding to second person, masculine, singular), the \emph{pgn} GrammarMetaFeature should be
+rendered as ``2MSg''.
+
+
+\subsubsection{\emph{grammargroup}}\index{GrammarGroup}
+
+Listing \ref{list-grammargroup-sample} shows the \emph{grammargroup} for the English localization of
+the ETCBC4 database.
+
+\begin{lstlisting}[caption=A sample grammargroup value,label=list-grammargroup-sample]
+    "grammargroup": {
+        "word": {
+            "form_in_text": "Form in text",
+            "lexeme": "Lexeme",
+            "morphology": "Morphology"
+        }
+    },
+\end{lstlisting}
+
+The Database Specification File for the ETCBC4 database defines three GrammarGroups for the
+\emph{word} object with the names \emph{form\_in\_text,\footnote{Shown in Listing
+    \ref{list-itemssample} on page \pageref{list-itemssample}.} lexeme,} and \emph{morphology.} The
+localization information above specifies the English names for these GrammarGroups. The two
+illustrations in Section \ref{sentencegrammar} show these translations in the grammar selection
+box\index{grammar selection box} and the grammar information box\index{grammar information box}.
+
+\subsection{The \emph{universe} Key}\label{universe-loc}\index{passages}
+
+The value of \emph{universe} is collection of key/value pairs describing how to display book,
+chapter, and verse references.
+
+As an example, Listing \ref{list-universe-sample} shows a subset of the \emph{universe} for English
+localization of the ETCBC4 database.
+
+\begin{lstlisting}[escapechar=\#,numbers=left,caption=A subset of the universe value,label=list-universe-sample]
+    "universe": {
+        "book": {
+            "_label": "%s", #\label{line-book-label}#
+            "Genesis": "Genesis", #\label{line-first-book}#
+            "Exodus": "Exodus",
+            "Leviticus": "Leviticus",
+            "Numeri": "Numbers",
+            "Deuteronomium": "Deuteronomy",
+            "Josua": "Joshua",
+            "Judices": "Judges",
+            "Ruth": "Ruth",
+            "Samuel_I": "1 Samuel",
+            "Samuel_II": "2 Samuel",
+            ... #\textrm{\scriptsize(Additional books omitted)}\label{line-last-book}#
+        },
+        "chapter": {
+            "_label": "Chapter %s" #\label{line-chapter-label}#
+        },
+        "verse": {
+            "_label": "Verse %s" #\label{line-verse-label}#
+        },
+        "reference": {
+            "_label": "%s %d:%d", #\label{line-reference-label}#
+            "Genesis": "Gen", #\label{line-first-book-abbrev}#
+            "Exodus": "Ex",
+            ... #\textrm{\scriptsize(Additional book abbreviations omitted)}\label{line-last-book-abbrev}#
+        }
+    }
+\end{lstlisting}
+
+The \emph{universeHierarchy} key of the Database Specification File (see page
+\pageref{universe-hierarchy}) defines the reference hierarchy of ETCBC4 as consisting of the Emdros
+object types \emph{book, chapter,} and \emph{verse.} The \emph{universe} key in Listing
+\ref{list-universe-sample} above defines how these three object types should be rendered:
+
+The \emph{\_label} key presents the general format as a string where ``\%s'' is to be replaced by
+the actual reference. So, when line \ref{line-chapter-label} gives the \emph{\_label} key of
+\emph{chapter} a value of ``Chapter~\%s'', it means that chapter 18 will be displayed as
+``Chapter~18''.
+
+For the \emph{book} object, the \emph{\_label} key (line \ref{line-book-label}) is simply the string
+``\%s'', but additionally English translations of the book names used in ETCBC4 are given in lines
+\ref{line-first-book}-\ref{line-last-book}.
+
+The \emph{reference} key specifies how a Bible reference should be written. The \emph{\_label} key
+here (line \ref{line-reference-label}) specifies the format as ``\%s \%d:\%d''. The ``\%s'' will be
+replaced by the abbreviated book name, and the two ``\%d'' strings will be replaced by the chapter
+and verse number, respecitively. Lines \ref{line-first-book-abbrev}-\ref{line-last-book-abbrev}
+contain abbreviations of the book names.
+
+
+%%%%%%%%%%%%%%%%%%%% Grammar Localization Comments %%%%%%%%%%%%%%%%%%%%
+\section{Grammar Localization Comments}\label{sec-gram-loc-comments}\index{grammar localization comments|hyperit}
+
+In addition to the Grammar Localization Structures for various target languages, the
+\emph{db\_localize} table also contains comments for the different structures. These comments are
+found in entries where the \emph{lang} field is ``comment''.
+
+The grammar localization comments are structured exactly as the Grammar Localization Structures, but
+their contents are used in the translator's interface to guide in the translation of each item.
+Additionally, if a value starts with the string ``f:textarea'', the translator's interface will use
+a \xml{textarea} HTML element for input. Otherwise, the translator's interface will use an
+\xml{input type="text"} HTML element.
+
+
+%%%%%%%%%%%%%%%%%%%% Lexicon Localization %%%%%%%%%%%%%%%%%%%%
+\section{Lexicon Localization}\label{sec-lex-loc}\index{lexicon localization|hyperit}
+
+Sections \ref{sec-lexicon-heb}, \ref{sec-lexicon-heb-lang}, \ref{sec-lexicon-greek}, and
+\ref{sec-lexicon-greek-lang} give information about how localized versions of the Hebrew, Aramaic,
+and Greek dictionaries are stored.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Plug-ins %%%%%%%%%%%%%%%%%%%%
+\chapter{Plug-ins}\index{plug-in}
+
+\textbf{Read this chapter if you want to modify Learning Journey or write a new plug-in.}
+\plainbreak{3}
+
+CodeIgniter and Bible OL provide a limited mechanism for writing plug-ins (that is, extensions to
+the system).
+
+PHP code for the plug-in must be stored in a directory hierarchy under
+\texttt{myapp/third\_party/xxx}, where \texttt{xxx} is the name of the plug-in. The directory
+hierachy must contain the directories required by CodeIgniter, namely, \texttt{controllers},
+\texttt{helpers}, \texttt{language}, \texttt{libraries}, \texttt{models}, and \texttt{views}.
+
+The names of the controllers in the \texttt{controllers} directory must start with the string
+``Ctrl\_XXX\_'', where ``XXX'' is the name of the plug-in in upper case letters. Similarly the
+models and views should have names that start with the string ``Mod\_XXX\_'' or ``view\_XXX\_''.
+
+Localization of plug-ins is not quite streamlined yet. Localization information can be stored in the
+\texttt{language} directory.
+
+To enable a plugin with the name ``xxx'', the following modifications must be made to the Bible OL
+code:
+
+In the file \texttt{myapp/config/config.php} add the following line:
+
+\begin{lstlisting}[language=PHP]
+$config['xxx_enabled'] = true;
+\end{lstlisting}
+
+The value can be set to \emph{true} or \emph{false} depending on whether the plug-in is installed or
+not.
+
+In the file \texttt{myapp/config/autoload.php} add the following lines:
+
+\begin{lstlisting}[language=PHP]
+if (config_item('xxx_enabled'))
+    $autoload['packages'][] = APPPATH.'third_party/xxx';
+\end{lstlisting}
+
+In the file \texttt{myapp/config/routes.php} add the following lines:
+
+\begin{lstlisting}[language=PHP]
+if ($this->config->item('xxx_enabled')) {
+    $route['(xxx)/(.+)'] = function ($name, $path) {
+        $this->directory="../third_party/$name/controllers/"; // $this is the CI_Router object
+        return "Ctrl_$path";
+    };
+}
+\end{lstlisting}
+
+This ensures that URLs such as, for example, \texttt{'http://bibleol.3bmoodle.dk/xxx/XXX\_foobar} is
+sent to the controller at \texttt{myapp/third\_party/xxx/controllers/Ctrl\_XXX\_foobar}. Thus, all
+URLs directed at plug-in ``xxx'' should start with the string ``/xxx/'' after the hostname.
+
+If additional code needs to be added to Bible OL (for example, to add special menu items if a plug-in
+is available), the following can be added to the existing Bible OL code:
+
+\begin{lstlisting}[escapechar=\#,language=PHP]
+if ($this->config->item('xxx_enabled')) {
+   ...#\textrm{\scriptsize(Code that uses the plug-in)}#
+}
+\end{lstlisting}
+
+
+At present, the only available plug-in is \emph{Learning Journey}. 
+
+%%%%%%%%%%%%%%%%%%%% The Learning Journey Plug-in %%%%%%%%%%%%%%%%%%%%
+\section{The Learning Journey Plug-in}\label{sec-lj}\index{Learning Journey}
+
+Bible OL collects information about the answers users give to exercises and how much time they spend
+on each exercise. The Learning Journey plug-in%
+\footnote{Developed by Judith Gottschalk.\index{Gottschalk, Judith}}
+accesses this information and provides statistics\index{statistics} about each user's
+performance.
+
+No further information about Learning Journey is given in this document.
 
 
 
@@ -5727,22 +5973,9 @@ TODO: Here are copies of text from old versions:
 \plainbreak{3}
 
 
-A few additional websites complement the function of Bible OL: The Learning Journey website, the
-resource website, and the SHEBANQ website.
+A few additional websites complement the function of Bible OL: The resource website and the SHEBANQ
+website.
 
-%%%%%%%%%%%%%%%%%%%% The Learning Journey Website %%%%%%%%%%%%%%%%%%%%
-\section{The Learning Journey Website}\index{Learning Journey}
-
-Bible OL collects information about the answers users give to exercises and how much time they spend
-on each exercise. The Learning Journey%
-\footnote{Developed by Judith Gottschalk.\index{Gottschalk, Judith}}
-accesses this information and provides statistics\index{statistics} about each user's
-performance. Currently, the Learning Journey URL is \url{http://statdb.3bmoodle.dk}.
-
-Learning Journey directly accesses the statistics and user tables of the Bible OL user
-database.\index{user database} (See Chapter \ref{chap-user-database}.)
-
-No further information about Learning Journey is given in this document.
 
 
 %%%%%%%%%%%%%%%%%%%% The Resource Website %%%%%%%%%%%%%%%%%%%%
@@ -6581,14 +6814,11 @@ Note that the lemma may contain extra characters, for example:
 
 In the \emph{raw\_lemma} feature, both of these are given as ``βατος''.
 
-\subsection{Features: strongs, strongs\_unreliable, and english}
+\subsection{Features: strongs and strongs\_unreliable}
 
 The \emph{strongs} feature is an integer feature containing Strong's number for the lemma. The
 \emph{strongs\_unreliable} feature is a Boolean feature which is \emph{true} if the indicated
 Strong's number is considered unreliable.
-
-The \emph{english} feature gives the English gloss for the lemma. This is based on Strong's number
-and is taken from Jeffrey Dodson's Greek dictionary.
 
 If a Strong's number is considered unreliable, Bible OL lists the corresponding gloss in
 parentheses. For example (from \bibleref{Matthew}{6}{18}):
@@ -6818,25 +7048,6 @@ The Emdros database has been created based on these sources using my program
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Index %%%%%%%%%%%%%%%%%%%%
 \printindex
-
-\chapter{TODO}
-
-\begin{itemize}
-\item Explain the function of the installed git-hook.
-\item Update \texttt{bolsetup.sql} to include translator privileges and translation files.
-\item Plug-ins.
-\item Learning Journey.
-\item In the code, switch from using \texttt{\$config['site\_url']} to the already existant
-  \texttt{\$config['base\_url']} (with an optional final '/' removed). Also remove
-  \texttt{\$config['site\_url']} from this documentation.
-\item Search this document for ``Database Localization File''.
-\item Move everything between ``TODO: MOVE THIS - START'' and ``TODO: MOVE THIS - END'' to a section
-  on localization.
-\item Describe the ``.pretty.json'' files in \texttt{db}.
-\item \texttt{php index.php maketypeinfo index \textit{databasename}} doesn't work.
-
-  
-\end{itemize}
 
 \end{document}
 
