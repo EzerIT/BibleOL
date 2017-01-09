@@ -706,7 +706,7 @@ class Ctrl_users extends MY_Controller {
         $this->email->subject($this->lang->line_secondary('expiry_warning_subject'));
 
         $message = sprintf($this->lang->line_secondary($warning),
-                           make_full_name($u), $this->config->item('site_url'));
+                           make_full_name($u), site_url());
 
         switch ($u->oauth2_login) {
           case 'google':

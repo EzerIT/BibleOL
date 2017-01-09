@@ -6,7 +6,6 @@ $config['pw_salt'] = 'xxxxxxx';
 $config['mql_driver'] = 'native';
 $config['mail_sender_address'] = 'xxxxx@xxxxx.xx';
 $config['mail_sender_name'] = 'Bible Online Learner';
-$config['site_url'] = 'http://xxxxx.xx';
 
 $config['google_login_enabled'] = false;
 $config['google_client_id'] = 'xxxxxxxxxxxx.apps.googleusercontent.com';
