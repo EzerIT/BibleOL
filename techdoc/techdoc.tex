@@ -497,7 +497,7 @@ will need to change this command.
 When you have compiled and installed Emdros (using the ``make'' and ``sudo make install'' commands,
 respectively) you need to enable access to Emdros in PHP. The correct way to do this depends on your
 Apache\index{Apache} and PHP installation. In my case, I had to add a file with this contents to the
-directory \texttt{/etc/php/5.6/apache2/conf.d/}:
+directories \texttt{/etc/php/5.6/apache2/conf.d/} and \texttt{/etc/php/5.6/cli/conf.d/}:
 
 \begin{lstlisting}
 extension=/usr/local/lib/emdros/EmdrosPHP.so
