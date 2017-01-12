@@ -21,6 +21,8 @@ CREATE TABLE `bol_user` (
   `warning_sent` int(11) NOT NULL DEFAULT '0',
   `isteacher` tinyint(1) NOT NULL DEFAULT '0',
   `preflang` tinytext NOT NULL,
+  `family_name_first` tinyint(1) DEFAULT '0',
+  `istranslator` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
