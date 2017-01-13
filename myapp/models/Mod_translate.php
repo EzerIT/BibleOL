@@ -604,4 +604,122 @@ class Mod_translate extends CI_Model {
             }
         }
     }
+
+    function download_lex(string $src_lang, string $dst_lang) {
+        switch ($src_lang) {
+          case 'heb':
+                $src_language = 'Hebrew';
+                $l10n_db = 'ETCBC4';
+                break;
+
+          case 'aram':
+                $src_language = 'Aramaic';
+                $l10n_db = 'ETCBC4';
+                break;
+
+          case 'greek':
+                $l10n_db = 'nestle1904';
+                break;
+
+          default:
+                throw new DataException($this->lang->line('illegal_source_language'));
+        }
+
+        if (!array_key_exists($dst_lang, $this->lexicon_langs[$src_lang]))
+            throw new DataException($this->lang->line('illegal_target_language'));
+
+        // Always use English for grammar terms because there may not be grammar terms for the target language
+        $l10n = $this->db->select('json')->where('db',$l10n_db)->where('lang','en')->get('db_localize')->row()->json;
+        $grammar_terms = json_decode($l10n, true);
+
+        $result = '';
+        
+        switch ($src_lang) {
+          case 'heb':
+          case 'aram':
+                // Find names of used verbal stems
+                $query = $this->db->select('vs')->distinct()
+                    ->where('language',$src_language)
+                    ->where('vs <>','NA')
+                    ->order_by('vs')
+                    ->get('lexicon_heb');
+
+                $stems = array('NA');
+        
+                foreach ($query->result() as $row)
+                    $stems[] = $row->vs;
+
+                $result =
+                    '"' . $grammar_terms['emdrosobject']['word']['lexeme_occurrences'] . '"' .
+                    ',"lex"' .
+                    ',"' . $grammar_terms['emdrosobject']['word']['vocalized_lexeme_utf8'] . '"';
+                
+                foreach ($stems as $st)
+                    $result .= ',"' . stripSortIndex($grammar_terms['emdrostype']['verbal_stem_t'][$st]) . '"';
+
+                $result .= "\n";
+
+                
+                $query = $this->db->select('lex,tally,vs,vocalized_lexeme_utf8,gloss')
+                    ->from('lexicon_heb c')
+                    ->join("lexicon_heb_{$dst_lang}", 'lex_id=c.id','left')
+                    ->where('language',$src_language)
+                    ->order_by('sortorder')
+                    ->get();
+
+                $res = array();
+                foreach ($query->result() as $row) {
+                    if (!isset($res[$row->lex]))
+                        $res[$row->lex] = array('tally' => $row->tally,
+                                                'vocalized_lexeme_utf8' => $row->vocalized_lexeme_utf8,
+                                                'glosses' => array());
+                    $res[$row->lex]['glosses'][$row->vs] = $row->gloss;
+                }
+                
+                foreach ($res as $lex => $r) {
+                    $result .=
+                        $r['tally'] .
+                        ',"' . $lex . '"' .
+                        ',"' . $r['vocalized_lexeme_utf8'] . '"';
+                    
+                    foreach ($stems as $st) {
+                        if (isset($r['glosses'][$st]))
+                            $result .= ',"' . str_replace('"', '""', $r['glosses'][$st]) . '"';
+                        else
+                            $result .= ',';
+                    }
+                    $result .= "\n";
+                }
+                break;
+
+          case 'greek':
+                $result =
+                    '"Occurrences"' .
+                    ',"' . $grammar_terms['emdrosobject']['word']['lemma'] . '"' .
+                    ',"' . $grammar_terms['emdrosobject']['word']['strongs'] . '"' .
+                    ',"' . $grammar_terms['emdrosobject']['word']['strongs_unreliable'] . '"' .
+                    ',"Gloss"' .
+                    "\n";
+
+                $query = $this->db->select('tally,lemma,strongs,strongs_unreliable,gloss')
+                    ->from('lexicon_greek c')
+                    ->join("lexicon_greek_$dst_lang", 'lex_id=c.id','left')
+                    ->order_by('sortorder')
+                    ->get();
+
+                $res = array();
+                foreach ($query->result() as $row) {
+                    $result .=
+                        $row->tally .
+                        ',"' . $row->lemma . '"' .
+                        ',' . $row->strongs .
+                        ',' . ($row->strongs_unreliable ? '"yes"' : '"no"')  .
+                        ',"' . str_replace('"', '""', $row->gloss) . '"' .
+                        "\n";
+                }                    
+                break;
+                
+        }
+        return $result;
+    }
   }

@@ -390,5 +390,29 @@ class Ctrl_translate extends MY_Controller {
         $this->mod_translate->gram_prop2db();
     }
 
+    function download_lex()
+    {
+        try {
+            if ($this->uri->total_segments()!=4) {
+                throw new DataException('BAD');
+            }
+
+            $src_lang = strtolower($this->uri->segment(3));
+            $dst_lang = strtolower($this->uri->segment(4));
+
+            $result = $this->mod_translate->download_lex($src_lang, $dst_lang);
+
+
+            // Output download headers:
+            header("Content-Type: text/csv");
+            header("Content-Length: " . strlen($result));
+            header("Content-Disposition: attachment; filename=\"{$src_lang}_{$dst_lang}.csv\"");
+
+            echo $result;
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('translate_user_interface'));
+        }
+    }
     
   }
