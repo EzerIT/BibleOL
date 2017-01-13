@@ -394,7 +394,7 @@ class Ctrl_translate extends MY_Controller {
     {
         try {
             if ($this->uri->total_segments()!=4) {
-                throw new DataException('BAD');
+                throw new DataException($this->lang->line('malformed_url'));
             }
 
             $src_lang = strtolower($this->uri->segment(3));
