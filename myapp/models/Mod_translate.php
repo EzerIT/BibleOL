@@ -419,7 +419,7 @@ class Mod_translate extends CI_Model {
             if (fwrite($ofile, "<?php\n\n")===false)
                 die("Cannot write to file \"$dest/$lang/{$row->textgroup}_lang.php\"\n");
                 
-            $query2 = $this->db->where('textgroup',$row->textgroup)->get("language_$lang");
+            $query2 = $this->db->where('textgroup',$row->textgroup)->order_by('symbolic_name')->get("language_$lang");
 
             if ($lang=='comment') {
                 foreach ($query2->result() as $row2) {

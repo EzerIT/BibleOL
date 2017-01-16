@@ -1,0 +1,31 @@
+<?php
+
+$lang['form_validation_alpha'] = "<i>{field}</i>只可以填寫英文字母。";
+$lang['form_validation_alpha_dash'] = "<i>{field}</i>只可以填寫英文字母、阿拉伯數目字、底線或連字號（-）。";
+$lang['form_validation_alpha_numeric'] = "<i>{field}</i>只可以填寫英文字母或阿拉伯數目字。";
+$lang['form_validation_alpha_numeric_spaces'] = "<i>{field}</i>只可以填寫英文字母、阿拉伯數目字或空格。";
+$lang['form_validation_decimal'] = "<i>{field}</i>內必須填寫有小數點的數字。";
+$lang['form_validation_differs'] = "<i>{field}</i>的內容必須不同於<i>{param}</i>的內容。";
+$lang['form_validation_error_message_not_set'] = "您在<i>{field}</i>格填寫的資料錯誤而系統找不到回應的訊息。";
+$lang['form_validation_exact_length'] = "<i>{field}</i>必須填寫{param}個字。";
+$lang['form_validation_greater_than'] = "<i>{field}</i>只可以填寫大於{param}的數字。";
+$lang['form_validation_greater_than_equal_to'] = "<i>{field}</i>只可以填寫大於或等於{param}的數字。";
+$lang['form_validation_integer'] = "<i>{field}</i>只可以填寫整數。";
+$lang['form_validation_in_list'] = "<i>{field}</i>只可以填寫以下的其中之一：{param}。";
+$lang['form_validation_isset'] = "<i>{field}</i>必須有值。";
+$lang['form_validation_is_natural'] = "<i>{field}</i>只可以填寫0至9等個位數字。";
+$lang['form_validation_is_natural_no_zero'] = "<i>{field}</i>只可以填寫1至9等個位數字。";
+$lang['form_validation_is_numeric'] = "<i>{field}</i>只可以填寫阿拉伯數目字。";
+$lang['form_validation_is_unique'] = "<i>{field}</i>不可以再使用這個值。";
+$lang['form_validation_less_than'] = "<i>{field}</i>只可以填寫少於{param}的數字。";
+$lang['form_validation_less_than_equal_to'] = "<i>{field}</i>只可以填寫少於或等於{param}的數字。";
+$lang['form_validation_matches'] = "<i>{field}</i>的內容不配合<i>{param}</i>的內容。";
+$lang['form_validation_max_length'] = "<i>{field}</i>不可有超過{param}個字。";
+$lang['form_validation_min_length'] = "<i>{field}</i>最少必需有{param}個字。";
+$lang['form_validation_numeric'] = "<i>{field}</i>只可以填寫阿拉伯數目字。";
+$lang['form_validation_regex_match'] = "<i>{field}</i>裡填寫的內容，格式不正確。";
+$lang['form_validation_required'] = "必須填寫<i>{field}</i>。";
+$lang['form_validation_valid_email'] = "<i>{field}</i>必須填寫有效的電郵地址。";
+$lang['form_validation_valid_emails'] = "<i>{field}</i>必須包含全部有效的電郵地址。";
+$lang['form_validation_valid_ip'] = "<i>{field}</i>必須填寫有效的IP地址。";
+$lang['form_validation_valid_url'] = "<i>{field}</i>必須填寫有效的網址。";
