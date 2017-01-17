@@ -1,0 +1,54 @@
+17.01.2017
+Procedure for changing localization in distribution:
+
+INTERFACE LOCALIZATION:
+
+1. On bibleol.3bmoodle.dk run
+
+          for i in comment da en es pt zh-simp zh-trad # Add new languages here
+          do
+              php5.6 index.php translate if_db2php $i myapp/language/langsrc/
+          done
+     
+          git status    (or git diff)
+
+   This will identify any changes that have been made to the localization.
+
+2. Update GIT repository with with changes in myapp/language/langsrc.
+
+3. Add/modify myapp/language/langsrc as needed.
+
+4. Update bibleol.3bmoodle.dk from GitHub.
+
+5. On bibleol.3bmoodle.dk run
+
+          for i in comment en es pt zh-simp zh-trad # Add new languages here
+          do
+              php5.6 index.php translate if_php2db $i myapp/language/langsrc/$i
+          done
+
+
+GRAMMAR LOCALIZATION:
+
+1. On bibleol.3bmoodle.dk run
+
+          php5.6 index.php translate gram_db2prop db/property_files
+     
+          git status    (or git diff)
+
+   This will identify any changes that have been made to the localization.
+
+2. Update GIT repository with with changes in db/property_files.
+
+3. Add/modify db/property_files as needed.
+
+4. Update bibleol.3bmoodle.dk from GitHub.
+
+5. On bibleol.3bmoodle.dk run
+
+          php5.6 index.php translate gram_prop2db
+
+
+LEXICON LOCALIZATION:
+
+TBD
