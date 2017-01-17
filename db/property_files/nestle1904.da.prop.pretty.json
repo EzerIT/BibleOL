@@ -1,5 +1,5 @@
 {
-    "dbdescription": "Gr\u00e6sk (Nestle 1904, NT)",
+    "dbdescription": "Græsk (Nestle 1904, NT)",
     "dbcopyright": "Ingen ophavsret.",
     "emdrosobject": {
         "word": {
@@ -9,36 +9,36 @@
             "tense": "Tid",
             "mood": "Modus",
             "lemma": "Leksem",
-            "raw_lemma": "Leksem (sm\u00e5 bogstaver, ingen accenter)",
+            "raw_lemma": "Leksem (små bogstaver, ingen accenter)",
             "normalized": "Normaliseret",
-            "raw_normalized": "Normaliseret (sm\u00e5 bogstaver, ingen accenter)",
+            "raw_normalized": "Normaliseret (små bogstaver, ingen accenter)",
             "number": "Tal",
             "possessor_number": "Ejers tal",
             "suffix": "Ekstra",
             "surface": "Tekst",
             "english": "Engelsk",
             "strongs": "Strongs tal",
-            "strongs_unreliable": "Strong utrov\u00e6rdig?",
-            "gender": "K\u00f8n",
+            "strongs_unreliable": "Strong utroværdig?",
+            "gender": "Køn",
             "case": "Kasus",
             "psp": "Ordklasse"
         },
         "clause1": {
-            "_objname": "Leds\u00e6tning niveau 1",
+            "_objname": "Ledsætning niveau 1",
             "typ": "Funktion"
         },
         "clause1_abbrev": {
-            "_objname": "Leds\u00e6tning1"
+            "_objname": "Ledsætning1"
         },
         "clause2": {
-            "_objname": "Leds\u00e6tning niveau 2",
+            "_objname": "Ledsætning niveau 2",
             "typ": "Funktion"
         },
         "clause2_abbrev": {
-            "_objname": "Leds\u00e6tning2"
+            "_objname": "Ledsætning2"
         },
         "sentence": {
-            "_objname": "S\u00e6tning"
+            "_objname": "Sætning"
         }
     },
     "emdrostype": {
@@ -50,7 +50,7 @@
             "pluperfect": "Pluskvamperfektum",
             "imperfect": "Imperfektum",
             "second_future": "Anden futurum",
-            "present": "Pr\u00e6sens",
+            "present": "Præsens",
             "aorist": "Aorist",
             "second_aorist": "Anden aorist",
             "second_pluperfect": "Anden puskvamperfektum",
@@ -94,7 +94,7 @@
             "genitive": "#4 Genitiv"
         },
         "psp_t": {
-            "letter_indeclinable": "Bogstav, ub\u00f8j.",
+            "letter_indeclinable": "Bogstav, ubøj.",
             "hebrew": "Hebraisk",
             "conjunction": "Konjunktion",
             "reciprocal_pronoun": "Reciprokt pronomen",
@@ -106,18 +106,18 @@
             "correlative_or_interrogative_pronoun": "Korrel. el. interrog. pron.",
             "possessive_pronoun": "Possessivt pronomen",
             "personal_pronoun": "Personligt pronomen",
-            "aramaic": "Aram\u00e6isk",
-            "numeral_indeclinable": "Talord, ub\u00f8j.",
+            "aramaic": "Aramæisk",
+            "numeral_indeclinable": "Talord, ubøj.",
             "reflexive_pronoun": "Refleksivt pronomen",
             "correlative_pronoun": "Korrelativt pronomen",
-            "noun_other_type_indeclinable": "Substantive (anden type), ub\u00f8j.",
+            "noun_other_type_indeclinable": "Substantive (anden type), ubøj.",
             "adjective": "Adjektiv",
             "demonstrative_pronoun": "Demonstrativt pronomen",
             "relative_pronoun": "Relativt pronomen",
-            "preposition": "Pr\u00e6position",
+            "preposition": "Præposition",
             "interrogative_pronoun": "Interrogativt pronomen",
             "article": "Artikel",
-            "proper_noun_indeclinable": "Egennavn, ub\u00f8j.",
+            "proper_noun_indeclinable": "Egennavn, ubøj.",
             "noun": "Substantiv",
             "indefinite_pronoun": "Indefinit pronomen",
             "NA": "-"
@@ -157,11 +157,11 @@
         },
         "clause_type_t": {
             "ADV": "Adverbiel",
-            "CL": "S\u00e6tning",
+            "CL": "Sætning",
             "IO": "Indirekte objekt",
             "O": "Objekt",
             "O2": "Andet objekt",
-            "P": "Pr\u00e6dikat",
+            "P": "Prædikat",
             "S": "Subjekt",
             "V": "Verbal",
             "VC": "Verbal copula"
@@ -175,7 +175,7 @@
     },
     "grammarmetafeature": {
         "word": {
-            "pgn": "Person, k\u00f8n, tal"
+            "pgn": "Person, køn, tal"
         }
     },
     "grammarsubfeature": {
@@ -202,7 +202,7 @@
     "universe": {
         "book": {
             "_label": "%s",
-            "Matthew": "Matth\u00e6us",
+            "Matthew": "Matthæus",
             "Mark": "Markus",
             "Luke": "Lukas",
             "John": "Johannes",
@@ -220,7 +220,7 @@
             "II_Timothy": "2. Timeotheousbrev",
             "Titus": "Titusbrevet",
             "Philemon": "Filemonbrevet",
-            "Hebrews": "Hebr\u00e6erbrevet",
+            "Hebrews": "Hebræerbrevet",
             "James": "Jakobsbrevet",
             "I_Peter": "1. Petersbrev",
             "II_Peter": "2. Petersbrev",
@@ -228,7 +228,7 @@
             "II_John": "2. Johannesbrev",
             "III_John": "3. Johannesbrev",
             "Jude": "Judasbrevet",
-            "Revelation": "Johannes' \u00c5benbaring"
+            "Revelation": "Johannes' Åbenbaring"
         },
         "chapter": {
             "_label": "Kapitel %s"
@@ -264,7 +264,7 @@
             "II_John": "2 Joh",
             "III_John": "3 Joh",
             "Jude": "Jud",
-            "Revelation": "\u00c5b"
-       }
+            "Revelation": "Åb"
+        }
     }
 }

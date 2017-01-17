@@ -56,7 +56,7 @@
             "second_pluperfect": "Segundo pluperfeito",
             "future": "Futuro",
             "second_perfect": "Segundo perfeito",
-            "NA": "N/A",
+            "NA": "N\/A",
             "perfect": "Perfeito"
         },
         "suffix_t": {
@@ -64,7 +64,7 @@
             "interrogative": "Interrogativo",
             "comparative": "Comparativo",
             "negative": "Negativo",
-            "NA": "N/A",
+            "NA": "N\/A",
             "superlative": "Superlativo",
             "attic": "Attico",
             "particle_attached": "Partícula anexada"
@@ -77,20 +77,20 @@
             "imperative_participle": "Particípio Imperativo",
             "indicative": "Indicativo",
             "infinitive": "Infinitivo",
-            "NA": "N/A"
+            "NA": "N\/A"
         },
         "gender_t": {
             "neuter": "#4 Neutro",
             "masculine": "#2 Masculino",
             "feminine": "#3 Feminino",
-            "NA": "#1 N/A"
+            "NA": "#1 N\/A"
         },
         "case_t": {
             "nominative": "#2 Nominativo",
             "dative": "#5 Dativo",
             "vocative": "#6 Vocativo",
             "accusative": "#3 Acusativo",
-            "NA": "#1 N/A",
+            "NA": "#1 N\/A",
             "genitive": "#4 Genitivo"
         },
         "psp_t": {
@@ -120,10 +120,10 @@
             "proper_noun_indeclinable": "Nome Próprio, indecl.",
             "noun": "Substantivo",
             "indefinite_pronoun": "Pronome Indefinido",
-            "NA": "N/A"
+            "NA": "N\/A"
         },
         "number_t": {
-            "NA": "#1 N/A",
+            "NA": "#1 N\/A",
             "plural": "#3 Plural",
             "singular": "#2 Singular"
         },
@@ -133,7 +133,7 @@
             "impersonal_active": "Ativa Impessoal",
             "active": "Ativa",
             "passive_deponent": "Passiva Deponente",
-            "NA": "N/A",
+            "NA": "N\/A",
             "middle_or_passive_deponent": "Médio-passiva deponente",
             "middle_deponent": "Média deponente",
             "middle": "Média"
@@ -142,7 +142,7 @@
             "second_person": "#3 2a",
             "third_person": "#4 3a",
             "first_person": "#2 1a",
-            "NA": "#1 N/A"
+            "NA": "#1 N\/A"
         },
         "clause_type_t_abbrev": {
             "ADV": "ADV",

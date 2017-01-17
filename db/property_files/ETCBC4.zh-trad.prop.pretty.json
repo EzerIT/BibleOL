@@ -1,6 +1,6 @@
 {
     "dbdescription": "希伯來聖經（ETCBC4，舊約）",
-    "dbcopyright": "This database is Copyright \u00a9 2015 by Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>This work is licensed under a <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (The database itself can be found through this persistent identifier: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
+    "dbcopyright": "This database is Copyright © 2015 by Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>This work is licensed under a <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (The database itself can be found through this persistent identifier: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
     "emdrosobject": {
         "word": {
             "_objname": "詞",
@@ -67,14 +67,47 @@
             "tab": "分層縮入",
             "code_TYPE_text": "怎樣和上句連接",
             "code_TYPE_text_VALUES": [
-                { "first" : 0, "last" : 0, "text" : "#1 無關" },
-                { "first" : 10, "last" : 16, "text" : "#7 關係子句" },
-                { "first" : 50, "last" : 74, "text" : "#6 不定式附屬形" },
-                { "first" : 100, "last" : 167, "text" : "#3 無連詞" },
-                { "first" : 200, "last" : 201, "text" : "#5 平行" },
-                { "first" : 300, "last" : 367, "text" : "#4 作連詞的副詞" },
-                { "first" : 400, "last" : 967, "text" : "#2 連詞" },
-                { "first" : 999, "last" : 999, "text" : "#8 直接引語" }],
+                {
+                    "first": 0,
+                    "last": 0,
+                    "text": "#1 無關"
+                },
+                {
+                    "first": 10,
+                    "last": 16,
+                    "text": "#7 關係子句"
+                },
+                {
+                    "first": 50,
+                    "last": 74,
+                    "text": "#6 不定式附屬形"
+                },
+                {
+                    "first": 100,
+                    "last": 167,
+                    "text": "#3 無連詞"
+                },
+                {
+                    "first": 200,
+                    "last": 201,
+                    "text": "#5 平行"
+                },
+                {
+                    "first": 300,
+                    "last": 367,
+                    "text": "#4 作連詞的副詞"
+                },
+                {
+                    "first": 400,
+                    "last": 967,
+                    "text": "#2 連詞"
+                },
+                {
+                    "first": 999,
+                    "last": 999,
+                    "text": "#8 直接引語"
+                }
+            ],
             "code": "和上句連接方式的代號",
             "typ": "類別"
         },
@@ -381,7 +414,7 @@
             "Way0": "#4 Wayyiqtol-空值分句",
             "WayX": "#5 Wayyiqtol-主語字串分句",
             "WxI0": "#34 We-無主語字串-命令式-空值分句",
-	"WxIX": "#35 We-無主語字串-命令式-主語字串分句",
+            "WxIX": "#35 We-無主語字串-命令式-主語字串分句",
             "WxQ0": "#30 We-無主語字串-qatal-空值分句",
             "WxQX": "#31 We-無主語字串-qatal-主語字串分句",
             "WxY0": "#32 We-無主語字串-yiqtol-空值分句",

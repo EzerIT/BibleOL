@@ -561,7 +561,7 @@ class Mod_translate extends CI_Model {
 
         foreach ($query->result() as $row) {
             if (!write_file("$dest/$row->db.$row->lang.prop.pretty.json",
-                            json_encode(json_decode($row->json), JSON_PRETTY_PRINT)))
+                            json_encode(json_decode($row->json), JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)))
                 die("Cannot write to file \"$dest/$row->db.$row->lang.prop.pretty.json\"\n");
         }
     }

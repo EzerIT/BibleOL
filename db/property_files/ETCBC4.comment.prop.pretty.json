@@ -67,14 +67,47 @@
             "tab": "",
             "code_TYPE_text": "",
             "code_TYPE_text_VALUES": [
-                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
-                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
-                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
-                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
-                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
-                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
-                { "first" : "f:num ", "last" : "f:num ", "text" : "" },
-                { "first" : "f:num ", "last" : "f:num ", "text" : "" }],
+                {
+                    "first": "f:num ",
+                    "last": "f:num ",
+                    "text": ""
+                },
+                {
+                    "first": "f:num ",
+                    "last": "f:num ",
+                    "text": ""
+                },
+                {
+                    "first": "f:num ",
+                    "last": "f:num ",
+                    "text": ""
+                },
+                {
+                    "first": "f:num ",
+                    "last": "f:num ",
+                    "text": ""
+                },
+                {
+                    "first": "f:num ",
+                    "last": "f:num ",
+                    "text": ""
+                },
+                {
+                    "first": "f:num ",
+                    "last": "f:num ",
+                    "text": ""
+                },
+                {
+                    "first": "f:num ",
+                    "last": "f:num ",
+                    "text": ""
+                },
+                {
+                    "first": "f:num ",
+                    "last": "f:num ",
+                    "text": ""
+                }
+            ],
             "code": "",
             "typ": ""
         },
@@ -531,7 +564,7 @@
             "_label": "Format for identifying chapter"
         },
         "verse": {
-            "_label": "Format for identifying verse"            
+            "_label": "Format for identifying verse"
         },
         "reference": {
             "_label": "How to format a reference",

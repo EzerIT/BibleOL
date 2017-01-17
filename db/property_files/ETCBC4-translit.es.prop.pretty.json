@@ -1,6 +1,6 @@
 {
     "dbdescription": "Hebreo (ETCBC4, Transliterado, OT)",
-    "dbcopyright": "Esta base de datos tiene Derecho de Autor \u00a9 2015 por Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>This work is licensed under a <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (The database itself can be found through this persistent identifier: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
+    "dbcopyright": "Esta base de datos tiene Derecho de Autor © 2015 por Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>This work is licensed under a <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (The database itself can be found through this persistent identifier: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
     "emdrosobject": {
         "word": {
             "_objname": "Palabra",
@@ -61,14 +61,47 @@
             "tab": "Indentación",
             "code_TYPE_text": "Enlace",
             "code_TYPE_text_VALUES": [
-                { "first" : 0, "last" : 0, "text" : "Sin relación" },
-                { "first" : 10, "last" : 16, "text" : "Relativo" },
-                { "first" : 50, "last" : 74, "text" : "Infinitivo constr." },
-                { "first" : 100, "last" : 167, "text" : "Sin conj." },
-                { "first" : 200, "last" : 201, "text" : "Paralelo" },
-                { "first" : 300, "last" : 367, "text" : "Conjunción adv." },
-                { "first" : 400, "last" : 967, "text" : "Conjunción" },
-                { "first" : 999, "last" : 999, "text" : "Discurso directo" }],
+                {
+                    "first": 0,
+                    "last": 0,
+                    "text": "Sin relación"
+                },
+                {
+                    "first": 10,
+                    "last": 16,
+                    "text": "Relativo"
+                },
+                {
+                    "first": 50,
+                    "last": 74,
+                    "text": "Infinitivo constr."
+                },
+                {
+                    "first": 100,
+                    "last": 167,
+                    "text": "Sin conj."
+                },
+                {
+                    "first": 200,
+                    "last": 201,
+                    "text": "Paralelo"
+                },
+                {
+                    "first": 300,
+                    "last": 367,
+                    "text": "Conjunción adv."
+                },
+                {
+                    "first": 400,
+                    "last": 967,
+                    "text": "Conjunción"
+                },
+                {
+                    "first": 999,
+                    "last": 999,
+                    "text": "Discurso directo"
+                }
+            ],
             "code": "Código Sintáctico",
             "typ": "Tipo"
         },

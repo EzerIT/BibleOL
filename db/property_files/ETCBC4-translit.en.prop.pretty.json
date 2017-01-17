@@ -1,6 +1,6 @@
 {
     "dbdescription": "Hebrew (ETCBC4, Transliterated, OT)",
-    "dbcopyright": "This database is Copyright \u00a9 2015 by Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>This work is licensed under a <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (The database itself can be found through this persistent identifier: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
+    "dbcopyright": "This database is Copyright © 2015 by Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>This work is licensed under a <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (The database itself can be found through this persistent identifier: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
     "emdrosobject": {
         "word": {
             "_objname": "Word",
@@ -61,14 +61,47 @@
             "tab": "Indentation",
             "code_TYPE_text": "Linkage",
             "code_TYPE_text_VALUES": [
-                { "first" : 0, "last" : 0, "text" : "No relation" },
-                { "first" : 10, "last" : 16, "text" : "Relative" },
-                { "first" : 50, "last" : 74, "text" : "Inf.constr." },
-                { "first" : 100, "last" : 167, "text" : "No conj." },
-                { "first" : 200, "last" : 201, "text" : "Parallel" },
-                { "first" : 300, "last" : 367, "text" : "Conj.adv." },
-                { "first" : 400, "last" : 967, "text" : "Conjunction" },
-                { "first" : 999, "last" : 999, "text" : "Dir.speech" }],
+                {
+                    "first": 0,
+                    "last": 0,
+                    "text": "No relation"
+                },
+                {
+                    "first": 10,
+                    "last": 16,
+                    "text": "Relative"
+                },
+                {
+                    "first": 50,
+                    "last": 74,
+                    "text": "Inf.constr."
+                },
+                {
+                    "first": 100,
+                    "last": 167,
+                    "text": "No conj."
+                },
+                {
+                    "first": 200,
+                    "last": 201,
+                    "text": "Parallel"
+                },
+                {
+                    "first": 300,
+                    "last": 367,
+                    "text": "Conj.adv."
+                },
+                {
+                    "first": 400,
+                    "last": 967,
+                    "text": "Conjunction"
+                },
+                {
+                    "first": 999,
+                    "last": 999,
+                    "text": "Dir.speech"
+                }
+            ],
             "code": "Syntactic code",
             "typ": "Type"
         },

@@ -1,6 +1,6 @@
 {
     "dbdescription": "Hebraisk (ETCBC4, Translittereret, GT)",
-    "dbcopyright": "Ophavsret til denne database: \u00a9 2015 Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>Dette værk er licenseret under en <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/deed.da\">Creative Commons Navngivelse-IkkeKommerciel 4.0 International Licens<\/a>. (Selve databasen kan findes via denne bestandige identifikator: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
+    "dbcopyright": "Ophavsret til denne database: © 2015 Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>Dette værk er licenseret under en <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/deed.da\">Creative Commons Navngivelse-IkkeKommerciel 4.0 International Licens<\/a>. (Selve databasen kan findes via denne bestandige identifikator: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
     "emdrosobject": {
         "word": {
             "_objname": "Ord",
@@ -61,14 +61,47 @@
             "tab": "Indrykning",
             "code_TYPE_text": "Forbindelse",
             "code_TYPE_text_VALUES": [
-                { "first" : 0, "last" : 0, "text" : "Ingen relat." },
-                { "first" : 10, "last" : 16, "text" : "Relativ" },
-                { "first" : 50, "last" : 74, "text" : "Inf.konstr." },
-                { "first" : 100, "last" : 167, "text" : "Ing.konj." },
-                { "first" : 200, "last" : 201, "text" : "Parallel" },
-                { "first" : 300, "last" : 367, "text" : "Konj.adv." },
-                { "first" : 400, "last" : 967, "text" : "Konjunktion" },
-                { "first" : 999, "last" : 999, "text" : "Dir.tale" }],
+                {
+                    "first": 0,
+                    "last": 0,
+                    "text": "Ingen relat."
+                },
+                {
+                    "first": 10,
+                    "last": 16,
+                    "text": "Relativ"
+                },
+                {
+                    "first": 50,
+                    "last": 74,
+                    "text": "Inf.konstr."
+                },
+                {
+                    "first": 100,
+                    "last": 167,
+                    "text": "Ing.konj."
+                },
+                {
+                    "first": 200,
+                    "last": 201,
+                    "text": "Parallel"
+                },
+                {
+                    "first": 300,
+                    "last": 367,
+                    "text": "Konj.adv."
+                },
+                {
+                    "first": 400,
+                    "last": 967,
+                    "text": "Konjunktion"
+                },
+                {
+                    "first": 999,
+                    "last": 999,
+                    "text": "Dir.tale"
+                }
+            ],
             "code": "Kode",
             "typ": "Type"
         },

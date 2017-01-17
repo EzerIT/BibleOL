@@ -1,6 +1,6 @@
 {
     "dbdescription": "Hebrew (ETCBC4, Transliterated, OT)",
-    "dbcopyright": "Este banco de dados está sob Copyright © 2015 do Eep Talstra Center for Bible and Computer.<br /><a target=\"_blank\" rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https://i.creativecommons.org/l/by-nc/4.0/88x31.png\" /></a><br />Este trabalho está licenseado de acordo com <a target=\"_blank\" rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\">Creative Commons Attribution-NonCommercial 4.0 International License</a>. (O banco de dados em si pode ser encontrado no seguinte identificador fixo: <a href=\"http://www.persistent-identifier.nl/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71</a>.)",
+    "dbcopyright": "Este banco de dados está sob Copyright © 2015 do Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>Este trabalho está licenseado de acordo com <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (O banco de dados em si pode ser encontrado no seguinte identificador fixo: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
     "emdrosobject": {
         "word": {
             "_objname": "Palavra",
@@ -61,14 +61,47 @@
             "tab": "Indentation",
             "code_TYPE_text": "Linkage",
             "code_TYPE_text_VALUES": [
-                { "first" : 0, "last" : 0, "text" : "Sem relação" },  
-                { "first" : 10, "last" : 16, "text" : "Relativa" },     
-                { "first" : 50, "last" : 74, "text" : "Inf.constr." },  
-                { "first" : 100, "last" : 167, "text" : "Sem conj." },    
-                { "first" : 200, "last" : 201, "text" : "Paralela" },     
-                { "first" : 300, "last" : 367, "text" : "Conj.adv." },    
-                { "first" : 400, "last" : 967, "text" : "Conjunção" },    
-                { "first" : 999, "last" : 999, "text" : "Disc.direto" }], 
+                {
+                    "first": 0,
+                    "last": 0,
+                    "text": "Sem relação"
+                },
+                {
+                    "first": 10,
+                    "last": 16,
+                    "text": "Relativa"
+                },
+                {
+                    "first": 50,
+                    "last": 74,
+                    "text": "Inf.constr."
+                },
+                {
+                    "first": 100,
+                    "last": 167,
+                    "text": "Sem conj."
+                },
+                {
+                    "first": 200,
+                    "last": 201,
+                    "text": "Paralela"
+                },
+                {
+                    "first": 300,
+                    "last": 367,
+                    "text": "Conj.adv."
+                },
+                {
+                    "first": 400,
+                    "last": 967,
+                    "text": "Conjunção"
+                },
+                {
+                    "first": 999,
+                    "last": 999,
+                    "text": "Disc.direto"
+                }
+            ],
             "code": "Código sintático",
             "typ": "Tipo"
         },
@@ -171,12 +204,12 @@
             "unknown": "Desconhecido"
         },
         "verb_class_t": {
-            "NA": "N/A",
+            "NA": "N\/A",
             "analog_i_nun": "#15 Analog I nun",
             "analog_i_waw": "#16 Analog I waw",
             "four_consonants": "#17 Quatro Consoantes",
             "geminate": "#14 Geminado",
-            "hjh_xjh": "#13 HJH/XJH",
+            "hjh_xjh": "#13 HJH\/XJH",
             "i_aleph": "#2 I aleph",
             "i_guttural": "#3 I guttural",
             "i_nun": "#4 I nun",
@@ -191,7 +224,7 @@
             "regular": "#1 Regular"
         },
         "phrase_determination_t": {
-            "NA": "N/A",
+            "NA": "N\/A",
             "det": "Determinado",
             "und": "Indeterminado"
         },

@@ -1,6 +1,6 @@
 {
     "dbdescription": "希伯来圣经（ETCBC4音译版，旧约）",
-    "dbcopyright": "This database is Copyright \u00a9 2015 by Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>This work is licensed under a <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (The database itself can be found through this persistent identifier: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
+    "dbcopyright": "This database is Copyright © 2015 by Eep Talstra Center for Bible and Computer.<br \/><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\" \/><\/a><br \/>This work is licensed under a <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (The database itself can be found through this persistent identifier: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
     "emdrosobject": {
         "word": {
             "_objname": "词",
@@ -61,14 +61,47 @@
             "tab": "分层缩入",
             "code_TYPE_text": "怎样和上句连接",
             "code_TYPE_text_VALUES": [
-                { "first" : 0, "last" : 0, "text" : "#1 无关" },
-                { "first" : 10, "last" : 16, "text" : "#7 关系子句" },
-                { "first" : 50, "last" : 74, "text" : "#6 不定式附属形" },
-                { "first" : 100, "last" : 167, "text" : "#3 无连词" },
-                { "first" : 200, "last" : 201, "text" : "#5 平行" },
-                { "first" : 300, "last" : 367, "text" : "#4 作连词的副词" },
-                { "first" : 400, "last" : 967, "text" : "#2 连词" },
-                { "first" : 999, "last" : 999, "text" : "#8 直接引语" }],
+                {
+                    "first": 0,
+                    "last": 0,
+                    "text": "#1 无关"
+                },
+                {
+                    "first": 10,
+                    "last": 16,
+                    "text": "#7 关系子句"
+                },
+                {
+                    "first": 50,
+                    "last": 74,
+                    "text": "#6 不定式附属形"
+                },
+                {
+                    "first": 100,
+                    "last": 167,
+                    "text": "#3 无连词"
+                },
+                {
+                    "first": 200,
+                    "last": 201,
+                    "text": "#5 平行"
+                },
+                {
+                    "first": 300,
+                    "last": 367,
+                    "text": "#4 作连词的副词"
+                },
+                {
+                    "first": 400,
+                    "last": 967,
+                    "text": "#2 连词"
+                },
+                {
+                    "first": 999,
+                    "last": 999,
+                    "text": "#8 直接引语"
+                }
+            ],
             "code": "和上句连接方式的代号",
             "typ": "类别"
         },
