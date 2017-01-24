@@ -21,6 +21,7 @@
             "continuation": "string",
             "continuation_translit": "string",
             "continuation_utf8": "string",
+            "danish": "string",
             "english": "string",
             "g_cons": "string",
             "g_cons_utf8": "string",

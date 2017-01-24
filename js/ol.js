@@ -660,9 +660,9 @@ var DisplaySingleMonadObject = (function (_super) {
                         wordclass = charset.transliteratedClass;
                     else
                         wordclass = 'ltr';
-                    // For English and German in ETCBC4, display only the first gloss
+                    // For Danish, English and German in ETCBC4, display only the first gloss
                     if (configuration.databaseName == "ETCBC4"
-                        && (featName == "english" || featName == "german")) {
+                        && (featName == "english" || featName == "danish" || featName == "german")) {
                         featValLoc = featValLoc.replace(/(&[gl]t);/, '$1Q')
                             .replace(/([^,;(]+).*/, '$1')
                             .replace(/(&[gl]t)Q/, '$1;');

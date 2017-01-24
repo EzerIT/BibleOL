@@ -31,8 +31,10 @@ class Mod_translate extends CI_Model {
                                     'zh-trad' => $this->lang->line('trad_chinese'));
 
             $this->lexicon_langs = array('heb' => array('en' => $this->lang->line('english'),
+                                                        'da' => $this->lang->line('danish'),
                                                         'de' => $this->lang->line('german')),
                                          'aram' => array('en' => $this->lang->line('english'),
+                                                         'da' => $this->lang->line('danish'),
                                                          'de' => $this->lang->line('german')),
                                          'greek' => array('en' => $this->lang->line('english')));
         }
