@@ -22,7 +22,7 @@ INTERFACE LOCALIZATION:
 
 5. On bibleol.3bmoodle.dk run
 
-          for i in comment en es pt zh-simp zh-trad # Add new languages here
+          for i in comment da en es pt zh-simp zh-trad # Add new languages here
           do
               php5.6 index.php translate if_php2db $i myapp/language/langsrc/$i
           done
