@@ -1,12 +1,17 @@
 <?php
 
 $lang['comment'] = "Kommentar";
+$lang['download_lex'] = "Download ordliste";
+$lang['download_lex_desc'] = "<p>Klik på den ordliste du ønsker. En CSV-fil med den valgte ordliste vil så blive downloadet.</p>";
 $lang['each_page_shows'] = "Hver side viser %d emner.";
 $lang['first_occurence'] = "Første forekomst";
 $lang['illegal_source_language'] = "Ulovligt kildesprog";
 $lang['illegal_target_language'] = "Ulovligt målsprog";
 $lang['items_text_database'] = "Antal emner i denne tekstdatabase: %d.";
 $lang['items_text_group'] = "Antal emner i denne tekstgruppe: %d.";
+$lang['lang_aram'] = "Aramæisk";
+$lang['lang_greek'] = "Græsk";
+$lang['lang_heb'] = "Hebraisk";
 $lang['lexeme'] = "Leksem";
 $lang['malformed_url'] = "Forkert URL";
 $lang['modified'] = "Modificeret?";

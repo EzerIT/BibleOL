@@ -1,12 +1,17 @@
 <?php
 
 $lang['comment'] = "Comment";
+$lang['download_lex'] = "Download Lexicon";
+$lang['download_lex_desc'] = "<p>Click the lexicon you want. This will download a CSV file with the selected lexicon.</p>";
 $lang['each_page_shows'] = "Each page shows %d items.";
 $lang['first_occurence'] = "First occurence";
 $lang['illegal_source_language'] = "Illegal source language";
 $lang['illegal_target_language'] = "Illegal target language";
 $lang['items_text_database'] = "Number of items in this text database: %d.";
 $lang['items_text_group'] = "Number of items in this text group: %d.";
+$lang['lang_aram'] = "Aramaic";
+$lang['lang_greek'] = "Greek";
+$lang['lang_heb'] = "Hebrew";
 $lang['lexeme'] = "Lexeme";
 $lang['malformed_url'] = "Malformed URL";
 $lang['modified'] = "Modified?";

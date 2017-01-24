@@ -4,6 +4,14 @@ $comment['comment'] = "";
 $format['comment'] = "";
 $use_textarea['comment'] = false;
 
+$comment['download_lex'] = "Title";
+$format['download_lex'] = "";
+$use_textarea['download_lex'] = false;
+
+$comment['download_lex_desc'] = "HTML";
+$format['download_lex_desc'] = "";
+$use_textarea['download_lex_desc'] = true;
+
 $comment['each_page_shows'] = "";
 $format['each_page_shows'] = "";
 $use_textarea['each_page_shows'] = false;
@@ -27,6 +35,18 @@ $use_textarea['items_text_database'] = false;
 $comment['items_text_group'] = "";
 $format['items_text_group'] = "";
 $use_textarea['items_text_group'] = false;
+
+$comment['lang_aram'] = "";
+$format['lang_aram'] = "";
+$use_textarea['lang_aram'] = false;
+
+$comment['lang_greek'] = "";
+$format['lang_greek'] = "";
+$use_textarea['lang_greek'] = false;
+
+$comment['lang_heb'] = "";
+$format['lang_heb'] = "";
+$use_textarea['lang_heb'] = false;
 
 $comment['lexeme'] = "";
 $format['lexeme'] = "";

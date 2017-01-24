@@ -38,6 +38,7 @@ if ($this->session->userdata('ol_user')!==null && $this->session->userdata('ol_u
             $content[$ix][] = anchor(site_url('translate/translate_if'), $this->lang->line('translate_interface'));
             $content[$ix][] = anchor(site_url('translate/translate_grammar'), $this->lang->line('translate_grammar'));
             $content[$ix][] = anchor(site_url('translate/translate_lex'), $this->lang->line('translate_lexicon'));
+            $content[$ix][] = anchor(site_url('translate/select_download_lex'), $this->lang->line('download_lexicon'));
         }
         if ($this->session->userdata('ol_admin'))
             $content[$ix][] = anchor(site_url('urls'), $this->lang->line('manage_gloss_links'));

@@ -12,6 +12,10 @@ $comment['display_text'] = "";
 $format['display_text'] = "";
 $use_textarea['display_text'] = false;
 
+$comment['download_lexicon'] = "";
+$format['download_lexicon'] = "";
+$use_textarea['download_lexicon'] = false;
+
 $comment['enroll_in_class'] = "";
 $format['enroll_in_class'] = "";
 $use_textarea['enroll_in_class'] = false;

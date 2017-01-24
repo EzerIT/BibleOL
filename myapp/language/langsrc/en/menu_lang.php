@@ -3,6 +3,7 @@
 $lang['administration'] = "Administration";
 $lang['classes'] = "Classes";
 $lang['display_text'] = "Display text";
+$lang['download_lexicon'] = "Download lexicon";
 $lang['enroll_in_class'] = "Enroll in class";
 $lang['exercises'] = "Exercises";
 $lang['font_preferences'] = "Font preferences";

@@ -3,6 +3,7 @@
 $lang['administration'] = "Administration";
 $lang['classes'] = "Klasser";
 $lang['display_text'] = "Vis tekst";
+$lang['download_lexicon'] = "Download ordliste";
 $lang['enroll_in_class'] = "Tilmeld til klasse";
 $lang['exercises'] = "Øvelser";
 $lang['font_preferences'] = "Skrifttyper";

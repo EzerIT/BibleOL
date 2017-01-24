@@ -610,11 +610,15 @@ class Mod_translate extends CI_Model {
           case 'heb':
                 $src_language = 'Hebrew';
                 $l10n_db = 'ETCBC4';
+                $stem_sort_order = array('NA','qal','nif','piel','pual','hit','hif',
+                                         'hof','hsht','pasq','etpa','nit','hotp','tif');
                 break;
 
           case 'aram':
                 $src_language = 'Aramaic';
                 $l10n_db = 'ETCBC4';
+                $stem_sort_order = array('NA','peal','peil','pael','haf','afel','shaf',
+                                         'hof','htpe','htpa','hsht','etpe','etpa');
                 break;
 
           case 'greek':
@@ -649,12 +653,18 @@ class Mod_translate extends CI_Model {
                 foreach ($query->result() as $row)
                     $stems[] = $row->vs;
 
+                // We make very specific assumptions about the available stems:
+                assert(count($stems)===count($stem_sort_order),"Stem count mismatch");
+                foreach ($stems as $st)
+                    assert(in_array($st,$stem_sort_order),"Missing stem $st");
+
+
                 $result =
                     '"' . $grammar_terms['emdrosobject']['word']['lexeme_occurrences'] . '"' .
                     ',"lex"' .
                     ',"' . $grammar_terms['emdrosobject']['word']['vocalized_lexeme_utf8'] . '"';
                 
-                foreach ($stems as $st)
+                foreach ($stem_sort_order as $st)
                     $result .= ',"' . stripSortIndex($grammar_terms['emdrostype']['verbal_stem_t'][$st]) . '"';
 
                 $result .= "\n";
@@ -682,7 +692,7 @@ class Mod_translate extends CI_Model {
                         ',"' . $lex . '"' .
                         ',"' . $r['vocalized_lexeme_utf8'] . '"';
                     
-                    foreach ($stems as $st) {
+                    foreach ($stem_sort_order as $st) {
                         if (isset($r['glosses'][$st]))
                             $result .= ',"' . str_replace('"', '""', $r['glosses'][$st]) . '"';
                         else

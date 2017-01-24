@@ -390,9 +390,47 @@ class Ctrl_translate extends MY_Controller {
         $this->mod_translate->gram_prop2db();
     }
 
+    function select_download_lex()
+    {
+        try {
+            $this->mod_users->check_translator();
+
+            $lexicon_lang_list = $this->mod_translate->get_all_lexicon_langs();
+
+            $all_lex = array();
+            foreach ($lexicon_lang_list as $src_lang => $targets) {
+                foreach ($targets as $dst_lang => $dst_lang_name) {
+                    $all_lex[] = array('from_name' => $this->lang->line('lang_'.$src_lang),
+                                       'to_name' => $dst_lang_name,
+                                       'url' => site_url("/translate/download_lex/$src_lang/$dst_lang"));
+                }
+            }
+            
+            // VIEW:
+            $this->load->view('view_top1', array('title' => $this->lang->line('download_lex')));
+            $this->load->view('view_top2');
+            $this->load->view('view_menu_bar', array('langselect' => true));
+
+            $center_text = $this->load->view('view_download_lex',
+                                             array('all_lex' => $all_lex),true);
+
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('download_lex'),
+                                                      'left' => $this->lang->line('download_lex_desc'),
+                                                      'center' => $center_text));
+            $this->load->view('view_bottom');
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('download_lex'));
+        }
+    }
+
+            
+        
     function download_lex()
     {
         try {
+            $this->mod_users->check_translator();
+            
             if ($this->uri->total_segments()!=4) {
                 throw new DataException($this->lang->line('malformed_url'));
             }
@@ -411,7 +449,7 @@ class Ctrl_translate extends MY_Controller {
             echo $result;
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), $this->lang->line('translate_user_interface'));
+            $this->error_view($e->getMessage(), $this->lang->line('download_lex'));
         }
     }
     
