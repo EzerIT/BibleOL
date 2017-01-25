@@ -65,6 +65,7 @@ $lang['expiry_warning_message_local'] = "您如果想要保留账户，请造访
         . "用使用者名称“%s”登入。";
 $lang['expiry_warning_subject'] = "这个账户很久没有使用原文读经练习网";
 $lang['first_name'] = "名";
+$lang['german'] = "德文";
 $lang['google_no_response_delete'] = "Google没有回应这个请求。通常这是因为，您登入这个网站是在一小时或更久之前。请再次登入这个网站，然后删除您的账户。";
 $lang['go_to_home'] = "返回主页";
 $lang['last_login'] = "上次登入";

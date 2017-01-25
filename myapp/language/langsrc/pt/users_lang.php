@@ -64,6 +64,7 @@ $lang['expiry_warning_message_local'] = "Se você quer manter a sua conta, simpl
         . "e faça o login usando o nome de usuário '%s'.";
 $lang['expiry_warning_subject'] = "Conta inativa no Bible Online Learner";
 $lang['first_name'] = "Nome";
+$lang['german'] = "Alemão";
 $lang['google_no_response_delete'] = "O Google não respondeu a este pedido. Isso tipicamente acontece se você fez o login aqui mais de uma hora atrás. Tente refazê-lo e então exclua seu perfil.";
 $lang['go_to_home'] = "Ir para a Primeira Página";
 $lang['last_login'] = "Último login";

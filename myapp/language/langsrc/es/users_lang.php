@@ -64,6 +64,7 @@ $lang['expiry_warning_message_local'] = "Si desea mantener su cuenta, simplement
         . "e inicie sesión usando el nombre de usuario '%s'.";
 $lang['expiry_warning_subject'] = "Cuenta inactiva en Bible Online Learner";
 $lang['first_name'] = "Primer nombre";
+$lang['german'] = "Alemán";
 $lang['google_no_response_delete'] = "Google no respondió a este pedido. Típicamente esto pasa si usted inicio sesión aquí hace más de una hora. Trate de iniciar sesión aquí una vez más y luego borre su perfil.";
 $lang['go_to_home'] = "Ir a página de inicio";
 $lang['last_login'] = "Última sesión iniciada";
