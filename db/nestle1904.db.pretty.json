@@ -92,8 +92,8 @@
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i",
                     "indirdb": "mysql",
-                    "sql_command": "SELECT gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_en en ON en.lex_id=gr.id WHERE strongs=%d",
-                    "sqlargs": [ "strongs" ],
+                    "sql_command": "SELECT gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_en en ON en.lex_id=gr.id WHERE strongs=%d AND strongs_unreliable=('%s'='true')",
+                    "sqlargs": [ "strongs", "strongs_unreliable" ],
                     "multiple": false
                 },
                 "strongs": {
