@@ -80,7 +80,6 @@ function make_icon_radio_button(string $name) {
        <?php if ($make_add): ?>
           <a class="label label-primary"
              onclick="create_url('<?= $w->lex ?>',
-                                 '<?= $w->language ?>',
                                  '<?= '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . '</span>' ?>');
                       return false;"><?= $this->lang->line('urls_add') ?></a>
        <?php endif; ?>
@@ -141,7 +140,7 @@ function make_icon_radio_button(string $name) {
             <input type="hidden" name="id" id="edit-url-id">
             <input type="hidden" name="scrolltop" id="edit-url-scrolltop">
             <input type="hidden" name="lex" id="edit-url-lex">
-            <input type="hidden" name="language" id="edit-url-language">
+            <input type="hidden" name="longlang" value="<?= $longlang ?>">
             <input type="hidden" name="requesturi" value="<?= $_SERVER['REQUEST_URI'] ?>">
           </form>
         </div>
@@ -190,11 +189,10 @@ function make_icon_radio_button(string $name) {
         $('#edit-url-dialog').modal('show');
     }
 
-    function create_url(lex,language,gloss) {
+    function create_url(lex,gloss) {
         $('#edit-url-id').attr('value',-1);
         $('#create-url-gloss').html(gloss);
         $('#edit-url-lex').attr('value',lex);
-        $('#edit-url-language').attr('value',language);
         $('#edit-url-link').attr('value','');
         $('#iconlist input').prop('checked',false);
         $('#iconlist input[value="glyphicon-link"]').prop('checked',true);  // Default selection

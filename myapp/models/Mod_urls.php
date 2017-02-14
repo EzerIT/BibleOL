@@ -390,8 +390,7 @@ class Mod_urls extends CI_Model {
 
     
     public function get_glosses(string $language, string $from, string $to) {
-        $query = $this->db->from('lexicon_heb he')->join('lexicon_heb_en en','en.lex_id=he.id')
-            ->where('language',$language)
+        $query = $this->db->from("lexicon_{$language} he")->join("lexicon_{$language}_en en",'en.lex_id=he.id')
             ->where('sortorder >=',$from)
             ->where('sortorder <',$to)
             ->order_by('sortorder')
@@ -410,12 +409,10 @@ class Mod_urls extends CI_Model {
     }
 
     public function get_frequent_glosses(string $language, integer $gloss_count) {
-        $query = $this->db->from('lexicon_heb he')->join('lexicon_heb_en en','en.lex_id=he.id')
-            ->where('language',$language)
+        $query = $this->db->from("lexicon_{$language} he")->join("lexicon_{$language}_en en",'en.lex_id=he.id')
             ->order_by('tally','DESC')
             ->limit(2*$gloss_count)
             ->get();
-
 
         $last_lex = '';
         $result = array();

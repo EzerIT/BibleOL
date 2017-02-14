@@ -55,25 +55,23 @@ class Ctrl_urls extends MY_Controller {
 
             switch ($language) {
               case 'heb':
+                    $longlang = 'Hebrew';
                     $buttons = $this->mod_urls->get_heb_buttons();
-                    $words = $button_index==-1
-                        ? $this->mod_urls->get_frequent_glosses('Hebrew',$this->gloss_count)
-                        : $this->mod_urls->get_glosses('Hebrew',$buttons[$button_index][1],$buttons[$button_index][2]);
-                    $this->mod_urls->get_heb_urls('Hebrew',$words);
                     break;
 
               case 'aram':
+                    $longlang = 'Aramaic';
                     $buttons = $this->mod_urls->get_aram_buttons();
-                    $words = $button_index==-1
-                        ? $this->mod_urls->get_frequent_glosses('Aramaic',$this->gloss_count)
-                        : $this->mod_urls->get_glosses('Aramaic',$buttons[$button_index][1],$buttons[$button_index][2]);
-                    $this->mod_urls->get_heb_urls('Aramaic',$words);
                     break;
 
               default:
                     throw new DataException($this->lang->line('illegal_lang_code'));
             }
 
+            $words = $button_index==-1
+                ? $this->mod_urls->get_frequent_glosses($longlang,$this->gloss_count)
+                : $this->mod_urls->get_glosses($longlang,$buttons[$button_index][1],$buttons[$button_index][2]);
+            $this->mod_urls->get_heb_urls($longlang,$words);
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('urls')));
@@ -90,7 +88,7 @@ class Ctrl_urls extends MY_Controller {
                                                    'get_parms' => $get_parms),
                                              true)
                 . $this->load->view('view_edit_url',
-                                    array('language' => $language,
+                                    array('longlang' => $longlang,
                                           'words' => $words,
                                           'get_parms' => $get_parms),
                                     true);
@@ -112,16 +110,16 @@ class Ctrl_urls extends MY_Controller {
                 || !isset($_POST['id']) || !is_numeric($_POST['id'])
                 || !isset($_POST['requesturi'])
                 || !isset($_POST['scrolltop'])
-                || !is_numeric($_POST['scrolltop']))
-                throw new DataException($this->lang->line('bad_post_parameters'));
+                || !is_numeric($_POST['scrolltop'])) { echo "<pre>";print_r($_POST);die;
+                throw new DataException($this->lang->line('bad_post_parameters'));}
 
             if (intval($_POST['id'])==-1) {
                 // Create new link
-                if (!isset($_POST['lex']) || !isset($_POST['language'])
-                    || ($_POST['language']!='Hebrew' && $_POST['language']!='Aramaic'))
-                    throw new DataException($this->lang->line('bad_post_parameters'));
+                if (!isset($_POST['lex']) || !isset($_POST['longlang'])
+                    || ($_POST['longlang']!='Hebrew' && $_POST['longlang']!='Aramaic')) { echo "<pre>";print_r($_POST);die;
+                    throw new DataException($this->lang->line('bad_post_parameters'));}
 
-                $this->mod_urls->create_heb_url($_POST['lex'], $_POST['language'], $_POST['link'], $_POST['icon']);
+                $this->mod_urls->create_heb_url($_POST['lex'], $_POST['longlang'], $_POST['link'], $_POST['icon']);
             }
             else
                 $this->mod_urls->set_heb_url(intval($_POST['id']), $_POST['link'], $_POST['icon']);

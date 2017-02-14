@@ -55,25 +55,24 @@
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
                     "indirdb": "mysql",
-                    "sql_command": "SELECT gloss FROM {PRE}lexicon_heb heb JOIN {PRE}lexicon_heb_en en ON en.lex_id=heb.id WHERE lex='%s' AND vs='%s' AND language='%s'",
-
-                    "sqlargs": [ "lex", "vs", "language" ],
+                    "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_en en ON en.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
+                    "sqlargs": [ "language", "lex", "vs" ],
                     "multiple": false
                 },
                 "german": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
                     "indirdb": "mysql",
-                    "sql_command": "SELECT gloss FROM {PRE}lexicon_heb heb JOIN {PRE}lexicon_heb_de de ON de.lex_id=heb.id WHERE lex='%s' AND vs='%s' AND language='%s'",
-                    "sqlargs": [ "lex", "vs", "language" ],
+                    "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_de de ON de.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
+                    "sqlargs": [ "language", "lex", "vs" ],
                     "multiple": false
                 },
                 "danish": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
                     "indirdb": "mysql",
-                    "sql_command": "SELECT gloss FROM {PRE}lexicon_heb heb JOIN {PRE}lexicon_heb_da da ON da.lex_id=heb.id WHERE lex='%s' AND vs='%s' AND language='%s'",
-                    "sqlargs": [ "lex", "vs", "language" ],
+                    "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_da da ON da.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
+                    "sqlargs": [ "language", "lex", "vs" ],
                     "multiple": false
                 },
                 "glossurl": {

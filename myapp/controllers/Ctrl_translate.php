@@ -424,33 +424,67 @@ class Ctrl_translate extends MY_Controller {
         }
     }
 
-            
-        
     function download_lex()
     {
-        try {
-            $this->mod_users->check_translator();
-            
-            if ($this->uri->total_segments()!=4) {
-                throw new DataException($this->lang->line('malformed_url'));
+        if (is_cli()) {
+            if ($_SERVER['argc']!=5)
+                die("Usage: php index.php translate download_lex <source language> <target language>\n");
+
+            $src_lang = strtolower($_SERVER['argv'][3]);
+            $dst_lang = strtolower($_SERVER['argv'][4]);
+
+            try {
+                $result = $this->mod_translate->download_lex($src_lang, $dst_lang);
             }
-
-            $src_lang = strtolower($this->uri->segment(3));
-            $dst_lang = strtolower($this->uri->segment(4));
-
-            $result = $this->mod_translate->download_lex($src_lang, $dst_lang);
-
-
-            // Output download headers:
-            header("Content-Type: text/csv");
-            header("Content-Length: " . strlen($result));
-            header("Content-Disposition: attachment; filename=\"{$src_lang}_{$dst_lang}.csv\"");
+            catch (DataException $e) {
+                die($e->getMessage() . "\n");
+            }
 
             echo $result;
         }
-        catch (DataException $e) {
-            $this->error_view($e->getMessage(), $this->lang->line('download_lex'));
+        else {
+            try {
+                $this->mod_users->check_translator();
+            
+                if ($this->uri->total_segments()!=4) {
+                    throw new DataException($this->lang->line('malformed_url'));
+                }
+
+                $src_lang = strtolower($this->uri->segment(3));
+                $dst_lang = strtolower($this->uri->segment(4));
+
+                $result = $this->mod_translate->download_lex($src_lang, $dst_lang);
+
+
+                // Output download headers:
+                header("Content-Type: text/csv");
+                header("Content-Length: " . strlen($result));
+                header("Content-Disposition: attachment; filename=\"{$src_lang}_{$dst_lang}.csv\"");
+
+                echo $result;
+            }
+            catch (DataException $e) {
+                $this->error_view($e->getMessage(), $this->lang->line('download_lex'));
+            }
         }
     }
-    
+
+    function import_lex()
+    {
+        if (!is_cli()) {
+            echo '<pre>This command can only be run from the command line</pre>';
+            die;
+        }
+
+		if ($_SERVER['argc']!=6)
+			die("Usage: php index.php translate import_lex <source language> <target language> <CSV file>\n");
+
+        try {
+            $this->mod_translate->import_lex($_SERVER['argv'][3],$_SERVER['argv'][4],$_SERVER['argv'][5]);
+        }
+        catch (DataException $e) {
+            die($e->getMessage() . "\n");
+        }
+
+    }
   }

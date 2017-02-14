@@ -19,25 +19,23 @@ class Mod_translate extends CI_Model {
         parent::__construct();
         $this->load->database();
 
-        if (!is_cli()) {
-            // Not running from command line. This means we are not doing a migration
-            $this->lang->load('users', $this->language);
+        // Not running from command line. This means we are not doing a migration
+        $this->lang->load('users', $this->language);
 
-            $this->if_langs = array('en' => $this->lang->line('english'),
-                                    'da' => $this->lang->line('danish'),
-                                    'pt' => $this->lang->line('portuguese'),
-                                    'es' => $this->lang->line('spanish'),
-                                    'zh-simp' => $this->lang->line('simp_chinese'),
-                                    'zh-trad' => $this->lang->line('trad_chinese'));
+        $this->if_langs = array('en' => $this->lang->line('english'),
+                                'da' => $this->lang->line('danish'),
+                                'pt' => $this->lang->line('portuguese'),
+                                'es' => $this->lang->line('spanish'),
+                                'zh-simp' => $this->lang->line('simp_chinese'),
+                                'zh-trad' => $this->lang->line('trad_chinese'));
 
-            $this->lexicon_langs = array('heb' => array('en' => $this->lang->line('english'),
-                                                        'da' => $this->lang->line('danish'),
-                                                        'de' => $this->lang->line('german')),
-                                         'aram' => array('en' => $this->lang->line('english'),
-                                                         'da' => $this->lang->line('danish'),
-                                                         'de' => $this->lang->line('german')),
-                                         'greek' => array('en' => $this->lang->line('english')));
-        }
+        $this->lexicon_langs = array('heb' => array('en' => $this->lang->line('english'),
+                                                    'da' => $this->lang->line('danish'),
+                                                    'de' => $this->lang->line('german')),
+                                     'aram' => array('en' => $this->lang->line('english'),
+                                                     'da' => $this->lang->line('danish'),
+                                                     'de' => $this->lang->line('german')),
+                                     'greek' => array('en' => $this->lang->line('english')));
     }
 
     public function get_all_if_languages() {
@@ -272,29 +270,16 @@ class Mod_translate extends CI_Model {
             ->update('db_localize', array('json' => $this->build_grammar_json($this->grammar_edit_array)) );
     }
 
-//    public function count_lexicon_lines(string $src_lang) {
-//        switch ($src_lang) {
-//          case 'Hebrew':
-//          case 'Aramaic':
-//                $query = $this->db->select('count(*) as count')->where('language',$src_lang)->get('lexicon_heb');
-//                break;
-//                
-//          case 'Greek':
-//                $query = $this->db->select('count(*) as count')->get('lexicon_greek');
-//                break;
-//        }
-//        return $query->row()->count;
-//    }
-
     public function get_glosses(string $src_lang, string $lang_edit, string $lang_show, string $from, string $to) {
         switch ($src_lang) {
           case 'heb':
           case 'aram':
+                $src_lexicon = $src_lang=='heb' ? 'Hebrew' : 'Aramaic';
+
                 $query = $this->db->select('lex,vs,vocalized_lexeme_utf8 lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,c.id lex_id')
-                    ->from('lexicon_heb c')
-                    ->join("lexicon_heb_$lang_show s", 's.lex_id=c.id','left')
-                    ->join("lexicon_heb_$lang_edit e", 'e.lex_id=c.id','left')
-                    ->where('language',$src_lang=='heb' ? 'Hebrew' : 'Aramaic')
+                    ->from("lexicon_{$src_lexicon} c")
+                    ->join("lexicon_{$src_lexicon}_{$lang_show} s", 's.lex_id=c.id','left')
+                    ->join("lexicon_{$src_lexicon}_{$lang_edit} e", 'e.lex_id=c.id','left')
                     ->where('sortorder >=',$from)
                     ->where('sortorder <',$to)
                     ->order_by('sortorder')
@@ -319,8 +304,11 @@ class Mod_translate extends CI_Model {
     public function update_glosses(string $src_lang, string $dst_lang, array $post) {
         switch ($src_lang) {
           case 'heb':
+                $table = "lexicon_Hebrew_{$dst_lang}";
+                break;
+
           case 'aram':
-                $table = "lexicon_heb_{$dst_lang}";
+                $table = "lexicon_Aramaic_{$dst_lang}";
                 break;
 
           case 'greek':
@@ -368,11 +356,12 @@ class Mod_translate extends CI_Model {
         switch ($src_lang) {
           case 'heb':
           case 'aram':
+                $src_lexicon = $src_lang=='heb' ? 'Hebrew' : 'Aramaic';
+                
                 $query = $this->db->select('lex,vs,vocalized_lexeme_utf8 lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
-                    ->from('lexicon_heb c')
-                    ->join("lexicon_heb_$lang_show s", 's.lex_id=c.id','left')
-                    ->join("lexicon_heb_$lang_edit e", 'e.lex_id=c.id','left')
-                    ->where('language',$src_lang=='heb' ? 'Hebrew' : 'Aramaic')
+                    ->from("lexicon_{$src_lexicon} c")
+                    ->join("lexicon_{$src_lexicon}_{$lang_show} s", 's.lex_id=c.id','left')
+                    ->join("lexicon_{$src_lexicon}_{$lang_edit} e", 'e.lex_id=c.id','left')
                     ->order_by('tally','DESC')
                     ->limit(2*$gloss_count)
                     ->get();
@@ -607,36 +596,72 @@ class Mod_translate extends CI_Model {
         }
     }
 
-    function download_lex(string $src_lang, string $dst_lang) {
+    private function lex_common(string $src_lang, string__OR__null &$src_language, array__OR__null &$header_array) {
+        // Creates $header_array as an array of arrays, where the first value is the Emdros name for
+        // a verbal stem (or null), and the second value is the English heading for a column in the
+        // CSV file
         switch ($src_lang) {
           case 'heb':
                 $src_language = 'Hebrew';
-                $l10n_db = 'ETCBC4';
-                $stem_sort_order = array('NA','qal','nif','piel','pual','hit','hif',
-                                         'hof','hsht','pasq','etpa','nit','hotp','tif');
+                $header_array = array(array(null, 'Occurrences'),
+                                      array(null, 'lex'),
+                                      array(null, 'Lexeme'),
+                                      array('NA', 'None'),
+                                      array('qal', 'Qal'),
+                                      array('nif', 'Nifal'),
+                                      array('piel', 'Piel'),
+                                      array('pual', 'Pual'),
+                                      array('hit', 'Hitpael'),
+                                      array('hif', 'Hifil'),
+                                      array('hof', 'Hofal'),
+                                      array('hsht', 'Hishtafal'),
+                                      array('pasq', 'Passive Qal'),
+                                      array('etpa', 'Etpaal'),
+                                      array('nit', 'Nitpael'),
+                                      array('hotp', 'Hotpaal'),
+                                      array('tif', 'Tifal'));
                 break;
 
           case 'aram':
                 $src_language = 'Aramaic';
-                $l10n_db = 'ETCBC4';
-                $stem_sort_order = array('NA','peal','peil','pael','haf','afel','shaf',
-                                         'hof','htpe','htpa','hsht','etpe','etpa');
+                $header_array = array(array(null, 'Occurrences'),
+                                      array(null, 'lex'),
+                                      array(null, 'Lexeme'),
+                                      array('NA', 'None'),
+                                      array('peal', 'Peal'),
+                                      array('peil', 'Peil'),
+                                      array('pael', 'Pael'),
+                                      array('haf', 'Hafel'),
+                                      array('afel', 'Afel'),
+                                      array('shaf', 'Shafel'),
+                                      array('hof', 'Hofal'),
+                                      array('htpe', 'Hitpeel'),
+                                      array('htpa', 'Hitpaal'),
+                                      array('hsht', 'Hishtafal'),
+                                      array('etpe', 'Etpeel'),
+                                      array('etpa', 'Etpaal'));
                 break;
 
           case 'greek':
-                $l10n_db = 'nestle1904';
+                $src_language = 'greek';
+                $header_array = array(array(null, 'Occurrences'),
+                                      array(null, 'Lexeme'),
+                                      array(null, "Strong's number"),
+                                      array(null, "Strong's unreliable?"),
+                                      array(null, 'Gloss'));
                 break;
 
           default:
                 throw new DataException($this->lang->line('illegal_source_language'));
         }
+    }
+    
+    function download_lex(string $src_lang, string $dst_lang) {
+        $this->lex_common($src_lang, $src_language, $header_array);
 
         if (!array_key_exists($dst_lang, $this->lexicon_langs[$src_lang]))
             throw new DataException($this->lang->line('illegal_target_language'));
 
-        // Always use English for grammar terms because there may not be grammar terms for the target language
-        $l10n = $this->db->select('json')->where('db',$l10n_db)->where('lang','en')->get('db_localize')->row()->json;
-        $grammar_terms = json_decode($l10n, true);
 
         $result = '';
         
@@ -645,37 +670,32 @@ class Mod_translate extends CI_Model {
           case 'aram':
                 // Find names of used verbal stems
                 $query = $this->db->select('vs')->distinct()
-                    ->where('language',$src_language)
                     ->where('vs <>','NA')
                     ->order_by('vs')
-                    ->get('lexicon_heb');
+                    ->get("lexicon_{$src_language}");
 
                 $stems = array('NA');
         
                 foreach ($query->result() as $row)
                     $stems[] = $row->vs;
 
+                $stem_sort_order = array();
+                foreach ($header_array as $h) {
+                    $result .= '"' . $h[1] . '",';
+                    if (!is_null($h[0]))
+                        $stem_sort_order[] = $h[0];
+                }
+
+                $result[strlen($result)-1] = "\n"; // Replace final , with \n
+                       
                 // We make very specific assumptions about the available stems:
                 assert(count($stems)===count($stem_sort_order),"Stem count mismatch");
                 foreach ($stems as $st)
                     assert(in_array($st,$stem_sort_order),"Missing stem $st");
 
-
-                $result =
-                    '"' . $grammar_terms['emdrosobject']['word']['lexeme_occurrences'] . '"' .
-                    ',"lex"' .
-                    ',"' . $grammar_terms['emdrosobject']['word']['vocalized_lexeme_utf8'] . '"';
-                
-                foreach ($stem_sort_order as $st)
-                    $result .= ',"' . stripSortIndex($grammar_terms['emdrostype']['verbal_stem_t'][$st]) . '"';
-
-                $result .= "\n";
-
-                
                 $query = $this->db->select('lex,tally,vs,vocalized_lexeme_utf8,gloss')
-                    ->from('lexicon_heb c')
-                    ->join("lexicon_heb_{$dst_lang}", 'lex_id=c.id','left')
-                    ->where('language',$src_language)
+                    ->from("lexicon_{$src_language} c")
+                    ->join("lexicon_{$src_language}_{$dst_lang}", 'lex_id=c.id','left')
                     ->order_by('sortorder')
                     ->get();
 
@@ -705,21 +725,16 @@ class Mod_translate extends CI_Model {
                 break;
 
           case 'greek':
-                $result =
-                    '"Occurrences"' .
-                    ',"' . $grammar_terms['emdrosobject']['word']['lemma'] . '"' .
-                    ',"' . $grammar_terms['emdrosobject']['word']['strongs'] . '"' .
-                    ',"' . $grammar_terms['emdrosobject']['word']['strongs_unreliable'] . '"' .
-                    ',"Gloss"' .
-                    "\n";
+                foreach ($header_array as $h)
+                    $result .= '"' . $h[1] . '",';
+                $result[strlen($result)-1] = "\n"; // Replace final , with \n
 
                 $query = $this->db->select('tally,lemma,strongs,strongs_unreliable,gloss')
-                    ->from('lexicon_greek c')
-                    ->join("lexicon_greek_$dst_lang", 'lex_id=c.id','left')
+                    ->from("lexicon_{$src_language} c")
+                    ->join("lexicon_{$src_language}_{$dst_lang}", 'lex_id=c.id','left')
                     ->order_by('sortorder')
                     ->get();
 
-                $res = array();
                 foreach ($query->result() as $row) {
                     $result .=
                         $row->tally .
@@ -734,4 +749,86 @@ class Mod_translate extends CI_Model {
         }
         return $result;
     }
+
+    function import_lex(string $src_lang, string $dst_lang, string $csv_file) {
+        $this->lex_common($src_lang, $src_language, $header_array);
+
+        if (!array_key_exists($dst_lang, $this->lexicon_langs[$src_lang]))
+            throw new DataException($this->lang->line('illegal_target_language'));
+
+        $h = @fopen($csv_file, 'r');
+        if ($h===false)
+            throw new DataException("Cannot open file '$csv_file'");
+
+        $record = fgetcsv($h);
+        assert(count($record)==count($header_array));
+        for ($i=0; $i<count($record); ++$i)
+            assert($record[$i]==$header_array[$i][1]);
+        
+        $this->load->dbforge();
+        $this->dbforge->drop_table("lexicon_{$src_language}_{$dst_lang}",true);
+ 
+        $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
+                                        'lex_id' => array('type'=>'INT',
+                                                          'null' => true),
+                                        'gloss' => array('type'=>'TEXT')
+                                      ));
+        $this->dbforge->add_key('id', TRUE);
+        $this->dbforge->add_key('lex_id');
+        $this->dbforge->create_table("lexicon_{$src_language}_{$dst_lang}");
+
+        $this->db->query("ALTER TABLE {PRE}lexicon_{$src_language}_{$dst_lang} ADD FOREIGN KEY lexid (lex_id) REFERENCES {PRE}lexicon_{$src_language}(id) ON DELETE SET NULL ON UPDATE CASCADE");
+
+        $toinsert = array();
+
+        $header_count = count($header_array);
+        for ($i=0; $i<$header_count; ++$i)
+            if (!is_null($header_array[$i][0])) {
+                $first_stem = $i;
+                break;
+            }
+
+        // The verbal stems (including 'NA') are found at indexes $first_stem to $header_count-1
+        
+        while (($record = fgetcsv($h)) !== false) {
+            switch ($src_lang) {
+              case 'heb':
+              case 'aram':
+                    for ($hix=$first_stem; $hix<$header_count; ++$hix) {
+                        if (empty($record[$hix]))
+                            continue;
+                        
+                        $query = $this->db
+                            ->select('id')
+                            ->where('lex', $record[1])
+                            ->where('vs', $header_array[$hix][0])
+                            ->get("lexicon_{$src_language}");
+
+                        $row = $query->row();
+                        $toinsert[] = array('lex_id' => $row->id,
+                                            'gloss' => $record[$hix]);
+                    }
+                    break;
+
+              case 'greek':
+                    $query = $this->db
+                        ->select('id,lemma')
+                        ->where('strongs', $record[2])
+                        ->where('strongs_unreliable', $record[3]=='yes')
+                        ->get("lexicon_{$src_language}");
+            
+                    foreach ($query->result() as $row) {
+                        // The following comparison is required because of duplicate uses of Strong's number.
+                        // PHP's comparison is stricter than MySQL's, therefore the
+                        // check is done here rather than in the SQL statement
+                        if ($row->lemma == $record[1]) 
+                            $toinsert[] = array('lex_id' => $row->id,
+                                                'gloss' => $record[4]);
+                    }
+                    break;
+            }
+        }
+
+        $this->db->insert_batch("lexicon_{$src_language}_{$dst_lang}", $toinsert);
+    } 
   }
