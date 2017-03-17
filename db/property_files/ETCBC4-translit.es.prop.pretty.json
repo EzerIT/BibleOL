@@ -16,14 +16,14 @@
             "g_uvf_translit": "Final Univalente",
             "g_vbe_translit": "Terminación Verbal",
             "g_vbs_translit": "Formación de raíz",
-            "text_utf8": "Texto (Hebreo)",
-            "text_translit": "Texto",
-            "text_nopunct_translit": "Texto (sin punctuación)",
-            "text_cons_utf8": "Texto (sólo consonantes)",
-            "text_nocant_utf8": "Texto (sin signos de cantilación)",
-            "vocalized_lexeme_cons_utf8": "Lexema (sólo consonantes)",
-            "vocalized_lexeme_utf8": "Lexema (Hebreo)",
-            "vocalized_lexeme_translit": "Lexema",
+            "g_word_utf8": "Texto (Hebreo)",
+            "g_word_translit": "Texto",
+            "g_word_nopunct_translit": "Texto (sin punctuación)",
+            "g_word_cons_utf8": "Texto (sólo consonantes)",
+            "g_word_nocant_utf8": "Texto (sin signos de cantilación)",
+            "g_voc_lex_cons_utf8": "Lexema (sólo consonantes)",
+            "g_voc_lex_utf8": "Lexema (Hebreo)",
+            "g_voc_lex_translit": "Lexema",
             "language": "Lenguaje",
             "ls": "Conjunto léxico",
             "vs": "Raíz",
@@ -38,7 +38,7 @@
             "suffix_number": "Número del sufijo",
             "suffix_person": "Persona del sufijo",
             "verb_class": "Clase verbal",
-            "g_qere_translit": "Qere"
+            "qere_translit": "Qere"
         },
         "phrase_atom": {
             "_objname": "Frase átomo",
@@ -166,12 +166,6 @@
             "NA": "#3 Ninguno",
             "unknown": "#4 Desconocido"
         },
-        "suffix_gender_t": {
-            "c": "#3 Común",
-            "f": "#2 Feminino",
-            "m": "#1 Masculino",
-            "NA": "#4 Ninguno"
-        },
         "number_t": {
             "du": "#3 Dual",
             "NA": "#4 Ninguno",
@@ -179,23 +173,12 @@
             "sg": "#1 Singular",
             "unknown": "#5 Desconocido"
         },
-        "suffix_number_t": {
-            "NA": "#3 Ninguno",
-            "pl": "#2 Plural",
-            "sg": "#1 Singular"
-        },
         "person_t": {
             "p1": "#1 1st",
             "NA": "#4 Ninguno",
             "p2": "#2 2nd",
             "p3": "#3 3rd",
             "unknown": "#5 Desconocido"
-        },
-        "suffix_person_t": {
-            "NA": "#4 Ninguno",
-            "p1": "#1 1st",
-            "p2": "#2 2nd",
-            "p3": "#3 3rd"
         },
         "state_t": {
             "a": "Absoluto",
@@ -252,7 +235,10 @@
             "peil": "#20 Peil",
             "shaf": "#21 Shafel",
             "tif": "#22 Tifal",
-            "pasq": "#23 Qal Pasivo"
+            "pasq": "#23 Qal Pasivo",
+            "htpo": "#24 Hitpoal",
+            "poal": "#25 Poal",
+            "poel": "#26 Poel"
         },
         "verbal_tense_t": {
             "NA": "Ninguno",
@@ -442,7 +428,7 @@
             "Adju": "Adju",
             "Attr": "Attr",
             "Cmpl": "Cmpl",
-            "CoVo": "CoVo",
+            "ReVo": "ReVo",
             "Coor": "Coor",
             "Objc": "Objc",
             "PrAd": "PrAd",
@@ -462,9 +448,9 @@
     },
     "grammarfeature": {
         "word": {
-            "text_utf8": "Texto Hebreo",
-            "vocalized_lexeme_utf8": "Lexema (Letras hebraicas)",
-            "vocalized_lexeme_translit": "Lexema (transliterado)"
+            "g_word_utf8": "Texto Hebreo",
+            "g_voc_lex_utf8": "Lexema (Letras hebraicas)",
+            "g_voc_lex_translit": "Lexema (transliterado)"
         }
     },
     "grammarmetafeature": {
@@ -499,18 +485,20 @@
                 "p1": "1",
                 "NA": "-",
                 "p2": "2",
-                "p3": "3"
+                "p3": "3",
+		"unknown": "-"
             },
             "suffix_gender": {
-                "c": "C",
                 "f": "F",
                 "m": "M",
-                "NA": "-"
+                "NA": "-",
+		"unknown": "-"
             },
             "suffix_number": {
                 "NA": "-",
                 "pl": "Pl",
-                "sg": "Sg"
+                "sg": "Sg",
+		"unknown": "-"
             }
         }
     },

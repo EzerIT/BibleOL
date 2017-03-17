@@ -316,7 +316,7 @@ class Convert_wivu {
             "dem" => "dem",
             "mod" => "mod",
             "par" => "par",
-            "rec" => "rec" 
+            "rec" => "rec"
             )
 
 
@@ -386,7 +386,7 @@ class Convert_wivu {
         }
 
 
-        $typeinfo_json = @file_get_contents("db/ETCBC4.typeinfo.json") or die ("Failed opening file \"db/BHS4.typeinfo.json\":\nError was '$php_errormsg'\n");
+        $typeinfo_json = @file_get_contents("db/ETCBC4.typeinfo.json") or die ("Failed opening file \"db/ETCBC4.typeinfo.json\":\nError was '$php_errormsg'\n");
         self::$typeinfo = json_decode($typeinfo_json);
 
 
@@ -394,7 +394,7 @@ class Convert_wivu {
         foreach ($data->selectedPaths as $p) {
             $split_p = explode(':',$p);
             $num = count($split_p);
-            
+
             $path = self::$books[$split_p[0]];
             for ($i=1; $i<$num; ++$i)
                 $path .= ':' . $split_p[$i];
@@ -421,8 +421,116 @@ class Convert_wivu {
         foreach ($data->quizFeatures->dontShowFeatures as &$f)
             $f = self::$featureNames[$qoobj][$f];
 
-        
+
         //print_r($data);
+
+        return $data;
+    }
+  }
+
+class Convert_etcbc4_v7 {
+    static private $featureNames = array(
+        "word" => array(
+            "text" => "g_word",
+            "text_nopunct_translit" => "g_word_nopunct_translit",
+            "text_translit" => "g_word_translit",
+            "text_utf8" => "g_word_utf8",
+            "text_cons_utf8" => "g_word_cons_utf8",
+            "text_nocant_utf8" => "g_word_nocant_utf8",
+
+            "vocalized_lexeme" => "g_voc_lex",
+            "vocalized_lexeme_cons_utf8" => "g_voc_lex_cons_utf8",
+            "vocalized_lexeme_translit" => "g_voc_lex_translit",
+            "vocalized_lexeme_utf8" => "g_voc_lex_utf8",
+
+            "g_qere" => "qere",
+            "g_qere_translit" => "qere_translit",
+            "g_qere_utf8" => "qere_utf8",
+            ),
+        );
+
+    static private $valueNames = array(
+        "gender_t" => array(
+            "c" => "REMOVE_THIS",
+            ),
+
+        "clause_constituent_relation_t" => array(
+            "CoVo" => "ReVo",
+            ),
+        );
+
+    static private $typeinfo;
+
+    static private function convert_selection(&$selection, string $filename) {
+        if (isset($selection->mql)) {
+            fwrite(STDERR, "$filename: Exercize contains MQL\n");
+//            die(1);
+        }
+        else foreach ($selection->featHand->vhand as &$handler) {
+            if (isset(self::$featureNames[$selection->object][$handler->name]))
+                $handler->name = self::$featureNames[$selection->object][$handler->name];
+
+            switch ($handler->type) {
+              case 'enumfeature':
+                    foreach ($handler->values as $ix=>&$value) {
+                        $type = self::$typeinfo->obj2feat->{$selection->object}->{$handler->name};
+                        if (isset(self::$valueNames[$type][$value])) {
+                            $v = self::$valueNames[$type][$value];
+                            if ($v=="REMOVE_THIS") {
+                                if (count($handler->values)==1) {
+                                    fwrite(STDERR, "$filename: Cannot remove single value: $value\n");
+                                    die;
+                                }
+                                fwrite(STDERR, "$filename: Removing: $value\n");
+                                unset($handler->values[$ix]);
+                            }
+                            else
+                                $value = $v;
+                        }
+                    }
+                    break;
+              case 'stringfeature':
+              case 'rangeintegerfeature':
+              case 'enumlistfeature':
+                    break; // No operation
+              default:
+                    fwrite(STDERR, "$filename: Unknown handler type: $handler->type\n");
+                    die(3);
+            }
+        }
+    }
+
+    static public function convert($data, string $filename) {
+        if ($data->database !== 'ETCBC4') {
+            fwrite(STDERR, "$filename: Database is not ETCBC4\n");
+            die(4);
+        }
+
+        $typeinfo_json = @file_get_contents("db/ETCBC4.typeinfo.json") or die ("Failed opening file \"db/ETCBC4.typeinfo.json\":\nError was '$php_errormsg'\n");
+        self::$typeinfo = json_decode($typeinfo_json);
+
+
+        self::convert_selection($data->sentenceSelection, $filename);
+
+        if (!$data->sentenceSelection->useForQo) {
+            self::convert_selection($data->quizObjectSelection, $filename);
+            $qoobj = $data->quizObjectSelection->object;
+        }
+        else
+            $qoobj = $data->sentenceSelection->object;
+
+        foreach ($data->quizFeatures->showFeatures as &$f)
+            if (isset(self::$featureNames[$qoobj][$f]))
+                $f = self::$featureNames[$qoobj][$f];
+
+        foreach ($data->quizFeatures->requestFeatures as &$f)
+            if (isset(self::$featureNames[$qoobj][$f->name]))
+                $f->name = self::$featureNames[$qoobj][$f->name];
+
+        foreach ($data->quizFeatures->dontShowFeatures as &$f)
+            if (isset(self::$featureNames[$qoobj][$f]))
+                $f = self::$featureNames[$qoobj][$f];
+
 
         return $data;
     }

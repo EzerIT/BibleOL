@@ -196,7 +196,7 @@ class Ctrl_text extends MY_Controller {
         $filename = html_entity_decode($filename); // Fixes changes made by CI_URI::_filter_uri
 
         $this->load->model('mod_askemdros');
-        $this->mod_askemdros->convert_WIVU_to_ETCBC4($filename);
+        $this->mod_askemdros->convert_ETCBC4_v7($filename);
     }
 
 

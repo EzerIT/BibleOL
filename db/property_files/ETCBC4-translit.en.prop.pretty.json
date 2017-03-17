@@ -16,14 +16,14 @@
             "g_uvf_translit": "Univalent final",
             "g_vbe_translit": "Verbal ending",
             "g_vbs_translit": "Root formation",
-            "text_utf8": "Text (Hebrew)",
-            "text_translit": "Text",
-            "text_nopunct_translit": "Text (no punctuation)",
-            "text_cons_utf8": "Text (consonants only)",
-            "text_nocant_utf8": "Text (no cantillation marks)",
-            "vocalized_lexeme_cons_utf8": "Lexeme (consonants only)",
-            "vocalized_lexeme_utf8": "Lexeme (Hebrew)",
-            "vocalized_lexeme_translit": "Lexeme",
+            "g_word_utf8": "Text (Hebrew)",
+            "g_word_translit": "Text",
+            "g_word_nopunct_translit": "Text (no punctuation)",
+            "g_word_cons_utf8": "Text (consonants only)",
+            "g_word_nocant_utf8": "Text (no cantillation marks)",
+            "g_voc_lex_cons_utf8": "Lexeme (consonants only)",
+            "g_voc_lex_utf8": "Lexeme (Hebrew)",
+            "g_voc_lex_translit": "Lexeme",
             "language": "Language",
             "ls": "Lexical set",
             "vs": "Stem",
@@ -38,7 +38,7 @@
             "suffix_number": "Suffix number",
             "suffix_person": "Suffix person",
             "verb_class": "Verb class",
-            "g_qere_translit": "Qere"
+            "qere_translit": "Qere"
         },
         "phrase_atom": {
             "_objname": "Phrase atom",
@@ -166,12 +166,6 @@
             "NA": "#3 None",
             "unknown": "#4 Unknown"
         },
-        "suffix_gender_t": {
-            "c": "#3 Common",
-            "f": "#2 Feminine",
-            "m": "#1 Masculine",
-            "NA": "#4 None"
-        },
         "number_t": {
             "du": "#3 Dual",
             "NA": "#4 None",
@@ -179,23 +173,12 @@
             "sg": "#1 Singular",
             "unknown": "#5 Unknown"
         },
-        "suffix_number_t": {
-            "NA": "#3 None",
-            "pl": "#2 Plural",
-            "sg": "#1 Singular"
-        },
         "person_t": {
             "p1": "#1 1st",
             "NA": "#4 None",
             "p2": "#2 2nd",
             "p3": "#3 3rd",
             "unknown": "#5 Unknown"
-        },
-        "suffix_person_t": {
-            "NA": "#4 None",
-            "p1": "#1 1st",
-            "p2": "#2 2nd",
-            "p3": "#3 3rd"
         },
         "state_t": {
             "a": "Absolute",
@@ -252,7 +235,10 @@
             "peil": "#20 Peil",
             "shaf": "#21 Shafel",
             "tif": "#22 Tifal",
-            "pasq": "#23 Passive Qal"
+            "pasq": "#23 Passive Qal",
+            "htpo": "#24 Hitpoal",
+            "poal": "#25 Poal",
+            "poel": "#26 Poel"
         },
         "verbal_tense_t": {
             "NA": "None",
@@ -442,7 +428,7 @@
             "Adju": "Adju",
             "Attr": "Attr",
             "Cmpl": "Cmpl",
-            "CoVo": "CoVo",
+            "ReVo": "ReVo",
             "Coor": "Coor",
             "Objc": "Objc",
             "PrAd": "PrAd",
@@ -462,9 +448,9 @@
     },
     "grammarfeature": {
         "word": {
-            "text_utf8": "Hebrew text",
-            "vocalized_lexeme_utf8": "Lexeme (Hebrew letters)",
-            "vocalized_lexeme_translit": "Lexeme (transliterated)"
+            "g_word_utf8": "Hebrew text",
+            "g_voc_lex_utf8": "Lexeme (Hebrew letters)",
+            "g_voc_lex_translit": "Lexeme (transliterated)"
         }
     },
     "grammarmetafeature": {
@@ -499,18 +485,20 @@
                 "p1": "1",
                 "NA": "-",
                 "p2": "2",
-                "p3": "3"
+                "p3": "3",
+		"unknown": "-"
             },
             "suffix_gender": {
-                "c": "C",
                 "f": "F",
                 "m": "M",
-                "NA": "-"
+                "NA": "-",
+		"unknown": "-"
             },
             "suffix_number": {
                 "NA": "-",
                 "pl": "Pl",
-                "sg": "Sg"
+                "sg": "Sg",
+		"unknown": "-"
             }
         }
     },

@@ -16,14 +16,14 @@
             "g_uvf_translit": "Univalent finale",
             "g_vbe_translit": "Verbal endelse",
             "g_vbs_translit": "Roddannelse",
-            "text_utf8": "Tekst (Hebraisk)",
-            "text_translit": "Tekst",
-            "text_nopunct_translit": "Tekst (uden tegn)",
-            "text_cons_utf8": "Tekst (kun konsonanter)",
-            "text_nocant_utf8": "Tekst (ingen sangtegn)",
-            "vocalized_lexeme_cons_utf8": "Leksem (kun konsonanter)",
-            "vocalized_lexeme_utf8": "Leksem (Hebraisk)",
-            "vocalized_lexeme_translit": "Leksem",
+            "g_word_utf8": "Tekst (Hebraisk)",
+            "g_word_translit": "Tekst",
+            "g_word_nopunct_translit": "Tekst (uden tegn)",
+            "g_word_cons_utf8": "Tekst (kun konsonanter)",
+            "g_word_nocant_utf8": "Tekst (ingen sangtegn)",
+            "g_voc_lex_cons_utf8": "Leksem (kun konsonanter)",
+            "g_voc_lex_utf8": "Leksem (Hebraisk)",
+            "g_voc_lex_translit": "Leksem",
             "language": "Sprog",
             "ls": "Leksikalt sæt",
             "vs": "Stamme",
@@ -38,7 +38,7 @@
             "suffix_number": "Talsuffiks",
             "suffix_person": "Personsuffiks",
             "verb_class": "Verbalklasse",
-            "g_qere_translit": "Qere"
+            "qere_translit": "Qere"
         },
         "phrase_atom": {
             "_objname": "Sætningsledatom",
@@ -166,12 +166,6 @@
             "NA": "#3 Ingen",
             "unknown": "#4 Unkendt"
         },
-        "suffix_gender_t": {
-            "c": "#3 Fælleskøn",
-            "f": "#2 Femininum",
-            "m": "#1 Masculinum",
-            "NA": "#4 Ingen"
-        },
         "number_t": {
             "du": "#3 Dualis",
             "NA": "#4 Ingen",
@@ -179,23 +173,12 @@
             "sg": "#1 Singularis",
             "unknown": "#5 Ukendt"
         },
-        "suffix_number_t": {
-            "NA": "#3 Ingen",
-            "pl": "#2 Pluralis",
-            "sg": "#1 Singularis"
-        },
         "person_t": {
             "p1": "#1 1.",
             "NA": "#4 Ingen",
             "p2": "#2 2.",
             "p3": "#3 3.",
             "unknown": "#5 Ukent"
-        },
-        "suffix_person_t": {
-            "NA": "#4 Ingen",
-            "p1": "#1 1.",
-            "p2": "#2 2.",
-            "p3": "#3 3."
         },
         "state_t": {
             "a": "Absolutus",
@@ -252,7 +235,10 @@
             "peil": "#20 Peil",
             "shaf": "#21 Shafel",
             "tif": "#22 Tifal",
-            "pasq": "#23 Passiv Qal"
+            "pasq": "#23 Passiv Qal",
+            "htpo": "#24 Hitpoal",
+            "poal": "#25 Poal",
+            "poel": "#26 Poel"
         },
         "verbal_tense_t": {
             "NA": "Ingen",
@@ -442,7 +428,7 @@
             "Adju": "Adju",
             "Attr": "Attr",
             "Cmpl": "Cmpl",
-            "CoVo": "CoVo",
+            "ReVo": "ReVo",
             "Coor": "Coor",
             "Objc": "Objc",
             "PrAd": "PrAd",
@@ -462,9 +448,9 @@
     },
     "grammarfeature": {
         "word": {
-            "text_utf8": "Hebraisk tekst",
-            "vocalized_lexeme_utf8": "Leksem (Hebraiske bogstaver)",
-            "vocalized_lexeme_translit": "Leksem (translittereret)"
+            "g_word_utf8": "Hebraisk tekst",
+            "g_voc_lex_utf8": "Leksem (Hebraiske bogstaver)",
+            "g_voc_lex_translit": "Leksem (translittereret)"
         }
     },
     "grammarmetafeature": {
@@ -499,18 +485,20 @@
                 "p1": "1",
                 "NA": "-",
                 "p2": "2",
-                "p3": "3"
+                "p3": "3",
+		"unknown": "-"
             },
             "suffix_gender": {
-                "c": "C",
                 "f": "F",
                 "m": "M",
-                "NA": "-"
+                "NA": "-",
+		"unknown": "-"
             },
             "suffix_number": {
                 "NA": "-",
                 "pl": "Pl",
-                "sg": "Sg"
+                "sg": "Sg",
+		"unknown": "-"
             }
         }
     },

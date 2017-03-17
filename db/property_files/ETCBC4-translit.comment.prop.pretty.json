@@ -16,14 +16,14 @@
             "g_uvf_translit": "",
             "g_vbe_translit": "",
             "g_vbs_translit": "",
-            "text_utf8": "",
-            "text_translit": "",
-            "text_nopunct_translit": "",
-            "text_cons_utf8": "",
-            "text_nocant_utf8": "",
-            "vocalized_lexeme_cons_utf8": "",
-            "vocalized_lexeme_utf8": "",
-            "vocalized_lexeme_translit": "",
+            "g_word_utf8": "",
+            "g_word_translit": "",
+            "g_word_nopunct_translit": "",
+            "g_word_cons_utf8": "",
+            "g_word_nocant_utf8": "",
+            "g_voc_lex_cons_utf8": "",
+            "g_voc_lex_utf8": "",
+            "g_voc_lex_translit": "",
             "language": "",
             "ls": "",
             "vs": "",
@@ -38,7 +38,7 @@
             "suffix_number": "",
             "suffix_person": "",
             "verb_class": "",
-            "g_qere_translit": ""
+            "qere_translit": ""
         },
         "phrase_atom": {
             "_objname": "",
@@ -166,12 +166,6 @@
             "NA": "",
             "unknown": ""
         },
-        "suffix_gender_t": {
-            "c": "",
-            "f": "",
-            "m": "",
-            "NA": ""
-        },
         "number_t": {
             "du": "",
             "NA": "",
@@ -179,23 +173,12 @@
             "sg": "",
             "unknown": ""
         },
-        "suffix_number_t": {
-            "NA": "",
-            "pl": "",
-            "sg": ""
-        },
         "person_t": {
             "p1": "",
             "NA": "",
             "p2": "",
             "p3": "",
             "unknown": ""
-        },
-        "suffix_person_t": {
-            "NA": "",
-            "p1": "",
-            "p2": "",
-            "p3": ""
         },
         "state_t": {
             "a": "",
@@ -252,7 +235,10 @@
             "peil": "",
             "shaf": "",
             "tif": "",
-            "pasq": ""
+            "pasq": "",
+            "htpo": "",
+            "poal": "",
+            "poel": ""
         },
         "verbal_tense_t": {
             "NA": "",
@@ -442,7 +428,7 @@
             "Adju": "",
             "Attr": "",
             "Cmpl": "",
-            "CoVo": "",
+            "ReVo": "",
             "Coor": "",
             "Objc": "",
             "PrAd": "",
@@ -462,9 +448,9 @@
     },
     "grammarfeature": {
         "word": {
-            "text_utf8": "",
-            "vocalized_lexeme_utf8": "",
-            "vocalized_lexeme_translit": ""
+            "g_word_utf8": "",
+            "g_voc_lex_utf8": "",
+            "g_voc_lex_translit": ""
         }
     },
     "grammarmetafeature": {
@@ -499,18 +485,20 @@
                 "p1": "Abbrev. of 1st person",
                 "NA": "Indicates 'Not applicable'",
                 "p2": "Abbrev. of 2nd person",
-                "p3": "Abbrev. of 3rd person"
+                "p3": "Abbrev. of 3rd person",
+		"unknown": ""
             },
             "suffix_gender": {
-                "c": "Abbrev. of common gender",
                 "f": "Abbrev. of feminine",
                 "m": "Abbrev. of masculine",
-                "NA": "Indicates 'Not applicable'"
+                "NA": "Indicates 'Not applicable'",
+		"unknown": ""
             },
             "suffix_number": {
                 "NA": "Indicates 'Not applicable'",
                 "pl": "Abbrev. of plural",
-                "sg": "Abbrev. of singular"
+                "sg": "Abbrev. of singular",
+		"unknown": ""
             }
         }
     },

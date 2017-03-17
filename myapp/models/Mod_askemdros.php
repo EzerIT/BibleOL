@@ -190,7 +190,7 @@ class Mod_askemdros extends CI_Model {
                                                'oType' => $this->decoded_3et->quizObjectSelection->object));
     }
 
-    function convert_WIVU_to_ETCBC4(string $filename) {
+    function convert_ETCBC4_v7(string $filename) {
         $this->load->helper(array('file','xmlhandler','quiztemplate','convert_wivu'));
 
         if (!is_file($filename) || !is_readable($filename))
@@ -202,14 +202,13 @@ class Mod_askemdros extends CI_Model {
             throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
 
         $this->decoded_3et = harvest($this->contents);
-        $conv = Convert_wivu::convert($this->decoded_3et, $filename);
+        $conv = Convert_etcbc4_v7::convert($this->decoded_3et, $filename);
 
         $x = new stdClass;
         $x->subsetOf = false;
 
         $res = Template::writeAsXml($conv, $x);
         print $res;
-        
     }
 
     private function parseQuizBasic(string $filename) {

@@ -16,14 +16,14 @@
             "g_uvf_translit": "簡單後綴",
             "g_vbe_translit": "動詞尾",
             "g_vbs_translit": "語幹元素",
-            "text_utf8": " 希伯來經文詞語",
-            "text_translit": "經文詞語",
-            "text_nopunct_translit": "經文詞語（無標點）",
-            "text_cons_utf8": "經文詞語，只顯示輔音",
-            "text_nocant_utf8": "經文詞語（無讀音符號）",
-            "vocalized_lexeme_cons_utf8": "基本詞形，只顯示輔音",
-            "vocalized_lexeme_utf8": " 基本詞形（希伯來文）",
-            "vocalized_lexeme_translit": "基本詞形",
+            "g_word_utf8": " 希伯來經文詞語",
+            "g_word_translit": "經文詞語",
+            "g_word_nopunct_translit": "經文詞語（無標點）",
+            "g_word_cons_utf8": "經文詞語，只顯示輔音",
+            "g_word_nocant_utf8": "經文詞語（無讀音符號）",
+            "g_voc_lex_cons_utf8": "基本詞形，只顯示輔音",
+            "g_voc_lex_utf8": " 基本詞形（希伯來文）",
+            "g_voc_lex_translit": "基本詞形",
             "language": "語言",
             "ls": "詞細類",
             "vs": "語幹",
@@ -38,7 +38,7 @@
             "suffix_number": "後綴數",
             "suffix_person": "後綴人稱",
             "verb_class": "根類",
-            "g_qere_translit": "讀為"
+            "qere_translit": "讀為"
         },
         "phrase_atom": {
             "_objname": "詞組半截",
@@ -166,12 +166,6 @@
             "NA": "#3 無",
             "unknown": "#4 不明"
         },
-        "suffix_gender_t": {
-            "c": "#3 通性",
-            "f": "#2 陰性",
-            "m": "#1 陽性",
-            "NA": "#4 無"
-        },
         "number_t": {
             "du": "#3 雙數",
             "NA": "#4 無",
@@ -179,23 +173,12 @@
             "sg": "#1 單數",
             "unknown": "#5 不明"
         },
-        "suffix_number_t": {
-            "NA": "#3 無",
-            "pl": "#2 複數",
-            "sg": "#1 單數"
-        },
         "person_t": {
             "p1": "#1 第一人稱",
             "NA": "#4 無",
             "p2": "#2 第二人稱",
             "p3": "#3 第三人稱",
             "unknown": "#5 不明"
-        },
-        "suffix_person_t": {
-            "NA": "#4 無",
-            "p1": "#1 第一人稱",
-            "p2": "#2 第二人稱",
-            "p3": "#3 第三人稱"
         },
         "state_t": {
             "a": "獨立形",
@@ -252,7 +235,10 @@
             "peil": "#21 Peil",
             "shaf": "#22 Shafel",
             "tif": "#23 Tifal",
-            "pasq": "#9 被動Qal"
+            "pasq": "#9 被動Qal",
+            "htpo": "#24 Hitpoal",
+            "poal": "#25 Poal",
+            "poel": "#26 Poel"
         },
         "verbal_tense_t": {
             "NA": "#1 無",
@@ -442,7 +428,7 @@
             "Adju": "#8 修飾性狀語分句",
             "Attr": "#6 定語分句",
             "Cmpl": "#9 補語分句",
-            "CoVo": "#10 配合前面呼格詞的分句",
+            "ReVo": "#10 配合前面呼格詞的分句",
             "Coor": "#11 並列分句",
             "Objc": "#5 賓語分句",
             "PrAd": "#3 修飾性狀語作謂語分句",
@@ -462,9 +448,9 @@
     },
     "grammarfeature": {
         "word": {
-            "text_utf8": "希伯來經文詞語",
-            "vocalized_lexeme_utf8": "基本詞形（希伯來文字母）",
-            "vocalized_lexeme_translit": "基本詞形（音譯）"
+            "g_word_utf8": "希伯來經文詞語",
+            "g_voc_lex_utf8": "基本詞形（希伯來文字母）",
+            "g_voc_lex_translit": "基本詞形（音譯）"
         }
     },
     "grammarmetafeature": {
@@ -499,18 +485,20 @@
                 "p1": "一",
                 "NA": "／",
                 "p2": "二",
-                "p3": "三"
+                "p3": "三",
+                "unknown": "／"
             },
             "suffix_gender": {
-                "c": "通",
                 "f": "陰",
                 "m": "陽",
-                "NA": "／"
+                "NA": "／",
+                "unknown": "／"
             },
             "suffix_number": {
                 "NA": "／",
                 "pl": "複",
-                "sg": "單"
+                "sg": "單",
+                "unknown": "／"
             }
         }
     },
