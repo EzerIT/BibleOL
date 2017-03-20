@@ -192,7 +192,7 @@ class Ctrl_file_manager extends MY_Controller {
             if ($this->session->userdata('operation') === 'move')
                 $this->mod_source_quizpath->delete_files($this->session->userdata('files'));
                 
-            $this->session->unset_userdata(array('files'=>'', 'operation'=>'', 'from_dir'=>''));
+            $this->session->unset_userdata(array('files', 'operation', 'from_dir'));
 
             $this->show_files_2();
         }
@@ -205,7 +205,7 @@ class Ctrl_file_manager extends MY_Controller {
         try {
             $this->mod_users->check_teacher();
 
-            $this->session->unset_userdata(array('files'=>'', 'operation'=>'', 'from_dir'=>''));
+            $this->session->unset_userdata(array('files', 'operation', 'from_dir'));
 
             $this->show_files();
         }

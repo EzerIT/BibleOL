@@ -40,7 +40,7 @@ class Ctrl_login extends MY_Controller {
 		if ($this->form_validation->run())
             redirect("/");
 
-        $this->session->unset_userdata(array('ol_user'=>'', 'ol_admin'=>'', 'ol_teacher'=>'', 'ol_translator'=>'', 'files'=>'', 'operation'=>'', 'from_dir'=>''));
+        $this->session->unset_userdata(array('ol_user', 'ol_admin', 'ol_teacher', 'ol_translator', 'files', 'operation', 'from_dir'));
 
         // Set up parameters for OAuth2 authentication.
         $this->session->set_userdata('oauth2_state', md5(rand())); // Used to prevent forged requests
