@@ -37,7 +37,7 @@ class Mod_statistics extends CI_Model {
     public function newQuizTemplate(integer $userid, string $quizFile, string $fileContent, string $dbName, string $dbProp, string $qoName) {
         $hash = self::hashCode($fileContent);
 
-        $query = $this->db->where('quizcodehash',$hash)->where('userid',$userid)->get('sta_quiztemplate');
+        $query = $this->db->where('pathname',$quizFile)->where('quizcodehash',$hash)->where('userid',$userid)->get('sta_quiztemplate');
 
         foreach ($query->result() as $row)
             if ($row->quizcode===$fileContent)
