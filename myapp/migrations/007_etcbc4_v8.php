@@ -96,10 +96,34 @@ class Migration_Etcbc4_v8 extends CI_Migration {
     private function replace_word_in_lexicon(string $old, string $new, string $new_voclex) {
         $this->db->where('lex',$old)->update('lexicon_Hebrew',
                                              array('lex'=>$new,
-                                                   'vocalized_lexeme_utf8' => $new_voclex
-                                                   'sortorder' => wit2sort($new)));
+                                                   'vocalized_lexeme_utf8' => $new_voclex,
+                                                   'sortorder' => $this->wit2sort($new)));
     }
 
+    private function replace_translation(string $lex, string $lang, string $old, string $new) {
+        $query = $this->db->select('id')->where('lex',$lex)->get('lexicon_Hebrew');
+        if ($query->num_rows()!=1) {
+            echo "ERROR: Lex $lex is not in lexicon_Hebrew\n";
+            return;
+        }
+
+        $lex_id = $query->row()->id;
+
+        $query = $this->db->select('gloss')->where('lex_id',$lex_id)->get("lexicon_Hebrew_$lang");
+        if ($query->num_rows()!=1) {
+            echo "ERROR: Lex $lex is not in lexicon_Hebrew_$lang\n";
+            return;
+        }
+
+        if ($query->row()->gloss!=$old) {
+            echo "ERROR: Old gloss for $lex is not $old\n";
+            return;
+        }
+
+        $this->db->where('lex_id',$lex_id)->update("lexicon_Hebrew_$lang",
+                                                   array('gloss'=>$new));
+    }
+    
     private function replace_word_in_urls(string $old, string $new) {
         $this->db->where('lex',$old)->where('language','Hebrew')->update('heb_urls',array('lex'=>$new));
     }
@@ -161,19 +185,21 @@ class Migration_Etcbc4_v8 extends CI_Migration {
 
             // Words who were changed from plural to singular:
 
-            // Old lex         New lex     New vocalized lexeme                                                                        Translation comment
-            'KRKRWT/'   => array('KRKRH/', "\xd7\x9b\xd6\xbc\xd6\xb4\xd7\xa8\xd6\xb0\xd7\x9b\xd6\xbc\xd6\xb8\xd7\xa8\xd6\xb8\xd7\x94", 'camels=>camel, Kamelstuten=>Kamelstute'),
-            'MBDLWT/'   => array('MBDLH/', "\xd7\x9e\xd6\xb4\xd7\x91\xd6\xb0\xd7\x93\xd6\xbc\xd6\xb8\xd7\x9c\xd6\xb8\xd7\x94",         'separate places/enclaves=>separateplace/enclave, Enklaven=>Enklave'),
-            'ZJQWT/'    => array('ZJQH/',  "\xd7\x96\xd6\xb4\xd7\x99\xd7\xa7\xd6\xb8\xd7\x94",                                         'fire-arrows=>fire-arrow, Brandpfeile=>Brandpfeil'),
-            'ZQJM=/'    => array('ZQ/',    "\xd7\x96\xd6\xb5\xd7\xa7",                                                                 'fire-arrows=>fire-arrow, Brandpfeile=>Brandpfeil'),
+            // Old lex         New lex     New vocalized lexeme                                                                        Old English  New English  Old German  New German
+            'KRKRWT/'   => array('KRKRH/', "\xd7\x9b\xd6\xbc\xd6\xb4\xd7\xa8\xd6\xb0\xd7\x9b\xd6\xbc\xd6\xb8\xd7\xa8\xd6\xb8\xd7\x94", 'she-camels', 'she-camel', 'Kamelstuten', 'Kamelstute'),
+            'MBDLWT/'   => array('MBDLH/', "\xd7\x9e\xd6\xb4\xd7\x91\xd6\xb0\xd7\x93\xd6\xbc\xd6\xb8\xd7\x9c\xd6\xb8\xd7\x94",         'separate places, enclaves', 'separate place, enclave', 'Enklaven', 'Enklave'),
+            'ZJQWT/'    => array('ZJQH/',  "\xd7\x96\xd6\xb4\xd7\x99\xd7\xa7\xd6\xb8\xd7\x94",                                         'fire-arrows', 'fire-arrow', 'Brandpfeile', 'Brandpfeil'),
+            'ZQJM=/'    => array('ZQ/',    "\xd7\x96\xd6\xb5\xd7\xa7",                                                                 'fire-arrows', 'fire-arrow', 'Brandpfeile', 'Brandpfeil'),
             );
 
         foreach ($to_replace as $old=>$new) {
             $this->replace_word_in_lexicon($old,$new[0],$new[1]);
             $this->replace_word_in_urls($old,$new[0]);
 
-            if (isset($new[2]))
-                echo "Manually change meaning of $new[1] ($new[0]) thus: $new[2]\n";
+            if (isset($new[2])) {
+                $this->replace_translation($new[0], 'en', $new[2], $new[3]);
+                $this->replace_translation($new[0], 'de', $new[4], $new[5]);
+            }
         }
     }
 
@@ -204,7 +230,7 @@ class Migration_Etcbc4_v8 extends CI_Migration {
                               'vs' => $stem,
                               'tally' => $tally,
                               'vocalized_lexeme_utf8' => $voclex,
-                              'sortorder' => wit2sort($lex),
+                              'sortorder' => $this->wit2sort($lex),
                               'firstbook' => $book,
                               'firstchapter' => $chap,
                               'firstverse' => $verse));
@@ -244,7 +270,7 @@ class Migration_Etcbc4_v8 extends CI_Migration {
 
         $row = $query->row();
         $old_lex_id = $row->id;
-        $tally => $row->tally;
+        $tally = $row->tally;
         $voclex = $row->vocalized_lexeme_utf8;
         $sortorder = $row->sortorder;
         
@@ -262,7 +288,7 @@ class Migration_Etcbc4_v8 extends CI_Migration {
                               'vs' => $newstem,
                               'tally' => $tally,
                               'vocalized_lexeme_utf8' => $voclex,
-                              'sortorder' => $sortorder
+                              'sortorder' => $sortorder,
                               'firstbook' => $newbook,
                               'firstchapter' => $newchap,
                               'firstverse' => $newverse));
@@ -274,7 +300,7 @@ class Migration_Etcbc4_v8 extends CI_Migration {
         
         foreach (array('en','de','da') as $lang) {
             // Fetch gloss from old stem
-            $query = $this->db->select('gloss')->where('lex_id',$lex_id)->get("lexicon_Hebrew_$lang");
+            $query = $this->db->select('gloss')->where('lex_id',$old_lex_id)->get("lexicon_Hebrew_$lang");
             if ($query->num_rows()!=1) {
                 echo "ERROR: Lex $lex stem $oldstem is not in lexicon_Hebrew_$lang\n";
                 return;
@@ -301,12 +327,61 @@ class Migration_Etcbc4_v8 extends CI_Migration {
         }
     }
 
+    private function update_statistics()
+    {
+    //select * from pl_sta_quiztemplate
+    //join pl_sta_quiz on pl_sta_quiztemplate.id=pl_sta_quiz.templid
+    //join pl_sta_question on pl_sta_question.quizid=pl_sta_quiz.id
+    //join pl_sta_displayfeature on pl_sta_question.id=pl_sta_displayfeature.questid
+    //where name='visual' and dbname='ETCBC4';
+
+        $word_feat = array(
+            "text" => "g_word",
+            "text_nopunct_translit" => "g_word_nopunct_translit",
+            "text_translit" => "g_word_translit",
+            "text_utf8" => "g_word_utf8",
+            "text_cons_utf8" => "g_word_cons_utf8",
+            "text_nocant_utf8" => "g_word_nocant_utf8",
+
+            "vocalized_lexeme" => "g_voc_lex",
+            "vocalized_lexeme_cons_utf8" => "g_voc_lex_cons_utf8",
+            "vocalized_lexeme_translit" => "g_voc_lex_translit",
+            "vocalized_lexeme_utf8" => "g_voc_lex_utf8",
+
+            "g_qere" => "qere",
+            "g_qere_translit" => "qere_translit",
+            "g_qere_utf8" => "qere_utf8",
+            );
+
+
+        foreach (array('sta_displayfeature','sta_requestfeature') as $feature) {
+
+            $query = $this->db->select('feat.id,feat.name')
+                ->from('sta_quiztemplate qt')
+                ->join('sta_quiz qz', 'qz.templid=qt.id')
+                ->join('sta_question quest', 'quest.quizid=qz.id')
+                ->join("$feature feat", 'feat.questid=quest.id')
+                ->where('qt.dbname="ETCBC4"')
+                ->where('qt.qoname="word"')
+                ->get();
+
+            foreach ($query->result() as $row) {
+                if (array_key_exists($row->name,$word_feat)) {
+                    $this->db->where('id',$row->id)->update($feature, array('name'=>$word_feat[$row->name]));
+                    echo "updated $feature $row->id: $row->name => ",$word_feat[$row->name],"\n";
+                }
+            }
+        }
+    }
+
+    
     public function up() {
         $this->remove_words();
         $this->replace_words();
         $this->replace_stem();
         $this->add_words();
         $this->copy_stems();
+        $this->update_statistics();
    }
 
     public function down()
