@@ -84,8 +84,6 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
     /** Is this {@code DisplaySingleObject} created as part of a quiz? */
     private inQuiz : boolean;
 
-    static sof_pasuq : string = '&#x05c3;';
-
     static itemIndex : number;
 
     private monad : number;
@@ -111,7 +109,6 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         var uhSize : number = smo.bcv.length;
         var chapter : string = null;
         var verse : string = null;
-        var appendSofPasuq : boolean = false;
         var refs : number[] = null;
         var urls : string[][] = null;
 
@@ -119,7 +116,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
             if (uhSize!=smo.sameAsPrev.length) throw 'BAD2';
             if (uhSize!=smo.sameAsNext.length) throw 'BAD3';
 
-            // If this is not a quiz, add book, chapter, and verse, plus sof pasuq, if needed
+            // If this is not a quiz, add book, chapter, and verse
             if (!this.inQuiz) {
                 document.title = l10n.universe['book'][smo.bcv[0]] + ' ' + smo.bcv[1];
                 $('#textcontainer h1').html(document.title);
@@ -133,10 +130,6 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
                             refs=smo.pics;
                             urls=smo.urls;
                         }
-                    }
-                    if (!smo.sameAsNext[i]) {
-                        if (i==2)
-                            appendSofPasuq = true;
                     }
                 }
 	    }
@@ -152,11 +145,8 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
                 text = this.displayedMo.mo.features[configuration.surfaceFeature] ;
             text = '<em>' + text + '</em>';
         }
-        else {
+        else
             text = this.displayedMo.mo.features[configuration.surfaceFeature];
-            if (configuration.useSofPasuq && appendSofPasuq)
-		text += charset.isRtl ? DisplaySingleMonadObject.sof_pasuq : ':';
-	}
 
         var chapterstring : string = chapter==null ? '' : '<span class="chapter">{0}</span>&#x200a;'.format(chapter);
         var versestring : string = verse==null ? '' : '<span class="verse">{0}</span>'.format(verse);
@@ -217,10 +207,10 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
 
         if (charset.isHebrew) {
             var suffix = smo.mo.features[configuration.suffixFeature];
+            text += suffix;
             if (suffix==='' || suffix==='-' || suffix==='\u05be') {
                 follow_space = ''; // Prevents line wrapping
                 follow_class = suffix==='' ? ' cont cont1' : ' contx cont1';
-                text += suffix;
                 sentenceTextArr[0] += text;
             }
             else

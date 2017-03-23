@@ -584,7 +584,6 @@ var DisplaySingleMonadObject = (function (_super) {
         var uhSize = smo.bcv.length;
         var chapter = null;
         var verse = null;
-        var appendSofPasuq = false;
         var refs = null;
         var urls = null;
         if (uhSize != 0) {
@@ -592,7 +591,7 @@ var DisplaySingleMonadObject = (function (_super) {
                 throw 'BAD2';
             if (uhSize != smo.sameAsNext.length)
                 throw 'BAD3';
-            // If this is not a quiz, add book, chapter, and verse, plus sof pasuq, if needed
+            // If this is not a quiz, add book, chapter, and verse
             if (!this.inQuiz) {
                 document.title = l10n.universe['book'][smo.bcv[0]] + ' ' + smo.bcv[1];
                 $('#textcontainer h1').html(document.title);
@@ -605,10 +604,6 @@ var DisplaySingleMonadObject = (function (_super) {
                             refs = smo.pics;
                             urls = smo.urls;
                         }
-                    }
-                    if (!smo.sameAsNext[i]) {
-                        if (i == 2)
-                            appendSofPasuq = true;
                     }
                 }
             }
@@ -623,11 +618,8 @@ var DisplaySingleMonadObject = (function (_super) {
                 text = this.displayedMo.mo.features[configuration.surfaceFeature];
             text = '<em>' + text + '</em>';
         }
-        else {
+        else
             text = this.displayedMo.mo.features[configuration.surfaceFeature];
-            if (configuration.useSofPasuq && appendSofPasuq)
-                text += charset.isRtl ? DisplaySingleMonadObject.sof_pasuq : ':';
-        }
         var chapterstring = chapter == null ? '' : '<span class="chapter">{0}</span>&#x200a;'.format(chapter);
         var versestring = verse == null ? '' : '<span class="verse">{0}</span>'.format(verse);
         var refstring;
@@ -678,10 +670,10 @@ var DisplaySingleMonadObject = (function (_super) {
         var follow_class = '';
         if (charset.isHebrew) {
             var suffix = smo.mo.features[configuration.suffixFeature];
+            text += suffix;
             if (suffix === '' || suffix === '-' || suffix === '\u05be') {
                 follow_space = ''; // Prevents line wrapping
                 follow_class = suffix === '' ? ' cont cont1' : ' contx cont1';
-                text += suffix;
                 sentenceTextArr[0] += text;
             }
             else
@@ -693,7 +685,6 @@ var DisplaySingleMonadObject = (function (_super) {
             .format(charset.foreignClass + follow_class, smo.mo.id_d, '', //chapterstring,
         versestring, refstring, urlstring, text, grammar, follow_space));
     };
-    DisplaySingleMonadObject.sof_pasuq = '&#x05c3;';
     return DisplaySingleMonadObject;
 })(DisplayMonadObject);
 // TODO: Fix this

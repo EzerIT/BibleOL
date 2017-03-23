@@ -328,7 +328,7 @@ class Convert_wivu {
 
     static private function convert_selection(&$selection, string $filename) {
         if (isset($selection->mql)) {
-            fwrite(STDERR, "$filename: Exercize contains MQL\n");
+            fwrite(STDERR, "$filename: Exercise contains MQL\n");
 //            die(1);
         }
         else foreach ($selection->featHand->vhand as &$handler) {
@@ -463,7 +463,7 @@ class Convert_etcbc4_v7 {
 
     static private function convert_selection(&$selection, string $filename) {
         if (isset($selection->mql)) {
-            fwrite(STDERR, "$filename: Exercize contains MQL\n");
+            fwrite(STDERR, "$filename: Exercise contains MQL\n");
 //            die(1);
         }
         else foreach ($selection->featHand->vhand as &$handler) {

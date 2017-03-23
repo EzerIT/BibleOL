@@ -418,13 +418,12 @@ class Dictionary {
     }
  
  
-    /// Retrieves the text to display for a particular monad number. This consists of the text
-	/// proper plus a (possibly empty) suffix.
+    /// Retrieves the text to display for a particular monad number. This excludes an optional suffix.
 	/// @param $monad The monad number.
 	/// @return The text to display for the specified monad number.
     public function getVisual($monad) {
         $smo = $this->singleMonads[$monad];
-        return $smo->get_text() . $smo->get_suffix();
+        return $smo->get_text();
     }
  
 }
