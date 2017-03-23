@@ -14,8 +14,8 @@ $lang['intro_center'] = "<h1>甚麼是原文讀經練習網？</h1>\n"
         . "</p>";
 $lang['intro_right1'] = "<p>原文讀經練習網是<a href=\"http://global-learning.org\"\n"
         . "       target=\"_blank\">全球學習計劃（Global Learning Initiative）</a>的一個環節，2014年啟用。如果想要知道詳情，請聯絡<a\n"
-        . "       href=\"http://fih.fjellhaug.no/om-oss/in-english\" target=\"_blank\">豐賀國際大學丹麥校園（Fjellhaug International\n"
-        . "       University College Denmark (FIUC-Dk)）</a>.<br>的溫德生教授（Nicolai Winther-Nielsen，nwn [at] dbi . edu）。\n"
+        . "       href=\"http://fih.fjellhaug.no\" target=\"_blank\">豐賀國際大學丹麥校園（Fjellhaug International\n"
+        . "       University College Denmark (FIUC-DK)）</a>.<br>的溫德生教授（Nicolai Winther-Nielsen，nwn [at] dbi . edu）。\n"
         . "</a>.<br>\n"
         . "\n"
         . "       原文讀經練習網的程式，由<a href=\"http://www.ezer.dk\"\n"

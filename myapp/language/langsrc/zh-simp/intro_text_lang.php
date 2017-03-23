@@ -13,8 +13,8 @@ $lang['intro_center'] = "<h1>什么是原文读经练习网？</h1>\n"
         . "</p>";
 $lang['intro_right1'] = "<p>原文读经练习网是<a href=\"http://global-learning.org\"\n"
         . "       target=\"_blank\">全球学习计划（Global Learning Initiative）</a>的一个环节，2014年启用。如果想要知道详情，请联络<a\n"
-        . "       href=\"http://fih.fjellhaug.no/om-oss/in-english\" target=\"_blank\">丰贺国际大学丹麦校园（Fjellhaug International\n"
-        . "       University College Denmark (FIUC-Dk)）</a>.<br>的温德生教授（Nicolai Winther-Nielsen，nwn [at] dbi . edu）。\n"
+        . "       href=\"http://fih.fjellhaug.no\" target=\"_blank\">丰贺国际大学丹麦校园（Fjellhaug International\n"
+        . "       University College Denmark (FIUC-DK)）</a>.<br>的温德生教授（Nicolai Winther-Nielsen，nwn [at] dbi . edu）。\n"
         . "</a>.<br>\n"
         . "\n"
         . "       原文读经练习网的程式，由<a href=\"http://www.ezer.dk\"\n"
