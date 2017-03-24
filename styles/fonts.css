@@ -1,12 +1,15 @@
 @font-face {
     font-family: 'Ezra SIL Webfont';
+    src: url('fonts/SILEOT.woff') format('woff'); /* Modern Browsers */
+}
+@font-face {
+    font-family: 'Ezra SIL SR Webfont';
     src: url('fonts/ezrasilsr-webfont.eot'); /* IE9 Compat Modes */
     src: url('fonts/ezrasilsr-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
          url('fonts/ezrasilsr-webfont.woff') format('woff'), /* Modern Browsers */
          url('fonts/ezrasilsr-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
          url('fonts/ezrasilsr-webfont.svg#EzraSILSR') format('svg'); /* Legacy iOS */
 }
-
 @font-face {
     font-family: 'Frank Ruehl CLM Webfont';
     src: url('fonts/frankruehlclm-medium-webfont.eot');
