@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <questiontemplate version="3">
-  <desc><![CDATA[Number and state of nouns]]></desc>
+  <desc><![CDATA[<p>Number and state of nouns</p>
+]]></desc>
   <database>ETCBC4</database>
   <properties>ETCBC4</properties>
   <path>Genesis</path>
@@ -12,11 +13,6 @@
     <questionobject>word</questionobject>
     <featurehandlers version="2">
       <enumfeature version="1">
-        <name>suffix_gender</name>
-        <comparator>equals</comparator>
-        <value>NA</value>
-      </enumfeature>
-      <enumfeature version="1">
         <name>st</name>
         <comparator>equals</comparator>
         <value>c</value>
@@ -26,6 +22,12 @@
         <comparator>equals</comparator>
         <value>subs</value>
       </enumfeature>
+      <enumfeature version="1">
+        <name>suffix_gender</name>
+        <comparator>equals</comparator>
+        <value>NA</value>
+        <value>unknown</value>
+      </enumfeature>
     </featurehandlers>
     <useforquizobjects>false</useforquizobjects>
   </sentenceselection>
@@ -33,22 +35,23 @@
     <questionobject>word</questionobject>
     <featurehandlers version="2">
       <enumfeature version="1">
-        <name>suffix_gender</name>
-        <comparator>equals</comparator>
-        <value>NA</value>
-      </enumfeature>
-      <enumfeature version="1">
         <name>sp</name>
         <comparator>equals</comparator>
         <value>subs</value>
       </enumfeature>
+      <enumfeature version="1">
+        <name>suffix_gender</name>
+        <comparator>equals</comparator>
+        <value>NA</value>
+        <value>unknown</value>
+      </enumfeature>
     </featurehandlers>
   </quizobjectselection>
   <quizfeatures version="3">
-    <show>gn</show>
-    <show>vocalized_lexeme_utf8</show>
-    <show>st</show>
+    <show>g_voc_lex_utf8</show>
     <show>nu</show>
-    <request>text_nocant_utf8</request>
+    <show>gn</show>
+    <show>st</show>
+    <request>g_word_nocant_utf8</request>
   </quizfeatures>
 </questiontemplate>

@@ -18,17 +18,18 @@
         <name>suffix_gender</name>
         <comparator>differs</comparator>
         <value>NA</value>
+        <value>unknown</value>
       </enumfeature>
     </featurehandlers>
     <useforquizobjects>true</useforquizobjects>
   </sentenceselection>
   <quizfeatures version="3">
-    <show>vocalized_lexeme_translit</show>
+    <show>g_voc_lex_translit</show>
     <show>st</show>
     <show>nu</show>
     <show>suffix_person</show>
     <show>suffix_gender</show>
     <show>suffix_number</show>
-    <requestdd>text_nopunct_translit</requestdd>
+    <requestdd>g_word_nopunct_translit</requestdd>
   </quizfeatures>
 </questiontemplate>

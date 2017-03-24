@@ -12,9 +12,10 @@
     <questionobject>word</questionobject>
     <featurehandlers version="2">
       <enumfeature version="1">
-        <name>suffix_gender</name>
+        <name>suffix_person</name>
         <comparator>differs</comparator>
         <value>NA</value>
+        <value>unknown</value>
       </enumfeature>
     </featurehandlers>
     <useforquizobjects>true</useforquizobjects>

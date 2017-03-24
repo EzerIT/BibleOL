@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <questiontemplate version="3">
-  <desc><![CDATA[Number and state of nouns]]></desc>
+  <desc><![CDATA[<p>Number and state of nouns</p>
+]]></desc>
   <database>ETCBC4</database>
   <properties>ETCBC4-translit</properties>
   <path>Genesis</path>
@@ -10,19 +11,20 @@
     <questionobject>word</questionobject>
     <featurehandlers version="2">
       <enumfeature version="1">
-        <name>sp</name>
-        <comparator>equals</comparator>
-        <value>subs</value>
-      </enumfeature>
-      <enumfeature version="1">
         <name>st</name>
         <comparator>equals</comparator>
         <value>c</value>
       </enumfeature>
       <enumfeature version="1">
+        <name>sp</name>
+        <comparator>equals</comparator>
+        <value>subs</value>
+      </enumfeature>
+      <enumfeature version="1">
         <name>suffix_gender</name>
         <comparator>equals</comparator>
         <value>NA</value>
+        <value>unknown</value>
       </enumfeature>
     </featurehandlers>
     <useforquizobjects>false</useforquizobjects>
@@ -39,14 +41,15 @@
         <name>suffix_gender</name>
         <comparator>equals</comparator>
         <value>NA</value>
+        <value>unknown</value>
       </enumfeature>
     </featurehandlers>
   </quizobjectselection>
   <quizfeatures version="3">
-    <show>vocalized_lexeme_translit</show>
-    <show>st</show>
-    <show>gn</show>
+    <show>g_voc_lex_translit</show>
     <show>nu</show>
-    <requestdd>text_nopunct_translit</requestdd>
+    <show>gn</show>
+    <show>st</show>
+    <requestdd>g_word_nopunct_translit</requestdd>
   </quizfeatures>
 </questiontemplate>

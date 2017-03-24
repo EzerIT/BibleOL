@@ -15,6 +15,7 @@
         <name>suffix_gender</name>
         <comparator>differs</comparator>
         <value>NA</value>
+        <value>unknown</value>
       </enumfeature>
       <enumfeature version="1">
         <name>sp</name>
@@ -25,12 +26,12 @@
     <useforquizobjects>true</useforquizobjects>
   </sentenceselection>
   <quizfeatures version="3">
-    <show>vocalized_lexeme_utf8</show>
+    <show>g_voc_lex_utf8</show>
     <show>st</show>
     <show>suffix_gender</show>
     <show>suffix_person</show>
     <show>suffix_number</show>
     <show>nu</show>
-    <request>text_nocant_utf8</request>
+    <request>g_word_nocant_utf8</request>
   </quizfeatures>
 </questiontemplate>
