@@ -1,5 +1,57 @@
 <?php
 
+  /* These are important changes to the structure of ETCBC4:
+
+        "continuation": "string",                 | "g_suffix": "string",         
+        "continuation_translit": "string",        | "g_suffix_translit": "string",
+        "continuation_utf8": "string",            | "g_suffix_utf8": "string",    
+        "danish": "string",                       < TO BE ADDED
+        "english": "string",                      < TO BE ADDED
+        "german": "string",                       < TO BE ADDED
+        "glossurl": "url",                        < TO BE ADDED
+        "g_qere": "string",                       | "qere": "string",         
+        "g_qere_translit": "string",              | "qere_translit": "string",
+        "g_qere_utf8": "string",                  | "qere_utf8": "string",    
+                                                  > NOW INVISIBLE       "prs_gn": "gender_t",
+                                                  > NOW INVISIBLE       "prs_nu": "number_t",
+                                                  > NOW INVISIBLE       "prs_ps": "person_t",
+        "suffix_gender": "suffix_gender_t",       | "suffix_gender": "gender_t",
+        "suffix_number": "suffix_number_t",       | "suffix_number": "number_t",
+        "suffix_person": "suffix_person_t",       | "suffix_person": "person_t",
+        "suffix": "string",                       < REMOVE
+        "suffix_translit": "string",              < REMOVE
+        "suffix_utf8": "string",                  < REMOVE
+        "text_cons_utf8": "string",               < SUBSUMED IN g_word_cons_utf8
+        "text_nocant_utf8": "string",             | "g_word_nocant_utf8": "string",  
+        "text_nopunct_translit": "string",        | "g_word_nopunct_translit": "string", 
+        "text": "string",                         < SUBSUMED IN  g_word
+        "text_translit": "string",                | "g_word_translit": "string",
+        "text_utf8": "string",                    < SUBSUMED IN  g_word_utf8
+        "vocalized_lexeme_cons_utf8": "string",   | "g_voc_lex_cons_utf8": "string",
+        "vocalized_lexeme": "string",             | "g_voc_lex": "string",      
+        "vocalized_lexeme_translit": "string",    | "g_voc_lex_translit": "string", 
+        "vocalized_lexeme_utf8": "string",        | "g_voc_lex_utf8": "string",     
+
+
+
+    The types
+            "suffix_gender_t",
+            "suffix_number_t",
+            "suffix_person_t",
+    are removed.
+     
+    The verbal stems
+                "htpo",
+                "poal",
+                "poel",
+    are added.
+     
+    clause_constituent_relation_t:
+            "CoVo" changed to "ReVo"
+  */
+
+
+
 $comment = array();
 $format = array();
 
