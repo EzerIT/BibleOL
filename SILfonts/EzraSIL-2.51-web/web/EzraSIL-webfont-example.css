@@ -1,0 +1,46 @@
+/*
+EzraSIL-WOFF-metadata.html
+Ezra SIL v2.51
+This file is part of the Ezra SIL font family 
+(http://scripts.sil.org/EzraSIL_home). The Hebrew layout intelligence is 
+copyright (c) 2003 & 2007 Ralph Hancock and John Hudson, and licensed 
+under the MIT/X11 License (copied below). All other font software is 
+copyright (c) 1997-2007, SIL International (http://www.sil.org/), 
+with Reserved Font Names "SIL" and "Ezra", and is licensed under the 
+SIL Open Font License, Version 1.1. You should have received a copy
+of the license along with this Font Software. If not, go to
+(http://scripts.sil.org/OFL) for all the details including a FAQ.
+*/
+
+/* use Ezra SIL - Regular in .woff format */
+@font-face {
+  font-family: EzraSILW;
+  src: url(SILEOT.woff);
+}
+
+/* use Ezra SIL SR - Regular in .woff format */
+@font-face {
+  font-family: EzraSILSRW;
+  src: url(SILEOTSR.woff);
+}
+
+/* set body to use Andika New Basic in .woff format */
+body {
+  font-family: EzraSILW, sans-serif;
+    /* fall back to sans-serif so that it's really obvious if the fonts don't load */
+}
+/* remove bold styling from heading */
+h1 {
+  font-weight: normal;	
+}
+h2 {
+  font-weight: normal;	
+}
+.rtl {
+  font-family: EzraSILW, sans-serif; font-size: 200%; direction: rtl; text-align: right;
+    /* fall back to sans-serif so that it's really obvious if the fonts don't load */
+}
+.rtlSR {
+  font-family: EzraSILSRW, sans-serif; font-size: 200%; direction: rtl; text-align: right;
+    /* fall back to sans-serif so that it's really obvious if the fonts don't load */
+}	

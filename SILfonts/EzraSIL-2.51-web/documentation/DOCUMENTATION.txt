@@ -1,0 +1,18 @@
+DOCUMENTATION
+Ezra SIL
+========================
+
+This file describes the documentation files included with the Ezra SIL 
+font family. This information should be distributed along with the 
+Ezra SIL fonts and any derivative works.
+
+Primary documentation for the Ezra SIL font family is on the Ezra SIL 
+website (http://scripts.sil.org/EzraSIL_Home).
+
+The "Ezra Unicode Install2.5.pdf" file is an installation guide. It
+includes valuable information on rendering support used in various
+applications for using OpenType. There is also some help with regard
+to keyboarding.
+
+The "Ezra Unicode Convert30.pdf" file documents the process for 
+converting custom-encoded data to Unicode.
