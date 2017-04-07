@@ -603,23 +603,26 @@ class Mod_translate extends CI_Model {
         switch ($src_lang) {
           case 'heb':
                 $src_language = 'Hebrew';
-                $header_array = array(array(null, 'Occurrences'),
-                                      array(null, 'lex'),
-                                      array(null, 'Lexeme'),
-                                      array('NA', 'None'),
-                                      array('qal', 'Qal'),
-                                      array('nif', 'Nifal'),
-                                      array('piel', 'Piel'),
-                                      array('pual', 'Pual'),
-                                      array('hit', 'Hitpael'),
-                                      array('hif', 'Hifil'),
-                                      array('hof', 'Hofal'),
-                                      array('hsht', 'Hishtafal'),
-                                      array('pasq', 'Passive Qal'),
-                                      array('etpa', 'Etpaal'),
-                                      array('nit', 'Nitpael'),
-                                      array('hotp', 'Hotpaal'),
-                                      array('tif', 'Tifal'));
+          $header_array = array(array(null, 'Occurrences'),
+                                array(null, 'lex'),
+                                array(null, 'Lexeme'),
+                                array('NA', 'None'),
+                                array('qal', 'Qal'),
+                                array('nif', 'Nifal'),
+                                array('piel', 'Piel'),
+                                array('pual', 'Pual'),
+                                array('hit', 'Hitpael'),
+                                array('hif', 'Hifil'),
+                                array('hof', 'Hofal'),
+                                array('hsht', 'Hishtafal'),
+                                array('pasq', 'Passive Qal'),
+                                array('etpa', 'Etpaal'),
+                                array('nit', 'Nitpael'),
+                                array('hotp', 'Hotpaal'),
+                                array('tif', 'Tifal'),
+                                array('htpo', 'Hitpoal'),
+                                array('poal', 'Poal'),
+                                array('poel', 'Poel'));
                 break;
 
           case 'aram':
@@ -761,9 +764,9 @@ class Mod_translate extends CI_Model {
             throw new DataException("Cannot open file '$csv_file'");
 
         $record = fgetcsv($h);
-        assert(count($record)==count($header_array));
+        assert(count($record)==count($header_array),"Wrong number of fields in header");
         for ($i=0; $i<count($record); ++$i)
-            assert($record[$i]==$header_array[$i][1]);
+            assert($record[$i]==$header_array[$i][1],"Illegal field '$record[$i]' in header");
         
         $this->load->dbforge();
         $this->dbforge->drop_table("lexicon_{$src_language}_{$dst_lang}",true);

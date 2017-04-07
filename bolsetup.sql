@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.5.38, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.17, for Linux (x86_64)
 
 --
 -- Table structure for table `bol_user`
@@ -297,6 +297,46 @@ CREATE TABLE `bol_sta_universe` (
   CONSTRAINT `bol_sta_universe_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `bol_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `bol_sta_grading`
+--
+
+DROP TABLE IF EXISTS `bol_sta_grading`;
+CREATE TABLE `bol_sta_grading` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `start` int(11) NOT NULL,
+  `grade` float NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `bol_sta_gradingfeature`
+--
+
+DROP TABLE IF EXISTS `bol_sta_gradingfeature`;
+CREATE TABLE `bol_sta_gradingfeature` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `start` int(11) NOT NULL,
+  `grade` float NOT NULL,
+  `feature` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `bol_sta_gradingpath`
+--
+
+DROP TABLE IF EXISTS `bol_sta_gradingpath`;
+CREATE TABLE `bol_sta_gradingpath` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `start` int(11) NOT NULL,
+  `grade` int(11) NOT NULL,
+  `feature` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 
 --
@@ -352,4 +392,4 @@ CREATE TABLE IF NOT EXISTS `bol_migrations` (
 --
 
 INSERT INTO `bol_migrations` (`version`) VALUES
-(2);
+(7);
