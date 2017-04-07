@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Font matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{9 January 2017}
+\date{7 April 2017}
 
 \makeindex
 
@@ -464,10 +464,13 @@ The following software must be installed on your server (please pay attention to
 \item git\index{Git}. I use version 2.7.4.
 \end{itemize}
 
-
 All of this can be installed on an Ubuntu Linux system using the usual \emph{apt-get} installation
 program. I have not done a thorough investigation into the minimum required versions of these
 software packages; you should not see the versions mentioned above as minimum requirements.
+
+Note: Throughout this document the PHP command line tool is referred to as \texttt{php5.6}\index{php5.6}
+rather than just \texttt{php}. The reason is that on many recent Linux systems the default PHP
+installation is version 7, which does not work with Bible OL.
 
 
 \subsection{Step 2. Install Emdros\index{Emdros}}\label{sec-install-emdros}
@@ -556,7 +559,7 @@ following lines in the copy:
 Change the text USERNAME, PASSWORD, and DATABASE to be the database username, password, and database
 name.
 
-Initialize the contents of the database from the values in the file \texttt{bolsetup.sql}.
+Initialize the contents of the database from the values in the files \texttt{bolsetup.sql} and \texttt{bolsetup2.sql}.
 
 
 \subsection{Step 5. Additional Configuration}
@@ -724,13 +727,16 @@ The following should be installed:
 \item git\index{Git}. I use version 2.7.4.
 \end{itemize}
 
-
 All of this can be installed on an Ubuntu system using the usual \emph{apt-get} installation
 program. I have not done a thorough investigation into the minimum required versions of these
 software packages; you should not see the versions mentioned above as minimum requirements.
 
 You will also need to install the Emdros database system, a Less compiler, and a TypeScript
 compiler. This is detailed in Sections \ref{sec-install-start}-\ref{sec-install-end}.
+
+Note: Throughout this document the PHP command line tool is referred to as \texttt{php5.6}\index{php5.6}
+rather than just \texttt{php}. The reason is that on many recent Linux systems the default PHP
+installation is version 7, which does not work with Bible OL.
 
 \subsection{Forking\index{fork GitHub} Bible OL on GitHub\index{GitHub}}\label{sec-fork-github}
 
@@ -1226,8 +1232,8 @@ the directory is not under Git control.\\
 quiz\_templates & Sample quiz templates\index{quiz template} to be copied to the
 \texttt{quizzes} directory in a new installation.\\
 
-SILfonts & A collection of Greek and phonetic fonts\index{font}. These files are not used directly
-by the server, but a few of the font files from the sub-subdirectories \texttt{*/Squirrel} have been
+SILfonts & A collection of Hebrew, Greek and phonetic fonts\index{font}. These files are not used directly
+by the server, but a few of the font files have been
 copied to the \texttt{styles/fonts} directory.
 
 Webpage: \url{http://scripts.sil.org}.
@@ -1336,8 +1342,8 @@ In the Bible OL source tree, the Emdros databases are found in the directory \te
 \section{The \emph{visual}\index{visual feature@``visual'' feature|hyperit} Feature}\label{sec-visual}
 
 The Emdros databases use various feature names to describe the actual text of the corpus. In ETCBC4,
-the name of the feature is \emph{text\_utf8} when the Hebrew alphabet is used and
-\emph{text\_translit} when a transliterated alphabet is used; in nestle1904, the name of the feature
+the name of the feature is \emph{g\_word\_utf8} when the Hebrew alphabet is used and
+\emph{g\_word\_translit} when a transliterated alphabet is used; in nestle1904, the name of the feature
 is \emph{surface.}
 
 In order to establish a uniform way to reference this important feature, the Bible OL server and
@@ -1470,28 +1476,36 @@ half\_verse objects correspond in English to:
 \subsection{What Is a Word?}\label{sec-contin}\index{word}
 
 In most western languages, a space\index{space (between words)} is inserted between two words. In
-Hebrew, some words are strung together as one. For example, the text \heb{וַֽיְהִי־אֹֽור} (``and there was
+Hebrew, some words are strung together as one. For example, the text ``\heb{וַֽיְהִי־אֹֽור׃}'' (``and there was
 light'') in \bibleref{Genesis}{1}{3} consists of the three words \heb{וַֽ} (``and''), \heb{יְהִי}
 (``there was''), and \heb{אֹֽור} (``light'').
 
 In ETCBC4 this problem is handled by associating an Emdros feature called
-\emph{continuation}\index{continuation|hyperit} with each word. The continuation feature contains
+\emph{suffix}\index{suffix|hyperit} with each word. The suffix feature contains
 
 \begin{itemize}
 \item a space if a space should be inserted between this word and the next,
 \item an empty string if this word should be strung together with the following word,
 \item a \heb{־} (Unicode\index{Unicode} value 05BE) if a \emph{maqaf}\index{maqaf} (hyphen) should to be inserted
-  between this word and the next.
+  between this word and the next,
+\item punctuation characters, such as the a \heb{׃} (Unicode\index{Unicode} value 05C3), which is
+  the verse termination character, \emph{sof pasuq}.
 \end{itemize}
 
-So for the text \heb{וַֽיְהִי־אֹֽור}, mentioned above, we have these features for the three words:
+So for the text ``\heb{וַֽיְהִי־אֹֽור׃}'', mentioned above, we have these features for the three words:
 
-\begin{my-tabu}{cc}{ \headii{Text}{Continuation} }
+\begin{my-tabu}{cc}{ \headii{Text}{Suffix} }
   \heb{וַֽ} & Empty string\\
-  \heb{יְהִי} & \heb{־}\\
-  \heb{אֹֽור} & Space\\
+  \heb{יְהִי} & \emph{Maqaf}\\
+  \heb{אֹֽור} & \emph{Sof pasuq} followed by space\\
 \end{my-tabu}
 
+The actual name of the \emph{suffix} feature varies from one Emdros database to another. (See
+``suffixFeature'' on page \pageref{suffixFeature}.)
+
+Note: The \emph{suffix} feature mentioned here must not be confused with the grammatical suffix that can be added
+to a Hebrew word. For example, in \bibleref{Genesis}{1}{12} the word \heb{מִינֵ֔הוּ}, which derives from
+the lexeme \heb{מִין}, has a grammatical suffix indicating \emph{3rd person, masculine, singular}.
 
 %%%%%%%%%%%%%%%%%%%% Nestle1904 %%%%%%%%%%%%%%%%%%%%
 \section{Nestle1904}\index{nestle1904|hyperit}
@@ -1520,7 +1534,7 @@ composition of the text.
 
 The basic object type is the \emph{word.}\index{word} Each \emph{word} corresponds to a single
 monad.\index{monad} In contrast to the Hebrew database, the Greek database has no concept of a
-\emph{continuation}\index{continuation} feature (see Section \ref{sec-contin}).
+\emph{suffix}\index{suffix} feature (see Section \ref{sec-contin}).
 
 The top-level syntactic element is the \emph{sentence.}\index{sentence} A sentence is a set of
 contiguous monads.
@@ -1704,14 +1718,14 @@ between the ugly\index{JSON!ugly file} and the pretty\index{JSON!pretty file} fo
 ``xxx.json'' contains JSON data (either ugly or pretty), the command
 
 \begin{lstlisting}[language=bash]
-php json_pretty_print.php -p xxx.json
+php5.6 json_pretty_print.php -p xxx.json
 \end{lstlisting}
 
 \noindent
 will write the data in pretty format to standard output; and the command
 
 \begin{lstlisting}[language=bash]
-php json_pretty_print.php -u xxx.json
+php5.6 json_pretty_print.php -u xxx.json
 \end{lstlisting}
 
 \noindent
@@ -1769,15 +1783,17 @@ The Database Specification File is a JSON file containing the following key/valu
 
   surfaceFeature & The actual name of the \emph{visual} feature%
   \index{visual feature@``visual'' feature}
-  (see Section \ref{sec-visual}). \\
+  (see Section \ref{sec-visual}). For ETCBC4 using the native alphabet this value is
+  ``g\_word\_utf8'', for ETCBC4 using the transliterated alphabet the value is
+  ``g\_word\_translit'', for nestle1904 the value is ``surface''.\\
 
   objHasSurface & The name of the Emdros object type that contains the \emph{surfaceFeature.}
   (Typically, ``word''.)\\
 
-  suffixFeature & The name of the feature that contains the continuation\index{continuation} for the
-  word to display (see Section \ref{sec-contin}). For ETCBC4 using the native alphabet this value is
-  ``continuation\_utf8'', for ETCBC4 using the transliterated alphabet the value is
-  ``continuation\_translit'', for nestle1904 the value is \emph{null}. \\
+  suffixFeature\label{suffixFeature} & The actual name of the \emph{suffix} feature%
+  \index{suffix} (see Section \ref{sec-contin}). For ETCBC4 using the native alphabet this value is
+  ``g\_suffix\_utf8'', for ETCBC4 using the transliterated alphabet the value is
+  ``g\_suffix\_translit'', for nestle1904 the value is \emph{null}. \\
 
   charSet & The name of the character set for the text. For ETCBC4
   using the native alphabet this value is ``hebrew'', for ETCBC4
@@ -1910,13 +1926,13 @@ in the ETCBC4 database.
         },
         "english": {
             "ignoreSelect": true,
-            "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i"
+            "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
         },
-        "text_cons_utf8": {
+        "g_word_cons_utf8": {
             "hideWord": true,
             "foreignText": true
         },
-        "text_nocant_utf8": {
+        "g_word_nocant_utf8": {
             "alternateshowrequestDb": "ETCBC4_words.db",
             "alternateshowrequestSql": "SELECT DISTINCT word FROM texts,lextext,lexemes WHERE lex='%s' AND lexid=lexemes.id AND textid=texts.id",
             "hideWord": true,
@@ -1930,8 +1946,8 @@ in the ETCBC4 database.
     }
 \end{lstlisting}
 
-In this subset, the features \emph{lexeme\_occurrences, english, text\_const\_utf8,
-  text\_nocant\_utf8,} and \emph{vt} are mentioned. The value associated with each of these keys is
+In this subset, the features \emph{lexeme\_occurrences, english, g\_word\_const\_utf8,
+  g\_word\_nocant\_utf8,} and \emph{vt} are mentioned. The value associated with each of these keys is
 another collection of key/value pairs. Many of the values are Boolean, and an absent key is
 equivalent to a Boolean value of \emph{false}. Thus, the absence of a \emph{hideWord} key from
 \emph{lexeme\_occurrences} has the same meaning as if \emph{hideWord} had been given the value
@@ -2037,8 +2053,8 @@ As an example of a pseudofeature, consider Listing \ref{list-ps-syntax}.
         "ignoreSelect": true,
         "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
         "indirdb": "mysql",
-        "sql_command": "SELECT gloss FROM {PRE}lexicon_heb heb JOIN {PRE}lexicon_heb_en en ON en.lex_id=heb.id WHERE lex='%s' AND vs='%s' AND language='%s'",
-        "sqlargs": [ "lex", "vs", "language" ],
+        "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_en en ON en.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
+        "sqlargs": [ "language", "lex", "vs" ],
         "multiple": false
     }
 \end{lstlisting}
@@ -2052,11 +2068,12 @@ A pseudofeature uses the keys \emph{indirdb, sql\_command, sqlargs,} and \emph{m
   \ref{chap-user-database}). (Currently, only \emph{mysql} is used by Bible OL.)
 \item \emph{sql\_command} is the SQL command required to retrieve the value of the feature. A
   typical example is given in the listing above. The system will replace the string
-  \texttt{\{PRE\}} with the correct database table prefix. The string \texttt{\%d} or \texttt{\%s}
-  indicates the position of the parameters required for the request. These parameters are specified
-  under the key \emph{sqlargs}.
+  \texttt{\{PRE\}} with the correct database table prefix. The strings \texttt{\%1\$s}, \texttt{\%2\$s}, etc.
+  indicate the position of the parameters required for the request. These parameters are specified
+  under the key \emph{sqlargs}. The string \texttt{\%1\$s} refers to the first parameter in
+  \emph{sqlargs}, \texttt{\%2\$s} refers to the second parameter in \emph{sqlargs}, etc.
 \item \emph{sqlargs} is an array of features whose values are to be used in place of the
-  \texttt{\%d} or \texttt{\%s} strings in \emph{sql\_command}.
+  \texttt{\%\ldots\$s} strings in \emph{sql\_command}.
 \item \emph{multiple} is true if the database may contain more than one record for a given pseudofeature.
 \end{itemize}
 
@@ -2064,22 +2081,19 @@ Taking the pseudofeature \emph{english} from Listing \ref{list-ps-syntax} as an 
 the feature is found in the user database because \emph{indirdb} has the value ``mysql''.
 
 If we assume that the database table prefix\footnote{The database table prefix can be set in the
-  file \texttt{myapp/config/database.php} (See Section \ref{sec-database-php}).} is ``bol\_'',
+  file \texttt{myapp/config/database.php} (See Section \ref{sec-database-php}).} is ``bol\_'', and
+if the \emph{language, lex,} and \emph{vs} features have the values ``Hebrew'', ``B.@R@>'', and  ``qal'', respectively,
 the value of the pseudofeature is found by executing the SQL query
 
 \begin{lstlisting}[language=SQL]
-SELECT gloss FROM bol_lexicon_heb heb JOIN bol_lexicon_heb_en en ON en.lex_id=heb.id
-    WHERE lex='...' AND vs='...' AND language='...'
+SELECT gloss FROM bol_lexicon_Hebrew h JOIN bol_lexicon_Hebrew_en en ON en.lex_id=h.id
+    WHERE lex='B.@R@>' AND vs='qal'
 \end{lstlisting}
 
-\noindent
-where the dots are replaced by the values of the features \emph{lex, vs,} and
-\emph{language,} respectively.
 
 The SQL query is expected to return a single value because \emph{multiple} is \emph{false.}
 
 Currently, pseudofeatures are used for glosses and hyperlinks associated with lexemes.
-
 
 \subsection{The \emph{sentencegrammar} Key}\label{sentencegrammar}\index{sentencegrammar}
 
@@ -2162,7 +2176,7 @@ Listing \ref{list-itemssample} shows a typical \emph{items} array.
     "items": [
         {
             "mytype": "GrammarFeature",
-            "name": "text_translit"
+            "name": "g_word_translit"
         },
         {
             "mytype": "GrammarGroup",
@@ -2391,7 +2405,7 @@ the Emdros database itself. The PHP script \texttt{myapp/controllers/ctrl\_maket
 contains code to do that. Running the command
 
 \begin{lstlisting}
-php index.php maketypeinfo index %\textrm{\textit{databasename}}%
+php5.6 index.php maketypeinfo index %\textrm{\textit{databasename}}%
 \end{lstlisting}
 
 \noindent
@@ -2428,7 +2442,7 @@ from the file \texttt{db/ETCBC4.typeinfo.json}).
     "obj2feat": {
         "word": {
             "frequency_rank": "integer",%\label{line-freq-rank}%
-            "continuation": "string",
+            "g_suffix_utf8": "string",
             "nu": "number_t",
             "gn": "gender_t",
             "sp": "part_of_speech_t",
@@ -2914,7 +2928,7 @@ thus becomes a multiple choice question:
 
 But in some cases it is desirable that features of string type are also displayed as multiple
 choice. For example, in the current version of Bible OL, this is possible for the features
-\emph{text\_nocant\_utf8}\footnote{That is, \emph{Text (no cantillation marks).}} and
+\emph{g\_word\_nocant\_utf8}\footnote{That is, \emph{Text (no cantillation marks).}} and
 \emph{g\_prs\_utf8}\footnote{That is, \emph{Pronominal suffix.}}.
 
 A separate ``Words Database''\index{Words Database|hyperit} exists with the information necessary for this to work.
@@ -3471,7 +3485,7 @@ In addition to the fields mentioned above, a \emph{SingleMonadObject} has these 
 \begin{my-longtabu}{lX}{ \headii{Field}{Contents} }
 text & A string containing the text used to display the word.\\
 
-suffix & A string containing the continuation feature, if any, of the word. (See Section
+suffix & A string containing the suffix feature, if any, of the word. (See Section
 \ref{sec-contin}.)\\
 
 bcv & An array containing the Bible reference for the verse containing the word. For a word in
@@ -3724,7 +3738,7 @@ the file \emph{ctrl\_aaaaa.php}.
 It is also possible to access these functions from the shell command line on the server. The shell command
 
 \begin{lstlisting}[language=bash]
-php index.php aaaaa bbb
+php5.6 index.php aaaaa bbb
 \end{lstlisting}
 
 \noindent
@@ -4284,7 +4298,7 @@ of web page informing the user that they are now logged in to the system.
 A cron\index{cron job} job must be set up to run daily. The cron entry must execute this command:
 
 \begin{lstlisting}[language=bash,frame=,basicstyle={\ttfamily}]
-php index.php users expire_users
+php5.6 index.php users expire_users
 \end{lstlisting}
 
 This command calls the \emph{expire\_users} function in the \emph{Ctrl\_users} controller (in the
@@ -4321,15 +4335,16 @@ The user database contains these tables:
 
 \begin{center}
 \begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l}
-alphabet      &  heb\_urls            &  sta\_displayfeature \\
-bible\_refs   &  language\_comment    &  sta\_question       \\
-bible\_urls   &  language\_LANG       &  sta\_quiz           \\
-class         &  lexicon\_greek       &  sta\_quiztemplate   \\
-classexercise &  lexicon\_greek\_LANG &  sta\_requestfeature \\
-db\_localize  &  lexicon\_heb         &  sta\_universe       \\
-exercisedir   &  lexicon\_heb\_LANG   &  user                \\
-exerciseowner &  migrations           &  userclass           \\
-font          &  personal\_font       &  userconfig          \\
+alphabet      &  language\_comment      &  sta\_displayfeature \\
+bible\_refs   &  language\_LANG         &  sta\_question       \\
+bible\_urls   &  lexicon\_Aramaic       &  sta\_quiz           \\
+class         &  lexicon\_Aramaic\_LANG &  sta\_quiztemplate   \\
+classexercise &  lexicon\_greek         &  sta\_requestfeature \\
+db\_localize  &  lexicon\_greek\_LANG   &  sta\_universe       \\
+exercisedir   &  lexicon\_Hebrew        &  user                \\
+exerciseowner &  lexicon\_Hebrew\_LANG  &  userclass           \\
+font          &  migrations             &  userconfig          \\
+heb\_urls     &  personal\_font         &                      \\
 \end{tabu}
 \end{center}
 
@@ -4816,10 +4831,11 @@ text           & Text    & The relevant string translated into language \emph{LA
 \end{my-longtabu}
 
 
-\subsection{The \emph{lexicon\_heb} Table}\label{sec-lexicon-heb}\index{lexicon\_heb table|hyperit}
+\subsection{The \emph{lexicon\_Hebrew} and \emph{lexicon\_Aramaic} Tables}\label{sec-lexicon-heb}%
+\index{lexicon\_Hebrew table|hyperit}\index{lexicon\_Aramaic table|hyperit}
 
-The \emph{lexicon\_heb} table contains information about all the Hebrew and Aramaic lexemes used by
-the system.
+The \emph{lexicon\_Hebrew} table contains information about all the Hebrew lexemes used by
+the system. Similarly, the \emph{lexicon\_Aramaic} table contains information about all the Aramaic lexemes.
 
 The tables contain these fields:
 
@@ -4827,7 +4843,6 @@ The tables contain these fields:
 id                      & Integer & Unique number identifying this entry.     \\
 lex                     & Text    & The lexeme in the \emph{transcribed alphabet} (see page \pageref{page-transcribed}). \\
 vs                      & Text    & The verbal stem of the word. ``NA'' if the word is not a verb. \\
-language                & Enumeration & ``Hebrew'' or ``Aramaic''. \\
 tally                   & Integer & The number of occurrences of this word in the text. \\
 vocalized\_lexeme\_utf8 & Text    & The lexeme in Hebrew characters. \\
 sortorder               & Text    & A string that can be used to sort the words alphabetically. \\
@@ -4836,20 +4851,22 @@ firstchapter            & Integer & \\
 firstverse              & Integer & \\
 \end{my-longtabu}
 
-An entry is uniquely defined by its \emph{lex, vs,} and \emph{language} fields.
+An entry is uniquely defined by its \emph{lex} and \emph{vs} fields.
 
-\subsection{The \emph{lexicon\_heb\_LANG} Table}\label{sec-lexicon-heb-lang}\index{lexicon\_heb\_LANG table|hyperit}
+\subsection{The \emph{lexicon\_Hebrew\_LANG} and \emph{lexicon\_Aramaic\_LANG} Tables}\label{sec-lexicon-heb-lang}%
+\index{lexicon\_Hebrew\_LANG table|hyperit}\index{lexicon\_Aramaic\_LANG table|hyperit}
 
-The system contains a number of tables with names such as \emph{lexicon\_heb\_en} for English,
-\emph{lexicon\_heb\_de} for German. They provide translations for the lexemes listed in the
-\emph{lexicon\_heb} table.
+The system contains a number of tables with names such as \emph{lexicon\_Hebrew\_en} for English and
+\emph{lexicon\_Hebrew\_de} for German. They provide translations for the lexemes listed in the
+\emph{lexicon\_Hebrew} table. Similar tables, such as \emph{lexicon\_Aramaic\_en,} provide
+translations for the lexemes listed in the \emph{lexicon\_Aramaic} table.
 
 The tables contain these fields:
 
 \begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
 id      & Integer & Unique number identifying this entry. \\
-lex\_id & Integer & The \emph{id} field of the entry in the \emph{lexicon\_heb} table for
-                    which the current entry provides a translation. \\
+lex\_id & Integer & The \emph{id} field of the entry in the \emph{lexicon\_Hebrew} or
+                    \emph{lexicon\_Aramaic} table for which the current entry provides a translation. \\
 gloss   & Text    & The translation of the lexeme into language \emph{LANG}. \\
 \end{my-longtabu}
 
@@ -5878,6 +5895,116 @@ Sections \ref{sec-lexicon-heb}, \ref{sec-lexicon-heb-lang}, \ref{sec-lexicon-gre
 and Greek dictionaries are stored.
 
 
+%%%%%%%%%%%%%%%%%%%% Importing and Exporting Translations %%%%%%%%%%%%%%%%%%%%
+\section{Importing and Exporting Translations}\label{sec-imp-exp-trans}%
+\index{importing translations|hyperit}\index{exporting translations|hyperit}%
+\index{translations!importing and exporting|hyperit}
+
+For a translator, it is often more convenient to work with translations offline. For this reason it
+is possble to import and export the various translation tables from and to a textual format.
+
+\subsection{The User Interface}
+
+Sections \ref{sec-language-comment} and \ref{sec-language-lang} describe how localization of the
+user interface is stored in the user database.
+
+From the shell command line on the server the contents of the user interface tables can be exported
+thus:
+
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php5.6 index.php translate if_db2php %\textrm{\textit{language-code}}% %\textrm{\textit{destination-directory}}%
+\end{lstlisting}
+
+Here \emph{language-code} is, for example, ``en'' for English or ``comment'' to get the
+comment information (see Section \ref{sec-language-comment}). The exported files will be stored in a
+directory named
+\emph{destination-directory/language-code}. (The directory
+\emph{destination-directory} must exist, the directory \emph{destination-directory/language-code}
+need not exist.)
+
+To import the user interface tables from textual files, execute this command from the shell command
+line on the server:
+
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php5.6 index.php translate if_php2db %\textrm{\textit{language-code}}% %\textrm{\textit{source-directory}}%
+\end{lstlisting}
+
+The imported files will be loaded from a directory named \emph{source-directory}.
+
+Note the difference in directory naming in the export and import commands. The language code is
+appended to the directory name on export, but not on import. To export the English
+texts to a directory called \texttt{abc} and import it again, use this sequence of commands:
+
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php5.6 index.php translate if_db2php en abc
+php5.6 index.php translate if_php2db en abc/en
+\end{lstlisting}
+
+The reason for this difference is that we want to enforce a particular directory structure when
+exporting, but we cannot rely on having that structure when importing.
+
+\subsection{Grammar Localization Structures}
+
+Section \ref{sec-gram-loc-struct} describes how localization of grammar information is stored in the
+user database.
+
+From the shell command line on the server the contents of all the grammar localization structures can be exported
+thus:
+
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php5.6 index.php translate gram_db2prop %\textrm{\textit{destination-directory}}%
+\end{lstlisting}
+
+This command will store the grammar localization structures for all Emdros databases and all
+languages in files in the directory \emph{destination-directory} (which must exist). The data will
+be stored in ``pretty'' JSON format.
+
+To import the grammar localization structures from textual files, place the JSON files in the directory
+\texttt{db/propterty\_files} under the Bible OL main directory. Then execute this command from the
+shell command line on the server:
+
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php5.6 index.php translate gram_prop2db
+\end{lstlisting}
+
+This command will read the files from the \texttt{db/propterty\_files} directory and update the contents of
+the user database, where necessary. The command will print a list of tile files found plus
+information about whether the contents of the files caused the database to be updated.
+
+Note the difference in directories used in the export and import commands. For export, the
+destination directory must be specified on the command line. For import, the files are always read
+from the \texttt{db/propterty\_files} directory.
+
+\subsection{Lexicon}
+
+Sections \ref{sec-lexicon-heb}, \ref{sec-lexicon-heb-lang}, \ref{sec-lexicon-greek}, and
+\ref{sec-lexicon-greek-lang} describe how localized versions of the dictionaries are stored.
+
+From the shell command line on the server the contents of a lexicon can be exported thus:
+
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php5.6 index.php translate download_lex %\textrm{\textit{source-language}}% %\textrm{\textit{target-language}}%
+\end{lstlisting}
+
+The \emph{source-language} must be either ``hebr'', ``aram'', or ``greek''. The
+\emph{destination-language} must be, for example, ``en'' for English. The lexicon will be written to
+the standard output as a comma-separated file, suitable for import into a spreadsheet program.
+
+Note that a user with translator or administrator privileges can also download the lexicons from the
+Bible OL website by selecting the \emph{Administration > Download lexicon} menu.
+
+A lexicon can be imported from the shell command line on the server by executing this command:
+
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php5.6 index.php translate import_lex %\textrm{\textit{source-language}}% %\textrm{\textit{target-language}}%  %\textrm{\textit{CSV-file}}%
+\end{lstlisting}
+
+The \emph{source-language} and \emph{destination-language} are described above. The \emph{CSV-file}
+is the name of a comma-separated file containing the lexicon in the exact format generated by the export line
+above. This means that the imported CSV file must have the same number of fields and the same
+headings as the generated file.
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -5997,7 +6124,7 @@ than one photo, the icon will be blue rather than green.
 Bible OL gathers information about the photos on the resource web site by executing the command
 
 \begin{lstlisting}[language=bash,frame=,basicstyle={\ttfamily}]
-php index.php pic2db
+php5.6 index.php pic2db
 \end{lstlisting}
 
 \noindent
@@ -6071,6 +6198,7 @@ of the feature. A feature \emph{XXX} may exists in these variants:
   XXX\_utf8 & Native alphabet\index{alphabet!native}\\
   XXX\_translit & Transliterated alphabet\index{alphabet!transliterated}\\
   XXX\_cons\_utf8 & Consonants only, native alphabet\\
+  XXX\_nocant & Cantillation marks omitted, transcribed alphabet\\
   XXX\_nocant\_utf8 & Cantillation marks omitted, native alphabet\\
   XXX\_nopunct\_translit & Punctuation omitted, transliterated alphabet\\
 \end{my-tabu}
@@ -6080,77 +6208,54 @@ Except where otherwise noted, all features of the \emph{word} object are string 
 In cases where a feature is an enumeration\index{Emdros!enumeration}, the enumeration type may
 contain values that are not actually used. Such values are not listed in the following sections.
 
-\subsection{Features: text, continuation, g\_word, suffix, and g\_cons}\label{suffix}
+\subsection{Features: g\_word, g\_suffix, and g\_cons}\label{suffix}
 
 These features relate to the visual appearance of a word.
 
-The \emph{text} features contain the actual text of the word. These variants exist:
-
-\begin{itemize}
-\item text
-\item text\_utf8
-\item text\_translit
-\item text\_cons\_utf8
-\item text\_nocant\_utf8
-\item text\_nopunct\_translit
-\end{itemize}
-
-The \emph{text} features work together with the \emph{continuation}\index{continuation} features as
-described in Section \ref{sec-contin}. The \emph{continuation} features exist in these variants:
-
-\begin{itemize}
-\item continuation
-\item continuation\_utf8
-\item continuation\_translit
-\end{itemize}
-
-The \emph{g\_word} features are very similar to the \emph{text} features. The \emph{g\_word}
-features are not used by Bible OL because their information is available by other means. The
-difference between \emph{g\_word} and \emph{text} is that \emph{g\_word} does not use the proper
-final form of the Hebrew consonants, and it includes punctuation information that follows a word.
-This punctuation information is typically the character \heb{׃} \emph{(sof pasuq)}\index{sof pasuq}
-or \heb{־} \emph{(maqaf),}\index{maqaf} but it may also include additional characters.
-
-The \emph{g\_word} features exist in these variants:
+The \emph{g\_word} features contain the actual text of the word. These variants exist:
 
 \begin{itemize}
 \item g\_word
 \item g\_word\_utf8
+\item g\_word\_translit
 \item g\_word\_cons\_utf8
+\item g\_word\_nocant
+\item g\_word\_nocant\_utf8
+\item g\_word\_nopunct\_translit
 \end{itemize}
 
-The \emph{suffix} features contain characters that follow a word (as described above for
-\emph{g\_word}). Possible suffixes are:
+The \emph{g\_word} features work together with the \emph{g\_suffix}\index{suffix} features as
+described in Section \ref{sec-contin}. The \emph{g\_suffix} features exist in these variants:
 
 \begin{itemize}
+\item g\_suffix
+\item g\_suffix\_utf8
+\item g\_suffix\_translit
+\end{itemize}
+
+The \emph{g\_suffix} features contain characters that follow a word. Possible suffixes are:
+
+\begin{itemize}
+\item An empty string
+\item A space
 \item \heb{־}
-\item \heb{׃}
-\item \heb{ס}
-\item \heb{פ}
-\item \heb{׃ נ}
-\item \heb{׃ נ ס}
-\item \heb{׃ נ פ}
-\item \heb{׃ ס}
-\item \heb{׃ פ}
+\item \heb{׀}\quad followed by a space
+\item \heb{׃}\quad followed by a space
+\item \heb{׃ ׆}\quad followed by a space
+\item \heb{׃ ׆ ס}\quad followed by a space
+\item \heb{׃ ׆ פ}\quad followed by a space
+\item \heb{׃ ס}\quad followed by a space
+\item \heb{׃ פ}\quad followed by a space
+\item \heb{ס}\quad surrounded by spaces
+\item \heb{פ}\quad surrounded by spaces 
 \end{itemize}
 
-The \emph{suffix} features exist in these variants:
-
-\begin{itemize}
-\item suffix
-\item suffix\_translit
-\item suffix\_utf8
-\end{itemize}
-
-Note: Do not confuse these suffix features with the features \emph{suffix\_gender,} \emph{suffix\_number,} and
+Note: Do not confuse the \emph{g\_suffix} features with the features \emph{suffix\_gender,} \emph{suffix\_number,} and
 \emph{suffix\_person} which are described in Section \ref{suffix-gram}.
 
 
 The \emph{g\_cons} features contain the consonants of the word. They are not used by Bible OL
-because their information is available by other means. The \emph{g\_cons\_utf8} feature is identical to
-the \emph{text\_cons\_utf8} feature, except that \emph{g\_cons\_utf8} does not use the proper final form
-of the Hebrew consonants.
-
+because their information is available by other means.
 
 The \emph{g\_cons} features exist in these variants:
 
@@ -6160,7 +6265,7 @@ The \emph{g\_cons} features exist in these variants:
 \end{itemize}
 
 
-\subsection{Features: g\_lex, lex, and vocalized\_lexeme}
+\subsection{Features: g\_lex, lex, and g\_voc\_lex}
 
 The ``lexeme''\index{lexeme|hyperit} or ``lemma''\index{lemma|see {lexeme}} of a word is the version of
 the word found in a dictionary. For example, the English word ``mice'' has the lexeme ``mouse''
@@ -6168,14 +6273,14 @@ because in a dictionary, the word is found under the entry ``mouse''.
 
 ETCBC4 has three different lexeme features with different characteristics.
 
-The \emph{vocalized\_lexeme} is the word commonly taken to be the lexeme of a Hebrew word. Except
-for verbs, this lexeme contains vowels. The \emph{vocalized\_lexeme} features exist in these variants:
+The \emph{g\_voc\_lex} is the word commonly taken to be the lexeme of a Hebrew word. Except
+for verbs, this lexeme contains vowels. The \emph{g\_voc\_lex} features exist in these variants:
 
 \begin{itemize}
-\item vocalized\_lexeme
-\item vocalized\_lexeme\_utf8
-\item vocalized\_lexeme\_translit
-\item vocalized\_lexeme\_cons\_utf8
+\item g\_voc\_lex
+\item g\_voc\_lex\_utf8
+\item g\_voc\_lex\_translit
+\item g\_voc\_lex\_cons\_utf8
 \end{itemize}
 
 The \emph{g\_lex} and \emph{lex} features contain various other ways to write the lexeme. Compare,
@@ -6185,14 +6290,14 @@ for example, these three lexemes for \heb{אֱלֹהִים}:
   \begin{tabular}{ll}
     \textbf{Feature name} & \textbf{Content}\\
     \hline
-    vocalized\_lexeme\_utf8 & \heb{אֱלֹהִים}\\
+    g\_voc\_lex\_utf8 & \heb{אֱלֹהִים}\\
     g\_lex\_utf8 & \heb{אֱלֹה}\\
-    lex\_utf8 & \heb{אלהימ֜} (Note the shape of the \heb{מ})
+    lex\_utf8 & \heb{אלהים֜}
   \end{tabular}
 \end{center}
 
 I have not studied all the differences between the three lexemes. Suffice it to say that
-\emph{vocalized\_lexeme\_utf8} is the one normally shown to users, and \emph{lex} is useful
+\emph{g\_voc\_lex\_utf8} is the one normally shown to users, and \emph{lex} is useful
 internally in the system because it only contains consonants and uses the transcribed alphabet.
 
 The \emph{g\_lex} features exist in these variants:
@@ -6387,42 +6492,30 @@ These features exist in these variants:
 The \emph{prs} feature describes the paradigmatic form of the pronominal suffix. The following
 values are possible:
 
-\tabulinesep=0mm % Temporary (to make table fit on page)
+\begin{itemize}
+\item H  
+\item H= 
+\item HJ 
+\item HM 
+\item HN 
+\item HW 
+\item HWN
+\item J  
+\item K  
+\item K= 
+\item KM 
+\item KN 
+\item KWN
+\item M  
+\item MW 
+\item n/a
+\item N  
+\item N> 
+\item NJ 
+\item NW 
+\item W  
+\end{itemize}
 
-\begin{center}
-\begin{tabu}{@{}llll@{}}
-  \toprule
-  & \multicolumn{3}{c}{\textbf{Meaning}}\\
-  \cmidrule{2-4}
-  \textbf{Value} & \textbf{Gender} & \textbf{Person} & \textbf{Number} \\
-  \midrule
-  absent\footnote{This is the actual string ``absent''.} & \multicolumn{3}{c}{Absent}\\
-  H    & Feminine   & Third   & Singular   \\
-  H=   & Masculine  & Third   & Singular   \\
-  HJ   & Masculine  & Third   & Singular   \\
-  HM   & Masculine  & Third   & Plural     \\
-  HN   & Feminine   & Third   & Plural     \\
-  HW   & Masculine  & Third   & Singular   \\
-  HWN  & Masculine  & Third   & Plural     \\
-  J    & Common     & First   & Singular   \\
-  K    & Masculine  & Second  & Singular   \\
-  K=   & Feminine   & Second  & Singular   \\
-  KM   & Masculine  & Second  & Plural     \\
-  KN   & Feminine   & Second  & Plural     \\
-  KWN  & Masculine  & Second  & Plural     \\
-  M    & Masculine  & Third   & Plural     \\
-  MW   & Masculine  & Third   & Plural     \\
-  N    & Feminine   & Third   & Plural     \\
-  N>   & Common     & First   & Plural     \\
-  NJ   & Common     & First   & Singular   \\
-  NW   & Common     & First   & Plural     \\
-  W    & Masculine  & Third   & Singular   \\
-  n/a & \multicolumn{3}{c}{Not applicable} \\
-  \bottomrule
-\end{tabu}
-\end{center}
-
-\tabulinesep=_2mm %Restore value
 
 The \emph{g\_prs} features contain the graphical representation of the pronominal suffix.
 These features exist in these variants:
@@ -6435,16 +6528,16 @@ These features exist in these variants:
 \end{itemize}
 
 
-\subsection{Feature: g\_qere}
+\subsection{Feature: qere}
 
-The \emph{g\_qere} features contain the qere reading for the current word, if any.
+The \emph{qere} features contain the qere reading for the current word, if any.
 
-The \emph{g\_qere} features exist in these variants:
+The \emph{qere} features exist in these variants:
 
 \begin{itemize}
-\item g\_qere
-\item g\_qere\_utf8
-\item g\_qere\_translit
+\item qere
+\item qere\_utf8
+\item qere\_translit
 \end{itemize}
 
 \subsection{Feature: language}
@@ -6475,49 +6568,49 @@ They can have these values:
     verb & Verb                  \\
 \end{my-tabu}
 
-\subsection{Features: ps, nu, gn, suffix\_person, suffix\_number, suffix\_gender}\label{suffix-gram}
+\subsection{Features: ps, nu, gn, suffix\_person, suffix\_number, suffix\_gender, prs\_ps, prs\_nu, prs\_gn}\label{suffix-gram}
 
 The \emph{ps, nu,} and \emph{gn} features indicate the person, number, and gender, respectively, of
 the word. They are enumeration features of type \emph{person\_t, number\_t,} and \emph{gender\_t}
 respectively.
 
 The \emph{suffix\_person, suffix\_number,} and \emph{suffix\_gender} features indicate the person,
-number, and gender of an optional suffix on the word. (These values are derived from
-the \emph{prs} feature described in Section \ref{prs}.) They are enumeration
-features of type \emph{suffix\_person\_t, suffix\_number\_t,} and \emph{suffix\_gender\_t}
-respectively. Note: Do not confuse these features with the suffix features described in Section
-\ref{suffix}.
+number, and gender of an optional suffix on the word. (Note: Do not confuse these features with the
+suffix features described in Section \ref{suffix}.)
 
-The \emph{person\_t} and \emph{suffix\_person\_t} enumerations have these values:
+The \emph{prs\_ps, prs\_nu,} and \emph{prs\_gn} features are identical to the \emph{suffix\_person,
+  suffix\_number,} and \emph{suffix\_gender} features, respectively.
+
+The \emph{person\_t} enumeration has these values:
 
 \begin{my-tabu}{cl}{ \headii{Value}{Meaning} }
-    p1      & First person                                     \\
-    p2      & Second person                                    \\
-    p3      & Third person                                     \\
-    unknown & Unknown person (only legal for \emph{person\_t}) \\
-    NA      & Not applicable                                   \\
+    p1      & First person   \\
+    p2      & Second person  \\
+    p3      & Third person   \\
+    unknown & Unknown person \\
+    NA      & Not applicable \\
 \end{my-tabu}
 
-The \emph{number\_t} and \emph{suffix\_number\_t} enumerations have these values:
+\Needspace*{5cm}%
+The \emph{number\_t} enumeration has these values:
 
 \begin{my-tabu}{cl}{ \headii{Value}{Meaning} }
-    sg      & Singular                                         \\
-    du      & Dual (only legal for \emph{number\_t})           \\
-    pl      & Plural                                           \\
-    unknown & Unknown number (only legal for \emph{number\_t}) \\
-    NA      & Not applicable                                   \\
+    sg      & Singular       \\
+    du      & Dual           \\
+    pl      & Plural         \\
+    unknown & Unknown number \\
+    NA      & Not applicable \\
 \end{my-tabu}
 
 
 \Needspace*{5cm}%
-The \emph{gender\_t} and \emph{suffix\_gender\_t} enumerations have these values:
+The \emph{gender\_t} enumeration has these values:
 
 \begin{my-tabu}{cl}{ \headii{Value}{Meaning} }
-    f       & Feminine                                         \\
-    m       & Masculine                                        \\
-    c       & Common (only legal for \emph{suffix\_gender\_t}) \\
-    unknown & Unknown number (only legal for \emph{gender\_t}) \\
-    NA      & Not applicable                                   \\
+    f       & Feminine       \\
+    m       & Masculine      \\
+    unknown & Unknown number \\
+    NA      & Not applicable \\
 \end{my-tabu}
 
 
@@ -6561,6 +6654,7 @@ The \emph{vs} feature indicates the verbal stem of the word. It is an enumeratio
     hsht  & Hishtafal    & Both                \\
     htpa  & Hitpaal      & Aramaic             \\
     htpe  & Hitpeel      & Aramaic             \\
+    htpo  & Hitpoal      & Hebrew              \\
     nif   & Nifal        & Hebrew              \\
     nit   & Nitpael      & Hebrew              \\
     pael  & Pael         & Aramaic             \\
@@ -6568,6 +6662,8 @@ The \emph{vs} feature indicates the verbal stem of the word. It is an enumeratio
     peal  & Peal         & Aramaic             \\
     peil  & Peil         & Aramaic             \\
     piel  & Piel         & Hebrew              \\
+    poal  & Poal         & Hebrew              \\
+    poel  & Poel         & Hebrew              \\
     pual  & Pual         & Hebrew              \\
     qal   & Qal          & Hebrew              \\
     shaf  & Shafel       & Aramaic             \\
@@ -6633,7 +6729,7 @@ values of the enumeration type \emph{verb\_class\_t} whose values are:
 \item regular
 \end{itemize}
 
-\subsection{Features: number, distributional\_parent, functional\_parent}
+\subsection{Features: number, distributional\_parent, functional\_parent, lexeme\_count}
 
 These features are currently not used by Bible OL and are not documented here.
 
@@ -6643,53 +6739,45 @@ The following features of the \emph{word} object were part of the ETCBC4 databas
 from its creators:
 
 \begin{center}
-  \begin{tabular}{lll}
-    distributional\_parent & g\_uvf\_utf8  & nu    \\
-    functional\_parent     & g\_vbe        & number\\
-    g\_cons                & g\_vbe\_utf8  & pdp   \\
-    g\_cons\_utf8          & g\_vbs        & pfm   \\
-    g\_lex                 & g\_vbs\_utf8  & prs   \\
-    g\_lex\_utf8           & g\_word       & ps    \\
-    g\_nme                 & g\_word\_utf8 & sp    \\
-    g\_nme\_utf8           & gn            & st    \\
-    g\_pfm                 & language      & uvf   \\
-    g\_pfm\_utf8           & lex           & vbe   \\
-    g\_prs                 & lex\_utf8     & vbs   \\
-    g\_prs\_utf8           & ls            & vs    \\
-    g\_uvf                 & nme           & vt    \\
+  \begin{tabular}{llll}
+    distributional\_parent & g\_suffix         & lex           & ps             \\
+    functional\_parent     & g\_suffix\_utf8   & lexeme\_count & qere           \\
+    g\_cons                & g\_uvf            & lex\_utf8     & qere\_utf8     \\
+    g\_cons\_utf8          & g\_uvf\_utf8      & ls            & sp             \\
+    g\_lex                 & g\_vbe            & nme           & st             \\
+    g\_lex\_utf8           & g\_vbe\_utf8      & nu            & suffix\_gender \\
+    gn                     & g\_vbs            & number        & suffix\_number \\
+    g\_nme                 & g\_vbs\_utf8      & pdp           & suffix\_person \\
+    g\_nme\_utf8           & g\_voc\_lex       & pfm           & uvf            \\
+    g\_pfm                 & g\_voc\_lex\_utf8 & prs           & vbe            \\
+    g\_pfm\_utf8           & g\_word           & prs\_gn       & vbs            \\
+    g\_prs                 & g\_word\_utf8     & prs\_nu       & vs             \\
+    g\_prs\_utf8           & language          & prs\_ps       & vt             \\
   \end{tabular}
 \end{center}
 
-The following word features were generated by my program
-\emph{emdros\_updater}\index{emdros\_updater} which is currently not published or documented:
+The following word features were generated by the program
+\emph{emdros\_updater}\index{emdros\_updater} which is available at
+\url{https://github.com/EzerIT/ETCBC4BibleOL}.
 
 \begin{center}
   \begin{tabular}{lll}
-    continuation           & g\_uvf\_cons\_utf8  &  suffix\_utf8                  \\
-    continuation\_translit & g\_uvf\_translit    &  text                          \\
-    continuation\_utf8     & g\_vbe\_cons\_utf8  &  text\_cons\_utf8              \\
-    frequency\_rank        & g\_vbe\_translit    &  text\_nocant\_utf8            \\
-    g\_lex\_cons\_utf8     & g\_vbs\_cons\_utf8  &  text\_nopunct\_translit       \\
-    g\_nme\_cons\_utf8     & g\_vbs\_translit    &  text\_translit                \\
-    g\_nme\_translit       & g\_word\_cons\_utf8 &  text\_utf8                    \\
-    g\_pfm\_cons\_utf8     & lex\_cons\_utf8     &  verb\_class                   \\
-    g\_pfm\_translit       & lexeme\_occurrences &  vocalized\_lexeme             \\
-    g\_prs\_cons\_utf8     & suffix              &  vocalized\_lexeme\_cons\_utf8 \\
-    g\_prs\_translit       & suffix\_gender      &  vocalized\_lexeme\_translit   \\
-    g\_qere                & suffix\_number      &  vocalized\_lexeme\_utf8       \\
-    g\_qere\_translit      & suffix\_person      &   \\
-    g\_qere\_utf8          & suffix\_translit    &   \\
+    frequency\_rank     & g\_uvf\_cons\_utf8      & g\_word\_nocant            \\
+    g\_lex\_cons\_utf8  & g\_uvf\_translit        & g\_word\_nocant\_utf8      \\
+    g\_nme\_cons\_utf8  & g\_vbe\_cons\_utf8      & g\_word\_nopunct\_translit \\
+    g\_nme\_translit    & g\_vbe\_translit        & g\_word\_translit          \\
+    g\_pfm\_cons\_utf8  & g\_vbs\_cons\_utf8      & lex\_cons\_utf8            \\
+    g\_pfm\_translit    & g\_vbs\_translit        & lexeme\_occurrences        \\
+    g\_prs\_cons\_utf8  & g\_voc\_lex\_cons\_utf8 & qere\_translit             \\
+    g\_prs\_translit    & g\_voc\_lex\_translit   & verb\_class                \\
+    g\_suffix\_translit & g\_word\_cons\_utf8     &                            \\
   \end{tabular}
 \end{center}
 
-The \emph{emdros\_updater} also fixed final versions of the characters \heb{ך}, \heb{ם}, \heb{ן},
-\heb{ף}, and \heb{ץ} in the features \emph{g\_nme\_utf8,} \emph{g\_prs\_utf8,} and
-\emph{g\_vbe\_utf8}.
-
-
-Based on information from Assistant Professor Oliver Glanz of Andrews University, the verbal tenses
-\emph{jussive, cohortative,} and \emph{emphatic imperative} were added by a couple of (unpublished
-and undocumented) script in the \emph{extra\_tenses} directory under \emph{emdros\_updater.}
+The \emph{emdros\_updater} and associated programs also performs a number of modifications to the
+database, including adding the verbal tenses \emph{jussive, cohortative,} and \emph{emphatic
+  imperative}. See the file \url{https://github.com/EzerIT/ETCBC4BibleOL/blob/master/README.md} for
+details.
 
 %%%%%%%%%%%%%%%%%%%% The Other Object Types %%%%%%%%%%%%%%%%%%%%
 \section{The Other Object Types}
