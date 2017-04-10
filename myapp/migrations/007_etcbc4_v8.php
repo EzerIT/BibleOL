@@ -418,10 +418,13 @@ class Migration_Etcbc4_v8 extends CI_Migration {
                 ->where('qt.qoname="word"')
                 ->get();
 
+            $count = 0;
             foreach ($query->result() as $row) {
                 if (array_key_exists($row->name,$word_feat)) {
                     $this->db->where('id',$row->id)->update($feature, array('name'=>$word_feat[$row->name]));
-                    //echo "updated $feature $row->id: $row->name => ",$word_feat[$row->name],"\n";
+                    ++$count;
+                    if ($count%1000==0)
+                        echo "updated $feature $row->id: $row->name => ",$word_feat[$row->name],"\n";
                 }
             }
         }
