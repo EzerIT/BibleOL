@@ -56,7 +56,7 @@ $comment = array();
 $format = array();
 
 
-class Migration_Etcbc4_v8 extends CI_Migration {
+class Migration_Etcbc4_v8a extends CI_Migration {
 
     // Additions allowing users to sign up for an account, and for automatic account deletion
 
@@ -432,12 +432,12 @@ class Migration_Etcbc4_v8 extends CI_Migration {
 
     
     public function up() {
-        $this->remove_words();
-        $this->replace_words();
-        $this->replace_stem();
-        $this->add_words();
-        $this->copy_stems();
-//        $this->update_statistics();
+//        $this->remove_words();
+//        $this->replace_words();
+//        $this->replace_stem();
+//        $this->add_words();
+//        $this->copy_stems();
+        $this->update_statistics();
    }
 
     public function down()
