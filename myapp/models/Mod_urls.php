@@ -460,6 +460,8 @@ class Mod_urls extends CI_Model {
     }
     
     private function get_bad_urls(string $sql_table, string $field) {
+        $badurls = array();
+        
         $query = $this->db->get($sql_table);
         foreach ($query->result() as $row) {
             if (!$this->check_url($row->$field))
