@@ -444,6 +444,39 @@ class Mod_urls extends CI_Model {
         }
     }
 
+    // Checks if the specified $url is live
+    private function check_url($url) {
+        $headers = @get_headers($url,true);
+
+        if (!$headers)
+            return false;
+    
+        // Find last HTTP response:
+        for ($i=0; isset($headers[$i]); ++$i)
+            /* Nothing */;
+
+        $http_resp = explode(' ', $headers[$i-1]);
+        return $http_resp[1]=='200';
+    }
+    
+    private function get_bad_urls(string $sql_table, string $field) {
+        $query = $this->db->get($sql_table);
+        foreach ($query->result() as $row) {
+            if (!$this->check_url($row->$field))
+                $badurls[] = $row;
+        }
+        return $badurls;
+    }
+        
+    public function get_bad_heb_urls() {
+        return $this->get_bad_urls('heb_urls','url');
+    }
+
+    public function get_bad_bible_urls() {
+        return $this->get_bad_urls('bible_urls','url');
+    }
+
+
     public function set_heb_url(integer $id, string $link, string $icon) {
         $this->db->where('id',$id)->update('heb_urls',array('url' => $link,
                                                             'icon' => $icon));

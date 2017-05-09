@@ -152,4 +152,32 @@ class Ctrl_urls extends MY_Controller {
 
     }
 
+    public function check_urls() {
+        if (!is_cli()) {
+            echo '<pre>This command can only be run from the command line</pre>';
+            die;
+        }
+
+        $bad_heb_urls = $this->mod_urls->get_bad_heb_urls();
+        $bad_bible_urls = $this->mod_urls->get_bad_bible_urls();
+
+        if (count($bad_heb_urls)>0) {
+            echo "\nBAD LEXEME URLS:\n";
+            foreach ($bad_heb_urls as $b) {
+                echo "Language: $b->language\n";
+                echo "Lexeme:   $b->lex\n";
+                echo "URL:      $b->url\n";
+                echo "-----------------------------------\n";
+            }
+        }
+
+        if (count($bad_bible_urls)>0) {
+            echo "\nBAD BIBLE REFERENCE URLS:\n";
+            foreach ($bad_bible_urls as $b) {
+                echo "Reference: $b->book $b->chapter:$b->verse\n";
+                echo "URL:       $b->url\n";
+                echo "-----------------------------------\n";
+            }
+        }
+    }
   }
