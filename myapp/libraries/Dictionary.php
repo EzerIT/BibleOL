@@ -423,7 +423,6 @@ class Dictionary {
 	/// @return The text to display for the specified monad number.
     public function getVisual($monad) {
         $smo = $this->singleMonads[$monad];
-        return $smo->get_text();
+        return $smo->get_text() . $smo->get_suffix();
     }
- 
 }
