@@ -164,21 +164,24 @@
             "f": "#2 Femenino",
             "m": "#1 Masculino",
             "NA": "#3 Ninguno",
-            "unknown": "#4 Desconocido"
+            "unknown": "#4 Desconocido",
+            "absent": "#5 Absent"
         },
         "number_t": {
             "du": "#3 Dual",
             "NA": "#4 Ninguno",
             "pl": "#2 Plural",
             "sg": "#1 Singular",
-            "unknown": "#5 Desconocido"
+            "unknown": "#5 Desconocido",
+            "absent": "#6 Absent"
         },
         "person_t": {
             "p1": "#1 1st",
             "NA": "#4 Ninguno",
             "p2": "#2 2nd",
             "p3": "#3 3rd",
-            "unknown": "#5 Desconocido"
+            "unknown": "#5 Desconocido",
+            "absent": "#6 Absent"
         },
         "state_t": {
             "a": "Absoluto",
@@ -486,19 +489,22 @@
                 "NA": "-",
                 "p2": "2",
                 "p3": "3",
-		"unknown": "-"
+		"unknown": "-",
+                "absent": "-"
             },
             "suffix_gender": {
                 "f": "F",
                 "m": "M",
                 "NA": "-",
-		"unknown": "-"
+		"unknown": "-",
+                "absent": "-"
             },
             "suffix_number": {
                 "NA": "-",
                 "pl": "Pl",
                 "sg": "Sg",
-		"unknown": "-"
+		"unknown": "-",
+                "absent": "-"
             }
         }
     },

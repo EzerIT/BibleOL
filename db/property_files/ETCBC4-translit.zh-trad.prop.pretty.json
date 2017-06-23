@@ -164,21 +164,24 @@
             "f": "#2 陰性",
             "m": "#1 陽性",
             "NA": "#3 無",
-            "unknown": "#4 不明"
+            "unknown": "#4 不明",
+            "absent": "#5 Absent"
         },
         "number_t": {
             "du": "#3 雙數",
             "NA": "#4 無",
             "pl": "#2 複數",
             "sg": "#1 單數",
-            "unknown": "#5 不明"
+            "unknown": "#5 不明",
+            "absent": "#6 Absent"
         },
         "person_t": {
             "p1": "#1 第一人稱",
             "NA": "#4 無",
             "p2": "#2 第二人稱",
             "p3": "#3 第三人稱",
-            "unknown": "#5 不明"
+            "unknown": "#5 不明",
+            "absent": "#6 Absent"
         },
         "state_t": {
             "a": "獨立形",
@@ -486,19 +489,22 @@
                 "NA": "／",
                 "p2": "二",
                 "p3": "三",
-                "unknown": "／"
+                "unknown": "／",
+                "absent": "／"
             },
             "suffix_gender": {
                 "f": "陰",
                 "m": "陽",
                 "NA": "／",
-                "unknown": "／"
+                "unknown": "／",
+                "absent": "／"
             },
             "suffix_number": {
                 "NA": "／",
                 "pl": "複",
                 "sg": "單",
-                "unknown": "／"
+                "unknown": "／",
+                "absent": "／"
             }
         }
     },

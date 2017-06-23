@@ -330,6 +330,7 @@
         ],
         "person_t": [
             "NA",
+            "absent",
             "p1",
             "p2",
             "p3",
@@ -337,6 +338,7 @@
         ],
         "number_t": [
             "NA",
+            "absent",
             "du",
             "pl",
             "sg",
@@ -344,6 +346,7 @@
         ],
         "gender_t": [
             "NA",
+            "absent",
             "f",
             "m",
             "unknown"

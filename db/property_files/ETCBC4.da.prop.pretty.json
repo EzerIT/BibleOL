@@ -170,21 +170,24 @@
             "f": "#2 Femininum",
             "m": "#1 Maskulinum",
             "NA": "#3 Ingen",
-            "unknown": "#4 Unkendt"
+            "unknown": "#4 Ukendt",
+            "absent": "#5 Fraværende"
         },
         "number_t": {
             "du": "#3 Dualis",
             "NA": "#4 Ingen",
             "pl": "#2 Pluralis",
             "sg": "#1 Singularis",
-            "unknown": "#5 Ukendt"
+            "unknown": "#5 Ukendt",
+            "absent": "#6 Fraværende"
         },
         "person_t": {
             "p1": "#1 1.",
             "NA": "#4 Ingen",
             "p2": "#2 2.",
             "p3": "#3 3.",
-            "unknown": "#5 Ukent"
+            "unknown": "#5 Ukendt",
+            "absent": "#6 Fraværende"
         },
         "state_t": {
             "a": "Absolutus",
@@ -490,19 +493,22 @@
                 "NA": "-",
                 "p2": "2",
                 "p3": "3",
-		"unknown": "-"
+		"unknown": "-",
+                "absent": "-"
             },
             "suffix_gender": {
                 "f": "F",
                 "m": "M",
                 "NA": "-",
-		"unknown": "-"
+		"unknown": "-",
+                "absent": "-"
             },
             "suffix_number": {
                 "NA": "-",
                 "pl": "Pl",
                 "sg": "Sg",
-		"unknown": "-"
+		"unknown": "-",
+                "absent": "-"
             }
         }
     },

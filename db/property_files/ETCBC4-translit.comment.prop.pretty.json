@@ -164,21 +164,24 @@
             "f": "",
             "m": "",
             "NA": "",
-            "unknown": ""
+            "unknown": "",
+            "absent": ""
         },
         "number_t": {
             "du": "",
             "NA": "",
             "pl": "",
             "sg": "",
-            "unknown": ""
+            "unknown": "",
+            "absent": ""
         },
         "person_t": {
             "p1": "",
             "NA": "",
             "p2": "",
             "p3": "",
-            "unknown": ""
+            "unknown": "",
+            "absent": ""
         },
         "state_t": {
             "a": "",
@@ -486,19 +489,22 @@
                 "NA": "Indicates 'Not applicable'",
                 "p2": "Abbrev. of 2nd person",
                 "p3": "Abbrev. of 3rd person",
-		"unknown": ""
+		"unknown": "",
+                "absent": ""
             },
             "suffix_gender": {
                 "f": "Abbrev. of feminine",
                 "m": "Abbrev. of masculine",
                 "NA": "Indicates 'Not applicable'",
-		"unknown": ""
+		"unknown": "",
+                "absent": ""
             },
             "suffix_number": {
                 "NA": "Indicates 'Not applicable'",
                 "pl": "Abbrev. of plural",
                 "sg": "Abbrev. of singular",
-		"unknown": ""
+		"unknown": "",
+                "absent": ""
             }
         }
     },
