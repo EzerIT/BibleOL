@@ -24,6 +24,7 @@
             "g_voc_lex_cons_utf8": "Lexema (sólo consonantes)",
             "g_voc_lex_utf8": "Lexema (Hebreo)",
             "g_voc_lex_translit": "Lexema",
+            "g_voc_lex_translit_variant": "Lexema (with variant)",
             "language": "Lenguaje",
             "ls": "Conjunto léxico",
             "vs": "Raíz",

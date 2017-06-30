@@ -24,6 +24,7 @@
             "g_voc_lex_cons_utf8": "Leksem (kun konsonanter)",
             "g_voc_lex_utf8": "Leksem (Hebraisk)",
             "g_voc_lex_translit": "Leksem",
+            "g_voc_lex_translit_variant": "Leksem (med variant)",
             "language": "Sprog",
             "ls": "Leksikalt sæt",
             "vs": "Stamme",

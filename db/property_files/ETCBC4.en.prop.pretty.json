@@ -28,6 +28,7 @@
             "g_word_nocant_utf8": "Text (no cantillation marks)",
             "g_voc_lex_cons_utf8": "Lexeme (consonants only)",
             "g_voc_lex_utf8": "Lexeme",
+            "g_voc_lex_utf8_variant": "Lexeme (with variant)",
             "g_voc_lex_translit": "Lexeme (transliterated)",
             "language": "Language",
             "ls": "Lexical set",

@@ -393,7 +393,7 @@ class Mod_urls extends CI_Model {
         $query = $this->db->from("lexicon_{$language} he")->join("lexicon_{$language}_en en",'en.lex_id=he.id')
             ->where('sortorder >=',$from)
             ->where('sortorder <',$to)
-            ->order_by('sortorder')
+            ->order_by('sortorder,roman')
             ->get();
 
         $last_lex = '';

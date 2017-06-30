@@ -28,6 +28,7 @@
             "g_word_nocant_utf8": " 經文詞語，無讀音符號",
             "g_voc_lex_cons_utf8": " 基本詞形字母",
             "g_voc_lex_utf8": "基本詞形",
+            "g_voc_lex_utf8_variant": "基本詞形 (with variant)",
             "g_voc_lex_translit": " 基本詞形音譯",
             "language": "語言",
             "ls": "詞細類",

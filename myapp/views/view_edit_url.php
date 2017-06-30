@@ -30,7 +30,7 @@ function make_icon_radio_button(string $name) {
 
 <?php foreach ($words as $w): ?>
   <tr>
-    <td class="heb-default rtl"><?= $w->vocalized_lexeme_utf8 ?></td>
+    <td class="heb-default rtl"><?= $w->vocalized_lexeme_utf8 . ' ' . $w->roman  ?></td>
     <td><?= htmlspecialchars($w->gloss) ?></td>
     <td>
        <?php if (isset($w->urls)): ?>
@@ -57,7 +57,7 @@ function make_icon_radio_button(string $name) {
            <?php if (isset($w->urls[$i])): ?>
              <a class="label label-primary"
                 onclick="edit_url(<?= $w->urls[$i]->id ?>,
-                                  '<?= '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . '</span>' ?>',
+                                  '<?= '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . ' ' . $w->roman . '</span>' ?>',
                                   '<?= str_replace("'", 'QQzQQ', htmlspecialchars($w->urls[$i]->url)) ?>',
                                   '<?= $w->urls[$i]->icon ?>');
                          return false;"><?= $this->lang->line('urls_edit') ?></a>
@@ -65,7 +65,7 @@ function make_icon_radio_button(string $name) {
 
              <a class="label label-danger"
                 onclick="deleteUrlConfirm('<?= sprintf($this->lang->line('delete_url_confirm'),
-                                                       '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . '</span>',
+                                                       '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . ' ' . $w->roman . '</span>',
                                                        str_replace("'", 'QQzQQ', htmlspecialchars($w->urls[$i]->url))
                                                        ) ?>',
                                                        <?= $w->urls[$i]->id ?>);
@@ -80,7 +80,7 @@ function make_icon_radio_button(string $name) {
        <?php if ($make_add): ?>
           <a class="label label-primary"
              onclick="create_url('<?= $w->lex ?>',
-                                 '<?= '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . '</span>' ?>');
+                                 '<?= '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . ' ' . $w->roman . '</span>' ?>');
                       return false;"><?= $this->lang->line('urls_add') ?></a>
        <?php endif; ?>
      </td>

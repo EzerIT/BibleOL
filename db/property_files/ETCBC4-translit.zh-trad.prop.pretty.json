@@ -24,6 +24,7 @@
             "g_voc_lex_cons_utf8": "基本詞形，只顯示輔音",
             "g_voc_lex_utf8": " 基本詞形（希伯來文）",
             "g_voc_lex_translit": "基本詞形",
+            "g_voc_lex_translit_variant": "基本詞形 (with variant)",
             "language": "語言",
             "ls": "詞細類",
             "vs": "語幹",

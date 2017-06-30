@@ -28,6 +28,7 @@
             "g_word_nocant_utf8": "Tekst (ingen sangtegn)",
             "g_voc_lex_cons_utf8": "Leksem (kun konsonanter)",
             "g_voc_lex_utf8": "Leksem",
+            "g_voc_lex_utf8_variant": "Leksem (med variant)",
             "g_voc_lex_translit": "Leksem (translittereret)",
             "language": "Sprog",
             "ls": "Leksikalt sæt",

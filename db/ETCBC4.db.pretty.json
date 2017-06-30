@@ -257,7 +257,18 @@
                     "transliteratedText": true
                 },
                 "g_voc_lex_utf8": {
-                    "foreignText": true
+                    "foreignText": true,
+                    "ignoreShow": true
+                },
+                "g_voc_lex_utf8_variant": {
+                    "ignoreSelect": true,
+                    "foreignText": true,
+                    "ignoreRequest": true,
+                    "indirdb": "mysql",
+                    "sql_command": "SELECT CONCAT('%3$s ',roman) FROM {PRE}lexicon_%1$s WHERE lex='%2$s'",
+                    "sqlargs": [ "language", "lex", "g_voc_lex_utf8" ],
+                    "multiple": false
+
                 },
                 "distributional_parent": {
                     "ignoreSelect": true,
@@ -613,7 +624,7 @@
                     "items": [
                         {
                             "mytype": "GrammarFeature",
-                            "name": "g_voc_lex_utf8"
+                            "name": "g_voc_lex_utf8_variant"
                         },
                         {
                             "mytype": "GrammarFeature",

@@ -276,13 +276,13 @@ class Mod_translate extends CI_Model {
           case 'aram':
                 $src_lexicon = $src_lang=='heb' ? 'Hebrew' : 'Aramaic';
 
-                $query = $this->db->select('lex,vs,vocalized_lexeme_utf8 lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,c.id lex_id')
+                $query = $this->db->select('lex,vs,CONCAT(vocalized_lexeme_utf8," ",roman) lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,c.id lex_id')
                     ->from("lexicon_{$src_lexicon} c")
                     ->join("lexicon_{$src_lexicon}_{$lang_show} s", 's.lex_id=c.id','left')
                     ->join("lexicon_{$src_lexicon}_{$lang_edit} e", 'e.lex_id=c.id','left')
                     ->where('sortorder >=',$from)
                     ->where('sortorder <',$to)
-                    ->order_by('sortorder')
+                    ->order_by('sortorder,roman')
                     ->get();
                 break;
 
@@ -358,7 +358,7 @@ class Mod_translate extends CI_Model {
           case 'aram':
                 $src_lexicon = $src_lang=='heb' ? 'Hebrew' : 'Aramaic';
                 
-                $query = $this->db->select('lex,vs,vocalized_lexeme_utf8 lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
+                $query = $this->db->select('lex,vs,CONCAT(vocalized_lexeme_utf8," ",roman) lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
                     ->from("lexicon_{$src_lexicon} c")
                     ->join("lexicon_{$src_lexicon}_{$lang_show} s", 's.lex_id=c.id','left')
                     ->join("lexicon_{$src_lexicon}_{$lang_edit} e", 'e.lex_id=c.id','left')
@@ -696,7 +696,7 @@ class Mod_translate extends CI_Model {
                 foreach ($stems as $st)
                     assert(in_array($st,$stem_sort_order),"Missing stem $st");
 
-                $query = $this->db->select('lex,tally,vs,vocalized_lexeme_utf8,gloss')
+                $query = $this->db->select('lex,tally,vs,CONCAT(vocalized_lexeme_utf8," ",roman) lexeme,gloss')
                     ->from("lexicon_{$src_language} c")
                     ->join("lexicon_{$src_language}_{$dst_lang}", 'lex_id=c.id','left')
                     ->order_by('sortorder')
@@ -706,7 +706,7 @@ class Mod_translate extends CI_Model {
                 foreach ($query->result() as $row) {
                     if (!isset($res[$row->lex]))
                         $res[$row->lex] = array('tally' => $row->tally,
-                                                'vocalized_lexeme_utf8' => $row->vocalized_lexeme_utf8,
+                                                'lexeme' => $row->lexeme,
                                                 'glosses' => array());
                     $res[$row->lex]['glosses'][$row->vs] = $row->gloss;
                 }
@@ -715,7 +715,7 @@ class Mod_translate extends CI_Model {
                     $result .=
                         $r['tally'] .
                         ',"' . $lex . '"' .
-                        ',"' . $r['vocalized_lexeme_utf8'] . '"';
+                        ',"' . $r['lexeme'] . '"';
                     
                     foreach ($stem_sort_order as $st) {
                         if (isset($r['glosses'][$st]))
