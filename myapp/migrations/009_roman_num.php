@@ -19,9 +19,8 @@ class Migration_Roman_num extends CI_Migration {
     private $selector = array('',  '=',  '==',  '===', '====', '=====', '======', '=======', '========');
 
 
-
-    
-    public function up() {
+    private function add_roman()
+    {
         foreach (array('Hebrew','Aramaic') as $src_lang) {
             $this->dbforge->add_column('lexicon_'.$src_lang, array('roman' => array('type' => 'VARCHAR(5)',
                                                                                     'default' => '',
@@ -61,6 +60,43 @@ class Migration_Roman_num extends CI_Migration {
             }
             echo "\n";
         }
+    }
+
+    private function fix_final_et_al()
+    {
+        foreach (array('Hebrew','Aramaic') as $src_lang) {
+            $query = $this->db->select('id,lex,vocalized_lexeme_utf8')->get('lexicon_'.$src_lang);
+            foreach ($query->result() as $row) {
+                if ($row->lex=='KLNH/' && $row->vocalized_lexeme_utf8=="\xd7\x9b\xd6\xbc\xd6\xb7\xd7\x9c\xd6\xb0\xd7\xa0\xd6\xb6\xd7\x94")
+                    $vlu = "\xd7\x9b\xd6\xbc\xd6\xb7\xd7\x9c\xd6\xb0\xd7\xa0\xd6\xb5\xd7\x94";
+                elseif ($row->lex=='JRJXW/' && $row->vocalized_lexeme_utf8=="\xd7\x99\xd6\xb0\xd7\xa8\xd6\xb4\xd7\x99\xd7\x97\xd6\xb9\xd7\x95")
+                    $vlu = "\xd7\x99\xd6\xb0\xd7\xa8\xd6\xb4\xd7\x97\xd6\xb9\xd7\x95";
+                else
+                    $vlu = str_replace(array("\xd7\x9b ",
+                                             "\xd7\x9e ",
+                                             "\xd7\xa0 ",
+                                             "\xd7\xa4 ",
+                                             "\xd7\xa6 ",
+                                             "\xd7\x9b\xd6\xb0 "),
+                                       array("\xd7\x9a ",
+                                             "\xd7\x9d ",
+                                             "\xd7\x9f ",
+                                             "\xd7\xa3 ",
+                                             "\xd7\xa5 ",
+                                             "\xd7\x9a\xd6\xb0 "),
+                                       $row->vocalized_lexeme_utf8);
+                if ($vlu!=$row->vocalized_lexeme_utf8)
+                    $this->db->where('id',$row->id)->update('lexicon_'.$src_lang, array('vocalized_lexeme_utf8'=>$vlu));
+            }
+        }
+
+        
+        
+    }
+    
+    public function up() {
+        $this->add_roman();
+        $this->fix_final_et_al();
     }
 
     public function down()
