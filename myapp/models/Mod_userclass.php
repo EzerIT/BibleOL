@@ -16,7 +16,17 @@ class Mod_userclass extends CI_Model {
 
         return $res;
     }
-     
+
+    public function get_named_users_in_class(integer $classid) {
+        $query = $this->db
+            ->select("userid,IF(family_name_first,CONCAT(last_name,first_name),CONCAT(first_name,' ',last_name)) name")
+            ->join('user','user.id=userclass.userid')
+            ->where('classid',$classid)
+            ->get('userclass');
+
+        return $query->result();
+    }
+
     public function update_users_in_class(integer $classid, array $old_userids, array $new_userids) {
         // Insert new users
         foreach ($new_userids as $newid) {
@@ -40,19 +50,6 @@ class Mod_userclass extends CI_Model {
         $res = array();
         foreach ($query->result() as $row)
             $res[] = $row->classid;
-
-        return $res;
-    }
-     
-    public function get_classes_owned() {
-        if ($this->mod_users->is_admin())
-            $query = $this->db->select('id')->get('class');
-        else
-            $query = $this->db->select('id')->where('ownerid',$this->mod_users->my_id())->get('class');
-
-        $res = array();
-        foreach ($query->result() as $row)
-            $res[] = $row->id;
 
         return $res;
     }

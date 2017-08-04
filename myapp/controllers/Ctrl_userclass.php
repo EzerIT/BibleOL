@@ -109,7 +109,7 @@ class Ctrl_userclass extends MY_Controller {
             $user_info = $this->mod_users->get_user_by_id($userid);
 
             $all_classes = $this->mod_classes->get_all_classes();
-            $owned_classes = $this->mod_userclass->get_classes_owned();
+            $owned_classes = $this->mod_classes->get_classes_owned();
             $old_classes = $this->mod_userclass->get_classes_for_user($userid);
             usort($all_classes, 'classname_cmp');
 

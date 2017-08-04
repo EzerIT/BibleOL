@@ -40,6 +40,28 @@ class Mod_classes extends CI_Model {
         return $cl;
     }
 
+    public function get_classes_owned($all=true) {
+        if ($all && $this->mod_users->is_admin())
+            $query = $this->db->select('id')->get('class');
+        else
+            $query = $this->db->select('id')->where('ownerid',$this->mod_users->my_id())->get('class');
+
+        $res = array();
+        foreach ($query->result() as $row)
+            $res[] = $row->id;
+
+        return $res;
+    }
+     
+    public function get_named_classes_owned($all=true) {
+        if ($all && $this->mod_users->is_admin())
+            $query = $this->db->select('id,classname')->get('class');
+        else
+            $query = $this->db->select('id,classname')->where('ownerid',$this->mod_users->my_id())->get('class');
+
+        return $query->result();
+    }
+     
     public function set_class(stdClass $class_info) {
         if (empty($class_info->password))
             $class_info->password = null;

@@ -210,6 +210,46 @@ class Mod_statistics extends CI_Model {
         return $query->result();
     }
 
+    // Get all templates relating to $classid with finished quizzes for users in $userids
+    // TODO: This should be refined with a better class/exercise relationship implementation
+    public function get_templates_for_class_and_students(integer $classid, array $userids) {
+        // Find all pathids relating to $classid
+        $cwd = getcwd();
+
+        $query = $this->db
+            ->select('pathname')
+            ->from('classexercise')
+            ->join('exercisedir','classexercise.pathid=exercisedir.id')
+            ->where('classexercise.classid',$classid)
+            ->get();
+
+        $templids = array();
+        foreach ($query->result() as $row) {
+            // Find all templates for a relevant student relating to each path
+            $query2 = $this->db
+                ->select('id')
+                ->where("pathname REGEXP '^$cwd/quizzes/{$row->pathname}/[^/]*$'")
+                ->where_in('userid',$userids)
+                ->get('sta_quiztemplate');
+            foreach ($query2->result() as $row2)
+                $templids[] = (int)$row2->id;
+        }
+        return $templids;
+    }
+
+    public function get_quizzes_duration(array $templids, integer $start, integer $end) {
+        $query = $this->db
+            ->select('`userid`, `start`, `end`-`start` `duration`', false)
+            ->where_in('templid',$templids)
+            ->where('start >=',$start)
+            ->where('start <',$end)
+            ->where('end IS NOT NULL')
+            ->where('valid',1)
+            ->get('sta_quiz');
+        return $query->result();
+    }
+
+    
     /** Removes the content from the database.
      */
     public function purge(integer $userid) {
