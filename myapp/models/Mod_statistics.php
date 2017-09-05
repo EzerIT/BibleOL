@@ -229,6 +229,7 @@ class Mod_statistics extends CI_Model {
             $query2 = $this->db
                 ->select('id')
                 ->where("pathname REGEXP '^$cwd/quizzes/{$row->pathname}/[^/]*$'")
+//                ->where("pathname REGEXP '^/var/www/html/3bmoodle/bibleol/quizzes/{$row->pathname}/[^/]*$'")
                 ->where_in('userid',$userids)
                 ->get('sta_quiztemplate');
             foreach ($query2->result() as $row2)
@@ -237,6 +238,81 @@ class Mod_statistics extends CI_Model {
         return $templids;
     }
 
+    // Get all pathnames of templates relating to $classid
+    // TODO: This should be refined with a better class/exercise relationship implementation
+    public function get_pathnames_for_class(integer $classid) {
+        // Find all pathids relating to $classid
+        $cwd = getcwd();
+
+        $query = $this->db
+            ->select('pathname')
+            ->from('classexercise')
+            ->join('exercisedir','classexercise.pathid=exercisedir.id')
+            ->where('classexercise.classid',$classid)
+            ->get();
+
+        $pathset = array(); // This is used as a set
+        foreach ($query->result() as $row) {
+            // Find all templates for a relevant student relating to each path
+            $query2 = $this->db
+                ->select('pathname')
+                ->where("pathname REGEXP '^$cwd/quizzes/{$row->pathname}/[^/]*$'")
+//                ->where("pathname REGEXP '^/var/www/html/3bmoodle/bibleol/quizzes/{$row->pathname}/[^/]*$'")
+                ->get('sta_quiztemplate');
+            foreach ($query2->result() as $row2)
+                $pathset[$row2->pathname] = true;
+        }
+
+        $result = array();
+        $prefix_length = strlen("$cwd/quizzes/");
+//        $prefix_length = strlen('/var/www/html/3bmoodle/bibleol/quizzes/');
+        foreach ($pathset as $pathname => $ignore)
+            $result[] = substr($pathname,$prefix_length,-4); // Strip prefix and '.3et'
+
+        sort($result);
+        return $result;
+    }
+    
+    // Find all user IDs and template IDs that match the specified exercise pathname
+    // The result is sorted by user ID
+    public function get_users_and_templ(string $path) {
+        $cwd = getcwd();
+
+        $query = $this->db
+            ->select('id,userid')
+            ->where('pathname',"$cwd/quizzes/$path.3et")
+//            ->where('pathname',"/var/www/html/3bmoodle/bibleol/quizzes/$path.3et")
+            ->get('sta_quiztemplate');
+
+        $users_templ = array();
+        foreach ($query->result() as $row) {
+            if (!isset($users_templ[$row->userid]))
+                $users_templ[$row->userid] = array();
+            $users_templ[$row->userid][] = (int)$row->id;
+        }
+
+        ksort($users_templ); // Sort by user ID
+
+        return $users_templ;
+    }
+
+    public function get_score_by_date_user_templ(integer $uid,array $templids,integer $period_start,integer $period_end) {
+        $query = $this->db
+            ->from('sta_quiz q')
+            ->select('substr(from_unixtime(`q`.`start`),1,10) `st`,sum(`rf`.`correct`)/count(*)*100 `pct`,count(*) `cnt`')
+            ->join('sta_question quest','quizid=q.id')
+            ->join('sta_requestfeature rf','quest.id=rf.questid')
+            ->where('rf.userid',$uid)
+            ->where('(grading is null OR grading=1)')
+            ->where_in('q.templid',$templids)
+            ->where('q.start >=',$period_start)
+            ->where('q.start <',$period_end)
+            ->group_by('st')
+            ->order_by('st')
+            ->get()->result();
+        return $query;
+    }
+    
     public function get_quizzes_duration(array $templids, integer $start, integer $end) {
         $query = $this->db
             ->select('`userid`, `start`, `end`-`start` `duration`', false)
