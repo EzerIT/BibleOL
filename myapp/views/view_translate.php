@@ -4,13 +4,13 @@ function build_url($editing,$get_parms)
 {
     switch ($editing) {
       case 'interface':
-            return site_url('translate/translate_if?' . http_build_query($get_parms));
+            return site_url(build_get('translate/translate_if', $get_parms));
 
       case 'grammar':
-            return site_url('translate/translate_grammar?' . http_build_query($get_parms));
+            return site_url(build_get('translate/translate_grammar', $get_parms));
             
       case 'lexicon':
-            return site_url('translate/edit_lex?' . http_build_query($get_parms) . '#targetlang');
+            return site_url(build_get('translate/edit_lex', $get_parms) . '#targetlang');
     }
 }
 

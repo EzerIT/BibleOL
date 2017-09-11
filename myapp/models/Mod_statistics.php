@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+/* Copyright 2017 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 
 /**
  * This is a collection of functions to manipulate the statistics database.
@@ -299,7 +299,7 @@ class Mod_statistics extends CI_Model {
     public function get_score_by_date_user_templ(integer $uid,array $templids,integer $period_start,integer $period_end) {
         $query = $this->db
             ->from('sta_quiz q')
-            ->select('substr(from_unixtime(`q`.`start`),1,10) `st`,sum(`rf`.`correct`)/count(*)*100 `pct`,count(*) `cnt`')
+            ->select('substr(from_unixtime(`q`.`start`),1,10) `st`,sum(`rf`.`correct`)/count(*)*100 `pct`,count(*) `cnt`,60*count(*)/sum(`end`-`start`) `featpermin`')
             ->join('sta_question quest','quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
             ->where('rf.userid',$uid)
@@ -307,6 +307,8 @@ class Mod_statistics extends CI_Model {
             ->where_in('q.templid',$templids)
             ->where('q.start >=',$period_start)
             ->where('q.start <',$period_end)
+            ->where('end IS NOT NULL')
+            ->where('valid',1)
             ->group_by('st')
             ->order_by('st')
             ->get()->result();

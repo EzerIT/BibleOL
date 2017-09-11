@@ -106,9 +106,14 @@ class Mod_quizpath extends CI_Model {
 
 
         if ($this->check_access)
-            $directories = $this->mod_classdir->filter_directories($directories, $this->canonical_relative, $this->users_classes);
+            $good_directories = $this->mod_classdir->filter_directories($directories, $this->canonical_relative, $this->users_classes);
+        else {
+            $good_directories = array();
+            foreach ($directories as $d)
+                $good_directories[] = array($d,true);
+        }
 
-        return array('directories' => $directories,
+        return array('directories' => $good_directories,
                      'is_empty'    => $dir_is_empty,
                      'files'       => $files,
                      'parentdir'   => $parentdir,

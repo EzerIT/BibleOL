@@ -187,7 +187,64 @@ class Ctrl_userclass extends MY_Controller {
             $center_text = $this->load->view('view_enroll_in_class',
                                              array('all_classes' => $all_classes,
                                                    'old_classes' => $old_classes,
-                                                   'avail_classes' => $avail_classes),
+                                                   'avail_classes' => $avail_classes,
+                                                   'curdir' => null,
+                                                   'dir' => null),
+                                             true);
+             
+            $this->load->view('view_main_page', array('left_title' =>  $this->lang->line('enroll_in_classes'),
+                                                      'center' => $center_text));
+            $this->load->view('view_bottom');
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('classes'));
+        }
+    }
+    
+    public function enroll_by_folder() {
+        try {
+            $this->load->model('mod_classdir');
+            $this->mod_users->check_logged_in();
+
+            if (!isset($_GET['dir']) || !isset($_GET['curdir']))
+                throw new DataException($this->lang->line('missing_folder_name'));
+            
+            $userid = $this->mod_users->my_id();
+
+            $classids_for_dir = $this->mod_classdir->get_classes_for_dir($_GET['dir']);
+            
+            // If everybody can access the folder, this is a faked request
+            if (in_array(0,$classids_for_dir))
+                throw new DataException(translate('Folder does not require enrollment'));
+            
+            $all_classes = $this->mod_classes->get_all_classes();
+            $old_classes = $this->mod_userclass->get_classes_for_user($userid);
+
+            $avail_classes = array();
+            foreach ($classids_for_dir as $cid) {
+                // If the user is already enrolled in a relevant class, this is a faked request
+                if (in_array($cid, $old_classes))
+                    throw new DataException($this->lang->line('already_enrolled'));
+
+                if (empty($all_classes[$cid]->enrol_before) || self::before_date($all_classes[$cid]->enrol_before))
+                    $avail_classes[] = $cid;
+            }
+
+            if (empty($avail_classes))
+                throw new DataException(translate('No classes with access to the folder are available for enrollment'));
+
+            
+            // VIEW:
+            $this->load->view('view_top1', array('title' => $this->lang->line('enroll_in_class')));
+            $this->load->view('view_top2');
+            $this->load->view('view_menu_bar', array('langselect' => true));
+                
+            $center_text = $this->load->view('view_enroll_in_class',
+                                             array('all_classes' => $all_classes,
+                                                   'old_classes' => $old_classes,
+                                                   'avail_classes' => $avail_classes,
+                                                   'curdir' => $_GET['curdir'],
+                                                   'dir' => $_GET['dir']),
                                              true);
              
             $this->load->view('view_main_page', array('left_title' =>  $this->lang->line('enroll_in_classes'),
@@ -214,9 +271,10 @@ class Ctrl_userclass extends MY_Controller {
     public function enroll_in() {
         try {
             $this->mod_users->check_logged_in();
+            $this->load->helper('varset');
 
             $userid = $this->mod_users->my_id();
-            $classid = isset($_GET['classid']) ? intval($_GET['classid']) : 0;
+            $classid = isset($_GET['classid']) ? (int)$_GET['classid'] : 0;
 
             $all_classes = $this->mod_classes->get_all_classes();
             $old_classes = $this->mod_userclass->get_classes_for_user($userid);
@@ -246,11 +304,18 @@ class Ctrl_userclass extends MY_Controller {
                 $this->load->view('view_top1', array('title' => $this->lang->line('enroll_in_class')));
                 $this->load->view('view_top2');
                 $this->load->view('view_menu_bar', array('langselect' => true));
+
+
+                $center_text = $this->load->view('view_enrolled',
+                                                 array('classname' => $this->enroll_class->classname,
+                                                       'dir' => set_or_default($_GET['dir'],null)),
+                                             true);
+
+
                 
                 $this->load->view('view_main_page', array('left_title' => $this->lang->line('enrolled'),
-                                                          'center' => '<h1>'
-                                                          .sprintf($this->lang->line('you_are_enrolled'),$this->enroll_class->classname)
-                                                          .'</h1>'));
+                                                          'center' => $center_text));
+
                 $this->load->view('view_bottom');
             }
             else {
@@ -261,7 +326,9 @@ class Ctrl_userclass extends MY_Controller {
                 
                 $center_text = $this->load->view('view_enroll_form',
                                                  array('classid' => $classid,
-                                                       'classname' => $this->enroll_class->classname),
+                                                       'classname' => $this->enroll_class->classname,
+                                                       'curdir' => set_or_default($_GET['curdir'],null),
+                                                       'dir' => set_or_default($_GET['dir'],null)),
                                                  true);
 
                 $this->load->view('view_main_page', array('left_title' => $this->lang->line('enter_class_password'),

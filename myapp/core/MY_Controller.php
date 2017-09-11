@@ -1,5 +1,15 @@
 <?php
 
+// For debugging
+function preprint($x) {
+    echo "<pre>",print_r($x,true),"</pre>";
+  }
+    
+
+function translate(string $orig) {
+    return "TRANSLATE: $orig";
+  }
+
 class MY_Controller extends CI_Controller {
     public $language;
     public $language_short;
@@ -12,6 +22,7 @@ class MY_Controller extends CI_Controller {
         $this->load->library('session');
         $this->load->model('mod_users');
         $this->load->helper('url');
+        $this->load->helper('myurl');
         $this->load->database();
 
         $this->language = $this->session->userdata('language');

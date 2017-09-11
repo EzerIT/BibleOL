@@ -277,7 +277,7 @@ class Ctrl_file_manager extends MY_Controller {
                     $new_classes = array(); // ...so we set the array to empty
 
                 $this->mod_classdir->update_classes_for_dir($this->mod_quizpath->get_relative(), $old_classes, $new_classes);
-                redirect("/file_manager?dir={$this->mod_quizpath->get_relative()}");
+                redirect(build_get('/file_manager',array('dir' => $this->mod_quizpath->get_relative())));
             }
             else {
                 // VIEW:
@@ -314,12 +314,12 @@ class Ctrl_file_manager extends MY_Controller {
                 throw new DataException($this->lang->line('missing_quiz_filename'));
 
             $this->load->model('mod_quizpath');
-            $this->mod_quizpath->init(rawurldecode($_GET['dir']) . '/' . rawurldecode($_GET['file']), false, false);
+            $this->mod_quizpath->init($_GET['dir'] . '/' . $_GET['file'], false, false);
 
 
             header('Content-Type: application/octet-stream');
             header('Content-Length: ' . filesize($this->mod_quizpath->get_absolute()));
-            header('Content-Disposition: attachment; filename="' . $_GET['file'] . '"');
+            header('Content-Disposition: attachment; filename="' . $_GET['file'] . '"');  // Presumably we must not rawurldecode this
 
             $this->load->helper('file');
             $contents = file_get_contents($this->mod_quizpath->get_absolute());
@@ -348,7 +348,7 @@ class Ctrl_file_manager extends MY_Controller {
                 throw new DataException($this->lang->line('illegal_char_filename'));
             
             $this->load->model('mod_quizpath');
-            $this->mod_quizpath->init(rawurldecode($_POST['dir']), true, false);
+            $this->mod_quizpath->init($_POST['dir'], true, false);
             $owner = $this->mod_quizpath->get_excercise_owner($_POST['oldname'] . '.3et');
 
             if ($owner!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
@@ -356,7 +356,7 @@ class Ctrl_file_manager extends MY_Controller {
 
             $this->mod_quizpath->rename($_POST['oldname'], $newname);
 
-            redirect("/file_manager?dir={$this->mod_quizpath->get_relative()}");
+            redirect(build_get('/file_manager',array('dir' => $this->mod_quizpath->get_relative())));
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('rename_exercise'));

@@ -18,14 +18,19 @@
   <?php if (!is_null($dirlist['parentdir'])): ?>
     <p>
       <span class="glyphicon glyphicon-arrow-up" style="display:inline-block;"></span>
-      <?= anchor(site_url("text/select_quiz?dir={$dirlist['parentdir']}"), $this->lang->line('parent')) ?>
+      <?= anchor(build_get('text/select_quiz',array('dir' => $dirlist['parentdir'])), $this->lang->line('parent')) ?>
     </p>
   <?php endif; ?>
 
   <?php foreach ($dirlist['directories'] as $d): ?>
     <p>
       <span class="glyphicon glyphicon-folder-close" style="display:inline-block;"></span>
-      <?= anchor(site_url('text/select_quiz?dir=' . composedir($dirlist['relativedir'], $d)), $d) ?>
+      <?php if ($d[1]): /* Directory is visible to user */ ?>
+        <?= anchor(build_get('text/select_quiz',array('dir' => composedir($dirlist['relativedir'], $d[0]))), $d[0]) ?>
+      <?php else: ?>
+        <?= anchor(build_get('userclass/enroll_by_folder',array('dir' => composedir($dirlist['relativedir'], $d[0]),
+                                                                'curdir' => $curdir)), $d[0]) ?> <?= translate('(Restricted access)') ?>
+      <?php endif; ?>
     </p>
   <?php endforeach; ?>
 <?php endif; ?>
@@ -43,14 +48,14 @@
     <tr>
       <td><span class="glyphicon glyphicon-file" style="display:inline-block;"></span><?= $f->filename ?></td>
       <td style="text-align: center;">
-        <?= anchor(site_url('text/show_quiz?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=5'), '5') ?>&nbsp;&nbsp;&nbsp;
-        <?= anchor(site_url('text/show_quiz?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=10'), '10') ?>&nbsp;&nbsp;&nbsp;
-        <?= anchor(site_url('text/show_quiz?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=25'), '25') ?>
+        <?= anchor(build_get('text/show_quiz',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 5)), '5') ?>&nbsp;&nbsp;&nbsp;
+        <?= anchor(build_get('text/show_quiz',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 10)), '10') ?>&nbsp;&nbsp;&nbsp;
+        <?= anchor(build_get('text/show_quiz',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 25)), '25') ?>
       </td>
       <td style="text-align: center;">
-        <?= anchor(site_url('text/show_quiz_univ?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=5'), '5') ?>&nbsp;&nbsp;&nbsp;
-        <?= anchor(site_url('text/show_quiz_univ?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=10'), '10') ?>&nbsp;&nbsp;&nbsp;
-        <?= anchor(site_url('text/show_quiz_univ?quiz=' . composedir($dirlist['relativedir'], $f->filename) . '.3et&count=25'), '25') ?>
+        <?= anchor(build_get('text/show_quiz_univ',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 5)), '5') ?>&nbsp;&nbsp;&nbsp;
+        <?= anchor(build_get('text/show_quiz_univ',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 10)), '10') ?>&nbsp;&nbsp;&nbsp;
+        <?= anchor(build_get('text/show_quiz_univ',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 25)), '25') ?>
       </td>
     </tr>
   <?php endforeach; ?>

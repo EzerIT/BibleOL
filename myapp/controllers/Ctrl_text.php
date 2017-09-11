@@ -131,17 +131,18 @@ class Ctrl_text extends MY_Controller {
         try {
             // MODEL:
             $this->load->model('mod_quizpath');
-            $this->mod_quizpath->init(isset($_GET['dir']) ? $_GET['dir'] : '', true, true);
+            $this->load->helper('varset');
+            $this->mod_quizpath->init(set_or_default($_GET['dir'],''), true, true);
 
             $dirlist = $this->mod_quizpath->dirlist(true);
 
             // VIEW:
-            $this->load->helper('varset');
             $this->load->view('view_top1', array('title' => $this->lang->line('directory')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
             $center_text = $this->load->view('view_quizdir',
                                              array('dirlist' => $dirlist,
+                                                   'curdir' => set_or_default($_GET['dir'],''),
                                                    'is_logged_in' => $this->mod_users->is_logged_in()),
                                              true);
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_quiz'),
@@ -553,7 +554,7 @@ class Ctrl_text extends MY_Controller {
             $this->mod_askemdros->save_quiz(json_decode(urldecode($_POST['quizdata'])));
             $this->mod_quizpath->set_owner($this->mod_users->my_id());
 
-            redirect("/file_manager?dir=" . $_POST['dir']);
+            redirect(build_get('/file_manager', array('dir' => $_POST['dir'])));
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('edit_quiz'));

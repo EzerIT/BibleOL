@@ -1,7 +1,7 @@
 <?php if (!$is_top): ?>
   <h1><?= sprintf($this->lang->line('this_is_folder'), rtrim($dirlist['relativedir'],'/')) ?></h1>
 
-  <p><a class="btn btn-primary" href="<?= site_url("file_manager/edit_visibility?dir={$dirlist['relativedir']}") ?>"><?= $this->lang->line('edit_visibility_button') ?></a></p>
+  <p><a class="btn btn-primary" href="<?= site_url(build_get('file_manager/edit_visibility',array('dir' => $dirlist['relativedir']))) ?>"><?= $this->lang->line('edit_visibility_button') ?></a></p>
 <?php else: ?>
   <h1><?= $this->lang->line('this_is_top_folder') ?></h1>
 <?php endif; ?>
@@ -17,7 +17,7 @@
     <tr>
       <td>
         <span class="glyphicon glyphicon-arrow-up" style="display:inline-block;"></span>
-        <a href="<?= site_url("file_manager?dir={$dirlist['parentdir']}") ?>"><?= $this->lang->line('parent_folder') ?></a>
+        <a href="<?= site_url(build_get('file_manager',array('dir' => $dirlist['parentdir']))) ?>"><?= $this->lang->line('parent_folder') ?></a>
       </td>
       <td></td>
     </tr>
@@ -27,13 +27,13 @@
     <tr>
       <td>
         <span class="glyphicon glyphicon-folder-close" style="display:inline-block;"></span>
-        <a href="<?= site_url('file_manager?dir=' . composedir($dirlist['relativedir'], $d)) ?>"><?= $d ?>
+        <a href="<?= site_url(build_get('file_manager',array('dir' => composedir($dirlist['relativedir'], $d[0])))) ?>"><?= $d[0] ?>
       </td>
-      <?php if ($dirlist['is_empty'][$d]): ?>
+      <?php if ($dirlist['is_empty'][$d[0]]): ?>
 
         <td><a class="label label-danger" onclick="genericConfirmSm('<?= $this->lang->line('delete_folder_confirm') ?>',
-                                     '<?= sprintf($this->lang->line('delete_folder_question'), "\'$d\'") ?>',
-                                     '<?= site_url("file_manager/delete_folder?dir={$dirlist['relativedir']}&delete=$d") ?>');
+                                     '<?= sprintf($this->lang->line('delete_folder_question'), "\'$d[0]\'") ?>',
+                                     '<?= site_url(build_get('file_manager/delete_folder',array('dir' => $dirlist['relativedir'], 'delete' => $d[0]))) ?>');
                       return false;"
              href="#"><?= $this->lang->line('delete_folder_button') ?></a></td>
       <?php else: ?>
@@ -74,8 +74,8 @@
                   // Adding the attibute 'download' to the <a ...> tag removes the error, but prevents
                   // the server from sending error messages during download.
             ?>
-            <a class="label label-primary" href="<?= site_url("file_manager/download_ex?dir={$dirlist['relativedir']}&file=$f->filename") ?>"><?= $this->lang->line('download') ?></a>
-            <a class="label label-primary" href="<?= site_url("text/edit_quiz?quiz={$dirlist['relativedir']}/$f->filename") ?>"><?= $this->lang->line('edit') ?></a>
+            <a class="label label-primary" href="<?= site_url(build_get('file_manager/download_ex', array('dir' => $dirlist['relativedir'], 'file' => $f->filename))) ?>"><?= $this->lang->line('download') ?></a>
+            <a class="label label-primary" href="<?= site_url(build_get('text/edit_quiz',array('quiz' => $dirlist['relativedir'] . '/' . $f->filename))) ?>"><?= $this->lang->line('edit') ?></a>
             <a class="label label-primary" href="#" onclick="rename('<?= substr($f->filename,0,-4) ?>'); return false;"><?= $this->lang->line('rename') ?></a></span>
         </td>
       </tr>
@@ -94,13 +94,13 @@
 
 <?php if ($copy_or_move): ?>
   <p>
-  <a class="btn btn-primary" href="<?= site_url("file_manager/insert_files?dir={$dirlist['relativedir']}") ?>"><?= $copy_or_move==='move' ? $this->lang->line('insert_moved_files') : $this->lang->line('insert_copied_files') ?></a>
-    <a class="btn btn-primary" href="<?= site_url("file_manager/cancel_copy?dir={$dirlist['relativedir']}") ?>"><?= $copy_or_move==='move' ? $this->lang->line('cancel_move') : $this->lang->line('cancel_copy')?></a>
+  <a class="btn btn-primary" href="<?= site_url(build_get('file_manager/insert_files',array('dir' => $dirlist['relativedir']))) ?>"><?= $copy_or_move==='move' ? $this->lang->line('insert_moved_files') : $this->lang->line('insert_copied_files') ?></a>
+    <a class="btn btn-primary" href="<?= site_url(build_get('file_manager/cancel_copy',array('dir' => $dirlist['relativedir']))) ?>"><?= $copy_or_move==='move' ? $this->lang->line('cancel_move') : $this->lang->line('cancel_copy')?></a>
   </p>
 <?php endif; ?>
 
   <p>
-    <a class="btn btn-primary" href="<?= site_url("file_manager/upload_files?dir={$dirlist['relativedir']}") ?>"><?= $this->lang->line('upload_exercises_button') ?></a>
+    <a class="btn btn-primary" href="<?= site_url(build_get('file_manager/upload_files',array('dir' => $dirlist['relativedir']))) ?>"><?= $this->lang->line('upload_exercises_button') ?></a>
     <a class="btn btn-primary" href="#" onclick="create_exercise(); return false;"><?= $this->lang->line('create_exercise_button') ?></a>
   </p>
 

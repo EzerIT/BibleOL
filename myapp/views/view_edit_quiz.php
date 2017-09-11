@@ -30,7 +30,7 @@
 
 <div class="buttons">
   <a class="btn btn-primary" href="#" onclick="save_quiz(); return false;"><?= $this->lang->line('save_button') ?></a>
-  <a class="btn btn-default" href="<?=site_url('file_manager?dir=' . $dir) ?>"><?= $this->lang->line('cancel_button') ?></a>
+  <a class="btn btn-default" href="<?=site_url(build_get('file_manager',array('dir' => $dir))) ?>"><?= $this->lang->line('cancel_button') ?></a>
 </div>
 </div>
 

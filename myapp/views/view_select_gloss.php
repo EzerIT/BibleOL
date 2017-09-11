@@ -16,10 +16,10 @@ function build_url2(array $get_parms)
     
     switch ($editing_glob) {
       case 'url':
-            return site_url('urls/edit_url?' . http_build_query($get_parms));
+            return site_url(build_get('urls/edit_url',$get_parms));
 
       case 'lexicon':
-            return site_url('translate/edit_lex?' . http_build_query($get_parms) . '#targetlang');
+            return site_url(build_get('translate/edit_lex',$get_parms) . '#targetlang');
     }
 }
 

@@ -102,8 +102,7 @@ class Mod_classdir extends CI_Model {
         foreach ($directories as $dir) {
             $classes_for_dir = $this->get_classes_for_dir(composedir($relativedir, $dir));
             $may_see = count(array_intersect($classes_for_dir, $classes)) > 0;
-            if ($may_see)
-                $good_directories[] = $dir;
+            $good_directories[] = array($dir,$may_see);
         }
 
         return $good_directories;
