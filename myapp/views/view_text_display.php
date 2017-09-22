@@ -32,7 +32,7 @@
         <table id="quiztab"></table>
       </div>
       <p><input id="locate_cb" type="checkbox"><?= $this->lang->line('locate') ?> <span class="location"></span></p>
-      <?php /* <progess> works in most browsers, <div id="progressbar"> is for older browsers and uses JQuery UI*/ ?>
+      <?php /* <progress> works in most browsers, <div id="progressbar"> is for older browsers and uses JQuery UI*/ ?>
       <p class="inline"><?= $this->lang->line('progress') ?></p>
       <progress id="progress" value="0" max="1"></progress>
       <div id="progressbar"></div>

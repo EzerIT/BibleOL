@@ -14,10 +14,14 @@ if ($this->session->userdata('ol_user')!==null && $this->session->userdata('ol_u
     // Logged in
     $ix = count($head);
     $head[] = $this->lang->line('my_data');
-    $content[$ix][] = anchor(site_url('statistics'), $this->lang->line('statistics'));
+    //$content[$ix][] = anchor(site_url('statistics'), $this->lang->line('statistics'));
     $content[$ix][] = anchor(site_url('config'), $this->lang->line('font_preferences'));
     $content[$ix][] = anchor(site_url('users/profile'), $this->lang->line('profile'));
     $content[$ix][] = anchor(site_url('userclass/enroll'), $this->lang->line('enroll_in_class'));
+    $content[$ix][] = anchor(site_url('statistics/student_time'), $this->lang->line('my_progress'));
+
+    if ($this->session->userdata('ol_teacher') || $this->session->userdata('ol_admin'))
+        $content[$ix][] = anchor(site_url('statistics/teacher_progress'), $this->lang->line('students_progress'));
 
     if ($this->config->item('lj_enabled')) {
         $this->load->helper('lj_menu_helper');
