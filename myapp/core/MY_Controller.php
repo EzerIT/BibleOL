@@ -4,10 +4,16 @@
 function preprint($x) {
     echo "<pre>",print_r($x,true),"</pre>";
   }
+function predump($x) {
+    echo "<pre>";
+    var_dump($x);
+    echo "</pre>";
+  }
     
 
 function translate(string $orig) {
-    return "TRANSLATE: $orig";
+//    return "TRANSLATE: $orig";
+    return $orig;
   }
 
 class MY_Controller extends CI_Controller {

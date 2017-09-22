@@ -8,9 +8,13 @@
 class Mod_statistics extends CI_Model {
 
     public static $sign_extend;
+    private $quizzespath;
 
     public function __construct() {
         self::$sign_extend  = (-1) & ~0xffffffff; // All 1's followed by 32 zeros
+
+//       $this->quizzespath = getcwd() . '/quizzes';
+        $this->quizzespath = '/var/www/html/3bmoodle/bibleol/quizzes';
     }
 
     // Mimics the Java function, using 32-bit arithmetic
@@ -210,12 +214,28 @@ class Mod_statistics extends CI_Model {
         return $query->result();
     }
 
-    // Get all templates relating to $classid with finished quizzes for users in $userids
-    // TODO: This should be refined with a better class/exercise relationship implementation
-    public function get_templates_for_class_and_students(integer $classid, array $userids) {
-        // Find all pathids relating to $classid
-        $cwd = getcwd();
+    // Get one database information for a set of template IDs.
+    // We assume that the underlying database information is the same for all IDs.
+    public function get_templ_db(array $templids) {
+        assert(!empty($templids));
 
+        // We take the last entry, presumably the most current
+        $query = $this->db
+            ->select('dbname,dbpropname,qoname')
+            ->where_in('id',$templids)
+            ->order_by('id','DESC')
+            ->limit(1)
+            ->get('sta_quiztemplate');
+
+        return $query->row();
+    }
+    
+    // Get all templates relating to $classid with finished quizzes for users in $userids
+    public function get_templates_for_class_and_students(integer $classid, array $userids) {
+        if (empty($userids))
+            return array();
+        
+        // Find all pathids relating to $classid
         $query = $this->db
             ->select('pathname')
             ->from('classexercise')
@@ -228,8 +248,7 @@ class Mod_statistics extends CI_Model {
             // Find all templates for a relevant student relating to each path
             $query2 = $this->db
                 ->select('id')
-                ->where("pathname REGEXP '^$cwd/quizzes/{$row->pathname}/[^/]*$'")
-//                ->where("pathname REGEXP '^/var/www/html/3bmoodle/bibleol/quizzes/{$row->pathname}/[^/]*$'")
+                ->where("pathname REGEXP '^{$this->quizzespath}/{$row->pathname}/[^/]*$'")
                 ->where_in('userid',$userids)
                 ->get('sta_quiztemplate');
             foreach ($query2->result() as $row2)
@@ -238,12 +257,26 @@ class Mod_statistics extends CI_Model {
         return $templids;
     }
 
+    // Get all templates for finished quizzes for users in $userids
+    public function get_templates_for_students(array $userids) {
+        if (empty($userids))
+            return array();
+
+        $templids = array();
+        $query = $this->db
+            ->select('id')
+            ->where_in('userid',$userids)
+            ->get('sta_quiztemplate');
+
+        foreach ($query->result() as $row)
+            $templids[] = (int)$row->id;
+
+        return $templids;
+    }
+
     // Get all pathnames of templates relating to $classid
-    // TODO: This should be refined with a better class/exercise relationship implementation
     public function get_pathnames_for_class(integer $classid) {
         // Find all pathids relating to $classid
-        $cwd = getcwd();
-
         $query = $this->db
             ->select('pathname')
             ->from('classexercise')
@@ -256,32 +289,59 @@ class Mod_statistics extends CI_Model {
             // Find all templates for a relevant student relating to each path
             $query2 = $this->db
                 ->select('pathname')
-                ->where("pathname REGEXP '^$cwd/quizzes/{$row->pathname}/[^/]*$'")
-//                ->where("pathname REGEXP '^/var/www/html/3bmoodle/bibleol/quizzes/{$row->pathname}/[^/]*$'")
+                ->where("pathname REGEXP '^{$this->quizzespath}/{$row->pathname}/[^/]*$'")
                 ->get('sta_quiztemplate');
             foreach ($query2->result() as $row2)
                 $pathset[$row2->pathname] = true;
         }
 
         $result = array();
-        $prefix_length = strlen("$cwd/quizzes/");
-//        $prefix_length = strlen('/var/www/html/3bmoodle/bibleol/quizzes/');
+        $prefix_length = strlen($this->quizzespath . '/');
         foreach ($pathset as $pathname => $ignore)
             $result[] = substr($pathname,$prefix_length,-4); // Strip prefix and '.3et'
 
         sort($result);
         return $result;
     }
+
+    public function get_pathnames_for_templids(array $templids) {
+        if (empty($templids))
+            return array();
+        
+        $query = $this->db
+            ->select('id,pathname')
+            ->where_in('id',$templids)
+            ->get('sta_quiztemplate');
+
+        $templs = array();
+        $prefix_length = strlen($this->quizzespath . '/');
+        foreach ($query->result() as $row)
+            $templs[$row->id] = substr($row->pathname,$prefix_length,-4); // Strip prefix and '.3et'
+
+        return $templs;
+    }
+
+    public function get_templids_for_pathname_and_user(string $path, integer $userid) {
+        $query = $this->db
+            ->select('id')
+            ->where('pathname',"$this->quizzespath/$path.3et")
+            ->where('userid',$userid)
+            ->get('sta_quiztemplate');
+
+        $ids = array();
+        foreach ($query->result() as $row)
+            $ids[] = $row->id;
+
+        return $ids;
+    }
+
     
     // Find all user IDs and template IDs that match the specified exercise pathname
     // The result is sorted by user ID
     public function get_users_and_templ(string $path) {
-        $cwd = getcwd();
-
         $query = $this->db
             ->select('id,userid')
-            ->where('pathname',"$cwd/quizzes/$path.3et")
-//            ->where('pathname',"/var/www/html/3bmoodle/bibleol/quizzes/$path.3et")
+            ->where('pathname',"$this->quizzespath/$path.3et")
             ->get('sta_quiztemplate');
 
         $users_templ = array();
@@ -297,30 +357,76 @@ class Mod_statistics extends CI_Model {
     }
 
     public function get_score_by_date_user_templ(integer $uid,array $templids,integer $period_start,integer $period_end) {
+        if (empty($templids))
+            return array();
+        
+        // Get results per quiz
         $query = $this->db
             ->from('sta_quiz q')
-            ->select('substr(from_unixtime(`q`.`start`),1,10) `st`,sum(`rf`.`correct`)/count(*)*100 `pct`,count(*) `cnt`,60*count(*)/sum(`end`-`start`) `featpermin`')
+            ->select('q.id,substr(from_unixtime(`q`.`start`),1,10) `st`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,count(*) `cnt`',false)
             ->join('sta_question quest','quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
             ->where('rf.userid',$uid)
-            ->where('(grading is null OR grading=1)')
+//            ->where('(grading is null OR grading=1)')
             ->where_in('q.templid',$templids)
             ->where('q.start >=',$period_start)
-            ->where('q.start <',$period_end)
+            ->where('q.start <=',$period_end)
             ->where('end IS NOT NULL')
             ->where('valid',1)
-            ->group_by('st')
-            ->order_by('st')
-            ->get()->result();
-        return $query;
+            ->group_by('q.id')
+            ->get();
+
+        // Consolidate by date
+        $perdate = array();
+        foreach ($query->result() as $row) {
+            if (!isset($perdate[$row->st]))
+                $perdate[$row->st] = array('duration' => 0,
+                                           'correct' => 0,
+                                           'count' => 0);
+            $perdate[$row->st]['duration'] += $row->duration;
+            $perdate[$row->st]['correct'] += $row->correct;
+            $perdate[$row->st]['count'] += $row->cnt;
+        }
+
+        foreach ($perdate as $k => &$v) {
+            $v['percentage'] = 100*$v['correct'] / $v['count'];
+            $v['featpermin'] = 60*$v['count'] / $v['duration'];
+        }
+            
+        return $perdate;
+    }
+    
+    public function get_features_by_date_user_templ(integer $uid,array $templids,integer $period_start,integer $period_end) {
+        if (empty($templids))
+            return array();
+        
+        $query = $this->db
+            ->from('sta_quiz q')
+            ->select('rf.name rfname,sum(`rf`.`correct`)/count(*)*100 `pct`')
+            ->join('sta_question quest','quizid=q.id')
+            ->join('sta_requestfeature rf','quest.id=rf.questid')
+            ->where('rf.userid',$uid)
+//            ->where('(grading is null OR grading=1)')
+            ->where_in('q.templid',$templids)
+            ->where('q.start >=',$period_start)
+            ->where('q.start <=',$period_end)
+            ->where('end IS NOT NULL')
+            ->where('valid',1)
+            ->group_by('rfname')
+            ->get();
+
+        return $query->result();
     }
     
     public function get_quizzes_duration(array $templids, integer $start, integer $end) {
+        if (empty($templids))
+            return array();
+        
         $query = $this->db
-            ->select('`userid`, `start`, `end`-`start` `duration`', false)
+            ->select('`userid`, `templid`, `start`, `end`-`start` `duration`', false)
             ->where_in('templid',$templids)
             ->where('start >=',$start)
-            ->where('start <',$end)
+            ->where('start <=',$end)
             ->where('end IS NOT NULL')
             ->where('valid',1)
             ->get('sta_quiz');
@@ -333,6 +439,5 @@ class Mod_statistics extends CI_Model {
     public function purge(integer $userid) {
         $this->db->where('userid',$userid)->where('valid',1)->update('sta_quiz',array('valid' => 0));
     }
-
 
 }
