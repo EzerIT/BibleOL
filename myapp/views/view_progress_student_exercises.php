@@ -26,7 +26,9 @@
 </form>
 
   <script>
-        $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
+      $(function() {
+              $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
+          });
   </script>
 
   <h1>Statistics for exercise &ldquo;<?= htmlspecialchars($quiz) ?>&rdquo;</h1>
@@ -130,8 +132,8 @@
               id: 'cvs',
               data: <?= $resx ?>,
               options: {
-                  xmin: '<?= $start_date ?>',
-                  xmax: '<?= $end_date ?>',
+                  xmin: '<?= $scale_start ?>',
+                  xmax: '<?= $scale_end ?>',
                   gutterLeft: 70,
                   gutterBottom: 45,
                   tickmarks:  myTick,
@@ -141,15 +143,29 @@
                   unitsPost: '%',
                   titleYaxis: 'Correct',
                   titleYaxisX: 12,
-                  titleXaxis: 'Week number',
+                  titleXaxis: <?= $showweek ? "'(ISO) Week number'" : "'Date'" ?>,
                   titleXaxisY: 490,
                   textAccessible: true,
 
                   line: true,
                   lineLinewidth: 2,
                   lineColors: ['#f00'],
-                  labels: [<?php for ($w=$minweek; $w<=$maxweek; ++$w) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>],
-                  numxticks: <?= $maxweek-$minweek+1 ?>,
+                  labels: [<?php
+                           $numxticks = 0;
+                           if ($showweek) {
+                               for ($w=$minpoint; $w<=$maxpoint; ++$w) {
+                                   echo '"',Statistics_timeperiod::format_week($w),'",';
+                                   ++$numxticks;
+                               }
+                           }
+                           else {
+                               for ($ut=$minpoint; $ut<=$maxpoint; $ut += 24*3600) {
+                                   echo '"',Statistics_timeperiod::format_day($ut),'",';
+                                   ++$numxticks;
+                               }
+                           }
+                           ?>],
+                  numxticks: <?= $numxticks ?>,
               }
           };
 

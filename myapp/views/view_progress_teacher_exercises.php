@@ -72,15 +72,6 @@
       $resxspf = "[" . implode(",", $res2spf) . "]";
 
       $featname = array();
-
-//      if (!empty($resfeatall)) {
-//          foreach ($resfeatall[0] as $rf2) {
-//              // Localize if possible, otherwise just retain the symbolic feature name
-//              $featname[] = "'" . (isset($featloc->{$rf2->rfname}) ? $featloc->{$rf2->rfname} : $rf2->rfname)   . "'";
-//          }
-//      }
-
-
       $featpct = array();
 
       for ($i=0; $i<count($resfeatall); ++$i) {
@@ -188,8 +179,8 @@
               id: 'cvs',
               data: null,
               options: {
-                  xmin: '<?= $start_date_half ?>',
-                  xmax: '<?= $end_date_half ?>',
+                  xmin: '<?= $scale_start ?>',
+                  xmax: '<?= $scale_end ?>',
                   gutterLeft: 70,
                   gutterBottom: 45,
                   tickmarks:  myTick,
@@ -199,7 +190,7 @@
                   unitsPost: '%',
                   titleYaxis: 'Correct',
                   titleYaxisX: 12,
-                  titleXaxis: <?= $showweek ? "'Week number'" : "'Date'" ?>,
+                  titleXaxis: <?= $showweek ? "'(ISO) Week number'" : "'Date'" ?>,
                   titleXaxisY: 490,
                   textAccessible: true,
 

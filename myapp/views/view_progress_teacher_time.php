@@ -23,7 +23,9 @@
   </form>
 
   <script>
-        $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
+      $(function() {
+              $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
+          });
   </script>
 
   <h1>Statistics for class &ldquo;<?= htmlspecialchars($classname) ?>&rdquo;</h1>
