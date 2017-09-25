@@ -1,5 +1,7 @@
 <?php
 class Ctrl_statistics extends MY_Controller {
+    const SHOW_WEEK_LIMIT = 10*24*3600; // 10 days
+
     public function __construct() {
         parent::__construct();
         $this->lang->load('statistics', $this->language);
@@ -545,16 +547,29 @@ class Ctrl_statistics extends MY_Controller {
                 $featloc = null;
             }
 
-            // How many weeks does the time cover?
-            $minweek = $this->statistics_timeperiod->start_week();
-            $maxweek = $this->statistics_timeperiod->end_week();
+            // Find starting and ending point for week or day period
+            $showweek = ($this->statistics_timeperiod->end_timestamp() - $this->statistics_timeperiod->start_timestamp()) > self::SHOW_WEEK_LIMIT;
+            if ($showweek) {
+                $minpoint = $this->statistics_timeperiod->start_week();
+                $maxpoint = $this->statistics_timeperiod->end_week();
+            }
+            else {
+                $minpoint = $this->statistics_timeperiod->start_timestamp();
+                $maxpoint = $this->statistics_timeperiod->end_timestamp();
+            }
+
+            echo "<pre>start_date:", $this->statistics_timeperiod->start_string(),
+                ' end_date:', $this->statistics_timeperiod->end_string(),
+                ' minpoint:', $minpoint,
+                ' maxpoint:', $maxpoint,"</pre>";
+
 
             
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Exercise Graphs',
+            $this->load->view('view_top1', array('title' => 'Student Graphs',
                                                  'js_list' => array('RGraph/libraries/RGraph.common.core.js',
-                                                                    'RGraph/libraries/RGraph.scatter.js',
                                                                     'RGraph/libraries/RGraph.hbar.js',
+                                                                    'RGraph/libraries/RGraph.scatter.js',
                                                                     'RGraph/libraries/RGraph.common.dynamic.js',
                                                                     'RGraph/libraries/RGraph.common.tooltips.js',
                                                                     'RGraph/libraries/RGraph.common.key.js',
@@ -573,8 +588,11 @@ class Ctrl_statistics extends MY_Controller {
                                                                                       'quiz' => $ex,
                                                                                       'start_date' => $this->statistics_timeperiod->start_string(),
                                                                                       'end_date' => $this->statistics_timeperiod->end_string(),
-                                                                                      'minweek' => $this->statistics_timeperiod->start_week(),
-                                                                                      'maxweek' => $this->statistics_timeperiod->end_week(),
+                                                                                      'start_date_half' => $this->statistics_timeperiod->start_string_minus_half(),
+                                                                                      'end_date_half' => $this->statistics_timeperiod->end_string_minus_half(),
+                                                                                      'minpoint' => $minpoint,
+                                                                                      'maxpoint' => $maxpoint,
+                                                                                      'showweek' => $showweek,
                                                                                       'exercise_list' => $exercise_list), true);
 
             $this->load->view('view_main_page', array('left_title' => 'Select a Period',

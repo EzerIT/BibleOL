@@ -38,7 +38,9 @@
 </div>
 
   <script>
-        $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
+      $(function() {
+              $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
+          });
   </script>
 
    <h1>Statistics for class &ldquo;<?= htmlspecialchars($classname) ?>&rdquo;</h1>
@@ -186,8 +188,8 @@
               id: 'cvs',
               data: null,
               options: {
-                  xmin: '<?= $start_date ?>',
-                  xmax: '<?= $end_date ?>',
+                  xmin: '<?= $start_date_half ?>',
+                  xmax: '<?= $end_date_half ?>',
                   gutterLeft: 70,
                   gutterBottom: 45,
                   tickmarks:  myTick,
@@ -197,7 +199,7 @@
                   unitsPost: '%',
                   titleYaxis: 'Correct',
                   titleYaxisX: 12,
-                  titleXaxis: 'Week number',
+                  titleXaxis: <?= $showweek ? "'Week number'" : "'Date'" ?>,
                   titleXaxisY: 490,
                   textAccessible: true,
 
@@ -208,8 +210,22 @@
                                    '#088','#880','#808',
                                    '#f88','#8f8','#88f',
                                    '#ff8','#f8f','#8ff','#888'],
-                  labels: [<?php for ($w=$minweek; $w<=$maxweek; ++$w) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>],
-                  numxticks: <?= $maxweek-$minweek+1 ?>,
+                  labels: [<?php
+                           $numxticks = 0;
+                           if ($showweek) {
+                               for ($w=$minpoint; $w<=$maxpoint; ++$w) {
+                                   echo '"',Statistics_timeperiod::format_week($w),'",';
+                                   ++$numxticks;
+                               }
+                           }
+                           else {
+                               for ($ut=$minpoint; $ut<=$maxpoint; $ut += 24*3600) {
+                                   echo '"',Statistics_timeperiod::format_day($ut),'",';
+                                   ++$numxticks;
+                               }
+                           }
+                           ?>],
+                  numxticks: <?= $numxticks ?>,
               }
           };
 
@@ -257,7 +273,6 @@
 
           set_config(hbarconfig,hbaron,hbardata,hbarcolors);
           new RGraph.HBar(hbarconfig).draw();
-
           
           RGraph.HTML.Key('mykey', {
               'colors': scatter.Get('colors'),

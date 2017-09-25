@@ -14,6 +14,7 @@ function valid_date_check($date) {
 
 class Statistics_timeperiod {
     const MAX_PERIOD = 26*7*24*3600;  // 26 weeks
+    const DEFAULT_PERIOD = 7*24*3600;  // 7 days
     private $CI;
 
     private $period_start;
@@ -32,10 +33,15 @@ class Statistics_timeperiod {
 
         return date('W',$unixtime);
     }
+
+    public static function format_day(integer $unixtime) {
+        return date_create("@$unixtime")->format('d');
+    }
+        
     
     private function decode_start_date($date) {
         if (is_null($date))
-            return ((int)(time() / (24*3600)) + 1) * 24*3600 /*Midnight tonight*/ - self::MAX_PERIOD;
+            return ((int)(time() / (24*3600)) + 1) * 24*3600 /*Midnight tonight*/ - self::DEFAULT_PERIOD;
 
         // Set time to 00:00:00
         return date_create($date . ' 00:00:00',new DateTimeZone('UTC'))->getTimestamp();
@@ -57,9 +63,9 @@ class Statistics_timeperiod {
         return (int)floor(($time-$monday_offset) / $seconds_per_week);
     }
 
-    private function timestamp_to_date(integer $d) {
-        return date_create("@$d")->format('Y-m-d');
-    }
+//    private function timestamp_to_date(integer $d) {
+//        return date_create("@$d")->format('Y-m-d');
+//    }
 
 
     public function set_validation_rules() {
@@ -77,7 +83,7 @@ class Statistics_timeperiod {
 
     public function default_dates() {
         $this->period_end = ((int)(time() / (24*3600)) + 1) * 24*3600;  // Midnight tonight
-        $this->period_start = $this->period_end - self::MAX_PERIOD;
+        $this->period_start = $this->period_end - self::DEFAULT_PERIOD;
         --$this->period_end;  // Turn exclusive time into inclusive
     }
 
@@ -95,6 +101,14 @@ class Statistics_timeperiod {
 
     public function end_string() {
         return date_create("@$this->period_end")->format('Y-m-d');
+    }
+
+    public function start_string_minus_half() {
+        return date_create('@' . ($this->period_start - 12*3600))->format('Y-m-d 12:00:00');
+    }
+
+    public function end_string_minus_half() {
+        return date_create('@' . ($this->period_end - 12*3600))->format('Y-m-d 12:00:00');
     }
 
     public function start_week() {
