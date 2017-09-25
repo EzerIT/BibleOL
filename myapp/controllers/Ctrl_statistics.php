@@ -1,6 +1,5 @@
 <?php
 class Ctrl_statistics extends MY_Controller {
-    const SHOW_WEEK_LIMIT = 10*24*3600; // 10 days
 
     public function __construct() {
         parent::__construct();
@@ -263,17 +262,6 @@ class Ctrl_statistics extends MY_Controller {
 
             $user_full_name = $this->mod_users->user_full_name($userid);
             
-            // Find starting and ending point for week or day period
-            $showweek = ($this->statistics_timeperiod->end_timestamp() - $this->statistics_timeperiod->start_timestamp()) > self::SHOW_WEEK_LIMIT;
-            if ($showweek) {
-                $minpoint = $this->statistics_timeperiod->start_week();
-                $maxpoint = $this->statistics_timeperiod->end_week();
-            }
-            else {
-                $minpoint = $this->statistics_timeperiod->start_timestamp();
-                $maxpoint = $this->statistics_timeperiod->end_timestamp();
-            }
-
             // VIEW:
             $this->load->view('view_top1', array('title' => 'Exercise Graphs',
                                                  'js_list' => array('RGraph/libraries/RGraph.common.core.js',
@@ -296,11 +284,8 @@ class Ctrl_statistics extends MY_Controller {
                                                                                       'user_full_name' => $user_full_name,
                                                                                       'start_date' => $this->statistics_timeperiod->start_string(),
                                                                                       'end_date' => $this->statistics_timeperiod->end_string(),
-                                                                                      'scale_start' => $this->statistics_timeperiod->start_string_minus_half(),
-                                                                                      'scale_end' => $this->statistics_timeperiod->end_string_minus_half(),
-                                                                                      'minpoint' => $minpoint,
-                                                                                      'maxpoint' => $maxpoint,
-                                                                                      'showweek' => $showweek), true);
+                                                                                      'minpoint' => $this->statistics_timeperiod->start_timestamp(),
+                                                                                      'maxpoint' => $this->statistics_timeperiod->end_timestamp()), true);
 
             $this->load->view('view_main_page', array('left_title' => 'Select a Period',
                                                       'left' => '<p>TODO</p>',
@@ -561,17 +546,6 @@ class Ctrl_statistics extends MY_Controller {
                 $featloc = null;
             }
 
-            // Find starting and ending point for week or day period
-            $showweek = ($this->statistics_timeperiod->end_timestamp() - $this->statistics_timeperiod->start_timestamp()) > self::SHOW_WEEK_LIMIT;
-            if ($showweek) {
-                $minpoint = $this->statistics_timeperiod->start_week();
-                $maxpoint = $this->statistics_timeperiod->end_week();
-            }
-            else {
-                $minpoint = $this->statistics_timeperiod->start_timestamp();
-                $maxpoint = $this->statistics_timeperiod->end_timestamp();
-            }
-
             // VIEW:
             $this->load->view('view_top1', array('title' => 'Student Graphs',
                                                  'js_list' => array('RGraph/libraries/RGraph.common.core.js',
@@ -595,11 +569,8 @@ class Ctrl_statistics extends MY_Controller {
                                                                                       'quiz' => $ex,
                                                                                       'start_date' => $this->statistics_timeperiod->start_string(),
                                                                                       'end_date' => $this->statistics_timeperiod->end_string(),
-                                                                                      'scale_start' => $this->statistics_timeperiod->start_string_minus_half($showweek),
-                                                                                      'scale_end' => $this->statistics_timeperiod->end_string_minus_half($showweek),
-                                                                                      'minpoint' => $minpoint,
-                                                                                      'maxpoint' => $maxpoint,
-                                                                                      'showweek' => $showweek,
+                                                                                      'minpoint' => $this->statistics_timeperiod->start_timestamp(),
+                                                                                      'maxpoint' => $this->statistics_timeperiod->end_timestamp(),
                                                                                       'exercise_list' => $exercise_list), true);
 
             $this->load->view('view_main_page', array('left_title' => 'Select a Period',

@@ -45,12 +45,26 @@
   <?php else: ?>
 
     <?php
+      define("SHOW_WEEK_LIMIT", 10*24*3600); // 10 days
+
+      if ($maxpoint-$minpoint > SHOW_WEEK_LIMIT) {
+          $showweek = true;
+          $scale_start = Statistics_timeperiod::last_monday($minpoint);
+          $scale_end = Statistics_timeperiod::next_monday($maxpoint-1);
+      }
+      else {
+          $showweek = false;
+          $scale_start = Statistics_timeperiod::last_midnight($minpoint);
+          $scale_end = Statistics_timeperiod::next_midnight($maxpoint-1);
+      }
+
       $res = array();
       $resspf = array();
       foreach ($resscore as $date => $r) {
-          $res[]    = "['$date',{$r['percentage']},null,'Date: $date<br>Questions: {$r['count']}<br>Per min.: " . round($r['featpermin'],1) . "']";
+          $textdate = Statistics_timeperiod::format_date($date);
+          $res[]    = "[$date,{$r['percentage']},null,'Date: $textdate<br>Questions: {$r['count']}<br>Per min.: " . round($r['featpermin'],1) . "']";
           $roundpct = round($r['percentage']);
-          $resspf[] = "['$date',{$r['featpermin']},null,'Date: $date<br>Correct: $roundpct%']";
+          $resspf[] = "[$date,{$r['featpermin']},null,'Date: $textdate<br>Correct: $roundpct%']";
       }
 
       $resx    = "[[" . implode(",", $res) . "]]";
@@ -132,8 +146,8 @@
               id: 'cvs',
               data: <?= $resx ?>,
               options: {
-                  xmin: '<?= $scale_start ?>',
-                  xmax: '<?= $scale_end ?>',
+                  xmin: <?= $scale_start ?>,
+                  xmax: <?= $scale_end ?>,
                   gutterLeft: 70,
                   gutterBottom: 45,
                   tickmarks:  myTick,
@@ -153,13 +167,13 @@
                   labels: [<?php
                            $numxticks = 0;
                            if ($showweek) {
-                               for ($w=$minpoint; $w<=$maxpoint; ++$w) {
-                                   echo '"',Statistics_timeperiod::format_week($w),'",';
+                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_WEEK) {
+                                   echo '"',Statistics_timeperiod::format_week($ut),'",';
                                    ++$numxticks;
                                }
                            }
                            else {
-                               for ($ut=$minpoint; $ut<=$maxpoint; $ut += 24*3600) {
+                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_DAY) {
                                    echo '"',Statistics_timeperiod::format_day($ut),'",';
                                    ++$numxticks;
                                }

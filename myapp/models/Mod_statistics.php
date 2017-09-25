@@ -356,6 +356,7 @@ class Mod_statistics extends CI_Model {
         return $users_templ;
     }
 
+    // Gets data grouped by day. The index will be noon on the relevant day
     public function get_score_by_date_user_templ(integer $uid,array $templids,integer $period_start,integer $period_end) {
         if (empty($templids))
             return array();
@@ -363,7 +364,7 @@ class Mod_statistics extends CI_Model {
         // Get results per quiz
         $query = $this->db
             ->from('sta_quiz q')
-            ->select('q.id,substr(from_unixtime(`q`.`start`),1,10) `st`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,count(*) `cnt`',false)
+            ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,count(*) `cnt`',false)
             ->join('sta_question quest','quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
             ->where('rf.userid',$uid)
@@ -379,13 +380,14 @@ class Mod_statistics extends CI_Model {
         // Consolidate by date
         $perdate = array();
         foreach ($query->result() as $row) {
-            if (!isset($perdate[$row->st]))
-                $perdate[$row->st] = array('duration' => 0,
-                                           'correct' => 0,
-                                           'count' => 0);
-            $perdate[$row->st]['duration'] += $row->duration;
-            $perdate[$row->st]['correct'] += $row->correct;
-            $perdate[$row->st]['count'] += $row->cnt;
+            $day = Statistics_timeperiod::round_to_noon((int)$row->start);
+            if (!isset($perdate[$day]))
+                $perdate[$day] = array('duration' => 0,
+                                             'correct' => 0,
+                                             'count' => 0);
+            $perdate[$day]['duration'] += $row->duration;
+            $perdate[$day]['correct'] += $row->correct;
+            $perdate[$day]['count'] += $row->cnt;
         }
 
         foreach ($perdate as $k => &$v) {
