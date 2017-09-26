@@ -131,20 +131,20 @@ class Ctrl_statistics extends MY_Controller {
             else
                 $durations = array();
 
-            // How many weeks does the time cover?
-            $minweek = $this->statistics_timeperiod->start_week();
-            $maxweek = $this->statistics_timeperiod->end_week();
 
-            // $total[23] will be the duration in week 23
+            // $total[123456] will be the duration in week starting at UNIX time 123456
             // $totaltemp[$templatename] will be the total time spent on template $templatename
             $total = array();
             $totaltemp = array();
-            for ($w=$minweek; $w<=$maxweek; ++$w)
+
+            $minweek = $this->statistics_timeperiod->start_week();
+            $maxweek = $this->statistics_timeperiod->end_week();
+            for ($w=$minweek; $w<$maxweek; $w+=Statistics_timeperiod::SECS_PER_WEEK)
                 $total[$w] = 0;
 
             foreach ($durations as $d) {
                 $hours = $d->duration / 3600;
-                $w = $this->statistics_timeperiod->time_to_week((int)$d->start);
+                $w = $this->statistics_timeperiod->last_monday((int)$d->start);
                 $total[$w] += $hours;
 
                 $templname = $temp_id2path[$d->templid];
@@ -371,10 +371,6 @@ class Ctrl_statistics extends MY_Controller {
                 else
                     $durations = array();
 
-                // How many weeks does the time cover?
-                $minweek = $this->statistics_timeperiod->start_week();
-                $maxweek = $this->statistics_timeperiod->end_week();
-
                 // What students actually have results?
                 $real_students = array(); // Will be used as a set
                 foreach ($durations as $d)
@@ -382,20 +378,23 @@ class Ctrl_statistics extends MY_Controller {
                 ksort($real_students);
                 $number_students = count($real_students);
             
-                // $dur[23][55] will be the duration for user 55 in week 23
-                // $total[23]  will be the total duration for all users in week 23
+                // $dur[123456][55] will be the duration for user 55 in the week starting at UNIX time 123456
+                // $total[123456]  will be the total duration for all users in the week starting at UNIX time 123456
                 $dur = array();
                 $total = array();
-                for ($w=$minweek; $w<=$maxweek; ++$w) {
+
+                $minweek = $this->statistics_timeperiod->start_week();
+                $maxweek = $this->statistics_timeperiod->end_week();
+                for ($w=$minweek; $w<$maxweek; $w+=Statistics_timeperiod::SECS_PER_WEEK) {
                     $dur[$w] = array();
                     $total[$w] = 0;
                     foreach ($real_students as $st => $ignore)
                         $dur[$w][$st] = 0;
                 }
-
+                
                 foreach ($durations as $d) {
                     $hours = $d->duration / 3600;
-                    $w = $this->statistics_timeperiod->time_to_week((int)$d->start);
+                    $w = $this->statistics_timeperiod->last_monday((int)$d->start);
                     $dur[$w][$d->userid] += $hours;
                     $total[$w] += $hours;
                 }

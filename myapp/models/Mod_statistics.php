@@ -428,7 +428,7 @@ class Mod_statistics extends CI_Model {
             ->select('`userid`, `templid`, `start`, `end`-`start` `duration`', false)
             ->where_in('templid',$templids)
             ->where('start >=',$start)
-            ->where('start <=',$end)
+            ->where('start <',$end)
             ->where('end IS NOT NULL')
             ->where('valid',1)
             ->get('sta_quiz');

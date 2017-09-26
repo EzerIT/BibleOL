@@ -123,7 +123,7 @@
                 hmarginGrouped: 1,
                 titleYaxis: 'Hours',                  
                 titleYaxisX: 12,                  
-                titleXaxis: 'Week number',                  
+                titleXaxis: '(ISO) Week number',                  
                 titleXaxisY: 490,
                 textAccessible: true
             }
@@ -152,7 +152,7 @@
                 hmarginGrouped: 1,
                 titleYaxis: 'Hours',                  
                 titleYaxisX: 12,                  
-                titleXaxis: 'Week number',                  
+                titleXaxis: '(ISO) Week number',                  
                 titleXaxisY: 490,
                 textAccessible: true
             }
