@@ -8,14 +8,14 @@
     <?= form_open("statistics/teacher_exercises",array('method'=>'get')) ?>
     <input type="hidden" name="classid" value="<?= $classid ?>">
 
-    <p>Specify date period (in the UTC time zone):</p>
+    <p><?= $this->lang->line('specify_period') ?></p>
     <table>
       <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;">From:</td>
+        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
         <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
       </tr>
       <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;">To (and including):</td>
+        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
         <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
       </tr>
     </table>
@@ -32,6 +32,16 @@
     </select>
   </div>
 
+    <!--
+    <div class="row">
+  <div class="form-group">
+    <label for="nongraded" class="col-sm-3 control-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
+    <div class="col-sm-9">
+      <input class="checkbox" id="nongraded" name="nongraded" value="on" type="checkbox" <?= set_checkbox('nongraded','on') ?>>
+    </div>
+  </div>
+  </div>
+-->
 
   <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
 </form>
@@ -46,7 +56,7 @@
    <h1>Statistics for class &ldquo;<?= htmlspecialchars($classname) ?>&rdquo;</h1>
 
 <?php if ($status!=2): ?>
-  <h2>Statistics for exercise &ldquo;<?= htmlspecialchars($quiz) ?>&rdquo;</h2>
+  <h2><?= sprintf($this->lang->line('statistics_for_exercise'),htmlspecialchars($quiz)) ?></h2>
 
   <?php if ($status==0): ?>
 
@@ -117,6 +127,7 @@
               . anchor(build_get('statistics/student_exercise',
                                  array('userid' => $id,
                                        'templ' => $quiz,
+                                       'nongraded' => $nongraded ? 'on' : 'off',
                                        'start_date' => $start_date,
                                        'end_date' => $end_date)), addslashes($name))
               . "'";

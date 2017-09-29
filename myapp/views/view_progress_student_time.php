@@ -7,14 +7,14 @@
 <?= form_open("statistics/student_time",array('method'=>'get')) ?>
     <input type="hidden" name="userid" value="<?= $userid ?>">
         
-    <p>Specify date period (in the UTC time zone):</p>
+    <p><?= $this->lang->line('specify_period') ?></p>
     <table>
       <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;">From:</td>
+        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
         <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
       </tr>
       <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;">To (and including):</td>
+        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
         <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
       </tr>
     </table>
@@ -45,7 +45,7 @@
 <?php else: ?>
   <h1>Statistics for class &ldquo;<?= htmlspecialchars($myclassname) ?>&rdquo;</h1>
 <?php endif; ?>
-  <h1>Student is <?= htmlspecialchars($user_full_name) ?></h1>
+  <h1><?= sprintf($this->lang->line('student_is'),htmlspecialchars($user_full_name)) ?></h1>
         
 <?php $totaltime = array_sum($total); ?>
 <?php if ($totaltime==0): ?>

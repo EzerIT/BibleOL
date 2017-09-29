@@ -7,14 +7,14 @@
   <?= form_open("statistics/teacher_time",array('method'=>'get')) ?>
     <input type="hidden" name="classid" value="<?= $classid ?>">
 
-    <p>Specify date period (in the UTC time zone):</p>
+    <p><?= $this->lang->line('specify_period') ?></p>
     <table>
       <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;">From:</td>
+        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
         <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
       </tr>
       <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;">To (and including):</td>
+        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
         <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
       </tr>
     </table>

@@ -17,17 +17,24 @@ class Statistics_timeperiod {
     // Uses weeks since (1970-01-05T00:00:00Z) for week numbers (1970-01-05 was a Monday).
     
     const MAX_PERIOD = 26*7*24*3600;  // 26 weeks
-    const DEFAULT_PERIOD = 7*24*3600;  // 7 days
     const WEEK_EPOCH_OFFSET = 4*24*3600; // Seconds from 1970-01-01 to 1970-01-05
     const SECS_PER_WEEK = 7*24*3600; // Seconds per week
     const SECS_PER_DAY = 24*3600; // Seconds per day
     
     private $CI;
 
+    private $default_period;
     private $period_start; // UNIX time. Includes start second
     private $period_end;   // UNIX time. Does not include end second
     
-    public function __construct() {
+	public function __construct(array $params) {
+        assert(isset($params['default_period']));
+
+        if ($params['default_period']=='long')
+            $this->default_period = self::MAX_PERIOD;
+        else
+            $this->default_period = self::SECS_PER_WEEK;
+        
         $this->CI =& get_instance();
     }
 
@@ -72,7 +79,7 @@ class Statistics_timeperiod {
 
     private function decode_start_date($date) {
         if (is_null($date))
-            return self::next_midnight(time()) - self::DEFAULT_PERIOD;
+            return self::next_midnight(time()) - $this->default_period;
 
         // Set time to 00:00:00
         return date_create($date . ' 00:00:00',new DateTimeZone('UTC'))->getTimestamp();
@@ -101,7 +108,7 @@ class Statistics_timeperiod {
 
     public function default_dates() {
         $this->period_end = self::last_midnight(time()) + self::SECS_PER_DAY;
-        $this->period_start = $this->period_end - self::DEFAULT_PERIOD;
+        $this->period_start = $this->period_end - $this->default_period;
     }
 
     public function start_timestamp() {

@@ -7,21 +7,36 @@
    <?= form_open("statistics/student_exercise",array('method'=>'get')) ?>
     <input type="hidden" name="userid" value="<?= $userid ?>">
 
-    <p>Specify date period (in the UTC time zone):</p>
+    <p><?= $this->lang->line('specify_period') ?></p>
     <table>
       <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;">From:</td>
+        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
         <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
       </tr>
       <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;">To (and including):</td>
+        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
         <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
       </tr>
     </table>
 
+  <!--
+  <div class="row">
+  <div class="form-group">
+    <label for="nongraded" class="col-sm-3 control-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
+    <div class="col-sm-9">
+      <input class="checkbox" id="nongraded" name="nongraded" value="on" type="checkbox" <?= set_checkbox('nongraded','on') ?>>
+    </div>
+  </div>
+  </div>
+  -->
+
+
+           
   <input type="hidden" name="templ" value="<?= $quiz ?>">
   <input type="hidden" name="userid" value="<?= $userid ?>">
-            
+
+  
+           
   <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
 </form>
 
@@ -31,10 +46,8 @@
           });
   </script>
 
-  <h1>Statistics for exercise &ldquo;<?= htmlspecialchars($quiz) ?>&rdquo;</h1>
-  <h1>Student is <?= htmlspecialchars($user_full_name) ?></h1>
-
-  <h1>HUSK: Valg af med/uden grading</h1>
+  <h1><?= sprintf($this->lang->line('statistics_for_exercise'),htmlspecialchars($quiz)) ?></h1>
+  <h1><?= sprintf($this->lang->line('student_is'),htmlspecialchars($user_full_name)) ?></h1>
 
 <?php if ($status!=2): ?>
 
@@ -62,9 +75,9 @@
       $resspf = array();
       foreach ($resscore as $date => $r) {
           $textdate = Statistics_timeperiod::format_date($date);
-          $res[]    = "[$date,{$r['percentage']},null,'Date: $textdate<br>Questions: {$r['count']}<br>Per min.: " . round($r['featpermin'],1) . "']";
+          $res[]    = "[$date,{$r['percentage']},null,'{$this->lang->line('date_colon')} $textdate<br>{$this->lang->line('question_count')} {$r['count']}<br>{$this->lang->line('per_min')} " . round($r['featpermin'],1) . "']";
           $roundpct = round($r['percentage']);
-          $resspf[] = "[$date,{$r['featpermin']},null,'Date: $textdate<br>Correct: $roundpct%']";
+          $resspf[] = "[$date,{$r['featpermin']},null,'{$this->lang->line('date_colon')} $textdate<br>{$this->lang->line('correct_colon')} $roundpct%']";
       }
 
       $resx    = "[[" . implode(",", $res) . "]]";
@@ -82,17 +95,17 @@
       }
     ?>
 
-    <h2>Percentage of correct answers by date</h2>
+    <h2><?= $this->lang->line('pct_correct_by_date') ?></h2>
     <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="cvs" width="800" height="500">
       [No canvas support]
     </canvas>
 
-    <h2>Answering speed by date</h2>
+    <h2><?= $this->lang->line('speed_by_date') ?></h2>
     <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="cvsspf" width="800" height="500">
       [No canvas support]
     </canvas>
 
-    <h2>Percentage of correct answers by feature</h2>
+    <h2><?= $this->lang->line('pct_correct_by_feature') ?></h2>
     <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="featcanvas" width="800" height="<?= $canvasheight ?>">
     [No canvas support]
 </canvas>
@@ -155,9 +168,9 @@
                   ymax: 100,
                   shadow: false,
                   unitsPost: '%',
-                  titleYaxis: 'Correct',
+                  titleYaxis: '<?= $this->lang->line('correct') ?>',
                   titleYaxisX: 12,
-                  titleXaxis: <?= $showweek ? "'(ISO) Week number'" : "'Date'" ?>,
+                  titleXaxis: <?= $showweek ? "'{$this->lang->line('iso_week_no')}'" : "'{$this->lang->line('date')}'" ?>,
                   titleXaxisY: 490,
                   textAccessible: true,
 
@@ -186,7 +199,7 @@
           var scatterdataspf = $.extend(true, {}, scatterdata);  // This is a deep copy
           scatterdataspf.id = 'cvsspf';
           scatterdataspf.data = <?= $resxspf ?>;
-          scatterdataspf.options.titleYaxis = 'Question items per minute';//'Seconds per question item';
+          scatterdataspf.options.titleYaxis = '<?= $this->lang->line('question_items_per_min') ?>';
           scatterdataspf.options.unitsPost = null;
           scatterdataspf.options.ymax = null;
           scatterdataspf.options.scaleDecimals = 1;
@@ -206,27 +219,13 @@
                 xmin: 0,
                 xmax: 100,
                 unitsPost: '%',
-                titleXaxis: 'Correct',
+                titleXaxis: '<?= $this->lang->line('correct') ?>',
                 titleXaxisY: <?= $canvasheight-10 ?>,
                 textAccessible: true
             }
         };
         
         new RGraph.HBar(hbarconf).draw();
-
-//        var totaltempnames_html = [< ?= implode(',', $totaltempnames_html) ? >];
-//        var totaltempnames_url  = [< ?= implode(',', $totaltempnames_url)  ? >];
-
-//        for (var i in hbarconf.options.labels) {
-//            var found = RGraph.text2.find({
-//                id: 'featcanvas',
-//                text: hbarconf.options.labels[i]
-//            });
-// 
-//            $(found[0]).wrap('<div title="' + totaltempnames_html[i] + '"><a href="' + totaltempnames_url[i] + '"></a></div>')
-//            $(found[0]).css({color: 'blue'});
-//        }
-
 
       });
       </script>

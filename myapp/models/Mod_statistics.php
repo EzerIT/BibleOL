@@ -13,8 +13,8 @@ class Mod_statistics extends CI_Model {
     public function __construct() {
         self::$sign_extend  = (-1) & ~0xffffffff; // All 1's followed by 32 zeros
 
-//       $this->quizzespath = getcwd() . '/quizzes';
-        $this->quizzespath = '/var/www/html/3bmoodle/bibleol/quizzes';
+       $this->quizzespath = getcwd() . '/quizzes';
+//        $this->quizzespath = '/var/www/html/3bmoodle/bibleol/quizzes';
     }
 
     // Mimics the Java function, using 32-bit arithmetic
@@ -357,7 +357,7 @@ class Mod_statistics extends CI_Model {
     }
 
     // Gets data grouped by day. The index will be noon on the relevant day
-    public function get_score_by_date_user_templ(integer $uid,array $templids,integer $period_start,integer $period_end) {
+    public function get_score_by_date_user_templ(integer $uid,array $templids,integer $period_start,integer $period_end, boolean $nongraded) {
         if (empty($templids))
             return array();
         
@@ -367,8 +367,12 @@ class Mod_statistics extends CI_Model {
             ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,count(*) `cnt`',false)
             ->join('sta_question quest','quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
-            ->where('rf.userid',$uid)
-//            ->where('(grading is null OR grading=1)')
+            ->where('rf.userid',$uid);
+
+        if (!$nongraded)
+            $query = $query->where('(grading is null OR grading=1)');
+
+        $query = $query
             ->where_in('q.templid',$templids)
             ->where('q.start >=',$period_start)
             ->where('q.start <=',$period_end)
@@ -398,7 +402,7 @@ class Mod_statistics extends CI_Model {
         return $perdate;
     }
     
-    public function get_features_by_date_user_templ(integer $uid,array $templids,integer $period_start,integer $period_end) {
+    public function get_features_by_date_user_templ(integer $uid,array $templids,integer $period_start,integer $period_end, boolean $nongraded) {
         if (empty($templids))
             return array();
         
@@ -407,8 +411,12 @@ class Mod_statistics extends CI_Model {
             ->select('rf.name rfname,sum(`rf`.`correct`)/count(*)*100 `pct`')
             ->join('sta_question quest','quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
-            ->where('rf.userid',$uid)
-//            ->where('(grading is null OR grading=1)')
+            ->where('rf.userid',$uid);
+
+        if (!$nongraded)
+            $query = $query->where('(grading is null OR grading=1)');
+
+        $query = $query
             ->where_in('q.templid',$templids)
             ->where('q.start >=',$period_start)
             ->where('q.start <=',$period_end)

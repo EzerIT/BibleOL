@@ -52,6 +52,10 @@ $comment['my_data'] = "";
 $format['my_data'] = "";
 $use_textarea['my_data'] = false;
 
+$comment['my_progress'] = "";
+$format['my_progress'] = "";
+$use_textarea['my_progress'] = false;
+
 $comment['privacy_policy'] = "";
 $format['privacy_policy'] = "";
 $use_textarea['privacy_policy'] = false;
@@ -63,6 +67,10 @@ $use_textarea['profile'] = false;
 $comment['statistics'] = "";
 $format['statistics'] = "";
 $use_textarea['statistics'] = false;
+
+$comment['students_progress'] = "";
+$format['students_progress'] = "";
+$use_textarea['students_progress'] = false;
 
 $comment['text_and_exercises'] = "";
 $format['text_and_exercises'] = "";

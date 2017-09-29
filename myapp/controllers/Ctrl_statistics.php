@@ -70,10 +70,10 @@ class Ctrl_statistics extends MY_Controller {
     	$this->load->model('mod_classes');
     	$this->load->model('mod_userclass');
     	$this->load->model('mod_statistics');
-        $this->load->library('Statistics_timeperiod');
+        $this->load->library('statistics_timeperiod',array('default_period'=>'long'));
 
         try {
-            $this->db->set_dbprefix('bol_');
+//            $this->db->set_dbprefix('bol_');
 
             $this->load->helper('form');
             $this->load->library('form_validation');
@@ -196,11 +196,11 @@ class Ctrl_statistics extends MY_Controller {
         
 
     public function student_exercise() {
-        $this->db->set_dbprefix('bol_');
+//        $this->db->set_dbprefix('bol_');
 
 		$this->load->model('mod_users');
 		$this->load->model('mod_statistics');
-        $this->load->library('Statistics_timeperiod');
+        $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
  
 		try {
             $this->load->helper('form');
@@ -212,14 +212,20 @@ class Ctrl_statistics extends MY_Controller {
             $this->statistics_timeperiod->set_validation_rules();
             $this->form_validation->set_rules('templ', 'Template', 'required');
             $this->form_validation->set_rules('userid', 'User ID', 'required');
+            $this->form_validation->set_rules('nongraded', '', 'callback_always_true');  // Dummy rule. At least one rule is required
 
-            $userid = $this->mod_users->my_id(); // Default value
             $templ = $this->input->get('templ');
+            $nongraded = $this->input->get('nongraded');
+            $nongraded = false; //!is_null($nongraded) && $nongraded=="on";
+
+            $userid = $this->input->get('userid');
+            if (is_null($userid))
+                $userid = $this->mod_users->my_id();
+            else
+                $userid = (int)$userid;
             
 			if ($this->form_validation->run()) {
                 $this->statistics_timeperiod->ok_dates();
-
-                $userid = (int)$this->input->get('userid');
 
                 if (!$this->mod_users->is_teacher() && $userid!=$this->mod_users->my_id())
                     throw new DataException($this->lang->line('illegal_user_id'));
@@ -229,13 +235,15 @@ class Ctrl_statistics extends MY_Controller {
                 $resscore = $this->mod_statistics->get_score_by_date_user_templ($userid,
                                                                                 $templs,
                                                                                 $this->statistics_timeperiod->start_timestamp(),
-                                                                                $this->statistics_timeperiod->end_timestamp());
+                                                                                $this->statistics_timeperiod->end_timestamp(),
+                                                                                $nongraded);
 
                 
                 $resfeat = $this->mod_statistics->get_features_by_date_user_templ($userid,
                                                                                   $templs,
                                                                                   $this->statistics_timeperiod->start_timestamp(),
-                                                                                  $this->statistics_timeperiod->end_timestamp());
+                                                                                  $this->statistics_timeperiod->end_timestamp(),
+                                                                                  $nongraded);
 
                 // Localize feature names
 
@@ -282,13 +290,20 @@ class Ctrl_statistics extends MY_Controller {
                                                                                       'status' => $status,
                                                                                       'userid' => $userid,
                                                                                       'user_full_name' => $user_full_name,
+                                                                                      'nongraded' => $nongraded,
                                                                                       'start_date' => $this->statistics_timeperiod->start_string(),
                                                                                       'end_date' => $this->statistics_timeperiod->end_string(),
                                                                                       'minpoint' => $this->statistics_timeperiod->start_timestamp(),
                                                                                       'maxpoint' => $this->statistics_timeperiod->end_timestamp()), true);
 
             $this->load->view('view_main_page', array('left_title' => 'Select a Period',
-                                                      'left' => '<p>TODO</p>',
+                                                      'left' => '<p>Use the two date fields to select a first
+                                                                 and last date to view.</p>
+                                                                 <p><b>Note: At most 26 weeks (6 months) of information
+                                                                 can be shown at a time.</b></p>
+                                                                 <p>If the period is longer than 10 days, the results will
+                                                                 be grouped using the week number specified by the
+                                                                 International Organization for Standardization (ISO).</p>',
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
@@ -304,11 +319,11 @@ class Ctrl_statistics extends MY_Controller {
         try {
             $this->mod_users->check_teacher();
 
-            $this->db->set_dbprefix('bol_');
+//            $this->db->set_dbprefix('bol_');
             
-//            $classes = $this->mod_classes->get_named_classes_owned(false);
-            $classes = $this->mod_classes->get_named_classes_owned(!false);
-
+            $classes = $this->mod_classes->get_named_classes_owned(false);
+//            $classes = $this->mod_classes->get_named_classes_owned(!false);
+            
             $this->load->view('view_top1', array('title' => 'Teacher Graph'));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
@@ -330,12 +345,12 @@ class Ctrl_statistics extends MY_Controller {
     	$this->load->model('mod_classes');
     	$this->load->model('mod_userclass');
     	$this->load->model('mod_statistics');
-        $this->load->library('Statistics_timeperiod');
+        $this->load->library('statistics_timeperiod',array('default_period'=>'long'));
 
         try {
             $this->mod_users->check_teacher();
 
-            $this->db->set_dbprefix('bol_');
+//            $this->db->set_dbprefix('bol_');
 
             $this->load->helper('form');
             $this->load->library('form_validation');
@@ -344,8 +359,8 @@ class Ctrl_statistics extends MY_Controller {
 
             $classid = (int)$this->input->get('classid');
             $class = $this->mod_classes->get_class_by_id($classid);
-			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
-//			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
+//			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
+			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
 				throw new DataException($this->lang->line('illegal_class_id'));
             
             $this->statistics_timeperiod->set_validation_rules();
@@ -451,12 +466,12 @@ class Ctrl_statistics extends MY_Controller {
     	$this->load->model('mod_users');
     	$this->load->model('mod_classes');
     	$this->load->model('mod_statistics');
-        $this->load->library('Statistics_timeperiod');
+        $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
 
         try {
             $this->mod_users->check_teacher();
 
-            $this->db->set_dbprefix('bol_');
+//            $this->db->set_dbprefix('bol_');
 
 
             $this->load->helper('form');
@@ -467,15 +482,19 @@ class Ctrl_statistics extends MY_Controller {
 
             $classid = (int)$this->input->get('classid');
             $class = $this->mod_classes->get_class_by_id($classid);
-			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
-//			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
+//			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
+			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
 				throw new DataException($this->lang->line('illegal_class_id'));
 
             $exercise_list = $this->mod_statistics->get_pathnames_for_class($classid);
 
             $this->statistics_timeperiod->set_validation_rules();
             $this->form_validation->set_rules('exercise', '', 'callback_always_true');  // Dummy rule. At least one rule is required
+            $this->form_validation->set_rules('nongraded', '', 'callback_always_true');  // Dummy rule. At least one rule is required
 
+            $nongraded = $this->input->get('nongraded');
+            $nongraded = false;//!is_null($nongraded) && $nongraded=="on";
+            
 			if ($this->form_validation->run()) {
                 $this->statistics_timeperiod->ok_dates();
 
@@ -500,12 +519,14 @@ class Ctrl_statistics extends MY_Controller {
                         $res = $this->mod_statistics->get_score_by_date_user_templ($uid,
                                                                                    $templs,
                                                                                    $this->statistics_timeperiod->start_timestamp(),
-                                                                                   $this->statistics_timeperiod->end_timestamp());
+                                                                                   $this->statistics_timeperiod->end_timestamp(),
+                                                                                   $nongraded);
 
                         $resfeat = $this->mod_statistics->get_features_by_date_user_templ($uid,
-                                                                                  $templs,
-                                                                                  $this->statistics_timeperiod->start_timestamp(),
-                                                                                  $this->statistics_timeperiod->end_timestamp());
+                                                                                          $templs,
+                                                                                          $this->statistics_timeperiod->start_timestamp(),
+                                                                                          $this->statistics_timeperiod->end_timestamp(),
+                                                                                          $nongraded);
 
                         if (empty($res))
                             continue;
@@ -566,6 +587,7 @@ class Ctrl_statistics extends MY_Controller {
                                                                                       'featloc' => $featloc,
                                                                                       'status' => $status,
                                                                                       'quiz' => $ex,
+                                                                                      'nongraded' => $nongraded,
                                                                                       'start_date' => $this->statistics_timeperiod->start_string(),
                                                                                       'end_date' => $this->statistics_timeperiod->end_string(),
                                                                                       'minpoint' => $this->statistics_timeperiod->start_timestamp(),
