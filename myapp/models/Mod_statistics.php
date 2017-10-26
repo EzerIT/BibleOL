@@ -304,6 +304,34 @@ class Mod_statistics extends CI_Model {
         return $result;
     }
 
+    // Get IDs of all classes to which $exercise belongs
+    private function get_classes_for_pathname(string $exercise) {
+        $query = $this->db
+            ->select('classid')
+            ->from('classexercise')
+            ->join('exercisedir','classexercise.pathid=exercisedir.id')
+            ->where('pathname',dirname($exercise))
+            ->get();
+
+        $classes = array();
+        
+        foreach ($query->result() as $row)
+            $classes[] = $row->classid;
+
+        return $classes;
+    }
+
+    public function may_see_nongraded(integer $student, string $exercise) {
+        if ($this->mod_users->my_id()==$student)
+            return true;
+
+        $this->load->model('mod_userclass');
+
+        $classes = $this->get_classes_for_pathname($exercise);
+        return $this->mod_userclass->gave_access($student, $classes);
+    }
+        
+    
     public function get_pathnames_for_templids(array $templids) {
         if (empty($templids))
             return array();

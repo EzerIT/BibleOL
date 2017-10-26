@@ -32,8 +32,7 @@
     </select>
   </div>
 
-    <!--
-    <div class="row">
+  <div class="row">
   <div class="form-group">
     <label for="nongraded" class="col-sm-3 control-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
     <div class="col-sm-9">
@@ -41,7 +40,6 @@
     </div>
   </div>
   </div>
--->
 
   <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
 </form>
@@ -141,6 +139,9 @@
     <div style="display:inline-block; vertical-align:top;">
       <div id="mykey"></div>
       <div id="allkey"><input type="checkbox" style="margin-left:20px" checked name="selectall" value="">All</div>
+      <?php if ($nongraded): ?>
+        <p style="width:200px">Students marked * include results not intended for grading</p>
+      <?php endif; ?>
     </div>
 
     <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="cvsspf" width="800" height="500">

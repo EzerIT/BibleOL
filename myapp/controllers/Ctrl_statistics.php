@@ -215,14 +215,15 @@ class Ctrl_statistics extends MY_Controller {
             $this->form_validation->set_rules('nongraded', '', 'callback_always_true');  // Dummy rule. At least one rule is required
 
             $templ = $this->input->get('templ');
-            $nongraded = $this->input->get('nongraded');
-            $nongraded = false; //!is_null($nongraded) && $nongraded=="on";
+            $nongraded = $this->input->get('nongraded')=='on';
 
             $userid = $this->input->get('userid');
             if (is_null($userid))
                 $userid = $this->mod_users->my_id();
             else
                 $userid = (int)$userid;
+
+            $may_see_nongraded = $this->mod_statistics->may_see_nongraded($userid, $templ);
             
 			if ($this->form_validation->run()) {
                 $this->statistics_timeperiod->ok_dates();
@@ -230,20 +231,22 @@ class Ctrl_statistics extends MY_Controller {
                 if (!$this->mod_users->is_teacher() && $userid!=$this->mod_users->my_id())
                     throw new DataException($this->lang->line('illegal_user_id'));
 
+                $see_nongraded = $nongraded && $may_see_nongraded;
+                
                 $templs = $this->mod_statistics->get_templids_for_pathname_and_user($templ, $userid);
 
                 $resscore = $this->mod_statistics->get_score_by_date_user_templ($userid,
                                                                                 $templs,
                                                                                 $this->statistics_timeperiod->start_timestamp(),
                                                                                 $this->statistics_timeperiod->end_timestamp(),
-                                                                                $nongraded);
+                                                                                $see_nongraded);
 
                 
                 $resfeat = $this->mod_statistics->get_features_by_date_user_templ($userid,
                                                                                   $templs,
                                                                                   $this->statistics_timeperiod->start_timestamp(),
                                                                                   $this->statistics_timeperiod->end_timestamp(),
-                                                                                  $nongraded);
+                                                                                  $see_nongraded);
 
                 // Localize feature names
 
@@ -291,6 +294,7 @@ class Ctrl_statistics extends MY_Controller {
                                                                                       'userid' => $userid,
                                                                                       'user_full_name' => $user_full_name,
                                                                                       'nongraded' => $nongraded,
+                                                                                      'may_see_nongraded' => $may_see_nongraded,
                                                                                       'start_date' => $this->statistics_timeperiod->start_string(),
                                                                                       'end_date' => $this->statistics_timeperiod->end_string(),
                                                                                       'minpoint' => $this->statistics_timeperiod->start_timestamp(),
@@ -492,8 +496,7 @@ class Ctrl_statistics extends MY_Controller {
             $this->form_validation->set_rules('exercise', '', 'callback_always_true');  // Dummy rule. At least one rule is required
             $this->form_validation->set_rules('nongraded', '', 'callback_always_true');  // Dummy rule. At least one rule is required
 
-            $nongraded = $this->input->get('nongraded');
-            $nongraded = false;//!is_null($nongraded) && $nongraded=="on";
+            $nongraded = $this->input->get('nongraded')=='on';
             
 			if ($this->form_validation->run()) {
                 $this->statistics_timeperiod->ok_dates();
@@ -516,23 +519,25 @@ class Ctrl_statistics extends MY_Controller {
                     $real_students = array(); // Will be used as a set
 
                     foreach ($users_and_templs as $uid => $templs) {
+                        $see_nongraded = $nongraded && $this->mod_statistics->may_see_nongraded($uid, $ex);
+
                         $res = $this->mod_statistics->get_score_by_date_user_templ($uid,
                                                                                    $templs,
                                                                                    $this->statistics_timeperiod->start_timestamp(),
                                                                                    $this->statistics_timeperiod->end_timestamp(),
-                                                                                   $nongraded);
+                                                                                   $see_nongraded);
 
                         $resfeat = $this->mod_statistics->get_features_by_date_user_templ($uid,
                                                                                           $templs,
                                                                                           $this->statistics_timeperiod->start_timestamp(),
                                                                                           $this->statistics_timeperiod->end_timestamp(),
-                                                                                          $nongraded);
+                                                                                          $see_nongraded);
 
                         if (empty($res))
                             continue;
                         $resall[] = $res;
                         $resfeatall[] = $resfeat;
-                        $real_students[$uid] = true;
+                        $real_students[$uid] = $see_nongraded;
                     }
 
                     $status = empty($resall) ? 0 : 1;  // 0=no data, 1=data
@@ -550,7 +555,7 @@ class Ctrl_statistics extends MY_Controller {
                     
                     // Get student names
                     foreach ($real_students as $uid => &$v)
-                        $v = make_full_name($this->mod_users->get_user_by_id($uid));
+                        $v = make_full_name($this->mod_users->get_user_by_id($uid)) . ($v ? ' *' : '');
 
                     // Because $users_and_temps is sorted by user ID, $real_students and $resall are sorted in the same order
                 }

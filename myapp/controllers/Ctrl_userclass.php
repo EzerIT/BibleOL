@@ -172,17 +172,18 @@ class Ctrl_userclass extends MY_Controller {
             $userid = $this->mod_users->my_id();
 
             $all_classes = $this->mod_classes->get_all_classes();
-            $old_classes = $this->mod_userclass->get_classes_for_user($userid);
+            $old_classes = $this->mod_userclass->get_classes_and_access_for_user($userid);
             $avail_classes = array();
 
             foreach ($all_classes as $ix => $ac)
-                if (!in_array($ac->clid, $old_classes) && (empty($ac->enrol_before) ||self::before_date($ac->enrol_before)))
+                if (!array_key_exists($ac->clid, $old_classes) && (empty($ac->enrol_before) ||self::before_date($ac->enrol_before)))
                     $avail_classes[] = $ac->clid;
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('enroll_in_class')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_confirm_dialog');
                 
             $center_text = $this->load->view('view_enroll_in_class',
                                              array('all_classes' => $all_classes,
@@ -239,7 +240,7 @@ class Ctrl_userclass extends MY_Controller {
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
                 
-            $center_text = $this->load->view('view_enroll_in_class',
+            $center_text = $this->load->view('view_enroll_by_folder',
                                              array('all_classes' => $all_classes,
                                                    'old_classes' => $old_classes,
                                                    'avail_classes' => $avail_classes,
@@ -300,6 +301,10 @@ class Ctrl_userclass extends MY_Controller {
             if (empty($this->enroll_class->clpass) || $this->form_validation->run()) {
                 $this->mod_userclass->enroll_user_in_class($userid, $classid);
 
+                if (empty($_GET['dir'])) // Enrolling from the 'enroll' menu
+                    header("Location: " . site_url('/userclass/enroll'));
+
+                // The following code is used when enrolling from a folder
                 // VIEW:
                 $this->load->view('view_top1', array('title' => $this->lang->line('enroll_in_class')));
                 $this->load->view('view_top2');
@@ -317,6 +322,8 @@ class Ctrl_userclass extends MY_Controller {
                                                           'center' => $center_text));
 
                 $this->load->view('view_bottom');
+
+
             }
             else {
                 // VIEW:
@@ -335,6 +342,48 @@ class Ctrl_userclass extends MY_Controller {
                                                           'center' => $center_text));
                 $this->load->view('view_bottom');
             }
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('classes'));
+        }
+    }
+
+    public function manage_access() {
+        try {
+            $this->mod_users->check_logged_in();
+            $this->load->helper('varset');
+
+            $userid = $this->mod_users->my_id();
+            $classid = isset($_GET['classid']) ? (int)$_GET['classid'] : 0;
+
+            $enrolled_in = $this->mod_userclass->get_classes_for_user($userid);
+
+            if (!in_array($classid, $enrolled_in))
+                throw new DataException($this->lang->line('not_enrolled'));
+            
+            $this->mod_userclass->change_access($userid, $classid, set_or_default($_GET['grant'],0));
+            header("Location: " . site_url('/userclass/enroll'));
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('classes'));
+        }
+    }
+
+    public function unenroll_from() {
+        try {
+            $this->mod_users->check_logged_in();
+            $this->load->helper('varset');
+
+            $userid = $this->mod_users->my_id();
+            $classid = isset($_GET['classid']) ? (int)$_GET['classid'] : 0;
+
+            $enrolled_in = $this->mod_userclass->get_classes_for_user($userid);
+
+            if (!in_array($classid, $enrolled_in))
+                throw new DataException($this->lang->line('not_enrolled'));
+
+            $this->mod_userclass->unenroll_user_from_class($userid, $classid);
+            header("Location: " . site_url('/userclass/enroll'));
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('classes'));

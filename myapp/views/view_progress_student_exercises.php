@@ -19,16 +19,17 @@
       </tr>
     </table>
 
-  <!--
   <div class="row">
   <div class="form-group">
     <label for="nongraded" class="col-sm-3 control-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
     <div class="col-sm-9">
-      <input class="checkbox" id="nongraded" name="nongraded" value="on" type="checkbox" <?= set_checkbox('nongraded','on') ?>>
+      <input class="checkbox" style='display:inline-block' id="nongraded" name="nongraded"
+        <?= $may_see_nongraded ? '' : 'disabled' ?>
+        value="on" type="checkbox" <?= set_checkbox('nongraded', $may_see_nongraded ? 'on' : 'off') ?>>
+      <span><?= $may_see_nongraded ? '' : '(Permission not granted)' ?></span>
     </div>
   </div>
   </div>
-  -->
 
 
            

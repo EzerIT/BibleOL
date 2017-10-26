@@ -399,7 +399,7 @@ class Mod_translate extends CI_Model {
     }
 
     // $lang may be 'comment'
-    function if_db2php(string $lang, string $dest) {
+    public function if_db2php(string $lang, string $dest) {
         $this->load->helper('file');
         @mkdir("$dest/$lang"); // Fails if directory exists, but that's OK
 
@@ -445,7 +445,7 @@ class Mod_translate extends CI_Model {
     }
 
     // $src is the source directory where the php files are found
-    function if_php2db(string $short_langname, string $src) {
+    public function if_php2db(string $short_langname, string $src) {
         $this->load->helper('directory');
         $this->load->dbforge();
         $this->dbforge->drop_table('language_'.$short_langname,true);
@@ -476,13 +476,21 @@ class Mod_translate extends CI_Model {
                 $format[$row->symbolic_name] = is_null($row->format) ? "" : $row->format;
             
             $toinsert = array();
+            $toinsertcomment = array();
                 
             $lang = array();
             include($src.DIRECTORY_SEPARATOR.$file);
                 
             foreach ($lang as $key => $text) {
-                if (!isset($format[$key]))
-                    die("Key $key missing from textgroup $short_file in comment table\n");
+                if (!isset($format[$key])) {
+                    echo "Key $key missing from textgroup $short_file in comment table -- I will add it\n";
+                    $toinsertcomment[] = array('textgroup' => $short_file,
+                                               'symbolic_name' => $key,
+                                               'comment' => null,
+                                               'format' => null,
+                                               'use_textarea' => 0);
+                    $format[$key] = '';
+                }
                     
                 if ($format[$key]!='keep_blanks')
                     $text = preg_replace('/\s+/',' ',$text); // Remove extraneous whitespace
@@ -493,10 +501,13 @@ class Mod_translate extends CI_Model {
             }
 
             $this->db->insert_batch('language_'.$short_langname, $toinsert);
+
+            if (!empty($toinsertcomment)) 
+                $this->db->insert_batch('language_comment', $toinsertcomment);
         }
     }
 
-    function if_phpcomment2db(string $src) {
+    public function if_phpcomment2db(string $src) {
         $this->load->helper('directory');
         $this->load->dbforge();
         $this->dbforge->drop_table('language_comment',true);
@@ -546,7 +557,7 @@ class Mod_translate extends CI_Model {
         }
     }
         
-    function gram_db2prop(string $dest) {
+    public function gram_db2prop(string $dest) {
         $this->load->helper('file');
         $query = $this->db->get('db_localize');
 
@@ -557,7 +568,7 @@ class Mod_translate extends CI_Model {
         }
     }
     
-    function gram_prop2db() {
+    public function gram_prop2db() {
         $this->load->helper('directory');
         $d = directory_map('db/property_files', 1); // A value of 2 allows us to recognize empty directories
 
@@ -659,7 +670,7 @@ class Mod_translate extends CI_Model {
         }
     }
     
-    function download_lex(string $src_lang, string $dst_lang) {
+    public function download_lex(string $src_lang, string $dst_lang) {
         $this->lex_common($src_lang, $src_language, $header_array);
 
         if (!array_key_exists($dst_lang, $this->lexicon_langs[$src_lang]))
@@ -753,7 +764,7 @@ class Mod_translate extends CI_Model {
         return $result;
     }
 
-    function import_lex(string $src_lang, string $dst_lang, string $csv_file) {
+    public function import_lex(string $src_lang, string $dst_lang, string $csv_file) {
         $this->lex_common($src_lang, $src_language, $header_array);
 
         if (!array_key_exists($dst_lang, $this->lexicon_langs[$src_lang]))

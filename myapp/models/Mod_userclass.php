@@ -53,7 +53,17 @@ class Mod_userclass extends CI_Model {
 
         return $res;
     }
-     
+
+    public function get_classes_and_access_for_user(integer $userid) {
+        $query = $this->db->select('classid,access')->where('userid',$userid)->get('userclass');
+        $res = array();
+        foreach ($query->result() as $row)
+            $res[$row->classid] = $row->access;
+
+        return $res;
+    }
+
+    
     public function update_classes_for_user(integer $userid, array $old_classes, array $new_classes, array $owned_classes) {
         // Insert new classes
         foreach ($new_classes as $newid) {
@@ -79,4 +89,22 @@ class Mod_userclass extends CI_Model {
     public function unenroll_user_from_class($userid, $classid) { // Warning: There have been problems with adding type checks here
         $this->db->where(array('userid' => $userid, 'classid' => $classid))->delete('userclass');
     }
+
+    public function change_access(integer $userid, integer $classid, integer $grant) {
+        $this->db
+            ->where('userid', $userid)
+            ->where('classid', $classid)
+            ->update('userclass', array('access' => $grant));
+    }
+
+    public function gave_access(integer $student, array $classes) {
+        $query = $this->db
+            ->select('MAX(access) granted')
+            ->where('userid',$student)
+            ->where_in('classid',$classes)
+            ->get('userclass');
+
+        return $query->row()->granted;
+    }
+        
   }
