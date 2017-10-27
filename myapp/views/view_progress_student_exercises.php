@@ -113,48 +113,6 @@
 
 
     <script>
-      function pad(number) {
-          return number<10 ? '0'+number : number;
-      }
-
-
-      function adaptScale(obj, e) {
-          // Change number of decimals on y axis depending on max value
-          if (obj.scale2.max < 0.05)
-              obj.set('scaleDecimals', 3);
-          else if (obj.scale2.max < 0.5)
-              obj.set('scaleDecimals', 2);
-          else if (obj.scale2.max < 5)
-              obj.set('scaleDecimals', 1);
-          else
-              obj.set('scaleDecimals', 0);
-
-          this.firstDraw=false; // Prevent firstdraw event from firing again. (Probably bug in RGraph.)
-          RGraph.redraw();
-      }
-
-      /**
-       * The function that is called once per tickmark, to draw it
-       *
-       * @param object obj           The chart object
-       * @param object data          The chart data
-       * @param number x             The X coordinate
-       * @param number y             The Y coordinate
-       * @param number xVal          The X value
-       * @param number yVal          The Y value
-       * @param number xMax          The maximum X scale value
-       * @param number xMax          The maximum Y scale value
-       * @param string color         The color of the tickmark
-       * @param string dataset_index The index of the data (which starts at zero
-       * @param string data_index    The index of the data in the dataset (which starts at zero)
-       */
-      function myTick (obj, data, x, y, xVal, yVal, xMax, yMax, color, dataset_index, data_index) {
-          co = document.getElementById(obj.canvas.id).getContext('2d');
-          co.strokeStyle = color;
-          co.fillStyle = obj.original_colors['chart.line.colors'][dataset_index];
-          co.fillRect(x-4, y-4, 8, 8);
-      }
-
       $(function() {
           var xlabels = [<?php
                            $numxticks = 0;
@@ -183,38 +141,13 @@
                              ?>];
           <?php endif; ?>
               
-          var scatterdata = {
-              id: 'cvs',
-              data: <?= $resx ?>,
-              options: {
-                  xmin: <?= $scale_start ?>,
-                  xmax: <?= $scale_end ?>,
-                  gutterLeft: 70,
-                  gutterBottom: 45,
-                  tickmarks:  myTick,
-                  ymin: 0,
-                  ymax: 100,
-                  shadow: false,
-                  unitsPost: '%',
-                  titleYaxis: '<?= $this->lang->line('correct') ?>',
-                  titleYaxisX: 12,
-                  titleXaxis: <?= $showweek ? "'{$this->lang->line('iso_week_no')}'" : "'{$this->lang->line('date')}'" ?>,
-                  titleXaxisY: 490,
-                  textAccessible: true,
-
-                  line: true,
-                  lineLinewidth: 2,
-                  lineColors: ['#f00'],
-                  labels: xlabels,
-                  numxticks: <?= $numxticks ?>,
-              }
-          };
-
-          var scatterdataspf = $.extend(true, {}, scatterdata);  // This is a deep copy
-          scatterdataspf.id = 'cvsspf';
-          scatterdataspf.data = <?= $resxspf ?>;
-          scatterdataspf.options.titleYaxis = '<?= $this->lang->line('question_items_per_min') ?>';
-          scatterdataspf.options.unitsPost = null;
+          var scatterdata = make_scatterconfig('cvs', <?= $resx ?>, <?= $scale_start ?>, <?= $scale_end ?>,
+                                             '%', '<?= $this->lang->line('correct') ?>', <?= $showweek ? "'{$this->lang->line('iso_week_no')}'" : "'{$this->lang->line('date')}'" ?>,
+                                             xlabels, <?= $numxticks ?>);
+          var scatterdataspf = make_scatterconfig('cvsspf',<?= $resxspf ?>, <?= $scale_start ?>, <?= $scale_end ?>,
+                                                  null, '<?= $this->lang->line('question_items_per_min') ?>', <?= $showweek ? "'(ISO) Week number'" : "'Date'" ?>,
+                                                  xlabels, <?= $numxticks ?>);
+          
           scatterdataspf.options.ymax = null;
           scatterdataspf.options.scaleDecimals = 1;
 
@@ -229,26 +162,10 @@
               weekno_tooltip('cvsspf', xlabels, '', daydates);
           <?php endif; ?>
 
-          
-          var hbarconf = {
-            id: 'featcanvas',
-            data: [<?= implode(",", $featpct) ?>],
-            options: {
-                labels: [<?= implode(",", $featname) ?>],
-                gutterLeftAutosize: true,
-                gutterBottom: 45,
-                vmargin: 5,
-                scaleZerostart: true,
-                xmin: 0,
-                xmax: 100,
-                unitsPost: '%',
-                titleXaxis: '<?= $this->lang->line('correct') ?>',
-                titleXaxisY: <?= $canvasheight-10 ?>,
-                textAccessible: true
-            }
-        };
-        
-        new RGraph.HBar(hbarconf).draw();
+
+          var hbarconfig = make_hbarconfig('featcanvas', [<?= implode(",", $featpct) ?>], [<?= implode(",", $featname) ?>], '<?= $this->lang->line('correct') ?>', <?= $canvasheight-10 ?>);
+
+          new RGraph.HBar(hbarconfig).draw();
 
       });
       </script>

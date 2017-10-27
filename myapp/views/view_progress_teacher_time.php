@@ -93,20 +93,6 @@
         }
     }
 
-    function adaptScale(obj, e) {
-        // Change number of decimals on y axis depending on max value
-        if (obj.scale2.max < 0.05)
-            obj.set('scaleDecimals', 3);
-        else if (obj.scale2.max < 0.5)
-            obj.set('scaleDecimals', 2);
-        else if (obj.scale2.max < 5)
-            obj.set('scaleDecimals', 1);
-        else
-            obj.set('scaleDecimals', 0);
-
-        this.firstDraw=false; // Prevent firstdraw event from firing again. (Probably bug in RGraph.)
-        RGraph.redraw();
-    }
 
 
 
@@ -114,25 +100,8 @@
         var weeklabels = [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>];
         var weekdates =  [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_date($w),'",'; ?>];
 
-        var bar1 = new RGraph.Bar({
-            id: 'totalcanvas',
-            data: [<?= implode(",", $total) ?>],
-            options: {
-                labels: weeklabels,
-                colors: ['#f00'],
-                gutterLeft: 55,
-                gutterBottom: 45,
-                hmargin: 7,
-                hmarginGrouped: 1,
-                titleYaxis: 'Hours',                  
-                titleYaxisX: 12,                  
-                titleXaxis: '(ISO) Week number',                  
-                titleXaxisY: 490,
-                textAccessible: true
-            }
-        }).on('firstdraw', adaptScale).draw();
-
-    
+        graph_bar('totalcanvas', [<?= implode(",", $total) ?>], weeklabels, 'Hours', '(ISO) Week number');
+        
         var bar2colors = ['#f00','#0f0','#00f','#0ff','#ff0','#f0f','#000',
                           '#800','#080','#008','#08f','#8f0','#80f','#0f8','#f80','#f08',
                           '#088','#880','#808',

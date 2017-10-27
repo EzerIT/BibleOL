@@ -154,10 +154,6 @@
     </canvas>
 
     <script>
-      function pad(number) {
-          return number<10 ? '0'+number : number;
-      }
-
       function set_config(config,on,data,colors) {
           config.data = [];
           config.options.colors = [];
@@ -177,21 +173,6 @@
                   if (on[s])
                       config.data[p].push(data[p][s]);
           }
-      }
-
-      function adaptScale(obj, e) {
-          // Change number of decimals on y axis depending on max value
-          if (obj.scale2.max < 0.05)
-              obj.set('scaleDecimals', 3);
-          else if (obj.scale2.max < 0.5)
-              obj.set('scaleDecimals', 2);
-          else if (obj.scale2.max < 5)
-              obj.set('scaleDecimals', 1);
-          else
-              obj.set('scaleDecimals', 0);
-
-          this.firstDraw=false; // Prevent firstdraw event from firing again. (Probably bug in RGraph.)
-          RGraph.redraw();
       }
 
       $(function() {
@@ -229,48 +210,17 @@
                                    echo '"',Statistics_timeperiod::format_date($ut),'",';
                              ?>];
           <?php endif; ?>
-          
-          
-          var scatterdata = {
-              id: 'cvs',
-              data: null,
-              options: {
-                  xmin: <?= $scale_start ?>,
-                  xmax: <?= $scale_end ?>,
-                  gutterLeft: 70,
-                  gutterBottom: 45,
-                  tickmarks:  myTick,
-                  ymin: 0,
-                  ymax: 100,
-                  shadow: false,
-                  unitsPost: '%',
-                  titleYaxis: 'Correct',
-                  titleYaxisX: 12,
-                  titleXaxis: <?= $showweek ? "'(ISO) Week number'" : "'Date'" ?>,
-                  titleXaxisY: 490,
-                  textAccessible: true,
 
-                  line: true,
-                  lineLinewidth: 2,
-                  lineColors: ['#f00','#0f0','#00f','#0ff','#ff0','#f0f','#000',
-                                   '#800','#080','#008','#08f','#8f0','#80f','#0f8','#f80','#f08',
-                                   '#088','#880','#808',
-                                   '#f88','#8f8','#88f',
-                                   '#ff8','#f8f','#8ff','#888'],
-                  labels: xlabels,
-                  numxticks: <?= $numxticks ?>,
-              }
-          };
-          
-          var scatterdataspf = $.extend(true, {}, scatterdata);  // This is a deep copy
-          scatterdataspf.id = 'cvsspf';
-          scatterdataspf.options.titleYaxis = 'Question items per minute';//'Seconds per question item';
-          scatterdataspf.options.unitsPost = null;
+          var scatterdata = make_scatterconfig('cvs', RGraph.array_clone(dataorig), <?= $scale_start ?>, <?= $scale_end ?>,
+                                             '%', 'Correct', <?= $showweek ? "'(ISO) Week number'" : "'Date'" ?>,
+                                             xlabels, <?= $numxticks ?>);
+          var scatterdataspf = make_scatterconfig('cvsspf', RGraph.array_clone(dataorigspf), <?= $scale_start ?>, <?= $scale_end ?>,
+                                                  null, 'Question items per minute', <?= $showweek ? "'(ISO) Week number'" : "'Date'" ?>,
+                                                  xlabels, <?= $numxticks ?>);
           scatterdataspf.options.ymax = null;
           scatterdataspf.options.scaleDecimals = 1;
 
-          scatterdata.data = RGraph.array_clone(dataorig);
-          scatterdataspf.data = RGraph.array_clone(dataorigspf);
+
           scatter = new RGraph.Scatter(scatterdata).draw();
           new RGraph.Scatter(scatterdataspf).on('firstdraw', adaptScale).draw();
 
@@ -290,28 +240,11 @@
                             '#ff8','#f8f','#8ff','#888'];
           var hbaron = [<?php for ($i=0; $i<count($student_captions); ++$i) echo 'true,'; ?>];
           var hbardata = <?= $featdata ?>;
-
           
-          var hbarconfig = {
-              id: 'featcanvas',
-              data: null,
-              options: {
-                  labels: [<?= implode(",", $featname) ?>],
-                  gutterLeftAutosize: true,
-                  gutterBottom: 45,
-                  scaleZerostart: true,
-                  xmin: 0,
-                  xmax: 100,
-                  vmarginGrouped: 1,
-                  vmargin: 5,
-                  colors: null,
-                  unitsPost: '%',
-                  titleXaxis: 'Correct',
-                  titleXaxisY: <?= $canvasheight-10 ?>,
-                  textAccessible: true
-              }
-          };
-
+          var hbarconfig = make_hbarconfig('featcanvas', null, [<?= implode(",", $featname) ?>], 'Correct', <?= $canvasheight-10 ?>);
+          hbarconfig.options.vmarginGrouped = 1;
+          hbarconfig.options.vmargin = 5;
+          
           set_config(hbarconfig,hbaron,hbardata,hbarcolors);
           new RGraph.HBar(hbarconfig).draw();
           
@@ -388,9 +321,6 @@
               scatter = new RGraph.Scatter(scatterdata).draw();
               new RGraph.Scatter(scatterdataspf).on('firstdraw', adaptScale).draw();
               new RGraph.HBar(hbarconfig).draw();
-
-
-
           }
 
           function allchange(e) {
@@ -405,28 +335,6 @@
               .change(allchange)
               .prop("indeterminate", false);
 
-
-          /**
-           * The function that is called once per tickmark, to draw it
-           *
-           * @param object obj           The chart object
-           * @param object data          The chart data
-           * @param number x             The X coordinate
-           * @param number y             The Y coordinate
-           * @param number xVal          The X value
-           * @param number yVal          The Y value
-           * @param number xMax          The maximum X scale value
-           * @param number xMax          The maximum Y scale value
-           * @param string color         The color of the tickmark
-           * @param string dataset_index The index of the data (which starts at zero
-           * @param string data_index    The index of the data in the dataset (which starts at zero)
-           */
-          function myTick (obj, data, x, y, xVal, yVal, xMax, yMax, color, dataset_index, data_index) {
-              co = document.getElementById(obj.canvas.id).getContext('2d');
-              co.strokeStyle = color;
-              co.fillStyle = obj.original_colors['chart.line.colors'][dataset_index];
-              co.fillRect(x-4, y-4, 8, 8);
-          }
 
       });
       </script>
