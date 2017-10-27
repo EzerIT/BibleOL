@@ -156,6 +156,33 @@
       }
 
       $(function() {
+          var xlabels = [<?php
+                           $numxticks = 0;
+                           if ($showweek) {
+                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_WEEK) {
+                                   echo '"',Statistics_timeperiod::format_week($ut),'",';
+                                   ++$numxticks;
+                               }
+                           }
+                           else {
+                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_DAY) {
+                                   echo '"',Statistics_timeperiod::format_day($ut),'",';
+                                   ++$numxticks;
+                               }
+                           }
+                         ?>];
+          <?php if ($showweek): ?>
+            var weekdates = [<?php
+                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_WEEK)
+                                   echo '"',Statistics_timeperiod::format_date($ut),'",';
+                             ?>];
+          <?php else: ?>
+            var daydates = [<?php
+                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_DAY)
+                                   echo '"',Statistics_timeperiod::format_date($ut),'",';
+                             ?>];
+          <?php endif; ?>
+              
           var scatterdata = {
               id: 'cvs',
               data: <?= $resx ?>,
@@ -178,21 +205,7 @@
                   line: true,
                   lineLinewidth: 2,
                   lineColors: ['#f00'],
-                  labels: [<?php
-                           $numxticks = 0;
-                           if ($showweek) {
-                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_WEEK) {
-                                   echo '"',Statistics_timeperiod::format_week($ut),'",';
-                                   ++$numxticks;
-                               }
-                           }
-                           else {
-                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_DAY) {
-                                   echo '"',Statistics_timeperiod::format_day($ut),'",';
-                                   ++$numxticks;
-                               }
-                           }
-                           ?>],
+                  labels: xlabels,
                   numxticks: <?= $numxticks ?>,
               }
           };
@@ -208,6 +221,15 @@
           scatter = new RGraph.Scatter(scatterdata).draw();
           scatterspf = new RGraph.Scatter(scatterdataspf).on('firstdraw', adaptScale).draw();
 
+          <?php if ($showweek): ?>
+              weekno_tooltip('cvs', xlabels, 'Starts\n', weekdates);
+              weekno_tooltip('cvsspf', xlabels, 'Starts\n', weekdates);
+          <?php else: ?>
+              weekno_tooltip('cvs', xlabels, '', daydates);
+              weekno_tooltip('cvsspf', xlabels, '', daydates);
+          <?php endif; ?>
+
+          
           var hbarconf = {
             id: 'featcanvas',
             data: [<?= implode(",", $featpct) ?>],

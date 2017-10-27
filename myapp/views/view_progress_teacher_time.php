@@ -111,11 +111,14 @@
 
 
     $(function() {
+        var weeklabels = [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>];
+        var weekdates =  [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_date($w),'",'; ?>];
+
         var bar1 = new RGraph.Bar({
             id: 'totalcanvas',
             data: [<?= implode(",", $total) ?>],
             options: {
-                labels: [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>],
+                labels: weeklabels,
                 colors: ['#f00'],
                 gutterLeft: 55,
                 gutterBottom: 45,
@@ -144,7 +147,7 @@
             id: 'studentscanvas',
             data: null,
             options: {
-                labels: [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>],
+                labels: weeklabels,
                 colors: null,
                 gutterLeft: 55,
                 gutterBottom: 45,
@@ -169,6 +172,9 @@
 
         var users_elem = $('input[name="users"]');
         var selectall_elem = $('input[name="selectall"]');
+
+        weekno_tooltip('totalcanvas', weeklabels, 'Starts\n', weekdates);
+        weekno_tooltip('studentscanvas', weeklabels, 'Starts\n', weekdates);
 
         function userchange(e) {
             bar2on[$(this).prop('value')] = $(this).prop('checked');

@@ -118,11 +118,14 @@
 
 
     $(function() {
+        var weeklabels = [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>];
+        var weekdates =  [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_date($w),'",'; ?>];
+        
         new RGraph.Bar({
             id: 'weekcanvas',
             data: [<?= implode(",", $total) ?>],
             options: {
-                labels: [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>],
+                labels: weeklabels,
                 colors: ['#f00'],
                 gutterLeft: 55,
                 gutterBottom: 45,
@@ -134,7 +137,8 @@
             }
         }).on('firstdraw', adaptScale).draw();
 
-
+        weekno_tooltip('weekcanvas', weeklabels, 'Starts\n', weekdates);
+        
         var hbarconf = {
             id: 'excanvas',
             data: [<?= implode(",", $totaltempvalues) ?>],

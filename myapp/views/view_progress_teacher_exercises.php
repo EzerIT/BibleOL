@@ -201,6 +201,36 @@
                 
           var dataorig = <?= $resx ?>;
           var dataorigspf = <?= $resxspf ?>;
+
+          var xlabels = [<?php
+                           $numxticks = 0;
+                           if ($showweek) {
+                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_WEEK) {
+                                   echo '"',Statistics_timeperiod::format_week($ut),'",';
+                                   ++$numxticks;
+                               }
+                           }
+                           else {
+                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_DAY) {
+                                   echo '"',Statistics_timeperiod::format_day($ut),'",';
+                                   ++$numxticks;
+                               }
+                           }
+                         ?>];
+          
+          <?php if ($showweek): ?>
+            var weekdates = [<?php
+                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_WEEK)
+                                   echo '"',Statistics_timeperiod::format_date($ut),'",';
+                             ?>];
+          <?php else: ?>
+            var daydates = [<?php
+                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_DAY)
+                                   echo '"',Statistics_timeperiod::format_date($ut),'",';
+                             ?>];
+          <?php endif; ?>
+          
+          
           var scatterdata = {
               id: 'cvs',
               data: null,
@@ -227,25 +257,11 @@
                                    '#088','#880','#808',
                                    '#f88','#8f8','#88f',
                                    '#ff8','#f8f','#8ff','#888'],
-                  labels: [<?php
-                           $numxticks = 0;
-                           if ($showweek) {
-                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_WEEK) {
-                                   echo '"',Statistics_timeperiod::format_week($ut),'",';
-                                   ++$numxticks;
-                               }
-                           }
-                           else {
-                               for ($ut=$scale_start; $ut<$scale_end; $ut += Statistics_timeperiod::SECS_PER_DAY) {
-                                   echo '"',Statistics_timeperiod::format_day($ut),'",';
-                                   ++$numxticks;
-                               }
-                           }
-                           ?>],
+                  labels: xlabels,
                   numxticks: <?= $numxticks ?>,
               }
           };
-
+          
           var scatterdataspf = $.extend(true, {}, scatterdata);  // This is a deep copy
           scatterdataspf.id = 'cvsspf';
           scatterdataspf.options.titleYaxis = 'Question items per minute';//'Seconds per question item';
@@ -258,6 +274,14 @@
           scatter = new RGraph.Scatter(scatterdata).draw();
           new RGraph.Scatter(scatterdataspf).on('firstdraw', adaptScale).draw();
 
+
+          <?php if ($showweek): ?>
+              weekno_tooltip('cvs', xlabels, 'Starts\n', weekdates);
+              weekno_tooltip('cvsspf', xlabels, 'Starts\n', weekdates);
+          <?php else: ?>
+              weekno_tooltip('cvs', xlabels, '', daydates);
+              weekno_tooltip('cvsspf', xlabels, '', daydates);
+          <?php endif; ?>
 
           var hbarcolors = ['#f00','#0f0','#00f','#0ff','#ff0','#f0f','#000',
                             '#800','#080','#008','#08f','#8f0','#80f','#0f8','#f80','#f08',
