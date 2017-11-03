@@ -21,9 +21,9 @@
 
   <p>&nbsp;</p>
   <div>
-    <span style="font-weight:bold">Class:</span>
+    <span style="font-weight:bold"><?= $this->lang->line('class_prompt') ?></span>
     <select name="classid">
-      <option value="0" <?= set_select('classid', 0, true) ?>>Ignore class</option>
+      <option value="0" <?= set_select('classid', 0, true) ?>><?= $this->lang->line('ignore_class') ?></option>
       <?php foreach($classlist as $cl): ?>
         <?php if ($cl->id==$classid) $myclassname = $cl->classname; ?>
         <option value="<?= $cl->id ?>" <?= set_select('classid', $cl->id) ?>><?= htmlspecialchars($cl->classname) ?></option>
@@ -41,15 +41,15 @@
   </script>
 
 <?php if ($classid==0): ?>
-  <h1>Statistics for all exercises</h1>
+  <h1><?= $this->lang->line('stat_all_ex') ?></h1>
 <?php else: ?>
-  <h1>Statistics for class &ldquo;<?= htmlspecialchars($myclassname) ?>&rdquo;</h1>
+  <h1><?= sprintf($this->lang->line('stat_for_class'), htmlspecialchars($myclassname)) ?></h1>
 <?php endif; ?>
-  <h1><?= sprintf($this->lang->line('student_is'),htmlspecialchars($user_full_name)) ?></h1>
+  <h1><?= sprintf($this->lang->line('student_is'), htmlspecialchars($user_full_name)) ?></h1>
         
 <?php $totaltime = array_sum($total); ?>
 <?php if ($totaltime==0): ?>
-    <h2>No data</h2>
+  <div class="alert alert-warning"><?= $this->lang->line('no_data') ?></div>
 <?php else: ?>
 
   <?php
@@ -87,13 +87,13 @@
       $canvasheight = count($totaltemp)*25 + 70;
   ?>
       
-  <h2>Total time spent: <?= floor($totaltime) ?> hours <?= round(($totaltime - floor($totaltime))*60) ?> minutes. </h2>
-  <h2>Time spent per week</h2>
+  <h2><?= sprintf($this->lang->line('total_time_spent'), floor($totaltime), round(($totaltime - floor($totaltime))*60)) ?></h2>
+  <h2><?= $this->lang->line('time_per_week') ?></h2>
   <canvas style="background:#f8f8f8; display:block;" id="weekcanvas" width="800" height="500">
     [No canvas support]
   </canvas>
    
-  <h2>Time spent on each exercise</h2>
+  <h2><?= $this->lang->line('time_per_exercise') ?></h2>
   <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="excanvas" width="800" height="<?= $canvasheight ?>">
     [No canvas support]
   </canvas>
@@ -104,8 +104,9 @@
         var weeklabels = [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>];
         var weekdates =  [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_date($w),'",'; ?>];
 
-        graph_bar('weekcanvas', [<?= implode(",", $total) ?>], weeklabels, 'Hours', '(ISO) Week number');
-        weekno_tooltip('weekcanvas', weeklabels, 'Starts\n', weekdates);
+        graph_bar('weekcanvas', [<?= implode(",", $total) ?>], weeklabels,
+                  '<?= $this->lang->line('hours') ?>', '<?= $this->lang->line('iso_week_no') ?>');
+        weekno_tooltip('weekcanvas', weeklabels, '<?= $this->lang->line('starts') ?>' + '\n', weekdates);
         
         var hbarconf = {
             id: 'excanvas',
@@ -116,7 +117,7 @@
                 gutterBottom: 45,
                 vmargin: 5,
                 scaleZerostart: true,
-                titleXaxis: 'Minutes',                  
+                titleXaxis: '<?= $this->lang->line('minutes') ?>',                  
                 titleXaxisY: <?= $canvasheight-10 ?>,
                 textAccessible: true
             }
@@ -133,7 +134,7 @@
                 text: hbarconf.options.labels[i]
             });
 
-            $(found[0]).wrap('<div title="' + totaltempnames_html[i] + '"><a href="' + totaltempnames_url[i] + '"></a></div>')
+            $(found[0]).wrap('<div title="' + totaltempnames_html[i] + '"><a href="' + totaltempnames_url[i] + '"></a></div>');
             $(found[0]).css({color: 'blue'});
         }
 

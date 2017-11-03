@@ -142,10 +142,10 @@
           <?php endif; ?>
               
           var scatterdata = make_scatterconfig('cvs', <?= $resx ?>, <?= $scale_start ?>, <?= $scale_end ?>,
-                                             '%', '<?= $this->lang->line('correct') ?>', <?= $showweek ? "'{$this->lang->line('iso_week_no')}'" : "'{$this->lang->line('date')}'" ?>,
+                                             '%', '<?= $this->lang->line('correct') ?>', '<?= $showweek ? $this->lang->line('iso_week_no') : $this->lang->line('date') ?>',
                                              xlabels, <?= $numxticks ?>);
           var scatterdataspf = make_scatterconfig('cvsspf',<?= $resxspf ?>, <?= $scale_start ?>, <?= $scale_end ?>,
-                                                  null, '<?= $this->lang->line('question_items_per_min') ?>', <?= $showweek ? "'(ISO) Week number'" : "'Date'" ?>,
+                                                  null, '<?= $this->lang->line('question_items_per_min') ?>', '<?= $showweek ? $this->lang->line('iso_week_no') : $this->lang->line('date') ?>',
                                                   xlabels, <?= $numxticks ?>);
           
           scatterdataspf.options.ymax = null;
@@ -155,8 +155,8 @@
           scatterspf = new RGraph.Scatter(scatterdataspf).on('firstdraw', adaptScale).draw();
 
           <?php if ($showweek): ?>
-              weekno_tooltip('cvs', xlabels, 'Starts\n', weekdates);
-              weekno_tooltip('cvsspf', xlabels, 'Starts\n', weekdates);
+              weekno_tooltip('cvs', xlabels, '<?= $this->lang->line('starts') ?>' + '\n', weekdates);
+              weekno_tooltip('cvsspf', xlabels, '<?= $this->lang->line('starts') ?>' + '\n', weekdates);
           <?php else: ?>
               weekno_tooltip('cvs', xlabels, '', daydates);
               weekno_tooltip('cvsspf', xlabels, '', daydates);

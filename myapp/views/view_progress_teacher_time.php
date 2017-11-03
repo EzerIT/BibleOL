@@ -28,12 +28,12 @@
           });
   </script>
 
-  <h1>Statistics for class &ldquo;<?= htmlspecialchars($classname) ?>&rdquo;</h1>
+  <h1><?= sprintf($this->lang->line('stat_for_class'), htmlspecialchars($classname)) ?></h1>
 
   <?php if ($status==1): ?>
   <?php if (array_sum($total)==0): ?>
 
-    <h2>No data</h2>
+    <h2><?= $this->lang->line('no_data') ?></h2>
   <?php else: ?>
 
   <?php
@@ -55,12 +55,12 @@
       }
   ?>
       
-  <h2>Time spent by all students</h2>
+  <h2><?= $this->lang->line('time_by_all_students') ?></h2>
   <canvas style="background:#f8f8f8; display:block;" id="totalcanvas" width="800" height="500">
     [No canvas support]
   </canvas>
    
-  <h2>Time spent by each student</h2>
+  <h2><?= $this->lang->line('time_by_each_students') ?></h2>
   <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="studentscanvas" width="800" height="500">
     [No canvas support]
   </canvas>
@@ -100,7 +100,7 @@
         var weeklabels = [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>];
         var weekdates =  [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_date($w),'",'; ?>];
 
-        graph_bar('totalcanvas', [<?= implode(",", $total) ?>], weeklabels, 'Hours', '(ISO) Week number');
+        graph_bar('totalcanvas', [<?= implode(",", $total) ?>], weeklabels, '<?= $this->lang->line('hours') ?>', '<?= $this->lang->line('iso_week_no') ?>');
         
         var bar2colors = ['#f00','#0f0','#00f','#0ff','#ff0','#f0f','#000',
                           '#800','#080','#008','#08f','#8f0','#80f','#0f8','#f80','#f08',
@@ -122,9 +122,9 @@
                 gutterBottom: 45,
                 hmargin: 7,
                 hmarginGrouped: 1,
-                titleYaxis: 'Hours',                  
+                titleYaxis: '<?= $this->lang->line('hours') ?>',                  
                 titleYaxisX: 12,                  
-                titleXaxis: '(ISO) Week number',                  
+                titleXaxis: '<?= $this->lang->line('iso_week_no') ?>',                  
                 titleXaxisY: 490,
                 textAccessible: true
             }
@@ -142,8 +142,8 @@
         var users_elem = $('input[name="users"]');
         var selectall_elem = $('input[name="selectall"]');
 
-        weekno_tooltip('totalcanvas', weeklabels, 'Starts\n', weekdates);
-        weekno_tooltip('studentscanvas', weeklabels, 'Starts\n', weekdates);
+        weekno_tooltip('totalcanvas', weeklabels, '<?= $this->lang->line('starts') ?>' + '\n', weekdates);
+        weekno_tooltip('studentscanvas', weeklabels, '<?= $this->lang->line('starts') ?>' + '\n', weekdates);
 
         function userchange(e) {
             bar2on[$(this).prop('value')] = $(this).prop('checked');

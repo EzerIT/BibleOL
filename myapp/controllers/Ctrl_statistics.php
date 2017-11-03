@@ -157,7 +157,7 @@ class Ctrl_statistics extends MY_Controller {
             $user_full_name = $this->mod_users->user_full_name($userid);
             
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Student Graphs',
+            $this->load->view('view_top1', array('title' => $this->lang->line('student_graphs_title'),
                                                  'js_list' => array('RGraph/libraries/RGraph.common.core.js',
                                                                     'RGraph/libraries/RGraph.bar.js',
                                                                     'RGraph/libraries/RGraph.hbar.js',
@@ -180,18 +180,14 @@ class Ctrl_statistics extends MY_Controller {
 
 
             
-            $this->load->view('view_main_page', array('left_title' => 'Select a Period',
-                                                      'left' => '<p>Use the two date fields to select a first
-                                                                 and last date to view.</p>
-                                                                 <p><b>Note: At most 26 weeks (6 months) of information
-                                                                 can be shown at a time.</b></p>
-                                                                 <p>Optionally, select the class for which you want
-                                                                 data.</p>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_period_heading'),
+                                                      'left' => $this->lang->line('time_period_description')
+                                                                . $this->lang->line('student_time_description'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Student Graphs');
+            $this->error_view($e->getMessage(), $this->lang->line('student_graphs_title'));
         }
     }
         
@@ -275,7 +271,7 @@ class Ctrl_statistics extends MY_Controller {
             $user_full_name = $this->mod_users->user_full_name($userid);
             
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Exercise Graphs',
+            $this->load->view('view_top1', array('title' => $this->lang->line('exercise_graphs_title'),
                                                  'js_list' => array('RGraph/libraries/RGraph.common.core.js',
                                                                     'RGraph/libraries/RGraph.scatter.js',
                                                                     'RGraph/libraries/RGraph.hbar.js',
@@ -302,19 +298,14 @@ class Ctrl_statistics extends MY_Controller {
                                                                                       'minpoint' => $this->statistics_timeperiod->start_timestamp(),
                                                                                       'maxpoint' => $this->statistics_timeperiod->end_timestamp()), true);
 
-            $this->load->view('view_main_page', array('left_title' => 'Select a Period',
-                                                      'left' => '<p>Use the two date fields to select a first
-                                                                 and last date to view.</p>
-                                                                 <p><b>Note: At most 26 weeks (6 months) of information
-                                                                 can be shown at a time.</b></p>
-                                                                 <p>If the period is longer than 10 days, the results will
-                                                                 be grouped using the week number specified by the
-                                                                 International Organization for Standardization (ISO).</p>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_period_heading'),
+                                                      'left' => $this->lang->line('time_period_description')
+                                                                . $this->lang->line('student_exercise_description'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Exercise Graphs');
+            $this->error_view($e->getMessage(), $this->lang->line('exercise_graphs_title'));
         }
     }
 
@@ -330,19 +321,19 @@ class Ctrl_statistics extends MY_Controller {
             $classes = $this->mod_classes->get_named_classes_owned(false);
 //            $classes = $this->mod_classes->get_named_classes_owned(!false);
             
-            $this->load->view('view_top1', array('title' => 'Teacher Graph'));
+            $this->load->view('view_top1', array('title' => $this->lang->line('teacher_graphs_title')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
             
             $center_text = $this->load->view('view_progress_teacher_classes', array('classes' => $classes), true); 
 
-            $this->load->view('view_main_page', array('left_title' => 'Select class',
-                                                      'left' => '<p>Here you will find a list of classes you manage.</p><p>Click the “Students” or “Exercises” button next to a class.</p>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_class_heading'),
+                                                      'left' => $this->lang->line('select_class_description'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Teacher Graph');
+            $this->error_view($e->getMessage(), $this->lang->line('teacher_graphs_title'));
         }
     }
 
@@ -436,7 +427,7 @@ class Ctrl_statistics extends MY_Controller {
             }
 
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Student Graphs',
+            $this->load->view('view_top1', array('title' => $this->lang->line('student_graphs_title'),
                                                  'js_list' => array('RGraph/libraries/RGraph.common.core.js',
                                                                     'RGraph/libraries/RGraph.bar.js',
                                                                     'RGraph/libraries/RGraph.common.dynamic.js',
@@ -456,16 +447,13 @@ class Ctrl_statistics extends MY_Controller {
                                                                                  'dur' => $dur,
                                                                                  'total' => $total), true);
 
-            $this->load->view('view_main_page', array('left_title' => 'Select a Period',
-                                                      'left' => '<p>Use the two date fields to select a first
-                                                                 and last date to view.</p>
-                                                                 <p><b>Note: At most 26 weeks (6 months) of information
-                                                                 can be shown at a time.</b></p>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_period_heading'),
+                                                      'left' => $this->lang->line('time_period_description'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Student Graphs');
+            $this->error_view($e->getMessage(), $this->lang->line('student_graphs_title'));
         }
     }
     
@@ -575,7 +563,7 @@ class Ctrl_statistics extends MY_Controller {
             }
 
             // VIEW:
-            $this->load->view('view_top1', array('title' => 'Student Graphs',
+            $this->load->view('view_top1', array('title' => $this->lang->line('exercise_graphs_title'),
                                                  'js_list' => array('RGraph/libraries/RGraph.common.core.js',
                                                                     'RGraph/libraries/RGraph.hbar.js',
                                                                     'RGraph/libraries/RGraph.scatter.js',
@@ -603,16 +591,14 @@ class Ctrl_statistics extends MY_Controller {
                                                                                       'maxpoint' => $this->statistics_timeperiod->end_timestamp(),
                                                                                       'exercise_list' => $exercise_list), true);
 
-            $this->load->view('view_main_page', array('left_title' => 'Select a Period',
-                                                      'left' => '<p>Use the two date fields to select a first
-                                                                 and last date to view. Use the selector to select an exercise.</p>
-                                                                 <p><b>Note: At most 26 weeks (6 months) of information
-                                                                 can be shown at a time.</b></p>',
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_period_heading'),
+                                                      'left' => $this->lang->line('time_period_description')
+                                                      . $this->lang->line('student_exercise_description'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
-            $this->error_view($e->getMessage(), 'Exercise Graphs');
+            $this->error_view($e->getMessage(), $this->lang->line('exercise_graphs_title'));
         }
     }
     

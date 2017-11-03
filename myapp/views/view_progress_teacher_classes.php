@@ -1,17 +1,17 @@
-<h1>Statistics per Class</h1>
+<h1><?= $this->lang->line('statistics_per_class_heading') ?></h1>
 
 <?php if (count($classes)==0): ?>
-     <h2>You have no classes</h2>
+     <h2><?= $this->lang->line('no_classes') ?></h2>
 <?php else: ?>
 
   <table>
-    <tr><th>Class</th><th style="padding-left:5px">Select statistics grouped by</th></tr>
+    <tr><th><?= $this->lang->line('class') ?></th><th style="padding-left:5px"><?= $this->lang->line('select_grouped_by') ?></th></tr>
   <?php foreach($classes as $cl): ?>
     <tr>
       <td><?= $cl->classname ?></td>
       <td style="padding-left:5px;text-align:center;">
-       <a class="label label-primary" href="<?= site_url('statistics/teacher_time') ?>?classid=<?= $cl->id ?>">Students</a>
-       <a class="label label-primary" href="<?= site_url('statistics/teacher_exercises') ?>?classid=<?= $cl->id ?>">Exercises</a>
+       <a class="label label-primary" href="<?= site_url('statistics/teacher_time') ?>?classid=<?= $cl->id ?>"><?= $this->lang->line('grouped_by_students') ?></a>
+       <a class="label label-primary" href="<?= site_url('statistics/teacher_exercises') ?>?classid=<?= $cl->id ?>"><?= $this->lang->line('grouped_by_exercises') ?></a>
      </td>
     </tr>
   <?php endforeach; ?>

@@ -1,5 +1,13 @@
 <?php
 
+$comment['class'] = "";
+$format['class'] = "";
+$use_textarea['class'] = false;
+
+$comment['class_prompt'] = "";
+$format['class_prompt'] = "";
+$use_textarea['class_prompt'] = false;
+
 $comment['correct'] = "";
 $format['correct'] = "";
 $use_textarea['correct'] = false;
@@ -28,6 +36,14 @@ $comment['exercise_file_colon'] = "";
 $format['exercise_file_colon'] = "";
 $use_textarea['exercise_file_colon'] = false;
 
+$comment['exercise_graphs_title'] = "";
+$format['exercise_graphs_title'] = "";
+$use_textarea['exercise_graphs_title'] = false;
+
+$comment['exercise_prompt'] = "";
+$format['exercise_prompt'] = "";
+$use_textarea['exercise_prompt'] = false;
+
 $comment['feature'] = "";
 $format['feature'] = "";
 $use_textarea['feature'] = false;
@@ -36,13 +52,41 @@ $comment['for_user'] = "";
 $format['for_user'] = "";
 $use_textarea['for_user'] = false;
 
+$comment['grouped_by_exercises'] = "";
+$format['grouped_by_exercises'] = "";
+$use_textarea['grouped_by_exercises'] = false;
+
+$comment['grouped_by_students'] = "";
+$format['grouped_by_students'] = "";
+$use_textarea['grouped_by_students'] = false;
+
+$comment['hours'] = "";
+$format['hours'] = "";
+$use_textarea['hours'] = false;
+
+$comment['ignore_class'] = "";
+$format['ignore_class'] = "";
+$use_textarea['ignore_class'] = false;
+
 $comment['iso_week_no'] = "";
 $format['iso_week_no'] = "";
 $use_textarea['iso_week_no'] = false;
 
+$comment['minutes'] = "";
+$format['minutes'] = "";
+$use_textarea['minutes'] = false;
+
 $comment['mistakes'] = "";
 $format['mistakes'] = "";
 $use_textarea['mistakes'] = false;
+
+$comment['no_classes'] = "";
+$format['no_classes'] = "";
+$use_textarea['no_classes'] = false;
+
+$comment['no_data'] = "";
+$format['no_data'] = "";
+$use_textarea['no_data'] = false;
 
 $comment['number_abbrev'] = "";
 $format['number_abbrev'] = "";
@@ -80,6 +124,22 @@ $comment['sec_per_correct'] = "";
 $format['sec_per_correct'] = "";
 $use_textarea['sec_per_correct'] = false;
 
+$comment['select_class_description'] = "HTML";
+$format['select_class_description'] = "keep_blanks";
+$use_textarea['select_class_description'] = true;
+
+$comment['select_class_heading'] = "";
+$format['select_class_heading'] = "";
+$use_textarea['select_class_heading'] = false;
+
+$comment['select_grouped_by'] = "";
+$format['select_grouped_by'] = "";
+$use_textarea['select_grouped_by'] = false;
+
+$comment['select_period_heading'] = "";
+$format['select_period_heading'] = "";
+$use_textarea['select_period_heading'] = false;
+
 $comment['show_non_graded_prompt'] = "";
 $format['show_non_graded_prompt'] = "";
 $use_textarea['show_non_graded_prompt'] = false;
@@ -92,21 +152,81 @@ $comment['speed_by_date'] = "";
 $format['speed_by_date'] = "";
 $use_textarea['speed_by_date'] = false;
 
+$comment['starts'] = "";
+$format['starts'] = "";
+$use_textarea['starts'] = false;
+
 $comment['statistics_for_exercise'] = "";
 $format['statistics_for_exercise'] = "";
 $use_textarea['statistics_for_exercise'] = false;
+
+$comment['statistics_per_class_heading'] = "";
+$format['statistics_per_class_heading'] = "";
+$use_textarea['statistics_per_class_heading'] = false;
 
 $comment['statistics_title'] = "Text in title bar";
 $format['statistics_title'] = "";
 $use_textarea['statistics_title'] = false;
 
+$comment['stat_all_ex'] = "";
+$format['stat_all_ex'] = "";
+$use_textarea['stat_all_ex'] = false;
+
+$comment['stat_for_class'] = "";
+$format['stat_for_class'] = "";
+$use_textarea['stat_for_class'] = false;
+
+$comment['students_marked_star'] = "";
+$format['students_marked_star'] = "";
+$use_textarea['students_marked_star'] = false;
+
+$comment['student_exercise_description'] = "HTML";
+$format['student_exercise_description'] = "keep_blanks";
+$use_textarea['student_exercise_description'] = true;
+
+$comment['student_graphs_title'] = "";
+$format['student_graphs_title'] = "";
+$use_textarea['student_graphs_title'] = false;
+
 $comment['student_is'] = "";
 $format['student_is'] = "";
 $use_textarea['student_is'] = false;
 
+$comment['student_time_description'] = "HTML";
+$format['student_time_description'] = "keep_blanks";
+$use_textarea['student_time_description'] = true;
+
+$comment['teacher_graphs_title'] = "";
+$format['teacher_graphs_title'] = "";
+$use_textarea['teacher_graphs_title'] = false;
+
 $comment['time'] = "Date and time";
 $format['time'] = "";
 $use_textarea['time'] = false;
+
+$comment['time_by_all_students'] = "";
+$format['time_by_all_students'] = "";
+$use_textarea['time_by_all_students'] = false;
+
+$comment['time_by_each_students'] = "";
+$format['time_by_each_students'] = "";
+$use_textarea['time_by_each_students'] = false;
+
+$comment['time_period_description'] = "HTML";
+$format['time_period_description'] = "keep_blanks";
+$use_textarea['time_period_description'] = true;
+
+$comment['time_per_exercise'] = "";
+$format['time_per_exercise'] = "";
+$use_textarea['time_per_exercise'] = false;
+
+$comment['time_per_week'] = "";
+$format['time_per_week'] = "";
+$use_textarea['time_per_week'] = false;
+
+$comment['total_time_spent'] = "";
+$format['total_time_spent'] = "";
+$use_textarea['total_time_spent'] = false;
 
 $comment['wrong'] = "";
 $format['wrong'] = "";

@@ -22,7 +22,7 @@
 
   <p>&nbsp;</p>
   <div>
-    <span style="font-weight:bold">Exercise:</span>
+    <span style="font-weight:bold"><?= $this->lang->line('exercise_prompt') ?></span>
     <select name="exercise">
       <option value="" <?= set_select('exercise', '', true) ?>></option>
       <?php foreach($exercise_list as $ex): ?>
@@ -51,14 +51,14 @@
           });
   </script>
 
-   <h1>Statistics for class &ldquo;<?= htmlspecialchars($classname) ?>&rdquo;</h1>
+  <h1><?= sprintf($this->lang->line('stat_for_class'), htmlspecialchars($classname)) ?></h1>
 
 <?php if ($status!=2): ?>
   <h2><?= sprintf($this->lang->line('statistics_for_exercise'),htmlspecialchars($quiz)) ?></h2>
 
   <?php if ($status==0): ?>
 
-    <h2>No data</h2>
+    <h2><?= $this->lang->line('no_data') ?></h2>
 
   <?php else: ?>
 
@@ -82,9 +82,9 @@
 
           foreach ($r1 as $date => $r) {
               $textdate = Statistics_timeperiod::format_date($date);
-              $res1[]    = "[$date,{$r['percentage']},null,'Date: $textdate<br>Questions: {$r['count']}<br>Per min.: " . round($r['featpermin'],1) . "']";
+              $res1[]    = "[$date,{$r['percentage']},null,'{$this->lang->line('date_colon')} $textdate<br>{$this->lang->line('question_count')} {$r['count']}<br>{$this->lang->line('per_min')} " . round($r['featpermin'],1) . "']";
               $roundpct = round($r['percentage']);
-              $res1spf[] = "[$date,{$r['featpermin']},null,'Date: $textdate<br>Correct: $roundpct%']";
+              $res1spf[] = "[$date,{$r['featpermin']},null,'{$this->lang->line('date_colon')} $textdate<br>{$this->lang->line('correct_colon')} $roundpct%']";
           }
           $res2[]    = "[" . implode(",",$res1) . "]";
           $res2spf[] = "[" . implode(",",$res1spf) . "]";
@@ -140,7 +140,7 @@
       <div id="mykey"></div>
       <div id="allkey"><input type="checkbox" style="margin-left:20px" checked name="selectall" value="">All</div>
       <?php if ($nongraded): ?>
-        <p style="width:200px">Students marked * include results not intended for grading</p>
+        <p style="width:200px"><?= $this->lang->line('students_marked_star') ?></p>
       <?php endif; ?>
     </div>
 
@@ -148,7 +148,7 @@
       [No canvas support]
     </canvas>
 
-    <h2>Percentage of correct answers by feature</h2>
+    <h2><?= $this->lang->line('pct_correct_by_feature') ?></h2>
     <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="featcanvas" width="800" height="<?= $canvasheight ?>">
     [No canvas support]
     </canvas>
@@ -212,10 +212,10 @@
           <?php endif; ?>
 
           var scatterdata = make_scatterconfig('cvs', RGraph.array_clone(dataorig), <?= $scale_start ?>, <?= $scale_end ?>,
-                                             '%', 'Correct', <?= $showweek ? "'(ISO) Week number'" : "'Date'" ?>,
+                                             '%', '<?= $this->lang->line('correct') ?>', '<?= $showweek ? $this->lang->line('iso_week_no') : $this->lang->line('date') ?>',
                                              xlabels, <?= $numxticks ?>);
           var scatterdataspf = make_scatterconfig('cvsspf', RGraph.array_clone(dataorigspf), <?= $scale_start ?>, <?= $scale_end ?>,
-                                                  null, 'Question items per minute', <?= $showweek ? "'(ISO) Week number'" : "'Date'" ?>,
+                                                  null, '<?= $this->lang->line('question_items_per_min') ?>', '<?= $showweek ? $this->lang->line('iso_week_no') : $this->lang->line('date') ?>',
                                                   xlabels, <?= $numxticks ?>);
           scatterdataspf.options.ymax = null;
           scatterdataspf.options.scaleDecimals = 1;
@@ -226,8 +226,8 @@
 
 
           <?php if ($showweek): ?>
-              weekno_tooltip('cvs', xlabels, 'Starts\n', weekdates);
-              weekno_tooltip('cvsspf', xlabels, 'Starts\n', weekdates);
+              weekno_tooltip('cvs', xlabels, '<?= $this->lang->line('starts') ?>' + '\n', weekdates);
+              weekno_tooltip('cvsspf', xlabels, '<?= $this->lang->line('starts') ?>' + '\n', weekdates);
           <?php else: ?>
               weekno_tooltip('cvs', xlabels, '', daydates);
               weekno_tooltip('cvsspf', xlabels, '', daydates);
@@ -241,7 +241,7 @@
           var hbaron = [<?php for ($i=0; $i<count($student_captions); ++$i) echo 'true,'; ?>];
           var hbardata = <?= $featdata ?>;
           
-          var hbarconfig = make_hbarconfig('featcanvas', null, [<?= implode(",", $featname) ?>], 'Correct', <?= $canvasheight-10 ?>);
+          var hbarconfig = make_hbarconfig('featcanvas', null, [<?= implode(",", $featname) ?>], '<?= $this->lang->line('correct') ?>', <?= $canvasheight-10 ?>);
           hbarconfig.options.vmarginGrouped = 1;
           hbarconfig.options.vmargin = 5;
           
@@ -334,8 +334,6 @@
           selectall_elem
               .change(allchange)
               .prop("indeterminate", false);
-
-
       });
       </script>
 
