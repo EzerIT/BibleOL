@@ -415,9 +415,11 @@ class Mod_translate extends CI_Model {
             if ($lang=='comment') {
                 foreach ($query2->result() as $row2) {
                     $text = preg_replace(array('/"/',
+                                               "/\r/",
                                                "/\n$/",
                                                "/\n/"),
                                          array('\\"',
+                                               '',
                                                '\\n',
                                                "\\n\"\n        . \""),
                                          $row2->comment);
@@ -430,9 +432,11 @@ class Mod_translate extends CI_Model {
             else {
                 foreach ($query2->result() as $row2) {
                     $text = preg_replace(array('/"/',
+                                               "/\r/",
                                                "/\n$/",
                                                "/\n/"),
                                          array('\\"',
+                                               '',
                                                '\\n',
                                                "\\n\"\n        . \""),
                                          $row2->text);
