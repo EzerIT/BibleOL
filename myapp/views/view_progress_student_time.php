@@ -92,15 +92,93 @@
   <canvas style="background:#f8f8f8; display:block;" id="weekcanvas" width="800" height="500">
     [No canvas support]
   </canvas>
-   
+
+
+  <p style="margin-top:10px">
+    <a id="show1" class="label label-primary" href="#"><?= $this->lang->line('show_table') ?></a>
+    <a id="hide1" class="label label-primary" style="display:none" href="#"><?= $this->lang->line('hide_table') ?></a>
+  </p>
+  <div class="table-responsive" id="table1" style="display:none">
+  <table class="type2 table table-striped autowidth">
+    <caption><?= sprintf($this->lang->line('time_one_student_caption'),htmlspecialchars($user_full_name)) ?></caption>
+    <tr>
+      <th colspan="<?= count($total) ?>" class="text-center"><?= $this->lang->line('iso_week_no') ?></th>
+    </tr>
+    <tr>
+      <?php 
+         foreach ($total as $w => $ignore)
+           echo '<th class="text-center">',Statistics_timeperiod::format_week($w),'</th>';
+      ?>
+    </tr>
+    <tr>
+      <?php foreach ($total as $w => $h): ?>
+        <td><?= sprintf("%d:%02d",floor($h),round(($h-floor($h))*60)) ?></td>
+      <?php endforeach; ?>
+    </tr>
+  </table>
+  </div>
+
+  <hr style="margin-top:50px">          
   <h2><?= $this->lang->line('time_per_exercise') ?></h2>
   <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="excanvas" width="800" height="<?= $canvasheight ?>">
     [No canvas support]
   </canvas>
 
+  <p style="margin-top:10px">
+    <a id="show2" class="label label-primary" href="#"><?= $this->lang->line('show_table') ?></a>
+    <a id="hide2" class="label label-primary" style="display:none" href="#"><?= $this->lang->line('hide_table') ?></a>
+  </p>
+  <div class="table-responsive" id="table2" style="display:none">
+    <table class="type2 table table-striped autowidth">
+      <caption><?= sprintf($this->lang->line('time_per_exercise_caption'),htmlspecialchars($user_full_name)) ?></caption>
+      <?php foreach ($totaltemp as $name => $value): ?>
+        <tr>
+          <td><?= htmlspecialchars($name) ?></td>
+          <td><?= sprintf("%d:%02d:%02d",floor($value),($value*60)%60,($value*3600)%60) ?></td>
+        </tr>
+      <?php endforeach; ?>
+    </table>
+  </div>
 
   <script>
     $(function() {
+            $('#show1').click(
+                function() {
+                    $('#table1').show();
+                    $('#show1').hide();
+                    $('#hide1').show();
+                    return false;
+                }
+                );
+            $('#hide1').click(
+                function() {
+                    $('#table1').hide();
+                    $('#show1').show();
+                    $('#hide1').hide();
+                    return false;
+                }
+                );
+            $('#show2').click(
+                function() {
+                    $('#table2').show();
+                    $('#show2').hide();
+                    $('#hide2').show();
+
+                    $("html, body").animate({ scrollTop: $(document).height() }, 1000); // Scroll to bottom
+                    
+                    return false;
+                }
+                );
+            $('#hide2').click(
+                function() {
+                    $('#table2').hide();
+                    $('#show2').show();
+                    $('#hide2').hide();
+                    return false;
+                }
+                );
+
+
         var weeklabels = [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>];
         var weekdates =  [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_date($w),'",'; ?>];
 

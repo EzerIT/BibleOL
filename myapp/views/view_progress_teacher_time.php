@@ -59,14 +59,49 @@
   <canvas style="background:#f8f8f8; display:block;" id="totalcanvas" width="800" height="500">
     [No canvas support]
   </canvas>
-   
+          
+          
+  <hr style="margin-top:50px">          
   <h2><?= $this->lang->line('time_by_each_students') ?></h2>
   <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="studentscanvas" width="800" height="500">
     [No canvas support]
   </canvas>
   <div style="display:inline-block; vertical-align:top;">
     <div id="mykey"></div>
-    <div id="allkey"><input type="checkbox" style="margin-left:20px" checked name="selectall" value="">All</div>
+    <div id="allkey"><input type="checkbox" style="margin-left:20px" checked name="selectall" value=""><?= $this->lang->line('all') ?></div>
+  </div>
+
+  
+  <p style="margin-top:10px">
+          <a id="show1" class="label label-primary" href="#"><?= $this->lang->line('show_table') ?></a>
+          <a id="hide1" class="label label-primary" style="display:none" href="#"><?= $this->lang->line('hide_table') ?></a>
+  </p>
+  <div class="table-responsive" id="table1" style="display:none">
+  <table class="type2 table table-striped autowidth">
+    <caption><?= $this->lang->line('time_by_student_caption') ?></caption>
+    <tr>
+      <th><?= $this->lang->line('iso_week_no') ?></th>
+      <?php 
+         foreach ($total as $w => $ignore)
+           echo '<th class="text-center">',Statistics_timeperiod::format_week($w),'</th>';
+      ?>
+    </tr>
+    <?php foreach ($students as $id=>$name): ?>
+      <tr>
+        <td><?= $name ?></td>
+        <?php foreach ($dur as $w => $st): ?>
+          <?php $h = $st[$id]; ?>
+          <td class="text-center"><?= sprintf("%d:%02d",floor($h),round(($h-floor($h))*60)) ?></td>
+        <?php endforeach; ?>
+      </tr>
+    <?php endforeach; ?>
+    <tr>
+      <td><?= $this->lang->line('total') ?></td>
+      <?php foreach ($total as $w => $h): ?>
+        <td class="text-center"><?= sprintf("%d:%02d",floor($h),round(($h-floor($h))*60)) ?></td>
+      <?php endforeach; ?>
+    </tr>
+  </table>
   </div>
 
 
@@ -97,7 +132,27 @@
 
 
     $(function() {
-        var weeklabels = [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>];
+       $('#show1').click(
+           function() {
+               $('#table1').show();
+               $('#show1').hide();
+               $('#hide1').show();
+
+               $("html, body").animate({ scrollTop: $(document).height() }, 1000); // Scroll to bottom
+               
+               return false;
+           }
+           );
+       $('#hide1').click(
+           function() {
+               $('#table1').hide();
+               $('#show1').show();
+               $('#hide1').hide();
+               return false;
+           }
+           );
+
+       var weeklabels = [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>];
         var weekdates =  [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_date($w),'",'; ?>];
 
         graph_bar('totalcanvas', [<?= implode(",", $total) ?>], weeklabels, '<?= $this->lang->line('hours') ?>', '<?= $this->lang->line('iso_week_no') ?>');

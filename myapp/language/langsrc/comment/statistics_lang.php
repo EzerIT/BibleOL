@@ -1,5 +1,9 @@
 <?php
 
+$comment['all'] = "Refers to all students on a list";
+$format['all'] = "";
+$use_textarea['all'] = false;
+
 $comment['class'] = "";
 $format['class'] = "";
 $use_textarea['class'] = false;
@@ -32,6 +36,10 @@ $comment['duration'] = "";
 $format['duration'] = "";
 $use_textarea['duration'] = false;
 
+$comment['exercise_by_student_caption'] = "";
+$format['exercise_by_student_caption'] = "";
+$use_textarea['exercise_by_student_caption'] = false;
+
 $comment['exercise_file_colon'] = "";
 $format['exercise_file_colon'] = "";
 $use_textarea['exercise_file_colon'] = false;
@@ -40,6 +48,10 @@ $comment['exercise_graphs_title'] = "";
 $format['exercise_graphs_title'] = "";
 $use_textarea['exercise_graphs_title'] = false;
 
+$comment['exercise_one_student_caption'] = "";
+$format['exercise_one_student_caption'] = "";
+$use_textarea['exercise_one_student_caption'] = false;
+
 $comment['exercise_prompt'] = "";
 $format['exercise_prompt'] = "";
 $use_textarea['exercise_prompt'] = false;
@@ -47,6 +59,14 @@ $use_textarea['exercise_prompt'] = false;
 $comment['feature'] = "";
 $format['feature'] = "";
 $use_textarea['feature'] = false;
+
+$comment['features_by_student_caption'] = "";
+$format['features_by_student_caption'] = "";
+$use_textarea['features_by_student_caption'] = false;
+
+$comment['features_one_student_caption'] = "";
+$format['features_one_student_caption'] = "";
+$use_textarea['features_one_student_caption'] = false;
 
 $comment['for_user'] = "";
 $format['for_user'] = "";
@@ -59,6 +79,10 @@ $use_textarea['grouped_by_exercises'] = false;
 $comment['grouped_by_students'] = "";
 $format['grouped_by_students'] = "";
 $use_textarea['grouped_by_students'] = false;
+
+$comment['hide_table'] = "";
+$format['hide_table'] = "";
+$use_textarea['hide_table'] = false;
 
 $comment['hours'] = "";
 $format['hours'] = "";
@@ -112,9 +136,17 @@ $comment['per_min'] = "";
 $format['per_min'] = "";
 $use_textarea['per_min'] = false;
 
+$comment['qi_per_min'] = "";
+$format['qi_per_min'] = "";
+$use_textarea['qi_per_min'] = false;
+
 $comment['question_count'] = "";
 $format['question_count'] = "";
 $use_textarea['question_count'] = false;
+
+$comment['question_count_colon'] = "";
+$format['question_count_colon'] = "";
+$use_textarea['question_count_colon'] = false;
 
 $comment['question_items_per_min'] = "";
 $format['question_items_per_min'] = "";
@@ -143,6 +175,10 @@ $use_textarea['select_period_heading'] = false;
 $comment['show_non_graded_prompt'] = "";
 $format['show_non_graded_prompt'] = "";
 $use_textarea['show_non_graded_prompt'] = false;
+
+$comment['show_table'] = "";
+$format['show_table'] = "";
+$use_textarea['show_table'] = false;
 
 $comment['specify_period'] = "";
 $format['specify_period'] = "";
@@ -175,6 +211,10 @@ $use_textarea['stat_all_ex'] = false;
 $comment['stat_for_class'] = "";
 $format['stat_for_class'] = "";
 $use_textarea['stat_for_class'] = false;
+
+$comment['student'] = "";
+$format['student'] = "";
+$use_textarea['student'] = false;
 
 $comment['students_marked_star'] = "";
 $format['students_marked_star'] = "";
@@ -212,6 +252,14 @@ $comment['time_by_each_students'] = "";
 $format['time_by_each_students'] = "";
 $use_textarea['time_by_each_students'] = false;
 
+$comment['time_by_student_caption'] = "";
+$format['time_by_student_caption'] = "";
+$use_textarea['time_by_student_caption'] = false;
+
+$comment['time_one_student_caption'] = "";
+$format['time_one_student_caption'] = "";
+$use_textarea['time_one_student_caption'] = false;
+
 $comment['time_period_description'] = "HTML";
 $format['time_period_description'] = "keep_blanks";
 $use_textarea['time_period_description'] = true;
@@ -220,9 +268,17 @@ $comment['time_per_exercise'] = "";
 $format['time_per_exercise'] = "";
 $use_textarea['time_per_exercise'] = false;
 
+$comment['time_per_exercise_caption'] = "";
+$format['time_per_exercise_caption'] = "";
+$use_textarea['time_per_exercise_caption'] = false;
+
 $comment['time_per_week'] = "";
 $format['time_per_week'] = "";
 $use_textarea['time_per_week'] = false;
+
+$comment['total'] = "";
+$format['total'] = "";
+$use_textarea['total'] = false;
 
 $comment['total_time_spent'] = "";
 $format['total_time_spent'] = "";

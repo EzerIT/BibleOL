@@ -491,6 +491,9 @@ table.iconlist td {
   padding-right: 30px;
   text-align: right;
 }
+table.autowidth {
+  width: auto !important;
+}
 .bolicon {
   font-weight: bold;
 }

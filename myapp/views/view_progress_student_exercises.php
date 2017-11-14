@@ -76,7 +76,7 @@
       $resspf = array();
       foreach ($resscore as $date => $r) {
           $textdate = Statistics_timeperiod::format_date($date);
-          $res[]    = "[$date,{$r['percentage']},null,'{$this->lang->line('date_colon')} $textdate<br>{$this->lang->line('question_count')} {$r['count']}<br>{$this->lang->line('per_min')} " . round($r['featpermin'],1) . "']";
+          $res[]    = "[$date,{$r['percentage']},null,'{$this->lang->line('date_colon')} $textdate<br>{$this->lang->line('question_count_colon')} {$r['count']}<br>{$this->lang->line('per_min')} " . round($r['featpermin'],1) . "']";
           $roundpct = round($r['percentage']);
           $resspf[] = "[$date,{$r['featpermin']},null,'{$this->lang->line('date_colon')} $textdate<br>{$this->lang->line('correct_colon')} $roundpct%']";
       }
@@ -101,19 +101,106 @@
       [No canvas support]
     </canvas>
 
+    <hr style="margin-top:20px">          
     <h2><?= $this->lang->line('speed_by_date') ?></h2>
     <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="cvsspf" width="800" height="500">
       [No canvas support]
     </canvas>
 
+    <p style="margin-top:10px">
+          <a id="show1" class="label label-primary" href="#"><?= $this->lang->line('show_table') ?></a>
+          <a id="hide1" class="label label-primary" style="display:none" href="#"><?= $this->lang->line('hide_table') ?></a>
+    </p>
+    <div class="table-responsive" id="table1" style="display:none">
+      <table class="type2 table table-striped autowidth">
+        <caption><?= sprintf($this->lang->line('exercise_one_student_caption'),htmlspecialchars($user_full_name)) ?></caption>
+        <tr>
+          <th class="text-center"><?= $this->lang->line('date') ?></th>
+          <th class="text-center"><?= $this->lang->line('correct') ?></th>
+          <th class="text-center"><?= $this->lang->line('question_count') ?></th>
+          <th class="text-center"><?= $this->lang->line('qi_per_min') ?></th>
+        </tr>
+        <?php foreach ($resscore as $time => $result): ?>
+        <tr>
+          <td class="text-center"><?= Statistics_timeperiod::format_date($time) ?></td>
+          <td class="text-center"><?= round($result['percentage']) ?>%</td>
+          <td class="text-center"><?= $result['count'] ?></td>
+          <td class="text-center"><?= sprintf("%.1f",$result['featpermin']) ?></td>
+        </tr>
+        <?php endforeach; ?>
+      </table>
+    </div>
+
+
+
+          
+    <hr style="margin-top:10px">
     <h2><?= $this->lang->line('pct_correct_by_feature') ?></h2>
     <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="featcanvas" width="800" height="<?= $canvasheight ?>">
     [No canvas support]
-</canvas>
+    </canvas>
 
+    <p style="margin-top:10px">
+          <a id="show2" class="label label-primary" href="#"><?= $this->lang->line('show_table') ?></a>
+          <a id="hide2" class="label label-primary" style="display:none" href="#"><?= $this->lang->line('hide_table') ?></a>
+    </p>
+    <div class="table-responsive" id="table2" style="display:none">
+      <table class="type2 table table-striped autowidth">
+          <caption><?= sprintf($this->lang->line('features_one_student_caption'),htmlspecialchars($user_full_name)) ?></caption>
+        <tr>
+          <th><?= $this->lang->line('feature') ?></th>
+          <th class="text-center"><?= $this->lang->line('correct') ?></th>
+        </tr>
+        <?php foreach ($resfeat as $rf): ?>
+        <tr>
+          <td><?= isset($featloc->{$rf->rfname}) ? $featloc->{$rf->rfname} : $rf->rfname ?></td>
+          <td class="text-center"><?= round($rf->pct) ?>%</td>
+        </tr>
+        <?php endforeach; ?>
+      </table>
+    </div>
+
+
+          
 
     <script>
       $(function() {
+          $('#show1').click(
+              function() {
+                  $('#table1').show();
+                  $('#show1').hide();
+                  $('#hide1').show();
+                  return false;
+              }
+              );
+          $('#hide1').click(
+              function() {
+                  $('#table1').hide();
+                  $('#show1').show();
+                  $('#hide1').hide();
+                  return false;
+              }
+              );
+          $('#show2').click(
+              function() {
+                  $('#table2').show();
+                  $('#show2').hide();
+                  $('#hide2').show();
+
+                  $("html, body").animate({ scrollTop: $(document).height() }, 1000); // Scroll to bottom
+                  
+                  return false;
+              }
+              );
+          $('#hide2').click(
+              function() {
+                  $('#table2').hide();
+                  $('#show2').show();
+                  $('#hide2').hide();
+                  return false;
+              }
+              );
+          
           var xlabels = [<?php
                            $numxticks = 0;
                            if ($showweek) {
