@@ -216,6 +216,10 @@ $comment['student'] = "";
 $format['student'] = "";
 $use_textarea['student'] = false;
 
+$comment['students'] = "";
+$format['students'] = "";
+$use_textarea['students'] = false;
+
 $comment['students_marked_star'] = "";
 $format['students_marked_star'] = "";
 $use_textarea['students_marked_star'] = false;

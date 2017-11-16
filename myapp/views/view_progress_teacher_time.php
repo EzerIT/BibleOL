@@ -66,10 +66,6 @@
   <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="studentscanvas" width="800" height="500">
     [No canvas support]
   </canvas>
-  <div style="display:inline-block; vertical-align:top;">
-    <div id="mykey"></div>
-    <div id="allkey"><input type="checkbox" style="margin-left:20px" checked name="selectall" value=""><?= $this->lang->line('all') ?></div>
-  </div>
 
   
   <p style="margin-top:10px">
@@ -139,6 +135,8 @@
                $('#hide1').show();
 
                $("html, body").animate({ scrollTop: $(document).height() }, 1000); // Scroll to bottom
+
+               $("#leftpanel").height($('#centerpanel').height());
                
                return false;
            }
@@ -148,6 +146,9 @@
                $('#table1').hide();
                $('#show1').show();
                $('#hide1').hide();
+
+               $("#leftpanel").height($('#centerpanel').height());
+
                return false;
            }
            );
@@ -258,6 +259,12 @@
         selectall_elem
             .change(allchange)
             .prop("indeterminate", false);
+
+        // Make floating legend
+        $('#extraleft').css('position','sticky').css('top','10px');
+        var cheight = $('#centerpanel').height();
+        if ($('#leftpanel').height()<cheight)
+            $("#leftpanel").height(cheight);
     });
   </script>
   

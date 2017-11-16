@@ -55,6 +55,7 @@ $lang['statistics_title'] = "Statistik";
 $lang['stat_all_ex'] = "Statistik for alle øvelser";
 $lang['stat_for_class'] = "Statistik for klassen »%s«";
 $lang['student'] = "Studerende";
+$lang['students'] = "Studerende";
 $lang['students_marked_star'] = "Studerende markeret med * inkluderer resultater der ikke benyttes til bedømmelse";
 $lang['student_exercise_description'] = "<p>Hvis perioden er længere end 10 dage, vil resultaterne blive grupperet pr. ugenummer</p>";
 $lang['student_graphs_title'] = "Grafer pr. studerende";

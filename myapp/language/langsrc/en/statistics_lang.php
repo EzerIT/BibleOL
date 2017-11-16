@@ -55,6 +55,7 @@ $lang['statistics_title'] = "Statistics";
 $lang['stat_all_ex'] = "Statistics for all exercises";
 $lang['stat_for_class'] = "Statistics for the class “%s”";
 $lang['student'] = "Student";
+$lang['students'] = "Students";
 $lang['students_marked_star'] = "Students marked * include results not intended for grading";
 $lang['student_exercise_description'] = "<p>If the period is longer than 10 days, the results will be grouped using the week number specified by the International Organization for Standardization (ISO).</p>";
 $lang['student_graphs_title'] = "Student Graphs";

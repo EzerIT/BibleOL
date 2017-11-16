@@ -447,9 +447,16 @@ class Ctrl_statistics extends MY_Controller {
                                                                                  'dur' => $dur,
                                                                                  'total' => $total), true);
 
-            $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_period_heading'),
-                                                      'left' => $this->lang->line('time_period_description'),
-                                                      'center' => $center_text));
+            $main_params = array('left_title' => $this->lang->line('select_period_heading'),
+                                 'left' => $this->lang->line('time_period_description'),
+                                 'center' => $center_text);
+
+            if (array_sum($total)>0) {
+                $main_params['extraleft'] = $this->load->view('view_progress_teacher_legend', array(), true);
+                $main_params['extraleft_title'] = $this->lang->line('students');
+            }
+                
+            $this->load->view('view_main_page', $main_params);
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
@@ -591,10 +598,19 @@ class Ctrl_statistics extends MY_Controller {
                                                                                       'maxpoint' => $this->statistics_timeperiod->end_timestamp(),
                                                                                       'exercise_list' => $exercise_list), true);
 
-            $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_period_heading'),
-                                                      'left' => $this->lang->line('time_period_description')
-                                                      . $this->lang->line('student_exercise_description'),
-                                                      'center' => $center_text));
+            $main_params = array('left_title' => $this->lang->line('select_period_heading'),
+                                 'left' => $this->lang->line('time_period_description')
+                                 . $this->lang->line('student_exercise_description'),
+                                 'center' => $center_text);
+            
+            if ($status==1) {
+                $main_params['extraleft'] = $this->load->view('view_progress_teacher_legend',
+                                                              array('nongraded' => $nongraded),
+                                                              true);
+                $main_params['extraleft_title'] = $this->lang->line('students');
+            }
+            
+            $this->load->view('view_main_page', $main_params);
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
