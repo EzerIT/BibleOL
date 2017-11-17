@@ -420,6 +420,10 @@ div.statistics table th,
 div.statistics table td {
   text-align: center;
 }
+div.student-legend {
+  max-height: 400px;
+  overflow-y: auto;
+}
 div#virtualkbid {
   float: right;
 }

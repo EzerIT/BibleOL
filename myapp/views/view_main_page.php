@@ -28,7 +28,7 @@
         <div class="panel-heading">
           <h3 class="panel-title"><?= $extraleft_title ?></h3>
         </div>
-        <div class="panel-body">
+        <div class="panel-body student-legend">
           <?= $extraleft ?>
         </div>
       </div>
@@ -70,7 +70,7 @@
         <div class="panel-heading">
           <h3 class="panel-title"><?= $extraleft_title ?></h3>
         </div>
-        <div class="panel-body">
+        <div class="panel-body student-legend">
           <?= $extraleft ?>
         </div>
         </div>
