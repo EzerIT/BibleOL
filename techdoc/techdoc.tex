@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Font matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{7 April 2017}
+\date{20 November 2017}
 
 \makeindex
 
@@ -942,14 +942,22 @@ transfer data between the server and the client.
 \section{jQuery and jQuery UI}\index{jQuery|hyperit}\index{jQuery UI|hyperit}
 
 On the client side Bible OL uses a JavaScript/TypeScript framework known as
-\emph{jQuery}\footnote{\url{http://jquery.com}.} and its associate user interface functions
-\emph{jQuery UI.}\footnote{\url{http://jqueryui.com}.}
+\emph{jQuery}\footnote{\url{https://jquery.com}.} and its associate user interface functions
+\emph{jQuery UI.}\footnote{\url{https://jqueryui.com}.}
 
 %%%%%%%%%%%%%%%%%%%% Bootstrap %%%%%%%%%%%%%%%%%%%%
 \section{Bootstrap}\index{Bootstrap|hyperit}
 
 On the client side Bible OL uses a JavaScript framework known as
-\emph{Bootstrap.}\footnote{\url{http://getbootstrap.com}.}
+\emph{Bootstrap.}\footnote{\url{https://getbootstrap.com}.} Currently, Bible OL uses Bootstrap
+version 3.3.5 with a few minor modifications.
+
+%%%%%%%%%%%%%%%%%%%% RGraph %%%%%%%%%%%%%%%%%%%%
+\section{RGraph}\index{RGraph|hyperit}
+
+Bible OL can display graphs showing statistics about how students are doing. The graphs are
+constructed using \emph{RGraph.}\footnote{\url{https://www.rgraph.net}.} Currently, Bible OL uses
+RGraph version 4.63.
 
 
 %%%%%%%%%%%%%%%%%%%% What You Must Know %%%%%%%%%%%%%%%%%%%%
@@ -1149,7 +1157,7 @@ The source code contains the following directories (in alphabetical order):
 \begin{my-longtabu}{>{\ttfamily}p{3.3cm}X}{ \headii{\textrm{Name}}{Contents} }
 bootstrap\index{Bootstrap} & A JavaScript framework used on the client side of Bible OL.
 
-Webpage: \url{http://getbootstrap.com}.
+Webpage: \url{https://getbootstrap.com}.
 
 Source: \url{https://github.com/twbs/bootstrap.git}.
 
@@ -1197,7 +1205,8 @@ Source: \url{http://jqueryui.com/download}.
 
 License: MIT.\\
 
-js & JavaScript\index{JavaScript} files from various sources. The files \texttt{ol.js}, \texttt{editquiz.js}, and
+js & JavaScript\index{JavaScript} files from various sources. The files \texttt{ol.js},
+\texttt{editquiz.js}, \texttt{handle\_legend.js}, and
 \texttt{fontselector.js} are the output form compiling TypeScript files. These JavaScript files
 should therefore never be edited.\\
 
@@ -1231,6 +1240,14 @@ the directory is not under Git control.\\
 
 quiz\_templates & Sample quiz templates\index{quiz template} to be copied to the
 \texttt{quizzes} directory in a new installation.\\
+
+RGraph\index{RGraph} & A collection of JavaScript files that aid in drawing graphs.
+
+Webpage: \url{https://www.rgraph.net}.
+
+Source: \url{https://www.rgraph.net/download}.
+
+License: MIT.\\
 
 SILfonts & A collection of Hebrew, Greek and phonetic fonts\index{font}. These files are not used directly
 by the server, but a few of the font files have been
@@ -4428,10 +4445,12 @@ students). It has the following fields:
 An entry in the \emph{userclass} table indicates that a particular user is a member of a particular
 class. The table has these fields:
 
-\begin{my-longtabu}{>{\itshape}lll}{ \headiii{\textup{Column}}{Type}{Contents} }
+\begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
  id       & Integer  & Unique number identifying this entry.\\
  userid   & Integer  & The \emph{id} field from an entry in the \emph{user} table.\\
  classid  & Integer  & The \emph{id} field from an entry in the \emph{class} table.\\
+ access   & Boolean  & \emph{True} if the user has granted the class owner access to results that
+ are marked as not intended for grading.\\
 \end{my-longtabu}
 
 %%%%%%%%%%%%%%%%%%%% The userconfig Table %%%%%%%%%%%%%%%%%%%%
@@ -4616,7 +4635,7 @@ end        & Integer & The end time (UNIX time). This value is NULL if the exerc
                        exercise was aborted without saving the result.\\
 valid      & Boolean & \emph{False} if the user has deleted the entry, \emph{true} otherwise. (There
                         is currently no user interface for deleting statistics.\\
-grading    & Boolean & \emph{True} if this entry is to be used by Learning Journey for grading
+grading    & Boolean & \emph{True} if this entry is to be used for grading
                        purposes, \emph{false} otherwise. (This is controlled by the user clicking
                        ``GRADE task'' or ``SAVE outcome'' at the end of an exercise.) \\
 \end{my-longtabu}
@@ -4845,6 +4864,7 @@ lex                     & Text    & The lexeme in the \emph{transcribed alphabet
 vs                      & Text    & The verbal stem of the word. ``NA'' if the word is not a verb. \\
 tally                   & Integer & The number of occurrences of this word in the text. \\
 vocalized\_lexeme\_utf8 & Text    & The lexeme in Hebrew characters. \\
+roman                   & Text    & An optional roman numeral to differentiate between identically spelled lexemes.\\
 sortorder               & Text    & A string that can be used to sort the words alphabetically. \\
 firstbook               & Text    & \multirow{3}{\linewidth}{The book, chapter, and verse of the first occurrence of the word.} \\
 firstchapter            & Integer & \\
