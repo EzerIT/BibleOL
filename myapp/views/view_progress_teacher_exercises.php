@@ -137,13 +137,6 @@
     <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="cvs" width="800" height="500">
       [No canvas support]
     </canvas>
-    <!--div style="display:inline-block; vertical-align:top;">
-      <div id="mykey"></div>
-      <div id="allkey"><input type="checkbox" style="margin-left:20px" checked name="selectall" value=""><?= $this->lang->line('all') ?></div>
-      <?php if ($nongraded): ?>
-        <p style="width:200px"><?= $this->lang->line('students_marked_star') ?></p>
-      <?php endif; ?>
-    </div-->
 
     <hr style="margin-top:20px">          
     <h2><?= $this->lang->line('speed_by_date') ?></h2>
@@ -259,7 +252,7 @@
                   $('#show1').hide();
                   $('#hide1').show();
 
-                  $("#leftpanel").height($('#centerpanel').height());
+                  legend_adjust($('#leftpanel'), $('#centerpanel'));
 
                   return false;
               }
@@ -270,7 +263,7 @@
                   $('#show1').show();
                   $('#hide1').hide();
 
-                  $("#leftpanel").height($('#centerpanel').height());
+                  legend_adjust($('#leftpanel'), $('#centerpanel'));
 
                   return false;
               }
@@ -283,7 +276,7 @@
 
                   $("html, body").animate({ scrollTop: $(document).height() }, 1000); // Scroll to bottom
 
-                  $("#leftpanel").height($('#centerpanel').height());
+                  legend_adjust($('#leftpanel'), $('#centerpanel'));
 
                   return false;
               }
@@ -294,7 +287,7 @@
                   $('#show2').show();
                   $('#hide2').hide();
 
-                  $("#leftpanel").height($('#centerpanel').height());
+                  legend_adjust($('#leftpanel'), $('#centerpanel'));
 
                   return false;
               }
@@ -457,9 +450,9 @@
 
           // Make floating legend
           $('#extraleft').css('position','sticky').css('top','10px');
-          var cheight = $('#centerpanel').height();
-          if ($('#leftpanel').height()<cheight)
-              $("#leftpanel").height(cheight);
+
+          fix_legend_height($('#leftpanel'), $('#centerpanel'));
+
           });
       </script>
 

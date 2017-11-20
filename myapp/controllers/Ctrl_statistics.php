@@ -434,7 +434,8 @@ class Ctrl_statistics extends MY_Controller {
                                                                     'RGraph/libraries/RGraph.common.tooltips.js',
                                                                     'RGraph/libraries/RGraph.common.key.js',
                                                                     'js/datepicker_period.js',
-                                                                    'js/graphing.js')));
+                                                                    'js/graphing.js',
+                                                                    'js/handle_legend.js')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
@@ -578,7 +579,8 @@ class Ctrl_statistics extends MY_Controller {
                                                                     'RGraph/libraries/RGraph.common.tooltips.js',
                                                                     'RGraph/libraries/RGraph.common.key.js',
                                                                     'js/datepicker_period.js',
-                                                                    'js/graphing.js')));
+                                                                    'js/graphing.js',
+                                                                    'js/handle_legend.js')));
 
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));

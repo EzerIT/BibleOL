@@ -136,7 +136,7 @@
 
                $("html, body").animate({ scrollTop: $(document).height() }, 1000); // Scroll to bottom
 
-               $("#leftpanel").height($('#centerpanel').height());
+               legend_adjust($('#leftpanel'), $('#centerpanel'));
                
                return false;
            }
@@ -147,13 +147,13 @@
                $('#show1').show();
                $('#hide1').hide();
 
-               $("#leftpanel").height($('#centerpanel').height());
+               legend_adjust($('#leftpanel'), $('#centerpanel'));
 
                return false;
            }
            );
 
-       var weeklabels = [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>];
+        var weeklabels = [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_week($w),'",'; ?>];
         var weekdates =  [<?php foreach ($total as $w => $ignore) echo '"',Statistics_timeperiod::format_date($w),'",'; ?>];
 
         graph_bar('totalcanvas', [<?= implode(",", $total) ?>], weeklabels, '<?= $this->lang->line('hours') ?>', '<?= $this->lang->line('iso_week_no') ?>');
@@ -262,9 +262,9 @@
 
         // Make floating legend
         $('#extraleft').css('position','sticky').css('top','10px');
-        var cheight = $('#centerpanel').height();
-        if ($('#leftpanel').height()<cheight)
-            $("#leftpanel").height(cheight);
+
+        fix_legend_height($('#leftpanel'), $('#centerpanel'));
+
     });
   </script>
   

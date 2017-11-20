@@ -1,4 +1,4 @@
-ALL_TARGETS = js/ol.js js/fontselector.js js/editquiz.js styles/ol.css styles/ol_zh.css
+ALL_TARGETS = js/ol.js js/fontselector.js js/editquiz.js js/handle_legend.js styles/ol.css styles/ol_zh.css
 
 all:	$(ALL_TARGETS) allugly
 
@@ -18,8 +18,11 @@ js/editquiz.js:	ts/editquiz.ts ts/jquery/jquery.d.ts ts/configuration.ts ts/loca
 	@#tsc --noImplicitAny --out $@ $<
 	tsc --out $@ $<
 
-
 js/fontselector.js:	ts/fontselector.ts ts/fontdetect.d.ts ts/jquery/jquery.d.ts ts/util.ts ts/localization_general.ts
+	@#tsc --noImplicitAny --out $@ $<
+	tsc --out $@ $<
+
+js/handle_legend.js: ts/handle_legend.ts ts/util.ts ts/resizer.ts
 	@#tsc --noImplicitAny --out $@ $<
 	tsc --out $@ $<
 
