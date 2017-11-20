@@ -4,41 +4,71 @@
         echo "<div class=\"alert alert-danger\">$valerr</div>\n";
 ?>
 
-<?= form_open("statistics/student_time",array('method'=>'get')) ?>
-    <input type="hidden" name="userid" value="<?= $userid ?>">
+<p style="margin-top:10px">
+  <a id="showsel" class="label label-primary" href="#"><?= $this->lang->line('show_selector') ?></a>
+  <a id="hidesel" class="label label-primary" style="display:none" href="#"><?= $this->lang->line('hide_selector') ?></a>
+</p>
+
+<script>
+    $(function() {
+        $('#showsel').click(
+            function() {
+                $('#selector').show();
+                $('#showsel').hide();
+                $('#hidesel').show();
+                return false;
+            }
+        );
+        $('#hidesel').click(
+            function() {
+                $('#selector').hide();
+                $('#showsel').show();
+                $('#hidesel').hide();
+                return false;
+            }
+        );
+    });
+</script>
         
-    <p><?= $this->lang->line('specify_period') ?></p>
-    <table>
-      <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
-        <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
-      </tr>
-      <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
-        <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
-      </tr>
-    </table>
+<div class="panel panel-default" id="selector" style="display:none">
+  <div class="panel-body">
+    <?= form_open("statistics/student_time",array('method'=>'get')) ?>
+      <input type="hidden" name="userid" value="<?= $userid ?>">
+        
+      <p><?= $this->lang->line('specify_period') ?></p>
+      <table>
+        <tr>
+          <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
+          <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
+          <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
+        </tr>
+      </table>
 
-  <p>&nbsp;</p>
-  <div>
-    <span style="font-weight:bold"><?= $this->lang->line('class_prompt') ?></span>
-    <select name="classid">
-      <option value="0" <?= set_select('classid', 0, true) ?>><?= $this->lang->line('ignore_class') ?></option>
-      <?php foreach($classlist as $cl): ?>
-        <?php if ($cl->id==$classid) $myclassname = $cl->classname; ?>
-        <option value="<?= $cl->id ?>" <?= set_select('classid', $cl->id) ?>><?= htmlspecialchars($cl->classname) ?></option>
-      <?php endforeach; ?>
-    </select>
+      <p>&nbsp;</p>
+      <div>
+        <span style="font-weight:bold"><?= $this->lang->line('class_prompt') ?></span>
+        <select name="classid">
+          <option value="0" <?= set_select('classid', 0, true) ?>><?= $this->lang->line('ignore_class') ?></option>
+          <?php foreach($classlist as $cl): ?>
+            <?php if ($cl->id==$classid) $myclassname = $cl->classname; ?>
+            <option value="<?= $cl->id ?>" <?= set_select('classid', $cl->id) ?>><?= htmlspecialchars($cl->classname) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+     
+      <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
+    </form>
   </div>
+</div>
 
-  <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
-</form>
-
-  <script>
-      $(function() {
-              $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
-          });
-  </script>
+<script>
+    $(function() {
+            $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
+        });
+</script>
 
 <?php if ($classid==0): ?>
   <h1><?= $this->lang->line('stat_all_ex') ?></h1>

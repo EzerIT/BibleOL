@@ -4,48 +4,74 @@
         echo "<div class=\"alert alert-danger\">$valerr</div>\n";
 ?>
 
-   <?= form_open("statistics/student_exercise",array('method'=>'get')) ?>
-    <input type="hidden" name="userid" value="<?= $userid ?>">
+<p style="margin-top:10px">
+  <a id="showsel" class="label label-primary" href="#"><?= $this->lang->line('show_selector') ?></a>
+  <a id="hidesel" class="label label-primary" style="display:none" href="#"><?= $this->lang->line('hide_selector') ?></a>
+</p>
 
-    <p><?= $this->lang->line('specify_period') ?></p>
-    <table>
-      <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
-        <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
-      </tr>
-      <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
-        <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
-      </tr>
-    </table>
+<script>
+    $(function() {
+        $('#showsel').click(
+            function() {
+                $('#selector').show();
+                $('#showsel').hide();
+                $('#hidesel').show();
+                return false;
+            }
+        );
+        $('#hidesel').click(
+            function() {
+                $('#selector').hide();
+                $('#showsel').show();
+                $('#hidesel').hide();
+                return false;
+            }
+        );
+    });
+</script>
 
-  <div class="row">
-  <div class="form-group">
-    <label for="nongraded" class="col-sm-3 control-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
-    <div class="col-sm-9">
-      <input class="checkbox" style='display:inline-block' id="nongraded" name="nongraded"
-        <?= $may_see_nongraded ? '' : 'disabled' ?>
-        value="on" type="checkbox" <?= set_checkbox('nongraded', $may_see_nongraded ? 'on' : 'off') ?>>
-      <span><?= $may_see_nongraded ? '' : '(Permission not granted)' ?></span>
-    </div>
+<div class="panel panel-default" id="selector" style="display:none">
+  <div class="panel-body">
+    <?= form_open("statistics/student_exercise",array('method'=>'get')) ?>
+      <input type="hidden" name="userid" value="<?= $userid ?>">
+       
+      <p><?= $this->lang->line('specify_period') ?></p>
+      <table>
+        <tr>
+          <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
+          <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
+          <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
+        </tr>
+      </table>
+       
+      <div class="row">
+        <div class="form-group">
+          <label for="nongraded" class="col-sm-3 control-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
+          <div class="col-sm-9">
+            <input class="checkbox" style='display:inline-block' id="nongraded" name="nongraded"
+              <?= $may_see_nongraded ? '' : 'disabled' ?>
+              value="on" type="checkbox" <?= set_checkbox('nongraded', $may_see_nongraded ? 'on' : 'off') ?>>
+            <span><?= $may_see_nongraded ? '' : '(Permission not granted)' ?></span>
+          </div>
+        </div>
+      </div>
+             
+      <input type="hidden" name="templ" value="<?= $quiz ?>">
+      <input type="hidden" name="userid" value="<?= $userid ?>">
+       
+      <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
+  </form>
   </div>
-  </div>
+</div>
 
-
-           
-  <input type="hidden" name="templ" value="<?= $quiz ?>">
-  <input type="hidden" name="userid" value="<?= $userid ?>">
-
-  
-           
-  <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
-</form>
-
-  <script>
-      $(function() {
-              $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
-          });
-  </script>
+<script>
+    $(function() {
+            $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
+        });
+</script>
 
   <h1><?= sprintf($this->lang->line('statistics_for_exercise'),htmlspecialchars($quiz)) ?></h1>
   <h1><?= sprintf($this->lang->line('student_is'),htmlspecialchars($user_full_name)) ?></h1>
@@ -54,7 +80,7 @@
 
   <?php if ($status==0): ?>
 
-    <h2>No data</h2>
+    <div class="alert alert-warning"><?= $this->lang->line('no_data') ?></div>
 
   <?php else: ?>
 

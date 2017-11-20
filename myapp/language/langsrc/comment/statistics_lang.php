@@ -80,6 +80,10 @@ $comment['grouped_by_students'] = "";
 $format['grouped_by_students'] = "";
 $use_textarea['grouped_by_students'] = false;
 
+$comment['hide_selector'] = "";
+$format['hide_selector'] = "";
+$use_textarea['hide_selector'] = false;
+
 $comment['hide_table'] = "";
 $format['hide_table'] = "";
 $use_textarea['hide_table'] = false;
@@ -175,6 +179,10 @@ $use_textarea['select_period_heading'] = false;
 $comment['show_non_graded_prompt'] = "";
 $format['show_non_graded_prompt'] = "";
 $use_textarea['show_non_graded_prompt'] = false;
+
+$comment['show_selector'] = "";
+$format['show_selector'] = "";
+$use_textarea['show_selector'] = false;
 
 $comment['show_table'] = "";
 $format['show_table'] = "";

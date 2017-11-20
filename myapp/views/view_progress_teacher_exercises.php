@@ -4,61 +4,99 @@
         echo "<div class=\"alert alert-danger\">$valerr</div>\n";
 ?>
 
-<div class="card">
+<?php if ($status!=2): ?>
+    <p style="margin-top:10px">
+      <a id="showsel" class="label label-primary" href="#"><?= $this->lang->line('show_selector') ?></a>
+      <a id="hidesel" class="label label-primary" style="display:none" href="#"><?= $this->lang->line('hide_selector') ?></a>
+    </p>
+     
+    <script>
+        $(function() {
+            $('#showsel').click(
+                function() {
+                    $('#selector').show();
+                    $('#showsel').hide();
+                    $('#hidesel').show();
+     
+                    legend_adjust($('#leftpanel'), $('#centerpanel'));
+     
+                    return false;
+                }
+            );
+            $('#hidesel').click(
+                function() {
+                    $('#selector').hide();
+                    $('#showsel').show();
+                    $('#hidesel').hide();
+     
+                    legend_adjust($('#leftpanel'), $('#centerpanel'));
+     
+                    return false;
+                }
+            );
+        });
+    </script>
+<?php else: ?>
+    <h1><?= sprintf($this->lang->line('stat_for_class'), htmlspecialchars($classname)) ?></h1>
+<?php endif; ?>
+    
+<div class="panel panel-default" id="selector" <?= $status==2 ? '' : 'style="display:none"' ?>>
+  <div class="panel-body">
     <?= form_open("statistics/teacher_exercises",array('method'=>'get')) ?>
-    <input type="hidden" name="classid" value="<?= $classid ?>">
-
-    <p><?= $this->lang->line('specify_period') ?></p>
-    <table>
-      <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
-        <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
-      </tr>
-      <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
-        <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
-      </tr>
-    </table>
-
-  <p>&nbsp;</p>
-  <div>
-    <span style="font-weight:bold"><?= $this->lang->line('exercise_prompt') ?></span>
-    <select name="exercise">
-      <option value="" <?= set_select('exercise', '', true) ?>></option>
-      <?php foreach($exercise_list as $ex): ?>
-        <?php $ex2 = htmlspecialchars($ex); ?>
-        <option value="<?= $ex2 ?>" <?= set_select('exercise', $ex) ?>><?= $ex2 ?></option>
-      <?php endforeach; ?>
-    </select>
+      <input type="hidden" name="classid" value="<?= $classid ?>">
+       
+      <p><?= $this->lang->line('specify_period') ?></p>
+      <table>
+        <tr>
+          <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
+          <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
+          <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
+        </tr>
+      </table>
+       
+      <p>&nbsp;</p>
+      <div>
+        <span style="font-weight:bold"><?= $this->lang->line('exercise_prompt') ?></span>
+        <select name="exercise">
+          <option value="" <?= set_select('exercise', '', true) ?>></option>
+          <?php foreach($exercise_list as $ex): ?>
+            <?php $ex2 = htmlspecialchars($ex); ?>
+            <option value="<?= $ex2 ?>" <?= set_select('exercise', $ex) ?>><?= $ex2 ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+       
+      <div class="row">
+        <div class="form-group">
+          <label for="nongraded" class="col-sm-3 control-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
+          <div class="col-sm-9">
+            <input class="checkbox" id="nongraded" name="nongraded" value="on" type="checkbox" <?= set_checkbox('nongraded','on') ?>>
+          </div>
+        </div>
+      </div>
+       
+      <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
+    </form>
   </div>
-
-  <div class="row">
-  <div class="form-group">
-    <label for="nongraded" class="col-sm-3 control-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
-    <div class="col-sm-9">
-      <input class="checkbox" id="nongraded" name="nongraded" value="on" type="checkbox" <?= set_checkbox('nongraded','on') ?>>
-    </div>
-  </div>
-  </div>
-
-  <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
-</form>
 </div>
 
-  <script>
-      $(function() {
-              $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
-          });
-  </script>
+<script>
+    $(function() {
+            $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
+        });
+</script>
 
-  <h1><?= sprintf($this->lang->line('stat_for_class'), htmlspecialchars($classname)) ?></h1>
 
 <?php if ($status!=2): ?>
+  <h1><?= sprintf($this->lang->line('stat_for_class'), htmlspecialchars($classname)) ?></h1>
   <h2><?= sprintf($this->lang->line('statistics_for_exercise'),htmlspecialchars($quiz)) ?></h2>
 
   <?php if ($status==0): ?>
 
-    <h2><?= $this->lang->line('no_data') ?></h2>
+      <div class="alert alert-warning"><?= $this->lang->line('no_data') ?></div>
 
   <?php else: ?>
 

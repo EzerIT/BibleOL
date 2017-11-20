@@ -4,23 +4,60 @@
         echo "<div class=\"alert alert-danger\">$valerr</div>\n";
 ?>
 
-  <?= form_open("statistics/teacher_time",array('method'=>'get')) ?>
-    <input type="hidden" name="classid" value="<?= $classid ?>">
+<p style="margin-top:10px">
+  <a id="showsel" class="label label-primary" href="#"><?= $this->lang->line('show_selector') ?></a>
+  <a id="hidesel" class="label label-primary" style="display:none" href="#"><?= $this->lang->line('hide_selector') ?></a>
+</p>
 
-    <p><?= $this->lang->line('specify_period') ?></p>
-    <table>
-      <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
-        <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
-      </tr>
-      <tr>
-        <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
-        <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
-      </tr>
-    </table>
+<script>
+    $(function() {
+        $('#showsel').click(
+            function() {
+                $('#selector').show();
+                $('#showsel').hide();
+                $('#hidesel').show();
 
-    <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
-  </form>
+                legend_adjust($('#leftpanel'), $('#centerpanel'));
+
+                return false;
+            }
+        );
+        $('#hidesel').click(
+            function() {
+                $('#selector').hide();
+                $('#showsel').show();
+                $('#hidesel').hide();
+
+                legend_adjust($('#leftpanel'), $('#centerpanel'));
+
+                return false;
+            }
+        );
+    });
+</script>
+
+<div class="panel panel-default" id="selector" style="display:none">
+  <div class="panel-body">
+    <?= form_open("statistics/teacher_time",array('method'=>'get')) ?>
+      <input type="hidden" name="classid" value="<?= $classid ?>">
+   
+      <p><?= $this->lang->line('specify_period') ?></p>
+      <table>
+        <tr>
+          <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
+          <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
+          <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
+        </tr>
+      </table>
+   
+      <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
+    </form>
+  </div>
+</div>  
+
 
   <script>
       $(function() {
@@ -33,7 +70,8 @@
   <?php if ($status==1): ?>
   <?php if (array_sum($total)==0): ?>
 
-    <h2><?= $this->lang->line('no_data') ?></h2>
+    <div class="alert alert-warning"><?= $this->lang->line('no_data') ?></div>
+
   <?php else: ?>
 
   <?php
@@ -146,9 +184,6 @@
                $('#table1').hide();
                $('#show1').show();
                $('#hide1').hide();
-
-               legend_adjust($('#leftpanel'), $('#centerpanel'));
-
                return false;
            }
            );
