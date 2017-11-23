@@ -14,17 +14,17 @@ class Ctrl_oauth2 extends MY_Controller {
 
 
     // This is almost indentical to a function in Ctrl_login.cpp
-    private function accept_policy(integer $user_id) {
+    private function accept_policy() {
         $this->load->helper('form');
 
-        $acceptance_code = $this->mod_users->generate_acceptance_code($user_id);
+        $acceptance_code = $this->mod_users->generate_acceptance_code();
 
         // VIEW:
         $this->load->view('view_top1', array('title' => $this->lang->line('policy')));
         $this->load->view('view_top2');
         $this->load->view('view_menu_bar', array('langselect' => true));
         $center_text = $this->load->view('view_accept_policy', array('acceptance_code' => $acceptance_code,
-                                                                     'user_id' => $user_id), true);
+                                                                     'user_id' => $this->mod_users->my_id()), true);
 
         $this->load->view('view_main_page', array('center' => $center_text));
         
@@ -132,32 +132,31 @@ class Ctrl_oauth2 extends MY_Controller {
             if (empty($result))
                 throw new DataException($this->lang->line("{$authority}_no_valid_reply"));
  
-            $user_info = json_decode($result);
+            $remote_user_info = json_decode($result);
 
             // Generate uniform member names
             if ($authority==="google") {
-                $user_info->first_name = $user_info->given_name;
-                $user_info->last_name = $user_info->family_name;
+                $remote_user_info->first_name = $remote_user_info->given_name;
+                $remote_user_info->last_name = $remote_user_info->family_name;
                 // Is this foolproof?:
-                $user_info->family_name_first = $user_info->name == $user_info->family_name . $user_info->given_name;
+                $remote_user_info->family_name_first = $remote_user_info->name == $remote_user_info->family_name . $remote_user_info->given_name;
             }
 
             if ($authority==='facebook')
                 // Is this foolproof?:
-                $user_info->family_name_first = $user_info->name_format=='{last}{first}';
+                $remote_user_info->family_name_first = $remote_user_info->name_format=='{last}{first}';
 
-            if (!isset($user_info->email))
-                $user_info->email = null;
+            if (!isset($remote_user_info->email))
+                $remote_user_info->email = null;
 
 
             // MODEL:
             switch ($this->mod_users->new_oauth2_user($authority,
-                                                      $user_info->id,
-                                                      $user_info->first_name,
-                                                      $user_info->last_name,
-                                                      $user_info->family_name_first,
-                                                      $user_info->email)) {
-
+                                                      $remote_user_info->id,
+                                                      $remote_user_info->first_name,
+                                                      $remote_user_info->last_name,
+                                                      $remote_user_info->family_name_first,
+                                                      $remote_user_info->email)) {
               case 1:
                     // VIEW:
                     $this->load->view('view_top1', array('title' => $this->lang->line("new_{$authority}_user")));
@@ -165,7 +164,7 @@ class Ctrl_oauth2 extends MY_Controller {
                     $this->load->view('view_menu_bar', array('langselect' => false));
                     $center_text = $this->load->view('view_new_oauth2_user',
                                                      array('authority' => $authority,
-                                                           'user_info' => $user_info),
+                                                           'user_info' => $remote_user_info),
                                                      true);
                     $this->lang->load('intro_text', $this->language); // For 'welcome' below
                     $this->load->view('view_main_page',array('left_title' => $this->lang->line('welcome'),
@@ -174,8 +173,7 @@ class Ctrl_oauth2 extends MY_Controller {
                     break;
                     
               case 2:
-                    echo "case 2: ",$this->mod_users->my_id(),"\n";
-                    $this->accept_policy(intval($this->mod_users->my_id()));
+                    $this->accept_policy();
                     break;
                     
               case 3:

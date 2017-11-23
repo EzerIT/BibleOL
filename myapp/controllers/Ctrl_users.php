@@ -65,7 +65,7 @@ class Ctrl_users extends MY_Controller {
         $this->mod_users->delete_user($this->mod_users->my_id());
 
         // Log out
-        $this->mod_users->set_login_session(0, false, false, false);
+        $this->mod_users->clear_login_session();
 
         // VIEW:
         $this->load->view('view_top1', array('title' => $this->lang->line('user_profile_deleted')));
@@ -109,7 +109,7 @@ class Ctrl_users extends MY_Controller {
                     // Token not recognized by Google
 
                     // Log out
-                    $this->mod_users->set_login_session(0, false, false, false);
+                    $this->mod_users->clear_login_session();
 
                     throw new DataException($this->lang->line('google_no_response_delete'));
                     break;

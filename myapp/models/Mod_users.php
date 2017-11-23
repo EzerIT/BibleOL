@@ -19,14 +19,33 @@ function make_full_name($u) {
         return "$u->first_name $u->last_name";
 }
 
+// Creates a dummy user structure with id=0
+function make_dummy_user() {
+    $u = new stdClass;
+    $u->id = 0;
+    $u->first_name = '';
+    $u->last_name = '';
+    $u->username = '';
+    $u->password = '';
+    $u->reset = '';
+    $u->reset_time = 0;
+    $u->isadmin = 0;
+    $u->email = '';
+    $u->oauth2_login = '';
+    $u->created_time = 0;
+    $u->last_login = 0;
+    $u->warning_sent = 0;
+    $u->isteacher = 0;
+    $u->preflang = '';
+    $u->family_name_first = 0;
+    $u->istranslator = 0;
+
+    return $u;
+}
+
 class Mod_users extends CI_Model {
     const CURRENT_POLICY_DATE = 1511440972;  // 2017-11-23
     const ACCEPT_CODE_EXPIRY = 15*60; // 15 minutes
-
-    private $admin;
-    private $teacher;
-    private $translator;
-    private $user_id;
 
     private $me;
 
@@ -36,45 +55,32 @@ class Mod_users extends CI_Model {
         $this->config->load('ol');
         $this->load->database();
 
-        $this->user_id = $this->session->userdata('ol_user');
-
-        if ($this->user_id===null)
-            $this->user_id = 0;
-        else
-            $this->user_id = intval($this->user_id);
-            
-        $query = $this->db->where('id',$this->user_id)->get('user');
-		if ($this->me = $query->row()) {
-			$this->admin = $this->me->isadmin;
-			$this->teacher = $this->me->isteacher;
-			$this->translator = $this->me->istranslator;
-        }
-		else {
-			$this->admin = false;
-			$this->teacher = false;
-			$this->translator = false;
-        }
+        $user_id = intval($this->session->userdata('ol_user'));  // Sets $user_id to 0 if userdata('ol_user') is not set
+        
+        $query = $this->db->where('id',$user_id)->get('user');
+		$this->me = $query->row();
+        
+		if (is_null($this->me))
+            $this->me = make_dummy_user();
     }
 
     public function is_admin() {
-        return $this->admin;
+        return $this->me->isadmin;
     }
 
     public function is_teacher() {
-        return $this->teacher || $this->admin; // All admins are teachers
+        return $this->me->isteacher || $this->me->isadmin; // All admins are teachers
     }
 
     public function is_translator() {
-        return $this->translator || $this->admin; // All admins are translator
+        return $this->me->istranslator || $this->me->isadmin; // All admins are translator
     }
 
     public function my_id() {
-        return $this->user_id;
+        return $this->me->id;
     }
 
     public function my_name() {
-        if (!$this->me)
-            return null;
         return make_full_name($this->me);
     }
 
@@ -88,17 +94,15 @@ class Mod_users extends CI_Model {
     }
     
     public function get_me() {
-        if (!$this->me)
-            return null;
         return $this->me;
     }
 
     public function is_logged_in() {
-        return $this->user_id>0;
+        return $this->me->id > 0;
     }
 
     public function is_me(integer $user_id) {
-        return $user_id==$this->user_id;
+        return $user_id==$this->me->id;
     }
 
     // Returns true if login is successful, otherwise returns null. Sets $this->me
@@ -106,12 +110,18 @@ class Mod_users extends CI_Model {
         $pw_md5 = md5($this->config->item('pw_salt') . $pw);
 
         $query = $this->db->where('username',$name)->where('password',$pw_md5)->get('user');
-        $this->me = $query->row();
-        return !is_null($this->me);
+        if ($this->me = $query->row())
+            return true;
+
+        $this->me = make_dummy_user();
+        return false;
     }
 
-    public function update_login_stat(integer $user_id) {
-        $this->db->where('id',$user_id)->update('user',array('last_login'=>time(), 'warning_sent'=>0));
+    public function update_login_stat() {
+        $this->me->last_login = time();
+        $this->me->warning_sent = 0;
+        $this->db->where('id',$this->me->id)->update('user',array('last_login'   => $this->me->last_login,
+                                                                  'warning_sent' => $this->me->warning_sent));
     }
 
     public function check_admin() {
@@ -139,10 +149,7 @@ class Mod_users extends CI_Model {
         if (!$this->mod_users->is_logged_in())
             throw new DataException($this->lang->line('must_be_logged_in'));
 
-        $user_info = $this->mod_users->get_me();
-        assert('!is_null($user_info)');
-
-        if (!empty($user_info->oauth2_login))
+        if (!empty($this->me->oauth2_login))
             throw new DataException($this->lang->line("must_not_be_{$user_info->oauth2_login}"));
     }
 
@@ -150,27 +157,23 @@ class Mod_users extends CI_Model {
         if (!$this->mod_users->is_logged_in())
             throw new DataException($this->lang->line('must_be_logged_in'));
 
-        $user_info = $this->mod_users->get_me();
-        assert('!is_null($user_info)');
-
-        if ($user_info->oauth2_login!==$authority)
+        if ($this->me->oauth2_login!==$authority)
             throw new DataException($this->lang->line("must_be_$authority"));
     }
 
-    public function set_login_session(integer $user, $admin, $teacher, $translator, $preflang=null) {
-        $this->session->set_userdata('ol_user', $user);
-        $this->session->set_userdata('ol_admin', $admin);  // NOTE: 'ol_admin' is only a hint. Do not rely on it.
-        $this->session->set_userdata('ol_teacher', $teacher);  // NOTE: 'ol_teacher' is only a hint. Do not rely on it.
-        $this->session->set_userdata('ol_translator', $translator);  // NOTE: 'ol_translator' is only a hint. Do not rely on it.
-        if (!is_null($preflang) && $preflang!='none')
-            $this->session->set_userdata('language', $preflang);
+    public function set_login_session() {
+        $this->session->set_userdata('ol_user', $this->me->id);
 
-        $this->user_id = $user;
-        $this->admin = $admin;
-        $this->teacher = $teacher;
-        $this->translator = $translator;
+        if (!empty($this->me->preflang) && $this->me->preflang!='none')
+            $this->session->set_userdata('language', $this->me->preflang);
     }
 
+    public function clear_login_session() {
+        $this->session->unset_userdata('ol_user');
+        $this->session->unset_userdata('language');
+    }
+
+    
     public function get_all_users() {
         $query = $this->db->get('user');
         return $query->result();
@@ -197,22 +200,11 @@ class Mod_users extends CI_Model {
     public function get_user_by_id(integer $userid) {
         if ($userid===-1) {
             // Create new user
-            $user = new stdClass();
+            $user = make_dummy_user();
             $user->id = null; // Indicates new user
-            $user->first_name = '';
-            $user->last_name = '';
-            $user->family_name_first = 0;
-            $user->username = '';
-            $user->password = '';
-            $user->isadmin = 0;
-            $user->email = '';
-            $user->oauth2_login = null;
             $user->created_time = time();
             $user->last_login = time()-10; // Assume that the user has logged in at least once to prevent expiry.
                                            // The -10 is used when listing users to indicate that this is a fake value.
-            $user->warning_sent = 0;
-            $user->isteacher = 0;
-            $user->istranslator = 0;
             $user->preflang = 'none';
         }
         else {
@@ -231,7 +223,7 @@ class Mod_users extends CI_Model {
     public function get_user_by_name_or_email(string $username, string $email) {
         if ($username!='') {
             $query = $this->db->where('username',$username)->where('oauth2_login',null)->get('user'); //TODO: Test this
-            return $query->num_rows()>0 ? $query->row() : null;
+            return $query->row();
         }
         
         $query = $this->db->where('email',$email)->where('oauth2_login',null)->get('user'); //TODO: Test this
@@ -308,25 +300,17 @@ class Mod_users extends CI_Model {
 
 		if ($row = $query->row()) {
             $this->me = $row;
-            $this->user_id = $this->me->id;
 
             if ($first_name!==$this->me->first_name || $last_name!==$this->me->last_name || $email!==$this->me->email)
-                $query = $this->db->where('id',$this->user_id)->update('user',array('first_name' => $first_name,
-                                                                                    'last_name' => $last_name,
-                                                                                    'email' => (empty($email) ? null : $email)));
-            if ($this->accept_policy_current($this->me)) {
-                $this->admin = $this->me->isadmin;
-                $this->teacher = $this->me->isteacher;
-                $this->translator = $this->me->istranslator;
-
-                $this->session->set_userdata('ol_user', $this->user_id);
-                $this->session->set_userdata('ol_admin', $this->admin);  // NOTE: 'ol_admin' is only a hint. Do not rely on it.
-                $this->session->set_userdata('ol_teacher', $this->teacher);  // NOTE: 'ol_teacher' is only a hint. Do not rely on it.
-                $this->session->set_userdata('ol_translator', $this->translator);  // NOTE: 'ol_translator' is only a hint. Do not rely on it.
-                if ($row->preflang!='none')
-                    $this->session->set_userdata('language', $row->preflang);
-
-                $this->update_login_stat(intval($this->user_id));
+                $this->me->first_name = $first_name;
+                $this->me->last_name = $last_name;
+                $this->me->email = empty($email) ? null : $email;
+                $query = $this->db->where('id',$this->me->id)->update('user',array('first_name' => $this->me->first_name,
+                                                                                   'last_name'  => $this->me->last_name,
+                                                                                   'email'      => $this->me->email));
+            if ($this->accepted_current_policy()) {
+                $this->set_login_session();
+                $this->update_login_stat();
 
                 return 3;
             }
@@ -335,34 +319,24 @@ class Mod_users extends CI_Model {
         }
         else {
             // Create new user
-            $user = new stdClass();
-            $user->id = null; // Indicates new user
-            $user->first_name = $first_name;
-            $user->last_name = $last_name;
-            $user->family_name_first = $family_name_first;
-            $user->username = $username;
-            $user->password = 'NONE';
-            $user->isadmin = 0;
-            $user->isteacher = 0;
-            $user->istranslator = 0;
-            $user->email = empty($email) ? null : $email;
-            $user->oauth2_login = $authority;
-            $user->created_time = time();
-            $user->last_login = time();
-            $user->warning_sent = 0;
-            $user->preflang = $this->language_short;
+            $this->me = make_dummy_user();
+			$this->me->id = null; // Indicates new user
+			$this->me->first_name = $first_name;
+			$this->me->last_name = $last_name;
+			$this->me->family_name_first = $family_name_first;
+			$this->me->username = $username;
+			$this->me->password = 'NONE';
+			$this->me->email = empty($email) ? null : $email;
+			$this->me->oauth2_login = $authority;
+			$this->me->created_time = time();
+			$this->me->last_login = time();
+			$this->me->preflang = $this->language_short;
 
             $query = $this->db->insert('user', $user);
       
-			$this->admin = false;
-			$this->teacher = false;
-            $this->user_id = $this->db->insert_id();
+            $this->me->id = $this->db->insert_id();
 
-            $this->session->set_userdata('ol_user', $this->user_id);
-            $this->session->set_userdata('ol_admin', $this->admin);  // NOTE: 'ol_admin' is only a hint. Do not rely on it.
-            $this->session->set_userdata('ol_teacher', $this->teacher);  // NOTE: 'ol_teacher' is only a hint. Do not rely on it.
-            $this->session->set_userdata('ol_translator', $this->translator);  // NOTE: 'ol_translator' is only a hint. Do not rely on it.
-            $this->session->set_userdata('language', $user->preflang);
+            $this->set_login_session();
 
             return 1;
         }
@@ -405,34 +379,34 @@ class Mod_users extends CI_Model {
         return $users;
     }
 
-    public function generate_acceptance_code(integer $user_id) {
+    public function generate_acceptance_code() {
         // Generate a random password acceptance code
-        $acc_code = sprintf("%08x",mt_rand()).sprintf("%08x",mt_rand()).sprintf("%08x",mt_rand()).sprintf("%08x",mt_rand());
-        $this->db->where('id',$user_id)->update('user',array('acc_code'=>$acc_code, 'acc_code_time'=>time()));
-     
-        return $acc_code;
+        $this->me->acc_code = sprintf("%08x",mt_rand()).sprintf("%08x",mt_rand()).sprintf("%08x",mt_rand()).sprintf("%08x",mt_rand());
+        $this->me->acc_code_time = time();
+        $this->db->where('id',$this->me->id)->update('user',array('acc_code'      => $this->me->acc_code,
+                                                                  'acc_code_time' => $this->me->acc_code_time));
+        return $this->me->acc_code;
     }
 
     
     // Returns true if accept code is correct, otherwise returns null. Sets $this->me
     public function verify_accept_code(string $acc_code, string $str_uid) {
-        echo "Verify $acc_code - $str_uid\n";
         $query = $this->db
             ->where('id',$str_uid)
             ->where('acc_code',$acc_code)
             ->where('acc_code_time >', time() - self::ACCEPT_CODE_EXPIRY)
             ->get('user');
 
-        
         if ($this->me = $query->row()) {
-            $this->db->where('id',$uid)->update('user',array('accept_policy'=>time()));
+            $this->me->accept_policy = time();
+            $this->db->where('id',$this->me->id)->update('user',array('accept_policy' => $this->me->accept_policy));
             return true;
         }
         else
             return false;
     }
 
-    public function accept_policy_current() {
+    public function accepted_current_policy() {
         return $this->me->accept_policy >= self::CURRENT_POLICY_DATE;
     }
     

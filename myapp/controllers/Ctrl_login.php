@@ -11,21 +11,21 @@ class Ctrl_login extends MY_Controller {
             return true;  // Password OK
 
         // Wrong password
-        $this->mod_users->set_login_session(0,false,false,false); // Paranoia
+        $this->mod_users->clear_login_session(); // Paranoia
         $this->form_validation->set_message('password_check', $this->lang->line('bad_password'));
         return false;
     }
 
     // This is almost indentical to a function in Ctrl_oauth2.cpp
-    private function accept_policy(integer $user_id) {
-        $acceptance_code = $this->mod_users->generate_acceptance_code($user_id);
+    private function accept_policy() {
+        $acceptance_code = $this->mod_users->generate_acceptance_code();
 
         // VIEW:
         $this->load->view('view_top1', array('title' => $this->lang->line('policy')));
         $this->load->view('view_top2');
         $this->load->view('view_menu_bar', array('langselect' => true));
         $center_text = $this->load->view('view_accept_policy', array('acceptance_code' => $acceptance_code,
-                                                                     'user_id' => $user_id), true);
+                                                                     'user_id' => $this->mod_users->my_id()), true);
 
         $this->load->view('view_main_page', array('center' => $center_text));
         
@@ -37,19 +37,13 @@ class Ctrl_login extends MY_Controller {
             isset($_POST['user_id']) &&
             $this->mod_users->verify_accept_code($_POST['acceptance_code'], $_POST['user_id'])) {
 
-            echo "YES - ",$_POST['acceptance_code']," - ", $_POST['user_id'],"\n";die;
-
-            
             // Successful login
-            $me = $this->mod_users->get_me();
-            $uid = intval($_POST['user_id']);
-            $this->mod_users->update_login_stat($uid);
-            $this->mod_users->set_login_session($uid, $me->isadmin, $me->isteacher, $me->istranslator, $me->preflang);
+            $this->mod_users->update_login_stat();
+            $this->mod_users->set_login_session();
             redirect("/");
         }
         else {
-            echo "NO";die;
-            $this->mod_users->set_login_session(0, false, false, false);
+            $this->mod_users->clear_login_session();
             redirect("/");
         }
     } 
@@ -68,7 +62,7 @@ class Ctrl_login extends MY_Controller {
                                          // TODO: Should xss_clean be replaced by strip_tags or vice versa?
         if ($this->mod_users->is_logged_in()) {
             // Log out
-            $this->mod_users->set_login_session(0, false, false, false);
+            $this->mod_users->clear_login_session();
             redirect("/");
         }
 
@@ -81,22 +75,20 @@ class Ctrl_login extends MY_Controller {
         $this->form_validation->set_rules('password', $this->lang->line('password'), 'trim|required|callback_password_check');
 
 		if ($this->form_validation->run()) {
-            if ($this->mod_users->accept_policy_current()) {
+            if ($this->mod_users->accepted_current_policy()) {
                 // Successful login
-                $me = $this->mod_users->get_me();
-                $uid = intval($me->id);
-                $this->mod_users->update_login_stat($uid);
-                $this->mod_users->set_login_session($uid, $me->isadmin, $me->isteacher, $me->istranslator, $me->preflang);
+                $this->mod_users->update_login_stat();
+                $this->mod_users->set_login_session();
                 redirect("/");
             }
             else {
                 // User needs to accept new policy
-                $this->accept_policy(intval($this->mod_users->my_id()));
+                $this->accept_policy();
                 return;
             }
         }
 
-        $this->session->unset_userdata(array('ol_user', 'ol_admin', 'ol_teacher', 'ol_translator', 'files', 'operation', 'from_dir'));
+        $this->session->unset_userdata(array('ol_user', 'files', 'operation', 'from_dir'));
 
         // Set up parameters for OAuth2 authentication.
         $this->session->set_userdata('oauth2_state', md5(rand())); // Used to prevent forged requests
