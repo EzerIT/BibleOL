@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Font matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{20 November 2017}
+\date{22 November 2017}
 
 \makeindex
 
@@ -519,7 +519,7 @@ run \emph{ldconfig}\index{ldconfig} after copying the files to your runtime syst
 
 \subsection{Step 3. Download Bible OL}\label{sec-download-bol}\index{download Bible OL}
 
-You can download Bible OL from GitHub\index{GitHub} using this command:
+You can download Bible OL from GitHub\index{GitHub} using these commands:
 
 \begin{lstlisting}[language=bash]
 cd %\textrm{\emph{installation directory}}%
@@ -559,10 +559,70 @@ following lines in the copy:
 Change the text USERNAME, PASSWORD, and DATABASE to be the database username, password, and database
 name.
 
-Initialize the contents of the database from the values in the files \texttt{bolsetup.sql} and \texttt{bolsetup2.sql}.
+
+\subsection{Step 5. Initialize MySQL\index{MySQL}}
+
+The following commands should be executed with the current directory set to \texttt{BibleOl}.
+
+\subsubsection*{Substep 1}
+
+Initialize the contents of the database from the content of the file \texttt{bolsetup.sql}.
+
+If you plan to use \emph{Learning Journey} (see Section \ref{sec-lj}), you may also want to import
+the content of the file \texttt{ljsetup.sql}.
 
 
-\subsection{Step 5. Additional Configuration}
+\subsubsection*{Substep 2}
+
+Populate the database with the translations of the interface by issuing these commands:
+
+\begin{lstlisting}[language=bash]
+for i in comment da en es pt zh-simp zh-trad
+do
+    echo Importing language files $i
+    php5.6 index.php translate if_php2db $i myapp/language/langsrc/$i
+done
+\end{lstlisting}
+
+(On my computer, this takes less than 20 seconds.)
+
+\subsubsection*{Substep 3}
+
+Update the database with the translations of the grammar terms by issuing this command:
+
+\begin{lstlisting}[language=bash]
+php5.6 index.php translate gram_prop2db
+\end{lstlisting}
+
+The will output lines such as this:
+
+\begin{lstlisting}
+Handling file nestle1904.comment.prop.pretty.json - unchanged
+\end{lstlisting}
+
+Some files may be marked ``unchanged'', others may be marked ``updated +++++''. Both are normal.
+
+\subsubsection*{Substep 4}
+
+Populate the database with Hebrew and Greek lexicons by issuing these commands:
+\begin{lstlisting}[language=bash]
+for s in aram heb
+do
+    for d in en de da
+    do
+        echo Source language: $s. Destination language: $d.
+        php5.6 index.php translate import_lex $s $d lexicons/${s}_${d}.csv
+    done
+done
+
+echo Source language: greek. Destination language: en.
+php5.6 index.php translate import_lex greek en lexicons/greek_en.csv 
+\end{lstlisting}
+
+(On my computer, this takes about a minute.)
+
+
+\subsection{Step 6. Additional Configuration}
 
 Copy the file \texttt{myapp/config/ol.php-dist} to \texttt{myapp/config/ol.php}\index{ol.php} and modify the
 following lines in the copy:
@@ -633,7 +693,7 @@ Replace `http://example.com' with the top URL of the web site for your Bible OL 
 If you plan to use \emph{Learning Journey} (see Section \ref{sec-lj}), set \texttt{\$config['lj\_enabled']} to \texttt{true}.
 
 
-\subsection{Step 6. Add Administrator\index{administrator}}
+\subsection{Step 7. Add Administrator\index{administrator}}
 
 You must manually add an administrator to the MySQL database. You do this by adding an entry to the
 table \emph{bol\_user}\index{bol\_user table|see {user table}}\index{user table} (see Section \ref{sec-user-table}).
@@ -659,7 +719,7 @@ where \emph{sssss} is the value of \emph{\$config[\q pw\_salt\q]} and \emph{xxxx
 desired password.
 
 
-\subsection{Step 7. Apache Configuration}\index{Apache!Configuration}
+\subsection{Step 8. Apache Configuration}\index{Apache!Configuration}
 
 Set up the Apache web server to access Bible OL. Make sure that Apache is configured to allow
 \texttt{.htaccess}\index{htaccess@.htaccess} files. This is controlled by the Apache
@@ -682,7 +742,7 @@ RewriteBase /alpha/beta%\index{RewriteBase, Apache directive}%
 If you have a dedicated hostname for Bible OL (for example, \texttt{http://example.com}), you should
 leave \emph{RewriteBase} as it is: a single slash.
 
-\subsection{Step 8. Set Up Quiz Template Directory}
+\subsection{Step 9. Set Up Quiz Template Directory}
 
 Create a directory called \texttt{quizzes} in the installation directory. Quiz template files will
 be stored here. If you want to, you can copy the contents of the \texttt{quiz\_templates} directory,
@@ -749,7 +809,7 @@ Please note that this document is not a manual on how to use Git and GitHub. You
 know this.
 
 Section \ref{sec-download-bol} tells you how to download Bible OL from the original repository. To
-download from your own fork, you should use this command:
+download from your own fork, you should use these commands:
 
 
 \begin{lstlisting}[language=bash]
@@ -4314,7 +4374,7 @@ of web page informing the user that they are now logged in to the system.
 
 A cron\index{cron job} job must be set up to run daily. The cron entry must execute this command:
 
-\begin{lstlisting}[language=bash,frame=,basicstyle={\ttfamily}]
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
 php5.6 index.php users expire_users
 \end{lstlisting}
 
