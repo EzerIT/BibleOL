@@ -12,6 +12,26 @@ class Ctrl_oauth2 extends MY_Controller {
         $this->config->load('ol');
     }
 
+
+    // This is almost indentical to a function in Ctrl_login.cpp
+    private function accept_policy(integer $user_id) {
+        $this->load->helper('form');
+
+        $acceptance_code = $this->mod_users->generate_acceptance_code($user_id);
+
+        // VIEW:
+        $this->load->view('view_top1', array('title' => $this->lang->line('policy')));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => true));
+        $center_text = $this->load->view('view_accept_policy', array('acceptance_code' => $acceptance_code,
+                                                                     'user_id' => $user_id), true);
+
+        $this->load->view('view_main_page', array('center' => $center_text));
+        
+        $this->load->view('view_bottom');
+    }
+
+    
 	public function google_callback() {
         $this->common_callback('google');
     }
@@ -131,28 +151,36 @@ class Ctrl_oauth2 extends MY_Controller {
 
 
             // MODEL:
-            if ($this->mod_users->new_oauth2_user($authority,
-                                                  $user_info->id,
-                                                  $user_info->first_name,
-                                                  $user_info->last_name,
-                                                  $user_info->family_name_first,
-                                                  $user_info->email)) {
+            switch ($this->mod_users->new_oauth2_user($authority,
+                                                      $user_info->id,
+                                                      $user_info->first_name,
+                                                      $user_info->last_name,
+                                                      $user_info->family_name_first,
+                                                      $user_info->email)) {
 
-                // VIEW:
-                $this->load->view('view_top1', array('title' => $this->lang->line("new_{$authority}_user")));
-                $this->load->view('view_top2');
-                $this->load->view('view_menu_bar', array('langselect' => false));
-                $center_text = $this->load->view('view_new_oauth2_user',
-                                                 array('authority' => $authority,
-                                                       'user_info' => $user_info),
-                                                 true);
-                $this->lang->load('intro_text', $this->language); // For 'welcome' below
-                $this->load->view('view_main_page',array('left_title' => $this->lang->line('welcome'),
-                                                         'center' => $center_text));
-                $this->load->view('view_bottom');
+              case 1:
+                    // VIEW:
+                    $this->load->view('view_top1', array('title' => $this->lang->line("new_{$authority}_user")));
+                    $this->load->view('view_top2');
+                    $this->load->view('view_menu_bar', array('langselect' => false));
+                    $center_text = $this->load->view('view_new_oauth2_user',
+                                                     array('authority' => $authority,
+                                                           'user_info' => $user_info),
+                                                     true);
+                    $this->lang->load('intro_text', $this->language); // For 'welcome' below
+                    $this->load->view('view_main_page',array('left_title' => $this->lang->line('welcome'),
+                                                             'center' => $center_text));
+                    $this->load->view('view_bottom');
+                    break;
+                    
+              case 2:
+                    echo "case 2: ",$this->mod_users->my_id(),"\n";
+                    $this->accept_policy(intval($this->mod_users->my_id()));
+                    break;
+                    
+              case 3:
+                    redirect("/");
             }
-            else
-                header("Location: " . site_url());
         }
         catch (DataException $e) {
             // VIEW:

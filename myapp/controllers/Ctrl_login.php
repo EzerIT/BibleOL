@@ -7,19 +7,62 @@ class Ctrl_login extends MY_Controller {
     public function password_check($password) {
         $login_name = $this->input->post('login_name');
 
-        $user_info = $this->mod_users->verify_login($login_name, $password);
+        if ($this->mod_users->verify_login($login_name, $password))
+            return true;  // Password OK
 
-        if (is_null($user_info)) {
-            $this->mod_users->set_login_session(0,false,false,false); // Paranoia
-			$this->form_validation->set_message('password_check', $this->lang->line('bad_password'));
-			return false;
-        }
-        else {
-            $this->mod_users->set_login_session(intval($user_info->id), $user_info->isadmin, $user_info->isteacher, $user_info->istranslator, $user_info->preflang);
-            return true;
-        }
+        // Wrong password
+        $this->mod_users->set_login_session(0,false,false,false); // Paranoia
+        $this->form_validation->set_message('password_check', $this->lang->line('bad_password'));
+        return false;
     }
 
+    // This is almost indentical to a function in Ctrl_oauth2.cpp
+    private function accept_policy(integer $user_id) {
+        $acceptance_code = $this->mod_users->generate_acceptance_code($user_id);
+
+        // VIEW:
+        $this->load->view('view_top1', array('title' => $this->lang->line('policy')));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => true));
+        $center_text = $this->load->view('view_accept_policy', array('acceptance_code' => $acceptance_code,
+                                                                     'user_id' => $user_id), true);
+
+        $this->load->view('view_main_page', array('center' => $center_text));
+        
+        $this->load->view('view_bottom');
+    }
+
+    public function accept_policy_yes() {
+        if (isset($_POST['acceptance_code']) &&
+            isset($_POST['user_id']) &&
+            $this->mod_users->verify_accept_code($_POST['acceptance_code'], $_POST['user_id'])) {
+
+            echo "YES - ",$_POST['acceptance_code']," - ", $_POST['user_id'],"\n";die;
+
+            
+            // Successful login
+            $me = $this->mod_users->get_me();
+            $uid = intval($_POST['user_id']);
+            $this->mod_users->update_login_stat($uid);
+            $this->mod_users->set_login_session($uid, $me->isadmin, $me->isteacher, $me->istranslator, $me->preflang);
+            redirect("/");
+        }
+        else {
+            echo "NO";die;
+            $this->mod_users->set_login_session(0, false, false, false);
+            redirect("/");
+        }
+    } 
+
+    public function accept_policy_no() {
+        // VIEW:
+        $this->load->view('view_top1', array('title' => $this->lang->line('policy')));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => true));
+        $this->load->view('view_rejected_policy');
+        $this->load->view('view_bottom');
+    }
+    
     public function index() {
         $this->load->helper('security'); // Provides xss_clean. TODO: This testing should be done on output instead of input
                                          // TODO: Should xss_clean be replaced by strip_tags or vice versa?
@@ -37,8 +80,21 @@ class Ctrl_login extends MY_Controller {
         $this->form_validation->set_rules('login_name', $this->lang->line('user_name'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('password', $this->lang->line('password'), 'trim|required|callback_password_check');
 
-		if ($this->form_validation->run())
-            redirect("/");
+		if ($this->form_validation->run()) {
+            if ($this->mod_users->accept_policy_current()) {
+                // Successful login
+                $me = $this->mod_users->get_me();
+                $uid = intval($me->id);
+                $this->mod_users->update_login_stat($uid);
+                $this->mod_users->set_login_session($uid, $me->isadmin, $me->isteacher, $me->istranslator, $me->preflang);
+                redirect("/");
+            }
+            else {
+                // User needs to accept new policy
+                $this->accept_policy(intval($this->mod_users->my_id()));
+                return;
+            }
+        }
 
         $this->session->unset_userdata(array('ol_user', 'ol_admin', 'ol_teacher', 'ol_translator', 'files', 'operation', 'from_dir'));
 
