@@ -31,7 +31,7 @@
       
     <?php // $userid is -1 when an administrator creates a new user, -2 when a user creates their own account ?>
 
-    <?= form_open($userid==-2 ? "users/sign_up" : "users/edit_one_user?userid=$userid&$extras") ?>
+    <?= form_open($userid==-2 ? "users/sign_up" : "users/edit_one_user?userid=$userid&$extras",array('id'=>'thisform')) ?>
       <table class="form">
         <tr>
           <?php if (!empty($user_info->oauth2_login)): ?>
@@ -155,7 +155,36 @@
           </tr>
         <?php endif; ?>
       </table>
-      <p style="height:2px">&nbsp;</p>
-      <p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
-          <a class="btn btn-default" href="<?= site_url($userid==-2 ? '/' : "users?$extras") ?>"><?= $this->lang->line('cancel_button') ?></a></p>
+
+      <?php if ($userid==-2): ?>
+        <div class="panel panel-default" style="margin-top: 20px">
+          <div class="panel-body">
+            <?php
+               $this->lang->load('privacy', $this->language);
+               // Detect language of privacy policy
+               if (preg_match('/^\(([^)]*)\)(.*)/s', $this->lang->line('privacy_text'), $matches)) {
+                   $policy_lang = $matches[1];
+                   echo $matches[2];
+               }
+               else {
+                   $policy_lang = 'Unknown';
+                   echo $this->lang->line('privacy_text');
+               }
+            ?>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading"><?= $this->lang->line('by_clicking_you_accept') ?></div>
+          <div class="panel-body">
+            <input type="hidden" name="policy_lang" value="<?= $policy_lang ?>" />
+            <p><input class="btn btn-primary" type="button" onclick="$('#thisform').submit()" name="emulsubmit" value="<?= $this->lang->line('OK_button') ?>">
+              <a class="btn btn-default" href="<?= site_url('/') ?>"><?= $this->lang->line('cancel_button') ?></a></p>
+          </div>
+        </div>
+      <?php else: ?>
+        <p style="height:2px">&nbsp;</p>
+        <p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
+          <a class="btn btn-default" href="<?= site_url("users?$extras") ?>"><?= $this->lang->line('cancel_button') ?></a></p>
+      <?php endif; ?>
     </form>

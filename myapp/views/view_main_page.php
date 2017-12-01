@@ -86,6 +86,7 @@
 
 <?php else: ?>
 
-  <?= $center ?>
-
+  <div class="col-sm-12" id="leftpanel">
+    <?= $center ?>
+  </div>
 <?php endif; ?>

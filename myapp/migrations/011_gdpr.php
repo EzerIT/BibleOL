@@ -15,7 +15,9 @@ class Migration_Gdpr extends CI_Migration {
         $this->dbforge->add_column('user', array('accept_policy' => array('type' => 'INT',
                                                                           'null' => false,
                                                                           'default' => 0),
-
+                                                 'policy_lang'   => array('type' => 'TINYTEXT',
+                                                                          'null' => true,
+                                                                          'default' => null),
                                                  'acc_code'      => array('type' => 'TINYTEXT',
                                                                           'null' => true,
                                                                           'default' => null),
@@ -23,7 +25,7 @@ class Migration_Gdpr extends CI_Migration {
                                                                            'null' => false,
                                                                            'default' => 0)));
                                                                      
-        echo "Access field added to user\n";
+        echo "Fields added to user\n";
     }
 
 	public function down()

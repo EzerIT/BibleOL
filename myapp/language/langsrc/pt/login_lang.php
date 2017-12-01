@@ -47,7 +47,6 @@ $lang['type_name_or_email'] = "Digite nome de usuário ou endereço de email";
 $lang['users'] = "Usuários";
 $lang['user_name'] = "Nome de usuário";
 $lang['user_not_found'] = "Usuário não encontrado";
-$lang['use_menu'] = "Você pode usar o menu acima para acessar as várias funções deste website.";
 $lang['warn_multiple_login'] = "Sempre utilize o mesmo mecanismo para entrar: Use sempre o Facebook, sempre o Google, ou sempre use um nome de usuário user name ou senha. Do contrário, você terá múltiplas congas neste sistema.";
 $lang['welcome_new_facebook_user'] = "Bem-vindo, novo usário do Facebook";
 $lang['welcome_new_google_user'] = "Bem-vindo, novo usuário do Google";

@@ -16,44 +16,34 @@ class Ctrl_login extends MY_Controller {
         return false;
     }
 
-    // This is almost indentical to a function in Ctrl_oauth2.cpp
-    private function accept_policy() {
-        $acceptance_code = $this->mod_users->generate_acceptance_code();
-
-        // VIEW:
-        $this->load->view('view_top1', array('title' => $this->lang->line('policy')));
-        $this->load->view('view_top2');
-        $this->load->view('view_menu_bar', array('langselect' => true));
-        $center_text = $this->load->view('view_accept_policy', array('acceptance_code' => $acceptance_code,
-                                                                     'user_id' => $this->mod_users->my_id()), true);
-
-        $this->load->view('view_main_page', array('center' => $center_text));
-        
-        $this->load->view('view_bottom');
-    }
-
     public function accept_policy_yes() {
         if (isset($_POST['acceptance_code']) &&
             isset($_POST['user_id']) &&
-            $this->mod_users->verify_accept_code($_POST['acceptance_code'], $_POST['user_id'])) {
+            isset($_POST['policy_lang']) &&
+            $this->mod_users->verify_accept_code($_POST['acceptance_code'],
+                                                 $_POST['user_id'],
+                                                 $_POST['policy_lang'],
+                                                 true)) {
 
             // Successful login
             $this->mod_users->update_login_stat();
-            $this->mod_users->set_login_session();
-            redirect("/");
         }
-        else {
+        else
             $this->mod_users->clear_login_session();
-            redirect("/");
-        }
+
+        redirect("/");
     } 
 
     public function accept_policy_no() {
+        $this->mod_users->clear_login_session();
+        
+        $this->lang->load('privacy', $this->language);
+
         // VIEW:
         $this->load->view('view_top1', array('title' => $this->lang->line('policy')));
         $this->load->view('view_top2');
         $this->load->view('view_menu_bar', array('langselect' => true));
-        $this->load->view('view_rejected_policy');
+        $this->load->view('view_rejected_policy', array('reject_text' => $this->lang->line('you_rejected_text')));
         $this->load->view('view_bottom');
     }
     
@@ -79,13 +69,13 @@ class Ctrl_login extends MY_Controller {
                 // Successful login
                 $this->mod_users->update_login_stat();
                 $this->mod_users->set_login_session();
-                redirect("/");
             }
             else {
-                // User needs to accept new policy
-                $this->accept_policy();
-                return;
+                // User needs to accept new policy, so don't log anything yet
+                $this->mod_users->set_login_session();
             }
+            
+            redirect("/");
         }
 
         $this->session->unset_userdata(array('ol_user', 'files', 'operation', 'from_dir'));

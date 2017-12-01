@@ -5,10 +5,13 @@ $this->lang->load('menu', $this->language);
 $ix = 0;
 $head[] = anchor(site_url(), $this->lang->line('home'));
  
-$ix = count($head);
-$head[] = $this->lang->line('text_and_exercises');
-$content[$ix][] = anchor(site_url('text/select_text'), $this->lang->line('display_text'));
-$content[$ix][] = anchor(site_url('text/select_quiz'), $this->lang->line('exercises'));
+if (!$this->mod_users->is_logged_in_noaccept()) {
+    // The user has not logged in, or has logged in and accepted policy
+    $ix = count($head);
+    $head[] = $this->lang->line('text_and_exercises');
+    $content[$ix][] = anchor(site_url('text/select_text'), $this->lang->line('display_text'));
+    $content[$ix][] = anchor(site_url('text/select_quiz'), $this->lang->line('exercises'));
+}
  
 if ($this->mod_users->is_logged_in()) {
     // Logged in
@@ -48,6 +51,13 @@ if ($this->mod_users->is_logged_in()) {
             $content[$ix][] = anchor(site_url('urls'), $this->lang->line('manage_gloss_links'));
     }
  
+    $ix = count($head);
+    $head[] = $this->lang->line('user_access');
+    $content[$ix][] = anchor(site_url('login'), $this->lang->line('logout'));
+    $content[$ix][] = anchor(site_url('privacy'), $this->lang->line('privacy_policy'));
+}
+elseif ($this->mod_users->is_logged_in_noaccept()) {
+    // The user did not accept policy.
     $ix = count($head);
     $head[] = $this->lang->line('user_access');
     $content[$ix][] = anchor(site_url('login'), $this->lang->line('logout'));

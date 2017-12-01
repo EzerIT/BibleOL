@@ -12,26 +12,6 @@ class Ctrl_oauth2 extends MY_Controller {
         $this->config->load('ol');
     }
 
-
-    // This is almost indentical to a function in Ctrl_login.cpp
-    private function accept_policy() {
-        $this->load->helper('form');
-
-        $acceptance_code = $this->mod_users->generate_acceptance_code();
-
-        // VIEW:
-        $this->load->view('view_top1', array('title' => $this->lang->line('policy')));
-        $this->load->view('view_top2');
-        $this->load->view('view_menu_bar', array('langselect' => true));
-        $center_text = $this->load->view('view_accept_policy', array('acceptance_code' => $acceptance_code,
-                                                                     'user_id' => $this->mod_users->my_id()), true);
-
-        $this->load->view('view_main_page', array('center' => $center_text));
-        
-        $this->load->view('view_bottom');
-    }
-
-    
 	public function google_callback() {
         $this->common_callback('google');
     }
@@ -40,6 +20,42 @@ class Ctrl_oauth2 extends MY_Controller {
         $this->common_callback('facebook');
     }
 
+    public function accept_policy_no() {
+        $myid = $this->mod_users->my_id(); // mod_users->clear_login_session() will clear mod_users->my_id()
+        $this->mod_users->clear_login_session();
+
+        if (isset($_GET['acceptance_code']) &&
+            $this->mod_users->verify_accept_code($_GET['acceptance_code'], $myid, '', false)) {
+            // We only delete the account if the acceptance code is valid. This is a safety measure to prevent
+            // malicious or accidental deletion of Oauth2 accouts by navigating directly to this controller
+            // function.
+
+            $this->mod_users->delete_user($myid);
+
+            if (isset($_GET['authority'])) {
+                switch ($_GET['authority']) {
+                  case 'google':
+                        $this->mod_users->revoke_google_permissions(); // Return value ignored
+                        break;
+                        
+                  case 'facebook':
+                        // Facebook does not allow revoking user permissions from the server
+                        break;
+                }
+            }
+        }
+
+        $this->lang->load('privacy', $this->language);
+
+        // VIEW:
+        $this->load->view('view_top1', array('title' => $this->lang->line('policy')));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => true));
+        $this->load->view('view_rejected_policy', array('reject_text' => $this->lang->line('you_rejected_oauth2_text')));
+        $this->load->view('view_bottom');
+    }
+     
+    
     // When an OAuth service has tried to authenticate a user, control is transferred to this function. If
     // all is well, $_GET['code'] contains an authorization code that can be converted to an access
     // code that can be used to retrieve user information.
@@ -151,33 +167,49 @@ class Ctrl_oauth2 extends MY_Controller {
 
 
             // MODEL:
-            switch ($this->mod_users->new_oauth2_user($authority,
-                                                      $remote_user_info->id,
-                                                      $remote_user_info->first_name,
-                                                      $remote_user_info->last_name,
-                                                      $remote_user_info->family_name_first,
-                                                      $remote_user_info->email)) {
-              case 1:
-                    // VIEW:
-                    $this->load->view('view_top1', array('title' => $this->lang->line("new_{$authority}_user")));
-                    $this->load->view('view_top2');
-                    $this->load->view('view_menu_bar', array('langselect' => false));
-                    $center_text = $this->load->view('view_new_oauth2_user',
-                                                     array('authority' => $authority,
-                                                           'user_info' => $remote_user_info),
-                                                     true);
-                    $this->lang->load('intro_text', $this->language); // For 'welcome' below
-                    $this->load->view('view_main_page',array('left_title' => $this->lang->line('welcome'),
-                                                             'center' => $center_text));
-                    $this->load->view('view_bottom');
-                    break;
-                    
-              case 2:
-                    $this->accept_policy();
-                    break;
-                    
-              case 3:
-                    redirect("/");
+            if ($this->mod_users->new_oauth2_user($authority,
+                                                  $remote_user_info->id,
+                                                  $remote_user_info->first_name,
+                                                  $remote_user_info->last_name,
+                                                  $remote_user_info->family_name_first,
+                                                  $remote_user_info->email)) {
+                // First time login
+
+                $this->load->helper('form');
+                $this->load->helper('myurl');
+                $this->lang->load('privacy', $this->language);
+                $acceptance_code = $this->mod_users->generate_acceptance_code();
+
+                $this->mod_users->set_login_session();
+
+                // VIEW:
+                $this->load->view('view_top1', array('title' => $this->lang->line("new_{$authority}_user")));
+                $this->load->view('view_top2');
+                $this->load->view('view_menu_bar', array('langselect' => false));
+                $center_text = $this->load->view('view_new_oauth2_user',
+                                                 array('authority' => $authority,
+                                                       'user_info' => $remote_user_info,
+                                                       'acceptance_code' => $acceptance_code,
+                                                       'user_id' => $this->mod_users->my_id()),
+                                                 true);
+                $this->lang->load('intro_text', $this->language); // For 'welcome' below
+                $this->load->view('view_main_page',array('left_title' => $this->lang->line('welcome'),
+                                                         'center' => $center_text));
+                $this->load->view('view_bottom');
+            }
+            else {
+                // User has logged in previously
+                if ($this->mod_users->accepted_current_policy()) {
+                    // Successful login
+                    $this->mod_users->update_login_stat();
+                    $this->mod_users->set_login_session();
+                }
+                else {
+                    // User needs to accept new policy, so don't log anything yet
+                    $this->mod_users->set_login_session();
+                }
+            
+                redirect("/");
             }
         }
         catch (DataException $e) {

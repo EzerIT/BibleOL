@@ -46,7 +46,6 @@ $lang['type_name_or_email'] = "請輸入使用者名稱或電郵地址";
 $lang['users'] = "使用者";
 $lang['user_name'] = "使用者名稱";
 $lang['user_not_found'] = "找不到這個使用者";
-$lang['use_menu'] = "您可以用上面的選單來執行這個網站的各樣功能。";
 $lang['warn_multiple_login'] = "您必須恆常使用同一種方式登入，要麼恆常用Facebook，要麼恆常用Google，要麼恆常用使用者名稱和密碼。否則您會在這個系統裡有多個帳戶。";
 $lang['welcome_new_facebook_user'] = "新的Facebook使用者，歡迎您！";
 $lang['welcome_new_google_user'] = "新的Google使用者，歡迎您！";

@@ -92,19 +92,8 @@ class Ctrl_users extends MY_Controller {
     public function delete_me_google() {
         try {
             $this->mod_users->check_logged_in_oauth2('google');
- 
-            // Revoke user permissions
-            $url = "https://accounts.google.com/o/oauth2/revoke?token=" . $this->session->userdata('access_token');
-            $options = array(
-                'http' => array(
-                    'method'  => 'GET'
-                    )
-                );
-            $context  = stream_context_create($options);
-            $result = @file_get_contents($url, false, $context);
-            
-            $items = explode(' ',$http_response_header[0]); // $items[1] is the HTTP error code
-            switch ($items[1]) {
+
+            switch ($this->mod_users->revoke_google_permissions()) {
               case '400':
                     // Token not recognized by Google
 
@@ -127,7 +116,8 @@ class Ctrl_users extends MY_Controller {
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('users'));
         }
-    }
+    }            
+    
 
     public function delete_me_facebook() {
         try {
@@ -220,6 +210,8 @@ class Ctrl_users extends MY_Controller {
                 $user_info->last_login = 0;  // This means never logged in. User must log in within 48 hours.
                 $user_info->warning_sent = 0;
                 $user_info->preflang = $this->input->post('preflang');
+                $user_info->accept_policy = time();
+                $user_info->policy_lang =  $this->input->post('policy_lang');
 
                 $pw = $this->generate_pw();
                 $query = $this->mod_users->set_user($user_info, $pw);

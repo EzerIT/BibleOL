@@ -39,12 +39,16 @@ function make_dummy_user() {
     $u->preflang = '';
     $u->family_name_first = 0;
     $u->istranslator = 0;
+    $u->accept_policy = 0;
+    $u->policy_lang = '';
+    $u->acc_code = '';
+    $u->acc_code_time = 0;
 
     return $u;
 }
 
 class Mod_users extends CI_Model {
-    const CURRENT_POLICY_DATE = 1511440972;  // 2017-11-23
+    const CURRENT_POLICY_DATE = 1511514827;  // 2017-11-24
     const ACCEPT_CODE_EXPIRY = 15*60; // 15 minutes
 
     private $me;
@@ -65,19 +69,19 @@ class Mod_users extends CI_Model {
     }
 
     public function is_admin() {
-        return $this->me->isadmin;
+        return $this->me->isadmin && $this->accepted_current_policy();
     }
 
     public function is_teacher() {
-        return $this->me->isteacher || $this->me->isadmin; // All admins are teachers
+        return ($this->me->isteacher || $this->me->isadmin) && $this->accepted_current_policy(); // All admins are teachers
     }
 
     public function is_translator() {
-        return $this->me->istranslator || $this->me->isadmin; // All admins are translator
+        return ($this->me->istranslator || $this->me->isadmin) && $this->accepted_current_policy(); // All admins are translator
     }
 
     public function my_id() {
-        return $this->me->id;
+        return intval($this->me->id);
     }
 
     public function my_name() {
@@ -98,7 +102,11 @@ class Mod_users extends CI_Model {
     }
 
     public function is_logged_in() {
-        return $this->me->id > 0;
+        return $this->me->id > 0 && $this->accepted_current_policy();
+    }
+
+    public function is_logged_in_noaccept() {
+        return $this->me->id > 0 && !$this->accepted_current_policy();
     }
 
     public function is_me(integer $user_id) {
@@ -170,10 +178,10 @@ class Mod_users extends CI_Model {
 
     public function clear_login_session() {
         $this->session->unset_userdata('ol_user');
-        $this->session->unset_userdata('language');
+        //$this->session->unset_userdata('language');
+        $this->me = make_dummy_user();
     }
 
-    
     public function get_all_users() {
         $query = $this->db->get('user');
         return $query->result();
@@ -282,9 +290,7 @@ class Mod_users extends CI_Model {
     }
 
 
-    /// @return 1 if this is the first time this user logs in.
-    ///         2 if the user needs to accept a policy
-    ///         3 if the user is allowed to proceed
+    /// @return True if this is the first time this user logs in.
     public function new_oauth2_user(string $authority, string $oauth2_user_id, string $first_name, string $last_name, boolean $family_name_first, string__OR__null $email) {
         switch ($authority) {
           case 'google':
@@ -301,21 +307,15 @@ class Mod_users extends CI_Model {
 		if ($row = $query->row()) {
             $this->me = $row;
 
-            if ($first_name!==$this->me->first_name || $last_name!==$this->me->last_name || $email!==$this->me->email)
+            if ($first_name!==$this->me->first_name || $last_name!==$this->me->last_name || $email!==$this->me->email) {
                 $this->me->first_name = $first_name;
                 $this->me->last_name = $last_name;
                 $this->me->email = empty($email) ? null : $email;
                 $query = $this->db->where('id',$this->me->id)->update('user',array('first_name' => $this->me->first_name,
                                                                                    'last_name'  => $this->me->last_name,
                                                                                    'email'      => $this->me->email));
-            if ($this->accepted_current_policy()) {
-                $this->set_login_session();
-                $this->update_login_stat();
-
-                return 3;
             }
-            else
-                return 2;
+            return false;
         }
         else {
             // Create new user
@@ -332,13 +332,11 @@ class Mod_users extends CI_Model {
 			$this->me->last_login = time();
 			$this->me->preflang = $this->language_short;
 
-            $query = $this->db->insert('user', $user);
+            $query = $this->db->insert('user', $this->me);
       
             $this->me->id = $this->db->insert_id();
 
-            $this->set_login_session();
-
-            return 1;
+            return true;
         }
     }
 
@@ -389,17 +387,24 @@ class Mod_users extends CI_Model {
     }
 
     
-    // Returns true if accept code is correct, otherwise returns null. Sets $this->me
-    public function verify_accept_code(string $acc_code, string $str_uid) {
+    // Returns true if accept code is correct, otherwise returns null.
+    // If $set_me is true, this function sets $this->me and updates the database.
+    // $policy_lang is not used if $set_me==false
+    public function verify_accept_code(string $acc_code, string__OR__integer $uid, string $policy_lang, boolean $set_me) {
         $query = $this->db
-            ->where('id',$str_uid)
+            ->where('id',$uid)
             ->where('acc_code',$acc_code)
             ->where('acc_code_time >', time() - self::ACCEPT_CODE_EXPIRY)
             ->get('user');
 
-        if ($this->me = $query->row()) {
-            $this->me->accept_policy = time();
-            $this->db->where('id',$this->me->id)->update('user',array('accept_policy' => $this->me->accept_policy));
+        if ($row = $query->row()) {
+            if ($set_me) {
+                $this->me = $row;
+                $this->me->accept_policy = time();
+                $this->me->policy_lang = $policy_lang;
+                $this->db->where('id',$this->me->id)->update('user',array('accept_policy' => $this->me->accept_policy,
+                                                                          'policy_lang' => $this->me->policy_lang));
+            }
             return true;
         }
         else
@@ -408,6 +413,21 @@ class Mod_users extends CI_Model {
 
     public function accepted_current_policy() {
         return $this->me->accept_policy >= self::CURRENT_POLICY_DATE;
+    }
+
+    public function revoke_google_permissions() {
+        // Revoke user permissions
+        $url = "https://accounts.google.com/o/oauth2/revoke?token=" . $this->session->userdata('access_token');
+        $options = array(
+            'http' => array(
+                'method'  => 'GET'
+                )
+            );
+        $context  = stream_context_create($options);
+        $result = @file_get_contents($url, false, $context);
+            
+        $items = explode(' ',$http_response_header[0]);
+        return $items[1]; // $items[1] is the HTTP error code
     }
     
   }
