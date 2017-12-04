@@ -7,7 +7,6 @@ $lang['cannot_enroll'] = "You cannot enroll in this class";
 $lang['class'] = "Class";
 $lang['classes_for_user'] = "Classes for user '%s'";
 $lang['class_password'] = "Class password";
-$lang['click_enroll'] = "Click “Enroll” to Enroll in a Class";
 $lang['enroll'] = "Enroll";
 $lang['enrolled'] = "Enrolled";
 $lang['enrolled_in_no_classes'] = "You are currently not enrolled in any classes";

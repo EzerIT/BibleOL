@@ -7,7 +7,6 @@ $lang['cannot_enroll'] = "Du kan ikke tilmeldes denne klasse";
 $lang['class'] = "Klasse";
 $lang['classes_for_user'] = "Klasser for brugeren '%s'";
 $lang['class_password'] = "Klassens adgangskode";
-$lang['click_enroll'] = "Klik »Tilmeld« for at melde dig til en klasse";
 $lang['enroll'] = "Tilmeld";
 $lang['enrolled'] = "Tilmeldt";
 $lang['enrolled_in_no_classes'] = "Du er ikke tilmeldt nogen klasser";

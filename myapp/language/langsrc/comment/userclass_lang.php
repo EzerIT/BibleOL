@@ -28,10 +28,6 @@ $comment['class_password'] = "";
 $format['class_password'] = "";
 $use_textarea['class_password'] = false;
 
-$comment['click_enroll'] = "";
-$format['click_enroll'] = "";
-$use_textarea['click_enroll'] = false;
-
 $comment['enroll'] = "";
 $format['enroll'] = "";
 $use_textarea['enroll'] = false;
