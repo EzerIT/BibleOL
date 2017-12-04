@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Font matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{22 November 2017}
+\date{4 December 2017}
 
 \makeindex
 
@@ -560,7 +560,78 @@ Change the text USERNAME, PASSWORD, and DATABASE to be the database username, pa
 name.
 
 
-\subsection{Step 5. Initialize MySQL\index{MySQL}}
+\subsection{Step 5. Additional Configuration}
+
+Copy the file \texttt{myapp/config/ol.php-dist} to \texttt{myapp/config/ol.php}\index{ol.php} and modify the
+following lines in the copy:
+
+\begin{lstlisting}[language=PHP]
+$config['pw_salt'] = 'xxxxxxx';
+$config['mql_driver'] = 'native';
+$config['mail_sender_address'] = 'xxxxx@xxxxx.xx';
+$config['mail_sender_name'] = 'Bible Online Learner';
+
+$config['google_login_enabled'] = false;
+$config['google_client_id'] = 'xxxxxxxxxxxx.apps.googleusercontent.com';
+$config['google_client_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+
+$config['facebook_login_enabled'] = false;
+$config['facebook_client_id'] = 'xxxxxxxxxxxxxxxx';
+$config['facebook_client_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+\end{lstlisting}
+
+You should modify these values thus:
+
+\begin{my-longtabu}{>{\footnotesize\ttfamily}lX}{ \headii{\normalsize\textrm{Variable}}{Contents} }
+\$config['pw\_salt']\index{salt} & A random text string of, say, 6-8 characters. This is used to randomize the
+  user passwords stored in the user database\index{user database}.\\
+
+\$config['mql\_driver']\index{MQL driver}\index{driver, MQL|see {MQL driver}} & Set to \texttt{'native'} to select a
+built-in MQL driver. Set to or \texttt{'extern'} to run MQL commands external to the PHP interpreter
+(see Section \ref{sec-mql-extern}).\\
+
+\$config['mail\_sender\_address']\index{email address}\index{address|see {email address}} & The email address to
+be used as sender when Bible OL sends email to users.\\
+
+\$config['mail\_sender\_name']\index{email sender}\index{sender|see {email sender}} & The name to be used as
+sender when Bible OL sends email to users.\\
+
+\$config['google\_login\_enabled']\index{login!Google}\index{Google!login|see {login, Google}} & Set to \emph{true} if
+you have a Google apps account\index{Google!apps account} that allows you to service Google logins;
+set to \emph{false} to disable Google login.\\
+
+\$config['google\_client\_id']\index{Google!client ID}\index{client ID|see {Google, client ID}} & Your Google apps
+client ID. Used only if you enable Google login.\\
+
+\$config['google\_client\_secret']\index{Google!client secret}\index{client secret|see {Google, client secret}} & Your
+Google apps client secret, if any. Used only if you enable Google login.\\
+
+\$config['facebook\_login\_enabled']\index{login!Facebook}\index{Facebook!login|see {login, Facebook}} & Set to \emph{true} if
+you have a Facebook developers account\index{Facebook!developers account} that allows you to service Facebook logins;
+set to \emph{false} to disable Facebook login.\\
+
+\$config['facebook\_client\_id']\index{Facebook!app ID}\index{app ID|see {Facebook, app ID}} & Your Facebook app
+ID. Used only if you enable Facebook login.\\
+
+\$config['facebook\_client\_secret']\index{Facebook!app secret}\index{app secret|see {Facebook, app secret}} & Your
+Facebook app secret. Used only if you enable Facebook login.\\
+  
+\end{my-longtabu}
+
+Copy the file \texttt{myapp/config/config.php-dist} to \texttt{myapp/config/config.php} and modify the
+following line in the copy:
+
+\begin{lstlisting}[language=PHP]
+$config['base_url'] = 'http://example.com';%\index{base URL}%
+$config['lj_enabled'] = false;
+\end{lstlisting}
+
+Replace `http://example.com' with the top URL of the web site for your Bible OL installation.
+
+If you plan to use \emph{Learning Journey} (see Section \ref{sec-lj}), set \texttt{\$config['lj\_enabled']} to \texttt{true}.
+
+
+\subsection{Step 6. Initialize MySQL\index{MySQL}}
 
 The following commands should be executed with the current directory set to \texttt{BibleOl}.
 
@@ -620,77 +691,6 @@ php5.6 index.php translate import_lex greek en lexicons/greek_en.csv
 \end{lstlisting}
 
 (On my computer, this takes about a minute.)
-
-
-\subsection{Step 6. Additional Configuration}
-
-Copy the file \texttt{myapp/config/ol.php-dist} to \texttt{myapp/config/ol.php}\index{ol.php} and modify the
-following lines in the copy:
-
-\begin{lstlisting}[language=PHP]
-$config['pw_salt'] = 'xxxxxxx';
-$config['mql_driver'] = 'native';
-$config['mail_sender_address'] = 'xxxxx@xxxxx.xx';
-$config['mail_sender_name'] = 'Bible Online Learner';
-
-$config['google_login_enabled'] = false;
-$config['google_client_id'] = 'xxxxxxxxxxxx.apps.googleusercontent.com';
-$config['google_client_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxx';
-
-$config['facebook_login_enabled'] = false;
-$config['facebook_client_id'] = 'xxxxxxxxxxxxxxxx';
-$config['facebook_client_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-\end{lstlisting}
-
-You should modify these values thus:
-
-\begin{my-longtabu}{>{\footnotesize\ttfamily}lX}{ \headii{\normalsize\textrm{Variable}}{Contents} }
-\$config['pw\_salt']\index{salt} & A random text string of, say, 6-8 characters. This is used to randomize the
-  user passwords stored in the user database\index{user database}.\\
-
-\$config['mql\_driver']\index{MQL driver}\index{driver, MQL|see {MQL driver}} & Set to \texttt{'native'} to select a
-built-in MQL driver. Set to or \texttt{'extern'} to run MQL commands external to the PHP interpreter
-(see Section \ref{sec-mql-extern}).\\
-
-\$config['mail\_sender\_address']\index{email address}\index{address|see {email address}} & The email address to
-be used as sender when Bible OL sends email to users.\\
-
-\$config['mail\_sender\_name']\index{email sender}\index{sender|see {email sender}} & The name to be used as
-sender when Bible OL sends email to users.\\
-
-\$config['google\_login\_enabled']\index{login!Google}\index{Google!login|see {login, Google}} & Set to \emph{true} if
-you have a Google apps account\index{Google!apps account} that allows you to service Google logins;
-set to \emph{false} to disable Google login.\\
-
-\$config['google\_client\_id']\index{Google!client ID}\index{client ID|see {Google, client ID}} & Your Google apps
-client ID. Used only if you enable Google login.\\
-
-\$config['google\_client\_secret']\index{Google!client secret}\index{client secret|see {Google, client secret}} & Your
-Google apps client secret, if any. Used only if you enable Google login.\\
-
-\$config['facebook\_login\_enabled']\index{login!Facebook}\index{Facebook!login|see {login, Facebook}} & Set to \emph{true} if
-you have a Facebook developers account\index{Facebook!developers account} that allows you to service Facebook logins;
-set to \emph{false} to disable Facebook login.\\
-
-\$config['facebook\_client\_id']\index{Facebook!app ID}\index{app ID|see {Facebook, app ID}} & Your Facebook app
-ID. Used only if you enable Facebook login.\\
-
-\$config['facebook\_client\_secret']\index{Facebook!app secret}\index{app secret|see {Facebook, app secret}} & Your
-Facebook app secret. Used only if you enable Facebook login.\\
-  
-\end{my-longtabu}
-
-Copy the file \texttt{myapp/config/config.php-dist} to \texttt{myapp/config/conf.php} and modify the
-following line in the copy:
-
-\begin{lstlisting}[language=PHP]
-$config['base_url'] = 'http://example.com';%\index{base URL}%
-$config['lj_enabled'] = false;
-\end{lstlisting}
-
-Replace `http://example.com' with the top URL of the web site for your Bible OL installation.
-
-If you plan to use \emph{Learning Journey} (see Section \ref{sec-lj}), set \texttt{\$config['lj\_enabled']} to \texttt{true}.
 
 
 \subsection{Step 7. Add Administrator\index{administrator}}
