@@ -7,7 +7,7 @@ $lang['chapter_prompt'] = "章：";
 $lang['check_answer'] = "检查答案";
 $lang['clear_grammar'] = "清除所有选择";
 $lang['click_folder'] = "请点选资料夹来打开。然后您可以选择做哪个练习，做其中多少条题目。练习题目的来源，您可以选用预设的经文，或自选经文。";
-$lang['corpus_copyright'] = "<h3>ETCBC4资料库的版权属于：</h3><p>%s</p>\n"
+$lang['corpus_copyright'] = "<h3>ETCBC4资料库的版权属于：</h3><p>%s</p>\n"
         . "     <h3>Nestle 1904资料库的版权属于：</h3><p>%s</p>";
 $lang['corpus_copyright_title'] = "版权";
 $lang['corpus_prompt'] = "经文：";
@@ -48,8 +48,8 @@ $lang['quiz_instruct1'] = "请选择用哪些经文来进行练习……";
 $lang['quiz_instruct2'] = "然后按本页底部的“开始练习”按钮。";
 $lang['quiz_name'] = "练习名称";
 $lang['save_button'] = "储存";
-$lang['select_a_passage'] = "<p>在这里，您可以选择显示哪些圣经经文。<p>\n"
-        . "     <p>如果不填“由第几节”，就会显示整章。</p>\n"
+$lang['select_a_passage'] = "<p>在这里，您可以选择显示哪些圣经经文。<p>\n"
+        . "     <p>如果不填“由第几节”，就会显示整章。</p>\n"
         . "     <p>如果不填“到第几节”，就只会显示一节。</p>";
 $lang['select_a_passage_title'] = "请选择要显示什么经文";
 $lang['select_exercise'] = "请选择一个练习";

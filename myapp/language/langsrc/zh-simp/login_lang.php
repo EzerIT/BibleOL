@@ -22,7 +22,7 @@ $lang['login'] = "登入";
 $lang['login_button'] = "登入";
 $lang['new_facebook_user'] = "新的Facebook使用者";
 $lang['new_google_user'] = "新的Google使用者";
-$lang['no_email'] = "<h1>您没有电邮地址。</h1>\n"
+$lang['no_email'] = "<h1>您没有电邮地址。</h1>\n"
         . "    <p>在我们的使用者名单之中，找不到您的电邮地址。所以我们无法用电邮寄密码给您。请联络您的系统管理员，他可以为您重设密码。</p>";
 $lang['or'] = "或";
 $lang['password'] = "密码";

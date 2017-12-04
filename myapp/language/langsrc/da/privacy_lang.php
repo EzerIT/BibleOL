@@ -1,8 +1,10 @@
 <?php
 
 $lang['do_you_accept'] = "Accepterer du disse betingelser?";
+$lang['first_you_must_accept_policy'] = "Før du begynder at bruge Bible Online Learner, skal du acceptere vores privatlivspolitik.";
 $lang['new_privacy_header'] = "Ny privatlivspolitik";
 $lang['new_privacy_intro'] = "Der er kommet en ny udgave af vores privatlivspolitik. Før du bliver logget ind, bedes du gennemlæse den og nederst på siden angive om du vil acceptere den.";
+$lang['policy'] = "Politik";
 $lang['privacy_policy_title'] = "Privatlivspolitik";
 $lang['privacy_text'] = "(da)<h1>Privatlivspolitik</h1>\n"
         . "<p>Denne privatlivspolitik fastlægger hvordan Bible Online Learner\n"
@@ -104,8 +106,7 @@ $lang['privacy_text'] = "(da)<h1>Privatlivspolitik</h1>\n"
         . "\n"
         . "<p>Vi gør vort bedste for at sikre at dine oplysninger ikke går tabt\n"
         . "på grund af tekniske eller menneskelige fejl,\n"
-        . "men vi kan ikke være ansvarlige for følgerne af et eventuelt datatab.</p>"
-        . "\n"
+        . "men vi kan ikke være ansvarlige for følgerne af et eventuelt datatab.</p>\n"
         . "<h2>Klage</h2>\n"
         . "\n"
         . "<p>Du har i henhold til gældende EU-lovgivning ret til at klage\n"
@@ -124,7 +125,5 @@ $lang['privacy_text'] = "(da)<h1>Privatlivspolitik</h1>\n"
         . "privatlivspolitik. Du bør være forsigtig og undersøge hvilke\n"
         . "privatlivsregler der gælder for disse andre websteder.</p>\n\n";
 $lang['you_rejected_header'] = "Du afviste privatlivspolitikken";
-$lang['you_rejected_text'] = "Du valgte at afvise vores privatlivspolitik. Det betyder at du ikke kan benytte en konto på Bible Online Learner. Hvis du ønsker at vi nedlægger din konto, bedes du kontakte en af systemadministratorerne, fx claus@ezer.dk. Din konto vil automatisk blive slettet hvis du ikke benytter den i 18 måneder.";
 $lang['you_rejected_oauth2_text'] = "Du valgte at afvise vores privatlivspolitik. Det betyder at du ikke kan få en konto på Bible Online Learner.";
-$lang['first_you_must_accept_policy'] = "Før du begynder at bruge Bible Online Learner, skal du acceptere vores privatlivspolitik.";
-$lang['policy'] = 'Politik';
+$lang['you_rejected_text'] = "Du valgte at afvise vores privatlivspolitik. Det betyder at du ikke kan benytte en konto på Bible Online Learner. Hvis du ønsker at vi nedlægger din konto, bedes du kontakte en af systemadministratorerne, fx claus@ezer.dk. Din konto vil automatisk blive slettet hvis du ikke benytter den i 18 måneder.";
