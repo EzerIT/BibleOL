@@ -21,19 +21,16 @@ class Ctrl_oauth2 extends MY_Controller {
     }
 
     public function accept_policy_no() {
-        $myid = $this->mod_users->my_id(); // mod_users->clear_login_session() will clear mod_users->my_id()
-        $this->mod_users->clear_login_session();
-
         if (isset($_GET['acceptance_code']) &&
-            $this->mod_users->verify_accept_code($_GET['acceptance_code'], $myid, '', false)) {
+            $this->mod_users->verify_accept_code($_GET['acceptance_code'], '', false)) {
             // We only delete the account if the acceptance code is valid. This is a safety measure to prevent
             // malicious or accidental deletion of Oauth2 accouts by navigating directly to this controller
             // function.
 
-            $this->mod_users->delete_user($myid);
+            $this->mod_users->delete_user($this->mod_users->my_id());
 
-            if (isset($_GET['authority'])) {
-                switch ($_GET['authority']) {
+            if (isset($_SESSION['new_oauth2'])) {
+                switch ($_SESSION['new_oauth2']) {
                   case 'google':
                         $this->mod_users->revoke_google_permissions(); // Return value ignored
                         break;
@@ -45,6 +42,8 @@ class Ctrl_oauth2 extends MY_Controller {
             }
         }
 
+        $this->mod_users->clear_login_session();
+        unset($_SESSION['new_oauth2']);
         $this->lang->load('privacy', $this->language);
 
         // VIEW:
@@ -174,43 +173,18 @@ class Ctrl_oauth2 extends MY_Controller {
                                                   $remote_user_info->family_name_first,
                                                   $remote_user_info->email)) {
                 // First time login
-
-                $this->load->helper('form');
-                $this->load->helper('myurl');
-                $this->lang->load('privacy', $this->language);
-                $acceptance_code = $this->mod_users->generate_acceptance_code();
-
-                $this->mod_users->set_login_session();
-
-                // VIEW:
-                $this->load->view('view_top1', array('title' => $this->lang->line("new_{$authority}_user")));
-                $this->load->view('view_top2');
-                $this->load->view('view_menu_bar', array('langselect' => false));
-                $center_text = $this->load->view('view_new_oauth2_user',
-                                                 array('authority' => $authority,
-                                                       'user_info' => $remote_user_info,
-                                                       'acceptance_code' => $acceptance_code,
-                                                       'user_id' => $this->mod_users->my_id()),
-                                                 true);
-                $this->lang->load('intro_text', $this->language); // For 'welcome' below
-                $this->load->view('view_main_page',array('left_title' => $this->lang->line('welcome'),
-                                                         'center' => $center_text));
-                $this->load->view('view_bottom');
+                $_SESSION['new_oauth2'] = $authority;
             }
             else {
                 // User has logged in previously
-                if ($this->mod_users->accepted_current_policy()) {
+
+                if ($this->mod_users->accepted_current_policy())
                     // Successful login
                     $this->mod_users->update_login_stat();
-                    $this->mod_users->set_login_session();
-                }
-                else {
-                    // User needs to accept new policy, so don't log anything yet
-                    $this->mod_users->set_login_session();
-                }
-            
-                redirect("/");
             }
+            
+            $this->mod_users->set_login_session();
+            redirect("/");
         }
         catch (DataException $e) {
             // VIEW:

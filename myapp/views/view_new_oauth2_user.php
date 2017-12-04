@@ -29,14 +29,13 @@
   <div class="panel-body">
     <?= form_open("login/accept_policy_yes") ?>
       <input type="hidden" name="acceptance_code" value="<?= $acceptance_code ?>" />
-      <input type="hidden" name="user_id" value="<?= $user_id ?>" />
       <input type="hidden" name="policy_lang" value="<?= $policy_lang ?>" />
       <input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('yes') ?>" />
-      <a class="btn btn-primary" href="<?= build_get('/oauth2/accept_policy_no',
-                                                     array('user_id' => $user_id,
-                                                           'acceptance_code' => $acceptance_code,
-                                                           'authority' => $authority))
-                                       ?>"><?= $this->lang->line('no') ?></a>
+      <?= anchor(build_get('oauth2/accept_policy_no', array('acceptance_code' => $acceptance_code)),
+                 $this->lang->line('no'),
+                 array('class' => 'btn btn-primary')) ?>
+
+     
     </form>
   </div>
 </div>

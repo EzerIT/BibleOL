@@ -175,7 +175,7 @@
         </div>
 
         <div class="panel panel-default">
-          <div class="panel-heading"><?= $this->lang->line('by_clicking_you_accept') ?></div>
+          <div class="panel-heading"><?= $this->lang->line('do_you_accept') ?></div>
           <div class="panel-body">
             <input type="hidden" name="policy_lang" value="<?= $policy_lang ?>" />
             <p><input class="btn btn-primary" type="button" onclick="$('#thisform').submit()" name="emulsubmit" value="<?= $this->lang->line('OK_button') ?>">

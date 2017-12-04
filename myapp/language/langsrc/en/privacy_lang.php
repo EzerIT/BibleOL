@@ -94,6 +94,11 @@ $lang['privacy_text'] = "(en)<h1>Privacy Policy</h1>\n"
     . "<p>If you want a complete electronic record of all your data,\n"
     . "you may contact Claus Tøndering at <a href=\"mailto:claus@ezer.dk\">claus@ezer.dk</a>.</p>\n"
     . "\n"
+    . "<h2>Data Loss</h2>\n"
+    . "\n"
+    . "<p>We do our best to ensure that your data is not lost due to technical or human error,\n"
+    . "but we cannot be held responsible for any loss of data.</p>"
+    . "\n"
     . "<h2>Complaints</h2>\n"
     . "\n"
     . "<p>According to current EU regulation, you have the right to complain\n"
@@ -112,3 +117,4 @@ $lang['you_rejected_header'] = "You rejected the Privacy Policy";
 $lang['you_rejected_text'] = "You chose to reject our Privacy Policy. This means that you cannot use an account on Bible Online Learner. If you want us to delete your account, please contact one of the system administrators, for example, claus@ezer.dk. Your account will automatically be deleted if you do not use it for 18 months.";
 $lang['you_rejected_oauth2_text'] = "You chose to reject our Privacy Policy. This means that you cannot have an account on Bible Online Learner.";
 $lang['first_you_must_accept_policy'] = "Before you start using Bible Online Learner, you must accept our Privacy Policy.";
+$lang['policy'] = 'Policy';

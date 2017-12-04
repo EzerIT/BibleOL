@@ -18,10 +18,8 @@ class Ctrl_login extends MY_Controller {
 
     public function accept_policy_yes() {
         if (isset($_POST['acceptance_code']) &&
-            isset($_POST['user_id']) &&
             isset($_POST['policy_lang']) &&
             $this->mod_users->verify_accept_code($_POST['acceptance_code'],
-                                                 $_POST['user_id'],
                                                  $_POST['policy_lang'],
                                                  true)) {
 
@@ -31,6 +29,8 @@ class Ctrl_login extends MY_Controller {
         else
             $this->mod_users->clear_login_session();
 
+        unset($_SESSION['new_oauth2']);
+        
         redirect("/");
     } 
 

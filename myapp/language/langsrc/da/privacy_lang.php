@@ -100,6 +100,12 @@ $lang['privacy_text'] = "(da)<h1>Privatlivspolitik</h1>\n"
         . "<p>Hvis du ønsker en komplet elektronisk fortegnelse over alle dine\n"
         . "data, kan du kontakte Claus Tøndering på <a href=\"mailto:claus@ezer.dk\">claus@ezer.dk</a>.</p>\n"
         . "\n"
+        . "<h2>Datatab</h2>\n"
+        . "\n"
+        . "<p>Vi gør vort bedste for at sikre at dine oplysninger ikke går tabt\n"
+        . "på grund af tekniske eller menneskelige fejl,\n"
+        . "men vi kan ikke være ansvarlige for følgerne af et eventuelt datatab.</p>"
+        . "\n"
         . "<h2>Klage</h2>\n"
         . "\n"
         . "<p>Du har i henhold til gældende EU-lovgivning ret til at klage\n"
@@ -121,3 +127,4 @@ $lang['you_rejected_header'] = "Du afviste privatlivspolitikken";
 $lang['you_rejected_text'] = "Du valgte at afvise vores privatlivspolitik. Det betyder at du ikke kan benytte en konto på Bible Online Learner. Hvis du ønsker at vi nedlægger din konto, bedes du kontakte en af systemadministratorerne, fx claus@ezer.dk. Din konto vil automatisk blive slettet hvis du ikke benytter den i 18 måneder.";
 $lang['you_rejected_oauth2_text'] = "Du valgte at afvise vores privatlivspolitik. Det betyder at du ikke kan få en konto på Bible Online Learner.";
 $lang['first_you_must_accept_policy'] = "Før du begynder at bruge Bible Online Learner, skal du acceptere vores privatlivspolitik.";
+$lang['policy'] = 'Politik';

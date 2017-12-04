@@ -48,7 +48,7 @@ function make_dummy_user() {
 }
 
 class Mod_users extends CI_Model {
-    const CURRENT_POLICY_DATE = 1511514827;  // 2017-11-24
+    const CURRENT_POLICY_DATE = 1512390210;  // 2017-12-04
     const ACCEPT_CODE_EXPIRY = 15*60; // 15 minutes
 
     private $me;
@@ -390,16 +390,9 @@ class Mod_users extends CI_Model {
     // Returns true if accept code is correct, otherwise returns null.
     // If $set_me is true, this function sets $this->me and updates the database.
     // $policy_lang is not used if $set_me==false
-    public function verify_accept_code(string $acc_code, string__OR__integer $uid, string $policy_lang, boolean $set_me) {
-        $query = $this->db
-            ->where('id',$uid)
-            ->where('acc_code',$acc_code)
-            ->where('acc_code_time >', time() - self::ACCEPT_CODE_EXPIRY)
-            ->get('user');
-
-        if ($row = $query->row()) {
+    public function verify_accept_code(string $acc_code, string $policy_lang, boolean $set_me) {
+        if ($this->me->acc_code==$acc_code && time()-$this->me->acc_code_time < self::ACCEPT_CODE_EXPIRY) {
             if ($set_me) {
-                $this->me = $row;
                 $this->me->accept_policy = time();
                 $this->me->policy_lang = $policy_lang;
                 $this->db->where('id',$this->me->id)->update('user',array('accept_policy' => $this->me->accept_policy,
