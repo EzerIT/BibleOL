@@ -10,12 +10,6 @@ function predump($x) {
     echo "</pre>";
   }
     
-
-function translate(string $orig) {
-//    return "TRANSLATE: $orig";
-    return $orig;
-  }
-
 class MY_Controller extends CI_Controller {
     public $language;
     public $language_short;

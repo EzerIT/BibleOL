@@ -29,7 +29,7 @@
         <?= anchor(build_get('text/select_quiz',array('dir' => composedir($dirlist['relativedir'], $d[0]))), $d[0]) ?>
       <?php else: ?>
         <?= anchor(build_get('userclass/enroll_by_folder',array('dir' => composedir($dirlist['relativedir'], $d[0]),
-                                                                'curdir' => $curdir)), $d[0]) ?> <?= translate('(Restricted access)') ?>
+                                                                'curdir' => $curdir)), $d[0]) ?> <?= $this->lang->line('restricted_access') ?>
       <?php endif; ?>
     </p>
   <?php endforeach; ?>

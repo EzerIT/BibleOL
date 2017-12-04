@@ -60,6 +60,10 @@ $comment['class'] = "";
 $format['class'] = "";
 $use_textarea['class'] = false;
 
+$comment['class_uses_folder'] = "";
+$format['class_uses_folder'] = "";
+$use_textarea['class_uses_folder'] = false;
+
 $comment['click_and_go_to'] = "";
 $format['click_and_go_to'] = "";
 $use_textarea['click_and_go_to'] = false;
@@ -216,6 +220,10 @@ $comment['illegal_folder'] = "";
 $format['illegal_folder'] = "";
 $use_textarea['illegal_folder'] = false;
 
+$comment['indicate_classes'] = "";
+$format['indicate_classes'] = "";
+$use_textarea['indicate_classes'] = false;
+
 $comment['insert_copied_files'] = "";
 $format['insert_copied_files'] = "";
 $use_textarea['insert_copied_files'] = false;
@@ -359,6 +367,14 @@ $use_textarea['visibility_folder'] = false;
 $comment['visibility_folder_desc'] = "";
 $format['visibility_folder_desc'] = "";
 $use_textarea['visibility_folder_desc'] = false;
+
+$comment['visible_all'] = "";
+$format['visible_all'] = "";
+$use_textarea['visible_all'] = false;
+
+$comment['visible_if_not_checked'] = "";
+$format['visible_if_not_checked'] = "";
+$use_textarea['visible_if_not_checked'] = false;
 
 $comment['visible_to_class'] = "";
 $format['visible_to_class'] = "";

@@ -47,6 +47,7 @@ $lang['quiz'] = "Øvelse";
 $lang['quiz_instruct1'] = "Vælg de bibelsteder der skal bruges til øvelsen...";
 $lang['quiz_instruct2'] = "...og klik på knappen »Start øvelse« nederst på siden.";
 $lang['quiz_name'] = "Øvelsens navn";
+$lang['restricted_access'] = "(Begrænset adgang)";
 $lang['save_button'] = "Gem";
 $lang['select_a_passage'] = "<p>Her kan du vælge hvilken bibeltekst der skal vises.</p>\n"
         . "     <p>Hvis du udelader »Første vers«, vil et helt kapitel blive vist.</p>\n"

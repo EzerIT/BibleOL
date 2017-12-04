@@ -5,8 +5,8 @@ if (empty($avail_classes))
 else {
     echo "<h1>",
         count($avail_classes)>1
-                          ? translate('Enroll in one of these classes to get access to folder:')
-                          : translate('Enroll in this class to get access to folder:'), "</h1>\n";
+                  ? $this->lang->line('enroll_these_classes')
+                  : $this->lang->line('enroll_this_class'), "</h1>\n";
     echo "<table class=\"enroll\">\n";
     foreach ($avail_classes as $clid) {
         $cl = $all_classes[$clid];

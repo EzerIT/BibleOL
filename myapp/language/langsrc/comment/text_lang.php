@@ -184,6 +184,10 @@ $comment['quiz_name'] = "";
 $format['quiz_name'] = "";
 $use_textarea['quiz_name'] = false;
 
+$comment['restricted_access'] = "";
+$format['restricted_access'] = "";
+$use_textarea['restricted_access'] = false;
+
 $comment['save_button'] = "";
 $format['save_button'] = "";
 $use_textarea['save_button'] = false;
