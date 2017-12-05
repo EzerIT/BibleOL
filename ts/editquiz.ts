@@ -45,6 +45,7 @@ declare var dir_name           : string;
 var VirtualKeyboard  : any;
 
 
+var origMayLocate : boolean;
 var panelSent     : PanelTemplSentenceSelector; // Sentence selection panel
 var panelSentUnit : PanelTemplQuizObjectSelector; // Sentence unit selection panel
 var panelFeatures : PanelTemplQuizFeatures; // Features panel
@@ -71,6 +72,9 @@ function isDirty() : boolean {
     if (checked_passages.length !== initial_universe.length)
         return true;
 
+    if ($('#maylocate_cb').prop('checked')!=origMayLocate)
+        return true;
+    
     for (var i=0; i<checked_passages.length; ++i)
         if ($(checked_passages[i]).data('ref') !== initial_universe[i])
             return true;
@@ -134,6 +138,9 @@ setTimeout(function() {
 
     $('#quiz_tabs').tabs({ disabled: [3] });
 
+    origMayLocate = decoded_3et.maylocate;
+    $('#maylocate_cb').prop('checked', origMayLocate);
+    
     panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
 
     panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'),
@@ -231,7 +238,9 @@ function save_quiz2() {
         if (r!='')
             decoded_3et.selectedPaths.push(r);
     }
-    
+
+    decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
+
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();

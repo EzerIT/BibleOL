@@ -14,6 +14,7 @@
   <div id="tab_universe">
     <div id="passagetree">
     </div>
+    <div style="margin-top:10px"><input id="maylocate_cb" type="checkbox" name="maylocate" value="maylocate"> <?= $this->lang->line('may_locate') ?></div>
   </div>
   <div id="tab_sentences">
   </div>

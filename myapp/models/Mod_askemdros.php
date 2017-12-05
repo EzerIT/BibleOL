@@ -184,6 +184,7 @@ class Mod_askemdros extends CI_Model {
                                                'senSelect' => $sentenceSelector,
                                                'qoSelect' => $qoSelector,
                                                'desc' => $this->decoded_3et->desc,
+                                               'maylocate' => $this->decoded_3et->maylocate,
                                                'show_features' => $this->decoded_3et->quizFeatures->showFeatures,
                                                'request_features' => $this->decoded_3et->quizFeatures->requestFeatures,
                                                'dontshow_features' => $this->decoded_3et->quizFeatures->dontShowFeatures,
@@ -300,7 +301,8 @@ class Mod_askemdros extends CI_Model {
                            . '"selectedPaths":[],'
                            . '"sentenceSelection":{"object":"%s","mql":null,"featHand":{"vhand":[]},"useForQo":true},'
                            . '"quizObjectSelection":{"object":"word","mql":null,"featHand":{"vhand":[]},"useForQo":true},'
-                           . '"quizFeatures":{"showFeatures":[],"requestFeatures":[],"dontShowFeatures":[]}'
+                           . '"quizFeatures":{"showFeatures":[],"requestFeatures":[],"dontShowFeatures":[]},'
+                           . '"maylocate":true'
                            . '}',
                            $this->db_config->dbinfo->databaseName, $db, $this->db_config->dbinfo->objHasSurface);
         }

@@ -4,7 +4,7 @@ class Template extends XmlHandler {
     /************************************************************************************************
      * Class version for XML serialisation
      ************************************************************************************************/
-    const classVersion = 3; // Version 3: Description is now HTML
+    const classVersion = 4; // Version 4: Accepts <maylocate> element
 
 	/************************************************************************************************
 	 * Template data
@@ -17,6 +17,7 @@ class Template extends XmlHandler {
     public $sentenceSelection;
     public $quizObjectSelection;
     public $quizFeatures;
+    public $maylocate = true;  // Default value for older versions of quiz templates
 
 	/************************************************************************************************
 	 * XML writer interface
@@ -63,6 +64,7 @@ class Template extends XmlHandler {
         
         $res .= QuizFeatures::writeAsXml($quizdata->quizFeatures);
 
+        $res .= sprintf("%2s<maylocate>%s</maylocate>\n", ' ', $quizdata->maylocate ? "true" : "false");
 		$res .= sprintf("</questiontemplate>\n", ' ');
 
         return $res;
@@ -110,6 +112,11 @@ class Template extends XmlHandler {
                 $this->setthis_type = SetThisType::SET;
                 break;
 
+          case 'maylocate':
+                $this->setthis = &$this->maylocate;
+                $this->setthis_type = SetThisType::SET_BOOL;
+                break;
+                
           default:
                 PANIC(__FILE__,__LINE__);
                 break;
@@ -125,6 +132,7 @@ class Template extends XmlHandler {
           case 'desc':
           case 'database':
           case 'properties':
+          case 'maylocate':
                 // Ignore
                 break;
 

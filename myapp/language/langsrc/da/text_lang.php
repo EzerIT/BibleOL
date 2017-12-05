@@ -29,6 +29,7 @@ $lang['last_verse'] = "Sidste vers:";
 $lang['last_verse_prompt'] = "Sidste vers:";
 $lang['locate'] = "Bibelsted:";
 $lang['make_a_selection'] = "Vælg:";
+$lang['may_locate'] = "Vis afkrydsningsfeltet »Bibelsted« i øvelsen";
 $lang['missing_database_name'] = "Databases navn ikke angivet";
 $lang['mql_compiler_error_colon'] = "MQL-oversætterfejl:";
 $lang['mql_database_error_colon'] = "MQL-databasefejl:";

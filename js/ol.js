@@ -1434,12 +1434,16 @@ var PanelQuestion = (function () {
                     break;
             }
         }
-        $('input#locate_cb').on('click', null, this.location, function (e) {
-            if ($(this).prop('checked'))
-                $('.location').html(e.data);
-            else
-                $('.location').html('');
-        });
+        if (this.qd.maylocate) {
+            $('input#locate_cb').on('click', null, this.location, function (e) {
+                if ($(this).prop('checked'))
+                    $('.location').html(e.data);
+                else
+                    $('.location').html('');
+            });
+        }
+        else
+            $('#locate_choice').hide();
         if ($('#locate_cb').prop('checked'))
             $('.location').html(this.location);
         // Optimisations:

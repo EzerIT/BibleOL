@@ -18,6 +18,7 @@ interface QuizData {
     quizid : number;
     quizFeatures : ExtendedQuizFeatures;
     desc : string;
+    maylocate : boolean;
     monad2Id : number[];
     id2FeatVal : string[][];
 }

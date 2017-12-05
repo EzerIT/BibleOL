@@ -2012,6 +2012,7 @@ var util;
 /// <reference path="sortingcheckbox.ts" />
 /// <reference path="util.ts" />
 var VirtualKeyboard;
+var origMayLocate;
 var panelSent; // Sentence selection panel
 var panelSentUnit; // Sentence unit selection panel
 var panelFeatures; // Features panel
@@ -2028,6 +2029,8 @@ function isDirty() {
         return true;
     checked_passages = $('#passagetree').jstree('get_checked', null, false);
     if (checked_passages.length !== initial_universe.length)
+        return true;
+    if ($('#maylocate_cb').prop('checked') != origMayLocate)
         return true;
     for (var i = 0; i < checked_passages.length; ++i)
         if ($(checked_passages[i]).data('ref') !== initial_universe[i])
@@ -2079,6 +2082,8 @@ setTimeout(function () {
     });
     ckeditor.val(decoded_3et.desc);
     $('#quiz_tabs').tabs({ disabled: [3] });
+    origMayLocate = decoded_3et.maylocate;
+    $('#maylocate_cb').prop('checked', origMayLocate);
     panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
     panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'), panelFeatures);
     panelSent = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'), panelSentUnit, panelFeatures);
@@ -2155,6 +2160,7 @@ function save_quiz2() {
         if (r != '')
             decoded_3et.selectedPaths.push(r);
     }
+    decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();

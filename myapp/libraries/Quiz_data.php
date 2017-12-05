@@ -95,6 +95,7 @@ class Quiz_data {
     public $quizid;
 	public $quizFeatures;
     public $desc;
+    public $maylocate;
 	
 	private $mainSheaf; // Contains all candidate sentences
 	private $order; // Vector<Integer>
@@ -167,6 +168,7 @@ class Quiz_data {
 		$this->mqlQuizObjectSelection = $this->normalize($params['qoSelect']);
         $this->quizFeatures = new ExtendedQuizFeatures($params['show_features'],$params['request_features'],$params['dontshow_features'],$params['oType']);
         $this->desc = $params['desc'];
+        $this->maylocate = $params['maylocate'];
 		
 		$this->nextCandidate = 0;
 	}

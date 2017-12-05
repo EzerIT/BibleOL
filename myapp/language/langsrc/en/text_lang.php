@@ -29,6 +29,7 @@ $lang['last_verse'] = "Last verse";
 $lang['last_verse_prompt'] = "Last verse:";
 $lang['locate'] = "Locate:";
 $lang['make_a_selection'] = "Make a selection:";
+$lang['may_locate'] = "Show “Locate” checkbox in the exercise";
 $lang['missing_database_name'] = "Missing database name";
 $lang['mql_compiler_error_colon'] = "MQL compiler error:";
 $lang['mql_database_error_colon'] = "MQL database error:";
