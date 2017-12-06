@@ -46,9 +46,9 @@ $lang['file_exists'] = "目的地档案'%s\已经存在。请删除它，或者�
 $lang['file_exists_copied'] = "然后重新把复制来的档案插入。";
 $lang['file_exists_moved'] = "然后重新把移动来的档案插入。";
 $lang['file_mgmt'] = "管理档案";
-$lang['file_mgmt_description'] = "<p>您可以在这里上载或删除练习档案，建立资料夹来存放多个档案，或是删除资料夹。</p>\n"
-        . "     <p>留意：空的资料夹才能删除。</p>\n"
-        . "     <p>按“设定谁能看”，可以设定谁能看每个资料夹里的档案。</p>\n"
+$lang['file_mgmt_description'] = "<p>您可以在这里上载或删除练习档案，建立资料夹来存放多个档案，或是删除资料夹。</p>\n"
+        . "     <p>留意：空的资料夹才能删除。</p>\n"
+        . "     <p>按“设定谁能看”，可以设定谁能看每个资料夹里的档案。</p>\n"
         . "     <p>此外，您可以用Windows版的独立软件PLOTLearner来制作练习档案。练习档案的档案类型是“.3et”。</p>";
 $lang['file_selection'] = "选取档案";
 $lang['folders'] = "资料夹";

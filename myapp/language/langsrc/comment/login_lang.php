@@ -140,10 +140,6 @@ $comment['user_not_found'] = "";
 $format['user_not_found'] = "";
 $use_textarea['user_not_found'] = false;
 
-$comment['use_menu'] = "";
-$format['use_menu'] = "";
-$use_textarea['use_menu'] = false;
-
 $comment['warn_multiple_login'] = "";
 $format['warn_multiple_login'] = "";
 $use_textarea['warn_multiple_login'] = true;

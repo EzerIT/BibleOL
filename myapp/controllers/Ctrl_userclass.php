@@ -216,7 +216,7 @@ class Ctrl_userclass extends MY_Controller {
             
             // If everybody can access the folder, this is a faked request
             if (in_array(0,$classids_for_dir))
-                throw new DataException(translate('Folder does not require enrollment'));
+                throw new DataException($this->lang->line('folder_not_enroll'));
             
             $all_classes = $this->mod_classes->get_all_classes();
             $old_classes = $this->mod_userclass->get_classes_for_user($userid);
@@ -232,7 +232,7 @@ class Ctrl_userclass extends MY_Controller {
             }
 
             if (empty($avail_classes))
-                throw new DataException(translate('No classes with access to the folder are available for enrollment'));
+                throw new DataException($this->lang->line('no_class_enroll'));
 
             
             // VIEW:

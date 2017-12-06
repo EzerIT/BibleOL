@@ -40,6 +40,10 @@ CREATE TABLE `bol_user` (
   `preflang` tinytext NOT NULL,
   `family_name_first` tinyint(1) DEFAULT '0',
   `istranslator` tinyint(1) DEFAULT '0',
+  `accept_policy` int(11) NOT NULL DEFAULT '0',
+  `policy_lang` tinytext,
+  `acc_code` tinytext,
+  `acc_code_time` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

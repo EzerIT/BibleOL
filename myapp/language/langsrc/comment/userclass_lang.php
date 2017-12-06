@@ -28,10 +28,6 @@ $comment['class_password'] = "";
 $format['class_password'] = "";
 $use_textarea['class_password'] = false;
 
-$comment['click_enroll'] = "";
-$format['click_enroll'] = "";
-$use_textarea['click_enroll'] = false;
-
 $comment['enroll'] = "";
 $format['enroll'] = "";
 $use_textarea['enroll'] = false;
@@ -56,6 +52,14 @@ $comment['enroll_in_classes'] = "";
 $format['enroll_in_classes'] = "";
 $use_textarea['enroll_in_classes'] = false;
 
+$comment['enroll_these_classes'] = "";
+$format['enroll_these_classes'] = "";
+$use_textarea['enroll_these_classes'] = false;
+
+$comment['enroll_this_class'] = "";
+$format['enroll_this_class'] = "";
+$use_textarea['enroll_this_class'] = false;
+
 $comment['enter_class_password'] = "";
 $format['enter_class_password'] = "";
 $use_textarea['enter_class_password'] = false;
@@ -63,6 +67,14 @@ $use_textarea['enter_class_password'] = false;
 $comment['enter_password_for'] = "";
 $format['enter_password_for'] = "";
 $use_textarea['enter_password_for'] = false;
+
+$comment['folder_not_enroll'] = "";
+$format['folder_not_enroll'] = "";
+$use_textarea['folder_not_enroll'] = false;
+
+$comment['go_to_folder'] = "";
+$format['go_to_folder'] = "";
+$use_textarea['go_to_folder'] = false;
 
 $comment['grant_access'] = "";
 $format['grant_access'] = "";
@@ -83,6 +95,10 @@ $use_textarea['no_classes'] = false;
 $comment['no_classes_enroll'] = "";
 $format['no_classes_enroll'] = "";
 $use_textarea['no_classes_enroll'] = false;
+
+$comment['no_class_enroll'] = "";
+$format['no_class_enroll'] = "";
+$use_textarea['no_class_enroll'] = false;
 
 $comment['revoke_access'] = "";
 $format['revoke_access'] = "";

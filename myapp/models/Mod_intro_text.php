@@ -26,8 +26,8 @@ class Mod_intro_text extends CI_Model {
     function left_text_title() {
         $name = $this->mod_users->my_name();
 
-        return is_null($name) ? $this->lang->line('welcome')
-                              : sprintf($this->lang->line('welcome2'), $name);
+        return empty($name) ? $this->lang->line('welcome')
+                            : sprintf($this->lang->line('welcome2'), $name);
     }
 
     function left_text() {

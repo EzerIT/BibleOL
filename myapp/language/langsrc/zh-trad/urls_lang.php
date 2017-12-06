@@ -27,7 +27,7 @@ $lang['link_colon'] = "鏈結：";
 $lang['link_icon'] = "圖示：";
 $lang['missing_link'] = "沒有提供鏈結";
 $lang['no_greek'] = "不好意思，現在還沒有希臘文的資料。";
-$lang['select_gloss_range'] = "<p>請選擇語言，也選擇您想要的詞語解釋範圍，是您想要新增或修改網址的。</p>\n"
+$lang['select_gloss_range'] = "<p>請選擇語言，也選擇您想要的詞語解釋範圍，是您想要新增或修改網址的。</p>\n"
         . "<p>您可以選擇看首%d個最常見詞語的解釋（會按出現次數遞減排列），或者選擇按字母次序看詞語的解釋。</p>";
 $lang['select_gloss_range_head'] = "請選擇詞語解釋的網址";
 $lang['top_glosses'] = "首%d個最常見的";
