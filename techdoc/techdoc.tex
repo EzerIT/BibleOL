@@ -491,7 +491,9 @@ When you compile Emdros, be sure to include support for PHP\index{PHP}. I use th
 
 % Do not set language=bash in the following line lest "local" be printed in blue
 \begin{lstlisting}
-./configure --with-sqlite3=local --with-mysql=yes --with-default-backend=sqlite3 --with-swig-language-php=yes --with-swig-language-java=no --with-swig-language-python=no --with-swig-language-perl=no
+./configure --with-sqlite3=local --with-mysql=yes --with-default-backend=sqlite3 \
+    --with-swig-language-php=yes --with-swig-language-java=no --with-swig-language-python=no \
+    --with-swig-language-perl=no
 \end{lstlisting}
 
 If you want to include support for Java\index{Java}, Python\index{Python}, or Perl\index{Perl}, you
