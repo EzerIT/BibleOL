@@ -15,8 +15,14 @@ function teacher_cmp($t1, $t2) {
 function make_full_name($u) {
     if ($u->family_name_first)
         return "$u->last_name$u->first_name"; // Note: No space
-    else
+    else {
+        if (empty($u->first_name))
+            return $u->last_name;
+        if (empty($u->last_name))
+            return $u->first_name;
+
         return "$u->first_name $u->last_name";
+    }
 }
 
 // Creates a dummy user structure with id=0
