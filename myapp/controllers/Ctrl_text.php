@@ -554,7 +554,7 @@ class Ctrl_text extends MY_Controller {
             $this->mod_askemdros->save_quiz(json_decode(urldecode($_POST['quizdata'])));
             $this->mod_quizpath->set_owner($this->mod_users->my_id());
 
-            redirect(site_url(build_get('/file_manager', array('dir' => $_POST['dir']))));
+            redirect('/file_manager?dir=' . $_POST['dir']); // Note: Don't use http_build_query, because $POST['dir'] is already encoded
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('edit_quiz'));
