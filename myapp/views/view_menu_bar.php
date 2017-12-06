@@ -5,12 +5,15 @@ $this->lang->load('menu', $this->language);
 $ix = 0;
 $head[] = anchor(site_url(), $this->lang->line('home'));
  
-$ix = count($head);
-$head[] = $this->lang->line('text_and_exercises');
-$content[$ix][] = anchor(site_url('text/select_text'), $this->lang->line('display_text'));
-$content[$ix][] = anchor(site_url('text/select_quiz'), $this->lang->line('exercises'));
+if (!$this->mod_users->is_logged_in_noaccept()) {
+    // The user has not logged in, or has logged in and accepted policy
+    $ix = count($head);
+    $head[] = $this->lang->line('text_and_exercises');
+    $content[$ix][] = anchor(site_url('text/select_text'), $this->lang->line('display_text'));
+    $content[$ix][] = anchor(site_url('text/select_quiz'), $this->lang->line('exercises'));
+}
  
-if ($this->session->userdata('ol_user')!==null && $this->session->userdata('ol_user')>0) {
+if ($this->mod_users->is_logged_in()) {
     // Logged in
     $ix = count($head);
     $head[] = $this->lang->line('my_data');
@@ -20,7 +23,7 @@ if ($this->session->userdata('ol_user')!==null && $this->session->userdata('ol_u
     $content[$ix][] = anchor(site_url('userclass/enroll'), $this->lang->line('enroll_in_class'));
     $content[$ix][] = anchor(site_url('statistics/student_time'), $this->lang->line('my_progress'));
 
-    if ($this->session->userdata('ol_teacher') || $this->session->userdata('ol_admin'))
+    if ($this->mod_users->is_teacher())
         $content[$ix][] = anchor(site_url('statistics/teacher_progress'), $this->lang->line('students_progress'));
 
     if ($this->config->item('lj_enabled')) {
@@ -28,26 +31,33 @@ if ($this->session->userdata('ol_user')!==null && $this->session->userdata('ol_u
         lj_menu_add($head, $content);
     }
     
-    if ($this->session->userdata('ol_teacher') || $this->session->userdata('ol_admin') || $this->session->userdata('ol_translator')) {
+    if ($this->mod_users->is_teacher() || $this->mod_users->is_translator()) {
         // Teacher or translator
         $ix = count($head);
         $head[] = $this->lang->line('administration');
-        if ($this->session->userdata('ol_teacher') || $this->session->userdata('ol_admin')) {
+        if ($this->mod_users->is_teacher()) {
             // Teacher
             $content[$ix][] = anchor(site_url('users'), $this->lang->line('users'));
             $content[$ix][] = anchor(site_url('classes'), $this->lang->line('classes'));
             $content[$ix][] = anchor(site_url('file_manager'), $this->lang->line('manage_exercises'));
         }
-        if ($this->session->userdata('ol_translator') || $this->session->userdata('ol_admin')) {
+        if ($this->mod_users->is_translator()) {
             $content[$ix][] = anchor(site_url('translate/translate_if'), $this->lang->line('translate_interface'));
             $content[$ix][] = anchor(site_url('translate/translate_grammar'), $this->lang->line('translate_grammar'));
             $content[$ix][] = anchor(site_url('translate/translate_lex'), $this->lang->line('translate_lexicon'));
             $content[$ix][] = anchor(site_url('translate/select_download_lex'), $this->lang->line('download_lexicon'));
         }
-        if ($this->session->userdata('ol_admin'))
+        if ($this->mod_users->is_admin())
             $content[$ix][] = anchor(site_url('urls'), $this->lang->line('manage_gloss_links'));
     }
  
+    $ix = count($head);
+    $head[] = $this->lang->line('user_access');
+    $content[$ix][] = anchor(site_url('login'), $this->lang->line('logout'));
+    $content[$ix][] = anchor(site_url('privacy'), $this->lang->line('privacy_policy'));
+}
+elseif ($this->mod_users->is_logged_in_noaccept()) {
+    // The user did not accept policy.
     $ix = count($head);
     $head[] = $this->lang->line('user_access');
     $content[$ix][] = anchor(site_url('login'), $this->lang->line('logout'));

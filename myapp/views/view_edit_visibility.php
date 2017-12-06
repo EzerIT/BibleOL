@@ -2,11 +2,11 @@
 <h1><?= sprintf($this->lang->line('visibility_folder'), $dir) ?></h1>
 
 <?= form_open(build_get('file_manager/edit_visibility',array('dir' => $dir))) ?>
-     <p><?= translate('Check here if folder is visible to everybody:') ?> <input id="selectall" class="narrow" type="checkbox" name="inclass[]" value="0" <?= set_checkbox('inclass[]', 0, in_array(0, $old_classes)) ?>><br><?= translate('(If not checked, only the classes indicated in the table below can see the exercises in this folder.)') ?></p>
-     <p style="margin-top:30px"><?= translate('In this table, indicate which classes use this folder:') ?></p>
+     <p><?= $this->lang->line('visible_all') ?> <input id="selectall" class="narrow" type="checkbox" name="inclass[]" value="0" <?= set_checkbox('inclass[]', 0, in_array(0, $old_classes)) ?>><br><?= $this->lang->line('visible_if_not_checked') ?></p>
+     <p style="margin-top:30px"><?= $this->lang->line('indicate_classes') ?></p>
 <table class="form">
 
-     <tr><th><?= $this->lang->line('class') ?></th><th><?= translate('Class uses folder') ?></th></tr>
+     <tr><th><?= $this->lang->line('class') ?></th><th><?= $this->lang->line('class_uses_folder') ?></th></tr>
 
 
   <?php foreach ($allclasses as $cl): ?>

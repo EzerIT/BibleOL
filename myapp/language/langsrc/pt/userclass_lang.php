@@ -7,7 +7,6 @@ $lang['cannot_enroll'] = "Você não pode se inscrever nesta classe";
 $lang['class'] = "Classe";
 $lang['classes_for_user'] = "Classes por Usuário '%s'";
 $lang['class_password'] = "Senha da Classe";
-$lang['click_enroll'] = "Clique em “Inscrever-se” para se inscrever em uma classe";
 $lang['enroll'] = "Inscrever-se";
 $lang['enrolled'] = "Inscrito/a";
 $lang['enrolled_in_no_classes'] = "Você não está inscrito em nenhuma classe no momento";

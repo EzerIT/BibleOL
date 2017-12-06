@@ -7,7 +7,6 @@ $lang['cannot_enroll'] = "您不能报名参加这个班";
 $lang['class'] = "班别";
 $lang['classes_for_user'] = "使用者'%s'参加了的班别";
 $lang['class_password'] = "班别密码";
-$lang['click_enroll'] = "请按“报名”来报名参加一个班别";
 $lang['enroll'] = "报名";
 $lang['enrolled'] = "已经报名";
 $lang['enrolled_in_no_classes'] = "您现在没有参加任何班别";

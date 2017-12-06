@@ -22,7 +22,7 @@ $lang['login'] = "登入";
 $lang['login_button'] = "登入";
 $lang['new_facebook_user'] = "新的Facebook使用者";
 $lang['new_google_user'] = "新的Google使用者";
-$lang['no_email'] = "<h1>您没有电邮地址。</h1>\n"
+$lang['no_email'] = "<h1>您没有电邮地址。</h1>\n"
         . "    <p>在我们的使用者名单之中，找不到您的电邮地址。所以我们无法用电邮寄密码给您。请联络您的系统管理员，他可以为您重设密码。</p>";
 $lang['or'] = "或";
 $lang['password'] = "密码";
@@ -46,7 +46,6 @@ $lang['type_name_or_email'] = "请输入使用者名称或电邮地址";
 $lang['users'] = "使用者";
 $lang['user_name'] = "使用者名称";
 $lang['user_not_found'] = "找不到这个使用者";
-$lang['use_menu'] = "您可以用上面的选单来执行这个网站的各样功能。";
 $lang['warn_multiple_login'] = "您必须恒常使用同一种方式登入，要么恒常用Facebook，要么恒常用Google，要么恒常用使用者名称和密码。否则您会在这个系统里有多个账户。";
 $lang['welcome_new_facebook_user'] = "新的Facebook使用者，欢迎您！";
 $lang['welcome_new_google_user'] = "新的Google使用者，欢迎您！";

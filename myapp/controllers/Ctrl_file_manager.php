@@ -277,7 +277,7 @@ class Ctrl_file_manager extends MY_Controller {
                     $new_classes = array(); // ...so we set the array to empty
 
                 $this->mod_classdir->update_classes_for_dir($this->mod_quizpath->get_relative(), $old_classes, $new_classes);
-                redirect(build_get('/file_manager',array('dir' => $this->mod_quizpath->get_relative())));
+                redirect(site_url(build_get('/file_manager',array('dir' => $this->mod_quizpath->get_relative()))));
             }
             else {
                 // VIEW:
@@ -356,7 +356,7 @@ class Ctrl_file_manager extends MY_Controller {
 
             $this->mod_quizpath->rename($_POST['oldname'], $newname);
 
-            redirect(build_get('/file_manager',array('dir' => $this->mod_quizpath->get_relative())));
+            redirect(site_url(build_get('/file_manager',array('dir' => $this->mod_quizpath->get_relative()))));
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('rename_exercise'));

@@ -48,7 +48,6 @@ $lang['type_name_or_email'] = "Angiv brugernavn eller email-adresse";
 $lang['users'] = "Brugere";
 $lang['user_name'] = "Brugernavn";
 $lang['user_not_found'] = "Ukendt bruger";
-$lang['use_menu'] = "Via menuen ovenfor får du adgang til de forskellige funktioner på dette websted.";
 $lang['warn_multiple_login'] = "Log altid ind på samme måde &ndash; enten altid med Facebook, altid med Google eller altid med et brugernavn og en adgangskode &ndash; for at undgå at du får oprettet flere konti på dette system.";
 $lang['welcome_new_facebook_user'] = "Velkommen, nye Facebook-bruger";
 $lang['welcome_new_google_user'] = "Velkommen, nye Google-bruger";

@@ -7,25 +7,52 @@ class Ctrl_login extends MY_Controller {
     public function password_check($password) {
         $login_name = $this->input->post('login_name');
 
-        $user_info = $this->mod_users->verify_login($login_name, $password);
+        if ($this->mod_users->verify_login($login_name, $password))
+            return true;  // Password OK
 
-        if (is_null($user_info)) {
-            $this->mod_users->set_login_session(0,false,false,false); // Paranoia
-			$this->form_validation->set_message('password_check', $this->lang->line('bad_password'));
-			return false;
-        }
-        else {
-            $this->mod_users->set_login_session(intval($user_info->id), $user_info->isadmin, $user_info->isteacher, $user_info->istranslator, $user_info->preflang);
-            return true;
-        }
+        // Wrong password
+        $this->mod_users->clear_login_session(); // Paranoia
+        $this->form_validation->set_message('password_check', $this->lang->line('bad_password'));
+        return false;
     }
 
+    public function accept_policy_yes() {
+        if (isset($_POST['acceptance_code']) &&
+            isset($_POST['policy_lang']) &&
+            $this->mod_users->verify_accept_code($_POST['acceptance_code'],
+                                                 $_POST['policy_lang'],
+                                                 true)) {
+
+            // Successful login
+            $this->mod_users->update_login_stat();
+        }
+        else
+            $this->mod_users->clear_login_session();
+
+        unset($_SESSION['new_oauth2']);
+        
+        redirect("/");
+    } 
+
+    public function accept_policy_no() {
+        $this->mod_users->clear_login_session();
+        
+        $this->lang->load('privacy', $this->language);
+
+        // VIEW:
+        $this->load->view('view_top1', array('title' => $this->lang->line('policy')));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => true));
+        $this->load->view('view_rejected_policy', array('reject_text' => $this->lang->line('you_rejected_text')));
+        $this->load->view('view_bottom');
+    }
+    
     public function index() {
         $this->load->helper('security'); // Provides xss_clean. TODO: This testing should be done on output instead of input
                                          // TODO: Should xss_clean be replaced by strip_tags or vice versa?
         if ($this->mod_users->is_logged_in()) {
             // Log out
-            $this->mod_users->set_login_session(0, false, false, false);
+            $this->mod_users->clear_login_session();
             redirect("/");
         }
 
@@ -37,10 +64,21 @@ class Ctrl_login extends MY_Controller {
         $this->form_validation->set_rules('login_name', $this->lang->line('user_name'), 'trim|required|xss_clean');
         $this->form_validation->set_rules('password', $this->lang->line('password'), 'trim|required|callback_password_check');
 
-		if ($this->form_validation->run())
+		if ($this->form_validation->run()) {
+            if ($this->mod_users->accepted_current_policy()) {
+                // Successful login
+                $this->mod_users->update_login_stat();
+                $this->mod_users->set_login_session();
+            }
+            else {
+                // User needs to accept new policy, so don't log anything yet
+                $this->mod_users->set_login_session();
+            }
+            
             redirect("/");
+        }
 
-        $this->session->unset_userdata(array('ol_user', 'ol_admin', 'ol_teacher', 'ol_translator', 'files', 'operation', 'from_dir'));
+        $this->session->unset_userdata(array('ol_user', 'files', 'operation', 'from_dir'));
 
         // Set up parameters for OAuth2 authentication.
         $this->session->set_userdata('oauth2_state', md5(rand())); // Used to prevent forged requests

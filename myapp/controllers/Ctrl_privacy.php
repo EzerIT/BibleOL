@@ -11,8 +11,16 @@ class Ctrl_privacy extends MY_Controller {
         $this->load->view('view_top2');
         $this->load->view('view_menu_bar', array('langselect' => true));
 
+
+        // Detect langauge of privacy policy
+        if (preg_match('/^\(([^)]*)\)(.*)/s', $this->lang->line('privacy_text'), $matches))
+            $txt = $matches[2];
+        else
+            $txt = $this->lang->line('privacy_text');
+
+        
         $this->load->view('view_main_page', array('left_title' => $this->lang->line('privacy_policy_title'),
-                                                  'center' => $this->lang->line('privacy_text')));
+                                                  'center' => $txt));
         $this->load->view('view_bottom');
     }
   }

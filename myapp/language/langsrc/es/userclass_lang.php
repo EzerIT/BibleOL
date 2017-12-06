@@ -7,7 +7,6 @@ $lang['cannot_enroll'] = "No puede registrarse en esta clase";
 $lang['class'] = "Clase";
 $lang['classes_for_user'] = "Clases para usuario '%s'";
 $lang['class_password'] = "Contraseña de la Clase";
-$lang['click_enroll'] = "Haga click “Registrar” para Registrar en una Clase";
 $lang['enroll'] = "Registrar";
 $lang['enrolled'] = "Registrado";
 $lang['enrolled_in_no_classes'] = "Usted actualmente no está registrado en ninguna clase";
