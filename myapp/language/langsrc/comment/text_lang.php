@@ -112,6 +112,10 @@ $comment['make_a_selection'] = "";
 $format['make_a_selection'] = "";
 $use_textarea['make_a_selection'] = false;
 
+$comment['may_locate'] = "";
+$format['may_locate'] = "";
+$use_textarea['may_locate'] = false;
+
 $comment['missing_database_name'] = "";
 $format['missing_database_name'] = "";
 $use_textarea['missing_database_name'] = false;

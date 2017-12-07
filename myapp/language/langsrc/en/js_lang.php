@@ -36,6 +36,7 @@ $lang['no_request_feature'] = "No request features specified";
 $lang['no_show_feature'] = "No show features specified";
 $lang['OK_button'] = "OK";
 $lang['or_write_preferred'] = "Or write your preferred font name:";
+$lang['other_sentence_unit_types'] = "Other types:";
 $lang['other_value'] = "Other value";
 $lang['passage_selection'] = "Passage selection";
 $lang['request'] = "Request";

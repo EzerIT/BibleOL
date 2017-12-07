@@ -5,6 +5,7 @@ interface QuizFeatures {
     showFeatures : string[];
     requestFeatures : { name : string; usedropdown : boolean;} [];
     dontShowFeatures : string[];
+    dontShowObjects : string[];
 }
 
 
@@ -193,7 +194,28 @@ class PanelForOneOtype  {
 
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
-         }
+        }
+
+        this.panel.append('<tr><td colspan="5"></td><td class="leftalign">&nbsp;</tr>');
+        this.panel.append('<tr><td colspan="5"></td><td class="leftalign"><b>' + localize('other_sentence_unit_types') + '</b></tr>');
+        
+        // Generate buttons for other types:
+        for (var otherOtype in configuration.objectSettings) {
+            if (otherOtype!==otype && configuration.objectSettings[otherOtype].mayselect) {
+                var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype),
+                                          'otherOtype_' + otherOtype,
+                                          otype,
+                                          useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE,
+                                          false,
+                                          false,
+                                          false,
+                                          true);
+
+            this.allBAL.push(bal);
+            this.panel.append(bal.getRow());
+            }
+        }
+        
     }
 
     public hide() : void {
@@ -264,6 +286,15 @@ class PanelTemplQuizFeatures {
 	return ButtonSelection.DONT_CARE;
     }
 
+    public getObjectSelector(otype : string) : ButtonSelection {
+	if (this.initialQf && this.initialQf.dontShowObjects)
+            for (var i=0; i<this.initialQf.dontShowObjects.length; ++i)
+		if (this.initialQf.dontShowObjects[i]===otype)
+		    return ButtonSelection.DONT_SHOW;
+
+	return ButtonSelection.DONT_CARE;
+    }
+
     public noRequestFeatures() : boolean {
 	if (!this.visiblePanel)
 	    return true;
@@ -297,7 +328,8 @@ class PanelTemplQuizFeatures {
         var qf : QuizFeatures =  {
             showFeatures     : [],
             requestFeatures  : [],
-            dontShowFeatures : []
+            dontShowFeatures : [],
+            dontShowObjects  : []
         };
 
 
@@ -316,8 +348,13 @@ class PanelTemplQuizFeatures {
 		qf.showFeatures.push(bal.getFeatName());
 	    else if (bal.isSelected_reqFeat())
 	        qf.requestFeatures.push({name : bal.getFeatName(), usedropdown : bal.isSelected_ddCheck()});
-	    else if (bal.isSelected_dontShowFeat())
-		qf.dontShowFeatures.push(bal.getFeatName());
+	    else if (bal.isSelected_dontShowFeat()) {
+                var fn = bal.getFeatName();
+                if (fn.substring(0,11) === 'otherOtype_') // 11 is the length of 'otherOtype_'
+                    qf.dontShowObjects.push(fn.substring(11));
+                else
+		    qf.dontShowFeatures.push(fn);
+            }
 	}
 	return qf;
     }
@@ -327,7 +364,8 @@ class PanelTemplQuizFeatures {
         
         if (qfnow.showFeatures.length !== this.initialQf.showFeatures.length ||
             qfnow.requestFeatures.length !== this.initialQf.requestFeatures.length ||
-            qfnow.dontShowFeatures.length !== this.initialQf.dontShowFeatures.length) {
+            qfnow.dontShowFeatures.length !== this.initialQf.dontShowFeatures.length ||
+            qfnow.dontShowObjects.length !== this.initialQf.dontShowObjects.length) {
             return true;
         }
 
@@ -343,6 +381,11 @@ class PanelTemplQuizFeatures {
         
         for (var i=0; i<qfnow.dontShowFeatures.length; ++i)
             if (qfnow.dontShowFeatures[i] !== this.initialQf.dontShowFeatures[i]) {
+            return true;
+        }
+
+        for (var i=0; i<qfnow.dontShowObjects.length; ++i)
+            if (qfnow.dontShowObjects[i] !== this.initialQf.dontShowObjects[i]) {
             return true;
         }
 

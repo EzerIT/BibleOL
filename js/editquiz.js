@@ -1527,6 +1527,16 @@ var PanelForOneOtype = (function () {
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }
+        this.panel.append('<tr><td colspan="5"></td><td class="leftalign">&nbsp;</tr>');
+        this.panel.append('<tr><td colspan="5"></td><td class="leftalign"><b>' + localize('other_sentence_unit_types') + '</b></tr>');
+        // Generate buttons for other types:
+        for (var otherOtype in configuration.objectSettings) {
+            if (otherOtype !== otype && configuration.objectSettings[otherOtype].mayselect) {
+                var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), 'otherOtype_' + otherOtype, otype, useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, false, false, false, true);
+                this.allBAL.push(bal);
+                this.panel.append(bal.getRow());
+            }
+        }
     }
     PanelForOneOtype.prototype.hide = function () {
         this.panel.hide();
@@ -1576,6 +1586,13 @@ var PanelTemplQuizFeatures = (function () {
                     return ButtonSelection.DONT_SHOW;
         return ButtonSelection.DONT_CARE;
     };
+    PanelTemplQuizFeatures.prototype.getObjectSelector = function (otype) {
+        if (this.initialQf && this.initialQf.dontShowObjects)
+            for (var i = 0; i < this.initialQf.dontShowObjects.length; ++i)
+                if (this.initialQf.dontShowObjects[i] === otype)
+                    return ButtonSelection.DONT_SHOW;
+        return ButtonSelection.DONT_CARE;
+    };
     PanelTemplQuizFeatures.prototype.noRequestFeatures = function () {
         if (!this.visiblePanel)
             return true;
@@ -1600,7 +1617,8 @@ var PanelTemplQuizFeatures = (function () {
         var qf = {
             showFeatures: [],
             requestFeatures: [],
-            dontShowFeatures: []
+            dontShowFeatures: [],
+            dontShowObjects: []
         };
         if (!this.visiblePanel)
             return null;
@@ -1614,8 +1632,13 @@ var PanelTemplQuizFeatures = (function () {
                 qf.showFeatures.push(bal.getFeatName());
             else if (bal.isSelected_reqFeat())
                 qf.requestFeatures.push({ name: bal.getFeatName(), usedropdown: bal.isSelected_ddCheck() });
-            else if (bal.isSelected_dontShowFeat())
-                qf.dontShowFeatures.push(bal.getFeatName());
+            else if (bal.isSelected_dontShowFeat()) {
+                var fn = bal.getFeatName();
+                if (fn.substring(0, 11) === 'otherOtype_')
+                    qf.dontShowObjects.push(fn.substring(11));
+                else
+                    qf.dontShowFeatures.push(fn);
+            }
         }
         return qf;
     };
@@ -1623,7 +1646,8 @@ var PanelTemplQuizFeatures = (function () {
         var qfnow = this.getInfo();
         if (qfnow.showFeatures.length !== this.initialQf.showFeatures.length ||
             qfnow.requestFeatures.length !== this.initialQf.requestFeatures.length ||
-            qfnow.dontShowFeatures.length !== this.initialQf.dontShowFeatures.length) {
+            qfnow.dontShowFeatures.length !== this.initialQf.dontShowFeatures.length ||
+            qfnow.dontShowObjects.length !== this.initialQf.dontShowObjects.length) {
             return true;
         }
         for (var i = 0; i < qfnow.showFeatures.length; ++i)
@@ -1637,6 +1661,10 @@ var PanelTemplQuizFeatures = (function () {
             }
         for (var i = 0; i < qfnow.dontShowFeatures.length; ++i)
             if (qfnow.dontShowFeatures[i] !== this.initialQf.dontShowFeatures[i]) {
+                return true;
+            }
+        for (var i = 0; i < qfnow.dontShowObjects.length; ++i)
+            if (qfnow.dontShowObjects[i] !== this.initialQf.dontShowObjects[i]) {
                 return true;
             }
         return false;

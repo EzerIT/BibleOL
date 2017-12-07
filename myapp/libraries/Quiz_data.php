@@ -21,6 +21,7 @@ class ExtendedQuizFeatures {
 	public $showFeatures; // Vector
 	public $requestFeatures; //Vector<Pair<DoubleName,Boolean>> 
     public $dontShowFeatures; //Vector<String> 
+    public $dontShowObjects; //Vector<String> 
     public $objectType;
 	public $dontShow;
     public $useVirtualKeyboard;
@@ -29,13 +30,14 @@ class ExtendedQuizFeatures {
     public $allFeatures; // All showfeatures and requestfeatures (excluding 'visual') and additionalFeatures
     public $pseudoFeatures;
 
-    function __construct(array $sf, array $rf, array $dsf, string $oType) {
+    function __construct(array $sf, array $rf, array $dsf, array $dso, string $oType) {
         $CI =& get_instance();
         $dbinfo = $CI->db_config->dbinfo; // Cached here
 
         $this->showFeatures = $sf;
         $this->requestFeatures = $rf;
         $this->dontShowFeatures = $dsf;
+        $this->dontShowObjects = $dso;
         $this->objectType = $oType;
         $this->dontShow = false;
         $this->useVirtualKeyboard = false;
@@ -166,7 +168,7 @@ class Quiz_data {
 		$this->mqlSentenceSelection = $this->normalize($params['senSelect']);
 		$this->oType = $params['oType']; // Cached here
 		$this->mqlQuizObjectSelection = $this->normalize($params['qoSelect']);
-        $this->quizFeatures = new ExtendedQuizFeatures($params['show_features'],$params['request_features'],$params['dontshow_features'],$params['oType']);
+        $this->quizFeatures = new ExtendedQuizFeatures($params['show_features'],$params['request_features'],$params['dontshow_features'],$params['dontshow_objects'],$params['oType']);
         $this->desc = $params['desc'];
         $this->maylocate = $params['maylocate'];
 		

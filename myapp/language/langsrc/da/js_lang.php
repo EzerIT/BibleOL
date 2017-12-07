@@ -36,6 +36,7 @@ $lang['no_request_feature'] = "Ingen efterspørgselsattributter angivet";
 $lang['no_show_feature'] = "Ingen visningsattributter angivet";
 $lang['OK_button'] = "OK";
 $lang['or_write_preferred'] = "Eller skriv dit foretrukne skrifttypenavn:";
+$lang['other_sentence_unit_types'] = "Andre typer:";
 $lang['other_value'] = "Anden værdi";
 $lang['passage_selection'] = "Valg af bibelsteder";
 $lang['request'] = "Eftersprøg";

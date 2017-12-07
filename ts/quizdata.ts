@@ -4,6 +4,7 @@ interface ExtendedQuizFeatures {
     showFeatures : string[];
     requestFeatures : {name : string; usedropdown : boolean; }[];
     dontShowFeatures : string[];
+    dontShowObjects : string[];
     objectType : string;
     dontShow : boolean;
     useVirtualKeyboard : boolean;
@@ -41,6 +42,9 @@ function mayShowFeature(oType : string, feat : string, sgiObj : SentenceGrammarI
     }
 
     var qf : ExtendedQuizFeatures = quizdata.quizFeatures;
+
+    if (qf.dontShowObjects.indexOf(oType)!==-1)
+        return false;
 
     if (oType!==qf.objectType)
         return true;

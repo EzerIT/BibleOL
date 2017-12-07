@@ -1179,8 +1179,9 @@ class QuizFeatures extends XmlHandler {
     /************************************************************************************************
      * Class version for XML serialisation
      ************************************************************************************************/
-    const classVersion = 3; // Version 3 added "dontshow"
-                           // Version 2 added "requestdd"
+    const classVersion = 4; // Version 4 added "dontshowobject"
+                            // Version 3 added "dontshow"
+                            // Version 2 added "requestdd"
 
 	/************************************************************************************************
 	 * Template data
@@ -1188,6 +1189,7 @@ class QuizFeatures extends XmlHandler {
 	public $showFeatures = array();
 	public $requestFeatures = array();
 	public $dontShowFeatures = array();
+	public $dontShowObjects = array();
 
 	/************************************************************************************************
 	 * XML writer interface
@@ -1207,6 +1209,9 @@ class QuizFeatures extends XmlHandler {
 
         foreach ($quizfeatures->dontShowFeatures as $s)
 			$res .= sprintf("%4s<dontshow>%s</dontshow>\n", ' ', htmlspecialchars($s));
+
+        foreach ($quizfeatures->dontShowObjects as $s)
+			$res .= sprintf("%4s<dontshowobject>%s</dontshowobject>\n", ' ', htmlspecialchars($s));
 
 		$res .= sprintf("%2s</quizfeatures>\n", ' ');
 
@@ -1240,6 +1245,11 @@ class QuizFeatures extends XmlHandler {
                 $this->setthis_type = SetThisType::PUSH;
                 break;
 
+          case 'dontshowobject':
+                $this->setthis = &$this->dontShowObjects;
+                $this->setthis_type = SetThisType::PUSH;
+                break;
+
           default:
                 PANIC(__FILE__,__LINE__);
                 break;
@@ -1251,6 +1261,7 @@ class QuizFeatures extends XmlHandler {
           case 'request':
           case 'requestdd':
           case 'dontshow':
+          case 'dontshowobject':
                 // Ignore
                 break;
 

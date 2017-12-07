@@ -144,6 +144,10 @@ $comment['or_write_preferred'] = "";
 $format['or_write_preferred'] = "";
 $use_textarea['or_write_preferred'] = false;
 
+$comment['other_sentence_unit_types'] = "";
+$format['other_sentence_unit_types'] = "";
+$use_textarea['other_sentence_unit_types'] = false;
+
 $comment['other_value'] = "";
 $format['other_value'] = "";
 $use_textarea['other_value'] = false;

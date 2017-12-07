@@ -843,6 +843,8 @@ function mayShowFeature(oType, feat, sgiObj) {
         return true;
     }
     var qf = quizdata.quizFeatures;
+    if (qf.dontShowObjects.indexOf(oType) !== -1)
+        return false;
     if (oType !== qf.objectType)
         return true;
     for (var ix = 0, len = qf.requestFeatures.length; ix < len; ++ix)
