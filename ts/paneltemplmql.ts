@@ -251,6 +251,32 @@ class EnumListFeatureHandler extends FeatureHandler {
     }
 }
 
+class QereFeatureHandler extends FeatureHandler {
+    public omit : boolean;
+
+    constructor(key : string) {
+        super('qerefeature', key);
+        this.omit = false;
+    }
+
+    public setValue(val : boolean) : void {
+        this.omit = val;
+    }
+
+    public hasValues() : boolean {
+        return this.omit;
+    }
+
+    public toMql() : string {
+        if (this.omit)
+            return "(" + this.name + "<>'' OR g_word_translit='HÎʔ')";
+        else
+            return '';
+    }
+}
+
+
+
 class ListValuesHandler {
     public type : string;
     public yes_values : string[];
@@ -392,6 +418,7 @@ class PanelTemplMql {
                     break;
 
                 case 'stringfeature':
+
                     addMethods(vh, StringFeatureHandler, null);
                     break;
 
@@ -401,6 +428,10 @@ class PanelTemplMql {
 
                 case 'rangeintegerfeature':
                     addMethods(vh, RangeIntegerFeatureHandler, null);
+                    break;
+
+                case 'qerefeature':
+                    addMethods(vh, QereFeatureHandler, null);
                     break;
                 }
                 vh.normalize();
@@ -675,87 +706,114 @@ class PanelTemplMql {
                 }
  	    }
  	    else if (valueType==='ascii' || valueType==='string') {
-                var sfh : StringFeatureHandler = null;
-                if (fhs)
-                    sfh = <StringFeatureHandler>fhs[key];
-                if (!sfh)
-                    sfh = new StringFeatureHandler(key);
+                if (key==='qere_utf8' || key==='qere_translit') {
+                    // Special handling of qere feature in ETCBC4
+                    var qfh : QereFeatureHandler = null;
+                    if (fhs)
+                        qfh = <QereFeatureHandler>fhs[key];
+                    if (!qfh)
+                        qfh = new QereFeatureHandler(key);
 
-                var butEquals  : JQuery = $('<input type="radio" name="{0}_{1}_comp" value="equals">'
-                                            .format(this.name_prefix,key));
-                var butDiffers : JQuery = $('<input type="radio" name="{0}_{1}_comp" value="differs">'
-                                            .format(this.name_prefix,key));
-                var butMatches : JQuery = $('<input type="radio" name="{0}_{1}_comp" value="matches">'
-                                            .format(this.name_prefix,key));
+                    var butOmitqere : JQuery = $('<input type="checkbox" name="{0}_{1}_sel" value="omit">'
+                                                 .format(this.name_prefix,key));
+                    if (qfh.omit)
+                        butOmitqere.prop('checked',true);
 
-                switch (sfh.comparator) {
-                case 'equals': butEquals.prop('checked',true); break;
-                case 'differs': butDiffers.prop('checked',true); break;
-                case 'matches': butMatches.prop('checked',true); break;
-                }
+                    var sel : JQuery = $('<span></span>');
+                    sel.append(butOmitqere, 'OMIT QERE');
+                    group.append(sel);
 
-                var sel : JQuery = $('<span></span>');
-                sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
-                group.append(sel);
-
-                sel.click(sfh, (e : JQueryEventObject) => {
-                    // val() may return an empty value if the user clicks on, say, the = sign
-                    var v = $(e.target).val();
-                    switch (v) {
-                    case 'equals':
-                    case 'differs':
-                    case 'matches':
-                        e.data.comparator = v; // e.data is sfh
+                    sel.click(qfh, (e : JQueryEventObject) => {
+                        var target : JQuery = $(e.target);
+                        e.data.setValue(target.prop('checked'));  // e.data is qfh
                         this.updateMql();
-                        break;
-                    }
-                });
+                    });
 
-                var group2 : JQuery = $('<table></table>');
-                
-                if (featset.foreignText) {
-                    for (var i=0; i<sfh.values.length; ++i) {
-                        var kbdRowId : string = '{0}_{1}_row{2}'.format(this.name_prefix, key, +i+1);
-
-                        var jtf : JQuery  = $('<input class="{0}" type="text" size="20" id="{1}_{2}_input{3}">'.format(charset.foreignClass, this.name_prefix, key, +i+1));
-
-                        if (sfh.values[i])
-                            jtf.val(sfh.values[i]);
-
-                        jtf.on('focus', null, {kbdRowId : kbdRowId, sfh: sfh, i: i}, (e : JQueryEventObject) => {
-                            $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
-                            VirtualKeyboard.attachInput(e.currentTarget);
-                            this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i)
-                        });
-
-
-                        jtf.on('keyup', null, {sfh: sfh, i: i}, $.proxy(this.stringTextModifiedListener,this));
-
-                        var row = $('<tr></tr>');
-                        var cell = $('<td></td>');
-                        cell.append(jtf);
-                        row.append(cell);
-                        group2.append(row);
-
-                        group2.append('<tr><td id="{0}" style="text-align:right;"></td></tr>'.format(kbdRowId));
-                    }
+                    this.handlers.push(qfh);
                 }
                 else {
-                    for (var i=0; i<sfh.values.length; ++i) {
-                        var jtf : JQuery = $('<input type="text" size="20">'); // VerifiedField
-                        if (sfh.values[i])
-                            jtf.val(sfh.values[i]);
+                    var sfh : StringFeatureHandler = null;
+                    if (fhs)
+                        sfh = <StringFeatureHandler>fhs[key];
+                    if (!sfh)
+                        sfh = new StringFeatureHandler(key);
 
-                        jtf.on('keyup', null, {sfh: sfh, i: i}, $.proxy(this.stringTextModifiedListener,this));
-                        var row = $('<tr></tr>');
-                        var cell = $('<td></td>');
-                        cell.append(jtf);
-                        row.append(cell);
-                        group2.append(row);
+                    var butEquals  : JQuery = $('<input type="radio" name="{0}_{1}_comp" value="equals">'
+                                                .format(this.name_prefix,key));
+                    var butDiffers : JQuery = $('<input type="radio" name="{0}_{1}_comp" value="differs">'
+                                                .format(this.name_prefix,key));
+                    var butMatches : JQuery = $('<input type="radio" name="{0}_{1}_comp" value="matches">'
+                                                .format(this.name_prefix,key));
+
+                    switch (sfh.comparator) {
+                    case 'equals': butEquals.prop('checked',true); break;
+                    case 'differs': butDiffers.prop('checked',true); break;
+                    case 'matches': butMatches.prop('checked',true); break;
                     }
+
+                    var sel : JQuery = $('<span></span>');
+                    sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
+                    group.append(sel);
+
+                    sel.click(sfh, (e : JQueryEventObject) => {
+                        // val() may return an empty value if the user clicks on, say, the = sign
+                        var v = $(e.target).val();
+                        switch (v) {
+                        case 'equals':
+                        case 'differs':
+                        case 'matches':
+                            e.data.comparator = v; // e.data is sfh
+                            this.updateMql();
+                            break;
+                        }
+                    });
+
+                    var group2 : JQuery = $('<table></table>');
+                    
+                    if (featset.foreignText) {
+                        for (var i=0; i<sfh.values.length; ++i) {
+                            var kbdRowId : string = '{0}_{1}_row{2}'.format(this.name_prefix, key, +i+1);
+
+                            var jtf : JQuery  = $('<input class="{0}" type="text" size="20" id="{1}_{2}_input{3}">'.format(charset.foreignClass, this.name_prefix, key, +i+1));
+
+                            if (sfh.values[i])
+                                jtf.val(sfh.values[i]);
+
+                            jtf.on('focus', null, {kbdRowId : kbdRowId, sfh: sfh, i: i}, (e : JQueryEventObject) => {
+                                $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
+                                VirtualKeyboard.attachInput(e.currentTarget);
+                                this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i)
+                            });
+
+
+                            jtf.on('keyup', null, {sfh: sfh, i: i}, $.proxy(this.stringTextModifiedListener,this));
+
+                            var row = $('<tr></tr>');
+                            var cell = $('<td></td>');
+                            cell.append(jtf);
+                            row.append(cell);
+                            group2.append(row);
+
+                            group2.append('<tr><td id="{0}" style="text-align:right;"></td></tr>'.format(kbdRowId));
+                        }
+                    }
+                    else {
+                        for (var i=0; i<sfh.values.length; ++i) {
+                            var jtf : JQuery = $('<input type="text" size="20">'); // VerifiedField
+                            if (sfh.values[i])
+                                jtf.val(sfh.values[i]);
+
+                            jtf.on('keyup', null, {sfh: sfh, i: i}, $.proxy(this.stringTextModifiedListener,this));
+                            var row = $('<tr></tr>');
+                            var cell = $('<td></td>');
+                            cell.append(jtf);
+                            row.append(cell);
+                            group2.append(row);
+                        }
+                    }
+                    group.append(group2);
+                    this.handlers.push(sfh);
                 }
-                group.append(group2);
-                this.handlers.push(sfh);
  	    }
             else if (valueType.substr(0,8)==='list of ') {
                 var stripped_valueType : string = valueType.substr(8);

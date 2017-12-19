@@ -361,7 +361,6 @@
                     "foreignText": true
                 },
                 "qere_utf8": {
-                    "ignoreSelect": true,
                     "foreignText": true
                 },
                 "qere_translit": {

@@ -254,7 +254,7 @@ class FeatureHandlerList extends XmlHandler {
 	 * Class version for XML serialisation
 	 ************************************************************************************************/
     /** Maximum acceptable version number in the {@literal <featurehandlers>} element. */
-	const classVersion = 2;
+	const classVersion = 3;  // Version 3: <qerefeature> added
 
 
 	/************************************************************************************************
@@ -324,6 +324,10 @@ class FeatureHandlerList extends XmlHandler {
               case 'enumlistfeature':
                     $res .= EnumListFeatureHandler::writeAsXml($fh);
                     break;
+                    
+              case 'qerefeature':
+                    $res .= QereFeatureHandler::writeAsXml($fh);
+                    break;
             }
         }
 
@@ -371,6 +375,12 @@ class FeatureHandlerList extends XmlHandler {
 
           case 'enumlistfeature':
                 $fh = new EnumListFeatureHandler($tagname, $attributes);
+                $handlers[] = $fh;
+                $this->vhand[] = $fh;
+                break;
+
+          case 'qerefeature':
+                $fh = new QereFeatureHandler($tagname, $attributes);
                 $handlers[] = $fh;
                 $this->vhand[] = $fh;
                 break;
@@ -1043,6 +1053,109 @@ class EnumListFeatureHandler extends FeatureHandler {
                 break;
 
           case 'enumlistfeature':
+                parent::close_handler($handlers, $tagname);
+                break;
+
+          default:
+                PANIC(__FILE__,__LINE__);
+                break;
+        }
+    }
+}
+
+class QereFeatureHandler extends FeatureHandler {
+	/************************************************************************************************
+	 * Class version for XML serialisation
+	 ************************************************************************************************/
+    /** Maximum acceptable version number in the {@literal <qerefeature>} element. */
+    const classVersion = 1;
+
+
+	/************************************************************************************************
+	 * Template data
+	 ************************************************************************************************/
+    /** Values against which the feature will be compared. */
+	public $omit = false;	  // Feature value
+    public $type = 'qerefeature';
+
+
+	/************************************************************************************************
+	 * Methods, and auxiliary fields
+	 ************************************************************************************************/
+
+    /** Tests if there are any values in {@link #m_values}.
+     * @return True if there are any values associated with the selector.
+     */
+	public function hasValues() {
+        return $this->omit;
+	}
+
+    /** Converts the feature selector to an MQL expression.
+     * @return An MQL representation of the feature selector.
+     */
+	public function __toString() {
+        if ($this->omit)
+            return "($this->name<>'' OR g_word_translit='HÎʔ')";
+        else
+            return '';
+	}
+
+	/************************************************************************************************
+	 * XML writer interface
+	 ************************************************************************************************/
+    /** Returns the feature handler as an XML string.
+     */
+	static public function writeAsXml($featureHandler) {
+        if ($featureHandler->omit)
+            return sprintf("%6s<qerefeature version=\"%d\">\n", ' ', self::classVersion)
+             . sprintf("%8s<name>%s</name>\n", ' ', htmlspecialchars($featureHandler->name))
+			 . sprintf("%8s<value>true</value>\n", ' ')
+			 . sprintf("%6s</qerefeature>\n", ' ');
+        else
+            return '';
+	}
+
+
+	/************************************************************************************************
+	 * XML reader interface
+	 ************************************************************************************************/
+
+    /** Called when an XML start element is parsed.
+     * @param uri Not used.
+     * @param name Not used.
+     * @param qName The name of the XML element.
+     * @param atts The attributes attached to the element.
+     * @throws SAXException if the element is unknown.
+     */
+    function open_handler(&$handlers, $tagname, $attributes) {
+        switch ($tagname) {
+          case 'name':
+                $this->setthis = &$this->name;
+                $this->setthis_type = SetThisType::SET;
+                break;
+
+          case 'value':
+                $this->setthis = &$this->omit;
+                $this->setthis_type = SetThisType::SET_BOOL;
+                break;
+
+          default:
+                PANIC(__FILE__,__LINE__);
+                break;
+        }
+	}
+
+    function close_handler(&$handlers, $tagname) {
+        switch ($tagname) {
+          case 'name':
+                // Ignore
+                break;
+
+          case 'value':
+                $this->setthis_type = SetThisType::DONT_SET;
+                break;
+
+          case 'qerefeature':
                 parent::close_handler($handlers, $tagname);
                 break;
 

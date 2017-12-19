@@ -557,6 +557,26 @@ var EnumListFeatureHandler = (function (_super) {
     };
     return EnumListFeatureHandler;
 })(FeatureHandler);
+var QereFeatureHandler = (function (_super) {
+    __extends(QereFeatureHandler, _super);
+    function QereFeatureHandler(key) {
+        _super.call(this, 'qerefeature', key);
+        this.omit = false;
+    }
+    QereFeatureHandler.prototype.setValue = function (val) {
+        this.omit = val;
+    };
+    QereFeatureHandler.prototype.hasValues = function () {
+        return this.omit;
+    };
+    QereFeatureHandler.prototype.toMql = function () {
+        if (this.omit)
+            return "(" + this.name + "<>'' OR g_word_translit='HÎʔ')";
+        else
+            return '';
+    };
+    return QereFeatureHandler;
+})(FeatureHandler);
 var ListValuesHandler = (function () {
     function ListValuesHandler() {
         this.type = 'listvalues';
@@ -631,6 +651,9 @@ var PanelTemplMql = (function () {
                         break;
                     case 'rangeintegerfeature':
                         addMethods(vh, RangeIntegerFeatureHandler, null);
+                        break;
+                    case 'qerefeature':
+                        addMethods(vh, QereFeatureHandler, null);
                         break;
                 }
                 vh.normalize();
@@ -891,79 +914,102 @@ var PanelTemplMql = (function () {
                 }
             }
             else if (valueType === 'ascii' || valueType === 'string') {
-                var sfh = null;
-                if (fhs)
-                    sfh = fhs[key];
-                if (!sfh)
-                    sfh = new StringFeatureHandler(key);
-                var butEquals = $('<input type="radio" name="{0}_{1}_comp" value="equals">'
-                    .format(this.name_prefix, key));
-                var butDiffers = $('<input type="radio" name="{0}_{1}_comp" value="differs">'
-                    .format(this.name_prefix, key));
-                var butMatches = $('<input type="radio" name="{0}_{1}_comp" value="matches">'
-                    .format(this.name_prefix, key));
-                switch (sfh.comparator) {
-                    case 'equals':
-                        butEquals.prop('checked', true);
-                        break;
-                    case 'differs':
-                        butDiffers.prop('checked', true);
-                        break;
-                    case 'matches':
-                        butMatches.prop('checked', true);
-                        break;
-                }
-                var sel = $('<span></span>');
-                sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
-                group.append(sel);
-                sel.click(sfh, function (e) {
-                    // val() may return an empty value if the user clicks on, say, the = sign
-                    var v = $(e.target).val();
-                    switch (v) {
-                        case 'equals':
-                        case 'differs':
-                        case 'matches':
-                            e.data.comparator = v; // e.data is sfh
-                            _this.updateMql();
-                            break;
-                    }
-                });
-                var group2 = $('<table></table>');
-                if (featset.foreignText) {
-                    for (var i = 0; i < sfh.values.length; ++i) {
-                        var kbdRowId = '{0}_{1}_row{2}'.format(this.name_prefix, key, +i + 1);
-                        var jtf = $('<input class="{0}" type="text" size="20" id="{1}_{2}_input{3}">'.format(charset.foreignClass, this.name_prefix, key, +i + 1));
-                        if (sfh.values[i])
-                            jtf.val(sfh.values[i]);
-                        jtf.on('focus', null, { kbdRowId: kbdRowId, sfh: sfh, i: i }, function (e) {
-                            $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
-                            VirtualKeyboard.attachInput(e.currentTarget);
-                            _this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i);
-                        });
-                        jtf.on('keyup', null, { sfh: sfh, i: i }, $.proxy(this.stringTextModifiedListener, this));
-                        var row = $('<tr></tr>');
-                        var cell = $('<td></td>');
-                        cell.append(jtf);
-                        row.append(cell);
-                        group2.append(row);
-                        group2.append('<tr><td id="{0}" style="text-align:right;"></td></tr>'.format(kbdRowId));
-                    }
+                if (key === 'qere_utf8' || key === 'qere_translit') {
+                    // Special handling of qere feature in ETCBC4
+                    var qfh = null;
+                    if (fhs)
+                        qfh = fhs[key];
+                    if (!qfh)
+                        qfh = new QereFeatureHandler(key);
+                    var butOmitqere = $('<input type="checkbox" name="{0}_{1}_sel" value="omit">'
+                        .format(this.name_prefix, key));
+                    if (qfh.omit)
+                        butOmitqere.prop('checked', true);
+                    var sel = $('<span></span>');
+                    sel.append(butOmitqere, 'OMIT QERE');
+                    group.append(sel);
+                    sel.click(qfh, function (e) {
+                        var target = $(e.target);
+                        e.data.setValue(target.prop('checked')); // e.data is qfh
+                        _this.updateMql();
+                    });
+                    this.handlers.push(qfh);
                 }
                 else {
-                    for (var i = 0; i < sfh.values.length; ++i) {
-                        var jtf = $('<input type="text" size="20">'); // VerifiedField
-                        if (sfh.values[i])
-                            jtf.val(sfh.values[i]);
-                        jtf.on('keyup', null, { sfh: sfh, i: i }, $.proxy(this.stringTextModifiedListener, this));
-                        var row = $('<tr></tr>');
-                        var cell = $('<td></td>');
-                        cell.append(jtf);
-                        row.append(cell);
-                        group2.append(row);
+                    var sfh = null;
+                    if (fhs)
+                        sfh = fhs[key];
+                    if (!sfh)
+                        sfh = new StringFeatureHandler(key);
+                    var butEquals = $('<input type="radio" name="{0}_{1}_comp" value="equals">'
+                        .format(this.name_prefix, key));
+                    var butDiffers = $('<input type="radio" name="{0}_{1}_comp" value="differs">'
+                        .format(this.name_prefix, key));
+                    var butMatches = $('<input type="radio" name="{0}_{1}_comp" value="matches">'
+                        .format(this.name_prefix, key));
+                    switch (sfh.comparator) {
+                        case 'equals':
+                            butEquals.prop('checked', true);
+                            break;
+                        case 'differs':
+                            butDiffers.prop('checked', true);
+                            break;
+                        case 'matches':
+                            butMatches.prop('checked', true);
+                            break;
                     }
+                    var sel = $('<span></span>');
+                    sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
+                    group.append(sel);
+                    sel.click(sfh, function (e) {
+                        // val() may return an empty value if the user clicks on, say, the = sign
+                        var v = $(e.target).val();
+                        switch (v) {
+                            case 'equals':
+                            case 'differs':
+                            case 'matches':
+                                e.data.comparator = v; // e.data is sfh
+                                _this.updateMql();
+                                break;
+                        }
+                    });
+                    var group2 = $('<table></table>');
+                    if (featset.foreignText) {
+                        for (var i = 0; i < sfh.values.length; ++i) {
+                            var kbdRowId = '{0}_{1}_row{2}'.format(this.name_prefix, key, +i + 1);
+                            var jtf = $('<input class="{0}" type="text" size="20" id="{1}_{2}_input{3}">'.format(charset.foreignClass, this.name_prefix, key, +i + 1));
+                            if (sfh.values[i])
+                                jtf.val(sfh.values[i]);
+                            jtf.on('focus', null, { kbdRowId: kbdRowId, sfh: sfh, i: i }, function (e) {
+                                $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
+                                VirtualKeyboard.attachInput(e.currentTarget);
+                                _this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i);
+                            });
+                            jtf.on('keyup', null, { sfh: sfh, i: i }, $.proxy(this.stringTextModifiedListener, this));
+                            var row = $('<tr></tr>');
+                            var cell = $('<td></td>');
+                            cell.append(jtf);
+                            row.append(cell);
+                            group2.append(row);
+                            group2.append('<tr><td id="{0}" style="text-align:right;"></td></tr>'.format(kbdRowId));
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < sfh.values.length; ++i) {
+                            var jtf = $('<input type="text" size="20">'); // VerifiedField
+                            if (sfh.values[i])
+                                jtf.val(sfh.values[i]);
+                            jtf.on('keyup', null, { sfh: sfh, i: i }, $.proxy(this.stringTextModifiedListener, this));
+                            var row = $('<tr></tr>');
+                            var cell = $('<td></td>');
+                            cell.append(jtf);
+                            row.append(cell);
+                            group2.append(row);
+                        }
+                    }
+                    group.append(group2);
+                    this.handlers.push(sfh);
                 }
-                group.append(group2);
-                this.handlers.push(sfh);
             }
             else if (valueType.substr(0, 8) === 'list of ') {
                 var stripped_valueType = valueType.substr(8);

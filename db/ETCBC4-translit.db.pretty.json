@@ -365,7 +365,6 @@
                     "foreignText": true
                 },
                 "qere_translit": {
-                    "ignoreSelect": true,
                     "foreignText": true
                 }
             }
