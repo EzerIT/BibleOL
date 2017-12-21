@@ -221,22 +221,22 @@ var GrammarGroup = (function () {
     function GrammarGroup() {
     }
     GrammarGroup.prototype.getFeatName = function (objType, callback) {
-        callback(WHAT.groupstart, objType, this.name, l10n.grammargroup[objType][this.name], this);
+        callback(WHAT.groupstart, objType, objType, this.name, l10n.grammargroup[objType][this.name], this);
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
             this.items[+i].getFeatName(objType, callback);
         }
-        callback(WHAT.groupend, objType, this.name, null, this);
+        callback(WHAT.groupend, objType, objType, this.name, null, this);
     };
     GrammarGroup.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
-        callback(WHAT.groupstart, objType, this.name, null, this);
+        callback(WHAT.groupstart, objType, objType, this.name, null, this);
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
             this.items[+i].getFeatVal(monob, mix, objType, abbrev, callback);
         }
-        callback(WHAT.groupend, objType, this.name, null, this);
+        callback(WHAT.groupend, objType, objType, this.name, null, this);
     };
     /** Do the children of this object identify the specified feature?
      * @param f The name of the feature to look for.
@@ -306,7 +306,7 @@ var GrammarMetaFeature = (function () {
     function GrammarMetaFeature() {
     }
     GrammarMetaFeature.prototype.getFeatName = function (objType, callback) {
-        callback(WHAT.metafeature, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
+        callback(WHAT.metafeature, objType, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
     };
     GrammarMetaFeature.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
         var res = '';
@@ -315,7 +315,7 @@ var GrammarMetaFeature = (function () {
                 continue; // Not numeric
             res += this.items[+i].getFeatValPart(monob, objType);
         }
-        callback(WHAT.metafeature, objType, this.name, res, this);
+        callback(WHAT.metafeature, objType, objType, this.name, res, this);
     };
     /** Do the children of this object identify the specified feature?
      * @param f The name of the feature to look for.
@@ -353,7 +353,7 @@ var GrammarFeature = (function () {
         var locname = l10n.grammarfeature && l10n.grammarfeature[this.realObjectType] && l10n.grammarfeature[this.realObjectType][this.realFeatureName]
             ? l10n.grammarfeature[this.realObjectType][this.realFeatureName]
             : l10n.emdrosobject[this.realObjectType][this.realFeatureName];
-        callback(WHAT.feature, this.realObjectType, this.realFeatureName, locname, this);
+        callback(WHAT.feature, this.realObjectType, objType, this.realFeatureName, locname, this);
     };
     GrammarFeature.prototype.icon2class = function (icon) {
         if (icon.substr(0, 10) === 'glyphicon-')
@@ -402,7 +402,7 @@ var GrammarFeature = (function () {
                 }
                 break;
         }
-        callback(WHAT.feature, this.realObjectType, this.realFeatureName, res, this);
+        callback(WHAT.feature, this.realObjectType, objType, this.realFeatureName, res, this);
     };
     /** Does this object identify the specified feature?
      * @param f The name of the feature to look for.
@@ -641,7 +641,7 @@ var DisplaySingleMonadObject = (function (_super) {
         }
         var grammar = '';
         configuration.sentencegrammar[0]
-            .getFeatVal(smo, 0, this.objType, false, function (whattype, objType, featName, featValLoc) {
+            .getFeatVal(smo, 0, this.objType, false, function (whattype, objType, origObjType, featName, featValLoc) {
             switch (whattype) {
                 case WHAT.feature:
                     var wordclass;
@@ -729,7 +729,7 @@ var DisplayMultipleMonadObject = (function (_super) {
         var indent = 0;
         if (configuration.sentencegrammar[this.level]) {
             configuration.sentencegrammar[this.level]
-                .getFeatVal(this.displayedMo, this.mix, this.objType, true, function (whattype, objType, featName, featValLoc) {
+                .getFeatVal(this.displayedMo, this.mix, this.objType, true, function (whattype, objType, origObjType, featName, featValLoc) {
                 if (whattype == WHAT.feature || whattype == WHAT.metafeature) {
                     if (configuration.databaseName == 'ETCBC4' && objType == "clause_atom" && featName == "tab")
                         indent = +featValLoc;
@@ -829,7 +829,7 @@ function localize(s) {
     return str === undefined ? '??' + s + '??' : str;
 }
 // -*- js -*-
-function mayShowFeature(oType, feat, sgiObj) {
+function mayShowFeature(oType, origOtype, feat, sgiObj) {
     var inQuiz = $('#quiztab').length > 0;
     if (!inQuiz)
         return true;
@@ -837,14 +837,15 @@ function mayShowFeature(oType, feat, sgiObj) {
         for (var i in sgiObj.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            if (!mayShowFeature(oType, sgiObj.items[+i].name, sgiObj.items[+i]))
+            if (!mayShowFeature(oType, origOtype, sgiObj.items[+i].name, sgiObj.items[+i]))
                 return false;
         }
         return true;
     }
     var qf = quizdata.quizFeatures;
-    if (qf.dontShowObjects.indexOf(oType) !== -1)
-        return false;
+    for (var ix = 0, len = qf.dontShowObjects.length; ix < len; ++ix)
+        if (qf.dontShowObjects[ix].content === origOtype)
+            return qf.dontShowObjects[ix].show === feat; // ...so we only show it if it is in the "show" attribute
     if (oType !== qf.objectType)
         return true;
     for (var ix = 0, len = qf.requestFeatures.length; ix < len; ++ix)
@@ -1069,17 +1070,17 @@ var Dictionary = (function () {
                 if (level === 0 && (!qd || !qd.quizFeatures.dontShow))
                     res += '<tr><td>{2}</td><td class="bol-tooltip leftalign {0}">{1}</td></tr>'.format(charset.foreignClass, monob.mo.features[configuration.surfaceFeature], localize('visual'));
                 var map = [];
-                sengram.getFeatName(sengram.objType, function (whattype, objType, featName, featNameLoc, sgiObj) {
+                sengram.getFeatName(sengram.objType, function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
                     if (whattype == WHAT.feature || whattype == WHAT.metafeature)
-                        if (!mayShowFeature(objType, featName, sgiObj))
+                        if (!mayShowFeature(objType, origObjType, featName, sgiObj))
                             return;
                     if (whattype == WHAT.feature || whattype == WHAT.metafeature || whattype == WHAT.groupstart)
                         map[featName] = featNameLoc;
                 });
-                sengram.getFeatVal(monob, mix, sengram.objType, false, function (whattype, objType, featName, featValLoc, sgiObj) {
+                sengram.getFeatVal(monob, mix, sengram.objType, false, function (whattype, objType, origObjType, featName, featValLoc, sgiObj) {
                     switch (whattype) {
                         case WHAT.feature:
-                            if (mayShowFeature(objType, featName, sgiObj)) {
+                            if (mayShowFeature(objType, origObjType, featName, sgiObj)) {
                                 var wordclass;
                                 var fs = getFeatureSetting(objType, featName);
                                 if (fs.foreignText)
@@ -1092,7 +1093,7 @@ var Dictionary = (function () {
                             }
                             break;
                         case WHAT.metafeature:
-                            if (mayShowFeature(objType, featName, sgiObj))
+                            if (mayShowFeature(objType, origObjType, featName, sgiObj))
                                 res += '<tr><td>{0}</td><td class="bol-tooltip leftalign">{1}</td></tr>'.format(map[featName], featValLoc);
                             break;
                         case WHAT.groupstart:
@@ -2086,7 +2087,7 @@ var GenerateCheckboxes = (function () {
         this.borderBoxes = [];
         this.separateLinesBoxes = [];
     }
-    GenerateCheckboxes.prototype.generatorCallback = function (whattype, objType, featName, featNameLoc, sgiObj) {
+    GenerateCheckboxes.prototype.generatorCallback = function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
         switch (whattype) {
             case WHAT.groupstart:
                 if (!this.hasSeenGrammarGroup) {
@@ -2101,7 +2102,7 @@ var GenerateCheckboxes = (function () {
                 break;
             case WHAT.feature:
             case WHAT.metafeature:
-                if (mayShowFeature(objType, featName, sgiObj)) {
+                if (mayShowFeature(objType, origObjType, featName, sgiObj)) {
                     this.checkboxes += '{0}<input id="{1}_{2}_cb" type="checkbox">{3}'
                         .format(this.addBr.getStr(), objType, featName, featNameLoc);
                     var wordclass;
@@ -2145,8 +2146,8 @@ var GenerateCheckboxes = (function () {
             /// and the grammargroups are not intermixed with grammarfeatures
             this.hasSeenGrammarGroup = false;
             configuration.sentencegrammar[leveli]
-                .getFeatName(configuration.sentencegrammar[leveli].objType, function (whattype, objType, featName, featNameLoc, sgiObj) {
-                return _this.generatorCallback(whattype, objType, featName, featNameLoc, sgiObj);
+                .getFeatName(configuration.sentencegrammar[leveli].objType, function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
+                return _this.generatorCallback(whattype, objType, origObjType, featName, featNameLoc, sgiObj);
             });
             if (this.hasSeenGrammarGroup)
                 this.checkboxes += '</div>';
@@ -2263,7 +2264,7 @@ var GenerateCheckboxes = (function () {
                     adjustDivLevWidth(e.data);
                 });
             }
-            sg.getFeatName(sg.objType, function (whattype, objType, featName, featNameLoc) {
+            sg.getFeatName(sg.objType, function (whattype, objType, origObjType, featName, featNameLoc) {
                 return _this.setHandlerCallback(whattype, objType, featName, featNameLoc, leveli);
             });
         }

@@ -72,7 +72,7 @@ class GenerateCheckboxes {
     private separateLinesBoxes : util.SeparateLinesFollowerBox[] = [];
     private wordSpaceBox : util.WordSpaceFollowerBox;
     
-    private generatorCallback(whattype:number, objType:string, featName:string,
+    private generatorCallback(whattype:number, objType:string, origObjType:string, featName:string,
                               featNameLoc:string, sgiObj:SentenceGrammarItem) : void {
         switch (whattype) {
         case WHAT.groupstart:
@@ -90,7 +90,7 @@ class GenerateCheckboxes {
     
         case WHAT.feature:
         case WHAT.metafeature:
-            if (mayShowFeature(objType,featName,sgiObj)) {
+            if (mayShowFeature(objType,origObjType,featName,sgiObj)) {
                 this.checkboxes += '{0}<input id="{1}_{2}_cb" type="checkbox">{3}'
                     .format(this.addBr.getStr(),objType,featName,featNameLoc);
         
@@ -145,8 +145,8 @@ class GenerateCheckboxes {
 
             configuration.sentencegrammar[leveli]
                 .getFeatName(configuration.sentencegrammar[leveli].objType,
-                             (whattype:number, objType:string, featName:string, featNameLoc:string, sgiObj:SentenceGrammarItem) =>
-                             this.generatorCallback(whattype, objType, featName, featNameLoc, sgiObj));
+                             (whattype:number, objType:string, origObjType:string, featName:string, featNameLoc:string, sgiObj:SentenceGrammarItem) =>
+                             this.generatorCallback(whattype, objType, origObjType, featName, featNameLoc, sgiObj));
 
             if (this.hasSeenGrammarGroup)
                 this.checkboxes += '</div>';
@@ -280,7 +280,7 @@ class GenerateCheckboxes {
             }
 
             sg.getFeatName(sg.objType,
-                           (whattype:number, objType:string, featName:string, featNameLoc:string) =>
+                           (whattype:number, objType:string, origObjType:string, featName:string, featNameLoc:string) =>
                            this.setHandlerCallback(whattype, objType, featName, featNameLoc, leveli));
         }
     }

@@ -4,7 +4,7 @@ interface ExtendedQuizFeatures {
     showFeatures : string[];
     requestFeatures : {name : string; usedropdown : boolean; }[];
     dontShowFeatures : string[];
-    dontShowObjects : string[];
+    dontShowObjects : { content : string; show? : string;} [];
     objectType : string;
     dontShow : boolean;
     useVirtualKeyboard : boolean;
@@ -26,7 +26,7 @@ interface QuizData {
 
 declare var quizdata : QuizData;
 
-function mayShowFeature(oType : string, feat : string, sgiObj : SentenceGrammarItem) : boolean {
+function mayShowFeature(oType : string, origOtype : string, feat : string, sgiObj : SentenceGrammarItem) : boolean {
     var inQuiz : boolean = $('#quiztab').length>0;
 
     if (!inQuiz)
@@ -35,7 +35,7 @@ function mayShowFeature(oType : string, feat : string, sgiObj : SentenceGrammarI
     if (sgiObj.mytype==='GrammarMetaFeature') {
         for (var i in sgiObj.items) {
             if (isNaN(+i)) continue; // Not numeric
-            if (!mayShowFeature(oType, sgiObj.items[+i].name, sgiObj.items[+i]))
+            if (!mayShowFeature(oType, origOtype, sgiObj.items[+i].name, sgiObj.items[+i]))
                 return false;
         }
         return true;
@@ -43,8 +43,9 @@ function mayShowFeature(oType : string, feat : string, sgiObj : SentenceGrammarI
 
     var qf : ExtendedQuizFeatures = quizdata.quizFeatures;
 
-    if (qf.dontShowObjects.indexOf(oType)!==-1)
-        return false;
+    for (var ix=0, len=qf.dontShowObjects.length; ix<len; ++ix)
+        if (qf.dontShowObjects[ix].content===origOtype) // oritOtype is a 'dontShowObject'...
+            return qf.dontShowObjects[ix].show===feat; // ...so we only show it if it is in the "show" attribute
 
     if (oType!==qf.objectType)
         return true;

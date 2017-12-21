@@ -140,6 +140,10 @@ $comment['OK_button'] = "";
 $format['OK_button'] = "";
 $use_textarea['OK_button'] = false;
 
+$comment['omit_qere'] = "";
+$format['omit_qere'] = "";
+$use_textarea['omit_qere'] = false;
+
 $comment['or_write_preferred'] = "";
 $format['or_write_preferred'] = "";
 $use_textarea['or_write_preferred'] = false;

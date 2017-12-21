@@ -5,11 +5,34 @@ interface QuizFeatures {
     showFeatures : string[];
     requestFeatures : { name : string; usedropdown : boolean;} [];
     dontShowFeatures : string[];
-    dontShowObjects : string[];
+    dontShowObjects : { content : string; show? : string;} [];
 }
 
 
-enum ButtonSelection { SHOW, REQUEST, REQUEST_DROPDOWN, DONT_CARE, DONT_SHOW };
+// Hand coded database dependency for qere detection
+
+function database_has_qere() : boolean {
+    return configuration.databaseName==="ETCBC4";
+}
+
+function otype_has_qere(otype : string) : boolean {
+    return database_has_qere() && otype==="word";
+}
+
+function qere_otype() : string {
+    return "word";
+}
+
+function qere_feature() : string {
+    if (configuration.propertiesName==="ETCBC4")
+        return "qere_utf8";
+    if (configuration.propertiesName==="ETCBC4-translit")
+        return "qere_translit";
+    return null;
+}
+
+
+enum ButtonSelection { SHOW, REQUEST, REQUEST_DROPDOWN, DONT_CARE, DONT_SHOW, SHOW_QERE };
 
 class ButtonsAndLabel {
     private showFeat	 : JQuery;
@@ -18,6 +41,7 @@ class ButtonsAndLabel {
     private dontShowFeat : JQuery;
     private ddCheck	 : JQuery;
     private feat	 : JQuery;
+    private showQere     : JQuery;
 
     constructor(lab                       : string,
                 private featName          : string,
@@ -26,12 +50,14 @@ class ButtonsAndLabel {
                 private useDropDown       : boolean,
                 private canShow           : boolean,
                 private canRequest        : boolean,
-                private canDisplayGrammar : boolean) {
+                private canDisplayGrammar : boolean,
+                private canShowQere       : boolean) {
 
-        this.showFeat     = canShow ? $('<input type="radio" name="feat_{0}_{1}" value="show">'.format(otype,featName)) : $('<span></span>');
-        this.reqFeat      = canRequest ? $('<input type="radio" name="feat_{0}_{1}" value="request">'.format(otype,featName)) : $('<span></span>');
+        this.showFeat     = canShow           ? $('<input type="radio" name="feat_{0}_{1}" value="show">'.format(otype,featName))         : $('<span></span>');
+        this.reqFeat      = canRequest        ? $('<input type="radio" name="feat_{0}_{1}" value="request">'.format(otype,featName))      : $('<span></span>');
         this.dcFeat       = $('<input type="radio" name="feat_{0}_{1}" value="dontcare">'.format(otype,featName));
         this.dontShowFeat = canDisplayGrammar ? $('<input type="radio" name="feat_{0}_{1}" value="dontshowfeat">'.format(otype,featName)) : $('<span></span>');
+        this.showQere     = canShowQere       ? $('<input type="radio" name="feat_{0}_{1}" value="showqere">'.format(otype,featName))     : $('<span></span>');
 	this.feat         = $('<span>{0}</span>'.format(lab));
 	
 	switch (select) {
@@ -40,11 +66,15 @@ class ButtonsAndLabel {
         case ButtonSelection.REQUEST_DROPDOWN: this.reqFeat.prop('checked',true);      break;
         case ButtonSelection.DONT_CARE:        this.dcFeat.prop('checked',true);       break;
         case ButtonSelection.DONT_SHOW:        this.dontShowFeat.prop('checked',true); break;
+        case ButtonSelection.SHOW_QERE:        this.showQere.prop('checked',true);     break;
 	}
 
         if (useDropDown) {
             this.ddCheck = $('<input type="checkbox" name="dd_{0}_{1}">'.format(otype,featName));
             this.ddCheck.prop('checked', select!=ButtonSelection.REQUEST);
+        }
+        else if (canShowQere) {
+            this.ddCheck = this.showQere; // Drop down and showQere share a position
         }
         else
             this.ddCheck = $('<span></span>'); // Empty space filler
@@ -114,6 +144,13 @@ class ButtonsAndLabel {
             return false;
     }
 
+    public isSelected_showQere() : boolean {
+        if (this.canShowQere)
+            return this.showQere.prop('checked');
+        else
+            return false;
+    }
+
     public isSelected_ddCheck() : boolean {
         if (this.useDropDown)
             return this.ddCheck.prop('checked');
@@ -148,6 +185,7 @@ class PanelForOneOtype  {
                                              configuration.objHasSurface===otype && !!getFeatureSetting(otype,configuration.surfaceFeature).alternateshowrequestSql,
                                              true,
                                              configuration.objHasSurface===otype,
+                                             false,
                                              false);
 
         this.panel.append(this.visualBAL.getRow());
@@ -190,32 +228,41 @@ class PanelForOneOtype  {
                                           !!getFeatureSetting(otype,key2).alternateshowrequestSql,
                                           !ignoreShow,
                                           !ignoreRequest,
-                                          sg!==null && sg.containsFeature(key2));
+                                          sg!==null && sg.containsFeature(key2),
+                                          false);
 
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }
 
         this.panel.append('<tr><td colspan="5"></td><td class="leftalign">&nbsp;</tr>');
-        this.panel.append('<tr><td colspan="5"></td><td class="leftalign"><b>' + localize('other_sentence_unit_types') + '</b></tr>');
+        this.panel.append('<tr><td colspan="2"></td><th>{0}</th><th>{1}</th><th>{2}</th><th class="leftalign">{3}</th></tr>'
+                          .format(localize('dont_care'),
+                                  localize('dont_show'),
+                                  localize('show_qere'),
+                                  localize('other_sentence_unit_types')));
         
         // Generate buttons for other types:
-        for (var otherOtype in configuration.objectSettings) {
+        for (var level in configuration.sentencegrammar) {
+            var leveli : number = +level;
+            if (isNaN(leveli)) continue; // Not numeric
+
+            var otherOtype = configuration.sentencegrammar[leveli].objType;
             if (otherOtype!==otype && configuration.objectSettings[otherOtype].mayselect) {
                 var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype),
-                                          'otherOtype_' + otherOtype,
-                                          otype,
-                                          useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE,
-                                          false,
-                                          false,
-                                          false,
-                                          true);
-
-            this.allBAL.push(bal);
-            this.panel.append(bal.getRow());
+                                              'otherOtype_' + otherOtype,
+                                              otype,
+                                              useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE,
+                                              false,
+                                              false,
+                                              false,
+                                              true,
+                                              otype_has_qere(otherOtype));
+                
+                this.allBAL.push(bal);
+                this.panel.append(bal.getRow());
             }
         }
-        
     }
 
     public hide() : void {
@@ -287,10 +334,16 @@ class PanelTemplQuizFeatures {
     }
 
     public getObjectSelector(otype : string) : ButtonSelection {
-	if (this.initialQf && this.initialQf.dontShowObjects)
-            for (var i=0; i<this.initialQf.dontShowObjects.length; ++i)
-		if (this.initialQf.dontShowObjects[i]===otype)
-		    return ButtonSelection.DONT_SHOW;
+	if (this.initialQf && this.initialQf.dontShowObjects) {
+            for (var i=0; i<this.initialQf.dontShowObjects.length; ++i) {
+		if (this.initialQf.dontShowObjects[i].content===otype) {
+                    if (this.initialQf.dontShowObjects[i].show) // We assume the feature to show is qere
+		        return ButtonSelection.SHOW_QERE;
+                    else
+		        return ButtonSelection.DONT_SHOW;
+                }
+            }
+        }
 
 	return ButtonSelection.DONT_CARE;
     }
@@ -351,9 +404,12 @@ class PanelTemplQuizFeatures {
 	    else if (bal.isSelected_dontShowFeat()) {
                 var fn = bal.getFeatName();
                 if (fn.substring(0,11) === 'otherOtype_') // 11 is the length of 'otherOtype_'
-                    qf.dontShowObjects.push(fn.substring(11));
+                    qf.dontShowObjects.push({content: fn.substring(11)});
                 else
 		    qf.dontShowFeatures.push(fn);
+            }
+	    else if (bal.isSelected_showQere()) {
+                qf.dontShowObjects.push({content: qere_otype(), show: qere_feature()});
             }
 	}
 	return qf;
@@ -385,7 +441,8 @@ class PanelTemplQuizFeatures {
         }
 
         for (var i=0; i<qfnow.dontShowObjects.length; ++i)
-            if (qfnow.dontShowObjects[i] !== this.initialQf.dontShowObjects[i]) {
+            if (qfnow.dontShowObjects[i].content !== this.initialQf.dontShowObjects[i].content ||
+                qfnow.dontShowObjects[i].show !== this.initialQf.dontShowObjects[i].show) {
             return true;
         }
 

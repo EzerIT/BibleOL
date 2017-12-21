@@ -24,6 +24,7 @@ class XmlHandler {
 
     protected $setthis;
 	protected $setthis_type = SetThisType::DONT_SET;
+    protected $setthis_attribs = null;
 
     function get_top() {
         return $this->top;
@@ -70,7 +71,13 @@ class XmlHandler {
                 break;
 
           case SetThisType::PUSH:
-                $this->setthis[] = $content;
+                if (is_null($this->setthis_attribs))
+                    $this->setthis[] = $content;
+                else {
+                    $this->setthis_attribs['content'] = $content;
+                    $this->setthis[] = $this->setthis_attribs;
+                    $this->setthis_attribs = null;
+                }
                 $this->setthis_type = SetThisType::DONT_SET;
                 break;
 

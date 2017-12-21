@@ -289,11 +289,11 @@ class Dictionary {
                     res += '<tr><td>{2}</td><td class="bol-tooltip leftalign {0}">{1}</td></tr>'.format(charset.foreignClass, monob.mo.features[configuration.surfaceFeature],localize('visual'));
                 
                 var map : Array<string> = [];
-    
+
                 sengram.getFeatName(sengram.objType,
-                                    (whattype:number, objType:string, featName:string, featNameLoc:string, sgiObj:SentenceGrammarItem) => {
+                                    (whattype:number, objType:string, origObjType:string, featName:string, featNameLoc:string, sgiObj:SentenceGrammarItem) => {
                                         if (whattype==WHAT.feature || whattype==WHAT.metafeature)
-                                            if (!mayShowFeature(objType, featName, sgiObj))
+                                            if (!mayShowFeature(objType, origObjType, featName, sgiObj))
                                                 return;
                                         
                                         if (whattype==WHAT.feature || whattype==WHAT.metafeature || whattype==WHAT.groupstart)
@@ -301,10 +301,10 @@ class Dictionary {
                                     });
 
                 sengram.getFeatVal(monob, mix, sengram.objType, false,
-                                   (whattype:number, objType:string, featName:string, featValLoc:string, sgiObj:SentenceGrammarItem) => {
+                                   (whattype:number, objType:string, origObjType:string, featName:string, featValLoc:string, sgiObj:SentenceGrammarItem) => {
                                        switch (whattype) {
                                        case WHAT.feature:
-                                           if (mayShowFeature(objType, featName, sgiObj)) {
+                                           if (mayShowFeature(objType, origObjType, featName, sgiObj)) {
                                                var wordclass : string;
                                                var fs : FeatureSetting = getFeatureSetting(objType,featName);
                                                if (fs.foreignText)
@@ -318,7 +318,7 @@ class Dictionary {
                                            break;
 
                                        case WHAT.metafeature:
-                                           if (mayShowFeature(objType, featName, sgiObj))
+                                           if (mayShowFeature(objType, origObjType, featName, sgiObj))
                                                res += '<tr><td>{0}</td><td class="bol-tooltip leftalign">{1}</td></tr>'.format(map[featName], featValLoc);
                                            break;
 

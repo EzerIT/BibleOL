@@ -172,7 +172,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         var grammar = '';
         configuration.sentencegrammar[0]
             .getFeatVal(smo, 0, this.objType, false,
-                        (whattype:number, objType:string, featName:string, featValLoc:string) => {
+                        (whattype:number, objType:string, origObjType:string, featName:string, featValLoc:string) => {
                             switch (whattype) {
                             case WHAT.feature:
                                 var wordclass : string;
@@ -326,7 +326,7 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
         if (configuration.sentencegrammar[this.level]) {
             configuration.sentencegrammar[this.level]
             .getFeatVal(this.displayedMo, this.mix, this.objType, true,
-                        (whattype:number, objType:string, featName:string, featValLoc:string) => {
+                        (whattype:number, objType:string, origObjType:string, featName:string, featValLoc:string) => {
                             if (whattype==WHAT.feature || whattype==WHAT.metafeature) {
                                 if (configuration.databaseName=='ETCBC4' && objType=="clause_atom" && featName=="tab")
                                     indent=+featValLoc;

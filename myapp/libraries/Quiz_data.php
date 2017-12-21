@@ -21,7 +21,7 @@ class ExtendedQuizFeatures {
 	public $showFeatures; // Vector
 	public $requestFeatures; //Vector<Pair<DoubleName,Boolean>> 
     public $dontShowFeatures; //Vector<String> 
-    public $dontShowObjects; //Vector<String> 
+    public $dontShowObjects; //Vector<map<string,string>> 
     public $objectType;
 	public $dontShow;
     public $useVirtualKeyboard;

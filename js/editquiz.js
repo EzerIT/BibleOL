@@ -71,22 +71,22 @@ var GrammarGroup = (function () {
     function GrammarGroup() {
     }
     GrammarGroup.prototype.getFeatName = function (objType, callback) {
-        callback(WHAT.groupstart, objType, this.name, l10n.grammargroup[objType][this.name], this);
+        callback(WHAT.groupstart, objType, objType, this.name, l10n.grammargroup[objType][this.name], this);
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
             this.items[+i].getFeatName(objType, callback);
         }
-        callback(WHAT.groupend, objType, this.name, null, this);
+        callback(WHAT.groupend, objType, objType, this.name, null, this);
     };
     GrammarGroup.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
-        callback(WHAT.groupstart, objType, this.name, null, this);
+        callback(WHAT.groupstart, objType, objType, this.name, null, this);
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
             this.items[+i].getFeatVal(monob, mix, objType, abbrev, callback);
         }
-        callback(WHAT.groupend, objType, this.name, null, this);
+        callback(WHAT.groupend, objType, objType, this.name, null, this);
     };
     /** Do the children of this object identify the specified feature?
      * @param f The name of the feature to look for.
@@ -156,7 +156,7 @@ var GrammarMetaFeature = (function () {
     function GrammarMetaFeature() {
     }
     GrammarMetaFeature.prototype.getFeatName = function (objType, callback) {
-        callback(WHAT.metafeature, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
+        callback(WHAT.metafeature, objType, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
     };
     GrammarMetaFeature.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
         var res = '';
@@ -165,7 +165,7 @@ var GrammarMetaFeature = (function () {
                 continue; // Not numeric
             res += this.items[+i].getFeatValPart(monob, objType);
         }
-        callback(WHAT.metafeature, objType, this.name, res, this);
+        callback(WHAT.metafeature, objType, objType, this.name, res, this);
     };
     /** Do the children of this object identify the specified feature?
      * @param f The name of the feature to look for.
@@ -203,7 +203,7 @@ var GrammarFeature = (function () {
         var locname = l10n.grammarfeature && l10n.grammarfeature[this.realObjectType] && l10n.grammarfeature[this.realObjectType][this.realFeatureName]
             ? l10n.grammarfeature[this.realObjectType][this.realFeatureName]
             : l10n.emdrosobject[this.realObjectType][this.realFeatureName];
-        callback(WHAT.feature, this.realObjectType, this.realFeatureName, locname, this);
+        callback(WHAT.feature, this.realObjectType, objType, this.realFeatureName, locname, this);
     };
     GrammarFeature.prototype.icon2class = function (icon) {
         if (icon.substr(0, 10) === 'glyphicon-')
@@ -252,7 +252,7 @@ var GrammarFeature = (function () {
                 }
                 break;
         }
-        callback(WHAT.feature, this.realObjectType, this.realFeatureName, res, this);
+        callback(WHAT.feature, this.realObjectType, objType, this.realFeatureName, res, this);
     };
     /** Does this object identify the specified feature?
      * @param f The name of the feature to look for.
@@ -571,7 +571,7 @@ var QereFeatureHandler = (function (_super) {
     };
     QereFeatureHandler.prototype.toMql = function () {
         if (this.omit)
-            return "(" + this.name + "<>'' OR g_word_translit='HÎʔ')";
+            return "(" + this.name + "='' AND g_word_translit<>'HÎʔ')";
         else
             return '';
     };
@@ -926,7 +926,7 @@ var PanelTemplMql = (function () {
                     if (qfh.omit)
                         butOmitqere.prop('checked', true);
                     var sel = $('<span></span>');
-                    sel.append(butOmitqere, 'OMIT QERE');
+                    sel.append(butOmitqere, localize('omit_qere'));
                     group.append(sel);
                     sel.click(qfh, function (e) {
                         var target = $(e.target);
@@ -1428,6 +1428,23 @@ var PanelTemplQuizObjectSelector = (function (_super) {
 })(PanelTemplMql);
 // -*- js -*-
 /* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Hand coded database dependency for qere detection
+function database_has_qere() {
+    return configuration.databaseName === "ETCBC4";
+}
+function otype_has_qere(otype) {
+    return database_has_qere() && otype === "word";
+}
+function qere_otype() {
+    return "word";
+}
+function qere_feature() {
+    if (configuration.propertiesName === "ETCBC4")
+        return "qere_utf8";
+    if (configuration.propertiesName === "ETCBC4-translit")
+        return "qere_translit";
+    return null;
+}
 var ButtonSelection;
 (function (ButtonSelection) {
     ButtonSelection[ButtonSelection["SHOW"] = 0] = "SHOW";
@@ -1435,20 +1452,23 @@ var ButtonSelection;
     ButtonSelection[ButtonSelection["REQUEST_DROPDOWN"] = 2] = "REQUEST_DROPDOWN";
     ButtonSelection[ButtonSelection["DONT_CARE"] = 3] = "DONT_CARE";
     ButtonSelection[ButtonSelection["DONT_SHOW"] = 4] = "DONT_SHOW";
+    ButtonSelection[ButtonSelection["SHOW_QERE"] = 5] = "SHOW_QERE";
 })(ButtonSelection || (ButtonSelection = {}));
 ;
 var ButtonsAndLabel = (function () {
-    function ButtonsAndLabel(lab, featName, otype, select, useDropDown, canShow, canRequest, canDisplayGrammar) {
+    function ButtonsAndLabel(lab, featName, otype, select, useDropDown, canShow, canRequest, canDisplayGrammar, canShowQere) {
         var _this = this;
         this.featName = featName;
         this.useDropDown = useDropDown;
         this.canShow = canShow;
         this.canRequest = canRequest;
         this.canDisplayGrammar = canDisplayGrammar;
+        this.canShowQere = canShowQere;
         this.showFeat = canShow ? $('<input type="radio" name="feat_{0}_{1}" value="show">'.format(otype, featName)) : $('<span></span>');
         this.reqFeat = canRequest ? $('<input type="radio" name="feat_{0}_{1}" value="request">'.format(otype, featName)) : $('<span></span>');
         this.dcFeat = $('<input type="radio" name="feat_{0}_{1}" value="dontcare">'.format(otype, featName));
         this.dontShowFeat = canDisplayGrammar ? $('<input type="radio" name="feat_{0}_{1}" value="dontshowfeat">'.format(otype, featName)) : $('<span></span>');
+        this.showQere = canShowQere ? $('<input type="radio" name="feat_{0}_{1}" value="showqere">'.format(otype, featName)) : $('<span></span>');
         this.feat = $('<span>{0}</span>'.format(lab));
         switch (select) {
             case ButtonSelection.SHOW:
@@ -1464,10 +1484,16 @@ var ButtonsAndLabel = (function () {
             case ButtonSelection.DONT_SHOW:
                 this.dontShowFeat.prop('checked', true);
                 break;
+            case ButtonSelection.SHOW_QERE:
+                this.showQere.prop('checked', true);
+                break;
         }
         if (useDropDown) {
             this.ddCheck = $('<input type="checkbox" name="dd_{0}_{1}">'.format(otype, featName));
             this.ddCheck.prop('checked', select != ButtonSelection.REQUEST);
+        }
+        else if (canShowQere) {
+            this.ddCheck = this.showQere; // Drop down and showQere share a position
         }
         else
             this.ddCheck = $('<span></span>'); // Empty space filler
@@ -1524,6 +1550,12 @@ var ButtonsAndLabel = (function () {
         else
             return false;
     };
+    ButtonsAndLabel.prototype.isSelected_showQere = function () {
+        if (this.canShowQere)
+            return this.showQere.prop('checked');
+        else
+            return false;
+    };
     ButtonsAndLabel.prototype.isSelected_ddCheck = function () {
         if (this.useDropDown)
             return this.ddCheck.prop('checked');
@@ -1543,7 +1575,7 @@ var PanelForOneOtype = (function () {
         this.panel.append('<tr><th>{0}</th><th>{1}</th><th>{2}</th><th>{3}</th><th>{4}</th><th class="leftalign">{5}</th></tr>'
             .format(localize('show'), localize('request'), localize('dont_care'), localize('dont_show'), localize('multiple_choice'), localize('feature')));
         // First set up "visual" pseudo feature
-        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, configuration.objHasSurface === otype && !!getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql, true, configuration.objHasSurface === otype, false);
+        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, configuration.objHasSurface === otype && !!getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql, true, configuration.objHasSurface === otype, false, false);
         this.panel.append(this.visualBAL.getRow());
         // Now handle genuine features
         var hasSurfaceFeature = otype === configuration.objHasSurface;
@@ -1569,16 +1601,21 @@ var PanelForOneOtype = (function () {
                 ignoreShow = true;
                 ignoreRequest = true;
             }
-            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, key2), key2, otype, useSavedFeatures ? ptqf.getSelector(key2) : ButtonSelection.DONT_CARE, !!getFeatureSetting(otype, key2).alternateshowrequestSql, !ignoreShow, !ignoreRequest, sg !== null && sg.containsFeature(key2));
+            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, key2), key2, otype, useSavedFeatures ? ptqf.getSelector(key2) : ButtonSelection.DONT_CARE, !!getFeatureSetting(otype, key2).alternateshowrequestSql, !ignoreShow, !ignoreRequest, sg !== null && sg.containsFeature(key2), false);
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }
         this.panel.append('<tr><td colspan="5"></td><td class="leftalign">&nbsp;</tr>');
-        this.panel.append('<tr><td colspan="5"></td><td class="leftalign"><b>' + localize('other_sentence_unit_types') + '</b></tr>');
+        this.panel.append('<tr><td colspan="2"></td><th>{0}</th><th>{1}</th><th>{2}</th><th class="leftalign">{3}</th></tr>'
+            .format(localize('dont_care'), localize('dont_show'), localize('show_qere'), localize('other_sentence_unit_types')));
         // Generate buttons for other types:
-        for (var otherOtype in configuration.objectSettings) {
+        for (var level in configuration.sentencegrammar) {
+            var leveli = +level;
+            if (isNaN(leveli))
+                continue; // Not numeric
+            var otherOtype = configuration.sentencegrammar[leveli].objType;
             if (otherOtype !== otype && configuration.objectSettings[otherOtype].mayselect) {
-                var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), 'otherOtype_' + otherOtype, otype, useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, false, false, false, true);
+                var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), 'otherOtype_' + otherOtype, otype, useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, false, false, false, true, otype_has_qere(otherOtype));
                 this.allBAL.push(bal);
                 this.panel.append(bal.getRow());
             }
@@ -1633,10 +1670,16 @@ var PanelTemplQuizFeatures = (function () {
         return ButtonSelection.DONT_CARE;
     };
     PanelTemplQuizFeatures.prototype.getObjectSelector = function (otype) {
-        if (this.initialQf && this.initialQf.dontShowObjects)
-            for (var i = 0; i < this.initialQf.dontShowObjects.length; ++i)
-                if (this.initialQf.dontShowObjects[i] === otype)
-                    return ButtonSelection.DONT_SHOW;
+        if (this.initialQf && this.initialQf.dontShowObjects) {
+            for (var i = 0; i < this.initialQf.dontShowObjects.length; ++i) {
+                if (this.initialQf.dontShowObjects[i].content === otype) {
+                    if (this.initialQf.dontShowObjects[i].show)
+                        return ButtonSelection.SHOW_QERE;
+                    else
+                        return ButtonSelection.DONT_SHOW;
+                }
+            }
+        }
         return ButtonSelection.DONT_CARE;
     };
     PanelTemplQuizFeatures.prototype.noRequestFeatures = function () {
@@ -1681,9 +1724,12 @@ var PanelTemplQuizFeatures = (function () {
             else if (bal.isSelected_dontShowFeat()) {
                 var fn = bal.getFeatName();
                 if (fn.substring(0, 11) === 'otherOtype_')
-                    qf.dontShowObjects.push(fn.substring(11));
+                    qf.dontShowObjects.push({ content: fn.substring(11) });
                 else
                     qf.dontShowFeatures.push(fn);
+            }
+            else if (bal.isSelected_showQere()) {
+                qf.dontShowObjects.push({ content: qere_otype(), show: qere_feature() });
             }
         }
         return qf;
@@ -1710,7 +1756,8 @@ var PanelTemplQuizFeatures = (function () {
                 return true;
             }
         for (var i = 0; i < qfnow.dontShowObjects.length; ++i)
-            if (qfnow.dontShowObjects[i] !== this.initialQf.dontShowObjects[i]) {
+            if (qfnow.dontShowObjects[i].content !== this.initialQf.dontShowObjects[i].content ||
+                qfnow.dontShowObjects[i].show !== this.initialQf.dontShowObjects[i].show) {
                 return true;
             }
         return false;

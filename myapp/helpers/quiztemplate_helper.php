@@ -126,16 +126,13 @@ class Template extends XmlHandler {
     function close_handler(&$handlers, $tagname) {
         switch ($tagname) {
           case 'path':
-          case 'sentenceselection':
-          case 'quizobjectselection':
-          case 'quizfeatures':
           case 'desc':
           case 'database':
           case 'properties':
           case 'maylocate':
                 // Ignore
                 break;
-
+                
           case 'questiontemplate':
                 if ($this->sentenceSelection->useForQo && !isset($this->quizObjectSelection))
                     $this->quizObjectSelection = clone $this->sentenceSelection;
@@ -1095,7 +1092,7 @@ class QereFeatureHandler extends FeatureHandler {
      */
 	public function __toString() {
         if ($this->omit)
-            return "($this->name<>'' OR g_word_translit='HÎʔ')";
+            return "($this->name='' AND g_word_translit<>'HÎʔ')";
         else
             return '';
 	}
@@ -1323,9 +1320,13 @@ class QuizFeatures extends XmlHandler {
         foreach ($quizfeatures->dontShowFeatures as $s)
 			$res .= sprintf("%4s<dontshow>%s</dontshow>\n", ' ', htmlspecialchars($s));
 
-        foreach ($quizfeatures->dontShowObjects as $s)
-			$res .= sprintf("%4s<dontshowobject>%s</dontshowobject>\n", ' ', htmlspecialchars($s));
-
+        foreach ($quizfeatures->dontShowObjects as $s) {
+            if (isset($s->show))
+                $res .= sprintf("%4s<dontshowobject show=\"%s\">%s</dontshowobject>\n", ' ', htmlspecialchars($s->show), htmlspecialchars($s->content));
+            else
+                $res .= sprintf("%4s<dontshowobject>%s</dontshowobject>\n", ' ', htmlspecialchars($s->content));
+        }
+        
 		$res .= sprintf("%2s</quizfeatures>\n", ' ');
 
         return $res;
@@ -1361,6 +1362,7 @@ class QuizFeatures extends XmlHandler {
           case 'dontshowobject':
                 $this->setthis = &$this->dontShowObjects;
                 $this->setthis_type = SetThisType::PUSH;
+                $this->setthis_attribs = $attributes;
                 break;
 
           default:

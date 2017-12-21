@@ -269,7 +269,7 @@ class QereFeatureHandler extends FeatureHandler {
 
     public toMql() : string {
         if (this.omit)
-            return "(" + this.name + "<>'' OR g_word_translit='HÎʔ')";
+            return "(" + this.name + "='' AND g_word_translit<>'HÎʔ')";
         else
             return '';
     }
@@ -720,7 +720,7 @@ class PanelTemplMql {
                         butOmitqere.prop('checked',true);
 
                     var sel : JQuery = $('<span></span>');
-                    sel.append(butOmitqere, 'OMIT QERE');
+                    sel.append(butOmitqere, localize('omit_qere'));
                     group.append(sel);
 
                     sel.click(qfh, (e : JQueryEventObject) => {

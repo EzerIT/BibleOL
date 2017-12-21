@@ -493,6 +493,7 @@ table.featuretable {
 }
 table.featuretable th,
 table.featuretable td {
+  text-align: center;
   padding-left: 10px;
   padding-right: 10px;
 }
