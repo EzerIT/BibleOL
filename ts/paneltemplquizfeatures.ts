@@ -16,7 +16,7 @@ function database_has_qere() : boolean {
 }
 
 function otype_has_qere(otype : string) : boolean {
-    return database_has_qere() && otype==="word";
+    return otype==="word";
 }
 
 function qere_otype() : string {
@@ -239,7 +239,7 @@ class PanelForOneOtype  {
         this.panel.append('<tr><td colspan="2"></td><th>{0}</th><th>{1}</th><th>{2}</th><th class="leftalign">{3}</th></tr>'
                           .format(localize('dont_care'),
                                   localize('dont_show'),
-                                  localize('show_qere'),
+                                  database_has_qere() && !otype_has_qere(otype) ? localize('show_qere') : '',
                                   localize('other_sentence_unit_types')));
         
         // Generate buttons for other types:
@@ -257,7 +257,7 @@ class PanelForOneOtype  {
                                               false,
                                               false,
                                               true,
-                                              otype_has_qere(otherOtype));
+                                              database_has_qere() && otype_has_qere(otherOtype));
                 
                 this.allBAL.push(bal);
                 this.panel.append(bal.getRow());

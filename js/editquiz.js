@@ -1433,7 +1433,7 @@ function database_has_qere() {
     return configuration.databaseName === "ETCBC4";
 }
 function otype_has_qere(otype) {
-    return database_has_qere() && otype === "word";
+    return otype === "word";
 }
 function qere_otype() {
     return "word";
@@ -1607,7 +1607,7 @@ var PanelForOneOtype = (function () {
         }
         this.panel.append('<tr><td colspan="5"></td><td class="leftalign">&nbsp;</tr>');
         this.panel.append('<tr><td colspan="2"></td><th>{0}</th><th>{1}</th><th>{2}</th><th class="leftalign">{3}</th></tr>'
-            .format(localize('dont_care'), localize('dont_show'), localize('show_qere'), localize('other_sentence_unit_types')));
+            .format(localize('dont_care'), localize('dont_show'), database_has_qere() && !otype_has_qere(otype) ? localize('show_qere') : '', localize('other_sentence_unit_types')));
         // Generate buttons for other types:
         for (var level in configuration.sentencegrammar) {
             var leveli = +level;
@@ -1615,7 +1615,7 @@ var PanelForOneOtype = (function () {
                 continue; // Not numeric
             var otherOtype = configuration.sentencegrammar[leveli].objType;
             if (otherOtype !== otype && configuration.objectSettings[otherOtype].mayselect) {
-                var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), 'otherOtype_' + otherOtype, otype, useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, false, false, false, true, otype_has_qere(otherOtype));
+                var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), 'otherOtype_' + otherOtype, otype, useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, false, false, false, true, database_has_qere() && otype_has_qere(otherOtype));
                 this.allBAL.push(bal);
                 this.panel.append(bal.getRow());
             }
