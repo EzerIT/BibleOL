@@ -192,6 +192,10 @@ $comment['show_border'] = "";
 $format['show_border'] = "";
 $use_textarea['show_border'] = false;
 
+$comment['show_qere'] = "";
+$format['show_qere'] = "";
+$use_textarea['show_qere'] = false;
+
 $comment['stop_practicing'] = "";
 $format['stop_practicing'] = "";
 $use_textarea['stop_practicing'] = false;
