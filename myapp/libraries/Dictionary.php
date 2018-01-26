@@ -121,7 +121,7 @@ class Dictionary {
                     }
                 }
                 else
-                    $this->indirectLookupCache[$key] = '';
+                    $this->indirectLookupCache[$key] = '*';
             }
         }
 

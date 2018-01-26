@@ -67,11 +67,11 @@
                     "sqlargs": [ "language", "lex", "vs" ],
                     "multiple": false
                 },
-                "danish": {
+                "spanish": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
                     "indirdb": "mysql",
-                    "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_da da ON da.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
+                    "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_es es ON es.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
                     "sqlargs": [ "language", "lex", "vs" ],
                     "multiple": false
                 },
@@ -639,7 +639,7 @@
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "danish"
+                            "name": "spanish"
                         },
                         {
                             "mytype": "GrammarFeature",

@@ -23,18 +23,17 @@ class Mod_translate extends CI_Model {
         $this->lang->load('users', $this->language);
 
         $this->if_langs = array('en' => $this->lang->line('english'),
-                                'da' => $this->lang->line('danish'),
                                 'pt' => $this->lang->line('portuguese'),
                                 'es' => $this->lang->line('spanish'),
                                 'zh-simp' => $this->lang->line('simp_chinese'),
                                 'zh-trad' => $this->lang->line('trad_chinese'));
 
         $this->lexicon_langs = array('heb' => array('en' => $this->lang->line('english'),
-                                                    'da' => $this->lang->line('danish'),
-                                                    'de' => $this->lang->line('german')),
+                                                    'de' => $this->lang->line('german'),
+                                                    'es' => $this->lang->line('spanish')),
                                      'aram' => array('en' => $this->lang->line('english'),
-                                                     'da' => $this->lang->line('danish'),
-                                                     'de' => $this->lang->line('german')),
+                                                     'de' => $this->lang->line('german'),
+                                                     'es' => $this->lang->line('spanish')),
                                      'greek' => array('en' => $this->lang->line('english')));
     }
 
@@ -823,6 +822,7 @@ class Mod_translate extends CI_Model {
                             ->get("lexicon_{$src_language}");
 
                         $row = $query->row();
+                        assert(!is_null($row));
                         $toinsert[] = array('lex_id' => $row->id,
                                             'gloss' => $record[$hix]);
                     }
@@ -847,6 +847,7 @@ class Mod_translate extends CI_Model {
             }
         }
 
-        $this->db->insert_batch("lexicon_{$src_language}_{$dst_lang}", $toinsert);
+        if (!empty($toinsert))
+            $this->db->insert_batch("lexicon_{$src_language}_{$dst_lang}", $toinsert);
     } 
   }
