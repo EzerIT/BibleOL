@@ -16,7 +16,7 @@ $comment['close_button'] = "";
 $format['close_button'] = "";
 $use_textarea['close_button'] = false;
 
-$comment['date_time_format'] = "Format specification available at <a target=\"_blank\" href=\"http://php.net/manual/en/function.date.php\">http://php.net/manual/en/function.date.php</a>";
+$comment['date_time_format'] = "Format specification available at http://php.net/manual/en/function.date.php";
 $format['date_time_format'] = "";
 $use_textarea['date_time_format'] = false;
 

@@ -24,6 +24,7 @@ class Mod_translate extends CI_Model {
 
         $this->if_langs = array('en' => $this->lang->line('english'),
                                 'da' => $this->lang->line('danish'),
+                                'de' => $this->lang->line('german'),
                                 'pt' => $this->lang->line('portuguese'),
                                 'es' => $this->lang->line('spanish'),
                                 'zh-simp' => $this->lang->line('simp_chinese'),
