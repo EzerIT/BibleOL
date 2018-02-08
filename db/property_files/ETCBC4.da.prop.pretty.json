@@ -10,6 +10,8 @@
             "english": "Engelsk",
             "german": "Tysk",
             "glossurl": "Link",
+            "g_lex_utf8": "Ordstamme",
+            "g_lex_cons_utf8": "Ordstamme (kun konsonanter)",
             "g_nme_utf8": "Nominel endelse",
             "g_nme_cons_utf8": "Nominel endelse (kun konsonanter)",
             "g_pfm_utf8": "Præformativ",

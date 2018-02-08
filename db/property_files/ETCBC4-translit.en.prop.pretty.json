@@ -10,6 +10,7 @@
             "english": "English",
             "german": "German",
             "glossurl": "Link",
+            "g_lex_translit": "Lexical stem",
             "g_nme_translit": "Nominal ending",
             "g_pfm_translit": "Preformative",
             "g_prs_translit": "Pronominal suffix",

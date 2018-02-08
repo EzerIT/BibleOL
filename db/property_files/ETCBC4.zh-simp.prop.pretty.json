@@ -10,6 +10,8 @@
             "english": "英文",
             "german": "德文",
             "glossurl": "链结",
+            "g_lex_utf8": "Lexical stem",
+            "g_lex_cons_utf8": "Lexical stem (consonants only)",
             "g_nme_utf8": "名词后缀",
             "g_nme_cons_utf8": "名词后缀字母",
             "g_pfm_utf8": "前缀",

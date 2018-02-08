@@ -95,10 +95,12 @@
                     "ignoreShowRequest": true
                 },
                 "g_lex_cons_utf8": {
-                    "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "foreignText": true
                 },
                 "g_lex_utf8": {
+                    "foreignText": true
+                },
+                "g_lex_translit": {
                     "ignoreSelect": true,
                     "ignoreShowRequest": true
                 },
@@ -587,6 +589,10 @@
                     "mytype": "GrammarGroup",
                     "name": "form_in_text",
                     "items": [
+                        {
+                            "mytype": "GrammarFeature",
+                            "name": "g_lex_utf8"
+                        },
                         {
                             "mytype": "GrammarFeature",
                             "name": "g_vbs_utf8"

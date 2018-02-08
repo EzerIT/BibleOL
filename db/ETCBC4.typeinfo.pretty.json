@@ -22,6 +22,7 @@
             "lexeme_count": "integer",
             "lexeme_occurrences": "integer",
             "number": "integer",
+            "g_lex_translit": "string",
             "distributional_parent": "id_d",
             "functional_parent": "id_d",
             "self": "id_d",

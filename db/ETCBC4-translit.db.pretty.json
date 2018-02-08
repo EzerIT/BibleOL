@@ -102,6 +102,9 @@
                     "ignoreSelect": true,
                     "ignoreShowRequest": true
                 },
+                "g_lex_translit": {
+                    "foreignText": true
+                },
                 "g_nme": {
                     "ignoreSelect": true,
                     "ignoreShowRequest": true
@@ -586,6 +589,10 @@
                     "mytype": "GrammarGroup",
                     "name": "form_in_text",
                     "items": [
+                        {
+                            "mytype": "GrammarFeature",
+                            "name": "g_lex_translit"
+                        },
                         {
                             "mytype": "GrammarFeature",
                             "name": "g_vbs_translit"

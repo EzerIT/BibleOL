@@ -10,6 +10,8 @@
             "english": "Inglês",
             "german": "Alemão",
             "glossurl": "Link",
+            "g_lex_utf8": "Lexical stem",
+            "g_lex_cons_utf8": "Lexical stem (apenas consoantes)",
             "g_nme_utf8": "Final Nominal",
             "g_nme_cons_utf8": "Final Nominal (apenas consoantes)",
             "g_pfm_utf8": "Preformativo",

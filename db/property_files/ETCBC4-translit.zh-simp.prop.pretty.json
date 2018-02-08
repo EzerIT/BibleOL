@@ -10,6 +10,7 @@
             "english": "英文",
             "german": "德文",
             "glossurl": "链结",
+            "g_lex_translit": "Lexical stem",
             "g_nme_translit": "名词后缀",
             "g_pfm_translit": "前缀",
             "g_prs_translit": "代词后缀",
