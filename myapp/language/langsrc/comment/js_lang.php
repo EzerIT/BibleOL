@@ -92,6 +92,10 @@ $comment['import_shebanq'] = "";
 $format['import_shebanq'] = "";
 $use_textarea['import_shebanq'] = false;
 
+$comment['item_number'] = "";
+$format['item_number'] = "";
+$use_textarea['item_number'] = false;
+
 $comment['low_value_prompt'] = "";
 $format['low_value_prompt'] = "";
 $use_textarea['low_value_prompt'] = false;

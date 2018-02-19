@@ -152,7 +152,7 @@ class PanelQuestion {
         var colcount = 0;
 
         if (dontShow) {
-            $('#quiztabhead').append('<th>Item number</th>');
+            $('#quiztabhead').append('<th>' + localize('item_number') + '</th>');
             this.question_stat.show_feat.names.push('item_number');
             ++colcount;
         }

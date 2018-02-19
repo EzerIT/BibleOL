@@ -23,6 +23,7 @@ $lang['friendly_featsel_prompt'] = "Friendly feature selector:";
 $lang['go_on'] = "Go on!";
 $lang['high_value_prompt'] = "High value:";
 $lang['import_shebanq'] = "Import from SHEBANQ";
+$lang['item_number'] = "Item number";
 $lang['low_value_prompt'] = "Low value:";
 $lang['missing_filename'] = "Missing filename";
 $lang['mql_featsel_prompt'] = "MQL feature selector:";

@@ -23,6 +23,7 @@ $lang['friendly_featsel_prompt'] = "Venligt attributvalg:";
 $lang['go_on'] = "Fortsæt!";
 $lang['high_value_prompt'] = "Øvre værdi";
 $lang['import_shebanq'] = "Importér fra SHEBANQ";
+$lang['item_number'] = "Nummer";
 $lang['low_value_prompt'] = "Nedre værdi";
 $lang['missing_filename'] = "Filnavn mangler";
 $lang['mql_featsel_prompt'] = "Attributvalg som MQL:";
