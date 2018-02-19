@@ -65,7 +65,7 @@ class Ctrl_pic2db extends CI_Controller {
 	public function index() {
         $this->tmpfname = tempnam(sys_get_temp_dir(), 'resource');
 
-        $ch = curl_init("http://resources.3bmoodle.dk/jsonrefs.php");
+        $ch = curl_init("https://resources.3bmoodle.dk/jsonrefs.php");
 		$fp = fopen($this->tmpfname.'a', "w");
 
 		curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -79,7 +79,7 @@ class Ctrl_pic2db extends CI_Controller {
         $data = file_get_contents($this->tmpfname.'a');
         $biblerefs = json_decode($data);
 
-        $ch = curl_init("http://resources.3bmoodle.dk/jsonurls.php");
+        $ch = curl_init("https://resources.3bmoodle.dk/jsonurls.php");
 		$fp = fopen($this->tmpfname.'b', "w");
 
 		curl_setopt($ch, CURLOPT_FILE, $fp);
