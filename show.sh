@@ -11,7 +11,7 @@ header "Executed quizzes"
 mysql -t $1 -e "select * from $2sta_quiz where userid=$3"
 
 header "Quiz files"
-mysql -t $1 -e "select id,userid,pathname,dbname,dbpropname,qoname from $2sta_quiztemplate where userid=$3"
+mysql -E $1 -e "select id,userid,pathname,dbname,dbpropname,qoname from $2sta_quiztemplate where userid=$3"
 
 header "Passages"
 mysql -t $1 -e "select * from $2sta_universe where userid=$3" 
