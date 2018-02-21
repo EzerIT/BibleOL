@@ -51,7 +51,7 @@ class Mod_translate extends CI_Model {
         return $this->lexicon_langs;
     }
 
-    public function get_if_lines_part(string $lang_edit, string $lang_show, string $textgroup, integer $limit, integer $offset, string $orderby, string $sortorder) {
+    public function get_if_lines_part(string $lang_edit, string $lang_show, string $textgroup, int $limit, int $offset, string $orderby, string $sortorder) {
         $query = $this->db->select("c.symbolic_name, comment, c.use_textarea, s.text text_show, e.text text_edit")
             ->from('language_comment c')
             ->join("language_$lang_show s", "s.symbolic_name=c.symbolic_name AND s.textgroup=c.textgroup",'left')
@@ -353,7 +353,7 @@ class Mod_translate extends CI_Model {
         return array(array(), $l10n['universe']['reference']);
     }
 
-    public function get_frequent_glosses(string $src_lang, string $lang_edit, string $lang_show, integer $gloss_count) {
+    public function get_frequent_glosses(string $src_lang, string $lang_edit, string $lang_show, int $gloss_count) {
         switch ($src_lang) {
           case 'heb':
           case 'aram':
@@ -612,7 +612,7 @@ class Mod_translate extends CI_Model {
         }
     }
 
-    private function lex_common(string $src_lang, string__OR__null &$src_language, array__OR__null &$header_array) {
+    private function lex_common(string $src_lang, string &$src_language, array &$header_array) {
         // Creates $header_array as an array of arrays, where the first value is the Emdros name for
         // a verbal stem (or null), and the second value is the English heading for a column in the
         // CSV file

@@ -21,7 +21,7 @@ class Mod_classes extends CI_Model {
     }
 
     // $classid==-1 means create new class
-    public function get_class_by_id(integer $classid) {
+    public function get_class_by_id(int $classid) {
         if ($classid===-1) {
             // Create new class
             $cl = new stdClass();
@@ -84,7 +84,7 @@ class Mod_classes extends CI_Model {
         return $query;
     }
 
-    public function delete_class(integer $classid) {
+    public function delete_class(int $classid) {
         $this->db->where('id', $classid)->delete('class');
         if ($this->db->affected_rows()==0)
             throw new DataException($this->lang->line('illegal_class_id'));
@@ -93,7 +93,7 @@ class Mod_classes extends CI_Model {
         $this->db->where('classid', $classid)->delete('classexercise');
     }
 
-    public function chown_class(integer $classid, integer $userid) {
+    public function chown_class(int $classid, int $userid) {
         $query = $this->db->where("`id`=$userid AND (`isteacher`=1 OR `isadmin`=1)",null,false)->get('user');
         if ($row = $query->row())
             // User exists and is a teacher

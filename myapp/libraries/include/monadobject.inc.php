@@ -19,7 +19,7 @@ abstract class MonadObject {
     /// Creates a MonadObject.
     /// @param $mo Emdros data about this text component.
     /// @param $has_children True if creating a MultipleMonadObject, false if creating a SingleMonadObject.
-    public function __construct(OlMatchedObject $mo, boolean $has_children) {
+    public function __construct(OlMatchedObject $mo, bool $has_children) {
         $this->mo = $mo;
         if ($has_children) {
             $this->children = array();
@@ -111,7 +111,7 @@ class SingleMonadObject extends MonadObject {
 
     /// Adds book name, chapter number, or verse number information about this word.
     /// @param $x The book name, chapter number, or verse number.
-    public function add_bcv(string__OR__integer $x) {
+    public function add_bcv($x) {
         $this->bcv[] = $x;
         // This only works for Bible references:
         if (count($this->bcv)==3) {
@@ -132,7 +132,7 @@ class SingleMonadObject extends MonadObject {
     /// book, chapter, or verse of the previous word.
     /// @param $b True if the book, chapter, or verse of this word is the same as the
     /// book, chapter, or verse of the previous word.
-    public function add_sameAsPrev(boolean $b) {
+    public function add_sameAsPrev(bool $b) {
         $this->sameAsPrev[] = $b;
     }
 
@@ -140,20 +140,20 @@ class SingleMonadObject extends MonadObject {
     /// book, chapter, or verse of the next word.
     /// @param $b True if the book, chapter, or verse of this word is the same as the
     /// book, chapter, or verse of the next word.
-    public function add_sameAsNext(boolean $b) {
+    public function add_sameAsNext(bool $b) {
         $this->sameAsNext[] = $b;
     }
 
     /// Sets information about the pictures in the resource database that are relevant for the verse containing this word.
     /// @param $p An array whose 0th element is the book number, the 1st element is the chapter, the 2nd element is the verse,
     /// and the remaining elements are picture numbers.
-    public function set_pics(array__OR__null $p) {
+    public function set_pics(array $p=null) {
         $this->pics = $p;
     }
 
     /// Sets information about the URLs from the resource database that are relevant for the verse containing this word.
     /// @param $u An array whose elements are arrays with two members: The URL and the URL type.
-    public function set_urls(array__OR__null $u) {
+    public function set_urls(array $u=null) {
         $this->urls = $u;
     }
 

@@ -418,7 +418,7 @@ class OlMatchedObject {
     /// Constructs an OlMatchedObject object.
     /// @param $id_d The Emdros ID_D of the matched object.
     /// @param $name The name of the type of the matched object.
-    public function __construct(integer $id_d, string $name) {
+    public function __construct(int $id_d, string $name) {
         $this->id_d = $id_d;
         $this->name = $name;
     }
@@ -431,7 +431,7 @@ class OlMatchedObject {
 
     /// Sets the subordinate sheaf.
     /// @param $shf OlSheaf to set.
-    public function set_sheaf(OlSheaf__OR__null $shf) {
+    public function set_sheaf(OlSheaf $shf=null) {
         $this->sheaf = $shf;
     }
 
@@ -455,7 +455,7 @@ class OlMatchedObject {
 
     /// Sets the features for this matched object.
     /// @param $f An associative array of name=>value pairs for the features of this matched object.
-    public function set_features(array__OR__null $f) {
+    public function set_features(array $f=null) {
         if (is_null($f))
             $this->features = null;
         else {

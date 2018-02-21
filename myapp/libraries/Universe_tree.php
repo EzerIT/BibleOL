@@ -10,7 +10,7 @@ class Node {
     private $ident;
 
     // No type on $name, as it can be both a string (book name) or an integer (chapter number)
-    public function __construct($name, OlMonadSet $ms, integer $hier_level, boolean $is_leaf, string $ident) {
+    public function __construct($name, OlMonadSet $ms, int $hier_level, bool $is_leaf, string $ident) {
         if ($hier_level<1 || $hier_level>count(Universe_tree::$CI->db_config->dbinfo->universeHierarchy))
             $this->data = "$name"; // Must be string
         else {
@@ -126,7 +126,7 @@ class Universe_tree {
     }
 
 
-    public function expand_level(integer $rangelow, integer $rangehigh, $ref, integer $lev) {
+    public function expand_level(int $rangelow, int $rangehigh, $ref, int $lev) {
         $res = array();
         $ms = new OlMonadSet();
         $ms->addOne($rangelow, $rangehigh);

@@ -176,7 +176,7 @@ class MqlData extends XmlHandler {
 	 * XML writer interface
 	 ************************************************************************************************/
 
-	static public function writeAsXml($selection, string $element, boolean $isSentenceSelector) {
+	static public function writeAsXml($selection, string $element, bool $isSentenceSelector) {
 		$res = sprintf("%2s<%s version=\"%d\">\n", ' ', $element, self::classVersion);
 
 		$res .= sprintf("%4s<questionobject>%s</questionobject>\n", ' ', htmlspecialchars($selection->object));

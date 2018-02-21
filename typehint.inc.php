@@ -19,15 +19,10 @@ function _error_handler($severity, $message, $filepath, $line)
             // $match[4] is the required type
             // $match[6] is the provided type
 
-            if ($match[4] == $match[6]) 
+            if ($match[4]==$match[6] ||
+                ($match[4]=='int' && $match[6]=='integer') ||
+                ($match[4]=='bool' && $match[6]=='boolean'))
                 return; // This was not an error
-
-            // Multiple type choices: $match[4] is xxx__OR__yyy__OR__zzz where xxx, yyy and zzz are the allowed types
-            
-            $allowed_types = explode('__OR__', $match[4]);
-            foreach ($allowed_types as $at)
-                if ($at == $match[6])
-                    return; // This was not an error
         }
     } 
 

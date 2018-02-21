@@ -5,7 +5,7 @@ define('BUTTONS_PER_LINE', 8);
 global $editing_glob;
 $editing_glob = $editing;
 
-function button_type(integer $index, integer__OR__null $button_index) {
+function button_type(int $index, int $button_index=0) {
     return $index===$button_index ? "btn-info" : "btn-default";
 }
 
@@ -28,7 +28,7 @@ function show_buttons(string $head,
                       array $get_parms,
                       array $button_array,
                       string $style,
-                      integer $gloss_count) {
+                      int $gloss_count) {
     $CI =& get_instance();
 
     $right_to_left = in_array($get_parms['src_lang'], array('heb','aram'));

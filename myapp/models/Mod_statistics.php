@@ -38,7 +38,7 @@ class Mod_statistics extends CI_Model {
      * @param qoName The quiz object used in the quiz.
      * @return The ID of the quiz template in the database. -1 if the database is unusable.
      */
-    public function newQuizTemplate(integer $userid, string $quizFile, string $fileContent, string $dbName, string $dbProp, string $qoName) {
+    public function newQuizTemplate(int $userid, string $quizFile, string $fileContent, string $dbName, string $dbProp, string $qoName) {
         $hash = self::hashCode($fileContent);
 
         $query = $this->db->where('pathname',$quizFile)->where('quizcodehash',$hash)->where('userid',$userid)->get('sta_quiztemplate');
@@ -63,7 +63,7 @@ class Mod_statistics extends CI_Model {
      * @param universeStrings The universe used for this quiz.
      * @return The ID of the quiz in the database. -1 if the database is unusable.
      */
-    public function startQuiz(integer $userid, integer $templid, array $universeStrings) {
+    public function startQuiz(int $userid, int $templid, array $universeStrings) {
         $this->db->insert('sta_quiz', array('templid' => $templid,
                                             'userid' => $userid,
                                             'start' => time(), // UNIX time
@@ -182,7 +182,7 @@ class Mod_statistics extends CI_Model {
     }
 
     // Get all templates with finished quizzes for user $user_id
-    public function allTemplates(integer $user_id) {
+    public function allTemplates(int $user_id) {
         $query = $this->db->select('sta_quiztemplate.id AS qtid,pathname,dbname,dbpropname,qoname')
             ->from('sta_quiz')->join('sta_quiztemplate','sta_quiztemplate.id=sta_quiz.templid')
             ->where('sta_quiz.valid',1)->where('sta_quiz.userid',$user_id)->where('sta_quiz.end IS NOT NULL')
@@ -190,7 +190,7 @@ class Mod_statistics extends CI_Model {
         return $query->result();
     }
 
-    public function allQuizzes(integer $qtid) {
+    public function allQuizzes(int $qtid) {
         $query = $this->db->select('sta_quiz.id, FROM_UNIXTIME(`start`) Time, '
                                    . '`end`-`start` Duration,'
                                    . 'sum(correct) Correct, sum(1-correct) Wrong ', false)
@@ -203,7 +203,7 @@ class Mod_statistics extends CI_Model {
     }
 
 
-    public function allReqFeatures(integer $qtid) {
+    public function allReqFeatures(int $qtid) {
         $query = $this->db->select('sta_quiz.id,name,value,count(*) cnt')
             ->from('sta_quiz')
             ->join('sta_question','sta_quiz.id=sta_question.quizid')
@@ -231,7 +231,7 @@ class Mod_statistics extends CI_Model {
     }
     
     // Get all templates relating to $classid with finished quizzes for users in $userids
-    public function get_templates_for_class_and_students(integer $classid, array $userids) {
+    public function get_templates_for_class_and_students(int $classid, array $userids) {
         if (empty($userids))
             return array();
         
@@ -275,7 +275,7 @@ class Mod_statistics extends CI_Model {
     }
 
     // Get all pathnames of templates relating to $classid
-    public function get_pathnames_for_class(integer $classid) {
+    public function get_pathnames_for_class(int $classid) {
         // Find all pathids relating to $classid
         $query = $this->db
             ->select('pathname')
@@ -321,7 +321,7 @@ class Mod_statistics extends CI_Model {
         return $classes;
     }
 
-    public function may_see_nongraded(integer $student, string $exercise) {
+    public function may_see_nongraded(int $student, string $exercise) {
         if ($this->mod_users->my_id()==$student)
             return true;
 
@@ -349,7 +349,7 @@ class Mod_statistics extends CI_Model {
         return $templs;
     }
 
-    public function get_templids_for_pathname_and_user(string $path, integer $userid) {
+    public function get_templids_for_pathname_and_user(string $path, int $userid) {
         $query = $this->db
             ->select('id')
             ->where('pathname',"$this->quizzespath/$path.3et")
@@ -385,7 +385,7 @@ class Mod_statistics extends CI_Model {
     }
 
     // Gets data grouped by day. The index will be noon on the relevant day
-    public function get_score_by_date_user_templ(integer $uid,array $templids,integer $period_start,integer $period_end, boolean $nongraded) {
+    public function get_score_by_date_user_templ(int $uid,array $templids,int $period_start,int $period_end, bool $nongraded) {
         if (empty($templids))
             return array();
         
@@ -430,7 +430,7 @@ class Mod_statistics extends CI_Model {
         return $perdate;
     }
     
-    public function get_features_by_date_user_templ(integer $uid,array $templids,integer $period_start,integer $period_end, boolean $nongraded) {
+    public function get_features_by_date_user_templ(int $uid,array $templids,int $period_start,int $period_end, bool $nongraded) {
         if (empty($templids))
             return array();
         
@@ -456,7 +456,7 @@ class Mod_statistics extends CI_Model {
         return $query->result();
     }
     
-    public function get_quizzes_duration(array $templids, integer $start, integer $end) {
+    public function get_quizzes_duration(array $templids, int $start, int $end) {
         if (empty($templids))
             return array();
         
@@ -474,7 +474,7 @@ class Mod_statistics extends CI_Model {
     
     /** Removes the content from the database.
      */
-    public function purge(integer $userid) {
+    public function purge(int $userid) {
         $this->db->where('userid',$userid)->where('valid',1)->update('sta_quiz',array('valid' => 0));
     }
 

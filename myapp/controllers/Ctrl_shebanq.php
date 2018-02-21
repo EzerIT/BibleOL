@@ -62,7 +62,7 @@ class Ctrl_shebanq extends MY_Controller {
     }
     
 
-    private function decode_mql(string__OR__null $request, shebanq_reply $reply) {
+    private function decode_mql(string $request=null, shebanq_reply $reply) {
         if ($request) {
             // Strip comments
             $txt = preg_replace('|//.*$|m', '', $request);

@@ -16,7 +16,7 @@ class Mod_quizpath extends CI_Model {
         $this->lang->load('file_manager', $this->language);
     }
 
-    public function init(string $path, boolean $must_be_dir, boolean $check_access, $must_exist = true) {
+    public function init(string $path, bool $must_be_dir, bool $check_access, $must_exist = true) {
         $path = rtrim($path, '/');
 
         $this->quizpath = realpath('quizzes');
@@ -64,7 +64,7 @@ class Mod_quizpath extends CI_Model {
     }
 
     
-    public function dirlist(boolean $doing_test) {
+    public function dirlist(bool $doing_test) {
         $this->load->helper('directory');
         $d = directory_map($this->canonical_absolute, 2); // A value of 2 allows us to recognize empty directories
 
@@ -177,7 +177,7 @@ class Mod_quizpath extends CI_Model {
     // Sets owner ID of a file, unless it already has an owner
     // If $filename==null, assume that $this is a file object
     // If $filename!=null, assume that $this is a directory object containing the file
-    public function set_owner(integer $owner, string $filename=null) {
+    public function set_owner(int $owner, string $filename=null) {
         if (is_null($filename)) {
             assert(is_file($this->canonical_absolute));
             $pathname = $this->canonical_relative;
@@ -254,7 +254,7 @@ class Mod_quizpath extends CI_Model {
     }
 
     // $path is absolute
-    private function abs2rel(string $path, boolean $must_exist) {
+    private function abs2rel(string $path, bool $must_exist) {
         $real_path = realpath($path);
         if (!$real_path) {
             if ($must_exist)
@@ -275,7 +275,7 @@ class Mod_quizpath extends CI_Model {
     }
 
     // $path is relative
-    private function rel2abs(string $path, boolean $must_exist) {
+    private function rel2abs(string $path, bool $must_exist) {
         $real_path = realpath("quizzes/$path");
         if ($real_path)
             return $real_path;
@@ -333,7 +333,7 @@ class Mod_quizpath extends CI_Model {
         }
     }
 
-    public function chown_files(array $files, integer $userid) {
+    public function chown_files(array $files, int $userid) {
         $query = $this->db->where("`id`=$userid AND (`isteacher`=1 OR `isadmin`=1)",null,false)->get('user');
         if ($row = $query->row()) {
             // User exists and is a teacher

@@ -103,7 +103,7 @@ class MY_Lang extends CI_Lang {
 	}
 
     
-    private function load_from_db(array__OR__string $langfile, string $idiom, boolean $return, boolean $add_suffix /*ignored*/, string $alt_path /*ignored*/)
+    private function load_from_db($langfile, string $idiom, bool $return, bool $add_suffix /*ignored*/, string $alt_path /*ignored*/)
     {
         if ($idiom==='english')
             $idiom = 'en';

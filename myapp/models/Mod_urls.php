@@ -408,7 +408,7 @@ class Mod_urls extends CI_Model {
         return $result;
     }
 
-    public function get_frequent_glosses(string $language, integer $gloss_count) {
+    public function get_frequent_glosses(string $language, int $gloss_count) {
         $query = $this->db->from("lexicon_{$language} he")->join("lexicon_{$language}_en en",'en.lex_id=he.id')
             ->order_by('tally','DESC')
             ->limit(2*$gloss_count)
@@ -479,7 +479,7 @@ class Mod_urls extends CI_Model {
     }
 
 
-    public function set_heb_url(integer $id, string $link, string $icon) {
+    public function set_heb_url(int $id, string $link, string $icon) {
         $this->db->where('id',$id)->update('heb_urls',array('url' => $link,
                                                             'icon' => $icon));
     }
@@ -491,7 +491,7 @@ class Mod_urls extends CI_Model {
                                            'icon' => $icon));
     }
 
-    public function delete_heb_url(integer $id) {
+    public function delete_heb_url(int $id) {
         $this->db->where('id',$id)->delete('heb_urls');
     }
   }

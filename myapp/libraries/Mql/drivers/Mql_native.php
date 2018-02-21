@@ -83,7 +83,7 @@ class Mql_native extends CI_Driver {
         return $crop;
     }
 
-    private function makeSheaf(Sheaf__OR__FlatSheaf__OR__null $emdrosSheaf) {
+    private function makeSheaf(/* Sheaf OR FlatSheaf OR null */ $emdrosSheaf) {
         if (is_null($emdrosSheaf))
             return null;
 
@@ -97,7 +97,7 @@ class Mql_native extends CI_Driver {
     }
 
 
-    private function makeStraw(Straw__OR__FlatStraw $emdrosStraw) {
+    private function makeStraw(/* Straw OR FlatStraw */ $emdrosStraw) {
         $str = new OlStraw(null,null);
 
         $sci = $emdrosStraw->const_iterator();

@@ -8,7 +8,7 @@ class Mod_userclass extends CI_Model {
         // No need to load database here; it has been loaded by mod_users which is always loaded together with this class
     }
 
-    public function get_users_in_class(integer $classid) {
+    public function get_users_in_class(int $classid) {
         $query = $this->db->select('userid')->where('classid',$classid)->get('userclass');
         $res = array();
         foreach ($query->result() as $row)
@@ -17,7 +17,7 @@ class Mod_userclass extends CI_Model {
         return $res;
     }
 
-    public function get_named_users_in_class(integer $classid) {
+    public function get_named_users_in_class(int $classid) {
         $query = $this->db
             ->select("userid,IF(family_name_first,CONCAT(last_name,first_name),CONCAT(first_name,' ',last_name)) name")
             ->join('user','user.id=userclass.userid')
@@ -27,7 +27,7 @@ class Mod_userclass extends CI_Model {
         return $query->result();
     }
 
-    public function update_users_in_class(integer $classid, array $old_userids, array $new_userids) {
+    public function update_users_in_class(int $classid, array $old_userids, array $new_userids) {
         // Insert new users
         foreach ($new_userids as $newid) {
             if (in_array($newid, $old_userids))
@@ -45,7 +45,7 @@ class Mod_userclass extends CI_Model {
         }
     }
 
-    public function get_classes_for_user(integer $userid) {
+    public function get_classes_for_user(int $userid) {
         $query = $this->db->select('classid')->where('userid',$userid)->get('userclass');
         $res = array();
         foreach ($query->result() as $row)
@@ -54,7 +54,7 @@ class Mod_userclass extends CI_Model {
         return $res;
     }
 
-    public function get_classes_and_access_for_user(integer $userid) {
+    public function get_classes_and_access_for_user(int $userid) {
         $query = $this->db->select('classid,access')->where('userid',$userid)->get('userclass');
         $res = array();
         foreach ($query->result() as $row)
@@ -64,7 +64,7 @@ class Mod_userclass extends CI_Model {
     }
 
     
-    public function update_classes_for_user(integer $userid, array $old_classes, array $new_classes, array $owned_classes) {
+    public function update_classes_for_user(int $userid, array $old_classes, array $new_classes, array $owned_classes) {
         // Insert new classes
         foreach ($new_classes as $newid) {
             if (in_array($newid, $old_classes) || !in_array($newid, $owned_classes))
@@ -90,14 +90,14 @@ class Mod_userclass extends CI_Model {
         $this->db->where(array('userid' => $userid, 'classid' => $classid))->delete('userclass');
     }
 
-    public function change_access(integer $userid, integer $classid, integer $grant) {
+    public function change_access(int $userid, int $classid, int $grant) {
         $this->db
             ->where('userid', $userid)
             ->where('classid', $classid)
             ->update('userclass', array('access' => $grant));
     }
 
-    public function gave_access(integer $student, array $classes) {
+    public function gave_access(int $student, array $classes) {
         $query = $this->db
             ->select('MAX(access) granted')
             ->where('userid',$student)

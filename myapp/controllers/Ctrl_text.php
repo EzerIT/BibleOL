@@ -217,7 +217,7 @@ class Ctrl_text extends MY_Controller {
     }
 
     // Common code for show_quiz() and show_quiz_sel()
-	private function show_quiz_common(string $quiz, integer $number_of_quizzes, array $universe = null) {
+	private function show_quiz_common(string $quiz, int $number_of_quizzes, array $universe = null) {
         try {
             // MODEL:
             $this->load->model('mod_quizpath');

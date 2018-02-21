@@ -93,7 +93,7 @@ class TypeInfo {
     //    new TypeInfo(null); -- Generates new typeinfo from contents of database
     //    new TypeInfo('jsonstring');    -- Genereates typeinfo from contents of JSON string
 
-    function __construct(string__OR__null $typeinfo) {
+    function __construct(string $typeinfo=null) {
         if (!$typeinfo) {
             // Construct from MQL
             $CI =& get_instance();

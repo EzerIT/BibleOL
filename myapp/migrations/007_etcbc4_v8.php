@@ -273,8 +273,8 @@ class Migration_Etcbc4_v8 extends CI_Migration {
             $this->replace_stem_in_lexicon($r[0],$r[1],$r[2]);
     }
 
-    private function add_in_lexicon(string $lex, string $stem, string $voclex, integer $tally,
-                                    string $book, integer $chap, integer $verse,
+    private function add_in_lexicon(string $lex, string $stem, string $voclex, int $tally,
+                                    string $book, int $chap, int $verse,
                                     string $english, string $german) {
         $this->db->insert('lexicon_Hebrew',
                           array(
@@ -311,9 +311,9 @@ class Migration_Etcbc4_v8 extends CI_Migration {
     }
 
     private function copy_stem_in_lexicon(string $lex, string $oldstem,
-                                          string $oldbook, integer $oldchap, integer $oldverse,
+                                          string $oldbook, int $oldchap, int $oldverse,
                                           string $newstem,
-                                          string $newbook, integer $newchap, integer $newverse) {
+                                          string $newbook, int $newchap, int $newverse) {
         $query = $this->db->where('lex',$lex)->where('vs',$oldstem)->get('lexicon_Hebrew');
         if ($query->num_rows()!=1) {
             echo "ERROR: Lex $lex stem $oldstem is not in lexicon_Hebrew\n";

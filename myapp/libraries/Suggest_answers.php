@@ -18,7 +18,7 @@ class Suggest_answers {
      */
 
     static public function findSuggestions(string $database, string $sqlCommand, string $param1, /*TODO: More than one param?*/
-                                    string $correct, integer $lower_limit, integer $upper_limit) {
+                                    string $correct, int $lower_limit, int $upper_limit) {
 
         if (empty($correct))
             $correct = '-';

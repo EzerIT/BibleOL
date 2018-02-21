@@ -175,7 +175,7 @@ class Quiz_data {
 		$this->nextCandidate = 0;
 	}
 	
-	public function getNextCandidate(integer $request_number) {
+	public function getNextCandidate(int $request_number) {
         assert('isset($this->mainSheaf)');
 
         if ($request_number > $this->numberOfCandidates-$this->nextCandidate)

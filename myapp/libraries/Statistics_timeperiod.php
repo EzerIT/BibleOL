@@ -42,38 +42,38 @@ class Statistics_timeperiod {
         return date_create("@$unixtime")->format('W');
     }
 
-    public static function format_date(integer $unixtime) {
+    public static function format_date(int $unixtime) {
         return date_create("@$unixtime")->format('Y-m-d');
     }
 
-    public static function format_day(integer $unixtime) {
+    public static function format_day(int $unixtime) {
         return date_create("@$unixtime")->format('d');
     }
 
     // Only used for debugging
-    public static function format_time(integer $unixtime) {
+    public static function format_time(int $unixtime) {
         return date_create("@$unixtime")->format('Y-m-d H:i:s');
     }
 
-    public static function last_midnight(integer $unixtime) {
+    public static function last_midnight(int $unixtime) {
         return (int)($unixtime / self::SECS_PER_DAY) * self::SECS_PER_DAY;
     }
 
-    public static function next_midnight(integer $unixtime) {
+    public static function next_midnight(int $unixtime) {
         return self::last_midnight($unixtime + self::SECS_PER_DAY);
     }
 
     
-    public static function round_to_noon(integer $unixtime) {
+    public static function round_to_noon(int $unixtime) {
         return self::last_midnight($unixtime) + self::SECS_PER_DAY/2;
     }
 
-    public static function last_monday(integer $unixtime) {
+    public static function last_monday(int $unixtime) {
         $weekno = (int)(($unixtime-self::WEEK_EPOCH_OFFSET) / self::SECS_PER_WEEK);
         return $weekno*self::SECS_PER_WEEK + self::WEEK_EPOCH_OFFSET;
     }
 
-    public static function next_monday(integer $unixtime) {
+    public static function next_monday(int $unixtime) {
         return self::last_monday($unixtime + self::SECS_PER_WEEK);
     }
 

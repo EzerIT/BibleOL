@@ -94,7 +94,7 @@ class Mod_users extends CI_Model {
         return make_full_name($this->me);
     }
 
-    public function user_full_name(integer $uid) {
+    public function user_full_name(int $uid) {
         $query = $this->db->select('first_name,last_name,family_name_first')->where('id',$uid)->get('user');
         $user = $query->row();
         if (!$user)
@@ -115,7 +115,7 @@ class Mod_users extends CI_Model {
         return $this->me->id > 0 && !$this->accepted_current_policy();
     }
 
-    public function is_me(integer $user_id) {
+    public function is_me(int $user_id) {
         return $user_id==$this->me->id;
     }
 
@@ -193,7 +193,7 @@ class Mod_users extends CI_Model {
         return $query->result();
     }
 
-    public function get_all_users_part(integer $limit, integer $offset, string $orderby, string $sortorder) {
+    public function get_all_users_part(int $limit, int $offset, string $orderby, string $sortorder) {
         $query = $this->db->order_by($orderby,$sortorder)->get('user',$limit,$offset);
         return $query->result();
     }
@@ -211,7 +211,7 @@ class Mod_users extends CI_Model {
     }
 
     // $userid==-1 means create new user
-    public function get_user_by_id(integer $userid) {
+    public function get_user_by_id(int $userid) {
         if ($userid===-1) {
             // Create new user
             $user = make_dummy_user();
@@ -282,7 +282,7 @@ class Mod_users extends CI_Model {
     }
 
     
-    public function delete_user(integer $userid) {
+    public function delete_user(int $userid) {
         $this->db->where('id', $userid)->delete('user');
         if ($this->db->affected_rows()==0)
             throw new DataException($this->lang->line('illegal_user_id'));
@@ -297,7 +297,7 @@ class Mod_users extends CI_Model {
 
 
     /// @return True if this is the first time this user logs in.
-    public function new_oauth2_user(string $authority, string $oauth2_user_id, string $first_name, string $last_name, boolean $family_name_first, string__OR__null $email) {
+    public function new_oauth2_user(string $authority, string $oauth2_user_id, string $first_name, string $last_name, bool $family_name_first, string $email==null) {
         switch ($authority) {
           case 'google':
                 $username = "ggl_$oauth2_user_id";
@@ -347,7 +347,7 @@ class Mod_users extends CI_Model {
     }
 
     // Delete accounts older than $time seconds where the user has never logged in
-    public function delete_new_inactive(integer $time) {
+    public function delete_new_inactive(int $time) {
         $now = time();
         $query = $this->db->where('last_login',0)->where('created_time >',0)->where('created_time <',$now-$time)
             ->get('user');
@@ -362,7 +362,7 @@ class Mod_users extends CI_Model {
     // Handle accounts where the user has not logged in for the last $time seconds
     // $level==0 means: Delete user
     // $level!=0 means: Set warning_sent to $level
-    public function old_inactive(integer $level, integer $time) {
+    public function old_inactive(int $level, int $time) {
         $now = time();
         if ($level==0) {
             $query = $this->db->where('last_login <',$now-$time)->where('last_login >',0)
@@ -396,7 +396,7 @@ class Mod_users extends CI_Model {
     // Returns true if accept code is correct, otherwise returns null.
     // If $set_me is true, this function sets $this->me and updates the database.
     // $policy_lang is not used if $set_me==false
-    public function verify_accept_code(string $acc_code, string $policy_lang, boolean $set_me) {
+    public function verify_accept_code(string $acc_code, string $policy_lang, bool $set_me) {
         if ($this->me->acc_code==$acc_code && time()-$this->me->acc_code_time < self::ACCEPT_CODE_EXPIRY) {
             if ($set_me) {
                 $this->me->accept_policy = time();

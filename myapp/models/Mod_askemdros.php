@@ -61,7 +61,7 @@ class Mod_askemdros extends CI_Model {
         return $ms;
     }
         
-    public function getMonadsAtLevel(OlMonadSet $ms, integer $hier_level) {
+    public function getMonadsAtLevel(OlMonadSet $ms, int $hier_level) {
         $hier = $this->db_config->dbinfo->universeHierarchy[$hier_level];
 
         $emdros_data = $this->mql->exec("SELECT ALL OBJECTS IN $ms WHERE [$hier->type GET $hier->feat] GOqxqxqx");
@@ -238,7 +238,7 @@ class Mod_askemdros extends CI_Model {
     }
 
 
-    public function show_quiz(integer $number_of_quizzes, array $use_selection = null) {
+    public function show_quiz(int $number_of_quizzes, array $use_selection = null) {
         try {
             $this->load->library('db_config');
 
@@ -371,7 +371,7 @@ class Mod_askemdros extends CI_Model {
 
     // TODO: This works only for references containing book, chapter and verse range
     // $vfrom==0 means use entire chapter
-    private function find_monads(string $book, integer $chapter, integer $vfrom, integer $vto) {
+    private function find_monads(string $book, int $chapter, int $vfrom, int $vto) {
         if ($vfrom==0)
             // Fetch entire chapter
             $emdros_data = $this->mql->exec("SELECT ALL OBJECTS WHERE [chapter book=$book AND chapter=$chapter] GOqxqxqx");
@@ -392,7 +392,7 @@ class Mod_askemdros extends CI_Model {
         return $mset;
     }
 
-    public function show_text(string $db, string $book, integer $chapter, integer $vfrom, integer $vto, boolean $showIcons) {
+    public function show_text(string $db, string $book, int $chapter, int $vfrom, int $vto, bool $showIcons) {
         try {
             $this->setup($db,$db);
 
@@ -418,7 +418,7 @@ class Mod_askemdros extends CI_Model {
     }
 
 
-    public function shebanq_link(string $db, string $book, integer $chapter) {
+    public function shebanq_link(string $db, string $book, int $chapter) {
         if ($db==='ETCBC4' || $db==='ETCBC4-translit')
             return "http://shebanq.ancient-data.org/hebrew/text?book=$book&amp;chapter=$chapter&mr=m";
         else
