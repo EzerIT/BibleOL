@@ -35,7 +35,7 @@
       <?php foreach($databases as $db): ?>
       <select name="book_<?= $db['name'] ?>">
         <?php foreach($db['order'] as $book_name): ?>
-        <option value="<?= $book_name[0] ?>" data-chaps="<?= @$book_name[1] ?>" <?= set_select('book_'.$db['name'], $book_name[0]) ?>><?= $db['loc_books']->$book_name[0] ?></option>
+        <option value="<?= $book_name[0] ?>" data-chaps="<?= @$book_name[1] ?>" <?= set_select('book_'.$db['name'], $book_name[0]) ?>><?= $db['loc_books']->{$book_name[0]} ?></option>
         <?php endforeach; ?>
       </select>
       <?php endforeach; ?>

@@ -123,8 +123,8 @@ class Ctrl_shebanq extends MY_Controller {
             $data = json_decode($json_data);
 
             if ($data->good) {
-                if (isset($data->data->versions->$_GET['version']))
-                    $this->decode_mql($data->data->versions->$_GET['version']->mql, $sh_reply);
+                if (isset($data->data->versions->{$_GET['version']}))
+                    $this->decode_mql($data->data->versions->{$_GET['version']}->mql, $sh_reply);
                 else
                     throw new DataException(sprintf($this->lang->line('version_does_not_exist'), $_GET['version']));
             }

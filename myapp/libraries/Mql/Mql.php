@@ -21,7 +21,7 @@ class Mql extends CI_Driver_Library {
 
     function __construct(array $params) {
         $this->emdros_db = $params['db'];
-        $this->driver = $this->$params['driver']; // Loads driver object
+        $this->driver = $this->{$params['driver']}; // Loads driver object
         $this->driver->init(); // This cannot be done in the driver's constructor because it has no
                                // parameters and doesn't know its parent
     }

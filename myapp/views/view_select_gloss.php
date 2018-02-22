@@ -5,7 +5,7 @@ define('BUTTONS_PER_LINE', 8);
 global $editing_glob;
 $editing_glob = $editing;
 
-function button_type(int $index, int $button_index=0) {
+function button_type(int $index, int $button_index) {
     return $index===$button_index ? "btn-info" : "btn-default";
 }
 

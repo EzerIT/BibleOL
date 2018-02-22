@@ -297,7 +297,7 @@ class Mod_users extends CI_Model {
 
 
     /// @return True if this is the first time this user logs in.
-    public function new_oauth2_user(string $authority, string $oauth2_user_id, string $first_name, string $last_name, bool $family_name_first, string $email==null) {
+    public function new_oauth2_user(string $authority, string $oauth2_user_id, string $first_name, string $last_name, bool $family_name_first, string $email=null) {
         switch ($authority) {
           case 'google':
                 $username = "ggl_$oauth2_user_id";
