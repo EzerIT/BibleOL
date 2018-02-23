@@ -1,6 +1,9 @@
 <?php
 
-require_once('/usr/local/lib/emdros/EmdrosPHP.php');
+if (version_compare(PHP_VERSION, '7.0', '>='))
+    require_once('/usr/local/lib/emdros/EmdrosPHP7.php');
+else
+    require_once('/usr/local/lib/emdros/EmdrosPHP.php');
 
 class Mql_native extends CI_Driver {
     private $emdros_env;
