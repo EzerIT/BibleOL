@@ -100,7 +100,7 @@ class Ctrl_oauth2 extends MY_Controller {
                                   'client_id' => $this->config->item('facebook_client_id'),
                                   'client_secret' => $this->config->item('facebook_client_secret'),
                                   'redirect_uri' => site_url('/oauth2/facebook_callback'));
-                    $url = 'https://graph.facebook.com/v2.4/oauth/access_token?' . http_build_query($data);
+                    $url = 'https://graph.facebook.com/v2.12/oauth/access_token?' . http_build_query($data);
  
                     $options = array(
                         'http' => array(
@@ -132,7 +132,7 @@ class Ctrl_oauth2 extends MY_Controller {
                                                                  $access_info->access_token, 
                                                                  $this->config->item('facebook_client_secret')),
                                   'fields' => 'id,first_name,last_name,email,name,name_format');
-                    $url = 'https://graph.facebook.com/v2.4/me?' . http_build_query($data);
+                    $url = 'https://graph.facebook.com/v2.12/me?' . http_build_query($data);
                     break;
             }
 
