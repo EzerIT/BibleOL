@@ -491,21 +491,21 @@
                 "NA": "Indicates 'Not applicable'",
                 "p2": "Abbrev. of 2nd person",
                 "p3": "Abbrev. of 3rd person",
-		"unknown": "",
+                "unknown": "",
                 "absent": ""
             },
             "suffix_gender": {
                 "f": "Abbrev. of feminine",
                 "m": "Abbrev. of masculine",
                 "NA": "Indicates 'Not applicable'",
-		"unknown": "",
+                "unknown": "",
                 "absent": ""
             },
             "suffix_number": {
                 "NA": "Indicates 'Not applicable'",
                 "pl": "Abbrev. of plural",
                 "sg": "Abbrev. of singular",
-		"unknown": "",
+                "unknown": "",
                 "absent": ""
             }
         }

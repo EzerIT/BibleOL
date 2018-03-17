@@ -30,7 +30,7 @@
             "g_word_nocant_utf8": "Texto (sin signos de cantilación)",
             "g_voc_lex_cons_utf8": "Lexema (sólo consonantes)",
             "g_voc_lex_utf8": "Lexema",
-            "g_voc_lex_utf8_variant": "Lexema (with variant)",
+            "g_voc_lex_utf8_variant": "Lexema (con variante)",
             "g_voc_lex_translit": "Lexema (transliterado)",
             "language": "Lenguaje",
             "ls": "Conjunto lexical",
@@ -496,21 +496,21 @@
                 "NA": "-",
                 "p2": "2",
                 "p3": "3",
-		"unknown": "-",
+                "unknown": "-",
                 "absent": "-"
             },
             "suffix_gender": {
                 "f": "F",
                 "m": "M",
                 "NA": "-",
-		"unknown": "-",
+                "unknown": "-",
                 "absent": "-"
             },
             "suffix_number": {
                 "NA": "-",
                 "pl": "Pl",
                 "sg": "Sg",
-		"unknown": "-",
+                "unknown": "-",
                 "absent": "-"
             }
         }

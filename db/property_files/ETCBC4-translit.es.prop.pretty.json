@@ -491,21 +491,21 @@
                 "NA": "-",
                 "p2": "2",
                 "p3": "3",
-		"unknown": "-",
+                "unknown": "-",
                 "absent": "-"
             },
             "suffix_gender": {
                 "f": "F",
                 "m": "M",
                 "NA": "-",
-		"unknown": "-",
+                "unknown": "-",
                 "absent": "-"
             },
             "suffix_number": {
                 "NA": "-",
                 "pl": "Pl",
                 "sg": "Sg",
-		"unknown": "-",
+                "unknown": "-",
                 "absent": "-"
             }
         }
