@@ -51,6 +51,14 @@
                     "ignoreSelect": true,
                     "ignoreShowRequest": true
                 },
+                "hint": {
+                    "ignoreSelect": true,
+                    "ignoreRequest": true,
+                    "indirdb": "ETCBC4-hints.db",
+                    "sql_command": "SELECT hint FROM hints WHERE self='%1$s'",
+                    "sqlargs": [ "self" ],
+                    "multiple": false
+                },
                 "english": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",

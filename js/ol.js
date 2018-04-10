@@ -1509,7 +1509,27 @@ var PanelQuestion = (function () {
                     alert('Unexpected (1) featType==null in panelquestion.ts; sf="' + sf + '"');
                 if (sf === 'visual')
                     featType = 'string';
-                if (featType !== 'string' && featType !== 'ascii' && featType !== 'integer') {
+                if (featType == 'hint') {
+                    // The feature value looks like this:
+                    // "featurename=value" or "featurename=value,featurename=value"
+                    var sp = val.split(/[,=]/);
+                    if (sp.length == 2) {
+                        val = getFeatureFriendlyName(oType, sp[0]) + "=" +
+                            getFeatureValueFriendlyName(featuresHere[sp[0]], sp[1], false, true);
+                    }
+                    else if (sp.length == 4) {
+                        val = getFeatureFriendlyName(oType, sp[0])
+                            + "="
+                            + getFeatureValueFriendlyName(featuresHere[sp[0]], sp[1], false, true)
+                            + " "
+                            + getFeatureFriendlyName(oType, sp[2])
+                            + "="
+                            + getFeatureValueFriendlyName(featuresHere[sp[2]], sp[3], false, true);
+                    }
+                    else if (val === '*')
+                        val = '-';
+                }
+                else if (featType !== 'string' && featType !== 'ascii' && featType !== 'integer') {
                     // This is an enumeration feature type
                     // Replace val with the appropriate friendly name or "Other value"
                     if (featset.otherValues && featset.otherValues.indexOf(val) !== -1)

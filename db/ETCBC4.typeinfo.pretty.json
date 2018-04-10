@@ -15,6 +15,7 @@
     ],
     "obj2feat": {
         "word": {
+            "hint": "hint",
             "spanish": "string",
             "english": "string",
             "german": "string",

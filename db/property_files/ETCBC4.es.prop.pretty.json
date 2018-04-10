@@ -6,6 +6,7 @@
             "_objname": "Palabra",
             "lexeme_occurrences": "Ocurrencias",
             "frequency_rank": "Rango de frecuencia",
+            "hint": "Hint",
             "spanish": "Español",
             "english": "Inglés",
             "german": "Alemán",

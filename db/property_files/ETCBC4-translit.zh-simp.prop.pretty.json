@@ -6,6 +6,7 @@
             "_objname": "词",
             "lexeme_occurrences": "出现次数",
             "frequency_rank": "出现次数排名",
+            "hint": "Hint",
             "spanish": "Spanish",
             "english": "英文",
             "german": "德文",
