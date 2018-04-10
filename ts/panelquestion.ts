@@ -225,7 +225,7 @@ class PanelQuestion {
                         val = getFeatureFriendlyName(oType, sp[0])
                             + "="
                             + getFeatureValueFriendlyName(featuresHere[sp[0]],sp[1],false,true)
-                            + " "
+                            + ", "
                             + getFeatureFriendlyName(oType, sp[2])
                             + "="
                             + getFeatureValueFriendlyName(featuresHere[sp[2]],sp[3],false,true);

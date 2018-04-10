@@ -54,7 +54,7 @@
                 "hint": {
                     "ignoreSelect": true,
                     "ignoreRequest": true,
-                    "indirdb": "ETCBC4-hints.db",
+                    "indirdb": "ETCBC4_hints.db",
                     "sql_command": "SELECT hint FROM hints WHERE self='%1$s'",
                     "sqlargs": [ "self" ],
                     "multiple": false
