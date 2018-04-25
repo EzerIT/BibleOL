@@ -1,3 +1,13 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // -*- js -*-
 /// <reference path="jquery/jquery.d.ts" />
 function getObjectSetting(otype) {
@@ -20,7 +30,7 @@ function getFeatureSetting(otype, feature) {
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 /// @file
 /// @brief Characteristics of the current character set
-var Charset = (function () {
+var Charset = /** @class */ (function () {
     function Charset(cs) {
         switch (cs) {
             case 'hebrew':
@@ -52,13 +62,8 @@ var Charset = (function () {
         }
     }
     return Charset;
-})();
+}());
 // -*- js -*-
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 var WHAT;
 (function (WHAT) {
@@ -67,7 +72,7 @@ var WHAT;
     WHAT[WHAT["groupstart"] = 2] = "groupstart";
     WHAT[WHAT["groupend"] = 3] = "groupend";
 })(WHAT || (WHAT = {}));
-var GrammarGroup = (function () {
+var GrammarGroup = /** @class */ (function () {
     function GrammarGroup() {
     }
     GrammarGroup.prototype.getFeatName = function (objType, callback) {
@@ -102,8 +107,8 @@ var GrammarGroup = (function () {
         return false;
     };
     return GrammarGroup;
-})();
-var GrammarSubFeature = (function () {
+}());
+var GrammarSubFeature = /** @class */ (function () {
     function GrammarSubFeature() {
     }
     GrammarSubFeature.prototype.getFeatValPart = function (monob, objType) {
@@ -117,11 +122,11 @@ var GrammarSubFeature = (function () {
         return this.name === f;
     };
     return GrammarSubFeature;
-})();
-var SentenceGrammar = (function (_super) {
+}());
+var SentenceGrammar = /** @class */ (function (_super) {
     __extends(SentenceGrammar, _super);
     function SentenceGrammar() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     SentenceGrammar.prototype.getFeatName = function (objType, callback) {
         for (var i in this.items) {
@@ -151,8 +156,8 @@ var SentenceGrammar = (function (_super) {
         return false;
     };
     return SentenceGrammar;
-})(GrammarGroup);
-var GrammarMetaFeature = (function () {
+}(GrammarGroup));
+var GrammarMetaFeature = /** @class */ (function () {
     function GrammarMetaFeature() {
     }
     GrammarMetaFeature.prototype.getFeatName = function (objType, callback) {
@@ -181,8 +186,8 @@ var GrammarMetaFeature = (function () {
         return false;
     };
     return GrammarMetaFeature;
-})();
-var GrammarFeature = (function () {
+}());
+var GrammarFeature = /** @class */ (function () {
     function GrammarFeature() {
     }
     GrammarFeature.prototype.pseudoConstructor = function (objType) {
@@ -262,7 +267,7 @@ var GrammarFeature = (function () {
         return this.name === f;
     };
     return GrammarFeature;
-})();
+}());
 function getSentenceGrammarFor(oType) {
     for (var i = 0; i < configuration.sentencegrammar.length; ++i)
         if (configuration.sentencegrammar[i].objType === oType)
@@ -299,7 +304,7 @@ function addMethodsSgi(sgi, objType) {
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 function getObjectFriendlyName(otype) {
-    if (otype === 'Patriarch')
+    if (otype === 'Patriarch') // Shouldn't happen
         return otype;
     var fn = l10n.emdrosobject[otype]._objname;
     return fn ? fn : otype;
@@ -360,7 +365,7 @@ function localize(s) {
     var str = l10n_js[s];
     return str === undefined ? '??' + s + '??' : str;
 }
-var FeatureHandler = (function () {
+var FeatureHandler = /** @class */ (function () {
     function FeatureHandler(typ, key) {
         this.type = typ;
         this.name = key;
@@ -394,13 +399,14 @@ var FeatureHandler = (function () {
         return '';
     };
     return FeatureHandler;
-})();
-var StringFeatureHandler = (function (_super) {
+}());
+var StringFeatureHandler = /** @class */ (function (_super) {
     __extends(StringFeatureHandler, _super);
     function StringFeatureHandler(key) {
-        _super.call(this, 'stringfeature', key);
-        this.values = [];
-        this.normalize();
+        var _this = _super.call(this, 'stringfeature', key) || this;
+        _this.values = [];
+        _this.normalize();
+        return _this;
     }
     StringFeatureHandler.prototype.normalize = function () {
         while (this.values.length < 4)
@@ -429,13 +435,14 @@ var StringFeatureHandler = (function (_super) {
         return '(' + values.join(this.getJoiner()) + ')';
     };
     return StringFeatureHandler;
-})(FeatureHandler);
-var IntegerFeatureHandler = (function (_super) {
+}(FeatureHandler));
+var IntegerFeatureHandler = /** @class */ (function (_super) {
     __extends(IntegerFeatureHandler, _super);
     function IntegerFeatureHandler(key) {
-        _super.call(this, 'integerfeature', key);
-        this.values = [];
-        this.normalize();
+        var _this = _super.call(this, 'integerfeature', key) || this;
+        _this.values = [];
+        _this.normalize();
+        return _this;
     }
     IntegerFeatureHandler.prototype.normalize = function () {
         while (this.values.length < 4)
@@ -465,11 +472,11 @@ var IntegerFeatureHandler = (function (_super) {
                 + this.name + ' IN (' + values.join(',') + ')';
     };
     return IntegerFeatureHandler;
-})(FeatureHandler);
-var RangeIntegerFeatureHandler = (function (_super) {
+}(FeatureHandler));
+var RangeIntegerFeatureHandler = /** @class */ (function (_super) {
     __extends(RangeIntegerFeatureHandler, _super);
     function RangeIntegerFeatureHandler(key) {
-        _super.call(this, 'rangeintegerfeature', key);
+        return _super.call(this, 'rangeintegerfeature', key) || this;
     }
     RangeIntegerFeatureHandler.prototype.isSetLow = function () {
         return this.value_low !== null && this.value_low !== undefined;
@@ -495,12 +502,13 @@ var RangeIntegerFeatureHandler = (function (_super) {
         }
     };
     return RangeIntegerFeatureHandler;
-})(FeatureHandler);
-var EnumFeatureHandler = (function (_super) {
+}(FeatureHandler));
+var EnumFeatureHandler = /** @class */ (function (_super) {
     __extends(EnumFeatureHandler, _super);
     function EnumFeatureHandler(key) {
-        _super.call(this, 'enumfeature', key);
-        this.values = [];
+        var _this = _super.call(this, 'enumfeature', key) || this;
+        _this.values = [];
+        return _this;
     }
     EnumFeatureHandler.prototype.addValue = function (val) {
         this.values.push(val);
@@ -518,13 +526,14 @@ var EnumFeatureHandler = (function (_super) {
             + this.name + ' IN (' + this.values.join(',') + ')';
     };
     return EnumFeatureHandler;
-})(FeatureHandler);
-var EnumListFeatureHandler = (function (_super) {
+}(FeatureHandler));
+var EnumListFeatureHandler = /** @class */ (function (_super) {
     __extends(EnumListFeatureHandler, _super);
     function EnumListFeatureHandler(key) {
-        _super.call(this, 'enumlistfeature', key);
-        this.listvalues = [];
-        this.normalize();
+        var _this = _super.call(this, 'enumlistfeature', key) || this;
+        _this.listvalues = [];
+        _this.normalize();
+        return _this;
     }
     EnumListFeatureHandler.prototype.normalize = function () {
         while (this.listvalues.length < 4)
@@ -556,12 +565,13 @@ var EnumListFeatureHandler = (function (_super) {
             return '';
     };
     return EnumListFeatureHandler;
-})(FeatureHandler);
-var QereFeatureHandler = (function (_super) {
+}(FeatureHandler));
+var QereFeatureHandler = /** @class */ (function (_super) {
     __extends(QereFeatureHandler, _super);
     function QereFeatureHandler(key) {
-        _super.call(this, 'qerefeature', key);
-        this.omit = false;
+        var _this = _super.call(this, 'qerefeature', key) || this;
+        _this.omit = false;
+        return _this;
     }
     QereFeatureHandler.prototype.setValue = function (val) {
         this.omit = val;
@@ -576,8 +586,8 @@ var QereFeatureHandler = (function (_super) {
             return '';
     };
     return QereFeatureHandler;
-})(FeatureHandler);
-var ListValuesHandler = (function () {
+}(FeatureHandler));
+var ListValuesHandler = /** @class */ (function () {
     function ListValuesHandler() {
         this.type = 'listvalues';
         this.yes_values = [];
@@ -621,8 +631,8 @@ var ListValuesHandler = (function () {
         return '(' + stringValues.join(' AND ') + ')';
     };
     return ListValuesHandler;
-})();
-var PanelTemplMql = (function () {
+}());
+var PanelTemplMql = /** @class */ (function () {
     function PanelTemplMql(md, name_prefix) {
         var _this = this;
         this.featureCombo = $('<select></select>');
@@ -727,7 +737,7 @@ var PanelTemplMql = (function () {
         if (s.length === 0)
             e.data.ifh.removeValue(e.data.i);
         else {
-            if (s.match(/\D/g) !== null)
+            if (s.match(/\D/g) !== null) // Note: Rejects minus sign
                 $('#' + e.data.err_id).html(localize('not_integer'));
             else
                 e.data.ifh.setValue(e.data.i, +s);
@@ -740,7 +750,7 @@ var PanelTemplMql = (function () {
         if (s.length === 0)
             e.data.rfh[e.data.i] = null;
         else {
-            if (s.match(/\D/g) !== null)
+            if (s.match(/\D/g) !== null) // Note: Rejects minus sign
                 $('#' + e.data.err_id).html(localize('not_integer'));
             else
                 e.data.rfh[e.data.i] = +s;
@@ -780,7 +790,7 @@ var PanelTemplMql = (function () {
     PanelTemplMql.prototype.monitorChange = function (elem, sfh, i) {
         var _this = this;
         clearInterval(this.intervalHandler);
-        if (this.lastMonitored !== elem.attr('id')) {
+        if (this.lastMonitored !== elem.attr('id')) { // A new element has focus
             this.monitorOrigVal = elem.val();
             this.lastMonitored = elem.attr('id');
         }
@@ -1049,7 +1059,7 @@ var PanelTemplMql = (function () {
                 group.tabs();
                 this.handlers.push(elfh);
             }
-            else {
+            else { // valueType is an enum
                 var enumValues = typeinfo.enum2values[valueType];
                 if (!enumValues) {
                     console.log('Unknown valueType', valueType);
@@ -1200,27 +1210,26 @@ var PanelTemplMql = (function () {
         return res;
     };
     return PanelTemplMql;
-})();
+}());
 // -*- js -*-
 /* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-var PanelTemplSentenceSelector = (function (_super) {
+var PanelTemplSentenceSelector = /** @class */ (function (_super) {
     __extends(PanelTemplSentenceSelector, _super);
     /**
      * Constructor.
      */
     function PanelTemplSentenceSelector(md, ttabs, where, qoselTab, featureTab) {
-        var _this = this;
-        _super.call(this, md, 'sensel');
-        this.questObjTypeLab = $('<span>' + localize('sentence_unit_type_prompt') + '</span>');
-        this.featSelLab = $('<span>' + localize('feature_prompt') + '</span>');
-        this.importShebanq = $('<button type="button">' + localize('import_shebanq') + '</button>');
-        this.templTabs = ttabs;
-        this.dirty = false;
-        this.featureTab = featureTab;
-        this.qoselTab = qoselTab;
-        this.cbUseForQo = $('<input type="checkbox" name="useforqol">');
-        this.cbUseForQoLabel = $('<span>' + localize('use_for_qosel') + '</span>');
-        this.cbUseForQo.click(function () {
+        var _this = _super.call(this, md, 'sensel') || this;
+        _this.questObjTypeLab = $('<span>' + localize('sentence_unit_type_prompt') + '</span>');
+        _this.featSelLab = $('<span>' + localize('feature_prompt') + '</span>');
+        _this.importShebanq = $('<button type="button">' + localize('import_shebanq') + '</button>');
+        _this.templTabs = ttabs;
+        _this.dirty = false;
+        _this.featureTab = featureTab;
+        _this.qoselTab = qoselTab;
+        _this.cbUseForQo = $('<input type="checkbox" name="useforqol">');
+        _this.cbUseForQoLabel = $('<span>' + localize('use_for_qosel') + '</span>');
+        _this.cbUseForQo.click(function () {
             if (_this.cbUseForQo.is(':checked'))
                 _this.templTabs.tabs('disable', 3);
             else
@@ -1228,19 +1237,20 @@ var PanelTemplSentenceSelector = (function (_super) {
             _this.populateFeatureTab(null);
             _this.dirty = true;
         });
-        this.rbMqlLabel = $('<span>' + localize('mql_qosel_prompt') + '</span>');
-        this.rbFriendlyLabel = $('<span>' + localize('friendly_featsel_prompt') + '</span>');
-        this.doLayout(where);
-        if (this.initialMd == null || this.initialMd.useForQo) {
-            this.cbUseForQo.prop('checked', true);
-            this.templTabs.tabs('disable', 3);
+        _this.rbMqlLabel = $('<span>' + localize('mql_qosel_prompt') + '</span>');
+        _this.rbFriendlyLabel = $('<span>' + localize('friendly_featsel_prompt') + '</span>');
+        _this.doLayout(where);
+        if (_this.initialMd == null || _this.initialMd.useForQo) {
+            _this.cbUseForQo.prop('checked', true);
+            _this.templTabs.tabs('disable', 3);
         }
         else {
-            this.cbUseForQo.prop('checked', false);
-            this.templTabs.tabs('enable', 3);
+            _this.cbUseForQo.prop('checked', false);
+            _this.templTabs.tabs('enable', 3);
         }
-        this.importShebanq.click(import_from_shebanq);
-        this.finish_construct();
+        _this.importShebanq.click(import_from_shebanq);
+        _this.finish_construct();
+        return _this;
     }
     PanelTemplSentenceSelector.prototype.switchToMql = function (useMql) {
         this.mqlText.prop('disabled', !useMql);
@@ -1346,22 +1356,23 @@ var PanelTemplSentenceSelector = (function (_super) {
             this.qoselTab.populateFeatureTab(null);
     };
     return PanelTemplSentenceSelector;
-})(PanelTemplMql);
+}(PanelTemplMql));
 // -*- js -*-
 /* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-var PanelTemplQuizObjectSelector = (function (_super) {
+var PanelTemplQuizObjectSelector = /** @class */ (function (_super) {
     __extends(PanelTemplQuizObjectSelector, _super);
     /**
      * Constructor.
      */
     function PanelTemplQuizObjectSelector(md, where, featureTab) {
-        _super.call(this, md, 'qosel');
-        this.featSelLab = $('<span>' + localize('feature_prompt') + '</span>');
-        this.featureTab = featureTab;
-        this.rbMqlLabel = $('<span>' + localize('mql_featsel_prompt') + '</span>');
-        this.rbFriendlyLabel = $('<span>' + localize('friendly_featsel_prompt') + '</span>');
-        this.doLayout(where);
-        this.finish_construct();
+        var _this = _super.call(this, md, 'qosel') || this;
+        _this.featSelLab = $('<span>' + localize('feature_prompt') + '</span>');
+        _this.featureTab = featureTab;
+        _this.rbMqlLabel = $('<span>' + localize('mql_featsel_prompt') + '</span>');
+        _this.rbFriendlyLabel = $('<span>' + localize('friendly_featsel_prompt') + '</span>');
+        _this.doLayout(where);
+        _this.finish_construct();
+        return _this;
     }
     PanelTemplQuizObjectSelector.prototype.switchToMql = function (useMql) {
         this.mqlText.prop('disabled', !useMql);
@@ -1425,7 +1436,7 @@ var PanelTemplQuizObjectSelector = (function (_super) {
         this.featureTab.populate(otype);
     };
     return PanelTemplQuizObjectSelector;
-})(PanelTemplMql);
+}(PanelTemplMql));
 // -*- js -*-
 /* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 // Hand coded database dependency for qere detection
@@ -1455,7 +1466,7 @@ var ButtonSelection;
     ButtonSelection[ButtonSelection["SHOW_QERE"] = 5] = "SHOW_QERE";
 })(ButtonSelection || (ButtonSelection = {}));
 ;
-var ButtonsAndLabel = (function () {
+var ButtonsAndLabel = /** @class */ (function () {
     function ButtonsAndLabel(lab, featName, otype, select, useDropDown, canShow, canRequest, canDisplayGrammar, canShowQere) {
         var _this = this;
         this.featName = featName;
@@ -1566,8 +1577,8 @@ var ButtonsAndLabel = (function () {
         return this.featName;
     };
     return ButtonsAndLabel;
-})();
-var PanelForOneOtype = (function () {
+}());
+var PanelForOneOtype = /** @class */ (function () {
     function PanelForOneOtype(otype, ptqf) {
         this.allBAL = [];
         this.panel = $('<table class="striped featuretable"></table>');
@@ -1631,8 +1642,8 @@ var PanelForOneOtype = (function () {
         return this.panel;
     };
     return PanelForOneOtype;
-})();
-var PanelTemplQuizFeatures = (function () {
+}());
+var PanelTemplQuizFeatures = /** @class */ (function () {
     function PanelTemplQuizFeatures(otype, qf, where) {
         this.panels = []; // Maps quiz object -> associated panel
         this.fpan = $('<div id="fpan"></div>');
@@ -1673,7 +1684,7 @@ var PanelTemplQuizFeatures = (function () {
         if (this.initialQf && this.initialQf.dontShowObjects) {
             for (var i = 0; i < this.initialQf.dontShowObjects.length; ++i) {
                 if (this.initialQf.dontShowObjects[i].content === otype) {
-                    if (this.initialQf.dontShowObjects[i].show)
+                    if (this.initialQf.dontShowObjects[i].show) // We assume the feature to show is qere
                         return ButtonSelection.SHOW_QERE;
                     else
                         return ButtonSelection.DONT_SHOW;
@@ -1723,7 +1734,7 @@ var PanelTemplQuizFeatures = (function () {
                 qf.requestFeatures.push({ name: bal.getFeatName(), usedropdown: bal.isSelected_ddCheck() });
             else if (bal.isSelected_dontShowFeat()) {
                 var fn = bal.getFeatName();
-                if (fn.substring(0, 11) === 'otherOtype_')
+                if (fn.substring(0, 11) === 'otherOtype_') // 11 is the length of 'otherOtype_'
                     qf.dontShowObjects.push({ content: fn.substring(11) });
                 else
                     qf.dontShowFeatures.push(fn);
@@ -1763,7 +1774,7 @@ var PanelTemplQuizFeatures = (function () {
         return false;
     };
     return PanelTemplQuizFeatures;
-})();
+}());
 // -*- js -*-
 /* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 var VerbClassSelection;
@@ -1773,7 +1784,7 @@ var VerbClassSelection;
     VerbClassSelection[VerbClassSelection["DONT_CARE"] = 2] = "DONT_CARE";
 })(VerbClassSelection || (VerbClassSelection = {}));
 ;
-var VerbClassButtonsAndLabel = (function () {
+var VerbClassButtonsAndLabel = /** @class */ (function () {
     function VerbClassButtonsAndLabel(lab, name, dataName, select) {
         this.yes = $('<input type="radio" name="{0}" value="yes" data-name="{1}">'.format(name, dataName));
         this.no = $('<input type="radio" name="{0}" value="no" data-name="{1}">'.format(name, dataName));
@@ -1809,8 +1820,8 @@ var VerbClassButtonsAndLabel = (function () {
         return row;
     };
     return VerbClassButtonsAndLabel;
-})();
-var PanelForOneVcChoice = (function () {
+}());
+var PanelForOneVcChoice = /** @class */ (function () {
     function PanelForOneVcChoice(enumValues, valueType, prefix, lv) {
         this.allBAL = [];
         this.panel = $('<table class="striped featuretable"></table>');
@@ -1837,7 +1848,7 @@ var PanelForOneVcChoice = (function () {
         return this.panel;
     };
     return PanelForOneVcChoice;
-})();
+}());
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 /// @file
@@ -1847,7 +1858,7 @@ var PanelForOneVcChoice = (function () {
 /// sort index will be used when ordering objects. Objects of this class can also be constructed from
 /// strings without a sort index, in which case comparison reverts to lexical case-free comparison.
 /// @see #StringWithSort::compare
-var StringWithSort = (function () {
+var StringWithSort = /** @class */ (function () {
     /// Constructs a StringWithSort object with an internal name.
     /// @param s String with an optional sort index. This string may take the form "#X SSS" where X
     /// is a non-negative integer and SSS is the string proper; in this case X will be used as the
@@ -1903,9 +1914,9 @@ var StringWithSort = (function () {
             return sws1.sort < sws2.sort ? -1 : 1; // Note: No zero here because equality is handled above
     };
     return StringWithSort;
-})();
+}());
 // -*- js -*-
-var SortingCheckBox = (function () {
+var SortingCheckBox = /** @class */ (function () {
     /** Creates an initially unselected check box with text.
      * @param text The text to display, optionally starting with '#' followed by a sort index.
      * @see StringWithSort
@@ -1926,7 +1937,7 @@ var SortingCheckBox = (function () {
         return this.jq;
     };
     return SortingCheckBox;
-})();
+}());
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 String.prototype.format = function () {
@@ -1949,7 +1960,7 @@ var util;
     // A followerBox handles a checkbox that can either be set explicitly or implicitly. "Show border"
     // is an example of this. The user case request "Show border" explicitly by clicking its checkbox,
     // or implictly by choosing to display a feature.
-    var FollowerBox = (function () {
+    var FollowerBox = /** @class */ (function () {
         function FollowerBox(level, idstring) {
             this.level = level;
             this.idstring = idstring;
@@ -1981,12 +1992,12 @@ var util;
             }
         };
         return FollowerBox;
-    })();
+    }());
     util.FollowerBox = FollowerBox;
-    var BorderFollowerBox = (function (_super) {
+    var BorderFollowerBox = /** @class */ (function (_super) {
         __extends(BorderFollowerBox, _super);
         function BorderFollowerBox(level) {
-            _super.call(this, level, '#lev{0}_sb_cb'.format(level));
+            return _super.call(this, level, '#lev{0}_sb_cb'.format(level)) || this;
         }
         BorderFollowerBox.prototype.setit = function (val) {
             if (val) {
@@ -1999,12 +2010,12 @@ var util;
             }
         };
         return BorderFollowerBox;
-    })(FollowerBox);
+    }(FollowerBox));
     util.BorderFollowerBox = BorderFollowerBox;
-    var SeparateLinesFollowerBox = (function (_super) {
+    var SeparateLinesFollowerBox = /** @class */ (function (_super) {
         __extends(SeparateLinesFollowerBox, _super);
         function SeparateLinesFollowerBox(level) {
-            _super.call(this, level, '#lev{0}_seplin_cb'.format(level));
+            return _super.call(this, level, '#lev{0}_seplin_cb'.format(level)) || this;
         }
         SeparateLinesFollowerBox.prototype.setit = function (val) {
             var oldSepLin = val ? 'noseplin' : 'seplin';
@@ -2012,12 +2023,12 @@ var util;
             $('.notdummy.lev' + this.level).removeClass(oldSepLin).addClass(newSepLin);
         };
         return SeparateLinesFollowerBox;
-    })(FollowerBox);
+    }(FollowerBox));
     util.SeparateLinesFollowerBox = SeparateLinesFollowerBox;
-    var WordSpaceFollowerBox = (function (_super) {
+    var WordSpaceFollowerBox = /** @class */ (function (_super) {
         __extends(WordSpaceFollowerBox, _super);
         function WordSpaceFollowerBox(level) {
-            _super.call(this, level, '#ws_cb');
+            return _super.call(this, level, '#ws_cb') || this;
         }
         WordSpaceFollowerBox.prototype.implicit = function (val) {
             _super.prototype.implicit.call(this, val);
@@ -2044,7 +2055,7 @@ var util;
             }
         };
         return WordSpaceFollowerBox;
-    })(FollowerBox);
+    }(FollowerBox));
     util.WordSpaceFollowerBox = WordSpaceFollowerBox;
     function mydump(arr, level, maxlevel) {
         if (level === void 0) { level = 0; }
@@ -2074,13 +2085,13 @@ var util;
         return dumped_text;
     }
     util.mydump = mydump;
-    var Pair = (function () {
+    var Pair = /** @class */ (function () {
         function Pair(first, second) {
             this.first = first;
             this.second = second;
         }
         return Pair;
-    })();
+    }());
     util.Pair = Pair;
     var resetChain = [];
     function addToResetChain(fb) {
@@ -2094,7 +2105,7 @@ var util;
         }
     }
     util.resetCheckboxCounters = resetCheckboxCounters;
-    var AddBetween = (function () {
+    var AddBetween = /** @class */ (function () {
         function AddBetween(text) {
             this.text = text;
             this.first = true;
@@ -2111,7 +2122,7 @@ var util;
             this.first = true;
         };
         return AddBetween;
-    })();
+    }());
     util.AddBetween = AddBetween;
 })(util || (util = {}));
 // -*- js -*-

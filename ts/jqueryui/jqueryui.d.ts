@@ -1722,7 +1722,9 @@ interface JQuery {
     tabs(): JQuery;
     tabs(methodName: 'destroy'): void;
     tabs(methodName: 'disable'): void;
+    tabs(methodName: 'disable', no: number): void;
     tabs(methodName: 'enable'): void;
+    tabs(methodName: 'enable', no: number): void;
     tabs(methodName: 'load', index: number): void;
     tabs(methodName: 'refresh'): void;
     tabs(methodName: 'widget'): JQuery;

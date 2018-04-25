@@ -1,10 +1,15 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 String.prototype.format = function () {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function (match, num) {
@@ -25,7 +30,7 @@ var util;
     // A followerBox handles a checkbox that can either be set explicitly or implicitly. "Show border"
     // is an example of this. The user case request "Show border" explicitly by clicking its checkbox,
     // or implictly by choosing to display a feature.
-    var FollowerBox = (function () {
+    var FollowerBox = /** @class */ (function () {
         function FollowerBox(level, idstring) {
             this.level = level;
             this.idstring = idstring;
@@ -57,12 +62,12 @@ var util;
             }
         };
         return FollowerBox;
-    })();
+    }());
     util.FollowerBox = FollowerBox;
-    var BorderFollowerBox = (function (_super) {
+    var BorderFollowerBox = /** @class */ (function (_super) {
         __extends(BorderFollowerBox, _super);
         function BorderFollowerBox(level) {
-            _super.call(this, level, '#lev{0}_sb_cb'.format(level));
+            return _super.call(this, level, '#lev{0}_sb_cb'.format(level)) || this;
         }
         BorderFollowerBox.prototype.setit = function (val) {
             if (val) {
@@ -75,12 +80,12 @@ var util;
             }
         };
         return BorderFollowerBox;
-    })(FollowerBox);
+    }(FollowerBox));
     util.BorderFollowerBox = BorderFollowerBox;
-    var SeparateLinesFollowerBox = (function (_super) {
+    var SeparateLinesFollowerBox = /** @class */ (function (_super) {
         __extends(SeparateLinesFollowerBox, _super);
         function SeparateLinesFollowerBox(level) {
-            _super.call(this, level, '#lev{0}_seplin_cb'.format(level));
+            return _super.call(this, level, '#lev{0}_seplin_cb'.format(level)) || this;
         }
         SeparateLinesFollowerBox.prototype.setit = function (val) {
             var oldSepLin = val ? 'noseplin' : 'seplin';
@@ -88,12 +93,12 @@ var util;
             $('.notdummy.lev' + this.level).removeClass(oldSepLin).addClass(newSepLin);
         };
         return SeparateLinesFollowerBox;
-    })(FollowerBox);
+    }(FollowerBox));
     util.SeparateLinesFollowerBox = SeparateLinesFollowerBox;
-    var WordSpaceFollowerBox = (function (_super) {
+    var WordSpaceFollowerBox = /** @class */ (function (_super) {
         __extends(WordSpaceFollowerBox, _super);
         function WordSpaceFollowerBox(level) {
-            _super.call(this, level, '#ws_cb');
+            return _super.call(this, level, '#ws_cb') || this;
         }
         WordSpaceFollowerBox.prototype.implicit = function (val) {
             _super.prototype.implicit.call(this, val);
@@ -120,7 +125,7 @@ var util;
             }
         };
         return WordSpaceFollowerBox;
-    })(FollowerBox);
+    }(FollowerBox));
     util.WordSpaceFollowerBox = WordSpaceFollowerBox;
     function mydump(arr, level, maxlevel) {
         if (level === void 0) { level = 0; }
@@ -150,13 +155,13 @@ var util;
         return dumped_text;
     }
     util.mydump = mydump;
-    var Pair = (function () {
+    var Pair = /** @class */ (function () {
         function Pair(first, second) {
             this.first = first;
             this.second = second;
         }
         return Pair;
-    })();
+    }());
     util.Pair = Pair;
     var resetChain = [];
     function addToResetChain(fb) {
@@ -170,7 +175,7 @@ var util;
         }
     }
     util.resetCheckboxCounters = resetCheckboxCounters;
-    var AddBetween = (function () {
+    var AddBetween = /** @class */ (function () {
         function AddBetween(text) {
             this.text = text;
             this.first = true;
@@ -187,7 +192,7 @@ var util;
             this.first = true;
         };
         return AddBetween;
-    })();
+    }());
     util.AddBetween = AddBetween;
 })(util || (util = {}));
 // -*- js -*-
@@ -202,7 +207,7 @@ function localize(s) {
 /// <reference path="fontdetect.d.ts" />
 /// <reference path="util.ts" />
 /// <reference path="localization_general.ts" />
-var FontSelector = (function () {
+var FontSelector = /** @class */ (function () {
     function FontSelector(alphabet, sample, direction) {
         this.alphabet = alphabet;
         this.sample = sample;
@@ -213,7 +218,7 @@ var FontSelector = (function () {
     }
     FontSelector.prototype.familyChange = function () {
         var val = $('input:radio[name="' + this.alphabet + 'choice"]:checked').attr('data-family');
-        if (val === 'XXmineXX') {
+        if (val === 'XXmineXX') { // Personal font
             val = this.myfont_text.prop('value');
             $('#' + this.alphabet + '_mysample').css('font-family', val);
         }
@@ -255,4 +260,4 @@ var FontSelector = (function () {
         this.myfont_text.on('input', function (e) { return _this.personalChange(); });
     };
     return FontSelector;
-})();
+}());
