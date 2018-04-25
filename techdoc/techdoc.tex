@@ -1,5 +1,3 @@
-%TODO: Add information about acceptance of privacy policy
-
 \documentclass[11pt,oneside,a4paper]{memoir}
 \usepackage{fontspec}
 \usepackage{alltt}
@@ -223,10 +221,10 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \sloppy
 
 
-%%% Font matter %%%
+%%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{4 December 2017}
+\date{25 April 2018}
 
 \makeindex
 
@@ -236,7 +234,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \maketitle
 
 \begin{center}
-Copyright © 2017 by Claus Tøndering, claus@ezer.dk
+Copyright © 2018 by Claus Tøndering, claus@ezer.dk
 
 \vspace{5mm}
 
@@ -266,7 +264,7 @@ server and developers who need to modify or expand the way Bible OL works.
 \section{License and Copyright}\index{license}\index{copyright}
 
 Except where otherwise noted, the Bible OL source code is distributed under an MIT
-License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2017 by Claus
+License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2018 by Claus
 Tøndering, claus@ezer.dk.
 
 The present document is made available under a Creative Commons Attribution 4.0 International
@@ -460,9 +458,9 @@ The following software must be installed on your server (please pay attention to
 
 \begin{itemize}
 \item Apache\index{Apache} (web server\index{web server}). I use version 2.4.18, but version 2.2.22 also works.
-\item MySQL\index{MySQL} (database system). I use version 5.7.13.
+\item MySQL\index{MySQL} (database system). I use version 5.7.21.
 \item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.11.0.
-\item PHP\index{PHP}. I use version 5.6. \emph{Note: Version 7.0 and later does not work!}
+\item PHP\index{PHP}. I use version 7.1.
 \item git\index{Git}. I use version 2.7.4.
 \end{itemize}
 
@@ -470,9 +468,6 @@ All of this can be installed on an Ubuntu Linux system using the usual \emph{apt
 program. I have not done a thorough investigation into the minimum required versions of these
 software packages; you should not see the versions mentioned above as minimum requirements.
 
-Note: Throughout this document the PHP command line tool is referred to as \texttt{php5.6}\index{php5.6}
-rather than just \texttt{php}. The reason is that on many recent Linux systems the default PHP
-installation is version 7, which does not work with Bible OL.
 
 
 \subsection{Step 2. Install Emdros\index{Emdros}}\label{sec-install-emdros}
@@ -480,34 +475,37 @@ installation is version 7, which does not work with Bible OL.
 You must install the Emdros database system. This is probably the most complex part of
 the installation process since Emdros is not a standard component in any operating system.
 
-I use Emdros version 3.4.0.pre03, a pre-release; but versions 3.4.0 should probably be fine as well.
-Emdros can be downloaded from \url{http://sourceforge.net/projects/emdros/files/emdros}.
+I use Emdros version 3.5.23. Emdros can be downloaded from
+\url{http://sourceforge.net/projects/emdros/files/emdros}.
 
 Follow the instructions that come with Emdros to compile and install it on your computer. You will
 need a C++\index{C++} compiler and the Gnu make%
 \index{make}\index{Gnu make|see {make}}\index{gmake|see {make}}
 system (and probably a few other things as well -- check the Emdros documentation).
 
-When you compile Emdros, be sure to include support for PHP\index{PHP}. I use this
+When you compile Emdros, be sure to include support for PHP~7\index{PHP}. I use this
 \emph{configure}\index{configure} command to set up the Emdros compilation:
 
 % Do not set language=bash in the following line lest "local" be printed in blue
 \begin{lstlisting}
 ./configure --with-sqlite3=local --with-mysql=yes --with-default-backend=sqlite3 \
     --with-swig-language-php=yes --with-swig-language-java=no --with-swig-language-python=no \
-    --with-swig-language-perl=no
+    --with-swig-language-perl=no --with-wx=no --with-swig-language-ruby=no \
+    --with-swig-language-php7=yes --with-swig-language-nodejs=no
 \end{lstlisting}
 
-If you want to include support for Java\index{Java}, Python\index{Python}, or Perl\index{Perl}, you
+If you want to include support for other programming languages, you
 will need to change this command.
 
 When you have compiled and installed Emdros (using the ``make'' and ``sudo make install'' commands,
 respectively) you need to enable access to Emdros in PHP. The correct way to do this depends on your
-Apache\index{Apache} and PHP installation. In my case, I had to add a file with this contents to the
-directories \texttt{/etc/php/5.6/apache2/conf.d/} and \texttt{/etc/php/5.6/cli/conf.d/}:
+Apache\index{Apache} and PHP installation. In my case, I had to copy the file
+\texttt{EmdrosPHP7.ini} to the directory \texttt{/etc/php/7.1/mods-available} and then run the
+command
 
-\begin{lstlisting}
-extension=/usr/local/lib/emdros/EmdrosPHP.so
+\begin{lstlisting}[language=bash]
+  sudo phpenmod -v 7.1 EmdrosPHP7
+  sudo service apache2 restart
 \end{lstlisting}
 
 If you cannot or do not want to enhance PHP with Emdros support, you can configure Bible OL to use
@@ -655,7 +653,7 @@ Populate the database with the translations of the interface by issuing these co
 for i in comment da en es pt zh-simp zh-trad
 do
     echo Importing language files $i
-    php5.6 index.php translate if_php2db $i myapp/language/langsrc/$i
+    php index.php translate if_php2db $i myapp/language/langsrc/$i
 done
 \end{lstlisting}
 
@@ -666,13 +664,13 @@ done
 Update the database with the translations of the grammar terms by issuing this command:
 
 \begin{lstlisting}[language=bash]
-php5.6 index.php translate gram_prop2db
+php index.php translate gram_prop2db
 \end{lstlisting}
 
 The will output lines such as this:
 
 \begin{lstlisting}
-Handling file nestle1904.comment.prop.pretty.json - unchanged
+  Handling file nestle1904.comment.prop.pretty.json - unchanged
 \end{lstlisting}
 
 Some files may be marked ``unchanged'', others may be marked ``updated +++++''. Both are normal.
@@ -686,12 +684,12 @@ do
     for d in en de da
     do
         echo Source language: $s. Destination language: $d.
-        php5.6 index.php translate import_lex $s $d lexicons/${s}_${d}.csv
+        php index.php translate import_lex $s $d lexicons/${s}_${d}.csv
     done
 done
 
 echo Source language: greek. Destination language: en.
-php5.6 index.php translate import_lex greek en lexicons/greek_en.csv 
+php index.php translate import_lex greek en lexicons/greek_en.csv 
 \end{lstlisting}
 
 (On my computer, this takes about a minute.)
@@ -783,7 +781,7 @@ The following should be installed:
 
 \begin{itemize}
 \item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.11.0.
-\item PHP\index{PHP}. I use version 5.6. \emph{Note: Version 7.0 and later does not work!}
+\item PHP\index{PHP}. I use version 7.1.
 \item nodejs\index{nodejs} (JavaScript runtime, used for compiling TypeScript and Less). I use version
   4.2.6.
 \item npm\index{npm} (package manager for nodejs). I use version 3.5.2.
@@ -797,10 +795,6 @@ software packages; you should not see the versions mentioned above as minimum re
 
 You will also need to install the Emdros database system, a Less compiler, and a TypeScript
 compiler. This is detailed in Sections \ref{sec-install-start}-\ref{sec-install-end}.
-
-Note: Throughout this document the PHP command line tool is referred to as \texttt{php5.6}\index{php5.6}
-rather than just \texttt{php}. The reason is that on many recent Linux systems the default PHP
-installation is version 7, which does not work with Bible OL.
 
 \subsection{Forking\index{fork GitHub} Bible OL on GitHub\index{GitHub}}\label{sec-fork-github}
 
@@ -849,13 +843,16 @@ cloned from the ``EzerIT'' repository. You may want to replace them with your ow
 repositories. The following table lists their names and their location on GitHub:
 
 \begin{my-tabu}{lll}{ \headiii{Submodule}{My forked location}{Original location} }
-CodeIgniter      \index{CodeIgniter}     & EzerIT/CodeIgniter         & bcit-ci/CodeIgniter \\
+bootstrap        \index{Bootstrap}       & EzerIT/bootstrap           & twbs/bootstrap \\
 ckeditor         \index{ckeditor}        & EzerIT/ckeditor-releases   & ckeditor/ckeditor-releases \\
 zocial           \index{zocial}          & EzerIT/css-social-buttons  & samcollins/css-social-buttons \\
 jstree           \index{jstree}          & EzerIT/jstree              & vakata/jstree \\
 virtualkeyboard  \index{virtualkeyboard} & EzerIT/virtualkeyboard     & \emph{Not on GitHub} \\
 \end{my-tabu}
 
+Previous versions of Bible OL also used a submodule called CodeIgniter. This is no longer a
+submodule but an integrated part of the Bible OL software tree; it is located in the directory
+\texttt{CodeIgniter\_Local}.
 
 \subsection{Installing Emdros\index{Emdros!installation}}\label{sec-install-start}
  
@@ -877,8 +874,7 @@ npm install -g less
 You may not need the ``-g'' option. If you do include it, you may need to prefix the command by
 ``sudo''.
  
-I use version 2.5.3 of \emph{lessc}. I have not studied what impact, if any, using a newer version
-of the compiler will have on the Less source files in Bible OL.
+I use version 3.0.1 of \emph{lessc}.
 
 \subsection{Installing Tsc\index{tsc!installation}\index{TypeScript!compiler|see {tsc}}}\label{sec-installing-tsc}\label{sec-install-end}
  
@@ -895,8 +891,7 @@ npm install -g typescript
 You may not need the ``-g'' option. If you do include it, you may need to prefix the command by
 ``sudo''.
  
-I use version 1.6.2 of \emph{tsc}. I have not studied what impact, if any, using a newer version of
-the compiler will have on the TypeScript source files in Bible OL.
+I use version 2.8.1 of \emph{tsc}.
 
 
 
@@ -932,8 +927,10 @@ More information about this is given in Chapter \ref{chap-codeigniter-use}.
 \section{SQL}\index{SQL|hyperit}
 
 SQL\footnote{See \url{https://en.wikipedia.org/wiki/SQL}.} is a language for manipulating a
-relational database. Bible OL uses the MySQL database\footnote{\url{http://www.mysql.com}.} to store
-information about users who have an account on the Bible OL website.
+relational database. Bible OL uses the MySQL database\footnote{\url{http://www.mysql.com}.} system to store
+information about users who have an account on the Bible OL website. Bible OL uses the SQLite3
+database system to store the ``Words Database'' (see chapter \ref{chap-multiple-choice}) and the
+``Hints Database'' (see Chapter \ref{chap-hints}).
 
 SQL commands are executed from PHP code through CodeIgniter.
 
@@ -1236,7 +1233,7 @@ Source: \url{https://github.com/ckeditor/ckeditor-releases}.
 
 License: A choice between GPL, LGPL, and MPL.\\
 
-CodeIgniter\index{CodeIgniter} & The PHP framework used by the server side of Bible OL.
+CodeIgniter\_Local\index{CodeIgniter} & The CodeIgniter framework used by PHP code on the server side of Bible OL.
 
 Webpage: \url{http://www.codeigniter.com}.
 
@@ -1659,7 +1656,7 @@ reformers wished to differentiate their system from the polytonic, the tonos on 
 sign: typically a dot or wedge: α\hspace{-0.5mm}̍\hspace{0.5mm}. However, the Greek government
 decreed in 1986 that the tonos shall be the acute. So you must now write ά instead of
 α\hspace{-0.5mm}̍\hspace{0.5mm}.\footnote{Source:
-  \url{http://www.opoudjis.net/unicode/unicode_gkbkgd.html}, accessed 15 December 2016.}
+  \url{http://www.opoudjis.net/unicode/unicode_gkbkgd.html}, accessed 24 April 2018.}
 
 This confusion has had an impact on the representation of the oxia and tonos accents in Unicode.
 Because of the decision from 1982, Unicode\index{Unicode} distinguishes between the oxia
@@ -1799,14 +1796,14 @@ between the ugly\index{JSON!ugly file} and the pretty\index{JSON!pretty file} fo
 ``xxx.json'' contains JSON data (either ugly or pretty), the command
 
 \begin{lstlisting}[language=bash]
-php5.6 json_pretty_print.php -p xxx.json
+php json_pretty_print.php -p xxx.json
 \end{lstlisting}
 
 \noindent
 will write the data in pretty format to standard output; and the command
 
 \begin{lstlisting}[language=bash]
-php5.6 json_pretty_print.php -u xxx.json
+php json_pretty_print.php -u xxx.json
 \end{lstlisting}
 
 \noindent
@@ -2146,7 +2143,7 @@ A pseudofeature uses the keys \emph{indirdb, sql\_command, sqlargs,} and \emph{m
 \item \emph{indirdb} gives the name of a database in which the pseudofeature can be found. The value
   is either the name of an SQLite3\index{SQLite3} database, or the string ``mysql'' if the
   pseudofeature is found in the user database\index{user database} (see Section
-  \ref{chap-user-database}). (Currently, only \emph{mysql} is used by Bible OL.)
+  \ref{chap-user-database}).
 \item \emph{sql\_command} is the SQL command required to retrieve the value of the feature. A
   typical example is given in the listing above. The system will replace the string
   \texttt{\{PRE\}} with the correct database table prefix. The strings \texttt{\%1\$s}, \texttt{\%2\$s}, etc.
@@ -2174,7 +2171,8 @@ SELECT gloss FROM bol_lexicon_Hebrew h JOIN bol_lexicon_Hebrew_en en ON en.lex_i
 
 The SQL query is expected to return a single value because \emph{multiple} is \emph{false.}
 
-Currently, pseudofeatures are used for glosses and hyperlinks associated with lexemes.
+Currently, pseudofeatures are used for glosses, hints (see Chapter \ref{chap-hints}), and hyperlinks
+associated with lexemes.
 
 \subsection{The \emph{sentencegrammar} Key}\label{sentencegrammar}\index{sentencegrammar}
 
@@ -2486,7 +2484,7 @@ the Emdros database itself. The PHP script \texttt{myapp/controllers/ctrl\_maket
 contains code to do that. Running the command
 
 \begin{lstlisting}
-php5.6 index.php maketypeinfo index %\textrm{\textit{databasename}}%
+php index.php maketypeinfo index %\textrm{\textit{databasename}}%
 \end{lstlisting}
 
 \noindent
@@ -2699,6 +2697,9 @@ quiz objects\index{quiz object (a.k.a. sentence unit)}). See Section \ref{qosel-
 \index{request feature}.
 See Section \ref{feat-xml}.\\
 
+\xml{maylocate} & A Boolean value indicating if a Bible reference may be displayed when showing an
+exercise question. If this XML element is absent, it is assumed have the value \emph{true}.\\
+
 \end{my-longtabu}
 
 %%%%%%%%%%%%%%%%%%%% sentenceselection %%%%%%%%%%%%%%%%%%%%
@@ -2745,6 +2746,8 @@ more of these elements, each of which describes an Emdros feature and how it is 
 \xml{enumfeature} & Enumeration. See Section \ref{enumfeat-xml}.\\
 
 \xml{enumlistfeature} & List of enumeration values. See Section \ref{enumlistfeat-xml}.\\
+
+\xml{qerefeature} & A string representing a Hebrew qere form. See Section \ref{qerefeat-xml}.\\
 
 \end{my-tabu}
 
@@ -2857,6 +2860,22 @@ present in the Emdros feature.\\
 present in the Emdros feature.\\
 \end{my-tabu}
 
+\subsubsection{\xml{qerefeature}}\label{qerefeat-xml}\index{qerefeature@\xml{qerefeature}}
+
+The presense of a \xml{qerefeature} element indicates that Hebrew words with a qere form should
+be omitted in the selection.
+
+The \xml{qerefeature} element contains these elements:
+
+\begin{my-tabu}{lX}{ \headii{Element}{Contents} }
+\xml{name} & The name of the Emdros feature containing the qere form.\\
+
+\xml{value} & A Boolean value which is always \emph{true}. This indicates that words with a qere
+form should be omitted from the selection. This value is never \emph{false}, as a false value
+is indicated by the absense of the \xml{qerefeature} element.\\
+\end{my-tabu}
+
+
 %%%%%%%%%%%%%%%%%%%% quizobjectselection %%%%%%%%%%%%%%%%%%%%
 \section{\xml{quizobjectselection}}\label{qosel-xml}\index{quizobjectselection@\xml{quizobjectselection}|hyperit}
 
@@ -2901,6 +2920,13 @@ multiple-choice\index{multiple-choice} question (see Chapter \ref{chap-multiple-
 
 \xml{dontshow} & The name of a feature that must not be available in the grammar selection box\index{grammar selection box} and the grammar
 information box.\\
+
+\xml{dontshowobject} & The name of an Emdros object whose features must not be available in the
+grammar selection box\index{grammar selection box} and the grammar information box. If, however,
+this XML element has an attribute named \texttt{show}, whose value is feature of the object, then
+that feature will be available. For example,
+\texttt{<dontshowobject show="qere\_utf8">word</dontshowobject>} means that all word features
+except \emph{qere\_utf8} will be unavailable.\\
 \end{my-longtabu}
 
 
@@ -3071,6 +3097,36 @@ word here:
   \includegraphics[width=0.4\textwidth]{pronsuf2.png}
 \end{center}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Multiple-Choice Questions %%%%%%%%%%%%%%%%%%%%
+\chapter{Hints}\label{chap-hints}\index{hints}
+
+\textbf{Read this chapter if you need to understand or modify the way Bible OL hinting for some
+  Hebrew verbs.}
+\plainbreak{3}
+
+
+In some cases, a Hebrew verb form may have several interpretations depending on the context. For
+example, the word \heb{תֵרָאֶה} (\bibleref{Genesis}{1}{9}) can be either 2nd person, singular,
+masculine or 3rd person, singular, feminine. A student looking merely at the word form, will not be
+able to determine the correct interpretation. In the context of \bibleref{Genesis}{1}{9} the word is
+3rd person, singular, feminine. A teacher can choose to display the \emph{hint} feature in exercises
+to help the student select the correct interpretation. For example, \bibleref{Genesis}{1}{9} may be
+displayed thus:
+
+\begin{center}
+  \includegraphics[width=0.6\textwidth]{hint.png}
+\end{center}
+
+A separate ``Hints Database''\index{Hints Database|hyperit} exists with the information necessary
+for this to work.
+
+The Hints Database is an SQLite3\index{SQLite3} database containing all possible values for the
+relevant feature. For a detailed description of the Hints Database see Appendix \ref{app-hintsdb}.
+
+The \emph{hint} feature is implemented as a pseudofeature (see Section \ref{sec-pseudofeature}).
+Hints are only available for verbs, and only in situations where the verb form is ambiguous.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Client/Server Data Exchange %%%%%%%%%%%%%%%%%%%%
@@ -3106,7 +3162,7 @@ server will access the Database Specification File \texttt{ETCBC4-translit.db.js
 
 So, for example, to retrieve \bibleref{Genesis}{1}{2-5} from ETCBC4-translit on the
 server with hostname \texttt{bibleol.3bmoodle.dk}, you can use this URL:
-\url{http://bibleol.3bmoodle.dk/text/show_text/ETCBC4-translit/Genesis/1/2/5}.
+\url{https://bibleol.3bmoodle.dk/text/show_text/ETCBC4-translit/Genesis/1/2/5}.
 
 The server will always expand the requested range of verses to contain a complete set of sentences;
 so a request for \bibleref{Genesis}{1}{16-17} will automatically be expanded to include verse 18,
@@ -3142,7 +3198,7 @@ headers, HTML code to lay out the menu, and these JavaScript variables:
 
   site\_url & The base part of the URL of the website.
 
-  (For example, \texttt{http://bibleol.3bmoodle.dk/}.)\\
+  (For example, \texttt{https://bibleol.3bmoodle.dk/}.)\\
 
   dictionaries\hmmindex{dictionaries JavaScript variable@\string\emph{dictionaries} JavaScript variable} &
   The text to display, including grammar information. This is a JavaScript object in
@@ -3185,7 +3241,7 @@ the exercise.\footnote{If \texttt{count} is omitted or if the number is illegal,
 So, for example, to run an exercise consisting of ten questions from the quiz template file
 \texttt{Nestle~1904/demo/case.3et} on the server with hostname \texttt{bibleol.3bmoodle.dk}, you can
 use this URL:
-\url{http://bibleol.3bmoodle.dk/text/show_quiz?quiz=Nestle\%201904/demo/case.3et&count=10}. This
+\url{https://bibleol.3bmoodle.dk/text/show_quiz?quiz=Nestle\%201904/demo/case.3et&count=10}. This
 will use the pre-defined set of Bible passages stored in the quiz template file.
 
 If the user chooses the second variant of the URL, the server will display a tree of books of the
@@ -3802,7 +3858,7 @@ software.
 
 Bible OL uses a PHP\index{PHP} framework known as \emph{CodeIgniter,} which provides a simple
 decoding of URLs, forces a model-view-controller approach to the software structure, and provides a
-large library for performing a number of tasks. Currently, Bible OL uses CodeIgniter version 3.0.
+large library for performing a number of tasks. Currently, Bible OL uses CodeIgniter version 3.1.7.
 
 If you are going to modify server\index{server} code, you will need a good understanding of how
 CodeIgniter works, and you should therefore read the documentation at
@@ -3819,7 +3875,7 @@ the file \emph{ctrl\_aaaaa.php}.
 It is also possible to access these functions from the shell command line on the server. The shell command
 
 \begin{lstlisting}[language=bash]
-php5.6 index.php aaaaa bbb
+php index.php aaaaa bbb
 \end{lstlisting}
 
 \noindent
@@ -4080,51 +4136,6 @@ libraries/Universe\_tree.php & Classes used together with \emph{jstree}\index{js
 
 
 
-%%%%%%%%%%%%%%%%%%%% PHP Parameter Type Hinting %%%%%%%%%%%%%%%%%%%%
-\section{PHP Parameter Type Hinting}\label{php-typing}\index{PHP!type hinting}
-
-Unlike better programming languages, PHP does not provide any type safety. In a declaration such as
-this:
-
-\begin{lstlisting}[language=PHP]
-function foo($x) { ... }
-\end{lstlisting}
-
-\noindent
-there is no way to tell if \emph{\$x} should be an integer, a string, a Boolean, an array, or perhaps an
-instance of some class.
-
-Recent versions of PHP have tried to remedy this by introducing \emph{type hinting}\footnote{See
-  \url{http://php.net/manual/en/language.oop5.typehinting.php}.}. Using type hinting, you can specify
-that an argument should be, for example, an array or an instance of a class:
-
-\begin{lstlisting}[language=PHP]
-function foo(Xyz $x) { ... } // $x must be an object of class Xyz
-function bar(array $x) { ... } // $x must be an array
-\end{lstlisting}
-
-However, this does not work for simple types such as integers or strings.
-
-The Bible OL code uses a special technique which involves catching error messages and interpreting them
-to achieve better (but not perfect) type safety. In Bible OL server code you can specify simple types as type hints:
-
-\begin{lstlisting}[language=PHP]
-function foo(integer $x) { ... }
-function bar(string $x) { ... }
-function pip(boolean $x) { ... }
-\end{lstlisting}
-
-If you need to be able to handle two different types you can do this:
-
-\begin{lstlisting}[language=PHP]
-function foo(integer__OR__string $x) { ... } // $x must be an integer or a string
-function bar(array__OR__null $x) { ... } // $x must be an array or null
-\end{lstlisting}
-
-These type hints are handled automatically in the file \texttt{typehint.inc.php}.
-
-
-
 %%%%%%%%%%%%%%%%%%%% MQL Requests in the Server %%%%%%%%%%%%%%%%%%%%
 \section{MQL Requests in the Server}\label{sec-mql-server}\index{MQL driver}
 
@@ -4239,7 +4250,7 @@ Google's description of how their OAuth implementation works can be found here:
 in a similar manner.
 
 The following is a brief description of the mechanism as it is set up on the Bible OL installation
-that runs at \url{http://bibleol.3bmoodle.dk}.
+that runs at \url{https://bibleol.3bmoodle.dk}.
 
 \subsection*{Step 1. The Browser Sends Authentication Request to Google or Facebook}
 
@@ -4252,7 +4263,7 @@ to \texttt{https://accounts.google.com/o/oauth2/auth} with the following GET par
 response\_type & \texttt{'code'}\\
 client\_id     & Our Google client ID\index{Google!client ID}, configured in the file
                  \texttt{myapp/\allowbreak{}config/\allowbreak{}ol.php}\index{ol.php}.\\
-redirect\_uri  & \texttt{'http://bibleol.3bmoodle.dk/oauth2/google\_callback'}\\
+redirect\_uri  & \texttt{'https://bibleol.3bmoodle.dk/oauth2/google\_callback'}\\
 scope          & \texttt{'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'}\\
 state          & A random value, stored in CodeIgniter's session mechanism.\\
 \end{my-tabu}
@@ -4266,7 +4277,7 @@ to \texttt{https://www.facebook.com/dialog/oauth} with the following GET paramet
 response\_type & \texttt{'code'}\\
 client\_id     & Our Facebook app ID\index{Facebook!app ID}, configured in the file
                  \texttt{myapp/\allowbreak{}config/\allowbreak{}ol.php}\index{ol.php}.\\
-redirect\_uri  & \texttt{'http://bibleol.3bmoodle.dk/oauth2/facebook\_callback'}\\
+redirect\_uri  & \texttt{'https://bibleol.3bmoodle.dk/oauth2/facebook\_callback'}\\
 scope          & \texttt{'email'}\\
 state          & A random value, stored in CodeIgniter's session mechanism.\\
 \end{my-tabu}
@@ -4282,7 +4293,7 @@ above. The parameters for the new GET request depend on whether Google/Facebook 
 \subsection*{Step 3. Browser Sends Authentication Information to the Bible OL Server}
 
 As directed by the response from Google or Facebook, the browser sends an HTTP GET request to
-\texttt{http://bibleol.3bmoodle.dk/oauth2/*\_callback} with the following GET parameters:
+\texttt{https://bibleol.3bmoodle.dk/oauth2/*\_callback} with the following GET parameters:
 
 \begin{my-tabu}{ll}{ \headii{Name}{Value} }
 error & Error information if access is denied. If access is approved, this parameter is not present.\\
@@ -4307,7 +4318,7 @@ code           & The authentication code received in the \emph{code} parameter i
 client\_id     & Our Google client ID\index{Google!client ID}, configured in the file
                  \texttt{myapp/config/ol.php}\index{ol.php}.\\
 client\_secret & Our Google client secret\index{Google!client secret}, configured in the file \texttt{myapp/config/ol.php}.\\
-redirect\_uri  & \texttt{'http://bibleol.3bmoodle.dk/oauth2/google\_callback'}\\
+redirect\_uri  & \texttt{'https://bibleol.3bmoodle.dk/oauth2/google\_callback'}\\
 grant\_type    & \texttt{'authorization\_code'}\\
 \end{my-tabu}
 
@@ -4325,7 +4336,7 @@ code           & The authentication code received in the \emph{code} parameter i
 client\_id     & Our Facebook app ID\index{Facebook!app ID}, configured in the file
                  \texttt{myapp/config/ol.php}\index{ol.php}.\\
 client\_secret & Our Facebook app secret\index{Facebook!app secret}, configured in the file \texttt{myapp/config/ol.php}.\\
-redirect\_uri  & \texttt{'http://bibleol.3bmoodle.dk/oauth2/facebook\_callback'}\\
+redirect\_uri  & \texttt{'https://bibleol.3bmoodle.dk/oauth2/facebook\_callback'}\\
 \end{my-tabu}
 
 In response to the HTTP GET request, Google replies with a JSON string containing an
@@ -4379,7 +4390,7 @@ of web page informing the user that they are now logged in to the system.
 A cron\index{cron job} job must be set up to run daily. The cron entry must execute this command:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
-php5.6 index.php users expire_users
+php index.php users expire_users
 \end{lstlisting}
 
 This command calls the \emph{expire\_users} function in the \emph{Ctrl\_users} controller (in the
@@ -4471,6 +4482,10 @@ The \emph{user} table contains information of each registered user. It has the f
   last\_login         & Integer       & UNIX time when the user last logged in.                 \\
   warning\_sent       & Integer       & Number of email warnings sent about account inactivity. \\
   preflang            & Text          & User's preferred language.                              \\
+  accept\_policy      & Integer       & UNIX time when the user accepted the privacy policy.    \\
+  policy\_lang        & Text          & The language of the accepted privacy policy.            \\
+  acc\_code           & Text          & Used in the policy acceptance handshake.                \\
+  acc\_code\_time     & Integer       & UNIX time when \texttt{acc\_code} was generated.        \\
 \end{my-longtabu}
 
 Local users have their username and password stored in this table. Their \emph{oauth2\_login} field
@@ -5996,7 +6011,7 @@ From the shell command line on the server the contents of the user interface tab
 thus:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
-php5.6 index.php translate if_db2php %\textrm{\textit{language-code}}% %\textrm{\textit{destination-directory}}%
+php index.php translate if_db2php %\textrm{\textit{language-code}}% %\textrm{\textit{destination-directory}}%
 \end{lstlisting}
 
 Here \emph{language-code} is, for example, ``en'' for English or ``comment'' to get the
@@ -6010,7 +6025,7 @@ To import the user interface tables from textual files, execute this command fro
 line on the server:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
-php5.6 index.php translate if_php2db %\textrm{\textit{language-code}}% %\textrm{\textit{source-directory}}%
+php index.php translate if_php2db %\textrm{\textit{language-code}}% %\textrm{\textit{source-directory}}%
 \end{lstlisting}
 
 The imported files will be loaded from a directory named \emph{source-directory}.
@@ -6020,8 +6035,8 @@ appended to the directory name on export, but not on import. To export the Engli
 texts to a directory called \texttt{abc} and import it again, use this sequence of commands:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
-php5.6 index.php translate if_db2php en abc
-php5.6 index.php translate if_php2db en abc/en
+php index.php translate if_db2php en abc
+php index.php translate if_php2db en abc/en
 \end{lstlisting}
 
 The reason for this difference is that we want to enforce a particular directory structure when
@@ -6036,7 +6051,7 @@ From the shell command line on the server the contents of all the grammar locali
 thus:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
-php5.6 index.php translate gram_db2prop %\textrm{\textit{destination-directory}}%
+php index.php translate gram_db2prop %\textrm{\textit{destination-directory}}%
 \end{lstlisting}
 
 This command will store the grammar localization structures for all Emdros databases and all
@@ -6048,7 +6063,7 @@ To import the grammar localization structures from textual files, place the JSON
 shell command line on the server:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
-php5.6 index.php translate gram_prop2db
+php index.php translate gram_prop2db
 \end{lstlisting}
 
 This command will read the files from the \texttt{db/propterty\_files} directory and update the contents of
@@ -6067,7 +6082,7 @@ Sections \ref{sec-lexicon-heb}, \ref{sec-lexicon-heb-lang}, \ref{sec-lexicon-gre
 From the shell command line on the server the contents of a lexicon can be exported thus:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
-php5.6 index.php translate download_lex %\textrm{\textit{source-language}}% %\textrm{\textit{target-language}}%
+php index.php translate download_lex %\textrm{\textit{source-language}}% %\textrm{\textit{target-language}}%
 \end{lstlisting}
 
 The \emph{source-language} must be either ``hebr'', ``aram'', or ``greek''. The
@@ -6080,7 +6095,7 @@ Bible OL website by selecting the \emph{Administration > Download lexicon} menu.
 A lexicon can be imported from the shell command line on the server by executing this command:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
-php5.6 index.php translate import_lex %\textrm{\textit{source-language}}% %\textrm{\textit{target-language}}%  %\textrm{\textit{CSV-file}}%
+php index.php translate import_lex %\textrm{\textit{source-language}}% %\textrm{\textit{target-language}}%  %\textrm{\textit{CSV-file}}%
 \end{lstlisting}
 
 The \emph{source-language} and \emph{destination-language} are described above. The \emph{CSV-file}
@@ -6143,7 +6158,7 @@ if ($this->config->item('xxx_enabled')) {
 }
 \end{lstlisting}
 
-This ensures that URLs such as, for example, \texttt{'http://bibleol.3bmoodle.dk/xxx/XXX\_foobar} is
+This ensures that URLs such as, for example, \texttt{'https://bibleol.3bmoodle.dk/xxx/XXX\_foobar} is
 sent to the controller at \texttt{myapp/third\_party/xxx/controllers/Ctrl\_XXX\_foobar}. Thus, all
 URLs directed at plug-in ``xxx'' should start with the string ``/xxx/'' after the hostname.
 
@@ -6208,7 +6223,7 @@ than one photo, the icon will be blue rather than green.
 Bible OL gathers information about the photos on the resource web site by executing the command
 
 \begin{lstlisting}[language=bash,frame=,basicstyle={\ttfamily}]
-php5.6 index.php pic2db
+php index.php pic2db
 \end{lstlisting}
 
 \noindent
@@ -6874,8 +6889,8 @@ used for generating the database. The MQL code can be seen by running the
 %%%%%%%%%%%%%%%%%%%% Appendix: ETCBC4 Words Database %%%%%%%%%%%%%%%%%%%%
 \chapter{ETCBC4 Words Database}\label{app-worddb}\index{Words Database}
 
-The Words Database (see Section \ref{chap-multiple-choice}) for the ETCBC4 Emdros database has the
-structure defined by these SQL statements:
+The Words Database (see Chapter \ref{chap-multiple-choice}) for the ETCBC4 Emdros database
+has the name \texttt{ETCBC4\_words.db}. Its structure is defined by these SQL statements:
 
 \begin{lstlisting}[language=SQL]
 CREATE TABLE lexemes (id integer primary key, lex text);
@@ -6922,8 +6937,34 @@ will list all possible combinations of the \emph{lex} and \emph{g\_prs\_utf8} fe
 %%%%%%%%%%%%%%%%%%%% The Origin of the ETCBC4 Words Database %%%%%%%%%%%%%%%%%%%%
 \section{The Origin of the ETCBC4 Words Database}\index{Words Database}
 
-The current Word Database was originally generated for the old WIVU\index{WIVU} Emdros database. It
-was created using a Java program called \texttt{WordDb.java}, which has not been updated for ETCBC4.
+The Words Database is generated by the program \emph{emdros\_updater}\index{emdros\_updater} which
+is available at \url{https://github.com/EzerIT/ETCBC4BibleOL}.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Appendix: ETCBC4 Hints Database %%%%%%%%%%%%%%%%%%%%
+\chapter{ETCBC4 Hints Database}\label{app-hintsdb}\index{Hints Database}
+
+The Hints Database (see Chapter \ref{chap-hints}) for the ETCBC4 Emdros database has the name
+\texttt{ETCBC4\_hints.db}. Its structure is defined by this SQL statement:
+
+\begin{lstlisting}[language=SQL]
+CREATE TABLE hints (self integer primary key, hint text);
+\end{lstlisting}
+
+The \emph{self} column contains a monad\index{monad} (see Chapter \ref{chap-emdros-use}) which
+identifies the ambiguous word within the ETCBC4 database. The \emph{hint} column contains the hint
+string in the form \emph{``feature=value''} or \emph{``feature=value,\thinspace{}feature=value'',} where
+\emph{feature} and \emph{value} must be localized before they are displayed to the user.
+
+
+%%%%%%%%%%%%%%%%%%%% The Origin of the ETCBC4 Hints Database %%%%%%%%%%%%%%%%%%%%
+\section{The Origin of the ETCBC4 Hints Database}\index{Hints Database}
+
+The Hints Database is generated by the program \emph{emdros\_updater}\index{emdros\_updater} which
+is available at \url{https://github.com/EzerIT/ETCBC4BibleOL}. The data was collected by Dr Oliver
+Glanz\index{Glanz, Oliver} of Andrews University.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
