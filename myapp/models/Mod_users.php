@@ -269,7 +269,7 @@ class Mod_users extends CI_Model {
         $this->db->where('id',$user_info->id)->update('user',array('reset'=>$reset_key, 'reset_time'=>time()));
     }
 
-    public function set_user(stdClass $user_info, string $pw) {
+    public function set_user(stdClass $user_info, string $pw=null) {
         if (!empty($pw))
             $user_info->password = md5($this->config->item('pw_salt') . $pw);
 
