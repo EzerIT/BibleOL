@@ -93,6 +93,7 @@
               <option value="en" <?= set_select('preflang', 'en', $curlang=='en') ?>><?= $this->lang->line('english') ?></option>
               <option value="de" <?= set_select('preflang', 'de', $curlang=='de') ?>><?= $this->lang->line('german') ?></option>
               <option value="da" <?= set_select('preflang', 'da', $curlang=='da') ?>><?= $this->lang->line('danish') ?></option>
+              <option value="nl" <?= set_select('preflang', 'nl', $curlang=='nl') ?>><?= $this->lang->line('dutch') ?></option>
               <option value="pt" <?= set_select('preflang', 'pt', $curlang=='pt') ?>><?= $this->lang->line('portuguese') ?></option>
               <option value="es" <?= set_select('preflang', 'es', $curlang=='es') ?>><?= $this->lang->line('spanish') ?></option>
               <option value="zh-simp" <?= set_select('preflang', 'zh-simp', $curlang=='zh-simp') ?>><?= $this->lang->line('simp_chinese') ?></option>

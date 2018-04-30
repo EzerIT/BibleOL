@@ -13,6 +13,7 @@
             "strongs": "integer",
             "self": "id_d",
             "english": "string",
+            "dutch": "string",
             "form_tag": "string",
             "functional_tag": "string",
             "ref": "string",

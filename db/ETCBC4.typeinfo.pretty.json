@@ -18,6 +18,7 @@
             "hint": "hint",
             "spanish": "string",
             "english": "string",
+            "dutch": "string",
             "german": "string",
             "glossurl": "url",
             "lexeme_count": "integer",

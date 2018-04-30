@@ -46,6 +46,7 @@ $lang['delete_profile_confirm'] = "Vil du nedlægge din konto og fjerne alle din
 $lang['delete_user'] = "Slet bruger";
 $lang['delete_user_confirm'] = "Ønsker du at slette bruger %s og fjerne vedkommendes data fra dette websted?";
 $lang['display_user'] = "Vis bruger";
+$lang['dutch'] = "Nederlandsk";
 $lang['edit_user'] = "Redigér bruger";
 $lang['edit_user_information'] = "Redigér brugeroplysninger";
 $lang['edit_user_profile'] = "Redigér brugerprofil";

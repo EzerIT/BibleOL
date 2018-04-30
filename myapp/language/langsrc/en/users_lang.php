@@ -44,6 +44,7 @@ $lang['delete_profile_confirm'] = "Do you want to delete your account including 
 $lang['delete_user'] = "Delete user";
 $lang['delete_user_confirm'] = "Do you want to delete user %s including all their data on this site?";
 $lang['display_user'] = "Display user";
+$lang['dutch'] = "Dutch";
 $lang['edit_user'] = "Edit user";
 $lang['edit_user_information'] = "Edit user information";
 $lang['edit_user_profile'] = "Edit user profile";

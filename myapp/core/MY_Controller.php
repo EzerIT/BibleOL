@@ -50,6 +50,7 @@ class MY_Controller extends CI_Controller {
 
           case 'da':
           case 'de':
+          case 'nl':
           case 'pt':
           case 'es':
           case 'zh-simp':

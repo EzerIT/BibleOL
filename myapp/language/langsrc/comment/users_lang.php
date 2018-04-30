@@ -112,6 +112,10 @@ $comment['display_user'] = "Text in title bar";
 $format['display_user'] = "";
 $use_textarea['display_user'] = false;
 
+$comment['dutch'] = "";
+$format['dutch'] = "";
+$use_textarea['dutch'] = false;
+
 $comment['edit_user'] = "Text in title bar";
 $format['edit_user'] = "";
 $use_textarea['edit_user'] = false;

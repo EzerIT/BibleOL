@@ -96,6 +96,14 @@
                     "sqlargs": [ "strongs", "strongs_unreliable" ],
                     "multiple": false
                 },
+                "dutch": {
+                    "ignoreSelect": true,
+                    "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i",
+                    "indirdb": "mysql",
+                    "sql_command": "SELECT gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_nl nl ON nl.lex_id=gr.id WHERE strongs=%d AND strongs_unreliable=('%s'='true')",
+                    "sqlargs": [ "strongs", "strongs_unreliable" ],
+                    "multiple": false
+                },
                 "strongs": {
                     "ignoreShowRequest": true
                 },
@@ -152,6 +160,10 @@
                         {
                             "mytype": "GrammarFeature",
                             "name": "english"
+                        },
+                        {
+                            "mytype": "GrammarFeature",
+                            "name": "dutch"
                         },
                         {
                             "mytype": "GrammarFeature",

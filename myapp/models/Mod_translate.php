@@ -25,6 +25,7 @@ class Mod_translate extends CI_Model {
         $this->if_langs = array('en' => $this->lang->line('english'),
                                 'da' => $this->lang->line('danish'),
                                 'de' => $this->lang->line('german'),
+                                'nl' => $this->lang->line('dutch'),
                                 'pt' => $this->lang->line('portuguese'),
                                 'es' => $this->lang->line('spanish'),
                                 'zh-simp' => $this->lang->line('simp_chinese'),
@@ -32,11 +33,14 @@ class Mod_translate extends CI_Model {
 
         $this->lexicon_langs = array('heb' => array('en' => $this->lang->line('english'),
                                                     'de' => $this->lang->line('german'),
+                                                    'nl' => $this->lang->line('dutch'),
                                                     'es' => $this->lang->line('spanish')),
                                      'aram' => array('en' => $this->lang->line('english'),
                                                      'de' => $this->lang->line('german'),
+                                                     'nl' => $this->lang->line('dutch'),
                                                      'es' => $this->lang->line('spanish')),
-                                     'greek' => array('en' => $this->lang->line('english')));
+                                     'greek' => array('en' => $this->lang->line('english'),
+                                                      'nl' => $this->lang->line('dutch')));
     }
 
     public function get_all_if_languages() {
@@ -676,6 +680,8 @@ class Mod_translate extends CI_Model {
     }
     
     public function download_lex(string $src_lang, string $dst_lang) {
+        $src_language="";
+        $header_array=array();
         $this->lex_common($src_lang, $src_language, $header_array);
 
         if (!array_key_exists($dst_lang, $this->lexicon_langs[$src_lang]))
@@ -770,6 +776,8 @@ class Mod_translate extends CI_Model {
     }
 
     public function import_lex(string $src_lang, string $dst_lang, string $csv_file) {
+        $src_language="";
+        $header_array=array();
         $this->lex_common($src_lang, $src_language, $header_array);
 
         if (!array_key_exists($dst_lang, $this->lexicon_langs[$src_lang]))

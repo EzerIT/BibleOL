@@ -11,6 +11,7 @@ class Ctrl_lang extends MY_Controller {
               case 'en':
               case 'de':
               case 'es':
+              case 'nl':
               case 'pt':
               case 'da':
               case 'zh-simp':

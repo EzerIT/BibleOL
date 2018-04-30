@@ -75,6 +75,14 @@
                     "sqlargs": [ "language", "lex", "vs" ],
                     "multiple": false
                 },
+                "dutch": {
+                    "ignoreSelect": true,
+                    "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
+                    "indirdb": "mysql",
+                    "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_nl nl ON nl.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
+                    "sqlargs": [ "language", "lex", "vs" ],
+                    "multiple": false
+                },
                 "spanish": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
@@ -650,6 +658,10 @@
                         {
                             "mytype": "GrammarFeature",
                             "name": "german"
+                        },
+                        {
+                            "mytype": "GrammarFeature",
+                            "name": "dutch"
                         },
                         {
                             "mytype": "GrammarFeature",
