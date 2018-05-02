@@ -98,9 +98,9 @@ class qqFileUploader {
         $val = trim($str);
         $last = strtolower($str[strlen($str)-1]);
         switch($last) {
-            case 'g': $val *= 1024;
-            case 'm': $val *= 1024;
-            case 'k': $val *= 1024;        
+          case 'g': $val = substr($val,0,-1) * 1024 * 1024 * 1024; break;
+          case 'm': $val = substr($val,0,-1) * 1024 * 1024; break;
+          case 'k': $val = substr($val,0,-1) * 1024; break;
         }
         return $val;
     }
