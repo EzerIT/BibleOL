@@ -228,6 +228,45 @@ class Mod_askemdros extends CI_Model {
 
         $this->setup($this->decoded_3et->database,$this->decoded_3et->properties);
 
+        // Make sure glosses are not visible if a gloss language is requested
+        if ($this->decoded_3et->quizObjectSelection->object===$this->db_config->dbinfo->objHasSurface) {
+            $fsetting = $this->db_config->dbinfo->objectSettings->{$this->db_config->dbinfo->objHasSurface}->featuresetting;
+
+            // Store all gloss features in $gloss_features
+            $gloss_features = array();
+            foreach (get_object_vars($fsetting) as $featname => $featval) {
+                if (!empty($featval->isGloss)) {
+                    $gloss_features[$featname] = true;
+                }
+            }
+
+            // Set $gloss_features[] to false for request, display, and "don't show" features.
+            // The remainder will be the "don't care" features.
+            $requestGlossFound = false;
+            foreach ($this->decoded_3et->quizFeatures->requestFeatures as $f) {
+                if (!empty($fsetting->{$f->name}->isGloss)) {
+                    $requestGlossFound = true;
+                    $gloss_features[$f->name] = false;
+                }
+            }
+
+            if ($requestGlossFound) {
+                foreach ($this->decoded_3et->quizFeatures->showFeatures as $f)
+                    if (!empty($fsetting->$f->isGloss))
+                        $gloss_features[$f] = false;
+
+                foreach ($this->decoded_3et->quizFeatures->dontShowFeatures as $f)
+                    if (!empty($fsetting->$f->isGloss))
+                        $gloss_features[$f] = false;
+
+                // Mark the remaining gloss features as "don't show"
+                foreach ($gloss_features as $f => $is_dontCare)
+                    if ($is_dontCare)
+                        $this->decoded_3et->quizFeatures->dontShowFeatures[] = $f;
+            }
+        }
+
+
         // A full universe path looks like this: <path></path>
         // Depending on the XML parser used, this may either result in a path which is either array() or array('').
         // The following statement streamlines this as array('').

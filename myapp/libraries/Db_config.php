@@ -190,12 +190,9 @@ class Db_config {
             // Replace 'gloss' with 'english', 'german, etc.
             foreach ($this->glosslang->to as $abb) {
                 $langname = Language::$dst_lang_abbrev[$abb];
-                $fsetting->$langname = new stdClass;
-                foreach (get_object_vars($fsetting->gloss) as $obj => $val) {
-                    if ($obj==='sql_command')
-                        $val = str_replace('LANG',$abb,$val);
-                    $fsetting->$langname->$obj = $val;
-                }
+                $fsetting->$langname = clone $fsetting->gloss;
+                $fsetting->$langname->sql_command = str_replace('LANG',$abb,$fsetting->gloss->sql_command);
+                $fsetting->$langname->isGloss = true;  // Extra feature
             }
             unset($fsetting->gloss);
 
