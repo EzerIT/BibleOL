@@ -201,7 +201,11 @@ class PanelForOneOtype  {
             // Ignore specified features
             if (getFeatureSetting(otype, key).ignoreShowRequest && (sg===null || !sg.containsFeature(key)))
                 continue;
-             
+
+            // Ignore features of type 'url'
+            if (typeinfo.obj2feat[otype][key]==='url')
+                continue;
+
             // Ignore the genuine feature already presented as "visual"
             if (hasSurfaceFeature && key===configuration.surfaceFeature)
                 continue;
