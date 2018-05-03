@@ -7,10 +7,6 @@
             "lexeme_occurrences": "出现次数",
             "frequency_rank": "出现次数排名",
             "hint": "Hint",
-            "spanish": "Spanish",
-            "english": "英文",
-            "dutch": "Dutch",
-            "german": "德文",
             "glossurl": "链结",
             "g_lex_utf8": "Lexical stem",
             "g_lex_cons_utf8": "Lexical stem (consonants only)",
@@ -457,7 +453,8 @@
         "word": {
             "form_in_text": "经文词语",
             "lexeme": "基本词形",
-            "morphology": "词形变化"
+            "morphology": "词形变化",
+            "glosses": "Glosses"
         }
     },
     "grammarfeature": {

@@ -7,10 +7,6 @@
             "lexeme_occurrences": "Occorrências",
             "frequency_rank": "Classificação de Frequência",
             "hint": "Hint",
-            "spanish": "Espanhol",
-            "english": "Inglês",
-            "german": "Alemão",
-            "dutch": "Dutch",
             "glossurl": "Link",
             "g_lex_translit": "Lexical stem",
             "g_nme_translit": "Final Nominal",
@@ -450,7 +446,8 @@
         "word": {
             "form_in_text": "Forma no texto",
             "lexeme": "Lexema",
-            "morphology": "Morfologia"
+            "morphology": "Morfologia",
+            "glosses": "Glosses"
         }
     },
     "grammarfeature": {

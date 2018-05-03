@@ -7,10 +7,6 @@
             "lexeme_occurrences": "Occurrences",
             "frequency_rank": "Frequency rank",
             "hint": "Hint",
-            "spanish": "Spanish",
-            "english": "English",
-            "dutch": "Dutch",
-            "german": "German",
             "glossurl": "Link",
             "g_lex_translit": "Lexical stem",
             "g_nme_translit": "Nominal ending",
@@ -450,7 +446,8 @@
         "word": {
             "form_in_text": "Form in text",
             "lexeme": "Lexeme",
-            "morphology": "Morphology"
+            "morphology": "Morphology",
+            "glosses": "Glosses"
         }
     },
     "grammarfeature": {

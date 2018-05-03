@@ -16,8 +16,6 @@
             "possessor_number": "Ejers tal",
             "suffix": "Ekstra",
             "surface": "Tekst",
-            "english": "Engelsk",
-            "dutch": "Nederlandsk",
             "strongs": "Strongs tal",
             "strongs_unreliable": "Strong utroværdig?",
             "gender": "Køn",
@@ -171,7 +169,8 @@
     "grammargroup": {
         "word": {
             "lexeme": "Leksem",
-            "morphology": "Morfologi"
+            "morphology": "Morfologi",
+            "glosses": "Gloser"
         }
     },
     "grammarmetafeature": {

@@ -7,10 +7,6 @@
             "lexeme_occurrences": "Forekomster",
             "frequency_rank": "Hyppighedsrang",
             "hint": "Tip",
-            "spanish": "Spansk",
-            "english": "Engelsk",
-            "dutch": "Nederlandsk",
-            "german": "Tysk",
             "glossurl": "Link",
             "g_lex_utf8": "Ordstamme",
             "g_lex_cons_utf8": "Ordstamme (kun konsonanter)",
@@ -457,7 +453,8 @@
         "word": {
             "form_in_text": "Form i tekst",
             "lexeme": "Leksem",
-            "morphology": "Morfologi"
+            "morphology": "Morfologi",
+            "glosses": "Gloser"
         }
     },
     "grammarfeature": {

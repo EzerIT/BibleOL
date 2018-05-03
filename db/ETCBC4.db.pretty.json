@@ -59,38 +59,6 @@
                     "sqlargs": [ "self" ],
                     "multiple": false
                 },
-                "english": {
-                    "ignoreSelect": true,
-                    "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
-                    "indirdb": "mysql",
-                    "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_en en ON en.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
-                    "sqlargs": [ "language", "lex", "vs" ],
-                    "multiple": false
-                },
-                "german": {
-                    "ignoreSelect": true,
-                    "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
-                    "indirdb": "mysql",
-                    "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_de de ON de.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
-                    "sqlargs": [ "language", "lex", "vs" ],
-                    "multiple": false
-                },
-                "dutch": {
-                    "ignoreSelect": true,
-                    "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
-                    "indirdb": "mysql",
-                    "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_nl nl ON nl.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
-                    "sqlargs": [ "language", "lex", "vs" ],
-                    "multiple": false
-                },
-                "spanish": {
-                    "ignoreSelect": true,
-                    "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
-                    "indirdb": "mysql",
-                    "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_es es ON es.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
-                    "sqlargs": [ "language", "lex", "vs" ],
-                    "multiple": false
-                },
                 "glossurl": {
                     "ignoreSelect": true,
                     "indirdb": "mysql",
@@ -385,6 +353,14 @@
                     "ignoreSelect": true,
                     "ignoreShowRequest": true,
                     "transliteratedText": true
+                },
+                "gloss": {
+                    "ignoreSelect": true,
+                    "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
+                    "indirdb": "mysql",
+                    "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_LANG lang ON lang.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
+                    "sqlargs": [ "language", "lex", "vs" ],
+                    "multiple": false
                 }
             }
         },
@@ -653,22 +629,6 @@
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "english"
-                        },
-                        {
-                            "mytype": "GrammarFeature",
-                            "name": "german"
-                        },
-                        {
-                            "mytype": "GrammarFeature",
-                            "name": "dutch"
-                        },
-                        {
-                            "mytype": "GrammarFeature",
-                            "name": "spanish"
-                        },
-                        {
-                            "mytype": "GrammarFeature",
                             "name": "lexeme_occurrences"
                         },
                         {
@@ -750,6 +710,11 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "mytype": "GrammarGroupGlosses",
+                    "name": "glosses",
+                    "items": []
                 }
             ]
         },

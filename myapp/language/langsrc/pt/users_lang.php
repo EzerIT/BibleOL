@@ -43,6 +43,7 @@ $lang['delete_profile_confirm'] = "Você quer deletar sua conta incluindo toda a
 $lang['delete_user'] = "Deletar usuário";
 $lang['delete_user_confirm'] = "Você quer deletar o usuário %s incluindo todas as informações dele neste site?";
 $lang['display_user'] = "Exibir Usuário";
+$lang['dutch'] = "Neerlandês";
 $lang['edit_user'] = "Editar Usuário";
 $lang['edit_user_information'] = "Editar informação de usuário";
 $lang['edit_user_profile'] = "Editar o perfil de usuário";

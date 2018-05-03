@@ -7,10 +7,6 @@
             "lexeme_occurrences": "",
             "frequency_rank": "",
             "hint": "",
-            "spanish": "",
-            "english": "",
-            "dutch": "",
-            "german": "",
             "glossurl": "",
             "g_lex_utf8": "",
             "g_lex_cons_utf8": "",
@@ -457,7 +453,8 @@
         "word": {
             "form_in_text": "",
             "lexeme": "",
-            "morphology": ""
+            "morphology": "",
+            "glosses": ""
         }
     },
     "grammarfeature": {

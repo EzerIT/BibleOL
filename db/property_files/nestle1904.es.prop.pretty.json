@@ -16,8 +16,6 @@
             "possessor_number": "Número Posesor",
             "suffix": "Extra",
             "surface": "Texto",
-            "english": "Inglés",
-            "dutch": "Dutch",
             "strongs": "Número de Concordancia Strong",
             "strongs_unreliable": "¿No confiable Strong?",
             "gender": "Género",
@@ -171,7 +169,8 @@
     "grammargroup": {
         "word": {
             "lexeme": "Lexema",
-            "morphology": "Morfología"
+            "morphology": "Morfología",
+            "glosses": "Glosses"
         }
     },
     "grammarmetafeature": {

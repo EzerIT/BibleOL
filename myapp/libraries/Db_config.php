@@ -8,6 +8,7 @@ class database_file {
     public $dbinfo;     ///< The name of the file containing database information (dbinfo) for the Emdros database
     public $propertiesName; 
     public $typeinfo;   ///< The name of the file containing type information for the Emdros database
+    public $glosslang;  ///< The name of the file containing gloss languages for the Emdros database
     public $bookorder;  ///< The order of the books in the Emdros database
     private $subsetOf;  ///< The name of an Emdros database, if any, that is a superset of this one
 
@@ -22,6 +23,7 @@ class database_file {
         $this->emdros_db = "db/$db";
         $this->dbinfo = "db/$pr.db.json";
         $this->typeinfo = "db/$db.typeinfo.json";
+        $this->glosslang = "db/$db.glosslang.json";
         $this->bookorder = "db/$db.bookorder";
     }
 
@@ -71,7 +73,7 @@ class Db_config {
     /// fields with information about all available Emdros databases.
     public function __construct() {
         $CI =& get_instance();
-        $CI->load->helper(array('file','directory'));
+        $CI->load->helper(array('file','directory','translation'));
 
 
         // TODO: We could speed this up by storing it in a database table
@@ -162,18 +164,88 @@ class Db_config {
     /// @param $dbf A database_file object describing the select Emdros database.
     /// @param $language The selected localization language.
     public function init_config_dbf(database_file $dbf, string $language) {
+        $this->glosslang = json_decode($this->read_or_throw($dbf->glosslang));
+
         $this->dbinfo_json = $this->read_or_throw($dbf->dbinfo);
         $this->dbinfo = json_decode($this->dbinfo_json);
-
+        $this->addgloss_dbinfo();
+        
         $CI =& get_instance();
         $query = $CI->db->select('json')->where('db',$dbf->propertiesName)->where('lang',$language)->get('db_localize');
         $this->l10n_json = $query->row()->json;
+        $this->addgloss_l10n_json($language);
 
         $this->typeinfo_json = $this->read_or_throw($dbf->typeinfo);
+        $this->addgloss_typeinfo_json();
         $this->typeinfo = new TypeInfo($this->typeinfo_json);
 
         $this->bookorder = $this->read_bookorder_file($dbf->bookorder);
          
         $this->emdros_db = $dbf->emdros_db;
     }
+
+    private function addgloss_dbinfo() {
+        $fsetting = $this->dbinfo->objectSettings->{$this->dbinfo->objHasSurface}->featuresetting;
+        if (isset($fsetting->gloss)) {
+            // Replace 'gloss' with 'english', 'german, etc.
+            foreach ($this->glosslang->to as $abb) {
+                $langname = Language::$dst_lang_abbrev[$abb];
+                $fsetting->$langname = new stdClass;
+                foreach (get_object_vars($fsetting->gloss) as $obj => $val) {
+                    if ($obj==='sql_command')
+                        $val = str_replace('LANG',$abb,$val);
+                    $fsetting->$langname->$obj = $val;
+                }
+            }
+            unset($fsetting->gloss);
+
+            // Replace 'GrammarGroupGlosses.glosses' with 'GrammarGroup.english', 'GrammarGroup.german' etc.
+            
+            foreach ($this->dbinfo->sentencegrammar as $sgo) {
+                if ($sgo->objType===$this->dbinfo->objHasSurface) {
+                    foreach ($sgo->items as $it) {
+                        if ($it->mytype==='GrammarGroupGlosses') {
+                            foreach ($this->glosslang->to as $abb) {
+                                $feat = new stdClass;
+                                $feat->mytype = 'GrammarFeature';
+                                $feat->name = Language::$dst_lang_abbrev[$abb];
+                                $it->items[] = $feat;
+                            }
+                            $it->mytype = 'GrammarGroup';
+                        }
+                    }
+                }
+            }
+        }
+        
+        $this->dbinfo_json = json_encode($this->dbinfo);
+    }
+
+    private function addgloss_typeinfo_json() {
+        $typinf = json_decode($this->typeinfo_json);
+        
+        $osetting = $typinf->obj2feat->{$this->dbinfo->objHasSurface};
+
+        foreach ($this->glosslang->to as $abb)
+            $osetting->{Language::$dst_lang_abbrev[$abb]} = 'string';
+
+        $this->typeinfo_json = json_encode($typinf);
+    }
+
+    private function addgloss_l10n_json(string $language) {
+        $CI =& get_instance();
+        $CI->lang->load('users', $language);
+
+        $l10n = json_decode($this->l10n_json);
+        
+        $wsetting = $l10n->emdrosobject->{$this->dbinfo->objHasSurface};
+
+        foreach ($this->glosslang->to as $abb) {
+            $langname = Language::$dst_lang_abbrev[$abb];
+            $wsetting->$langname = $CI->lang->line($langname);
+        }
+        
+        $this->l10n_json = json_encode($l10n);
+    }
+
   }

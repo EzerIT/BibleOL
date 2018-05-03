@@ -16,8 +16,6 @@
             "possessor_number": "",
             "suffix": "",
             "surface": "",
-            "english": "",
-            "dutch": "",
             "strongs": "",
             "strongs_unreliable": "",
             "gender": "",
@@ -171,7 +169,8 @@
     "grammargroup": {
         "word": {
             "lexeme": "",
-            "morphology": ""
+            "morphology": "",
+            "glosses": ""
         }
     },
     "grammarmetafeature": {

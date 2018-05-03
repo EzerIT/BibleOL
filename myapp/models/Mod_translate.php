@@ -14,7 +14,6 @@ class Mod_translate extends CI_Model {
                          'ETCBC4-translit',
                          'nestle1904');
 
-    
     public function __construct() {
         parent::__construct();
         $this->load->database();
@@ -31,18 +30,46 @@ class Mod_translate extends CI_Model {
                                 'zh-simp' => $this->lang->line('simp_chinese'),
                                 'zh-trad' => $this->lang->line('trad_chinese'));
 
-        $this->lexicon_langs = array('heb' => array('en' => $this->lang->line('english'),
-                                                    'de' => $this->lang->line('german'),
-                                                    'nl' => $this->lang->line('dutch'),
-                                                    'es' => $this->lang->line('spanish')),
-                                     'aram' => array('en' => $this->lang->line('english'),
-                                                     'de' => $this->lang->line('german'),
-                                                     'nl' => $this->lang->line('dutch'),
-                                                     'es' => $this->lang->line('spanish')),
-                                     'greek' => array('en' => $this->lang->line('english'),
-                                                      'nl' => $this->lang->line('dutch')));
+        
+        $this->load->helper(array('directory','translation'));
+
+        $this->lexicon_langs = array();
+        $allf = directory_map('db',1);
+
+        foreach ($allf as $af) {
+            if (self::endswith($af, '.glosslang.json')) {
+                $glosslang = json_decode($this->read_or_throw("db/$af"));
+
+                foreach ($glosslang->from as $src_lang) {
+                    $this->lexicon_langs[$src_lang] = array();
+                    foreach ($glosslang->to as $dst_lang) {
+                        $this->lexicon_langs[$src_lang][$dst_lang] = $this->lang->line(Language::$dst_lang_abbrev[$dst_lang]);
+                    }
+                }
+            }
+        }
     }
 
+    /// Utility function which checks if one string ends with another string.
+    /// @param $haystack String in which to search.
+    /// @param $needle String to search for.
+    /// @return True if $haystack ends with $needle, false otherwise.
+    private static function endswith(string $haystack, string $needle) {
+        return substr($haystack, -strlen($needle))===$needle;
+    }
+
+    /// Reads all the contents of a file.
+    /// @param $filename The name of the file to read
+    /// @return The content of the file.
+    /// @throws DataException if the file cannot be read.
+    private function read_or_throw(string $filename) {
+        $data = file_get_contents($filename);
+        if ($data===false)
+            throw new DataException("Missing file: $filename");
+        return $data;
+    }
+
+        
     public function get_all_if_languages() {
         return $this->if_langs;
     }

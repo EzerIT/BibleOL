@@ -16,8 +16,6 @@
             "possessor_number": "擁有者數",
             "suffix": "其他資料",
             "surface": "經文詞語",
-            "english": "英文",
-            "dutch": "Dutch",
             "strongs": "原文編號",
             "strongs_unreliable": "原文編號有誤？",
             "gender": "性",
@@ -171,7 +169,8 @@
     "grammargroup": {
         "word": {
             "lexeme": "基本詞形",
-            "morphology": "詞形變化"
+            "morphology": "詞形變化",
+            "glosses": "Glosses"
         }
     },
     "grammarmetafeature": {

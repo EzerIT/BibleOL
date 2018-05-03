@@ -7,10 +7,6 @@
             "lexeme_occurrences": "出現次數",
             "frequency_rank": "出現次數排名",
             "hint": "Hint",
-            "spanish": "Spanish",
-            "english": "英文",
-            "dutch": "Dutch",
-            "german": "德文",
             "glossurl": "鏈結",
             "g_lex_translit": "Lexical stem",
             "g_nme_translit": "名詞後綴",
@@ -450,7 +446,8 @@
         "word": {
             "form_in_text": "經文詞語",
             "lexeme": "基本詞形",
-            "morphology": "詞形變化"
+            "morphology": "詞形變化",
+            "glosses": "Glosses"
         }
     },
     "grammarfeature": {

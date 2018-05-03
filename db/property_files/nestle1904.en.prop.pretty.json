@@ -16,8 +16,6 @@
             "possessor_number": "Possessor number",
             "suffix": "Extra",
             "surface": "Text",
-            "english": "English",
-            "dutch": "Dutch",
             "strongs": "Strong's number",
             "strongs_unreliable": "Strong's unreliable?",
             "gender": "Gender",
@@ -171,7 +169,8 @@
     "grammargroup": {
         "word": {
             "lexeme": "Lexeme",
-            "morphology": "Morphology"
+            "morphology": "Morphology",
+            "glosses": "Glosses"
         }
     },
     "grammarmetafeature": {

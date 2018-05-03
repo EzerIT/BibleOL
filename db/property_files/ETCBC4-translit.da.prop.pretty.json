@@ -7,10 +7,6 @@
             "lexeme_occurrences": "Forekomster",
             "frequency_rank": "Hyppighedsrang",
             "hint": "Tip",
-            "spanish": "Spansk",
-            "english": "Engelsk",
-            "dutch": "Nederlandsk",
-            "german": "Tysk",
             "glossurl": "Link",
             "g_lex_translit": "Ordstamme",
             "g_nme_translit": "Nominel endelse",
@@ -450,7 +446,8 @@
         "word": {
             "form_in_text": "Form i tekst",
             "lexeme": "Leksem",
-            "morphology": "Morfologi"
+            "morphology": "Morfologi",
+            "glosses": "Gloser"
         }
     },
     "grammarfeature": {

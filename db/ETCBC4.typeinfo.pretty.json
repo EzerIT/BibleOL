@@ -16,10 +16,6 @@
     "obj2feat": {
         "word": {
             "hint": "hint",
-            "spanish": "string",
-            "english": "string",
-            "dutch": "string",
-            "german": "string",
             "glossurl": "url",
             "lexeme_count": "integer",
             "lexeme_occurrences": "integer",
