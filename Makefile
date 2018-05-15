@@ -56,3 +56,6 @@ TAGS:
 docs:
 	cd myapp; doxygen
 
+
+TAGS:
+	find myapp -name '*.php' | etags --lang=php --regex='/.*\(public\|private\) .*function.*/' -
