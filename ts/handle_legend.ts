@@ -2,7 +2,6 @@
 
 /* 2017 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 
-/// <reference path="jquery/jquery.d.ts" />
 /// <reference path="util.ts" />
 /// <reference path="resizer.ts" />
 

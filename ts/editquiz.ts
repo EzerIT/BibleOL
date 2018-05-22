@@ -1,9 +1,6 @@
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 
-/// <reference path="bootstrap/bootstrap.d.ts" />
-/// <reference path="jquery/jquery.d.ts" />
-/// <reference path="jqueryui/jqueryui.d.ts" />
 /// <reference path="configuration.ts" />
 /// <reference path="charset.ts" />
 /// <reference path="sentencegrammar.ts" />
@@ -183,10 +180,10 @@ function save_quiz() {
 
     $('#filename-dialog-save').off('click'); // Remove any previous handler
     $('#filename-dialog-save').on('click',() => {
-        if ($('#filename-name').val().trim()=='')
+        if (($('#filename-name').val() as string).trim() == '')
             show_error('#filename-error', localize('missing_filename'));
         else {
-            quiz_name = $('#filename-name').val().trim();
+            quiz_name = ($('#filename-name').val() as string).trim();
 
             // Check if file may be written
             $.ajax('{0}?dir={1}&quiz={2}'.format(check_url,
@@ -307,8 +304,8 @@ function import_from_shebanq() {
         $('.ui-dialog *').css('cursor', 'wait');
 
         $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url,
-                                               encodeURIComponent($('#import-shebanq-qid').val().trim()),
-                                               encodeURIComponent($('#import-shebanq-dbvers').val().trim())))
+                                               (encodeURIComponent($('#import-shebanq-qid').val() as string).trim()),
+                                               (encodeURIComponent($('#import-shebanq-dbvers').val() as string).trim())))
             .done((data, textStatus, jqXHR) => {
                 $('.ui-dialog *').css('cursor', 'auto');
 

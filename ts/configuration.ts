@@ -1,5 +1,4 @@
 // -*- js -*-
-/// <reference path="jquery/jquery.d.ts" />
 
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 

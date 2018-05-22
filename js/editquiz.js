@@ -9,7 +9,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // -*- js -*-
-/// <reference path="jquery/jquery.d.ts" />
 function getObjectSetting(otype) {
     return configuration.objectSettings[otype];
 }
@@ -894,7 +893,7 @@ var PanelTemplMql = /** @class */ (function () {
                     var sel = $('<span></span>');
                     sel.append(butEquals, "=", butDiffers, "&#x2260;");
                     group.append(sel);
-                    sel.click(ifh, function (e) {
+                    sel.on('click', ifh, function (e) {
                         // val() may return an empty value if the user clicks on, say, the = sign
                         var v = $(e.target).val();
                         switch (v) {
@@ -938,7 +937,7 @@ var PanelTemplMql = /** @class */ (function () {
                     var sel = $('<span></span>');
                     sel.append(butOmitqere, localize('omit_qere'));
                     group.append(sel);
-                    sel.click(qfh, function (e) {
+                    sel.on('click', qfh, function (e) {
                         var target = $(e.target);
                         e.data.setValue(target.prop('checked')); // e.data is qfh
                         _this.updateMql();
@@ -971,7 +970,7 @@ var PanelTemplMql = /** @class */ (function () {
                     var sel = $('<span></span>');
                     sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
                     group.append(sel);
-                    sel.click(sfh, function (e) {
+                    sel.on('click', sfh, function (e) {
                         // val() may return an empty value if the user clicks on, say, the = sign
                         var v = $(e.target).val();
                         switch (v) {
@@ -1047,7 +1046,7 @@ var PanelTemplMql = /** @class */ (function () {
                     var vc_choice = new PanelForOneVcChoice(enumValues, stripped_valueType, '{0}_{1}_{2}_{3}'.format(this.name_prefix, otype, key, tabno), lv);
                     tab_contents.append(vc_choice.getPanel());
                     group_tabs.append(tab_contents);
-                    tab_contents.click(lv, function (e) {
+                    tab_contents.on('click', lv, function (e) {
                         var target = $(e.target);
                         if (target.attr('type') === 'radio') {
                             e.data.modifyValue(target.attr('data-name'), target.attr('value')); // e.data is lv
@@ -1085,7 +1084,7 @@ var PanelTemplMql = /** @class */ (function () {
                     var sel = $('<span></span>');
                     sel.append(butEquals, '=', butDiffers, '&#x2260;');
                     group.append(sel);
-                    sel.click(efh, function (e) {
+                    sel.on('click', efh, function (e) {
                         // val() may return an empty value if the user clicks on, say, the = sign
                         var v = $(e.target).val();
                         switch (v) {
@@ -1125,7 +1124,7 @@ var PanelTemplMql = /** @class */ (function () {
                         }
                         group2.append(rw);
                     }
-                    group2.click(efh, function (e) {
+                    group2.on('click', efh, function (e) {
                         var target = $(e.target);
                         if (target.attr('type') === 'checkbox') {
                             // The user clicked on a checkbox
@@ -2130,9 +2129,6 @@ var util;
 })(util || (util = {}));
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-/// <reference path="bootstrap/bootstrap.d.ts" />
-/// <reference path="jquery/jquery.d.ts" />
-/// <reference path="jqueryui/jqueryui.d.ts" />
 /// <reference path="configuration.ts" />
 /// <reference path="charset.ts" />
 /// <reference path="sentencegrammar.ts" />
@@ -2346,7 +2342,7 @@ function import_from_shebanq() {
     $('#import-shebanq-button').off('click');
     $('#import-shebanq-button').on('click', function () {
         $('.ui-dialog *').css('cursor', 'wait');
-        $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url, encodeURIComponent($('#import-shebanq-qid').val().trim()), encodeURIComponent($('#import-shebanq-dbvers').val().trim())))
+        $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url, (encodeURIComponent($('#import-shebanq-qid').val()).trim()), (encodeURIComponent($('#import-shebanq-dbvers').val()).trim())))
             .done(function (data, textStatus, jqXHR) {
             $('.ui-dialog *').css('cursor', 'auto');
             var result = JSON.parse(data);

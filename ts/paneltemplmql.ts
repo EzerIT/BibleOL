@@ -356,7 +356,7 @@ class PanelTemplMql {
 
     public stringTextModifiedListener(e : JQueryEventObject) : void
     {
-        var s : string = $(e.currentTarget).val();
+        var s : string = $(e.currentTarget).val() as string;
         if (s.length===0)
             (<StringFeatureHandler>e.data.sfh).removeValue(e.data.i);
         else
@@ -366,7 +366,7 @@ class PanelTemplMql {
 
     public integerTextModifiedListener(e : JQueryEventObject) : void
     {
-        var s : string = $(e.currentTarget).val();
+        var s : string = $(e.currentTarget).val() as string;
         $('#' + e.data.err_id).html('');
         if (s.length===0)
             (<IntegerFeatureHandler>e.data.ifh).removeValue(e.data.i);
@@ -381,7 +381,7 @@ class PanelTemplMql {
 
     public rangeIntegerTextModifiedListener(e : JQueryEventObject) : void
     {
-        var s : string = $(e.currentTarget).val();
+        var s : string = $(e.currentTarget).val() as string;
         $('#' + e.data.err_id).html('');
         if (s.length===0)
             (<RangeIntegerFeatureHandler>e.data.rfh)[e.data.i] = null;
@@ -463,7 +463,7 @@ class PanelTemplMql {
 
         this.featureCombo.on('change', () => {
             this.currentBox.hide();
-            this.currentBox = this.groups[this.featureCombo.val()];
+            this.currentBox = this.groups[this.featureCombo.val() as string];
             this.currentBox.show();
         });
 
@@ -484,7 +484,7 @@ class PanelTemplMql {
             this.fpan.html('<div id="{0}_fpan"></div>'.format(this.name_prefix));
             this.currentBox = null
             this.featureCombo.html('<select></select>');
-            this.objectSelectionUpdated(this.objectTypeCombo.val(), null)
+            this.objectSelectionUpdated(this.objectTypeCombo.val() as string, null)
             this.updateMql();
         });
 
@@ -538,7 +538,7 @@ class PanelTemplMql {
     }
 
     public getMql() : string {
-        return this.mqlText.val();
+        return this.mqlText.val() as string;
     }
 
 
@@ -551,12 +551,12 @@ class PanelTemplMql {
         clearInterval(this.intervalHandler);
 
         if (this.lastMonitored !== elem.attr('id')) { // A new element has focus
-            this.monitorOrigVal = elem.val();
+            this.monitorOrigVal = elem.val() as string;
             this.lastMonitored = elem.attr('id');
         }
 
         this.intervalHandler = setInterval(() => {
-            var s : string = elem.val();
+            var s : string = elem.val() as string;
             if (s!==this.monitorOrigVal) {
                 this.monitorOrigVal = s;
                 if (s.length===0)
@@ -673,7 +673,7 @@ class PanelTemplMql {
                     sel.append(butEquals, "=", butDiffers, "&#x2260;");
                     group.append(sel);
 
-                    sel.click(ifh, (e : JQueryEventObject) => {
+                    sel.on('click', ifh, (e : JQueryEventObject) => {
                         // val() may return an empty value if the user clicks on, say, the = sign
                         var v = $(e.target).val();
                         switch (v) {
@@ -723,7 +723,7 @@ class PanelTemplMql {
                     sel.append(butOmitqere, localize('omit_qere'));
                     group.append(sel);
 
-                    sel.click(qfh, (e : JQueryEventObject) => {
+                    sel.on('click', qfh, (e : JQueryEventObject) => {
                         var target : JQuery = $(e.target);
                         e.data.setValue(target.prop('checked'));  // e.data is qfh
                         this.updateMql();
@@ -755,7 +755,7 @@ class PanelTemplMql {
                     sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
                     group.append(sel);
 
-                    sel.click(sfh, (e : JQueryEventObject) => {
+                    sel.on('click', sfh, (e : JQueryEventObject) => {
                         // val() may return an empty value if the user clicks on, say, the = sign
                         var v = $(e.target).val();
                         switch (v) {
@@ -851,7 +851,7 @@ class PanelTemplMql {
                                                   lv);
                     tab_contents.append(vc_choice.getPanel());
                     group_tabs.append(tab_contents);
-		    tab_contents.click(lv, (e : JQueryEventObject) => {
+		    tab_contents.on('click', lv, (e : JQueryEventObject) => {
                         var target : JQuery = $(e.target);
                         if (target.attr('type')==='radio') {
                             e.data.modifyValue(target.attr('data-name'), target.attr('value')); // e.data is lv
@@ -890,7 +890,7 @@ class PanelTemplMql {
                     sel.append(butEquals, '=', butDiffers, '&#x2260;');
                     group.append(sel);
 
-                    sel.click(efh, (e : JQueryEventObject) => {
+                    sel.on('click', efh, (e : JQueryEventObject) => {
                         // val() may return an empty value if the user clicks on, say, the = sign
                         var v = $(e.target).val();
                         switch (v) {
@@ -941,7 +941,7 @@ class PanelTemplMql {
                     }
 
 
-		    group2.click(efh, (e : JQueryEventObject) => {
+		    group2.on('click', efh, (e : JQueryEventObject) => {
                         var target : JQuery = $(e.target);
                         if (target.attr('type')==='checkbox') {
                             // The user clicked on a checkbox
@@ -964,7 +964,7 @@ class PanelTemplMql {
     }
 
     public getOtype() : string {
-        return this.objectTypeCombo.val();
+        return this.objectTypeCombo.val() as string;
     }
 
     public setOtype(otype : string) {

@@ -1,12 +1,8 @@
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+/* 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 
-/// @file
-/// @brief Main functions for handling text display a quizzes.
+// Main functions for handling text display a quizzes.
 
-/// @if Ignore these in documentation
-/// <reference path="bootstrap/bootstrap.d.ts" />
-/// <reference path="jqueryui/jqueryui.d.ts" />
 /// <reference path="util.ts" />
 /// <reference path="configuration.ts" />
 /// <reference path="sentencegrammar.ts" />
@@ -21,7 +17,6 @@
 /// <reference path="stringwithsort.ts" />
 /// <reference path="quiz.ts" />
 /// <reference path="resizer.ts" />
-/// @endif
 
 // If you want to compile with --noImplicitAny, you will now (as of TypeScript v1) get this error:
 //      error TS7017: Index signature of object type implicitly has an 'any' type.
@@ -162,10 +157,11 @@ class GenerateCheckboxes {
         if (whattype!=WHAT.feature && whattype!=WHAT.metafeature)
             return;
 
+        
         if (leveli===0) {
             // Handling of words
 
-            $('#{0}_{1}_cb'.format(objType,featName)).change( (e : JQueryEventObject) => {
+            $('#{0}_{1}_cb'.format(objType,featName)).on('change', (e : JQueryEventObject) => {
                 if ($(e.currentTarget).prop('checked')) {
                     if (!inQuiz)
                         sessionStorage.setItem($(e.currentTarget).prop('id'),configuration.propertiesName);
@@ -186,7 +182,7 @@ class GenerateCheckboxes {
         else {
             // Handling of clause, phrase, etc.
                                    
-            $('#{0}_{1}_cb'.format(objType,featName)).change( (e : JQueryEventObject) => {
+            $('#{0}_{1}_cb'.format(objType,featName)).on('change', (e : JQueryEventObject) => {
                 if ($(e.currentTarget).prop('checked')) {
                     if (!inQuiz)
                         sessionStorage.setItem($(e.currentTarget).prop('id'),configuration.propertiesName);
@@ -229,7 +225,7 @@ class GenerateCheckboxes {
                 this.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
 
                 // Only Hebrew has a #ws_cb
-                $('#ws_cb').change((e : JQueryEventObject) => {
+                $('#ws_cb').on('change',(e : JQueryEventObject) => {
                     if ($(e.currentTarget).prop('checked')) {
                         if (!inQuiz)
                             sessionStorage.setItem($(e.currentTarget).prop('id'),configuration.propertiesName);
@@ -248,7 +244,7 @@ class GenerateCheckboxes {
             else {
                 this.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
 
-                $('#lev{0}_seplin_cb'.format(leveli)).change(leveli, (e : JQueryEventObject) => {
+                $('#lev{0}_seplin_cb'.format(leveli)).on('change', leveli, (e : JQueryEventObject) => {
                     if ($(e.currentTarget).prop('checked')) {
                         if (!inQuiz)
                             sessionStorage.setItem($(e.currentTarget).prop('id'),configuration.propertiesName);

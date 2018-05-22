@@ -196,7 +196,6 @@ var util;
     util.AddBetween = AddBetween;
 })(util || (util = {}));
 // -*- js -*-
-/// <reference path="jquery/jquery.d.ts" />
 function getObjectSetting(otype) {
     return configuration.objectSettings[otype];
 }
@@ -2079,9 +2078,7 @@ var resizer;
     });
 })(resizer || (resizer = {}));
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-/// <reference path="bootstrap/bootstrap.d.ts" />
-/// <reference path="jqueryui/jqueryui.d.ts" />
+/* 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 /// <reference path="util.ts" />
 /// <reference path="configuration.ts" />
 /// <reference path="sentencegrammar.ts" />
@@ -2195,7 +2192,7 @@ var GenerateCheckboxes = /** @class */ (function () {
             return;
         if (leveli === 0) {
             // Handling of words
-            $('#{0}_{1}_cb'.format(objType, featName)).change(function (e) {
+            $('#{0}_{1}_cb'.format(objType, featName)).on('change', function (e) {
                 if ($(e.currentTarget).prop('checked')) {
                     if (!inQuiz)
                         sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
@@ -2214,7 +2211,7 @@ var GenerateCheckboxes = /** @class */ (function () {
         }
         else {
             // Handling of clause, phrase, etc.
-            $('#{0}_{1}_cb'.format(objType, featName)).change(function (e) {
+            $('#{0}_{1}_cb'.format(objType, featName)).on('change', function (e) {
                 if ($(e.currentTarget).prop('checked')) {
                     if (!inQuiz)
                         sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
@@ -2254,7 +2251,7 @@ var GenerateCheckboxes = /** @class */ (function () {
                 // because we use it to set up the inline-blocks for word grammar information.
                 this.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
                 // Only Hebrew has a #ws_cb
-                $('#ws_cb').change(function (e) {
+                $('#ws_cb').on('change', function (e) {
                     if ($(e.currentTarget).prop('checked')) {
                         if (!inQuiz)
                             sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
@@ -2271,7 +2268,7 @@ var GenerateCheckboxes = /** @class */ (function () {
             }
             else {
                 this.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
-                $('#lev{0}_seplin_cb'.format(leveli)).change(leveli, function (e) {
+                $('#lev{0}_seplin_cb'.format(leveli)).on('change', leveli, function (e) {
                     if ($(e.currentTarget).prop('checked')) {
                         if (!inQuiz)
                             sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);

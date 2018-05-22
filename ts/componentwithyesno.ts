@@ -51,14 +51,14 @@ class ComponentWithYesNo {
         clearInterval(ComponentWithYesNo.intervalHandler);
 
         if (ComponentWithYesNo.lastMonitored !== elem.data('kbid')) { // A new element has focus
-            ComponentWithYesNo.monitorOrigVal = elem.val();
+            ComponentWithYesNo.monitorOrigVal = elem.val() as string;
             ComponentWithYesNo.lastMonitored = elem.data('kbid');
         }
 
         // Closure around polling function
         function timedfun(elem2 : JQuery, me2 : ComponentWithYesNo) {
             return () => {
-                var s : string = elem2.val();
+                var s : string = elem2.val() as string;
                 if (s!==ComponentWithYesNo.monitorOrigVal) {
                     ComponentWithYesNo.monitorOrigVal = s;
                     me2.setNone();
@@ -112,7 +112,7 @@ class ComponentWithYesNo {
     /// @param yes Is the answer correct?
     public setYesNo(yes : boolean) : void {
         if (ComponentWithYesNo.lastMonitored === this.elem.data('kbid'))
-            ComponentWithYesNo.monitorOrigVal = this.elem.val(); // Lest the polling detects the change and removes the yes/no mark
+            ComponentWithYesNo.monitorOrigVal = this.elem.val() as string; // Lest the polling detects the change and removes the yes/no mark
 
         if (yes) {
             this.yesIcon.show();

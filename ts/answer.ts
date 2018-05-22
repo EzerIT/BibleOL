@@ -95,7 +95,7 @@ class Answer {
             case COMPONENT_TYPE.textFieldWithVirtKeyboard:
                 // TODO: Use Three_ET.dbInfo.charSet.converter.normalize (relevant only in Greek)
 
-                userAnswer = $(this.c).val().trim()
+                userAnswer = ($(this.c).val() as string).trim()
                     //.replace(/\u003b/g, '\u037e')  // SEMICOLON -> GREEK QUESTION MARK
 		    //.replace(/\u00b7/g, '\u0387')  // MIDDLE DOT -> GREEK ANO TELEIA
 		    .replace(/\u03ac/g, '\u1f71')  // GREEK SMALL LETTER ALPHA WITH TONOS -> OXIA
@@ -122,7 +122,7 @@ class Answer {
                 break;
 
             case COMPONENT_TYPE.translatedField:
-                userAnswer = $(this.c).val().trim();
+                userAnswer = ($(this.c).val() as string).trim();
                 if (this.matchRegexp==null)
                     isCorrect = userAnswer==this.answerString; // Not === for one may be a number
                 else {

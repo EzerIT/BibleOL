@@ -1,6 +1,14 @@
 // -*- js -*-
 /* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 
+// This fixes an error in @types/jqueryui:
+
+interface JQuery {
+    tabs(methodName: 'enable', index: number): void;
+    tabs(methodName: 'disable', index: number): void;
+}
+
+
 
 class PanelTemplSentenceSelector extends PanelTemplMql {
     private cbUseForQo : JQuery;
