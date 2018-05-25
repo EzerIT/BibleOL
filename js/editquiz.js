@@ -63,7 +63,62 @@ var Charset = /** @class */ (function () {
     return Charset;
 }());
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// The code here handles walink through the "sentencegrammar" part of the configuration object.
+//
+// Before using the classes in this file, the function addMethodsSgi() must called to enhace the
+// configuration object with polymorhic functions, turning the contents of "sentencegrammar" into
+// objects of various types.
+//
+// For example, addMethodsSgi() will turn this part of the configuration object:
+//     {
+//         "mytype": "GrammarFeature",
+//         "name": "g_lex_utf8"
+//     }
+// into an object of class GrammarFeature with appropriate polymorphic functions added (such as
+// walkFeatureNames, walkFeatureValues etc.)
+//****************************************************************************************************
+// addMethods function
+//
+// Takes method from a class and adds them to an object. Thereafter calls the method
+// pseudoConstructor() if it exists.
+//
+// Parameters:
+//     obj: The object to which methods should be added.
+//     classname: The class from which methods should be taken.
+//     param: The argument to pseudoConstructor().
+//
+function addMethods(obj, classname, param) {
+    // Copy all methods except constructor
+    for (var f in classname.prototype) {
+        if (f === 'constructor')
+            continue;
+        obj[f] = classname.prototype[f];
+    }
+    obj.pseudoConstructor && obj.pseudoConstructor(param); // Call pseudoConstructor if it exists
+}
+//****************************************************************************************************
+// addMethodsSgi function
+//
+// Recursively enhances a part of the configuration object to be a polymorphic object of the class
+// specified by the mytype field of the configuration object.
+//
+// Parameters:
+//     sgi: The part of the configuration object that is to be enhanced.
+//     param: The argument to pseudoConstructor() for the enhanced classes.
+//
+function addMethodsSgi(sgi, param) {
+    addMethods(sgi, eval(sgi.mytype), param); // sgi.mytype is the name of the subclass
+    // Do the same with all members of the items array
+    if (sgi.items) {
+        for (var i in sgi.items) {
+            if (isNaN(+i))
+                continue; // Not numeric
+            addMethodsSgi(sgi.items[+i], param);
+        }
+    }
+}
+// The WHAT enum is used to identify various stages when walking through a configuration object.
 var WHAT;
 (function (WHAT) {
     WHAT[WHAT["feature"] = 0] = "feature";
@@ -71,31 +126,48 @@ var WHAT;
     WHAT[WHAT["groupstart"] = 2] = "groupstart";
     WHAT[WHAT["groupend"] = 3] = "groupend";
 })(WHAT || (WHAT = {}));
+//****************************************************************************************************
+// GrammarGroup class
+//
+// A GrammarGroup groups GrammarFeatures and GrammarMetaFeatures into logical units, such as
+// "Features that describe the lexeme" or "Features that describe the morphology".
+//
 var GrammarGroup = /** @class */ (function () {
     function GrammarGroup() {
     }
-    GrammarGroup.prototype.getFeatName = function (objType, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureNames method
+    //
+    // See description under SentenceGrammarItem
+    //
+    GrammarGroup.prototype.walkFeatureNames = function (objType, callback) {
         callback(WHAT.groupstart, objType, objType, this.name, l10n.grammargroup[objType][this.name], this);
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            this.items[+i].getFeatName(objType, callback);
+            this.items[+i].walkFeatureNames(objType, callback);
         }
         callback(WHAT.groupend, objType, objType, this.name, null, this);
     };
-    GrammarGroup.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureValues method
+    //
+    // See description under SentenceGrammarItem
+    //
+    GrammarGroup.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         callback(WHAT.groupstart, objType, objType, this.name, null, this);
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            this.items[+i].getFeatVal(monob, mix, objType, abbrev, callback);
+            this.items[+i].walkFeatureValues(monob, mix, objType, abbrev, callback);
         }
         callback(WHAT.groupend, objType, objType, this.name, null, this);
     };
-    /** Do the children of this object identify the specified feature?
-     * @param f The name of the feature to look for.
-     * @return True if the specified feature matches this object.
-     */
+    //------------------------------------------------------------------------------------------
+    // containsFeature method
+    //
+    // See description under SentenceGrammarItem
+    //
     GrammarGroup.prototype.containsFeature = function (f) {
         for (var i in this.items) {
             if (isNaN(+i))
@@ -107,44 +179,77 @@ var GrammarGroup = /** @class */ (function () {
     };
     return GrammarGroup;
 }());
+//****************************************************************************************************
+// GrammarSubFeature class
+//
+// A GrammarSubFeature is a member of a GrammarMetaFeature.
+//
 var GrammarSubFeature = /** @class */ (function () {
     function GrammarSubFeature() {
     }
+    //------------------------------------------------------------------------------------------
+    // getFeatValPart method
+    //
+    // Retrieve the localized feature value.
+    //
+    // Parameters:
+    //     monob: The MonadObject containing the value we are retrieving.
+    //     objType: The type of the grammar object (word, phrase, etc.)
+    //
     GrammarSubFeature.prototype.getFeatValPart = function (monob, objType) {
         return l10n.grammarsubfeature[objType][this.name][monob.mo.features[this.name]];
     };
-    /** Does this object identify the specified feature?
-     * @param f The name of the feature to look for.
-     * @return True if the specified feature matches this object.
-     */
+    //------------------------------------------------------------------------------------------
+    // containsFeature method
+    //
+    // See description under SentenceGrammarItem
+    //
     GrammarSubFeature.prototype.containsFeature = function (f) {
         return this.name === f;
     };
     return GrammarSubFeature;
 }());
+//****************************************************************************************************
+// SentenceGrammar class
+//
+// A SentenceGrammar groups GrammarGroups, GrammarFeatures and GrammarMetaFeatures for a single
+// Emdros object type, such as word or phrase.
+//
+//
 var SentenceGrammar = /** @class */ (function (_super) {
     __extends(SentenceGrammar, _super);
     function SentenceGrammar() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SentenceGrammar.prototype.getFeatName = function (objType, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureNames method
+    //
+    // See description under SentenceGrammarItem
+    //
+    SentenceGrammar.prototype.walkFeatureNames = function (objType, callback) {
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            this.items[+i].getFeatName(objType, callback);
+            this.items[+i].walkFeatureNames(objType, callback);
         }
     };
-    SentenceGrammar.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureValues method
+    //
+    // See description under SentenceGrammarItem
+    //
+    SentenceGrammar.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            this.items[+i].getFeatVal(monob, mix, objType, abbrev, callback);
+            this.items[+i].walkFeatureValues(monob, mix, objType, abbrev, callback);
         }
     };
-    /** Do the children of this object identify the specified feature?
-     * @param f The name of the feature to look for.
-     * @return True if the specified feature matches this object.
-     */
+    //------------------------------------------------------------------------------------------
+    // containsFeature method
+    //
+    // See description under SentenceGrammarItem
+    //
     SentenceGrammar.prototype.containsFeature = function (f) {
         for (var i in this.items) {
             if (isNaN(+i))
@@ -156,13 +261,29 @@ var SentenceGrammar = /** @class */ (function (_super) {
     };
     return SentenceGrammar;
 }(GrammarGroup));
+//****************************************************************************************************
+// GrammarMetaFeature class
+//
+// A GrammarMetaFeature describes a combined value of a number of Emdros features (for example,
+// person, gender, and number).
+//
 var GrammarMetaFeature = /** @class */ (function () {
     function GrammarMetaFeature() {
     }
-    GrammarMetaFeature.prototype.getFeatName = function (objType, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureNames method
+    //
+    // See description under SentenceGrammarItem
+    //
+    GrammarMetaFeature.prototype.walkFeatureNames = function (objType, callback) {
         callback(WHAT.metafeature, objType, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
     };
-    GrammarMetaFeature.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureValues method
+    //
+    // See description under SentenceGrammarItem
+    //
+    GrammarMetaFeature.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         var res = '';
         for (var i in this.items) {
             if (isNaN(+i))
@@ -171,10 +292,11 @@ var GrammarMetaFeature = /** @class */ (function () {
         }
         callback(WHAT.metafeature, objType, objType, this.name, res, this);
     };
-    /** Do the children of this object identify the specified feature?
-     * @param f The name of the feature to look for.
-     * @return True if the specified feature matches this object.
-     */
+    //------------------------------------------------------------------------------------------
+    // containsFeature method
+    //
+    // See description under SentenceGrammarItem
+    //
     GrammarMetaFeature.prototype.containsFeature = function (f) {
         for (var i in this.items) {
             if (isNaN(+i))
@@ -186,13 +308,23 @@ var GrammarMetaFeature = /** @class */ (function () {
     };
     return GrammarMetaFeature;
 }());
+//****************************************************************************************************
+// GrammarFeature class
+//
+// A GrammarFeature describes a feature of an Emdros object.
+//
 var GrammarFeature = /** @class */ (function () {
     function GrammarFeature() {
     }
+    //------------------------------------------------------------------------------------------
+    // pseudoConstructor method
+    //
+    // Sets information about whether this is a subobject feature (see above) or not.
+    //
     GrammarFeature.prototype.pseudoConstructor = function (objType) {
         var io = this.name.indexOf(':');
         if (io != -1) {
-            // This is a feature of a subobject
+            // This is a feature of a sub-object
             this.isSubObj = true;
             this.realObjectType = this.name.substr(0, io);
             this.realFeatureName = this.name.substr(io + 1);
@@ -203,12 +335,30 @@ var GrammarFeature = /** @class */ (function () {
             this.realFeatureName = this.name;
         }
     };
-    GrammarFeature.prototype.getFeatName = function (objType, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureNames method
+    //
+    // See description under SentenceGrammarItem
+    //
+    GrammarFeature.prototype.walkFeatureNames = function (objType, callback) {
+        // Normally localized feature names are found in l10n.emdrosobject, but occasionally special
+        // translations exists that are to be used in the grammal selection box. These special
+        // translations are found in l10n.grammarfeature.
         var locname = l10n.grammarfeature && l10n.grammarfeature[this.realObjectType] && l10n.grammarfeature[this.realObjectType][this.realFeatureName]
             ? l10n.grammarfeature[this.realObjectType][this.realFeatureName]
             : l10n.emdrosobject[this.realObjectType][this.realFeatureName];
         callback(WHAT.feature, this.realObjectType, objType, this.realFeatureName, locname, this);
     };
+    //------------------------------------------------------------------------------------------
+    // icon2class method
+    //
+    // Converts the name of an icon to the required HTML element classes.
+    //
+    // Parameter:
+    //     icon: The name of the icon.
+    // Returns:
+    //     The HTML element class string.
+    //
     GrammarFeature.prototype.icon2class = function (icon) {
         if (icon.substr(0, 10) === 'glyphicon-')
             return 'glyphicon ' + icon;
@@ -216,16 +366,21 @@ var GrammarFeature = /** @class */ (function () {
             return 'bolicon ' + icon;
         return '';
     };
-    GrammarFeature.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureValues method
+    //
+    // See description under SentenceGrammarItem
+    //
+    GrammarFeature.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         var featType = typeinfo.obj2feat[this.realObjectType][this.realFeatureName];
+        // Normally featType will contain the type of the feature. However, the feature name can
+        // contain the string _TYPE_, in which case the an alternative type is used.
+        // The variable realRealFeature name is set to the part of the feature name that comes before _TYPE_.
         var io = this.realFeatureName.indexOf('_TYPE_'); // Separates feature from format
-        var res = io == -1 // Test if the feature name contains _TYPE_
-            ? (this.isSubObj
-                ? monob.subobjects[mix][0].features[this.realFeatureName]
-                : (monob.mo.features ? monob.mo.features[this.realFeatureName] : '')) // Empty for dummy objects
-            : (this.isSubObj
-                ? monob.subobjects[mix][0].features[this.realFeatureName.substr(0, io)]
-                : (monob.mo.features ? monob.mo.features[this.realFeatureName.substr(0, io)] : ''));
+        var realRealFeatureName = io == -1 ? this.realFeatureName : this.realFeatureName.substr(0, io);
+        var res = this.isSubObj
+            ? monob.subobjects[mix][0].features[realRealFeatureName]
+            : (monob.mo.features ? monob.mo.features[realRealFeatureName] : ''); // Empty for dummy objects
         switch (featType) {
             case 'string':
             case 'ascii':
@@ -239,8 +394,8 @@ var GrammarFeature = /** @class */ (function () {
                     // Assume res is an array, where each element is an array of two elements
                     var res2 = '';
                     for (var i = 0; i < res.length; ++i)
-                        res2 += '<a style="padding-right:1px;padding-left:1px;" href="{0}" target="_blank"><span class="{1}" aria-hidden="true"></span></a>'
-                            .format(res[i]['url'], this.icon2class(res[i]['icon']));
+                        res2 += "<a style=\"padding-right:1px;padding-left:1px;\" href=\"" + res[i]['url'] + "\" target=\"_blank\">"
+                            + ("<span class=\"" + this.icon2class(res[i]['icon']) + "\" aria-hidden=\"true\"></span></a>");
                     res = res2;
                 }
                 break;
@@ -258,47 +413,32 @@ var GrammarFeature = /** @class */ (function () {
         }
         callback(WHAT.feature, this.realObjectType, objType, this.realFeatureName, res, this);
     };
-    /** Does this object identify the specified feature?
-     * @param f The name of the feature to look for.
-     * @return True if the specified feature matches this object.
-     */
+    //------------------------------------------------------------------------------------------
+    // containsFeature method
+    //
+    // See description under SentenceGrammarItem
+    //
     GrammarFeature.prototype.containsFeature = function (f) {
         return this.name === f;
     };
     return GrammarFeature;
 }());
+//****************************************************************************************************
+// getSentenceGrammarFor function
+//
+// Retrieves from the configuraion structure the SentenceGrammar object that describes a particular
+// Emdros object type.
+//
+// Parameter:
+//     oType: The name of the Emdros object.
+// Returns:
+//     The corresponding SentenceGrammar object.
+//
 function getSentenceGrammarFor(oType) {
     for (var i = 0; i < configuration.sentencegrammar.length; ++i)
         if (configuration.sentencegrammar[i].objType === oType)
             return configuration.sentencegrammar[i];
     return null;
-}
-// This function copies all fields from the source to the destination
-function copyFields(dst, src) {
-    for (var f in src)
-        dst[f] = src[f];
-}
-// This function adds relevant methods to a data object of the specified class
-function addMethods(obj, classname, objType) {
-    // Copy all methods except constructor
-    for (var f in classname.prototype) {
-        if (f === 'constructor')
-            continue;
-        obj[f] = classname.prototype[f];
-    }
-    obj.pseudoConstructor && obj.pseudoConstructor(objType); // Call pseudoConstructor if it exiss
-}
-// This function adds relevant methods to a data object of a specific SentenceGrammarItem subtype
-function addMethodsSgi(sgi, objType) {
-    addMethods(sgi, eval(sgi.mytype), objType); // sgi.mytype is the name of the subclass, generated by the server
-    // Do the same with all members of the items array
-    if (sgi.items) {
-        for (var i in sgi.items) {
-            if (isNaN(+i))
-                continue; // Not numeric
-            addMethodsSgi(sgi.items[+i], objType);
-        }
-    }
 }
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */

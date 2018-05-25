@@ -171,36 +171,36 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         }
         var grammar = '';
         configuration.sentencegrammar[0]
-            .getFeatVal(smo, 0, this.objType, false,
-                        (whattype:number, objType:string, origObjType:string, featName:string, featValLoc:string) => {
-                            switch (whattype) {
-                            case WHAT.feature:
-                                var wordclass : string;
-                                var fs : FeatureSetting = getFeatureSetting(objType,featName);
-                                if (fs.foreignText)
-                                    wordclass = charset.foreignClass;
-                                else if (fs.transliteratedText)
-                                    wordclass = charset.transliteratedClass;
-                                else
-                                    wordclass = 'ltr';
+            .walkFeatureValues(smo, 0, this.objType, false,
+                               (whattype:number, objType:string, origObjType:string, featName:string, featValLoc:string) => {
+                                   switch (whattype) {
+                                   case WHAT.feature:
+                                       var wordclass : string;
+                                       var fs : FeatureSetting = getFeatureSetting(objType,featName);
+                                       if (fs.foreignText)
+                                           wordclass = charset.foreignClass;
+                                       else if (fs.transliteratedText)
+                                           wordclass = charset.transliteratedClass;
+                                       else
+                                           wordclass = 'ltr';
 
-                                // For Spanish, English and German in ETCBC4, display only the first gloss
-                                
-                                if (configuration.databaseName=="ETCBC4"
-                                    && (featName=="english" || featName=="spanish" || featName=="german")) {
-                                    featValLoc = featValLoc.replace(/(&[gl]t);/,'$1Q')
-                                                           .replace(/([^,;(]+).*/,'$1')
-                                                           .replace(/(&[gl]t)Q/,'$1;');
-                                }
+                                       // For Spanish, English and German in ETCBC4, display only the first gloss
+                                       
+                                       if (configuration.databaseName=="ETCBC4"
+                                           && (featName=="english" || featName=="spanish" || featName=="german")) {
+                                           featValLoc = featValLoc.replace(/(&[gl]t);/,'$1Q')
+                                               .replace(/([^,;(]+).*/,'$1')
+                                               .replace(/(&[gl]t)Q/,'$1;');
+                                       }
 
-                                grammar += '<span class="wordgrammar dontshowit {0} {2}">{1}</span>'.format(featName,featValLoc,wordclass);
-                                break;
+                                       grammar += '<span class="wordgrammar dontshowit {0} {2}">{1}</span>'.format(featName,featValLoc,wordclass);
+                                       break;
 
-                            case WHAT.metafeature:
-                                grammar += '<span class="wordgrammar dontshowit {0} ltr">{1}</span>'.format(featName,featValLoc);
-                                break;
-                            }
-                        });
+                                   case WHAT.metafeature:
+                                       grammar += '<span class="wordgrammar dontshowit {0} ltr">{1}</span>'.format(featName,featValLoc);
+                                       break;
+                                   }
+                               });
 
         var follow_space : string = '<span class="wordspace"> </span>'; // Enables line wrapping
         var follow_class : string = ''; 
@@ -325,15 +325,15 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
 
         if (configuration.sentencegrammar[this.level]) {
             configuration.sentencegrammar[this.level]
-            .getFeatVal(this.displayedMo, this.mix, this.objType, true,
-                        (whattype:number, objType:string, origObjType:string, featName:string, featValLoc:string) => {
-                            if (whattype==WHAT.feature || whattype==WHAT.metafeature) {
-                                if (configuration.databaseName=='ETCBC4' && objType=="clause_atom" && featName=="tab")
-                                    indent=+featValLoc;
-                                else
-                                    grammar += '<span class="xgrammar dontshowit {0}_{1}">:{2}</span>'.format(objType,featName,featValLoc);
-                            }
-                        });
+            .walkFeatureValues(this.displayedMo, this.mix, this.objType, true,
+                               (whattype:number, objType:string, origObjType:string, featName:string, featValLoc:string) => {
+                                   if (whattype==WHAT.feature || whattype==WHAT.metafeature) {
+                                       if (configuration.databaseName=='ETCBC4' && objType=="clause_atom" && featName=="tab")
+                                           indent=+featValLoc;
+                                       else
+                                           grammar += '<span class="xgrammar dontshowit {0}_{1}">:{2}</span>'.format(objType,featName,featValLoc);
+                                   }
+                               });
         }
         var jq : JQuery;
         if (this.isPatriarch)

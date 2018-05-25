@@ -290,44 +290,44 @@ class Dictionary {
                 
                 var map : Array<string> = [];
 
-                sengram.getFeatName(sengram.objType,
-                                    (whattype:number, objType:string, origObjType:string, featName:string, featNameLoc:string, sgiObj:SentenceGrammarItem) => {
-                                        if (whattype==WHAT.feature || whattype==WHAT.metafeature)
-                                            if (!mayShowFeature(objType, origObjType, featName, sgiObj))
-                                                return;
-                                        
-                                        if (whattype==WHAT.feature || whattype==WHAT.metafeature || whattype==WHAT.groupstart)
-                                            map[featName] = featNameLoc;
-                                    });
+                sengram.walkFeatureNames(sengram.objType,
+                                         (whattype:number, objType:string, origObjType:string, featName:string, featNameLoc:string, sgiObj:SentenceGrammarItem) => {
+                                             if (whattype==WHAT.feature || whattype==WHAT.metafeature)
+                                                 if (!mayShowFeature(objType, origObjType, featName, sgiObj))
+                                                     return;
+                                             
+                                             if (whattype==WHAT.feature || whattype==WHAT.metafeature || whattype==WHAT.groupstart)
+                                                 map[featName] = featNameLoc;
+                                         });
 
-                sengram.getFeatVal(monob, mix, sengram.objType, false,
-                                   (whattype:number, objType:string, origObjType:string, featName:string, featValLoc:string, sgiObj:SentenceGrammarItem) => {
-                                       switch (whattype) {
-                                       case WHAT.feature:
-                                           if (mayShowFeature(objType, origObjType, featName, sgiObj)) {
-                                               var wordclass : string;
-                                               var fs : FeatureSetting = getFeatureSetting(objType,featName);
-                                               if (fs.foreignText)
-                                                   wordclass = charset.foreignClass;
-                                               else if (fs.transliteratedText)
-                                                   wordclass = charset.transliteratedClass;
-                                               else
-                                                   wordclass = '';
-                                               res += '<tr><td>{0}</td><td class="bol-tooltip leftalign {2}">{1}</td></tr>'.format(map[featName], featValLoc, featValLoc==='-' ? '' : wordclass);
-                                           }
-                                           break;
+                sengram.walkFeatureValues(monob, mix, sengram.objType, false,
+                                          (whattype:number, objType:string, origObjType:string, featName:string, featValLoc:string, sgiObj:SentenceGrammarItem) => {
+                                              switch (whattype) {
+                                              case WHAT.feature:
+                                                  if (mayShowFeature(objType, origObjType, featName, sgiObj)) {
+                                                      var wordclass : string;
+                                                      var fs : FeatureSetting = getFeatureSetting(objType,featName);
+                                                      if (fs.foreignText)
+                                                          wordclass = charset.foreignClass;
+                                                      else if (fs.transliteratedText)
+                                                          wordclass = charset.transliteratedClass;
+                                                      else
+                                                          wordclass = '';
+                                                      res += '<tr><td>{0}</td><td class="bol-tooltip leftalign {2}">{1}</td></tr>'.format(map[featName], featValLoc, featValLoc==='-' ? '' : wordclass);
+                                                  }
+                                                  break;
 
-                                       case WHAT.metafeature:
-                                           if (mayShowFeature(objType, origObjType, featName, sgiObj))
-                                               res += '<tr><td>{0}</td><td class="bol-tooltip leftalign">{1}</td></tr>'.format(map[featName], featValLoc);
-                                           break;
+                                              case WHAT.metafeature:
+                                                  if (mayShowFeature(objType, origObjType, featName, sgiObj))
+                                                      res += '<tr><td>{0}</td><td class="bol-tooltip leftalign">{1}</td></tr>'.format(map[featName], featValLoc);
+                                                  break;
 
 
-                                       case WHAT.groupstart:
-                                           res += '<tr><td><b>{0}:</b></td><td class="leftalign"></td></tr>'.format(map[featName]);
-                                           break;
-                                       }
-                                   });
+                                              case WHAT.groupstart:
+                                                  res += '<tr><td><b>{0}:</b></td><td class="leftalign"></td></tr>'.format(map[featName]);
+                                                  break;
+                                              }
+                                          });
                 
                 return new util.Pair(res + '</table>', getObjectFriendlyName(sengram.objType));
             };

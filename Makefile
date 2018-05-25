@@ -3,7 +3,7 @@ ALL_TARGETS = js/ol.js js/fontselector.js js/editquiz.js js/handle_legend.js sty
 all:	$(ALL_TARGETS) allugly
 
 js/ol.js:	ts/ol.ts ts/answer.ts ts/charset.ts ts/componentwithyesno.ts ts/configuration.ts ts/dictionary.ts \
-	ts/sentencegrammar.ts ts/displaymonadobject.ts \
+	ts/sentencegrammar.ts ts/grammarselectionbox.ts ts/displaymonadobject.ts \
 	ts/localization.ts ts/monadobject.ts ts/panelquestion.ts \
 	ts/statistics.ts ts/stringwithsort.ts ts/util.ts ts/quiz.ts ts/quizdata.ts ts/resizer.ts \
 	ts/localization_general.ts

@@ -213,7 +213,62 @@ function getFeatureSetting(otype, feature) {
         return getObjectSetting(otype).featuresetting[feature];
 }
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// The code here handles walink through the "sentencegrammar" part of the configuration object.
+//
+// Before using the classes in this file, the function addMethodsSgi() must called to enhace the
+// configuration object with polymorhic functions, turning the contents of "sentencegrammar" into
+// objects of various types.
+//
+// For example, addMethodsSgi() will turn this part of the configuration object:
+//     {
+//         "mytype": "GrammarFeature",
+//         "name": "g_lex_utf8"
+//     }
+// into an object of class GrammarFeature with appropriate polymorphic functions added (such as
+// walkFeatureNames, walkFeatureValues etc.)
+//****************************************************************************************************
+// addMethods function
+//
+// Takes method from a class and adds them to an object. Thereafter calls the method
+// pseudoConstructor() if it exists.
+//
+// Parameters:
+//     obj: The object to which methods should be added.
+//     classname: The class from which methods should be taken.
+//     param: The argument to pseudoConstructor().
+//
+function addMethods(obj, classname, param) {
+    // Copy all methods except constructor
+    for (var f in classname.prototype) {
+        if (f === 'constructor')
+            continue;
+        obj[f] = classname.prototype[f];
+    }
+    obj.pseudoConstructor && obj.pseudoConstructor(param); // Call pseudoConstructor if it exists
+}
+//****************************************************************************************************
+// addMethodsSgi function
+//
+// Recursively enhances a part of the configuration object to be a polymorphic object of the class
+// specified by the mytype field of the configuration object.
+//
+// Parameters:
+//     sgi: The part of the configuration object that is to be enhanced.
+//     param: The argument to pseudoConstructor() for the enhanced classes.
+//
+function addMethodsSgi(sgi, param) {
+    addMethods(sgi, eval(sgi.mytype), param); // sgi.mytype is the name of the subclass
+    // Do the same with all members of the items array
+    if (sgi.items) {
+        for (var i in sgi.items) {
+            if (isNaN(+i))
+                continue; // Not numeric
+            addMethodsSgi(sgi.items[+i], param);
+        }
+    }
+}
+// The WHAT enum is used to identify various stages when walking through a configuration object.
 var WHAT;
 (function (WHAT) {
     WHAT[WHAT["feature"] = 0] = "feature";
@@ -221,31 +276,48 @@ var WHAT;
     WHAT[WHAT["groupstart"] = 2] = "groupstart";
     WHAT[WHAT["groupend"] = 3] = "groupend";
 })(WHAT || (WHAT = {}));
+//****************************************************************************************************
+// GrammarGroup class
+//
+// A GrammarGroup groups GrammarFeatures and GrammarMetaFeatures into logical units, such as
+// "Features that describe the lexeme" or "Features that describe the morphology".
+//
 var GrammarGroup = /** @class */ (function () {
     function GrammarGroup() {
     }
-    GrammarGroup.prototype.getFeatName = function (objType, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureNames method
+    //
+    // See description under SentenceGrammarItem
+    //
+    GrammarGroup.prototype.walkFeatureNames = function (objType, callback) {
         callback(WHAT.groupstart, objType, objType, this.name, l10n.grammargroup[objType][this.name], this);
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            this.items[+i].getFeatName(objType, callback);
+            this.items[+i].walkFeatureNames(objType, callback);
         }
         callback(WHAT.groupend, objType, objType, this.name, null, this);
     };
-    GrammarGroup.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureValues method
+    //
+    // See description under SentenceGrammarItem
+    //
+    GrammarGroup.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         callback(WHAT.groupstart, objType, objType, this.name, null, this);
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            this.items[+i].getFeatVal(monob, mix, objType, abbrev, callback);
+            this.items[+i].walkFeatureValues(monob, mix, objType, abbrev, callback);
         }
         callback(WHAT.groupend, objType, objType, this.name, null, this);
     };
-    /** Do the children of this object identify the specified feature?
-     * @param f The name of the feature to look for.
-     * @return True if the specified feature matches this object.
-     */
+    //------------------------------------------------------------------------------------------
+    // containsFeature method
+    //
+    // See description under SentenceGrammarItem
+    //
     GrammarGroup.prototype.containsFeature = function (f) {
         for (var i in this.items) {
             if (isNaN(+i))
@@ -257,44 +329,77 @@ var GrammarGroup = /** @class */ (function () {
     };
     return GrammarGroup;
 }());
+//****************************************************************************************************
+// GrammarSubFeature class
+//
+// A GrammarSubFeature is a member of a GrammarMetaFeature.
+//
 var GrammarSubFeature = /** @class */ (function () {
     function GrammarSubFeature() {
     }
+    //------------------------------------------------------------------------------------------
+    // getFeatValPart method
+    //
+    // Retrieve the localized feature value.
+    //
+    // Parameters:
+    //     monob: The MonadObject containing the value we are retrieving.
+    //     objType: The type of the grammar object (word, phrase, etc.)
+    //
     GrammarSubFeature.prototype.getFeatValPart = function (monob, objType) {
         return l10n.grammarsubfeature[objType][this.name][monob.mo.features[this.name]];
     };
-    /** Does this object identify the specified feature?
-     * @param f The name of the feature to look for.
-     * @return True if the specified feature matches this object.
-     */
+    //------------------------------------------------------------------------------------------
+    // containsFeature method
+    //
+    // See description under SentenceGrammarItem
+    //
     GrammarSubFeature.prototype.containsFeature = function (f) {
         return this.name === f;
     };
     return GrammarSubFeature;
 }());
+//****************************************************************************************************
+// SentenceGrammar class
+//
+// A SentenceGrammar groups GrammarGroups, GrammarFeatures and GrammarMetaFeatures for a single
+// Emdros object type, such as word or phrase.
+//
+//
 var SentenceGrammar = /** @class */ (function (_super) {
     __extends(SentenceGrammar, _super);
     function SentenceGrammar() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SentenceGrammar.prototype.getFeatName = function (objType, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureNames method
+    //
+    // See description under SentenceGrammarItem
+    //
+    SentenceGrammar.prototype.walkFeatureNames = function (objType, callback) {
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            this.items[+i].getFeatName(objType, callback);
+            this.items[+i].walkFeatureNames(objType, callback);
         }
     };
-    SentenceGrammar.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureValues method
+    //
+    // See description under SentenceGrammarItem
+    //
+    SentenceGrammar.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         for (var i in this.items) {
             if (isNaN(+i))
                 continue; // Not numeric
-            this.items[+i].getFeatVal(monob, mix, objType, abbrev, callback);
+            this.items[+i].walkFeatureValues(monob, mix, objType, abbrev, callback);
         }
     };
-    /** Do the children of this object identify the specified feature?
-     * @param f The name of the feature to look for.
-     * @return True if the specified feature matches this object.
-     */
+    //------------------------------------------------------------------------------------------
+    // containsFeature method
+    //
+    // See description under SentenceGrammarItem
+    //
     SentenceGrammar.prototype.containsFeature = function (f) {
         for (var i in this.items) {
             if (isNaN(+i))
@@ -306,13 +411,29 @@ var SentenceGrammar = /** @class */ (function (_super) {
     };
     return SentenceGrammar;
 }(GrammarGroup));
+//****************************************************************************************************
+// GrammarMetaFeature class
+//
+// A GrammarMetaFeature describes a combined value of a number of Emdros features (for example,
+// person, gender, and number).
+//
 var GrammarMetaFeature = /** @class */ (function () {
     function GrammarMetaFeature() {
     }
-    GrammarMetaFeature.prototype.getFeatName = function (objType, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureNames method
+    //
+    // See description under SentenceGrammarItem
+    //
+    GrammarMetaFeature.prototype.walkFeatureNames = function (objType, callback) {
         callback(WHAT.metafeature, objType, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
     };
-    GrammarMetaFeature.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureValues method
+    //
+    // See description under SentenceGrammarItem
+    //
+    GrammarMetaFeature.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         var res = '';
         for (var i in this.items) {
             if (isNaN(+i))
@@ -321,10 +442,11 @@ var GrammarMetaFeature = /** @class */ (function () {
         }
         callback(WHAT.metafeature, objType, objType, this.name, res, this);
     };
-    /** Do the children of this object identify the specified feature?
-     * @param f The name of the feature to look for.
-     * @return True if the specified feature matches this object.
-     */
+    //------------------------------------------------------------------------------------------
+    // containsFeature method
+    //
+    // See description under SentenceGrammarItem
+    //
     GrammarMetaFeature.prototype.containsFeature = function (f) {
         for (var i in this.items) {
             if (isNaN(+i))
@@ -336,13 +458,23 @@ var GrammarMetaFeature = /** @class */ (function () {
     };
     return GrammarMetaFeature;
 }());
+//****************************************************************************************************
+// GrammarFeature class
+//
+// A GrammarFeature describes a feature of an Emdros object.
+//
 var GrammarFeature = /** @class */ (function () {
     function GrammarFeature() {
     }
+    //------------------------------------------------------------------------------------------
+    // pseudoConstructor method
+    //
+    // Sets information about whether this is a subobject feature (see above) or not.
+    //
     GrammarFeature.prototype.pseudoConstructor = function (objType) {
         var io = this.name.indexOf(':');
         if (io != -1) {
-            // This is a feature of a subobject
+            // This is a feature of a sub-object
             this.isSubObj = true;
             this.realObjectType = this.name.substr(0, io);
             this.realFeatureName = this.name.substr(io + 1);
@@ -353,12 +485,30 @@ var GrammarFeature = /** @class */ (function () {
             this.realFeatureName = this.name;
         }
     };
-    GrammarFeature.prototype.getFeatName = function (objType, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureNames method
+    //
+    // See description under SentenceGrammarItem
+    //
+    GrammarFeature.prototype.walkFeatureNames = function (objType, callback) {
+        // Normally localized feature names are found in l10n.emdrosobject, but occasionally special
+        // translations exists that are to be used in the grammal selection box. These special
+        // translations are found in l10n.grammarfeature.
         var locname = l10n.grammarfeature && l10n.grammarfeature[this.realObjectType] && l10n.grammarfeature[this.realObjectType][this.realFeatureName]
             ? l10n.grammarfeature[this.realObjectType][this.realFeatureName]
             : l10n.emdrosobject[this.realObjectType][this.realFeatureName];
         callback(WHAT.feature, this.realObjectType, objType, this.realFeatureName, locname, this);
     };
+    //------------------------------------------------------------------------------------------
+    // icon2class method
+    //
+    // Converts the name of an icon to the required HTML element classes.
+    //
+    // Parameter:
+    //     icon: The name of the icon.
+    // Returns:
+    //     The HTML element class string.
+    //
     GrammarFeature.prototype.icon2class = function (icon) {
         if (icon.substr(0, 10) === 'glyphicon-')
             return 'glyphicon ' + icon;
@@ -366,16 +516,21 @@ var GrammarFeature = /** @class */ (function () {
             return 'bolicon ' + icon;
         return '';
     };
-    GrammarFeature.prototype.getFeatVal = function (monob, mix, objType, abbrev, callback) {
+    //------------------------------------------------------------------------------------------
+    // walkFeatureValues method
+    //
+    // See description under SentenceGrammarItem
+    //
+    GrammarFeature.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         var featType = typeinfo.obj2feat[this.realObjectType][this.realFeatureName];
+        // Normally featType will contain the type of the feature. However, the feature name can
+        // contain the string _TYPE_, in which case the an alternative type is used.
+        // The variable realRealFeature name is set to the part of the feature name that comes before _TYPE_.
         var io = this.realFeatureName.indexOf('_TYPE_'); // Separates feature from format
-        var res = io == -1 // Test if the feature name contains _TYPE_
-            ? (this.isSubObj
-                ? monob.subobjects[mix][0].features[this.realFeatureName]
-                : (monob.mo.features ? monob.mo.features[this.realFeatureName] : '')) // Empty for dummy objects
-            : (this.isSubObj
-                ? monob.subobjects[mix][0].features[this.realFeatureName.substr(0, io)]
-                : (monob.mo.features ? monob.mo.features[this.realFeatureName.substr(0, io)] : ''));
+        var realRealFeatureName = io == -1 ? this.realFeatureName : this.realFeatureName.substr(0, io);
+        var res = this.isSubObj
+            ? monob.subobjects[mix][0].features[realRealFeatureName]
+            : (monob.mo.features ? monob.mo.features[realRealFeatureName] : ''); // Empty for dummy objects
         switch (featType) {
             case 'string':
             case 'ascii':
@@ -389,8 +544,8 @@ var GrammarFeature = /** @class */ (function () {
                     // Assume res is an array, where each element is an array of two elements
                     var res2 = '';
                     for (var i = 0; i < res.length; ++i)
-                        res2 += '<a style="padding-right:1px;padding-left:1px;" href="{0}" target="_blank"><span class="{1}" aria-hidden="true"></span></a>'
-                            .format(res[i]['url'], this.icon2class(res[i]['icon']));
+                        res2 += "<a style=\"padding-right:1px;padding-left:1px;\" href=\"" + res[i]['url'] + "\" target=\"_blank\">"
+                            + ("<span class=\"" + this.icon2class(res[i]['icon']) + "\" aria-hidden=\"true\"></span></a>");
                     res = res2;
                 }
                 break;
@@ -408,48 +563,405 @@ var GrammarFeature = /** @class */ (function () {
         }
         callback(WHAT.feature, this.realObjectType, objType, this.realFeatureName, res, this);
     };
-    /** Does this object identify the specified feature?
-     * @param f The name of the feature to look for.
-     * @return True if the specified feature matches this object.
-     */
+    //------------------------------------------------------------------------------------------
+    // containsFeature method
+    //
+    // See description under SentenceGrammarItem
+    //
     GrammarFeature.prototype.containsFeature = function (f) {
         return this.name === f;
     };
     return GrammarFeature;
 }());
+//****************************************************************************************************
+// getSentenceGrammarFor function
+//
+// Retrieves from the configuraion structure the SentenceGrammar object that describes a particular
+// Emdros object type.
+//
+// Parameter:
+//     oType: The name of the Emdros object.
+// Returns:
+//     The corresponding SentenceGrammar object.
+//
 function getSentenceGrammarFor(oType) {
     for (var i = 0; i < configuration.sentencegrammar.length; ++i)
         if (configuration.sentencegrammar[i].objType === oType)
             return configuration.sentencegrammar[i];
     return null;
 }
-// This function copies all fields from the source to the destination
-function copyFields(dst, src) {
-    for (var f in src)
-        dst[f] = src[f];
-}
-// This function adds relevant methods to a data object of the specified class
-function addMethods(obj, classname, objType) {
-    // Copy all methods except constructor
-    for (var f in classname.prototype) {
-        if (f === 'constructor')
-            continue;
-        obj[f] = classname.prototype[f];
+// -*- js -*-
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+//****************************************************************************************************
+// About the IDs of HTML elements in the grammar selection box:
+//
+// The grammar selection box has the id "gramselect".
+//
+// A checkbox for Emdros object OOO feature FFF has the id "OOO_FFF_cb".
+//
+// The checkbox for "word spacing" (Hebrew only) has the id "ws_cb".
+//
+// A checkbox for "separate lines" for an Emdros object at level LLL (where, for example, 1 means
+// phrase, 2 means clause, etc.) has the id "levLLL_seplin_cb".
+//
+// A checkbox for "show borders" for an Emdros object at level LLL (where, for example, 1 means
+// phrase, 2 means clause, etc.) has the id "levLLL_sb_cb".
+//
+// The "Clear grammar" button has the id "cleargrammar".
+//
+//****************************************************************************************************
+//****************************************************************************************************
+// GrammarSelectionBox class
+//
+// This singleton class creates HTML for the contents of the grammar selection box.
+//
+var GrammarSelectionBox = /** @class */ (function () {
+    function GrammarSelectionBox() {
+        this.checkboxes = ''; // Holds the generated HTML
+        this.addBr = new util.AddBetween('<br>'); // AddBetween object to insert <br>
+        this.borderBoxes = []; // Handles checkbox for "show borders"
+        this.separateLinesBoxes = []; // Handles checkbox for "separate lines"
     }
-    obj.pseudoConstructor && obj.pseudoConstructor(objType); // Call pseudoConstructor if it exiss
-}
-// This function adds relevant methods to a data object of a specific SentenceGrammarItem subtype
-function addMethodsSgi(sgi, objType) {
-    addMethods(sgi, eval(sgi.mytype), objType); // sgi.mytype is the name of the subclass, generated by the server
-    // Do the same with all members of the items array
-    if (sgi.items) {
-        for (var i in sgi.items) {
-            if (isNaN(+i))
-                continue; // Not numeric
-            addMethodsSgi(sgi.items[+i], objType);
+    //****************************************************************************************************
+    // adjustDivLevWidth method
+    //
+    // Ensures that the width of a <span class="levX"> is at least as wide as the <span
+    // class="gram"> holding its grammar information.
+    //
+    // Parameter:
+    //    level Object level (word=0, phrase=1, etc.)
+    //
+    GrammarSelectionBox.adjustDivLevWidth = function (level) {
+        $(".showborder.lev" + level).each(function (index) {
+            $(this).css('width', 'auto'); // Give div natural width
+            var w = $(this).find('> .gram').width();
+            if ($(this).width() < w)
+                $(this).width(w); // Set width of div to width of information
+        });
+    };
+    //------------------------------------------------------------------------------------------
+    // generatorCallback method
+    //
+    // This function is called repeatedly from the walkFeatureNames() method of the
+    // SentenceGrammarItem interface. It generates HTML code that goes into the grammar selection
+    // box. The HTML code is appended to this.checkboxes.
+    //
+    // Parameters:
+    //    whattype: Identification of the current point in the walkthrough.
+    //    objType: The type of the current grammar object.
+    //    origObjType: The original type of the current grammar object. (This can be different from
+    //                 objType when, for example, a feature under "clause" has the name "clause_atom:tab".)
+    //    featName: The name of the feature.
+    //    featNameLoc: Localized feature name.
+    //    sgiObj: The current SentenceGrammarItem object (always 'this').
+    //
+    GrammarSelectionBox.prototype.generatorCallback = function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
+        switch (whattype) {
+            case WHAT.groupstart:
+                if (!this.hasSeenGrammarGroup) {
+                    this.hasSeenGrammarGroup = true;
+                    this.checkboxes += '<div class="subgrammargroup">';
+                }
+                this.checkboxes += "<div class=\"grammargroup\"><h2>" + featNameLoc + "</h2><div>";
+                this.addBr.reset();
+                break;
+            case WHAT.groupend:
+                this.checkboxes += '</div></div>';
+                break;
+            case WHAT.feature:
+            case WHAT.metafeature:
+                var disabled = mayShowFeature(objType, origObjType, featName, sgiObj) ? '' : 'disabled';
+                this.checkboxes += this.addBr.getStr() + "<input id=\"" + objType + "_" + featName + "_cb\" type=\"checkbox\" " + disabled + ">" + featNameLoc;
+                break;
         }
-    }
-}
+    };
+    //------------------------------------------------------------------------------------------
+    // makeInitCheckBoxForObj method
+    //
+    // Creates initial checkboxes for features related to objects (word, phrase, clause, etc.).
+    // The initial checkboxes are
+    //     for words: Word spacing (Hebrew only)
+    //     for other objects: Separate lines, show border.
+    //
+    // Parameter:
+    //     level: Object level (word=0, phrase=1, etc.)
+    // Returns HTML for creating a checkbox.
+    //
+    GrammarSelectionBox.prototype.makeInitCheckBoxForObj = function (level) {
+        if (level == 0) {
+            // Object is word
+            if (charset.isHebrew) {
+                return this.addBr.getStr()
+                    + ("<input id=\"ws_cb\" type=\"checkbox\">" + localize('word_spacing') + "</span>");
+            }
+            else
+                return '';
+        }
+        else {
+            // Object is phrase, clause etc.
+            return this.addBr.getStr()
+                + ("<input id=\"lev" + level + "_seplin_cb\" type=\"checkbox\">" + localize('separate_lines') + "</span>")
+                + '<br>'
+                + ("<input id=\"lev" + level + "_sb_cb\" type=\"checkbox\">" + localize('show_border') + "</span>");
+        }
+    };
+    //------------------------------------------------------------------------------------------
+    // generateHtml method
+    //
+    // This is the main method of the class. It generates the HTML that displays the contents of the
+    // grammar selection box.
+    //
+    // Returns:
+    //     HTML code.
+    //
+    GrammarSelectionBox.prototype.generateHtml = function () {
+        var _this = this;
+        // Loop through 'word', 'phrase', 'clause', 'sentence' or the like
+        for (var level in configuration.sentencegrammar) {
+            var leveli = +level;
+            if (isNaN(leveli))
+                continue; // Not numeric
+            var objType = configuration.sentencegrammar[leveli].objType; // objType is 'word', 'phrase' etc.
+            this.addBr.reset();
+            this.checkboxes += "<div class=\"objectlevel\"><h1>" + getObjectFriendlyName(objType) + "</h1><div>";
+            this.checkboxes += this.makeInitCheckBoxForObj(leveli);
+            /// TO DO: This only works if the grammargroups are not intermixed with grammarfeatures.
+            this.hasSeenGrammarGroup = false;
+            configuration.sentencegrammar[leveli]
+                .walkFeatureNames(objType, function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) { return _this.generatorCallback(whattype, objType, origObjType, featName, featNameLoc, sgiObj); });
+            if (this.hasSeenGrammarGroup)
+                this.checkboxes += '</div>';
+            this.checkboxes += '</div></div>';
+        }
+        return this.checkboxes;
+    };
+    //------------------------------------------------------------------------------------------
+    // setHandlerCallback method
+    //
+    // This function is called repeatedly from the walkFeatureNames() method of the
+    // SentenceGrammarItem interface. It sets up event handlers for checking/unchecking of
+    // checkboxes in the grammar selection box.
+    //
+    // Parameters:
+    //    whattype: Identification of the current point in the walkthrough.
+    //    objType: The type of the current grammar object.
+    //    featName: The name of the feature.
+    //    featNameLoc: Localized feature name.
+    //    leveli: The sentence grammar index (0 for word, 1 for phrase, etc.)
+    //
+    GrammarSelectionBox.prototype.setHandlerCallback = function (whattype, objType, featName, featNameLoc, leveli) {
+        var _this = this;
+        if (whattype != WHAT.feature && whattype != WHAT.metafeature)
+            return;
+        if (leveli === 0) { // Handling of words
+            $("#" + objType + "_" + featName + "_cb").on('change', function (e) {
+                if ($(e.currentTarget).prop('checked')) {
+                    if (!inQuiz) {
+                        // Save setting in browser
+                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                    }
+                    $(".wordgrammar." + featName).removeClass('dontshowit').addClass('showit');
+                    _this.wordSpaceBox.implicit(true);
+                }
+                else {
+                    if (!inQuiz) {
+                        // Remove setting from browser
+                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                    }
+                    $(".wordgrammar." + featName).removeClass('showit').addClass('dontshowit');
+                    _this.wordSpaceBox.implicit(false);
+                }
+                for (var lev = 1; lev < configuration.maxLevels - 1; ++lev)
+                    GrammarSelectionBox.adjustDivLevWidth(lev);
+            });
+        }
+        else { // Handling of clause, phrase, etc.
+            $("#" + objType + "_" + featName + "_cb").on('change', function (e) {
+                if ($(e.currentTarget).prop('checked')) {
+                    if (!inQuiz) {
+                        // Save setting in browser
+                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                    }
+                    $(".xgrammar." + objType + "_" + featName).removeClass('dontshowit').addClass('showit');
+                    if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
+                        _this.separateLinesBoxes[leveli].implicit(true);
+                        $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left', indentation_width + 'px').css('text-indent', -indentation_width + 'px');
+                    }
+                    else
+                        _this.borderBoxes[leveli].implicit(true);
+                }
+                else {
+                    if (!inQuiz) {
+                        // Remove setting from browser
+                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                    }
+                    $(".xgrammar." + objType + "_" + featName).removeClass('showit').addClass('dontshowit');
+                    if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
+                        _this.separateLinesBoxes[leveli].implicit(false);
+                        $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left', '0').css('text-indent', '0');
+                    }
+                    else
+                        _this.borderBoxes[leveli].implicit(false);
+                }
+                GrammarSelectionBox.adjustDivLevWidth(leveli);
+            });
+        }
+    };
+    //------------------------------------------------------------------------------------------
+    // setHandlers method
+    //
+    // Sets up event handlers for checking/unchecking of checkboxes in the grammar selection box.
+    // This function itself handles the "word spacing", "separate lines", and "show border"
+    // checkboxes; it then calls walkFeatureNames() to handle the other checkboxes.
+    //
+    GrammarSelectionBox.prototype.setHandlers = function () {
+        var _this = this;
+        var _loop_1 = function (level) {
+            var leveli = +level;
+            if (isNaN(leveli))
+                return "continue"; // Not numeric
+            var sg = configuration.sentencegrammar[leveli];
+            if (leveli === 0) { // Handling of words
+                // Set change handler for the checkbox for "word spacing".
+                // Although only Hebrew uses a word spacing checkbox, the mechanism is also used by Greek,
+                // because we use it to set up the inline-blocks for word grammar information.
+                this_1.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
+                // Only Hebrew has a #ws_cb
+                $('#ws_cb').on('change', function (e) {
+                    if ($(e.currentTarget).prop('checked')) {
+                        if (!inQuiz) {
+                            // Save setting in browser
+                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                        }
+                        _this.wordSpaceBox.explicit(true);
+                    }
+                    else {
+                        if (!inQuiz) {
+                            // Remove setting from browser
+                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                        }
+                        _this.wordSpaceBox.explicit(false);
+                    }
+                    for (var lev = 1; lev < configuration.maxLevels - 1; ++lev)
+                        GrammarSelectionBox.adjustDivLevWidth(lev);
+                });
+            }
+            else { // Handling of clause, phrase, etc.
+                // Set change handlers for the checkboxes for "separate lines" and "show border".
+                this_1.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
+                $("#lev" + leveli + "_seplin_cb").on('change', leveli, function (e) {
+                    if ($(e.currentTarget).prop('checked')) {
+                        if (!inQuiz) {
+                            // Save setting in browser
+                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                        }
+                        _this.separateLinesBoxes[e.data].explicit(true);
+                    }
+                    else {
+                        if (!inQuiz) {
+                            // Remove setting from browser
+                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                        }
+                        _this.separateLinesBoxes[e.data].explicit(false);
+                    }
+                });
+                this_1.borderBoxes[leveli] = new util.BorderFollowerBox(leveli);
+                $("#lev" + leveli + "_sb_cb").on('change', leveli, function (e) {
+                    if ($(e.currentTarget).prop('checked')) {
+                        if (!inQuiz) {
+                            // Save setting in browser
+                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                        }
+                        _this.borderBoxes[e.data].explicit(true);
+                    }
+                    else {
+                        if (!inQuiz) {
+                            // Remove setting from browser
+                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                        }
+                        _this.borderBoxes[e.data].explicit(false);
+                    }
+                    GrammarSelectionBox.adjustDivLevWidth(e.data);
+                });
+            }
+            // Handle the remaining checkboxes:
+            sg.walkFeatureNames(sg.objType, function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) { return _this.setHandlerCallback(whattype, objType, featName, featNameLoc, leveli); });
+        };
+        var this_1 = this;
+        for (var level in configuration.sentencegrammar) {
+            _loop_1(level);
+        }
+    };
+    //------------------------------------------------------------------------------------------
+    // clearBoxes method
+    //
+    // If we are not running a quiz and 'force' is false, the method checks or unchecks the
+    // checkboxes in the grammar selection box according to the values stored in the browser.
+    //
+    // If we are not running a quiz and 'force' is true, the method unchecks all checkboxes and
+    // updates the browser information accordingly.
+    //
+    // If we are running a quiz, all checkboxes are unchecked, but the browser information is not
+    // updated.
+    //
+    // Parameter:
+    //     force: False means set checkboxes according to information in browser.
+    //            True means uncheck all checkboxes.
+    //
+    GrammarSelectionBox.clearBoxes = function (force) {
+        $('input[type="checkbox"]').prop('checked', false); // Uncheck all checkboxes
+        if (!inQuiz) {
+            if (force) {
+                // Remove all information about selected grammar items
+                for (var i in sessionStorage) {
+                    if (sessionStorage[i] == configuration.propertiesName) {
+                        sessionStorage.removeItem(i);
+                        $('#' + i).prop('checked', false);
+                        $('#' + i).trigger('change');
+                    }
+                }
+            }
+            else {
+                // Enforce selected grammar items
+                for (var i in sessionStorage) {
+                    if (sessionStorage[i] == configuration.propertiesName)
+                        $('#' + i).prop('checked', true);
+                }
+            }
+        }
+    };
+    //****************************************************************************************************
+    // buildGrammarAccordion method
+    //
+    // Builds accordion for grammar selector.
+    //
+    // Returns:
+    //     The width of the accordion
+    //
+    GrammarSelectionBox.buildGrammarAccordion = function () {
+        var acc1 = $('#gramselect').accordion({ heightStyle: 'content', collapsible: true, header: 'h1' });
+        var acc2 = $('.subgrammargroup').accordion({ heightStyle: 'content', collapsible: true, header: 'h2' });
+        /// @todo Does this work if there are multiple '.subgrammargroup' divs?
+        var max_width = 0;
+        for (var j = 0; j < acc2.find('h2').length; ++j) {
+            acc2.accordion('option', 'active', j);
+            if (acc2.width() > max_width)
+                max_width = acc2.width();
+        }
+        acc2.accordion('option', 'active', false); // No active item 
+        acc2.width(max_width * 1.05); // I don't know why I have to add 5% here
+        max_width = 0;
+        for (var j = 0; j < acc1.find('h1').length; ++j) {
+            acc1.accordion('option', 'active', j);
+            if (acc1.width() > max_width)
+                max_width = acc1.width();
+        }
+        acc1.accordion('option', 'active', false);
+        acc1.width(max_width);
+        return max_width;
+    };
+    return GrammarSelectionBox;
+}());
 // -*- js -*-
 /* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 /// @file
@@ -646,7 +1158,7 @@ var DisplaySingleMonadObject = /** @class */ (function (_super) {
         }
         var grammar = '';
         configuration.sentencegrammar[0]
-            .getFeatVal(smo, 0, this.objType, false, function (whattype, objType, origObjType, featName, featValLoc) {
+            .walkFeatureValues(smo, 0, this.objType, false, function (whattype, objType, origObjType, featName, featValLoc) {
             switch (whattype) {
                 case WHAT.feature:
                     var wordclass;
@@ -735,7 +1247,7 @@ var DisplayMultipleMonadObject = /** @class */ (function (_super) {
         var indent = 0;
         if (configuration.sentencegrammar[this.level]) {
             configuration.sentencegrammar[this.level]
-                .getFeatVal(this.displayedMo, this.mix, this.objType, true, function (whattype, objType, origObjType, featName, featValLoc) {
+                .walkFeatureValues(this.displayedMo, this.mix, this.objType, true, function (whattype, objType, origObjType, featName, featValLoc) {
                 if (whattype == WHAT.feature || whattype == WHAT.metafeature) {
                     if (configuration.databaseName == 'ETCBC4' && objType == "clause_atom" && featName == "tab")
                         indent = +featValLoc;
@@ -1077,14 +1589,14 @@ var Dictionary = /** @class */ (function () {
                 if (level === 0 && (!qd || !qd.quizFeatures.dontShow))
                     res += '<tr><td>{2}</td><td class="bol-tooltip leftalign {0}">{1}</td></tr>'.format(charset.foreignClass, monob.mo.features[configuration.surfaceFeature], localize('visual'));
                 var map = [];
-                sengram.getFeatName(sengram.objType, function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
+                sengram.walkFeatureNames(sengram.objType, function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
                     if (whattype == WHAT.feature || whattype == WHAT.metafeature)
                         if (!mayShowFeature(objType, origObjType, featName, sgiObj))
                             return;
                     if (whattype == WHAT.feature || whattype == WHAT.metafeature || whattype == WHAT.groupstart)
                         map[featName] = featNameLoc;
                 });
-                sengram.getFeatVal(monob, mix, sengram.objType, false, function (whattype, objType, origObjType, featName, featValLoc, sgiObj) {
+                sengram.walkFeatureValues(monob, mix, sengram.objType, false, function (whattype, objType, origObjType, featName, featValLoc, sgiObj) {
                     switch (whattype) {
                         case WHAT.feature:
                             if (mayShowFeature(objType, origObjType, featName, sgiObj)) {
@@ -2078,10 +2590,11 @@ var resizer;
     });
 })(resizer || (resizer = {}));
 // -*- js -*-
-/* 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
 /// <reference path="util.ts" />
 /// <reference path="configuration.ts" />
 /// <reference path="sentencegrammar.ts" />
+/// <reference path="grammarselectionbox.ts" />
 /// <reference path="charset.ts" />
 /// <reference path="monadobject.ts" />
 /// <reference path="displaymonadobject.ts" />
@@ -2093,261 +2606,12 @@ var resizer;
 /// <reference path="stringwithsort.ts" />
 /// <reference path="quiz.ts" />
 /// <reference path="resizer.ts" />
-var supportsProgress; ///< Does the browser support &lt;progress&gt;?
-var charset;
-var inQuiz;
-var quiz;
-var accordion_width;
-var indentation_width;
-/// Ensures that the width of a &lt;span class="levX"&gt; is at least as wide as the &lt;span
-/// class="gram"&gt; holding its grammar information.
-/// @param[in] level Object level (word=0, phrase=1, etc.)
-function adjustDivLevWidth(level) {
-    $('.showborder.lev' + level).each(function (index) {
-        $(this).css('width', 'auto'); // Give div natural width
-        var w = $(this).find('> .gram').width();
-        if ($(this).width() < w)
-            $(this).width(w); // Set width of div to width of information
-    });
-}
-// Creates HTML for checkboxes that select what grammar to display
-var GenerateCheckboxes = /** @class */ (function () {
-    function GenerateCheckboxes() {
-        this.checkboxes = '';
-        this.addBr = new util.AddBetween('<br>'); ///< AddBetween object to insert &lt;br&gt;
-        this.borderBoxes = [];
-        this.separateLinesBoxes = [];
-    }
-    GenerateCheckboxes.prototype.generatorCallback = function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
-        switch (whattype) {
-            case WHAT.groupstart:
-                if (!this.hasSeenGrammarGroup) {
-                    this.hasSeenGrammarGroup = true;
-                    this.checkboxes += '<div class="subgrammargroup">';
-                }
-                this.checkboxes += '<div class="grammargroup"><h2>{0}</h2><div>'.format(featNameLoc);
-                this.addBr.reset();
-                break;
-            case WHAT.groupend:
-                this.checkboxes += '</div></div>';
-                break;
-            case WHAT.feature:
-            case WHAT.metafeature:
-                if (mayShowFeature(objType, origObjType, featName, sgiObj)) {
-                    this.checkboxes += '{0}<input id="{1}_{2}_cb" type="checkbox">{3}'
-                        .format(this.addBr.getStr(), objType, featName, featNameLoc);
-                    var wordclass;
-                    if (whattype === WHAT.feature && getFeatureSetting(objType, featName).foreignText)
-                        wordclass = charset.foreignClass;
-                    else if (whattype === WHAT.feature && getFeatureSetting(objType, featName).transliteratedText)
-                        wordclass = charset.transliteratedClass;
-                    else
-                        wordclass = 'latin';
-                }
-                else
-                    this.checkboxes += '{0}<input id="{1}_{2}_cb" type="checkbox" disabled>{3}'.format(this.addBr.getStr(), objType, featName, featNameLoc);
-                break;
-        }
-    };
-    /// Creates checkboxes related to objects (word, phrase, clause, etc.).
-    /// @param level Object level (word=0, phrase=1, etc.)
-    /// @return HTML for creating a checkbox
-    GenerateCheckboxes.prototype.makeCheckBoxForObj = function (level) {
-        if (level == 0) {
-            // Object is word
-            if (charset.isHebrew)
-                return '{0}<input id="ws_cb" type="checkbox">{1}</span>'.format(this.addBr.getStr(), localize('word_spacing'));
-            else
-                return '';
-        }
-        else // Object is phrase, clause etc.
-            return '{0}<input id="lev{1}_seplin_cb" type="checkbox">{2}</span><br><input id="lev{1}_sb_cb" type="checkbox">{3}</span>'.format(this.addBr.getStr(), level, localize('separate_lines'), localize('show_border'));
-    };
-    GenerateCheckboxes.prototype.generateHtml = function () {
-        var _this = this;
-        for (var level in configuration.sentencegrammar) {
-            var leveli = +level;
-            if (isNaN(leveli))
-                continue; // Not numeric
-            var objType = configuration.sentencegrammar[leveli].objType;
-            this.addBr.reset();
-            this.checkboxes += '<div class="objectlevel"><h1>' + getObjectFriendlyName(objType) + '</h1><div>';
-            this.checkboxes += this.makeCheckBoxForObj(leveli);
-            /// @todo This works if only one &lt;div class="objectlevel"&gt; has any &lt;div class="grammargroup"&gt; children
-            /// and the grammargroups are not intermixed with grammarfeatures
-            this.hasSeenGrammarGroup = false;
-            configuration.sentencegrammar[leveli]
-                .getFeatName(configuration.sentencegrammar[leveli].objType, function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
-                return _this.generatorCallback(whattype, objType, origObjType, featName, featNameLoc, sgiObj);
-            });
-            if (this.hasSeenGrammarGroup)
-                this.checkboxes += '</div>';
-            this.checkboxes += '</div></div>';
-        }
-        return this.checkboxes;
-    };
-    GenerateCheckboxes.prototype.setHandlerCallback = function (whattype, objType, featName, featNameLoc, leveli) {
-        var _this = this;
-        if (whattype != WHAT.feature && whattype != WHAT.metafeature)
-            return;
-        if (leveli === 0) {
-            // Handling of words
-            $('#{0}_{1}_cb'.format(objType, featName)).on('change', function (e) {
-                if ($(e.currentTarget).prop('checked')) {
-                    if (!inQuiz)
-                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
-                    $('.wordgrammar.{0}'.format(featName)).removeClass('dontshowit').addClass('showit');
-                    _this.wordSpaceBox.implicit(true);
-                }
-                else {
-                    if (!inQuiz)
-                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
-                    $('.wordgrammar.{0}'.format(featName)).removeClass('showit').addClass('dontshowit');
-                    _this.wordSpaceBox.implicit(false);
-                }
-                for (var lev = 1; lev < configuration.maxLevels - 1; ++lev)
-                    adjustDivLevWidth(lev);
-            });
-        }
-        else {
-            // Handling of clause, phrase, etc.
-            $('#{0}_{1}_cb'.format(objType, featName)).on('change', function (e) {
-                if ($(e.currentTarget).prop('checked')) {
-                    if (!inQuiz)
-                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
-                    $('.xgrammar.{0}_{1}'.format(objType, featName)).removeClass('dontshowit').addClass('showit');
-                    if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
-                        _this.separateLinesBoxes[leveli].implicit(true);
-                        $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left', indentation_width + 'px').css('text-indent', -indentation_width + 'px');
-                    }
-                    else
-                        _this.borderBoxes[leveli].implicit(true);
-                }
-                else {
-                    if (!inQuiz)
-                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
-                    $('.xgrammar.{0}_{1}'.format(objType, featName)).removeClass('showit').addClass('dontshowit');
-                    if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
-                        _this.separateLinesBoxes[leveli].implicit(false);
-                        $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left', '0').css('text-indent', '0');
-                    }
-                    else
-                        _this.borderBoxes[leveli].implicit(false);
-                }
-                adjustDivLevWidth(leveli);
-            });
-        }
-    };
-    // Set up handling of checkboxes
-    GenerateCheckboxes.prototype.setHandlers = function () {
-        var _this = this;
-        for (var level in configuration.sentencegrammar) {
-            var leveli = +level;
-            if (isNaN(leveli))
-                continue; // Not numeric
-            var sg = configuration.sentencegrammar[leveli];
-            if (leveli === 0) {
-                // Although only Hebrew uses a word spacing checkbox, the mechanism is also used by Greek,
-                // because we use it to set up the inline-blocks for word grammar information.
-                this.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
-                // Only Hebrew has a #ws_cb
-                $('#ws_cb').on('change', function (e) {
-                    if ($(e.currentTarget).prop('checked')) {
-                        if (!inQuiz)
-                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
-                        _this.wordSpaceBox.explicit(true);
-                    }
-                    else {
-                        if (!inQuiz)
-                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
-                        _this.wordSpaceBox.explicit(false);
-                    }
-                    for (var lev = 1; lev < configuration.maxLevels - 1; ++lev)
-                        adjustDivLevWidth(lev);
-                });
-            }
-            else {
-                this.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
-                $('#lev{0}_seplin_cb'.format(leveli)).on('change', leveli, function (e) {
-                    if ($(e.currentTarget).prop('checked')) {
-                        if (!inQuiz)
-                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
-                        _this.separateLinesBoxes[e.data].explicit(true);
-                    }
-                    else {
-                        if (!inQuiz)
-                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
-                        _this.separateLinesBoxes[e.data].explicit(false);
-                    }
-                });
-                this.borderBoxes[leveli] = new util.BorderFollowerBox(leveli);
-                $('#lev{0}_sb_cb'.format(leveli)).change(leveli, function (e) {
-                    if ($(e.currentTarget).prop('checked')) {
-                        if (!inQuiz)
-                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
-                        _this.borderBoxes[e.data].explicit(true);
-                    }
-                    else {
-                        if (!inQuiz)
-                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
-                        _this.borderBoxes[e.data].explicit(false);
-                    }
-                    adjustDivLevWidth(e.data);
-                });
-            }
-            sg.getFeatName(sg.objType, function (whattype, objType, origObjType, featName, featNameLoc) {
-                return _this.setHandlerCallback(whattype, objType, featName, featNameLoc, leveli);
-            });
-        }
-    };
-    GenerateCheckboxes.clearBoxes = function (force) {
-        $('input[type="checkbox"]').prop('checked', false);
-        if (!inQuiz) {
-            if (force) {
-                // Remove all information about selected grammar items
-                for (var i in sessionStorage) {
-                    if (sessionStorage[i] == configuration.propertiesName) {
-                        sessionStorage.removeItem(i);
-                        $('#' + i).prop('checked', false);
-                        $('#' + i).trigger('change');
-                    }
-                }
-            }
-            else {
-                // Enforce selected grammar items
-                for (var i in sessionStorage) {
-                    if (sessionStorage[i] == configuration.propertiesName)
-                        $('#' + i).prop('checked', true);
-                }
-            }
-        }
-    };
-    return GenerateCheckboxes;
-}());
-// Build accordion for grammar selector.
-// Returns its width
-function buildGrammarAccordion() {
-    var acc1 = $('#gramselect').accordion({ heightStyle: 'content', collapsible: true, header: 'h1' });
-    var acc2 = $('.subgrammargroup').accordion({ heightStyle: 'content', collapsible: true, header: 'h2' });
-    /// @todo Does this work if there are multiple '.subgrammargroup' divs?
-    var max_width = 0;
-    for (var j = 0; j < acc2.find('h2').length; ++j) {
-        acc2.accordion('option', 'active', j);
-        if (acc2.width() > max_width)
-            max_width = acc2.width();
-    }
-    acc2.accordion('option', 'active', false); // No active item 
-    acc2.width(max_width * 1.05); // I don't know why I have to add 5% here
-    max_width = 0;
-    for (var j = 0; j < acc1.find('h1').length; ++j) {
-        acc1.accordion('option', 'active', j);
-        if (acc1.width() > max_width)
-            max_width = acc1.width();
-    }
-    acc1.accordion('option', 'active', false);
-    acc1.width(max_width);
-    return max_width;
-}
+var supportsProgress; // Does the browser support <progress>?
+var charset; // Current character set
+var inQuiz; // Are we displaying a quiz?
+var quiz; // Current quiz
+var accordion_width; // Width of the grammar selector accordions
+var indentation_width; // Width of indentation of ETCBC4 clause atoms
 /// Main code executed when the page has been loaded.
 $(function () {
     inQuiz = $('#quiztab').length > 0;
@@ -2365,11 +2629,11 @@ $(function () {
         addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
     }
     // Create HTML for checkboxes that select what grammar to display
-    var generateCheckboxes = new GenerateCheckboxes();
+    var generateCheckboxes = new GrammarSelectionBox();
     $('#gramselect').append(generateCheckboxes.generateHtml());
     generateCheckboxes.setHandlers();
-    GenerateCheckboxes.clearBoxes(false);
-    accordion_width = buildGrammarAccordion();
+    GrammarSelectionBox.clearBoxes(false);
+    accordion_width = GrammarSelectionBox.buildGrammarAccordion();
     if (inQuiz) {
         if (supportsProgress)
             $('div#progressbar').hide();
@@ -2380,7 +2644,7 @@ $(function () {
     }
     else {
         // Display text
-        $('#cleargrammar').on('click', function () { GenerateCheckboxes.clearBoxes(true); });
+        $('#cleargrammar').on('click', function () { GrammarSelectionBox.clearBoxes(true); });
         var currentDict = new Dictionary(dictionaries, 0, false);
         currentDict.generateSentenceHtml(null);
         $('.grammarselector input:enabled:checked').trigger('change'); // Make sure grammar is displayed for relevant checkboxe
