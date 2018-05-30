@@ -33,7 +33,7 @@
 //****************************************************************************************************
 // Global variables
 
-declare var useTooltip : boolean; // Does the user use tooltips rather than grammardisplay?
+declare let useTooltip : boolean; // Does the user use tooltips rather than grammardisplay?
 let supportsProgress   : boolean; // Does the browser support <progress>?
 let charset            : Charset; // Current character set
 let inQuiz             : boolean; // Are we displaying a quiz?
@@ -42,7 +42,9 @@ let accordion_width    : number;  // Width of the grammar selector accordions
 let indentation_width  : number;  // Width of indentation of ETCBC4 clause atoms
 
 
-/// Main code executed when the page has been loaded.
+//****************************************************************************************************
+// Main code executed when the page has been loaded.
+
 $(function() {
     inQuiz = $('#quiztab').length>0;
 
@@ -59,13 +61,14 @@ $(function() {
     $('#textarea').addClass(charset.isRtl ? 'rtl' : 'ltr');
 
 
+    // Add polymorphic function to the contents of configuration.sentencegrammar
     for (let i in configuration.sentencegrammar) {
         if (isNaN(+i)) continue; // Not numeric
         addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
     }
 
 
-    // Create HTML for checkboxes that select what grammar to display
+    // Create HTML the grammar selection box
     let generateCheckboxes = new GrammarSelectionBox();
     $('#gramselect').append(generateCheckboxes.generateHtml());
     generateCheckboxes.setHandlers();
@@ -73,12 +76,14 @@ $(function() {
 
     accordion_width = GrammarSelectionBox.buildGrammarAccordion();
 
+    
     if (inQuiz) {
         if (supportsProgress)
             $('div#progressbar').hide();
         else
             $('progress#progress').hide();
 
+        // Run the exercize
         quiz = new Quiz(quizdata.quizid);
         quiz.nextQuestion();
     }
@@ -86,9 +91,10 @@ $(function() {
         // Display text
         $('#cleargrammar').on('click',() => { GrammarSelectionBox.clearBoxes(true); });
 
+        // Generate the text to display
         let currentDict : Dictionary = new Dictionary(dictionaries,0,false);
         currentDict.generateSentenceHtml(null);
-        $('.grammarselector input:enabled:checked').trigger('change'); // Make sure grammar is displayed for relevant checkboxe
+        $('.grammarselector input:enabled:checked').trigger('change'); // Make sure the relevant features are displayed
     }
 });
 

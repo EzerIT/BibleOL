@@ -31,7 +31,7 @@ class Quiz {
         var timeoutinner = 28000;
 
         var fun1 = function() {
-        
+            
             window.clearTimeout(tOutOuter);
             window.clearTimeout(tOutInner);
             window.clearTimeout(tDialog);
@@ -50,30 +50,28 @@ class Quiz {
             var heartbeatDialog = $('<div></div>')
                 .html(localize('done_practicing'))
                 .dialog({
-                autoOpen: false,
-                title: localize('stop_practicing'),
-                resizable: true,
-                show: 'fade',
-                hide: 'explode',
-                height:140,
-                modal: true,
-                buttons:[{
-                text: localize('go_on'),
-                click: function() {
-                    $(this).dialog('close');
-                    window.clearTimeout(tOutOuter);
-                    window.clearTimeout(tOutInner);
-                    window.clearTimeout(tDialog);
-                    tOutOuter = window.setTimeout(fun1, timeouter);
-                    return;
-                    } 
-                }]
-            }
-        );
-
-    }
+                    autoOpen: false,
+                    title: localize('stop_practicing'),
+                    resizable: true,
+                    show: 'fade',
+                    hide: 'explode',
+                    height:140,
+                    modal: true,
+                    buttons:[{
+                        text: localize('go_on'),
+                        click: function() {
+                            $(this).dialog('close');
+                            window.clearTimeout(tOutOuter);
+                            window.clearTimeout(tOutInner);
+                            window.clearTimeout(tDialog);
+                            tOutOuter = window.setTimeout(fun1, timeouter);
+                            return;
+                        } 
+                    }]
+                });
+        }
     
-    fun1();
+        fun1();
 
         if (this.currentPanelQuestion!==null)
             // Update statistics

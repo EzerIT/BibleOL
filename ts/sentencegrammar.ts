@@ -2,7 +2,7 @@
 
 // Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 
-// The code here handles walink through the "sentencegrammar" part of the configuration object.
+// The code here handles walking through the "sentencegrammar" part of the configuration object.
 //
 // Before using the classes in this file, the function addMethodsSgi() must called to enhace the
 // configuration object with polymorhic functions, turning the contents of "sentencegrammar" into

@@ -214,7 +214,7 @@ function getFeatureSetting(otype, feature) {
 }
 // -*- js -*-
 // Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-// The code here handles walink through the "sentencegrammar" part of the configuration object.
+// The code here handles walking through the "sentencegrammar" part of the configuration object.
 //
 // Before using the classes in this file, the function addMethodsSgi() must called to enhace the
 // configuration object with polymorhic functions, turning the contents of "sentencegrammar" into
@@ -1372,25 +1372,41 @@ function mayShowFeature(oType, origOtype, feat, sgiObj) {
     return qf.dontShowFeatures.indexOf(feat) === -1;
 }
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+//****************************************************************************************************
+// Dictionary class
+//
+// This class is responsible for interpreting the contents of the 'dictionaries' variable and
+// generating the corresponding HTML code.
+//
 var Dictionary = /** @class */ (function () {
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Parameters:
+    //     dictif: The DictionaryIf object to interpret.
+    //     index: The entry in dictif.sentenceSets and dictif.monadObjects to interpret.
+    //     inQuiz: True, if we are generating an exercize.
+    //
     function Dictionary(dictif, index, inQuiz) {
         this.monads = []; // Maps id_d => monad object
         this.level = []; // Maps id_d => object level
-        this.singleMonads = [];
-        this.dispMonadObjects = [];
+        this.singleMonads = []; // Maps monad number => SingleMonadObject (words only)
+        this.dispMonadObjects = []; // The Emdros objects to display.
+        // Save local copy of relevant information
         this.sentenceSet = dictif.sentenceSets[index];
         this.monadObjects1 = dictif.monadObjects[index];
         this.bookTitle = dictif.bookTitle;
-        // Index monads
+        // Generate the 'singleMonads', 'monads' and 'level' maps.
         for (var level in this.monadObjects1) {
             var leveli = +level;
             if (isNaN(leveli))
                 continue; // Not numeric
+            // leveli is 0 for word, 1 for phrase, etc. (or something similar depending on the database)
             for (var i in this.monadObjects1[leveli]) {
                 if (isNaN(+i))
                     continue; // Not numeric
-                var item = this.monadObjects1[leveli][+i];
+                var item = this.monadObjects1[leveli][+i]; // A single Emdros object
                 if (leveli === 0)
                     this.singleMonads[getSingleInteger(item.mo.monadset)] = item;
                 this.monads[item.mo.id_d] = item;
@@ -1401,55 +1417,51 @@ var Dictionary = /** @class */ (function () {
         for (var i in this.monads) {
             if (isNaN(+i))
                 continue; // Not numeric
-            var parent = this.monads[+i];
-            for (var i2 in parent.children_idds) {
+            var parent_1 = this.monads[+i];
+            for (var i2 in parent_1.children_idds) {
                 if (isNaN(+i2))
                     continue; // Not numeric
-                var child_idd = parent.children_idds[+i2];
-                this.monads[child_idd].parent = parent;
+                var child_idd = parent_1.children_idds[+i2];
+                this.monads[child_idd].parent = parent_1;
             }
         }
+        ///////////////////////////
         // Create display hierarchy
-        // Single monads
-        var objType = configuration.sentencegrammar[0].objType;
+        ///////////////////////////
+        // Single monads (i.e. words)
         this.dispMonadObjects.push([]);
-        // singleMonads is sparsely populated
         for (var se in this.singleMonads) {
             if (isNaN(+se))
                 continue; // Not numeric
-            var dmo = new DisplaySingleMonadObject(this.singleMonads[+se], objType, inQuiz);
-            this.dispMonadObjects[0].push(dmo);
-            // Do we need this?: dispSingleMonads[se] = dmo;
+            // singleMonads is sparsely populated
+            this.dispMonadObjects[0].push(new DisplaySingleMonadObject(this.singleMonads[+se], configuration.sentencegrammar[0].objType, inQuiz));
         }
-        // Multiple monads
+        // Multiple monads (i.e. phrases, clauses, etc.)
         for (var lev = 1; lev < configuration.maxLevels; ++lev) {
-            var ldmo = [];
+            var ldmo = []; // The Emdros objects at level 'lev'
             this.dispMonadObjects.push(ldmo);
-            if ( /*inQuiz || */lev < configuration.maxLevels - 1)
-                objType = configuration.sentencegrammar[lev].objType;
-            else
-                objType = 'Patriarch'; //$NON-NLS-1$
-            if (lev < configuration.maxLevels - 1) {
+            if (lev < configuration.maxLevels - 1) { // Not top level
                 for (var i in this.monadObjects1[lev]) {
                     if (isNaN(+i))
                         continue; // Not numeric
-                    var monadObject = this.monadObjects1[lev][parseInt(i)];
+                    var monadObject = this.monadObjects1[lev][parseInt(i)]; // The current object
                     // Split object into contiguous segments
                     var segCount = monadObject.mo.monadset.segments.length;
                     for (var mix = 0; mix < segCount; ++mix) {
                         var mp = monadObject.mo.monadset.segments[mix];
-                        ldmo.push(new DisplayMultipleMonadObject(monadObject, objType, lev, mp, mix, mix > 0, mix < segCount - 1));
+                        ldmo.push(new DisplayMultipleMonadObject(monadObject, configuration.sentencegrammar[lev].objType, lev, mp, mix, mix > 0, mix < segCount - 1));
                     }
                 }
+                // Sort ldmo in monad order
                 ldmo.sort(function (a, b) {
-                    // Sort in monad order
                     return a.range.low - b.range.low;
                 });
             }
-            else {
+            else { // Top level
                 // At the top level there is always only one DisplayMultipleMonadObject
                 var monadObject = this.monadObjects1[lev][0];
-                ldmo.push(new DisplayMultipleMonadObject(monadObject, objType, lev, monadObject.mo.monadset));
+                ldmo.push(new DisplayMultipleMonadObject(monadObject, 'Patriarch', // The pseudo-name of the top-level object
+                lev, monadObject.mo.monadset));
             }
         }
         /////////////////////////////////////////////////////////
@@ -1478,9 +1490,17 @@ var Dictionary = /** @class */ (function () {
             }
         }
     }
+    //------------------------------------------------------------------------------------------
+    // hoverForGrammar method
+    //
+    // Associate a grammar information box with each Emdros object. The grammar information box is
+    // displayed when the mouse hovers over the object.
+    //
     Dictionary.prototype.hoverForGrammar = function () {
         var thisDict = this;
+        // All display objects are identified with a "data-idd" attribute in the displaying HTML element. HERTIL
         if (useTooltip) {
+            // Use the tooltip function of JQuery UI.
             $(document).tooltip({
                 items: "[data-idd]",
                 disabled: false,
@@ -1488,6 +1508,8 @@ var Dictionary = /** @class */ (function () {
             });
         }
         else {
+            // Poplulate the <div class="grammardisplay"> element with grammar information when the
+            // mouse hovers over a displayed object.
             $("[data-idd]")
                 .hover(function () {
                 // Calculate vertical position of '.grammardisplay'.
@@ -1498,7 +1520,7 @@ var Dictionary = /** @class */ (function () {
                 $('.grammardisplay')
                     .html(thisDict.toolTipFunc(this, true).first)
                     .css('top', Math.max(0, scrTop - qcTop + 5))
-                    .outerWidth($('#grammardisplaycontainer').outerWidth() - 25) // 25px is a littel mora than margin-right
+                    .outerWidth($('#grammardisplaycontainer').outerWidth() - 25) // 25px is a littel more than margin-right
                     .show();
             }, function () {
                 $('.grammardisplay').hide();
@@ -1520,10 +1542,6 @@ var Dictionary = /** @class */ (function () {
             $('#grammar-info-dialog').modal('show');
         });
     };
-    //    Not used
-    //    private dontClickForGrammar() {
-    //        $("[data-idd]").off('click');
-    //    }
     Dictionary.handleDisplaySize = function (thisDict) {
         switch (resizer.getWindowSize()) {
             case 'xs':
@@ -1550,37 +1568,37 @@ var Dictionary = /** @class */ (function () {
         $('#textarea').append(this.dispMonadObjects[this.dispMonadObjects.length - 1][0].generateHtml(qd, sentenceTextArr));
         if (configuration.databaseName == 'ETCBC4') {
             // Generate indentation information
-            var minindent;
-            var maxindent;
+            var minindent_1;
+            var maxindent_1;
             var all_c_a_t = $('#textarea').find('.xgrammar.clause_atom_tab');
             // Find minimum and maximum indentation
             all_c_a_t.each(function (index, el) {
                 var indent = +$(el).attr('data-indent');
                 if (index == 0)
-                    minindent = maxindent = indent;
+                    minindent_1 = maxindent_1 = indent;
                 else {
-                    if (indent < minindent)
-                        minindent = indent;
-                    if (indent > maxindent)
-                        maxindent = indent;
+                    if (indent < minindent_1)
+                        minindent_1 = indent;
+                    if (indent > maxindent_1)
+                        maxindent_1 = indent;
                 }
             });
             // Calculate width of indentation indicators
             $('#textarea').append('<div class="indentation" id="testwidth"></div>');
             var tw = $('#testwidth');
-            tw.html(Dictionary.boxes(minindent, minindent, maxindent) + '&nbsp;&nbsp;');
+            tw.html(Dictionary.boxes(minindent_1, minindent_1, maxindent_1) + '&nbsp;&nbsp;');
             indentation_width = tw.width() + 1;
             // Set indentation indicators
             all_c_a_t.each(function (index, el) {
                 var indent = +$(el).attr('data-indent');
-                $(el).html(Dictionary.boxes(indent, minindent, maxindent) + '&nbsp;&nbsp;');
+                $(el).html(Dictionary.boxes(indent, minindent_1, maxindent_1) + '&nbsp;&nbsp;');
             });
         }
-        var thisDict = this;
         this.toolTipFunc =
             function (x_this, set_head) {
-                var monob = thisDict.monads[+($(x_this).attr("data-idd"))];
-                var level = thisDict.level[+($(x_this).attr("data-idd"))];
+                console.log(qd);
+                var monob = this.monads[+($(x_this).attr("data-idd"))];
+                var level = this.level[+($(x_this).attr("data-idd"))];
                 var mix = +$(x_this).attr("data-mix");
                 var sengram = configuration.sentencegrammar[level];
                 var res = '<table>';
@@ -1600,7 +1618,7 @@ var Dictionary = /** @class */ (function () {
                     switch (whattype) {
                         case WHAT.feature:
                             if (mayShowFeature(objType, origObjType, featName, sgiObj)) {
-                                var wordclass;
+                                var wordclass = void 0;
                                 var fs = getFeatureSetting(objType, featName);
                                 if (fs.foreignText)
                                     wordclass = charset.foreignClass;
@@ -2612,7 +2630,8 @@ var inQuiz; // Are we displaying a quiz?
 var quiz; // Current quiz
 var accordion_width; // Width of the grammar selector accordions
 var indentation_width; // Width of indentation of ETCBC4 clause atoms
-/// Main code executed when the page has been loaded.
+//****************************************************************************************************
+// Main code executed when the page has been loaded.
 $(function () {
     inQuiz = $('#quiztab').length > 0;
     // Does the browser support <progress>?
@@ -2623,12 +2642,13 @@ $(function () {
     // Set up CSS classes for text.
     charset = new Charset(configuration.charSet);
     $('#textarea').addClass(charset.isRtl ? 'rtl' : 'ltr');
+    // Add polymorphic function to the contents of configuration.sentencegrammar
     for (var i in configuration.sentencegrammar) {
         if (isNaN(+i))
             continue; // Not numeric
         addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
     }
-    // Create HTML for checkboxes that select what grammar to display
+    // Create HTML the grammar selection box
     var generateCheckboxes = new GrammarSelectionBox();
     $('#gramselect').append(generateCheckboxes.generateHtml());
     generateCheckboxes.setHandlers();
@@ -2639,14 +2659,16 @@ $(function () {
             $('div#progressbar').hide();
         else
             $('progress#progress').hide();
+        // Run the exercize
         quiz = new Quiz(quizdata.quizid);
         quiz.nextQuestion();
     }
     else {
         // Display text
         $('#cleargrammar').on('click', function () { GrammarSelectionBox.clearBoxes(true); });
+        // Generate the text to display
         var currentDict = new Dictionary(dictionaries, 0, false);
         currentDict.generateSentenceHtml(null);
-        $('.grammarselector input:enabled:checked').trigger('change'); // Make sure grammar is displayed for relevant checkboxe
+        $('.grammarselector input:enabled:checked').trigger('change'); // Make sure the relevant features are displayed
     }
 });
