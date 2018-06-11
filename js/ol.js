@@ -155,14 +155,6 @@ var util;
         return dumped_text;
     }
     util.mydump = mydump;
-    var Pair = /** @class */ (function () {
-        function Pair(first, second) {
-            this.first = first;
-            this.second = second;
-        }
-        return Pair;
-    }());
-    util.Pair = Pair;
     var resetChain = [];
     function addToResetChain(fb) {
         resetChain.push(fb);
@@ -488,7 +480,7 @@ var GrammarFeature = /** @class */ (function () {
     //------------------------------------------------------------------------------------------
     // walkFeatureNames method
     //
-    // See description under SentenceGrammarItem
+    // See description under SentenceGrammarItem.
     //
     GrammarFeature.prototype.walkFeatureNames = function (objType, callback) {
         // Normally localized feature names are found in l10n.emdrosobject, but occasionally special
@@ -519,7 +511,7 @@ var GrammarFeature = /** @class */ (function () {
     //------------------------------------------------------------------------------------------
     // walkFeatureValues method
     //
-    // See description under SentenceGrammarItem
+    // See description under SentenceGrammarItem.
     //
     GrammarFeature.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         var featType = typeinfo.obj2feat[this.realObjectType][this.realFeatureName];
@@ -566,7 +558,7 @@ var GrammarFeature = /** @class */ (function () {
     //------------------------------------------------------------------------------------------
     // containsFeature method
     //
-    // See description under SentenceGrammarItem
+    // See description under SentenceGrammarItem.
     //
     GrammarFeature.prototype.containsFeature = function (f) {
         return this.name === f;
@@ -963,10 +955,22 @@ var GrammarSelectionBox = /** @class */ (function () {
     return GrammarSelectionBox;
 }());
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-/// @file
-/// @brief Characteristics of the current character set
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+// Character set management
+//****************************************************************************************************
+// Charset class
+//
+// This class handles characteristics of the current character set.
+//
 var Charset = /** @class */ (function () {
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Initializes the members of this object.
+    //
+    // Parameter:
+    //     The character set from the configuration variable.
+    //
     function Charset(cs) {
         switch (cs) {
             case 'hebrew':
@@ -1000,7 +1004,17 @@ var Charset = /** @class */ (function () {
     return Charset;
 }());
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+//****************************************************************************************************
+// getFirst function
+//
+// Retrieves the lowest monad in a MonadSet.
+//
+// Parameter:
+//     ms: MonadSet to search.
+// Returns:
+//     The lowest monad in the monad set
+//
 function getFirst(ms) {
     var first = 1000000000;
     for (var pci in ms.segments) {
@@ -1012,6 +1026,16 @@ function getFirst(ms) {
     }
     return first;
 }
+//****************************************************************************************************
+// getSingleInteger function
+//
+// Retrieves the single monad from a MonadSet containing only one monad.
+//
+// Parameter:
+//     ms: MonadSet to search.
+// Returns:
+//     The only monad in the monad set
+//
 function getSingleInteger(ms) {
     if (ms.segments.length === 1) {
         var p = ms.segments[0];
@@ -1020,6 +1044,16 @@ function getSingleInteger(ms) {
     }
     throw 'MonadSet.ObjNotSingleMonad';
 }
+//****************************************************************************************************
+// getMonadArray function
+//
+// Returns an array containing all the monads in a MonadSet.
+//
+// Parameter:
+//     ms: MonadSet from which monads are taken.
+// Returns:
+//     An array containing all the monads of the MonadSet.
+//
 function getMonadArray(ms) {
     var res = [];
     for (var i in ms.segments) {
@@ -1032,20 +1066,82 @@ function getMonadArray(ms) {
     return res;
 }
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+// Classes that represent display information about Emdros objects.
+//****************************************************************************************************
+// About the HTML elements displaying text and grammar
+//****************************************************************************************************
+//
+// Words (lowest level Emdros objects):
+//     The Emdros object is represented by a <span> element with the classes "textblock" and
+//     "inline". Within this <span> element a number of other <span> elements are found:
+//      
+//         * One <span> element represents the word itself. It has the class "textdisplay" and a class
+//           representing the character set of the text. Additionally it may have classes representing
+//           Hebrew optional word spacing (see follow_class in the generateHtml method of the
+//           DisplaySingleMonadObject class below). The element also has a 'data-idd' attribute, whose
+//           value is the id_d of the object in the Emdros database.
+//
+//         * A number of <span> elements represent grammar features of the word. These elements have
+//           the class "wordgrammar". Additionally, they may have these classes:
+//               - "showit" / "dontshowit": Controls if the word feature is shown or not.
+//               - The name of the feature.
+//               - "hebrew" / "hebrew_translit" / "greek" / "latin" / "ltr": Identify the character set
+//                 of the feature.
+//
+// Emdros objects above the word level (such as phrase or clause)...
+//     ...have a level (for example, 1 for phrase, 2 for clause etc.).
+//     ...may be split into non-contiguous segments, numbered from 0 and up.
+//     ...may or may not be displayable. The Patriach element is not displayable, and not all
+//        Greek words belong to a displayable clause1 or a clause2.
+//
+//     The Emdros object is represented by a <span> element with the class "lev#", where # is the
+//     level number. Additionally it may have these classes:
+//         - "nodummy": If the object is displayable.
+//         - "showborder" / "dontshowborder": Controls if the border around the object is shown or not.
+//         - "seplin" / "noseplin": Controls if the object is shown on a separate line or not.
+//         - "hasp": If the object is split and has a predecessor.
+//         - "hass": If the object is split and has a successor.
+//
+//     In the border, the Emdros object type may be shown in a <span> element. This element has a
+//     'data-idd' attribute, whose value is the id_d of the object in the Emdros database, and a
+//     'data-mix' attribute, whose value is the number of the current object segment. The <span>
+//     element has class "gram" or "nogram", depending on whether the object is displayable or not.
+//     Additionally, it has one of these classes:
+//         - "showit" / "dontshowit": Controls if the feature is shown or not.
+//
+//     Following the name of the object type, the border may show features of the Emdros object in a
+//     <span> element with class "xgrammar". Additionally, it has these classes:
+//         - "showit" / "dontshowit": Controls if the feature is shown or not.
+//         - Object type, underscore, feature name (for example "clause_kind").
+//         - "indentation": If this feature should be displayed as a Hebrew clause indentation.
+//****************************************************************************************************
+// Maps URL type to non-localized hypterlink title
 var urlTypeString = {
     'u': 'click_for_web_site',
     'v': 'click_for_video',
     'd': 'click_for_document'
 };
+//****************************************************************************************************
+// DisplayMonadObject class
+//
+// This class represents the display information about a Emdros object. It is linked to a
+// MonadObject which contains the features of the Emdros object.
+//
+// A DisplayMonadObject is either a DisplaySingleMonadObject (if the Emdros object is a word) or a
+// DisplayMultipleMonadObject (if the Emdros objects is a phrase, clause, etc.).
+//
 var DisplayMonadObject = /** @class */ (function () {
-    /** Creates a {@code DisplayMonadObject}. This includes creating the display panel and popup.
-     * @param mo The {@link MonadObject} displayed (perhaps in part) by this {@code DisplayMonadObject}.
-     * @param objType The Emdros object type represented by this {@code DisplayMonadObject}.
-     * @param level The level of the object.
-     */
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Paramters:
+    //     mo: The MonadObject displayed (perhaps in part) by this DisplayMonadObject.
+    //     objType: The Emdros object type represented by this DisplayMonadObject.
+    //     level: The level of the object. (0=word, 1=phrase, etc.)
+    //    
     function DisplayMonadObject(mo, objType, level) {
-        this.uniqId = ++DisplayMonadObject.uniqIdStatic;
+        // Link this DisplayMonadObject with the MonadObject it displays
         this.displayedMo = mo;
         if (mo.displayers == undefined)
             mo.displayers = [this];
@@ -1054,40 +1150,45 @@ var DisplayMonadObject = /** @class */ (function () {
         this.objType = objType;
         this.level = level;
     }
-    DisplayMonadObject.prototype.generateHtml = function (qd, sentenceTextArr) {
-        alert('Abstract function generateHtml called');
-        return null;
-    };
-    /** Determines if this object is a subset of another {@code DisplayMonadObject}.
-     * @param mo Another {@code DisplayMonadObject}.
-     * @return True if the monad set represented by this {@code DisplayMonadObject} is a subset of the
-     * monad set represented by the parameter {@code mo}.
-     */
+    //------------------------------------------------------------------------------------------
+    // containedIn method
+    //
+    // Determines if this object is a subset of another DisplayMonadObject.
+    //
+    // Parameters:
+    //     mo: Another DisplayMonadObject.
+    // Returns
+    //     True if the monad set represented by this DisplayMonadObject is a subset of the
+    //     monad set represented by the parameter 'mo'.
+    //
     DisplayMonadObject.prototype.containedIn = function (mo) {
         return this.range.low >= mo.range.low && this.range.high <= mo.range.high;
     };
-    DisplayMonadObject.uniqIdStatic = 0;
     return DisplayMonadObject;
 }());
-/** A {@code DisplaySingleMonadObject} is a {@code DisplayMonadObject} that can display a text
- * component at the lowest level, corresponding to a single monad in an Emdros database. This is
- * typically a single word.
- * <p>
- * Hebrew is a special case here. In most languages, words are separated by spaces. In Hebrew, that
- * is not necessarily the case. The Hebrew Bible starts with the word <i>bereshit</i> ("in the
- * beginning"), but this is actually two words: <i>be</i> ("in") and <i>reshit</i> ("beginning"). When this
- * program shows the text without annotation, the words are strung together (<i>bereshit</i>), but when
- * annotation is included, the words are split (<i>be-&nbsp;reshit</i>).
- */
+//****************************************************************************************************
+// DisplaySingleMonadObject class
+//
+// A DisplaySingleMonadObject is a DisplayMonadObject that can display a text component at the
+// lowest level, corresponding to a single monad in an Emdros database. This is typically a single
+// word.
+//
+// Hebrew is a special case here. In most languages, words are separated by spaces. In Hebrew, that
+// is not necessarily the case. The Hebrew Bible starts with the word "bereshit" ("in the
+// beginning"), but this is actually two words: "be" ("in") and "reshit" ("beginning"). When this
+// program shows the text without annotation, the words are strung together ("bereshit"), but when
+// annotation is included, the words are split ("be- reshit").
+// 
 var DisplaySingleMonadObject = /** @class */ (function (_super) {
     __extends(DisplaySingleMonadObject, _super);
-    /** Creates a {@code DisplaySingleMonadObject}. This includes setting up a mouse listener that
-     * highlights enclosing phrase and clause frames. Note that this constructor does not set the
-     * text; that is done by a subsequent call to {@link #setText(String,String,Font,Color)}.
-     * @param smo The {@link SingleMonadObject} displayed by this {@code DisplaySingleMonadObject}.
-     * @param objType The Emdros object type represented by this {@code DisplaySingleMonadObject}.
-     * @param inQuiz Is this part of a quiz (in which case we must not display chapter and verse).
-     */
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Paramters:
+    //     smo: The SingleMonadObject displayed by this DisplaySingleMonadObject.
+    //     objType: The Emdros object type represented by this DisplaySingleMonadObject.
+    //     inQuiz: True if we are displaying an exercise.
+    //    
     function DisplaySingleMonadObject(smo, objType, inQuiz) {
         var _this = _super.call(this, smo, objType, 0) || this;
         _this.inQuiz = inQuiz;
@@ -1096,27 +1197,37 @@ var DisplaySingleMonadObject = /** @class */ (function (_super) {
         _this.mix = 0;
         return _this;
     }
+    //---------------------------------------------------------------------------------------------------
+    // generateHtml method
+    //
+    // See description under DisplayMonadObject.
+    //
     DisplaySingleMonadObject.prototype.generateHtml = function (qd, sentenceTextArr) {
-        var smo = this.displayedMo;
-        var uhSize = smo.bcv.length;
-        var chapter = null;
-        var verse = null;
-        var refs = null;
-        var urls = null;
+        var smo = this.displayedMo; // The SingleMonadObject being displayed by this DisplaySingleMonadObject
+        var uhSize = smo.bcv.length; // The size of the hierarchy book/chapter/verse. This is currently always 3
+        var chapter = null; // Current chapter, set if the current word is the first word of a chapter
+        var verse = null; // Current verse, set if the current word is the first word of a verse
+        // For displaying link icons (only set on the first word in a verse):
+        var refs = null; // Any picture database references associated with the current verse
+        var urls = null; // Any URLs associated with the current verse
         if (uhSize != 0) {
+            // Sanity check:
             if (uhSize != smo.sameAsPrev.length)
                 throw 'BAD2';
             if (uhSize != smo.sameAsNext.length)
                 throw 'BAD3';
-            // If this is not a quiz, add book, chapter, and verse
+            // If this is not an exercise, add book, chapter, and verse
             if (!this.inQuiz) {
-                document.title = l10n.universe['book'][smo.bcv[0]] + ' ' + smo.bcv[1];
-                $('#textcontainer h1').html(document.title);
+                document.title = l10n.universe['book'][smo.bcv[0]] + ' ' + smo.bcv[1]; // Text in title bar
+                $('#textcontainer h1').html(document.title); // Text in page heading
                 for (var i = 0; i < uhSize; ++i) {
                     if (!smo.sameAsPrev[i]) {
-                        if (i == 1)
+                        if (i == 1) {
+                            // The current word is the first word in a chapter
                             chapter = smo.bcv[i];
+                        }
                         else if (i == 2) {
+                            // The current word is the first word in a verse
                             verse = smo.bcv[i];
                             refs = smo.pics;
                             urls = smo.urls;
@@ -1125,43 +1236,37 @@ var DisplaySingleMonadObject = /** @class */ (function (_super) {
                 }
             }
         }
-        var text;
-        var id_d = qd ? qd.monad2Id[this.monad] : null;
-        if (id_d) {
+        var text; // The text to display for the current word
+        if (qd && qd.monad2Id[this.monad]) {
             // This is a quiz object
             if (qd.quizFeatures.dontShow)
-                text = '({0})'.format(++DisplaySingleMonadObject.itemIndex);
+                text = "(" + ++DisplaySingleMonadObject.itemIndex + ")";
             else
                 text = this.displayedMo.mo.features[configuration.surfaceFeature];
-            text = '<em>' + text + '</em>';
+            text = "<em>" + text + "</em>";
         }
         else
             text = this.displayedMo.mo.features[configuration.surfaceFeature];
-        var chapterstring = chapter == null ? '' : '<span class="chapter">{0}</span>&#x200a;'.format(chapter);
-        var versestring = verse == null ? '' : '<span class="verse">{0}</span>'.format(verse);
-        var refstring;
+        // Representation of chapter and verse number:
+        var chapterstring = chapter == null ? '' : "<span class=\"chapter\">" + chapter + "</span>&#x200a;"; // Currently not used
+        var versestring = verse == null ? '' : "<span class=\"verse\">" + verse + "</span>";
+        var refstring; // String of icons representing pictures
         if (refs === null)
             refstring = '';
         else if (refs.length === 4) // Only one reference
-            refstring = '<a target="_blank" title="{2}" href="http://resources.3bmoodle.dk/link.php?picno={0}"><img src="{1}images/p.png"></a>'
-                .format(refs[3], site_url, localize('click_for_picture'));
+            refstring = "<a target=\"_blank\" title=\"" + localize('click_for_picture') + "\" href=\"http://resources.3bmoodle.dk/link.php?picno=" + refs[3] + "\"><img src=\"" + site_url + "images/p.png\"></a>";
         else // More than one reference
-            refstring = '<a target="_blank" title="{4}" href="http://resources.3bmoodle.dk/img.php?book={0}&chapter={1}&verse={2}"><img src="{3}images/pblue.png"></a>'
-                .format(refs[0], refs[1], refs[2], site_url, localize('click_for_pictures'));
-        var urlstring = '';
-        if (urls !== null) {
-            var len = urls.length;
-            for (var uix = 0; uix < urls.length; ++uix) {
-                urlstring += '<a target="_blank" title="{0}" href="{1}"><img src="{2}images/{3}.png"></a>'
-                    .format(localize(urlTypeString[urls[uix][1]]), urls[uix][0], site_url, urls[uix][1]);
-            }
-        }
-        var grammar = '';
+            refstring = "<a target=\"_blank\" title=\"" + localize('click_for_pictures') + "\" href=\"http://resources.3bmoodle.dk/img.php?book=" + refs[0] + "&chapter=" + refs[1] + "&verse=" + refs[2] + "\"><img src=\"" + site_url + "images/pblue.png\"></a>";
+        var urlstring = ''; // String of icons representing URLs
+        if (urls !== null)
+            for (var uix = 0; uix < urls.length; ++uix)
+                urlstring += "<a target=\"_blank\" title=\"" + localize(urlTypeString[urls[uix][1]]) + "\" href=\"" + urls[uix][0] + "\"><img src=\"" + site_url + "images/" + urls[uix][1] + ".png\"></a>";
+        var grammar = ''; // Will hold the interlinear grammar information
         configuration.sentencegrammar[0]
             .walkFeatureValues(smo, 0, this.objType, false, function (whattype, objType, origObjType, featName, featValLoc) {
             switch (whattype) {
                 case WHAT.feature:
-                    var wordclass;
+                    var wordclass = void 0; // The class attribute of an HTML element
                     var fs = getFeatureSetting(objType, featName);
                     if (fs.foreignText)
                         wordclass = charset.foreignClass;
@@ -1172,14 +1277,14 @@ var DisplaySingleMonadObject = /** @class */ (function (_super) {
                     // For Spanish, English and German in ETCBC4, display only the first gloss
                     if (configuration.databaseName == "ETCBC4"
                         && (featName == "english" || featName == "spanish" || featName == "german")) {
-                        featValLoc = featValLoc.replace(/(&[gl]t);/, '$1Q')
-                            .replace(/([^,;(]+).*/, '$1')
-                            .replace(/(&[gl]t)Q/, '$1;');
+                        featValLoc = featValLoc.replace(/(&[gl]t);/, '$1Q') // Remove ';' from "&gt;" and "&lt;" 
+                            .replace(/([^,;(]+).*/, '$1') // Remove everything after ',' or ';' or '('
+                            .replace(/(&[gl]t)Q/, '$1;'); // Reinsert ';' in "&gt;" and "&lt;" 
                     }
-                    grammar += '<span class="wordgrammar dontshowit {0} {2}">{1}</span>'.format(featName, featValLoc, wordclass);
+                    grammar += "<span class=\"wordgrammar dontshowit " + featName + " " + wordclass + "\">" + featValLoc + "</span>";
                     break;
                 case WHAT.metafeature:
-                    grammar += '<span class="wordgrammar dontshowit {0} ltr">{1}</span>'.format(featName, featValLoc);
+                    grammar += "<span class=\"wordgrammar dontshowit " + featName + " ltr\">" + featValLoc + "</span>";
                     break;
             }
         });
@@ -1188,8 +1293,14 @@ var DisplaySingleMonadObject = /** @class */ (function (_super) {
         if (charset.isHebrew) {
             var suffix = smo.mo.features[configuration.suffixFeature];
             text += suffix;
-            if (suffix === '' || suffix === '-' || suffix === '\u05be') {
+            if (suffix === '' || suffix === '-' || suffix === '\u05be' /* maqaf */) {
                 follow_space = ''; // Prevents line wrapping
+                // Enable optional word spacing. This is handled by the util.WordSpaceFollowerBox class.
+                // CSS class 'cont' identifies words concatenated to the next word.
+                // CSS class 'contx' identifies words linked to the next word with a hypen/maqaf.
+                // CSS class 'cont1' means "do not add word spacing".
+                // CSS class 'cont2' means "add a hyphen and word spacing".
+                // CSS class 'cont2x' means "add word spacing" (a hyphen/maqaf is already present).
                 follow_class = suffix === '' ? ' cont cont1' : ' contx cont1';
                 sentenceTextArr[0] += text;
             }
@@ -1198,21 +1309,29 @@ var DisplaySingleMonadObject = /** @class */ (function (_super) {
         }
         else
             sentenceTextArr[0] += text + ' ';
-        return $('<span class="textblock inline"><span class="textdisplay {0}" data-idd="{1}">{2}{3}{4}{5}{6}</span>{7}</span>{8}'
-            .format(charset.foreignClass + follow_class, smo.mo.id_d, '', //chapterstring,
-        versestring, refstring, urlstring, text, grammar, follow_space));
+        return $("<span class=\"textblock inline\"><span class=\"textdisplay " + (charset.foreignClass + follow_class) + "\" data-idd=\"" + smo.mo.id_d + "\">" + versestring + refstring + urlstring + text + "</span>" + grammar + "</span>" + follow_space);
     };
     return DisplaySingleMonadObject;
 }(DisplayMonadObject));
-// TODO: Fix this
-var Color = /** @class */ (function () {
-    function Color(a, b, c) {
-    }
-    return Color;
-}());
+//****************************************************************************************************
+// DisplayMultipleMonadObject class
+//
+// A DisplayMultipleMonadObject is a DisplayMonadObject that can display a text component above the
+// word level, such as a clause. However, a DisplayMultipleMonadObject always represents a
+// contiguous set of monads, so if the clause is split, two or more DisplayMultipleMonadObjects will
+// be required, and their fields 'hasPredecessor' and 'hasSuccessor' will be set to represent that
+// fact.
+//
+// A DisplayMultipleMonadObject may be displayed with a border around it. If it has a predecessor or
+// or a successor, a side border will be missing.
+// 
 var DisplayMultipleMonadObject = /** @class */ (function (_super) {
     __extends(DisplayMultipleMonadObject, _super);
-    // Implementation of the overloaded constructors
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // The implementation of the above overloaded constructors.
+    //
     function DisplayMultipleMonadObject(mmo, objType, level, monadSet, monadix, hasPredecessor, hasSuccessor) {
         var _this = _super.call(this, mmo, objType, level) || this;
         if (arguments.length == 7) {
@@ -1224,12 +1343,13 @@ var DisplayMultipleMonadObject = /** @class */ (function (_super) {
             _this.hasPredecessor = hasPredecessor;
             _this.hasSuccessor = hasSuccessor;
             _this.borderTitle = getObjectFriendlyName(objType);
-            _this.myColors = DisplayMultipleMonadObject.frameColors[(level - 1) % DisplayMultipleMonadObject.frameColors.length];
         }
         else {
             // Patriarch
             _this.isPatriarch = true;
-            _this.range = { low: monadSet.segments[0].low, high: monadSet.segments[monadSet.segments.length - 1].high };
+            var mseg = monadSet.segments;
+            _this.range = { low: mseg[0].low,
+                high: mseg[mseg.length - 1].high };
             _this.mix = 0;
             _this.children = [];
             _this.hasPredecessor = false;
@@ -1237,38 +1357,66 @@ var DisplayMultipleMonadObject = /** @class */ (function (_super) {
         }
         return _this;
     }
+    //---------------------------------------------------------------------------------------------------
+    // generateHtml method
+    //
+    // See description under DisplayMonadObject.
+    //
     DisplayMultipleMonadObject.prototype.generateHtml = function (qd, sentenceTextArr) {
-        var spanclass = 'lev{0} dontshowborder noseplin'.format(this.level);
+        var spanclass = "lev" + this.level + " dontshowborder noseplin"; // The class of the <span> element containing this object
         if (this.hasPredecessor)
             spanclass += ' hasp';
         if (this.hasSuccessor)
             spanclass += ' hass';
-        var grammar = '';
-        var indent = 0;
+        var grammar = ''; // The class off the <span> element containing grammar information
+        var indent = 0; // The current indentation level (for Hebrew clauses)
         if (configuration.sentencegrammar[this.level]) {
+            // Generate the <span> elements for the features of this Emdros object
             configuration.sentencegrammar[this.level]
                 .walkFeatureValues(this.displayedMo, this.mix, this.objType, true, function (whattype, objType, origObjType, featName, featValLoc) {
                 if (whattype == WHAT.feature || whattype == WHAT.metafeature) {
                     if (configuration.databaseName == 'ETCBC4' && objType == "clause_atom" && featName == "tab")
                         indent = +featValLoc;
                     else
-                        grammar += '<span class="xgrammar dontshowit {0}_{1}">:{2}</span>'.format(objType, featName, featValLoc);
+                        grammar += "<span class=\"xgrammar dontshowit " + objType + "_" + featName + "\">:" + featValLoc + "</span>";
                 }
             });
         }
-        var jq;
-        if (this.isPatriarch)
-            jq = $('<span class="{0}"></span>'.format(spanclass));
-        else {
-            if (this.displayedMo.mo.name == "dummy")
-                jq = $('<span class="{0}"><span class="nogram dontshowit" data-idd="{1}" data-mix="0"></span></span>'.format(spanclass, this.displayedMo.mo.id_d));
-            else if (configuration.databaseName == 'ETCBC4' && this.level == 2)
-                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span><span class="xgrammar clause_atom_tab dontshowit indentation" data-indent={5}></span></span>'
-                    .format(spanclass, this.displayedMo.mo.id_d, this.mix, getObjectShortFriendlyName(this.objType), grammar, indent));
-            else
-                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span></span>'
-                    .format(spanclass, this.displayedMo.mo.id_d, this.mix, getObjectShortFriendlyName(this.objType), grammar));
+        var jq; // The resulting HTMl is built in this JQuery object
+        if (this.isPatriarch) {
+            // The patriarch object (topmost level) is not displayable
+            jq = $("<span class=\"" + spanclass + "\"></span>");
         }
+        else if (this.displayedMo.mo.name == "dummy") {
+            // We have an object that is not part of the hierarchy (frequent with Greek "δὲ").
+            // Such an object is not displayable.
+            jq = $("<span class=\"" + spanclass + "\"><span class=\"nogram dontshowit\" data-idd=\"" + this.displayedMo.mo.id_d + "\" data-mix=\"0\"></span></span>");
+        }
+        else if (configuration.databaseName == 'ETCBC4' && this.level == 2) {
+            // Special case: Add indentation information to Hebrew clauses.
+            // Note that the indentation <span class="xgrammar...> element is added at a less deep HTML level
+            // than the other <span class="xgrammar...> elements.
+            // (Don't use multi-line `strings` here - we don't want whitespace between the HTML elements.)
+            jq = $("<span class=\"notdummy " + spanclass + "\">"
+                + ("<span class=\"gram dontshowit\" data-idd=\"" + this.displayedMo.mo.id_d + "\" data-mix=\"" + this.mix + "\">")
+                + getObjectShortFriendlyName(this.objType)
+                + grammar
+                + '</span>'
+                + ("<span class=\"xgrammar clause_atom_tab dontshowit indentation\" data-indent=\"" + indent + "\">")
+                + '</span>'
+                + '</span>');
+        }
+        else {
+            // Normal case: We have a displayable object
+            // (Don't use multi-line `strings` here - we don't want whitespace between the HTML elements.)
+            jq = $("<span class=\"notdummy " + spanclass + "\">"
+                + ("<span class=\"gram dontshowit\" data-idd=\"" + this.displayedMo.mo.id_d + "\" data-mix=\"" + this.mix + "\">")
+                + getObjectShortFriendlyName(this.objType)
+                + grammar
+                + '</span>'
+                + '</span>');
+        }
+        // Generate HTML for Emdros objects at lower levels
         for (var ch in this.children) {
             if (isNaN(+ch))
                 continue; // Not numeric
@@ -1276,39 +1424,82 @@ var DisplayMultipleMonadObject = /** @class */ (function (_super) {
         }
         return jq;
     };
-    /** A collection colors to use for the unhightlighted and highlighted frames at various levels. */
-    DisplayMultipleMonadObject.frameColors = [new util.Pair(new Color(0.000, 0.27, 0.98), new Color(0.000, 0.98, 0.71)),
-        new util.Pair(new Color(0.667, 0.27, 0.98), new Color(0.667, 0.98, 0.71)),
-        new util.Pair(new Color(0.39, 0.27, 0.98), new Color(0.39, 0.98, 0.71))];
     return DisplayMultipleMonadObject;
 }(DisplayMonadObject));
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+//****************************************************************************************************
+// getObjectFriendlyName function
+//
+// Retrieves the localized name of an Emdros object type.
+//
+// Param:
+//     otype: The Emdros object type.
+// Returns:
+//     The localized name for the Emdros object type.
+//
 function getObjectFriendlyName(otype) {
     if (otype === 'Patriarch') // Shouldn't happen
         return otype;
     var fn = l10n.emdrosobject[otype]._objname;
     return fn ? fn : otype;
 }
+//****************************************************************************************************
+// getObjectShortFriendlyName function
+//
+// Retrieves the abbreviated localized name of an Emdros object type.
+//
+// Param:
+//     otype: The Emdros object type.
+// Returns:
+//     The abreviated localized name for the Emdros object type, if it exists. Otherwise the
+//     unabbreviated localized name is returned.
+//
 function getObjectShortFriendlyName(otype) {
     if (l10n.emdrosobject[otype + '_abbrev'] === undefined)
         return getObjectFriendlyName(otype);
     else
         return l10n.emdrosobject[otype + '_abbrev']._objname;
 }
+//****************************************************************************************************
+// getFeatureFriendlyName function
+//
+// Retrieves the localized name of an Emdros object feature.
+//
+// Param:
+//     otype: The Emdros object type.
+//     feature: The Emdros object feature.
+// Returns:
+//     The localized name for the Emdros object feature.
+//
 function getFeatureFriendlyName(otype, feature) {
     if (feature === 'visual')
         return localize('visual');
     var fn = l10n.emdrosobject[otype][feature];
     return fn ? fn : feature;
 }
+//****************************************************************************************************
+// getFeatureValueFriendlyName function
+//
+// Retrieves the localized name of an Emdros object feature value.
+//
+// Param:
+//     featureType: The Emdros object feature type.
+//     value: The Emdros object feature value.
+//     abbrev: True if the function should return an abbreviated name, if one exists.
+//     doStripSort: True if an optional sort index should be removed from the localized value.
+// Returns:
+//     The localized name for the Emdros object feature value.
+//
 function getFeatureValueFriendlyName(featureType, value, abbrev, doStripSort) {
     if (abbrev && l10n.emdrostype[featureType + '_abbrev'] !== undefined)
         // TODO: We assume there is no "list of " types here
         return doStripSort
             ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType + '_abbrev'][value])
             : l10n.emdrostype[featureType + '_abbrev'][value];
-    // TODO: For now we handle "list of ..." here. Is this OK with all the other locations where this is used?
+    // TODO: For now, we handle "list of ..." here.
+    // Currently, "list of ..." is only used with Hebrew verb classes.
+    // The correctness of this code must be reconsidered if "list of ..." is used for other features.
     if (featureType.substr(0, 8) === 'list of ') {
         featureType = featureType.substr(8); // Remove "list of "
         value = value.substr(1, value.length - 2); // Remove parenteses
@@ -1316,8 +1507,8 @@ function getFeatureValueFriendlyName(featureType, value, abbrev, doStripSort) {
             return doStripSort
                 ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType]['NA'])
                 : l10n.emdrostype[featureType]['NA'];
-        var verb_classes = value.split(',');
-        var localized_verb_classes = [];
+        var verb_classes = value.split(','); // Turn the list of values into an array
+        var localized_verb_classes = []; // Localized values will be stored here
         for (var ix in verb_classes) {
             if (isNaN(+ix))
                 continue; // Not numeric
@@ -1326,13 +1517,24 @@ function getFeatureValueFriendlyName(featureType, value, abbrev, doStripSort) {
                 : l10n.emdrostype[featureType][verb_classes[ix]]);
         }
         localized_verb_classes.sort();
-        return localized_verb_classes.join(', ');
+        return localized_verb_classes.join(', '); // Turn the array of localized values into a string
     }
-    // TODO Distinguish between friendly name A and S (Westminster)
     return doStripSort
         ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType][value])
         : l10n.emdrostype[featureType][value];
 }
+//****************************************************************************************************
+// getFeatureValueOtherFormat function
+//
+// Retrieves the localized name of a range containing an Emdros object feature value.
+//
+// Param:
+//     otype: The Emdros object type
+//     featureName: The Emdros object feature.
+//     value: The Emdros object feature value.
+// Returns:
+//     The localized name for the range containing the Emdros object feature value.
+//
 function getFeatureValueOtherFormat(otype, featureName, value) {
     var table = l10n.emdrosobject[otype][featureName + '_VALUES'];
     for (var ix = 0; ix < table.length; ++ix)
@@ -1341,17 +1543,46 @@ function getFeatureValueOtherFormat(otype, featureName, value) {
     return '?';
 }
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+//****************************************************************************************************
+// localize function
+//
+// Looks up a localized string.
+//
+// Parameter:
+//     s: The key for the string.
+// Returns:
+//     The localized value of s.
+//
 function localize(s) {
     var str = l10n_js[s];
     return str === undefined ? '??' + s + '??' : str;
 }
 // -*- js -*-
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+//****************************************************************************************************
+// mayShowFeature function
+//
+// Determines if the client code is allowed to display a given feature.
+//
+// When not running an exercise, all features may be displayed, but in an exercise, features that
+// the student should provide plus features that are marked as don't show may not be displayed.
+//
+// Parameters:
+//     oType: The type of the current grammar object.
+//     origOtype: The original type of the current grammar object. (This can be different from
+//                oType when, for example, a feature under "clause" has the name "clause_atom:tab".)
+//     feat: The name of the object feature.
+//     sigObj: The SentenceGrammarItem containing the feature.
+// Returns:
+//     True, if the specified feature may be displayed.
+//
 function mayShowFeature(oType, origOtype, feat, sgiObj) {
-    var inQuiz = $('#quiztab').length > 0;
     if (!inQuiz)
         return true;
     if (sgiObj.mytype === 'GrammarMetaFeature') {
+        // GrammarMetaFeatures are comprised of several features. All of them must be displayable
+        // for the meta feature to be displayable.
         for (var i in sgiObj.items) {
             if (isNaN(+i))
                 continue; // Not numeric
@@ -1361,18 +1592,51 @@ function mayShowFeature(oType, origOtype, feat, sgiObj) {
         return true;
     }
     var qf = quizdata.quizFeatures;
+    // Emdros object types in dontShowObjects may not be displayed (except for a feature explicitly marked "show")
     for (var ix = 0, len = qf.dontShowObjects.length; ix < len; ++ix)
-        if (qf.dontShowObjects[ix].content === origOtype) // oritOtype is a 'dontShowObject'...
+        if (qf.dontShowObjects[ix].content === origOtype) // origOtype is a 'dontShowObject'...
             return qf.dontShowObjects[ix].show === feat; // ...so we only show it if it is in the "show" attribute
+    // The object type was not in dontShowObjects. If it is not the sentence unit of the exercise,
+    // we may display it.
     if (oType !== qf.objectType)
         return true;
+    // For the sentence unit of the quiz, request featues must not be displayed
     for (var ix = 0, len = qf.requestFeatures.length; ix < len; ++ix)
         if (qf.requestFeatures[ix].name === feat)
             return false;
+    // Don't-show features must not be displayed
     return qf.dontShowFeatures.indexOf(feat) === -1;
 }
 // -*- js -*-
 // Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+//****************************************************************************************************
+// About the relationship between the MonadObject and DisplayMonadObject classes
+//****************************************************************************************************
+//
+// The server code places information about Emdros objects in the 'monadObjects' field of the
+// DictionaryIf interface. Each element in the 'monadObjects' field is an object of class MonadObject.
+// The MonadObjects are ordered in a hierarchy using the 'children_idds' field of the MonadObject.
+//
+// When the client code calls the constructor of the Dictionary class below, it adds a 'parent'
+// field to the MonadObject, resulting in a doubly linked hierarchy.
+//
+// The constructor also creates a parallel hierachy of DisplayMonadObjects, which contain
+// information about how the Emdros objects are displayed in HTML.
+//
+// The MonadObject class has two subclasses, SingleMonadObject (which represents a word) and
+// MultipleMonadObject (which represents a phrase or clause etc.). Similarly, the DisplayMonadObject
+// class has two subclasses, DisplaySingleMonadObject and DisplayMultipleMonadObject. Although the
+// two sets of classes are releated, there is a difference in the way split Emdros objects are
+// handled. (A split Emdros object is, for example, a clause which contains another clause.) A split
+// Emdros object is handled by one MultipleMonadObject but by several DisplayMultipleMonadObjects,
+// one for each segment of the split Emdros object.
+//
+// When the constructor below creates the hierarchy of DisplayMonadObjects, the MonadObjects
+// will be tied to the DisplayMonadObjects thus:
+//    The 'displayMo' field of DisplayMonadObject contains the corresponding MonadObject.
+//    The 'displayers' field of MonadObject is an array containing the corresponding DisplayMonadObjects.
+//
+//****************************************************************************************************
 //****************************************************************************************************
 // Dictionary class
 //
@@ -1386,9 +1650,9 @@ var Dictionary = /** @class */ (function () {
     // Parameters:
     //     dictif: The DictionaryIf object to interpret.
     //     index: The entry in dictif.sentenceSets and dictif.monadObjects to interpret.
-    //     inQuiz: True, if we are generating an exercize.
+    //     qd: Quiz information if we are generating an exercise, otherwise null.
     //
-    function Dictionary(dictif, index, inQuiz) {
+    function Dictionary(dictif, index, qd) {
         this.monads = []; // Maps id_d => monad object
         this.level = []; // Maps id_d => object level
         this.singleMonads = []; // Maps monad number => SingleMonadObject (words only)
@@ -1397,6 +1661,7 @@ var Dictionary = /** @class */ (function () {
         this.sentenceSet = dictif.sentenceSets[index];
         this.monadObjects1 = dictif.monadObjects[index];
         this.bookTitle = dictif.bookTitle;
+        this.hideWord = (qd != null && qd.quizFeatures.dontShow);
         // Generate the 'singleMonads', 'monads' and 'level' maps.
         for (var level in this.monadObjects1) {
             var leveli = +level;
@@ -1413,7 +1678,7 @@ var Dictionary = /** @class */ (function () {
                 this.level[item.mo.id_d] = leveli;
             }
         }
-        // Bind parents and children
+        // Bind parents and children of the MonadObject hierarchy
         for (var i in this.monads) {
             if (isNaN(+i))
                 continue; // Not numeric
@@ -1427,14 +1692,13 @@ var Dictionary = /** @class */ (function () {
         }
         ///////////////////////////
         // Create display hierarchy
-        ///////////////////////////
         // Single monads (i.e. words)
         this.dispMonadObjects.push([]);
         for (var se in this.singleMonads) {
             if (isNaN(+se))
                 continue; // Not numeric
             // singleMonads is sparsely populated
-            this.dispMonadObjects[0].push(new DisplaySingleMonadObject(this.singleMonads[+se], configuration.sentencegrammar[0].objType, inQuiz));
+            this.dispMonadObjects[0].push(new DisplaySingleMonadObject(this.singleMonads[+se], configuration.sentencegrammar[0].objType, qd != null));
         }
         // Multiple monads (i.e. phrases, clauses, etc.)
         for (var lev = 1; lev < configuration.maxLevels; ++lev) {
@@ -1466,7 +1730,6 @@ var Dictionary = /** @class */ (function () {
         }
         /////////////////////////////////////////////////////////
         // Construct child-parent linkage for DisplayMonadObjects
-        /////////////////////////////////////////////////////////
         for (var lev = 1; lev < configuration.maxLevels; ++lev) {
             // Find constituent MonadObjects
             // Loop through monads at level lev
@@ -1496,15 +1759,18 @@ var Dictionary = /** @class */ (function () {
     // Associate a grammar information box with each Emdros object. The grammar information box is
     // displayed when the mouse hovers over the object.
     //
+    // This function is called only if the display size is large enough to have room for a grammar
+    // information box.
+    //
     Dictionary.prototype.hoverForGrammar = function () {
         var thisDict = this;
-        // All display objects are identified with a "data-idd" attribute in the displaying HTML element. HERTIL
+        // All display objects are identified with a "data-idd" attribute in the displaying HTML element.
         if (useTooltip) {
             // Use the tooltip function of JQuery UI.
             $(document).tooltip({
                 items: "[data-idd]",
                 disabled: false,
-                content: function () { return thisDict.toolTipFunc(this, true).first; }
+                content: function () { return thisDict.toolTipFunc(this, true)[0]; }
             });
         }
         else {
@@ -1518,7 +1784,7 @@ var Dictionary = /** @class */ (function () {
                 var scrTop = $(window).scrollTop();
                 var qcTop = $('#textcontainer').offset().top;
                 $('.grammardisplay')
-                    .html(thisDict.toolTipFunc(this, true).first)
+                    .html(thisDict.toolTipFunc(this, true)[0])
                     .css('top', Math.max(0, scrTop - qcTop + 5))
                     .outerWidth($('#grammardisplaycontainer').outerWidth() - 25) // 25px is a littel more than margin-right
                     .show();
@@ -1527,51 +1793,107 @@ var Dictionary = /** @class */ (function () {
             });
         }
     };
+    //------------------------------------------------------------------------------------------
+    // dontHoverForGrammar method
+    //
+    // Disassociate a grammar information box with each Emdros object.
+    //
+    // This function is called if the display size is too narrow to have room for a grammar
+    // information box.
+    //
     Dictionary.prototype.dontHoverForGrammar = function () {
+        // All display objects are identified with a "data-idd" attribute in the displaying HTML element.
         if (useTooltip)
             $(document).tooltip({ items: "[data-idd]", disabled: true });
         else
             $("[data-idd]").off("mouseenter mouseleave");
     };
+    //------------------------------------------------------------------------------------------
+    // clickForGrammar method
+    //
+    // Associate a popup grammar information box with each Emdros object. The popup grammar
+    // information box is displayed when the user clicks on the object.
+    //
     Dictionary.prototype.clickForGrammar = function () {
+        // All display objects are identified with a "data-idd" attribute in the displaying HTML element.
         var _this = this;
         $("[data-idd]").on('click', function (event) {
-            var info = _this.toolTipFunc(event.currentTarget, false);
-            $('#grammar-info-label').html(info.second);
-            $('#grammar-info-body').html(info.first);
+            var _a = _this.toolTipFunc(event.currentTarget, false), contents = _a[0], heading = _a[1];
+            $('#grammar-info-label').html(heading);
+            $('#grammar-info-body').html(contents);
             $('#grammar-info-dialog').modal('show');
         });
     };
+    //------------------------------------------------------------------------------------------
+    // handleDisplaySize static method
+    //
+    // This function is called when the display size changes. It enables or disables the grammar
+    // information box depending on the display size.
+    //
+    // Parameter:
+    //     thisDict: The current Dictionary object
+    //
     Dictionary.handleDisplaySize = function (thisDict) {
         switch (resizer.getWindowSize()) {
             case 'xs':
-                thisDict.dontHoverForGrammar();
+                thisDict.dontHoverForGrammar(); // Disable grammar information box
                 break;
             default:
-                thisDict.hoverForGrammar();
+                thisDict.hoverForGrammar(); // Enable grammar information box
                 break;
         }
     };
+    //------------------------------------------------------------------------------------------
+    // boxes static method
+    //
+    // Generates a string with an appropriate number of small squares (Unicode character 25AA (▪))
+    // to indicate indentation size. This is currently only used for displaying indentation of
+    // clauses in the ETCBC4 database.
+    //
+    // Parameters:
+    //     num: The current indentation.
+    //     minnum: The minimum indentitation in the current text.
+    //     maxnum: The maximum indentitation in the current text.
+    // Returns:
+    //     A string containing the appropriate number of squares.
+    //
     Dictionary.boxes = function (num, minnum, maxnum) {
         var s = '';
         var numspaces = num < 10 ? num : num - 1; // If num has two digits, we write one space less
         for (var i = minnum; i < numspaces; ++i)
-            s += '\u00a0';
+            s += '\u00a0'; // Unicode NO-BREAK SPACE
         s += num;
         for (var i = num; i <= maxnum; ++i)
-            s += '\u25aa';
+            s += '\u25aa'; // Unicode BLACK SMALL SQUARE
         return s;
     };
+    //------------------------------------------------------------------------------------------
+    // generateSentenceHtml method
+    //
+    // Generates HTML code to display the current text and its grammar information. The text is
+    // stored in the <div id="textarea"> HTML element and is also the return value from this
+    // function. The return value is used if we are generating an exercise, in which case the text
+    // must be stored as part of the exercise statistics.
+    //
+    // Parameter:
+    //     qd: Data for the current exercise. Null, if we are not generating an exercise. This data
+    //         is used to control what grammar information to hide.
+    // Returns:
+    //     HTML code for displaying text.
+    //
     Dictionary.prototype.generateSentenceHtml = function (qd) {
-        DisplaySingleMonadObject.itemIndex = 0;
-        var sentenceTextArr = [''];
+        DisplaySingleMonadObject.itemIndex = 0; // Used in exercises where numbers replace text
+        var sentenceTextArr = ['']; // The text is build in element [0] of this array. An
+        // array is used because we want to use this variable
+        // is a call-by-reference parameter.
+        // Call DisplayMonadObject.generateHtml() on the top-most Emdros object (the 'Patriarch')
         $('#textarea').append(this.dispMonadObjects[this.dispMonadObjects.length - 1][0].generateHtml(qd, sentenceTextArr));
         if (configuration.databaseName == 'ETCBC4') {
             // Generate indentation information
+            // Calculate the min and max indentation by looping trough all HTML elements with indentation information
             var minindent_1;
             var maxindent_1;
             var all_c_a_t = $('#textarea').find('.xgrammar.clause_atom_tab');
-            // Find minimum and maximum indentation
             all_c_a_t.each(function (index, el) {
                 var indent = +$(el).attr('data-indent');
                 if (index == 0)
@@ -1594,57 +1916,90 @@ var Dictionary = /** @class */ (function () {
                 $(el).html(Dictionary.boxes(indent, minindent_1, maxindent_1) + '&nbsp;&nbsp;');
             });
         }
-        this.toolTipFunc =
-            function (x_this, set_head) {
-                console.log(qd);
-                var monob = this.monads[+($(x_this).attr("data-idd"))];
-                var level = this.level[+($(x_this).attr("data-idd"))];
-                var mix = +$(x_this).attr("data-mix");
-                var sengram = configuration.sentencegrammar[level];
-                var res = '<table>';
-                if (set_head)
-                    res += '<tr><td colspan="2" class="tooltiphead">{0}</td></tr>'.format(getObjectFriendlyName(sengram.objType));
-                if (level === 0 && (!qd || !qd.quizFeatures.dontShow))
-                    res += '<tr><td>{2}</td><td class="bol-tooltip leftalign {0}">{1}</td></tr>'.format(charset.foreignClass, monob.mo.features[configuration.surfaceFeature], localize('visual'));
-                var map = [];
-                sengram.walkFeatureNames(sengram.objType, function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
-                    if (whattype == WHAT.feature || whattype == WHAT.metafeature)
-                        if (!mayShowFeature(objType, origObjType, featName, sgiObj))
-                            return;
-                    if (whattype == WHAT.feature || whattype == WHAT.metafeature || whattype == WHAT.groupstart)
-                        map[featName] = featNameLoc;
-                });
-                sengram.walkFeatureValues(monob, mix, sengram.objType, false, function (whattype, objType, origObjType, featName, featValLoc, sgiObj) {
-                    switch (whattype) {
-                        case WHAT.feature:
-                            if (mayShowFeature(objType, origObjType, featName, sgiObj)) {
-                                var wordclass = void 0;
-                                var fs = getFeatureSetting(objType, featName);
-                                if (fs.foreignText)
-                                    wordclass = charset.foreignClass;
-                                else if (fs.transliteratedText)
-                                    wordclass = charset.transliteratedClass;
-                                else
-                                    wordclass = '';
-                                res += '<tr><td>{0}</td><td class="bol-tooltip leftalign {2}">{1}</td></tr>'.format(map[featName], featValLoc, featValLoc === '-' ? '' : wordclass);
-                            }
-                            break;
-                        case WHAT.metafeature:
-                            if (mayShowFeature(objType, origObjType, featName, sgiObj))
-                                res += '<tr><td>{0}</td><td class="bol-tooltip leftalign">{1}</td></tr>'.format(map[featName], featValLoc);
-                            break;
-                        case WHAT.groupstart:
-                            res += '<tr><td><b>{0}:</b></td><td class="leftalign"></td></tr>'.format(map[featName]);
-                            break;
-                    }
-                });
-                return new util.Pair(res + '</table>', getObjectFriendlyName(sengram.objType));
-            };
+        // Set up handlers for display size changes (this also takes care of mouse hovering events)
+        // and for mouse clicks
         resizer.addResizeListener(Dictionary.handleDisplaySize, this, 'xyzzy');
-        this.clickForGrammar();
         Dictionary.handleDisplaySize(this);
+        this.clickForGrammar();
         return sentenceTextArr[0];
     };
+    //------------------------------------------------------------------------------------------
+    // toolTipFunc method
+    //
+    // Generates HTML for the grammar information box.
+    //
+    // Patameters:
+    //     x_this: The HTML element that triggered the displaying of the grammar information box.
+    //     set_head: True if a header line should be generated. This parameter is true for mouse
+    //               hover events, false for click events.
+    // Returns:
+    //     A tuple of two strings. The first string is the HTML for the grammar information box
+    //     contents, the second string is the heading of the popup box, if any.
+    //
+    Dictionary.prototype.toolTipFunc = function (x_this, set_head) {
+        // x_this identifies the HTML element that was clicked or hovered over. It has the attribute
+        // 'data-idd', which contains the Emdros id_d, and the attribute 'data-mix' which identifies
+        // the part of a multi-part object (such as a split clause).
+        var monob = this.monads[+($(x_this).attr("data-idd"))]; // Current MonadObject
+        var level = this.level[+($(x_this).attr("data-idd"))]; // Current level (0=word, 1=phrase, etc.)
+        var mix = +$(x_this).attr("data-mix"); // Current part of multi-part object
+        var sengram = configuration.sentencegrammar[level]; // Sentence grammar information for the current level
+        var res = '<table>'; // Will contain the resulting HTML
+        if (set_head) {
+            res += "<tr>\n                        <td colspan=\"2\" class=\"tooltiphead\">" + getObjectFriendlyName(sengram.objType) + "</td>\n                    </tr>";
+        }
+        if (level === 0 && !this.hideWord) { // Word level and we're not hiding the text
+            res += "<tr>\n                        <td>" + localize('visual') + "</td>\n                        <td class=\"bol-tooltip leftalign " + charset.foreignClass + "\">" + monob.mo.features[configuration.surfaceFeature] + "</td>\n                    </tr>";
+        }
+        var map = []; // Maps feature name => localized feature name
+        // Popualate 'map':
+        sengram.walkFeatureNames(sengram.objType, function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
+            if (whattype == WHAT.feature || whattype == WHAT.metafeature)
+                if (!mayShowFeature(objType, origObjType, featName, sgiObj))
+                    return;
+            if (whattype == WHAT.feature || whattype == WHAT.metafeature || whattype == WHAT.groupstart)
+                map[featName] = featNameLoc;
+        });
+        // Generate HTML for each feature of the object
+        sengram.walkFeatureValues(monob, mix, sengram.objType, false, function (whattype, objType, origObjType, featName, featValLoc, sgiObj) {
+            switch (whattype) {
+                case WHAT.feature:
+                    if (mayShowFeature(objType, origObjType, featName, sgiObj)) {
+                        var wordclass = void 0; // HTML element class for displaying current feature value
+                        var fs = getFeatureSetting(objType, featName);
+                        if (featValLoc === '-')
+                            wordclass = '';
+                        else if (fs.foreignText)
+                            wordclass = charset.foreignClass;
+                        else if (fs.transliteratedText)
+                            wordclass = charset.transliteratedClass;
+                        else
+                            wordclass = '';
+                        res += "<tr>\n                                                           <td>" + map[featName] + "</td>\n                                                           <td class=\"bol-tooltip leftalign " + wordclass + "\">" + featValLoc + "</td>\n                                                       </tr>";
+                    }
+                    break;
+                case WHAT.metafeature:
+                    if (mayShowFeature(objType, origObjType, featName, sgiObj)) {
+                        res += "<tr>\n                                                           <td>" + map[featName] + "</td>\n                                                           <td class=\"bol-tooltip leftalign\">" + featValLoc + "</td>\n                                                       </tr>";
+                    }
+                    break;
+                case WHAT.groupstart:
+                    res += "<tr>\n                                                       <td><b>" + map[featName] + ":</b></td>\n                                                       <td class=\"leftalign\"></td>\n                                                   </tr>";
+                    break;
+            }
+        });
+        return [res + '</table>', getObjectFriendlyName(sengram.objType)];
+    };
+    //------------------------------------------------------------------------------------------
+    // getSingleMonadObject method
+    //
+    // Returns the SingleMonadObject (i.e. word) identified by a monad.
+    //
+    // Parameter:
+    //     monad: The monad identifying the Emdros word object.
+    // Returns:
+    //     The SingleMonadObject associated with the specified monad.
+    //
     Dictionary.prototype.getSingleMonadObject = function (monad) {
         return this.singleMonads[monad];
     };
@@ -1931,30 +2286,32 @@ var Answer = /** @class */ (function () {
     return Answer;
 }());
 // -*- js -*-
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+// This code handles displaying a single question of an exercise.
 /// <reference path="componentwithyesno.ts" />
 /// <reference path="answer.ts" />
-function charclass(featset, charset) {
-    return featset.foreignText ? charset.foreignClass
-        : featset.transliteratedText ? charset.transliteratedClass : '';
-}
+//****************************************************************************************************
+// PanelQuestion class
+//
+// This class represents a single question (with multiple question items) of an exercise.
+//
 var PanelQuestion = /** @class */ (function () {
-    //public generateSentenceText() : string {
-    // FOR MOODLE
-    //}
-    /**
-     * Constructs a {@code PanelQuestion} that is to be part of a {@link PanelGeneratedQuestionSet}
-     * or {@link PanelContinuousQuestions} panel.
-     * @param qd The information required to generate a quiz.
-     * @param generator True if this is called as part of a question set generation for Moodle
-     */
-    function PanelQuestion(qd, dict, generator) {
+    //------------------------------------------------------------------------------------------
+    // constructor method
+    //
+    // Parameter:
+    //     qd: The information required to generate a exercise.
+    //     dict: The collection of Emdros objects for this question.
+    //
+    function PanelQuestion(qd, dict) {
         var _this = this;
-        /** The correct answer for each question. */
-        this.vAnswers = [];
-        this.question_stat = new QuestionStatistics;
+        this.vAnswers = []; // The correct answer for each question item
+        this.question_stat = new QuestionStatistics; // Answer statistics
         this.qd = qd;
         this.sentence = dict.sentenceSet;
-        // We base the location on the first monad in the sentence
+        ////////////////////////////////////////////////////////////////////
+        // Calculate the Bible reference (the 'location') for this sentence.
+        // We base the location on the first monad in the sentence.
         var smo = dict.getSingleMonadObject(getFirst(this.sentence));
         var location_realname = ''; // Unlocalized
         this.location = smo.bcv_loc; // Localized
@@ -1963,7 +2320,6 @@ var PanelQuestion = /** @class */ (function () {
             if (isNaN(unixi))
                 continue; // Not numeric
             var uniname = configuration.universeHierarchy[unixi].type;
-            // TODO: This only works for Bible references
             switch (unixi) {
                 case 0:
                     location_realname += smo.bcv[unixi] + ', ';
@@ -1988,19 +2344,18 @@ var PanelQuestion = /** @class */ (function () {
             $('#locate_choice').hide();
         if ($('#locate_cb').prop('checked'))
             $('.location').html(this.location);
-        // Optimisations:
+        ///////////////////////////////////
+        // Generate table of question items
+        // Cache a few variables for easy access
         var dontShow = qd.quizFeatures.dontShow;
         var showFeatures = qd.quizFeatures.showFeatures;
         var requestFeatures = qd.quizFeatures.requestFeatures;
         var oType = qd.quizFeatures.objectType;
-        if (generator) {
-            // TODO: Quiz generator for Moodle not yet implementd
-        }
-        else {
-            this.question_stat.text = dict.generateSentenceHtml(qd);
-            this.question_stat.location = location_realname;
-        }
-        var colcount = 0;
+        // Save question text and location for statistics
+        this.question_stat.text = dict.generateSentenceHtml(qd);
+        this.question_stat.location = location_realname;
+        // Create heading for table of question items
+        var colcount = 0; // Number of columns in <table> containing question items
         if (dontShow) {
             $('#quiztabhead').append('<th>' + localize('item_number') + '</th>');
             this.question_stat.show_feat.names.push('item_number');
@@ -2010,45 +2365,44 @@ var PanelQuestion = /** @class */ (function () {
             if (isNaN(+sfi))
                 continue; // Not numeric
             $('#quiztabhead').append('<th>' + getFeatureFriendlyName(oType, showFeatures[sfi]) + '</th>');
-            this.question_stat.show_feat.names.push(showFeatures[sfi]);
+            this.question_stat.show_feat.names.push(showFeatures[sfi]); // Save feature name for statistics
             ++colcount;
         }
         for (var sfi in requestFeatures) {
             if (isNaN(+sfi))
                 continue; // Not numeric
             $('#quiztabhead').append('<th>' + getFeatureFriendlyName(oType, requestFeatures[sfi].name) + '</th>');
-            this.question_stat.req_feat.names.push(requestFeatures[sfi].name);
+            this.question_stat.req_feat.names.push(requestFeatures[sfi].name); // Save feature name for statistics
             ++colcount;
         }
-        // The requested object type can have these features. This maps feature name to feature type.
-        var featuresHere = typeinfo.obj2feat[oType];
-        // qoFeatures holds the feature/value pairs for each question object
-        var qoFeatures = this.buildQuizObjectFeatureList();
-        var hasForeignInput = false;
+        // Create table entries for each question item
+        var featuresHere = typeinfo.obj2feat[oType]; // Maps feature name => feature type
+        var qoFeatures = this.buildQuizObjectFeatureList(); // Feature/value pairs for each question object
+        var hasForeignInput = false; // Do we need a virtual keyboard?
         var firstInput = 'id="firstinput"'; // ID of <input> to receive virtual keyboard focus
         // Loop through all the quiz objects
         for (var qoid in qoFeatures) {
             if (isNaN(+qoid))
                 continue; // Not numeric
-            var currentRow = $('<tr></tr>');
-            var mm = qoFeatures[+qoid]; // Feature/value pairs for current quiz object
+            var currentRow = $('<tr></tr>'); // Current question item
+            var fvals = qoFeatures[+qoid]; // Feature/value pairs for current quiz object
             if (dontShow) {
-                currentRow.append('<td>' + (+qoid + 1) + '</td>');
-                this.question_stat.show_feat.values.push("" + (+qoid + 1));
+                currentRow.append('<td>' + (+qoid + 1) + '</td>'); // Item number
+                this.question_stat.show_feat.values.push("" + (+qoid + 1)); // Save feature value for statistics
             }
-            // Loop through show features
+            ////////////////////////////////
+            // Loop through display features
             for (var sfi in showFeatures) {
                 if (isNaN(+sfi))
                     continue; // Not numeric
                 var sf = showFeatures[+sfi]; // Feature name
-                var val = mm[sf]; // Feature value
+                var val = fvals[sf]; // Feature value
                 var featType = featuresHere[sf]; // Feature type
-                var featset = getFeatureSetting(oType, sf);
-                this.question_stat.show_feat.values.push(val);
+                var featset = getFeatureSetting(oType, sf); // Feature configuration
+                this.question_stat.show_feat.values.push(val); // Save feature value for statistics
                 if (featType == null && sf !== 'visual')
-                    alert('Unexpected (1) featType==null in panelquestion.ts; sf="' + sf + '"');
-                if ( /*featType==null && */ //TODO: Why this?
-                sf === 'visual')
+                    alert("Unexpected (1) featType==null in panelquestion.ts; sf=\"" + sf + "\"");
+                if (sf === 'visual')
                     featType = 'string';
                 if (featType == 'hint') {
                     // The feature value looks like this:
@@ -2080,185 +2434,250 @@ var PanelQuestion = /** @class */ (function () {
                 }
                 if (val == null)
                     alert('Unexpected val==null in panelquestion.ts');
-                if ( /*val!=null && */ // TODO: Why this?
-                (featType === 'string' || featType == 'ascii'))
-                    currentRow.append('<td class="{0}">{1}</td>'.format(charclass(featset, charset), val === '' ? '-' : val));
+                if (featType === 'string' || featType == 'ascii')
+                    currentRow.append("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + (val === '' ? '-' : val) + "</td>");
                 else
-                    currentRow.append('<td>' + val + '</td>');
+                    currentRow.append("<td>" + val + "</td>");
             }
-            // Loop through request features
-            for (var rfi in requestFeatures) {
+            var _loop_2 = function (rfi) {
                 if (isNaN(+rfi))
-                    continue; // Not numeric
+                    return "continue"; // Not numeric
                 var rf = requestFeatures[+rfi].name; // Feature name
-                var usedropdown = requestFeatures[+rfi].usedropdown;
-                var correctAnswer = mm[rf]; // Feature value (i.e., the correct answer)
-                var v = null; // Component to hold the data entry field or an error message
+                var usedropdown = requestFeatures[+rfi].usedropdown; // Use multiple choice?
+                var correctAnswer = fvals[rf]; // Feature value (i.e., the correct answer)
+                var featType = featuresHere[rf]; // Feature type
+                var featset = getFeatureSetting(oType, rf); // Feature configuration
+                var v = null; // Component to hold the data entry field or a message
                 if (correctAnswer == null)
                     alert('Unexpected correctAnswer==null in panelquestion.ts');
                 if (correctAnswer === '')
                     correctAnswer = '-'; // Indicates empty answer
-                if (correctAnswer != null /* TODO: Why this? */) {
-                    var featType = featuresHere[rf]; // Feature type
-                    var featset = getFeatureSetting(oType, rf);
-                    if (featType == null && rf !== 'visual')
-                        alert('Unexpected (2) featType==null in panelquestion.ts');
-                    if ( /*featType==null && */ // TODO: Why this?
-                    rf === 'visual')
-                        featType = 'string';
-                    if (featset.alternateshowrequestDb != null && usedropdown) {
-                        var suggestions = mm[rf + '!suggest!'];
-                        if (suggestions == null)
-                            v = $('<td class="{0}">{1}</td>'
-                                .format(charclass(featset, charset), correctAnswer));
-                        else {
-                            // This will be a multiple choice question
-                            var selectdiv = $('<div class="styled-select"></div>');
-                            // direction:ltr forces left alignment of options (though not on Firefox)
-                            var jcb = $('<select class="{0}" style="direction:ltr">'
-                                .format(charclass(featset, charset)));
-                            selectdiv.append(jcb);
-                            var optArray = [];
-                            var cwyn = new ComponentWithYesNo(selectdiv, COMPONENT_TYPE.comboBox2);
-                            cwyn.addChangeListener();
-                            jcb.append('<option value="NoValueGiven"></option>'); // Empty default choice
-                            for (var valix in suggestions) {
-                                if (isNaN(+valix))
-                                    continue; // Not numeric
-                                var s = suggestions[+valix];
-                                var item = new StringWithSort(s, s);
-                                var option = $('<option value="{0}" class="{1}">{2}</option>'
-                                    .format(item.getInternal(), charclass(featset, charset), item.getString()));
-                                option.data('sws', item);
-                                optArray.push(option);
-                                if (s === correctAnswer)
-                                    this.vAnswers.push(new Answer(cwyn, item, s, null));
-                            }
-                            optArray.sort(function (a, b) { return StringWithSort.compare(a.data('sws'), b.data('sws')); });
-                            $.each(optArray, function (ix, o) { return jcb.append(o); });
-                            v = cwyn.appendMeTo($('<td></td>'));
-                        }
-                    }
-                    else if (featType === 'string' || featType === 'ascii') {
-                        var cwyn;
-                        if (featset.foreignText || featset.transliteratedText) {
-                            var vf = $('<input {0} data-kbid="{1}" type="text" size="20" class="{2}" onfocus="$(\'#virtualkbid\').appendTo(\'#row{3}\');VirtualKeyboard.attachInput(this)">'
-                                .format(firstInput, PanelQuestion.kbid++, charclass(featset, charset), +qoid + 1));
-                            firstInput = '';
-                            hasForeignInput = true;
-                            cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textFieldWithVirtKeyboard);
-                        }
-                        else {
-                            var vf = $('<input type="text" size="20">'); // VerifiedField
-                            cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
-                        }
-                        cwyn.addKeypressListener();
-                        v = cwyn.appendMeTo($('<td></td>'));
-                        var trimmedAnswer = correctAnswer.trim()
-                            .replace(/&lt;/g, '<')
-                            .replace(/&gt;/g, '>')
-                            .replace(/&quot;/g, '"')
-                            .replace(/&amp;/g, '&');
-                        this.vAnswers.push(new Answer(cwyn, null, trimmedAnswer, featset.matchregexp));
-                    }
-                    else if (featType === 'integer') {
-                        var intf = $('<input type="number">');
-                        var cwyn = new ComponentWithYesNo(intf, COMPONENT_TYPE.textField);
-                        cwyn.addKeypressListener();
-                        v = cwyn.appendMeTo($('<td></td>'));
-                        this.vAnswers.push(new Answer(cwyn, null, correctAnswer, null));
-                    }
-                    else if (featType.substr(0, 8) === 'list of ') {
-                        var subFeatType = featType.substr(8); // Remove "list of "
-                        var values = typeinfo.enum2values[subFeatType];
-                        var swsValues = [];
-                        for (var i = 0, len = values.length; i < len; ++i)
-                            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false, false), values[i]));
-                        swsValues.sort(function (a, b) { return StringWithSort.compare(a, b); });
-                        var selections = $('<table class="list-of"></table>');
-                        // Arrange in three columns
-                        var numberOfItems = swsValues.length;
-                        var numberOfRows = Math.floor((numberOfItems + 2) / 3);
-                        for (var r = 0; r < numberOfRows; ++r) {
-                            var row = $('<tr></tr>');
-                            for (var c = 0; c < 3; c++) {
-                                var ix = r + c * numberOfRows;
-                                if (ix < numberOfItems)
-                                    row.append('<td style="text-align:left"><input type="checkbox" value="{0}">{1}</td>'
-                                        .format(swsValues[ix].getInternal(), swsValues[ix].getString()));
-                                else
-                                    row.append('<td></td>');
-                            }
-                            selections.append(row);
-                        }
-                        var cwyn = new ComponentWithYesNo(selections, COMPONENT_TYPE.checkBoxes);
+                if (featType == null && rf !== 'visual')
+                    alert('Unexpected (2) featType==null in panelquestion.ts');
+                if (rf === 'visual')
+                    featType = 'string';
+                // The layout of the feature request depends on the type of the feature:
+                if (featset.alternateshowrequestDb != null && usedropdown) {
+                    // Multiple choice question item
+                    var suggestions = fvals[rf + '!suggest!']; // Values to choose between
+                    if (suggestions == null) // No suggestions, just display the answer
+                        v = $("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + correctAnswer + "</td>");
+                    else {
+                        // Create this HTML structure in the variable v:            From these variables
+                        // <span ...>                                                cwyn
+                        //   <img ...>                                               cwyn
+                        //   <img ...>                                               cwyn
+                        //   <img ...>                                               cwyn
+                        //   <div class="styled-select">                             mc_div
+                        //     <select class="..." style="direction:ltr">            mc_select
+                        //       <option value="NoValueGiven"></option>              
+                        //       <option value="VAL1" class="...">VAL1</option>      optArray[0]
+                        //       <option value="VAL2" class="...">VAL2</option>      optArray[1]
+                        //       ...                                                 
+                        //     </select>                                             mc_select
+                        //   </div>                                                  mc_div
+                        // </span>                                                   cwyn
+                        var mc_div = $('<div class="styled-select"></div>');
+                        // direction:ltr forces left alignment of options (though not on Firefox)
+                        var mc_select_1 = $("<select class=\"" + PanelQuestion.charclass(featset) + "\" style=\"direction:ltr\">");
+                        mc_div.append(mc_select_1);
+                        var optArray = []; // All the multiple choice options
+                        var cwyn = new ComponentWithYesNo(mc_div, COMPONENT_TYPE.comboBox2); // Result indicator
                         cwyn.addChangeListener();
+                        mc_select_1.append('<option value="NoValueGiven"></option>'); // Empty default choice
+                        for (var valix in suggestions) {
+                            if (isNaN(+valix))
+                                continue; // Not numeric
+                            // We use a StringWithSort object to handle the option strings. This may
+                            // seem unnecessary in this case, but it means that comboboxes can be
+                            // handled in a uniform manner.
+                            var s = suggestions[+valix]; // Current suggestion
+                            var item = new StringWithSort(s, s); // StringWithSort holding the current suggestion
+                            var option = $("<option value=\"" + s + "\" class=\"" + PanelQuestion.charclass(featset) + "\">" + s + "</option>");
+                            option.data('sws', item); // Associate the answer string with the <option> element
+                            optArray.push(option);
+                            if (s === correctAnswer)
+                                this_2.vAnswers.push(new Answer(cwyn, item, s, null));
+                        }
+                        // Sort the options alphabetically
+                        optArray.sort(function (a, b) { return StringWithSort.compare(a.data('sws'), b.data('sws')); });
+                        // Append optArray to mc_select
+                        $.each(optArray, function (ix, o) { return mc_select_1.append(o); });
                         v = cwyn.appendMeTo($('<td></td>'));
-                        this.vAnswers.push(new Answer(cwyn, null, correctAnswer, null));
+                    }
+                }
+                else if (featType === 'string' || featType === 'ascii') {
+                    // Create this HTML structure in the variable v:      From these variables
+                    // <span ...>                                          cwyn
+                    //   <img ...>                                         cwyn
+                    //   <img ...>                                         cwyn
+                    //   <img ...>                                         cwyn
+                    //   <input type="text" ...>                           vf
+                    // </span>                                             cwyn
+                    var cwyn = void 0;
+                    if (featset.foreignText || featset.transliteratedText) {
+                        var vf = $("<input " + firstInput + " data-kbid=\"" + PanelQuestion.kbid++ + "\" type=\"text\" size=\"20\""
+                            + (" class=\"" + PanelQuestion.charclass(featset) + "\"")
+                            + (" onfocus=\"$('#virtualkbid').appendTo('#row" + (+qoid + 1) + "');VirtualKeyboard.attachInput(this)\">"));
+                        firstInput = '';
+                        hasForeignInput = true;
+                        cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textFieldWithVirtKeyboard);
                     }
                     else {
-                        // This is an enumeration feature type, get the collection of possible values
-                        var values = typeinfo.enum2values[featType];
-                        if (values == null)
-                            v = $('<td>QuestionPanel.UnknType</td>');
-                        else {
-                            // This will be a multiple choice question
-                            var jcb = $('<select></select>');
-                            var optArray = [];
-                            var cwyn = new ComponentWithYesNo(jcb, COMPONENT_TYPE.comboBox1);
-                            cwyn.addChangeListener();
-                            jcb.append('<option value="NoValueGiven"></option>'); // Empty default choice
-                            var correctAnswerFriendly = getFeatureValueFriendlyName(featType, correctAnswer, false, false);
-                            var hasAddedOther = false;
-                            var correctIsOther = featset.otherValues && featset.otherValues.indexOf(correctAnswer) !== -1;
-                            // Loop though all possible values and add the appropriate friendly name
-                            // or "Other value" to the combo box
-                            for (var valix in values) {
-                                if (isNaN(+valix))
-                                    continue; // Not numeric
-                                var s = values[+valix];
-                                if (featset.hideValues && featset.hideValues.indexOf(s) !== -1)
-                                    continue;
-                                // TODO: if (Three_ET.dbInfo.isDupFeatureValueFriendlyNameA(featType, s))  - Westminster
-                                // TODO:     continue;
-                                if (featset.otherValues && featset.otherValues.indexOf(s) !== -1) {
-                                    if (!hasAddedOther) {
-                                        hasAddedOther = true;
-                                        var item = new StringWithSort('#1000 ' + localize('other_value'), 'othervalue');
-                                        var option = $('<option value="{0}">{1}</option>'
-                                            .format(item.getInternal(), item.getString()));
-                                        option.data('sws', item);
-                                        optArray.push(option);
-                                        if (correctIsOther)
-                                            this.vAnswers.push(new Answer(cwyn, item, localize('other_value'), null));
-                                    }
-                                }
-                                else {
-                                    var sFriendly = getFeatureValueFriendlyName(featType, s, false, false);
-                                    var item = new StringWithSort(sFriendly, s);
-                                    var option = $('<option value="{0}">{1}</option>'
-                                        .format(item.getInternal(), item.getString()));
-                                    option.data('sws', item);
-                                    optArray.push(option);
-                                    if (sFriendly === correctAnswerFriendly) // Correct answer
-                                        this.vAnswers.push(new Answer(cwyn, item, s, null));
-                                }
-                            }
-                            optArray.sort(function (a, b) { return StringWithSort.compare(a.data('sws'), b.data('sws')); });
-                            $.each(optArray, function (ix, o) { return jcb.append(o); });
-                            v = cwyn.appendMeTo($('<td></td>'));
-                        }
+                        var vf = $('<input type="text" size="20">');
+                        cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
                     }
+                    cwyn.addKeypressListener();
+                    v = cwyn.appendMeTo($('<td></td>'));
+                    var trimmedAnswer = correctAnswer.trim()
+                        .replace(/&lt;/g, '<')
+                        .replace(/&gt;/g, '>')
+                        .replace(/&quot;/g, '"')
+                        .replace(/&amp;/g, '&'); // Unescape HTML characters in correctAnswer
+                    this_2.vAnswers.push(new Answer(cwyn, null, trimmedAnswer, featset.matchregexp));
+                }
+                else if (featType === 'integer') {
+                    // Create this HTML structure in the variable v:      From these variables
+                    // <span ...>                                          cwyn
+                    //   <img ...>                                         cwyn
+                    //   <img ...>                                         cwyn
+                    //   <img ...>                                         cwyn
+                    //   <input type="number" ...>                         intf
+                    // </span>                                             cwyn
+                    var intf = $('<input type="number">');
+                    var cwyn = new ComponentWithYesNo(intf, COMPONENT_TYPE.textField);
+                    cwyn.addKeypressListener();
+                    v = cwyn.appendMeTo($('<td></td>'));
+                    this_2.vAnswers.push(new Answer(cwyn, null, correctAnswer, null));
+                }
+                else if (featType.substr(0, 8) === 'list of ') {
+                    var subFeatType = featType.substr(8); // Remove "list of "
+                    var values = typeinfo.enum2values[subFeatType]; // Possible Emdros feature values
+                    var swsValues = []; // StringWithSort equivalents of feature values
+                    // Create StringWithSort objects for every feature value
+                    for (var i = 0, len = values.length; i < len; ++i)
+                        swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false, false), values[i]));
+                    // Sort the values using the optional sorting index in the value strings
+                    swsValues.sort(function (a, b) { return StringWithSort.compare(a, b); });
+                    // Create this HTML structure in the variable v:      From these variables
+                    // <span ...>                                          cwyn
+                    //   <img ...>                                         cwyn
+                    //   <img ...>                                         cwyn
+                    //   <img ...>                                         cwyn
+                    //   <table class="list-of">                           selections
+                    //     <tr>                                            row
+                    //       <td style="text-align:left">
+                    //         <input type="checkbox"...>VAL1
+                    //       </td>
+                    //       <td style="text-align:left">
+                    //         <input type="checkbox"...>VAL2
+                    //       </td>
+                    //       <td style="text-align:left">
+                    //         <input type="checkbox"...>VAL3
+                    //       </td>
+                    //     </tr>                                           row
+                    //     ...
+                    //   </table>                                          table
+                    // </span>                                             cwyn
+                    var selections = $('<table class="list-of"></table>');
+                    // Arrange in three columns
+                    var numberOfItems = swsValues.length; // Number of values
+                    var numberOfRows = Math.floor((numberOfItems + 2) / 3); // Number of rows with 3 values each
+                    for (var r = 0; r < numberOfRows; ++r) {
+                        var row = $('<tr></tr>');
+                        for (var c = 0; c < 3; c++) {
+                            var ix = r + c * numberOfRows;
+                            if (ix < numberOfItems)
+                                row.append('<td style="text-align:left">'
+                                    + ("<input type=\"checkbox\" value=\"" + swsValues[ix].getInternal() + "\">")
+                                    + swsValues[ix].getString()
+                                    + '</td>');
+                            else
+                                row.append('<td></td>');
+                        }
+                        selections.append(row);
+                    }
+                    var cwyn = new ComponentWithYesNo(selections, COMPONENT_TYPE.checkBoxes);
+                    cwyn.addChangeListener();
+                    v = cwyn.appendMeTo($('<td></td>'));
+                    this_2.vAnswers.push(new Answer(cwyn, null, correctAnswer, null));
                 }
                 else {
-                    alert('Unexpected correctAnswer==null');
-                    v = $('<td>WHAT?</td>'); // TODO: When can this happen?
+                    // This is an enumeration feature type, get the collection of possible values
+                    var values = typeinfo.enum2values[featType]; // Possible Emdros feature values
+                    if (values == null)
+                        v = $('<td>QuestionPanel.UnknType</td>');
+                    else {
+                        // This will be a multiple choice question
+                        // Create this HTML structure in the variable v:          From these variables
+                        // <span ...>                                              cwyn
+                        //   <img ...>                                             cwyn
+                        //   <img ...>                                             cwyn
+                        //   <img ...>                                             cwyn
+                        //   <select class="..." style="direction:ltr">            mc_select
+                        //     <option value="NoValueGiven"></option>
+                        //     <option value="VAL1" class="...">VAL1</option>      optArray[0]
+                        //     <option value="VAL2" class="...">VAL2</option>      optArray[1]
+                        //     ...
+                        //   </select>                                             mc_select
+                        // </span>                                                 cwyn
+                        var mc_select_2 = $('<select></select>');
+                        var optArray = []; // All the multiple choice options
+                        var cwyn = new ComponentWithYesNo(mc_select_2, COMPONENT_TYPE.comboBox1); // Result indicator
+                        cwyn.addChangeListener();
+                        mc_select_2.append('<option value="NoValueGiven"></option>'); // Empty default choice
+                        var correctAnswerFriendly = getFeatureValueFriendlyName(featType, correctAnswer, false, false);
+                        var hasAddedOther = false;
+                        var correctIsOther = featset.otherValues && featset.otherValues.indexOf(correctAnswer) !== -1;
+                        // Loop though all possible values and add the appropriate localized name
+                        // or "Other value" to the combo box
+                        for (var valix in values) {
+                            if (isNaN(+valix))
+                                continue; // Not numeric
+                            var s = values[+valix]; // Feature value under consideration
+                            if (featset.hideValues && featset.hideValues.indexOf(s) !== -1)
+                                continue; // Don't show the value s
+                            if (featset.otherValues && featset.otherValues.indexOf(s) !== -1) {
+                                // The value s is one of the values that make up 'Other value'
+                                if (!hasAddedOther) {
+                                    hasAddedOther = true;
+                                    var item = new StringWithSort('#1000 ' + localize('other_value'), 'othervalue');
+                                    var option = $("<option value=\"" + item.getInternal() + "\">" + item.getString() + "</option>");
+                                    option.data('sws', item); // Associate the answer string with the <option> element
+                                    optArray.push(option);
+                                    if (correctIsOther)
+                                        this_2.vAnswers.push(new Answer(cwyn, item, localize('other_value'), null));
+                                }
+                            }
+                            else {
+                                var sFriendly = getFeatureValueFriendlyName(featType, s, false, false); // Localized value of s
+                                var item = new StringWithSort(sFriendly, s); // StringWithSort holding the value s
+                                var option = $("<option value=\"" + item.getInternal() + "\">" + item.getString() + "</option>");
+                                option.data('sws', item); // Associate the answer string with the <option> element
+                                optArray.push(option);
+                                if (sFriendly === correctAnswerFriendly) // s is the correct answer
+                                    this_2.vAnswers.push(new Answer(cwyn, item, s, null));
+                            }
+                        }
+                        // Sort the options using the optional sorting index in the value strings
+                        optArray.sort(function (a, b) { return StringWithSort.compare(a.data('sws'), b.data('sws')); });
+                        // Append optArray to mc_select
+                        $.each(optArray, function (ix, o) { return mc_select_2.append(o); });
+                        v = cwyn.appendMeTo($('<td></td>'));
+                    }
                 }
                 currentRow.append(v);
+            };
+            var this_2 = this;
+            ////////////////////////////////
+            // Loop through request features
+            for (var rfi in requestFeatures) {
+                _loop_2(rfi);
             }
+            // currentrow now contains a question item. Set in in '#quiztab'.
             $('#quiztab').append(currentRow);
-            if (hasForeignInput) // Add row for storing keyboard
-                $('#quiztab').append('<tr><td colspan="{0}" id="row{1}" style="text-align:right;"></td></tr>'.format(colcount, +qoid + 1));
+            if (hasForeignInput) // Add row for virtual keyboard
+                $('#quiztab').append("<tr><td colspan=\"" + colcount + "\" id=\"row" + (+qoid + 1) + "\" style=\"text-align:right;\"></td></tr>");
         }
         // Add "Check answer" button
         $('button#check_answer').off('click'); // Remove old handler
@@ -2281,40 +2700,59 @@ var PanelQuestion = /** @class */ (function () {
                 a.checkIt(true);
             }
         });
-        this.question_stat.start_time = Math.round((new Date()).getTime() / 1000);
+        this.question_stat.start_time = Math.round((new Date()).getTime() / 1000); // Start time for statistcs
     }
+    //------------------------------------------------------------------------------------------
+    // charclass static method
+    //
+    // Determines the appropriate CSS class for a given feature.
+    //
+    // Parameter:
+    //     featset: FeatureSetting from the configuration variable.
+    // Returns:
+    //     The appropriate CSS class for the feature.
+    //
+    PanelQuestion.charclass = function (featset) {
+        return featset.foreignText ? charset.foreignClass
+            : featset.transliteratedText ? charset.transliteratedClass : '';
+    };
+    //------------------------------------------------------------------------------------------
+    // updateQuestionStat method
+    //
+    // Updates the private question statistics with information about the student's answers and
+    // returns the statistics.
+    //
+    // Parameter:
+    //     gradingFlag: May the statistics be used for grading the student?
+    // Returns:
+    //     The question statistics.
+    //
     PanelQuestion.prototype.updateQuestionStat = function (gradingFlag) {
         this.question_stat.end_time = Math.round((new Date()).getTime() / 1000);
-        this.commitAll();
         for (var i = 0, len = this.vAnswers.length; i < len; ++i) {
             var ans = this.vAnswers[i];
+            ans.commitIt(); // Check answer correctness and identify unanswered questions
             this.question_stat.req_feat.correct_answer.push(ans.correctAnswer());
             this.question_stat.req_feat.users_answer.push(ans.usersAnswer());
             this.question_stat.req_feat.users_answer_was_correct.push(ans.usersAnswerWasCorrect());
         }
-        this.question_stat.grading = gradingFlag;
+        this.question_stat.grading = +gradingFlag; // Convert GradingFlag to a number
         return this.question_stat;
     };
-    /** Gets the question name.
-     * @return The question name.
-     */
-    //public String getQName() {
-    //    return m_qName.getText();
-    //}
-    /** Gets the question title.
-     * @return The question title.
-     */
-    //public String getQTitle() {
-    //    return m_qTitle.getText();
-    //}
-    /** Creates a list of feature=&gt;value maps holding the features for each question object.
-     * @return A list of feature/value pairs for each question object.
-     */
+    //------------------------------------------------------------------------------------------
+    // buildQuizObjectFeatureList method
+    //
+    // Creates a list of feature=>value maps holding the features for each question object.
+    //
+    // Returns:
+    //     A list of feature/value pairs for each question object.
+    //
     PanelQuestion.prototype.buildQuizObjectFeatureList = function () {
-        // qoFeatures holds the feature/value pairs for each question object
-        var qoFeatures = [];
-        var hasSeen = []; // idd => true if seen
-        var allmonads = getMonadArray(this.sentence);
+        var qoFeatures = []; // The feature/value pairs for each question object
+        var hasSeen = []; // Maps id_d => true if the id_d has been seen. (An id_d
+        // can occur several times; for example, the id_d of a
+        // clause may occur for each monad within the clause.)
+        var allmonads = getMonadArray(this.sentence); // All monads in the sentence
         for (var i = 0, len = allmonads.length; i < len; ++i) {
             var id_d = this.qd.monad2Id[allmonads[i]];
             if (id_d) {
@@ -2325,13 +2763,6 @@ var PanelQuestion = /** @class */ (function () {
             }
         }
         return qoFeatures;
-    };
-    /** This function is called when the question panel is being closed.
-     * Unanswered questions will be marked as such.
-     */
-    PanelQuestion.prototype.commitAll = function () {
-        for (var i = 0, len = this.vAnswers.length; i < len; ++i)
-            this.vAnswers[i].commitIt();
     };
     PanelQuestion.kbid = 1; // Input field identification for virtual keyboard
     return PanelQuestion;
@@ -2496,13 +2927,13 @@ var Quiz = /** @class */ (function () {
         fun1();
         if (this.currentPanelQuestion !== null)
             // Update statistics
-            this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(1));
+            this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(true));
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
             $('#virtualkbid').appendTo('#virtualkbcontainer'); // Move the keyboard back to its initial position
             $('#textarea').empty();
             $('#quiztab').empty();
             $('#quiztab').append('<tr id="quiztabhead"></tr>');
-            var currentDict = new Dictionary(dictionaries, this.currentDictIx, true);
+            var currentDict = new Dictionary(dictionaries, this.currentDictIx, quizdata);
             $('#quizdesc').html(quizdata.desc);
             $('#quizdesc').find('a').attr('target', '_blank'); // Force all hyperlinks to open new browser tab
             if (supportsProgress)
@@ -2510,7 +2941,7 @@ var Quiz = /** @class */ (function () {
             else
                 $('div#progressbar').progressbar({ value: this.currentDictIx + 1, max: dictionaries.sentenceSets.length });
             $('#progresstext').html((this.currentDictIx + 1) + '/' + dictionaries.sentenceSets.length);
-            this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, false);
+            this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict);
             if (this.currentDictIx + 1 === dictionaries.sentenceSets.length)
                 $('button#next_question').attr('disabled', 'disabled');
             if (quizdata.quizFeatures.useVirtualKeyboard &&
@@ -2532,7 +2963,7 @@ var Quiz = /** @class */ (function () {
             if (this.currentPanelQuestion === null)
                 alert('System error: No current question panel');
             else
-                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(1));
+                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(true));
             // Send statistics to server
             $('.grammarselector').empty();
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
@@ -2553,7 +2984,7 @@ var Quiz = /** @class */ (function () {
             if (this.currentPanelQuestion === null)
                 alert('System error: No current question panel');
             else
-                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(0));
+                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(false));
             // Send statistics to server
             $('.grammarselector').empty();
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
@@ -2659,7 +3090,7 @@ $(function () {
             $('div#progressbar').hide();
         else
             $('progress#progress').hide();
-        // Run the exercize
+        // Run the exercise
         quiz = new Quiz(quizdata.quizid);
         quiz.nextQuestion();
     }
@@ -2667,7 +3098,7 @@ $(function () {
         // Display text
         $('#cleargrammar').on('click', function () { GrammarSelectionBox.clearBoxes(true); });
         // Generate the text to display
-        var currentDict = new Dictionary(dictionaries, 0, false);
+        var currentDict = new Dictionary(dictionaries, 0, null);
         currentDict.generateSentenceHtml(null);
         $('.grammarselector input:enabled:checked').trigger('change'); // Make sure the relevant features are displayed
     }

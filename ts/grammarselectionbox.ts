@@ -160,7 +160,7 @@ class GrammarSelectionBox {
             this.hasSeenGrammarGroup = false;
             
             configuration.sentencegrammar[leveli]
-                .walkFeatureNames(objType, (whattype    : number,
+                .walkFeatureNames(objType, (whattype    : WHAT,
                                             objType     : string,
                                             origObjType : string,
                                             featName    : string,
@@ -195,7 +195,7 @@ class GrammarSelectionBox {
     //    featNameLoc: Localized feature name.
     //    leveli: The sentence grammar index (0 for word, 1 for phrase, etc.)
     //
-    private setHandlerCallback(whattype    : number,
+    private setHandlerCallback(whattype    : WHAT,
                                objType     : string,
                                featName    : string,
                                featNameLoc : string,

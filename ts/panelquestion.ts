@@ -1,75 +1,89 @@
 // -*- js -*-
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+
+// This code handles displaying a single question of an exercise.
+
 /// <reference path="componentwithyesno.ts" />
 /// <reference path="answer.ts" />
 
 
-function charclass(featset : FeatureSetting, charset : Charset)
-{
-    return featset.foreignText ? charset.foreignClass
-                               : featset.transliteratedText ? charset.transliteratedClass : '';
-}
-
+//****************************************************************************************************
+// PanelQuestion class
+//
+// This class represents a single question (with multiple question items) of an exercise.
+//
 class PanelQuestion {
-    /** The information required to generate the quiz. */
-    private qd : QuizData;
-    
-    /** The monads containing the question text in the Emdros database. */
-    private sentence : MonadSet;
-    
-    /** The current location. */
-    private location : string; // Localized
-    
-    /** The correct answer for each question. */
-    private vAnswers : Answer[] = [];
-    
-    private question_stat : QuestionStatistics = new QuestionStatistics;
+    private qd            : QuizData;      // The information required to generate the exercise
+    private sentence      : MonadSet;      // The monads containing the question text in the Emdros database
+    private location      : string;        // The current location (localized)
+    private vAnswers      : Answer[] = []; // The correct answer for each question item
+    private question_stat : QuestionStatistics = new QuestionStatistics; // Answer statistics
+    private static kbid   : number = 1;    // Input field identification for virtual keyboard
+    private gradingFlag	  : boolean;	   // May the statistics be used for grading the student?
 
-    private static kbid = 1; // Input field identification for virtual keyboard
-    
-    private gradingFlag : number;
+    //------------------------------------------------------------------------------------------
+    // charclass static method
+    //
+    // Determines the appropriate CSS class for a given feature.
+    //
+    // Parameter:
+    //     featset: FeatureSetting from the configuration variable.
+    // Returns:
+    //     The appropriate CSS class for the feature.
+    //
+    private static charclass(featset : FeatureSetting) : string {
+        return featset.foreignText ? charset.foreignClass
+             : featset.transliteratedText ? charset.transliteratedClass : '';
+    }
 
-    public updateQuestionStat(gradingFlag) : QuestionStatistics {
+    
+    //------------------------------------------------------------------------------------------
+    // updateQuestionStat method
+    //
+    // Updates the private question statistics with information about the student's answers and
+    // returns the statistics.
+    //
+    // Parameter:
+    //     gradingFlag: May the statistics be used for grading the student?
+    // Returns:
+    //     The question statistics.
+    //
+    public updateQuestionStat(gradingFlag : boolean) : QuestionStatistics {
         this.question_stat.end_time = Math.round((new Date()).getTime() / 1000);
 
-        this.commitAll()
-        for (var i:number=0, len=this.vAnswers.length; i<len; ++i) {
-            var ans : Answer = this.vAnswers[i];
+        for (let i=0, len=this.vAnswers.length; i<len; ++i) {
+            let ans : Answer = this.vAnswers[i];
+            ans.commitIt(); // Check answer correctness and identify unanswered questions
+
             this.question_stat.req_feat.correct_answer.push(ans.correctAnswer());
             this.question_stat.req_feat.users_answer.push(ans.usersAnswer());
             this.question_stat.req_feat.users_answer_was_correct.push(ans.usersAnswerWasCorrect());
         }
 
-	this.question_stat.grading = gradingFlag;
+	this.question_stat.grading = +gradingFlag; // Convert GradingFlag to a number
         
         return this.question_stat;
     }
 
-    /** Gets the question name.
-     * @return The question name.
-     */
-    //public String getQName() {
-    //    return m_qName.getText();
-    //}
-    
-    /** Gets the question title.
-     * @return The question title.
-     */
-    //public String getQTitle() {
-    //    return m_qTitle.getText();
-    //}
-    
 
-    /** Creates a list of feature=&gt;value maps holding the features for each question object.
-     * @return A list of feature/value pairs for each question object.
-     */
+    //------------------------------------------------------------------------------------------
+    // buildQuizObjectFeatureList method
+    //
+    // Creates a list of feature=>value maps holding the features for each question object.
+    //
+    // Returns:
+    //     A list of feature/value pairs for each question object.
+    //
     private buildQuizObjectFeatureList() : string[][] {
-        // qoFeatures holds the feature/value pairs for each question object
-        var qoFeatures : string[][] = [];
-        var hasSeen : Array<boolean> = []; // idd => true if seen
+        let qoFeatures : string[][] = [];  // The feature/value pairs for each question object
+
+        let hasSeen    : boolean[]  = [];  // Maps id_d => true if the id_d has been seen. (An id_d
+                                           // can occur several times; for example, the id_d of a
+                                           // clause may occur for each monad within the clause.)
         
-        var allmonads = getMonadArray(this.sentence);
-        for (var i:number=0, len=allmonads.length; i<len; ++i) {
-            var id_d : number = this.qd.monad2Id[allmonads[i]];
+        let allmonads : number[] = getMonadArray(this.sentence); // All monads in the sentence
+        for (let i=0, len=allmonads.length; i<len; ++i) {
+            let id_d : number = this.qd.monad2Id[allmonads[i]];
             if (id_d) {
                 if (!hasSeen[id_d]) {
                     qoFeatures.push(this.qd.id2FeatVal[id_d]);
@@ -80,34 +94,30 @@ class PanelQuestion {
         return qoFeatures;
     }
     
-    
-    
-    //public generateSentenceText() : string {
-        // FOR MOODLE
-    //}
-    
-    
-    /**
-     * Constructs a {@code PanelQuestion} that is to be part of a {@link PanelGeneratedQuestionSet}
-     * or {@link PanelContinuousQuestions} panel.
-     * @param qd The information required to generate a quiz.
-     * @param generator True if this is called as part of a question set generation for Moodle
-     */
-    constructor(qd : QuizData, dict : Dictionary, generator : boolean) {
+    //------------------------------------------------------------------------------------------
+    // constructor method
+    //
+    // Parameter:
+    //     qd: The information required to generate a exercise.
+    //     dict: The collection of Emdros objects for this question.
+    //
+    constructor(qd : QuizData, dict : Dictionary) {
         this.qd = qd;
         this.sentence = dict.sentenceSet;
-        
-        // We base the location on the first monad in the sentence
-        var smo : SingleMonadObject = dict.getSingleMonadObject(getFirst(this.sentence));
-        var location_realname = ''; // Unlocalized
+
+        ////////////////////////////////////////////////////////////////////
+        // Calculate the Bible reference (the 'location') for this sentence.
+
+        // We base the location on the first monad in the sentence.
+        let smo : SingleMonadObject = dict.getSingleMonadObject(getFirst(this.sentence));
+        let location_realname = ''; // Unlocalized
         this.location = smo.bcv_loc; // Localized
-        for (var unix in configuration.universeHierarchy) {
-            var unixi : number = +unix;
+        for (let unix in configuration.universeHierarchy) {
+            let unixi : number = +unix;
             if (isNaN(unixi)) continue; // Not numeric
 
-            var uniname : string = configuration.universeHierarchy[unixi].type;
+            let uniname : string = configuration.universeHierarchy[unixi].type;
 
-            // TODO: This only works for Bible references
             switch (unixi) {
             case 0:
                 location_realname += smo.bcv[unixi] + ', ';
@@ -134,89 +144,92 @@ class PanelQuestion {
 
         if ($('#locate_cb').prop('checked'))
             $('.location').html(this.location);
-        
-        // Optimisations:
-        var dontShow : boolean                                           = qd.quizFeatures.dontShow;
-        var showFeatures : string[]                                   = qd.quizFeatures.showFeatures;
-        var requestFeatures : {name : string; usedropdown : boolean; }[] = qd.quizFeatures.requestFeatures;
-        var oType : string                                            = qd.quizFeatures.objectType;
-        
-	if (generator) {
-            // TODO: Quiz generator for Moodle not yet implementd
-        }
-        else {
-            this.question_stat.text = dict.generateSentenceHtml(qd);
-            this.question_stat.location = location_realname;
-        }
 
-        var colcount = 0;
 
+        
+        ///////////////////////////////////
+        // Generate table of question items
+        
+        // Cache a few variables for easy access
+        let dontShow        : boolean                                    = qd.quizFeatures.dontShow;
+        let showFeatures    : string[]                                   = qd.quizFeatures.showFeatures;
+        let requestFeatures : {name : string; usedropdown : boolean; }[] = qd.quizFeatures.requestFeatures;
+        let oType           : string                                     = qd.quizFeatures.objectType;
+
+        
+        // Save question text and location for statistics
+        this.question_stat.text = dict.generateSentenceHtml(qd);
+        this.question_stat.location = location_realname;
+
+
+        // Create heading for table of question items
+
+        let colcount : number = 0; // Number of columns in <table> containing question items
+        
         if (dontShow) {
             $('#quiztabhead').append('<th>' + localize('item_number') + '</th>');
             this.question_stat.show_feat.names.push('item_number');
             ++colcount;
         }
 
-        for (var sfi in showFeatures) {
+        for (let sfi in showFeatures) {
             if (isNaN(+sfi)) continue; // Not numeric
 
             $('#quiztabhead').append('<th>' + getFeatureFriendlyName(oType, showFeatures[sfi]) + '</th>');
-            this.question_stat.show_feat.names.push(showFeatures[sfi]);
+            this.question_stat.show_feat.names.push(showFeatures[sfi]);  // Save feature name for statistics
             ++colcount;
         }
 
-        for (var sfi in requestFeatures) {
+        for (let sfi in requestFeatures) {
             if (isNaN(+sfi)) continue; // Not numeric
 
             $('#quiztabhead').append('<th>' + getFeatureFriendlyName(oType, requestFeatures[sfi].name) + '</th>');
-            this.question_stat.req_feat.names.push(requestFeatures[sfi].name);
+            this.question_stat.req_feat.names.push(requestFeatures[sfi].name);  // Save feature name for statistics
             ++colcount;
         }
 
-        // The requested object type can have these features. This maps feature name to feature type.
-        var featuresHere : FeatureMap = typeinfo.obj2feat[oType];
-        
-        // qoFeatures holds the feature/value pairs for each question object
-        var qoFeatures : string[][] = this.buildQuizObjectFeatureList();
 
-        var hasForeignInput : boolean = false;
-        var firstInput : string = 'id="firstinput"'; // ID of <input> to receive virtual keyboard focus
+        // Create table entries for each question item
+        
+        let featuresHere    : FeatureMap = typeinfo.obj2feat[oType];          // Maps feature name => feature type
+        let qoFeatures      : string[][] = this.buildQuizObjectFeatureList(); // Feature/value pairs for each question object
+        let hasForeignInput : boolean = false;                                // Do we need a virtual keyboard?
+        let firstInput      : string = 'id="firstinput"';                     // ID of <input> to receive virtual keyboard focus
         
         // Loop through all the quiz objects
-        for (var qoid in qoFeatures) {
+        for (let qoid in qoFeatures) {
             if (isNaN(+qoid)) continue; // Not numeric
 
-            var currentRow : JQuery = $('<tr></tr>');
-            var mm : string[] = qoFeatures[+qoid]; // Feature/value pairs for current quiz object
+            let currentRow : JQuery   = $('<tr></tr>');    // Current question item
+            let fvals      : string[] = qoFeatures[+qoid]; // Feature/value pairs for current quiz object
             
             if (dontShow) {
-                currentRow.append('<td>' + (+qoid+1) + '</td>');
-                this.question_stat.show_feat.values.push(""+(+qoid+1));
+                currentRow.append('<td>' + (+qoid+1) + '</td>');  // Item number
+                this.question_stat.show_feat.values.push(""+(+qoid+1));  // Save feature value for statistics
             }
 
-            // Loop through show features
-            for (var sfi in showFeatures) {
+            ////////////////////////////////
+            // Loop through display features
+            for (let sfi in showFeatures) {
                 if (isNaN(+sfi)) continue; // Not numeric
 
-                var sf : string = showFeatures[+sfi];        // Feature name
-                var val : string = mm[sf];                   // Feature value
-                var featType : string = featuresHere[sf];    // Feature type
-                var featset : FeatureSetting = getFeatureSetting(oType,sf);
+                let sf       : string         = showFeatures[+sfi];          // Feature name
+                let val      : string         = fvals[sf];                   // Feature value
+                let featType : string         = featuresHere[sf];            // Feature type
+                let featset  : FeatureSetting = getFeatureSetting(oType,sf); // Feature configuration
 
-                this.question_stat.show_feat.values.push(val);
+                this.question_stat.show_feat.values.push(val);  // Save feature value for statistics
 
                 if (featType==null && sf!=='visual')
-                    alert('Unexpected (1) featType==null in panelquestion.ts; sf="' + sf + '"');
+                    alert(`Unexpected (1) featType==null in panelquestion.ts; sf="${sf}"`);
 
-                if (/*featType==null && */   //TODO: Why this?
-                    sf==='visual')
+                if (sf==='visual')
                     featType = 'string';
-
                 
                 if (featType=='hint') {
                     // The feature value looks like this:
                     // "featurename=value" or "featurename=value,featurename=value"
-                    var sp : Array<string> = val.split(/[,=]/);
+                    let sp : Array<string> = val.split(/[,=]/);
                     if (sp.length==2) {
                         val = getFeatureFriendlyName(oType, sp[0]) + "=" +
                             getFeatureValueFriendlyName(featuresHere[sp[0]],sp[1],false,true);
@@ -245,217 +258,308 @@ class PanelQuestion {
                 if (val==null)
                     alert('Unexpected val==null in panelquestion.ts');
 
-                if (/*val!=null && */ // TODO: Why this?
-                    (featType==='string' || featType=='ascii'))
-                    currentRow.append('<td class="{0}">{1}</td>'.format(charclass(featset,charset), val==='' ? '-' : val));
+                if (featType==='string' || featType=='ascii')
+                    currentRow.append(`<td class="${PanelQuestion.charclass(featset)}">${val==='' ? '-' : val}</td>`);
                 else
-                    currentRow.append('<td>' + val + '</td>');
+                    currentRow.append(`<td>${val}</td>`);
             }
 
+            ////////////////////////////////
             // Loop through request features
-            for (var rfi in requestFeatures) {
+            for (let rfi in requestFeatures) {
                 if (isNaN(+rfi)) continue; // Not numeric
 
-                var rf : string = requestFeatures[+rfi].name; // Feature name
-                var usedropdown : boolean = requestFeatures[+rfi].usedropdown;
+                let rf            : string  = requestFeatures[+rfi].name;         // Feature name
+                let usedropdown   : boolean = requestFeatures[+rfi].usedropdown;  // Use multiple choice?
+                let correctAnswer : string  = fvals[rf];                          // Feature value (i.e., the correct answer)
+                let featType      : string  = featuresHere[rf];                   // Feature type
+                let featset       : FeatureSetting = getFeatureSetting(oType,rf); // Feature configuration
+		let v             : JQuery  = null;                               // Component to hold the data entry field or a message
 
-                var correctAnswer : string = mm[rf]; // Feature value (i.e., the correct answer)
-		var v : JQuery = null; // Component to hold the data entry field or an error message
                 if (correctAnswer==null)
                     alert('Unexpected correctAnswer==null in panelquestion.ts');
                 if (correctAnswer==='')
                     correctAnswer = '-'; // Indicates empty answer
 
-                if (correctAnswer!=null /* TODO: Why this? */) {
-                    var featType : string = featuresHere[rf];    // Feature type
-                    var featset : FeatureSetting = getFeatureSetting(oType,rf);
+                if (featType==null && rf!=='visual')
+                    alert('Unexpected (2) featType==null in panelquestion.ts');
+                if (rf==='visual')
+                    featType = 'string';
 
-                    if (featType==null && rf!=='visual')
-                        alert('Unexpected (2) featType==null in panelquestion.ts');
-                    if (/*featType==null && */  // TODO: Why this?
-                        rf==='visual')
-                        featType = 'string';
 
-                    if (featset.alternateshowrequestDb!=null && usedropdown) {
-                        var suggestions : string[] = mm[rf + '!suggest!'];
-                        if (suggestions==null)
-                            v = $('<td class="{0}">{1}</td>'
-                                  .format(charclass(featset,charset), correctAnswer));
-                        else {
-                            // This will be a multiple choice question
-                            var selectdiv : JQuery = $('<div class="styled-select"></div>');
+                // The layout of the feature request depends on the type of the feature:
 
-                            // direction:ltr forces left alignment of options (though not on Firefox)
-                            var jcb : JQuery = $('<select class="{0}" style="direction:ltr">'
-                                                 .format(charclass(featset,charset)));
+                if (featset.alternateshowrequestDb!=null && usedropdown) {
+                    // Multiple choice question item
+                    let suggestions : string[] = fvals[rf + '!suggest!']; // Values to choose between
 
-                            selectdiv.append(jcb);
-                            var optArray : JQuery[] = [];
-                            var cwyn : ComponentWithYesNo = new ComponentWithYesNo(selectdiv,COMPONENT_TYPE.comboBox2);
-                            cwyn.addChangeListener();
-
-                            jcb.append('<option value="NoValueGiven"></option>'); // Empty default choice
-                            
-                            for (var valix in suggestions) {
-                                if (isNaN(+valix)) continue; // Not numeric
-
-                                var s : string = suggestions[+valix];
-                                var item = new StringWithSort(s,s);
-                                var option : JQuery = $('<option value="{0}" class="{1}">{2}</option>'
-                                                        .format(item.getInternal(),charclass(featset,charset),item.getString()));
-                                option.data('sws',item);
-                                optArray.push(option);
-                                if (s===correctAnswer)
-				    this.vAnswers.push(new Answer(cwyn,item,s,null));
-                            }
-                            optArray.sort((a : JQuery, b : JQuery) => StringWithSort.compare(a.data('sws'),b.data('sws')));
-                            $.each(optArray, (ix : number, o : JQuery) => jcb.append(o));
-
-                            v = cwyn.appendMeTo($('<td></td>'));
-                        }
-                    }
-                    else if (featType==='string' || featType==='ascii') {
-                        var cwyn : ComponentWithYesNo;
-                        if (featset.foreignText || featset.transliteratedText) {
-                            var vf : JQuery =
-                                $('<input {0} data-kbid="{1}" type="text" size="20" class="{2}" onfocus="$(\'#virtualkbid\').appendTo(\'#row{3}\');VirtualKeyboard.attachInput(this)">'
-                                  .format(firstInput, PanelQuestion.kbid++, charclass(featset,charset), +qoid+1));
-                            firstInput = '';
-                            hasForeignInput = true;
-                            cwyn = new ComponentWithYesNo(vf,COMPONENT_TYPE.textFieldWithVirtKeyboard);
-                        }
-                        else {                   
-                            var vf : JQuery = $('<input type="text" size="20">'); // VerifiedField
-                            cwyn = new ComponentWithYesNo(vf,COMPONENT_TYPE.textField);
-                        }
-                        cwyn.addKeypressListener();
-                        v = cwyn.appendMeTo($('<td></td>'));
-                        
-                        var trimmedAnswer : string = correctAnswer.trim()
-                            .replace(/&lt;/g,'<')
-                            .replace(/&gt;/g,'>')
-                            .replace(/&quot;/g,'"')
-                            .replace(/&amp;/g,'&');
-                        this.vAnswers.push(new Answer(cwyn, null, trimmedAnswer, featset.matchregexp));
-                    }
-                    else if (featType==='integer') {
-                        var intf : JQuery = $('<input type="number">');
-                        var cwyn : ComponentWithYesNo = new ComponentWithYesNo(intf,COMPONENT_TYPE.textField);
-                        cwyn.addKeypressListener();
-                        v = cwyn.appendMeTo($('<td></td>'));
-                        this.vAnswers.push(new Answer(cwyn,null,correctAnswer,null));
-                    }
-                    else if (featType.substr(0,8)==='list of ') {
-                        var subFeatType = featType.substr(8); // Remove "list of "
-                        var values : string[] = typeinfo.enum2values[subFeatType];
-                        var swsValues : StringWithSort[] = [];
-
-                        for (var i:number=0, len=values.length; i<len; ++i)
-                            swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false, false), values[i]));
-                        swsValues.sort((a : StringWithSort, b : StringWithSort) => StringWithSort.compare(a,b));
-                        
-                        var selections : JQuery = $('<table class="list-of"></table>');
-
-                        // Arrange in three columns
-                        var numberOfItems = swsValues.length;
-                        var numberOfRows = Math.floor((numberOfItems+2)/3);
-
-                        for (var r=0; r<numberOfRows; ++r) {
-                            var row : JQuery = $('<tr></tr>');
-                            for (var c=0; c<3; c++) {
-                                var ix = r+c*numberOfRows;
-                                if (ix<numberOfItems)
-                                    row.append('<td style="text-align:left"><input type="checkbox" value="{0}">{1}</td>'
-                                               .format(swsValues[ix].getInternal(), swsValues[ix].getString()));
-                                else
-                                    row.append('<td></td>');
-                            }
-                            selections.append(row);
-                        }
-                        
-                        var cwyn : ComponentWithYesNo = new ComponentWithYesNo(selections,COMPONENT_TYPE.checkBoxes);
-                        cwyn.addChangeListener();
-                        v = cwyn.appendMeTo($('<td></td>'));
-                        this.vAnswers.push(new Answer(cwyn,null,correctAnswer,null));
-                    }
+                    if (suggestions==null) // No suggestions, just display the answer
+                        v = $(`<td class="${PanelQuestion.charclass(featset)}">${correctAnswer}</td>`);
                     else {
-                        // This is an enumeration feature type, get the collection of possible values
-                        var values : string[] = typeinfo.enum2values[featType];
-                        if (values==null)
-                            v = $('<td>QuestionPanel.UnknType</td>');
-                        else {
-                            // This will be a multiple choice question
-                            var jcb : JQuery = $('<select></select>');
-                            var optArray : JQuery[] = [];
-                            var cwyn : ComponentWithYesNo = new ComponentWithYesNo(jcb,COMPONENT_TYPE.comboBox1);
-                            cwyn.addChangeListener();
+                        // Create this HTML structure in the variable v:            From these variables
+                        // <span ...>                                                cwyn
+                        //   <img ...>                                               cwyn
+                        //   <img ...>                                               cwyn
+                        //   <img ...>                                               cwyn
+                        //   <div class="styled-select">                             mc_div
+                        //     <select class="..." style="direction:ltr">            mc_select
+                        //       <option value="NoValueGiven"></option>              
+                        //       <option value="VAL1" class="...">VAL1</option>      optArray[0]
+                        //       <option value="VAL2" class="...">VAL2</option>      optArray[1]
+                        //       ...                                                 
+                        //     </select>                                             mc_select
+                        //   </div>                                                  mc_div
+                        // </span>                                                   cwyn
+                        
+                        let mc_div : JQuery = $('<div class="styled-select"></div>');
 
-                            jcb.append('<option value="NoValueGiven"></option>'); // Empty default choice
-                            
-                            var correctAnswerFriendly : string = getFeatureValueFriendlyName(featType, correctAnswer, false, false);
-                            
-                            var hasAddedOther : boolean = false;
-                            var correctIsOther : boolean = featset.otherValues && featset.otherValues.indexOf(correctAnswer)!==-1;
-                            
-                            // Loop though all possible values and add the appropriate friendly name
-                            // or "Other value" to the combo box
-                            for (var valix in values) {
-                                if (isNaN(+valix)) continue; // Not numeric
+                        // direction:ltr forces left alignment of options (though not on Firefox)
+                        let mc_select : JQuery = $(`<select class="${PanelQuestion.charclass(featset)}" style="direction:ltr">`);
 
-                                var s : string = values[+valix];
-                                if (featset.hideValues && featset.hideValues.indexOf(s)!==-1)
-                                    continue;
-                                // TODO: if (Three_ET.dbInfo.isDupFeatureValueFriendlyNameA(featType, s))  - Westminster
-                                // TODO:     continue;
-                                if (featset.otherValues && featset.otherValues.indexOf(s)!==-1) {
-                                    if (!hasAddedOther) {
-                                        hasAddedOther = true;
-                                        var item = new StringWithSort('#1000 ' + localize('other_value'),'othervalue');
-                                        var option : JQuery = $('<option value="{0}">{1}</option>'
-                                                                .format(item.getInternal(),item.getString()));
-                                        option.data('sws',item);
-                                        optArray.push(option);
-                                        if (correctIsOther)
-					    this.vAnswers.push(new Answer(cwyn,item,localize('other_value'),null));
-                                    }
-                                }
-                                else {
-                                    var sFriendly : string = getFeatureValueFriendlyName(featType, s, false, false);
-                                    var item = new StringWithSort(sFriendly,s);
-                                    var option : JQuery = $('<option value="{0}">{1}</option>'
-                                                            .format(item.getInternal(),item.getString()));
-                                    option.data('sws',item);
-                                    optArray.push(option);
-                                    if (sFriendly===correctAnswerFriendly) // Correct answer
-					this.vAnswers.push(new Answer(cwyn,item,s,null));
-                                }
-                            }
-                            optArray.sort((a : JQuery, b : JQuery) => StringWithSort.compare(a.data('sws'),b.data('sws')));
-                            $.each(optArray, (ix : number, o : JQuery) => jcb.append(o));
-                            v = cwyn.appendMeTo($('<td></td>'));
+                        mc_div.append(mc_select);
+
+                        let optArray : JQuery[]           = []; // All the multiple choice options
+                        let cwyn     : ComponentWithYesNo = new ComponentWithYesNo(mc_div,COMPONENT_TYPE.comboBox2); // Result indicator
+                        cwyn.addChangeListener();
+
+                        mc_select.append('<option value="NoValueGiven"></option>'); // Empty default choice
+                        
+                        for (let valix in suggestions) {
+                            if (isNaN(+valix)) continue; // Not numeric
+
+                            // We use a StringWithSort object to handle the option strings. This may
+                            // seem unnecessary in this case, but it means that comboboxes can be
+                            // handled in a uniform manner.
+                            
+                            let s      : string         = suggestions[+valix];     // Current suggestion
+                            let item   : StringWithSort = new StringWithSort(s,s); // StringWithSort holding the current suggestion
+                            let option : JQuery         = $(`<option value="${s}" class="${PanelQuestion.charclass(featset)}">${s}</option>`);
+
+                            option.data('sws',item); // Associate the answer string with the <option> element
+                            optArray.push(option);
+                            if (s===correctAnswer)
+				this.vAnswers.push(new Answer(cwyn,item,s,null));
                         }
+
+                        // Sort the options alphabetically
+                        optArray.sort((a : JQuery, b : JQuery) => StringWithSort.compare(a.data('sws'),b.data('sws')));
+
+                        // Append optArray to mc_select
+                        $.each(optArray, (ix : number, o : JQuery) => mc_select.append(o));
+
+                        v = cwyn.appendMeTo($('<td></td>'));
                     }
+                }
+                else if (featType==='string' || featType==='ascii') {
+                    // Create this HTML structure in the variable v:      From these variables
+                    // <span ...>                                          cwyn
+                    //   <img ...>                                         cwyn
+                    //   <img ...>                                         cwyn
+                    //   <img ...>                                         cwyn
+                    //   <input type="text" ...>                           vf
+                    // </span>                                             cwyn
+                        
+                    let cwyn : ComponentWithYesNo;
+                    if (featset.foreignText || featset.transliteratedText) {
+                        let vf : JQuery =        // A text <input> element with an associated virtual keyboard
+                            $(`<input ${firstInput} data-kbid="${PanelQuestion.kbid++}" type="text" size="20"`
+                              + ` class="${PanelQuestion.charclass(featset)}"`
+                              + ` onfocus="$('#virtualkbid').appendTo('#row${+qoid+1}');VirtualKeyboard.attachInput(this)">`);
+                        firstInput = '';
+                        hasForeignInput = true;
+                        cwyn = new ComponentWithYesNo(vf,COMPONENT_TYPE.textFieldWithVirtKeyboard);
+                    }
+                    else {                   
+                        let vf : JQuery = $('<input type="text" size="20">');
+                        cwyn = new ComponentWithYesNo(vf,COMPONENT_TYPE.textField);
+                    }
+                    cwyn.addKeypressListener();
+                    v = cwyn.appendMeTo($('<td></td>'));
+                    
+                    let trimmedAnswer : string = correctAnswer.trim()
+                        .replace(/&lt;/g,'<')
+                        .replace(/&gt;/g,'>')
+                        .replace(/&quot;/g,'"')
+                        .replace(/&amp;/g,'&');   // Unescape HTML characters in correctAnswer
+                    this.vAnswers.push(new Answer(cwyn, null, trimmedAnswer, featset.matchregexp));
+                }
+                else if (featType==='integer') {
+                    // Create this HTML structure in the variable v:      From these variables
+                    // <span ...>                                          cwyn
+                    //   <img ...>                                         cwyn
+                    //   <img ...>                                         cwyn
+                    //   <img ...>                                         cwyn
+                    //   <input type="number" ...>                         intf
+                    // </span>                                             cwyn
+                        
+                    let intf : JQuery = $('<input type="number">');
+                    let cwyn : ComponentWithYesNo = new ComponentWithYesNo(intf,COMPONENT_TYPE.textField);
+                    cwyn.addKeypressListener();
+                    v = cwyn.appendMeTo($('<td></td>'));
+                    this.vAnswers.push(new Answer(cwyn,null,correctAnswer,null));
+                }
+                else if (featType.substr(0,8)==='list of ') {
+                    let subFeatType : string   = featType.substr(8);                // Remove "list of "
+                    let values      : string[] = typeinfo.enum2values[subFeatType]; // Possible Emdros feature values
+                    let swsValues   : StringWithSort[] = [];                        // StringWithSort equivalents of feature values
+
+                    // Create StringWithSort objects for every feature value
+                    for (let i=0, len=values.length; i<len; ++i)
+                        swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false, false), values[i]));
+
+                    // Sort the values using the optional sorting index in the value strings
+                    swsValues.sort((a : StringWithSort, b : StringWithSort) => StringWithSort.compare(a,b));
+                    
+
+                    // Create this HTML structure in the variable v:      From these variables
+                    // <span ...>                                          cwyn
+                    //   <img ...>                                         cwyn
+                    //   <img ...>                                         cwyn
+                    //   <img ...>                                         cwyn
+                    //   <table class="list-of">                           selections
+                    //     <tr>                                            row
+                    //       <td style="text-align:left">
+                    //         <input type="checkbox"...>VAL1
+                    //       </td>
+                    //       <td style="text-align:left">
+                    //         <input type="checkbox"...>VAL2
+                    //       </td>
+                    //       <td style="text-align:left">
+                    //         <input type="checkbox"...>VAL3
+                    //       </td>
+                    //     </tr>                                           row
+                    //     ...
+                    //   </table>                                          table
+                    // </span>                                             cwyn
+
+
+                    let selections : JQuery = $('<table class="list-of"></table>');
+
+                    // Arrange in three columns
+                    let numberOfItems : number = swsValues.length;                // Number of values
+                    let numberOfRows  : number = Math.floor((numberOfItems+2)/3); // Number of rows with 3 values each
+
+                    for (let r=0; r<numberOfRows; ++r) {
+                        let row : JQuery = $('<tr></tr>');
+                        for (let c=0; c<3; c++) {
+                            let ix = r+c*numberOfRows;
+                            if (ix<numberOfItems)
+                                row.append('<td style="text-align:left">'
+                                           + `<input type="checkbox" value="${swsValues[ix].getInternal()}">`
+                                           + swsValues[ix].getString()
+                                           + '</td>');
+                            else
+                                row.append('<td></td>');
+                        }
+                        selections.append(row);
+                    }
+                    
+                    let cwyn : ComponentWithYesNo = new ComponentWithYesNo(selections,COMPONENT_TYPE.checkBoxes);
+                    cwyn.addChangeListener();
+                    v = cwyn.appendMeTo($('<td></td>'));
+                    this.vAnswers.push(new Answer(cwyn,null,correctAnswer,null));
                 }
                 else {
-                    alert('Unexpected correctAnswer==null');
-                    v = $('<td>WHAT?</td>'); // TODO: When can this happen?
+                    // This is an enumeration feature type, get the collection of possible values
+                    let values : string[] = typeinfo.enum2values[featType]; // Possible Emdros feature values
+
+                    if (values==null)
+                        v = $('<td>QuestionPanel.UnknType</td>');
+                    else {
+                        // This will be a multiple choice question
+
+                        // Create this HTML structure in the variable v:          From these variables
+                        // <span ...>                                              cwyn
+                        //   <img ...>                                             cwyn
+                        //   <img ...>                                             cwyn
+                        //   <img ...>                                             cwyn
+                        //   <select class="..." style="direction:ltr">            mc_select
+                        //     <option value="NoValueGiven"></option>
+                        //     <option value="VAL1" class="...">VAL1</option>      optArray[0]
+                        //     <option value="VAL2" class="...">VAL2</option>      optArray[1]
+                        //     ...
+                        //   </select>                                             mc_select
+                        // </span>                                                 cwyn
+
+                        let mc_select : JQuery   = $('<select></select>');
+                        let optArray  : JQuery[] = []; // All the multiple choice options
+                        let cwyn      : ComponentWithYesNo = new ComponentWithYesNo(mc_select,COMPONENT_TYPE.comboBox1); // Result indicator
+
+                        cwyn.addChangeListener();
+
+                        mc_select.append('<option value="NoValueGiven"></option>'); // Empty default choice
+
+
+                        let correctAnswerFriendly : string =          // Localized correct answer:
+                                                    getFeatureValueFriendlyName(featType, correctAnswer, false, false);
+                        let hasAddedOther         : boolean =         // Have we added an 'Other value' to the list of values?
+                                                    false;
+                        let correctIsOther        : boolean =         // Is the correct answer one of the values that make up 'Other value'?
+                                                    featset.otherValues && featset.otherValues.indexOf(correctAnswer)!==-1;
+                        
+                        // Loop though all possible values and add the appropriate localized name
+                        // or "Other value" to the combo box
+                        for (let valix in values) {
+                            if (isNaN(+valix)) continue; // Not numeric
+
+                            let s : string = values[+valix]; // Feature value under consideration
+                            if (featset.hideValues && featset.hideValues.indexOf(s)!==-1)
+                                continue;  // Don't show the value s
+
+                            if (featset.otherValues && featset.otherValues.indexOf(s)!==-1) {
+                                // The value s is one of the values that make up 'Other value'
+                                if (!hasAddedOther) {
+                                    hasAddedOther = true;
+
+                                    let item   : StringWithSort = new StringWithSort('#1000 ' + localize('other_value'),'othervalue');
+                                    let option : JQuery         = $(`<option value="${item.getInternal()}">${item.getString()}</option>`);
+                                    
+                                    option.data('sws',item); // Associate the answer string with the <option> element
+                                    optArray.push(option);
+                                    if (correctIsOther) 
+					this.vAnswers.push(new Answer(cwyn,item,localize('other_value'),null));
+                                }
+                            }
+                            else {
+                                let sFriendly : string         = getFeatureValueFriendlyName(featType, s, false, false); // Localized value of s
+                                let item      : StringWithSort = new StringWithSort(sFriendly,s); // StringWithSort holding the value s
+                                let option    : JQuery         = $(`<option value="${item.getInternal()}">${item.getString()}</option>`);
+
+                                option.data('sws',item); // Associate the answer string with the <option> element
+                                optArray.push(option);
+                                if (sFriendly===correctAnswerFriendly) // s is the correct answer
+				    this.vAnswers.push(new Answer(cwyn,item,s,null));
+                            }
+                        }
+
+                        // Sort the options using the optional sorting index in the value strings
+                        optArray.sort((a : JQuery, b : JQuery) => StringWithSort.compare(a.data('sws'),b.data('sws')));
+
+                        // Append optArray to mc_select
+                        $.each(optArray, (ix : number, o : JQuery) => mc_select.append(o));
+                        
+                        v = cwyn.appendMeTo($('<td></td>'));
+                    }
                 }
- 
+                
                 currentRow.append(v);
             }
+
+            // currentrow now contains a question item. Set in in '#quiztab'.
             $('#quiztab').append(currentRow);
-            if (hasForeignInput) // Add row for storing keyboard
-                $('#quiztab').append('<tr><td colspan="{0}" id="row{1}" style="text-align:right;"></td></tr>'.format(colcount, +qoid+1));
+
+            if (hasForeignInput) // Add row for virtual keyboard
+                $('#quiztab').append(`<tr><td colspan="${colcount}" id="row${+qoid+1}" style="text-align:right;"></td></tr>`);
         }
 
 	// Add "Check answer" button
         $('button#check_answer').off('click'); // Remove old handler
         $('button#check_answer').on('click',
                                     () => {
-                                        for (var ai in this.vAnswers) {
+                                        for (let ai in this.vAnswers) {
                                             if (isNaN(+ai)) continue; // Not numeric
 
-                                            var a : Answer = this.vAnswers[+ai];
+                                            let a : Answer = this.vAnswers[+ai];
                                             a.checkIt(false);
                                         }
                                     });
@@ -464,23 +568,15 @@ class PanelQuestion {
         $('button#show_answer').off('click'); // Remove old handler
         $('button#show_answer').on('click',
                                    () => {
-                                       for (var ai in this.vAnswers) {
+                                       for (let ai in this.vAnswers) {
                                            if (isNaN(+ai)) continue; // Not numeric
 
-                                           var a : Answer = this.vAnswers[+ai];
+                                           let a : Answer = this.vAnswers[+ai];
                                            a.showIt();
                                            a.checkIt(true);
                                        }
                                    });
 
-        this.question_stat.start_time = Math.round((new Date()).getTime() / 1000);
-    }
-
-    /** This function is called when the question panel is being closed. 
-     * Unanswered questions will be marked as such.
-     */
-    private commitAll() : void {
-        for (var i:number=0, len=this.vAnswers.length; i<len; ++i)
-            this.vAnswers[i].commitIt();
+        this.question_stat.start_time = Math.round((new Date()).getTime() / 1000); // Start time for statistcs
     }
 }

@@ -1,46 +1,97 @@
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
 
-var urlTypeString = {
+
+// Classes that represent display information about Emdros objects.
+
+
+
+//****************************************************************************************************
+// About the HTML elements displaying text and grammar
+//****************************************************************************************************
+//
+// Words (lowest level Emdros objects):
+//     The Emdros object is represented by a <span> element with the classes "textblock" and
+//     "inline". Within this <span> element a number of other <span> elements are found:
+//      
+//         * One <span> element represents the word itself. It has the class "textdisplay" and a class
+//           representing the character set of the text. Additionally it may have classes representing
+//           Hebrew optional word spacing (see follow_class in the generateHtml method of the
+//           DisplaySingleMonadObject class below). The element also has a 'data-idd' attribute, whose
+//           value is the id_d of the object in the Emdros database.
+//
+//         * A number of <span> elements represent grammar features of the word. These elements have
+//           the class "wordgrammar". Additionally, they may have these classes:
+//               - "showit" / "dontshowit": Controls if the word feature is shown or not.
+//               - The name of the feature.
+//               - "hebrew" / "hebrew_translit" / "greek" / "latin" / "ltr": Identify the character set
+//                 of the feature.
+//
+// Emdros objects above the word level (such as phrase or clause)...
+//     ...have a level (for example, 1 for phrase, 2 for clause etc.).
+//     ...may be split into non-contiguous segments, numbered from 0 and up.
+//     ...may or may not be displayable. The Patriach element is not displayable, and not all
+//        Greek words belong to a displayable clause1 or a clause2.
+//
+//     The Emdros object is represented by a <span> element with the class "lev#", where # is the
+//     level number. Additionally it may have these classes:
+//         - "nodummy": If the object is displayable.
+//         - "showborder" / "dontshowborder": Controls if the border around the object is shown or not.
+//         - "seplin" / "noseplin": Controls if the object is shown on a separate line or not.
+//         - "hasp": If the object is split and has a predecessor.
+//         - "hass": If the object is split and has a successor.
+//
+//     In the border, the Emdros object type may be shown in a <span> element. This element has a
+//     'data-idd' attribute, whose value is the id_d of the object in the Emdros database, and a
+//     'data-mix' attribute, whose value is the number of the current object segment. The <span>
+//     element has class "gram" or "nogram", depending on whether the object is displayable or not.
+//     Additionally, it has one of these classes:
+//         - "showit" / "dontshowit": Controls if the feature is shown or not.
+//
+//     Following the name of the object type, the border may show features of the Emdros object in a
+//     <span> element with class "xgrammar". Additionally, it has these classes:
+//         - "showit" / "dontshowit": Controls if the feature is shown or not.
+//         - Object type, underscore, feature name (for example "clause_kind").
+//         - "indentation": If this feature should be displayed as a Hebrew clause indentation.
+//****************************************************************************************************
+
+
+
+// Maps URL type to non-localized hypterlink title
+let urlTypeString = {
     'u' : 'click_for_web_site',
     'v' : 'click_for_video',
     'd' : 'click_for_document',
 };
 
-class DisplayMonadObject {
-    /** The {@link MonadObject} being displayed (perhaps in part) by this {@code DisplayMonadObject}. */
-    public displayedMo : MonadObject;
+//****************************************************************************************************
+// DisplayMonadObject class
+//
+// This class represents the display information about a Emdros object. It is linked to a
+// MonadObject which contains the features of the Emdros object.
+//
+// A DisplayMonadObject is either a DisplaySingleMonadObject (if the Emdros object is a word) or a
+// DisplayMultipleMonadObject (if the Emdros objects is a phrase, clause, etc.).
+//
+abstract class DisplayMonadObject {
+    protected displayedMo : MonadObject;                // The MonadObject being displayed (perhaps in part) by this DisplayMonadObject
+    protected objType     : string;                     // The name of the Emdros object type represented by this object
+    protected level       : number;                     // The level of this object. (0 for a DisplaySingleMonadObject, >0 for a DisplayMultipleMonadObject)
+    public range          : MonadPair;                  // The (single range) monad set being displayed by this object
+    protected mix         : number;                     // The index in the monad set ranges that make up this object
+    public parent         : DisplayMultipleMonadObject; // The parent of this Emdros object
+    public children       : DisplayMonadObject[];       // The children of this Emdros object
 
-    /** The (single range) monad set being displayed by this object. */
-    public range : MonadPair;
-
-    /** The index in the monad set ranges that make up this object. */
-    public mix : number;
-
-    static uniqIdStatic : number = 0;
-
-    public uniqId : number;
-
-    /** The level of this object. (0 for a {@code DisplaySingleMonadObject}, &gt;0 for a {@code
-     * DisplayMultipleMonadObject}.) */
-    public level : number;
-
-    /** The parent of this text component. */
-    public parent : DisplayMultipleMonadObject;
-
-    /** The children of this text component. */
-    public children : DisplayMonadObject[];
-
-    /** The name of the Emdros object type represented by this object. */
-    public objType : string;
-
-    /** Creates a {@code DisplayMonadObject}. This includes creating the display panel and popup.
-     * @param mo The {@link MonadObject} displayed (perhaps in part) by this {@code DisplayMonadObject}.
-     * @param objType The Emdros object type represented by this {@code DisplayMonadObject}.
-     * @param level The level of the object.
-     */
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Paramters:
+    //     mo: The MonadObject displayed (perhaps in part) by this DisplayMonadObject.
+    //     objType: The Emdros object type represented by this DisplayMonadObject.
+    //     level: The level of the object. (0=word, 1=phrase, etc.)
+    //    
     constructor(mo : MonadObject, objType : string, level : number) {
-        this.uniqId = ++DisplayMonadObject.uniqIdStatic;
+        // Link this DisplayMonadObject with the MonadObject it displays
         this.displayedMo = mo;
 
         if (mo.displayers==undefined)
@@ -48,53 +99,70 @@ class DisplayMonadObject {
         else 
             mo.displayers.push(this);
 
+        
         this.objType = objType;
         this.level = level;
     }
 
-    public generateHtml(qd : QuizData, sentenceTextArr : string[]) : JQuery {
-        alert('Abstract function generateHtml called');
-        return null;
-    }
+    //---------------------------------------------------------------------------------------------------
+    // generateHtml method
+    //
+    // Generates the HTML that displays the Emdros object.
+    //
+    // Parameters:
+    //     qd: Data for the current exercise. Null, if we are not generating an exercise.
+    //     sentenceTextArr: The generated HTML is stored in element 0 of this array. Only element 0
+    //                      is used; the parameter is an array to make it a call-by-reference parameter.
+    // Returns:
+    //     A JQuery object containing the generated HTML.
+    //
+    public abstract generateHtml(qd : QuizData, sentenceTextArr : string[]) : JQuery;
 
-    /** Determines if this object is a subset of another {@code DisplayMonadObject}.
-     * @param mo Another {@code DisplayMonadObject}.
-     * @return True if the monad set represented by this {@code DisplayMonadObject} is a subset of the
-     * monad set represented by the parameter {@code mo}.
-     */
+
+    //------------------------------------------------------------------------------------------
+    // containedIn method
+    //
+    // Determines if this object is a subset of another DisplayMonadObject.
+    //
+    // Parameters:
+    //     mo: Another DisplayMonadObject.
+    // Returns
+    //     True if the monad set represented by this DisplayMonadObject is a subset of the
+    //     monad set represented by the parameter 'mo'.
+    //
     public containedIn(mo : DisplayMonadObject) : boolean {
         return this.range.low>=mo.range.low && this.range.high<=mo.range.high;
     }
-
 }
 
 
-
-/** A {@code DisplaySingleMonadObject} is a {@code DisplayMonadObject} that can display a text
- * component at the lowest level, corresponding to a single monad in an Emdros database. This is
- * typically a single word.
- * <p>
- * Hebrew is a special case here. In most languages, words are separated by spaces. In Hebrew, that
- * is not necessarily the case. The Hebrew Bible starts with the word <i>bereshit</i> ("in the
- * beginning"), but this is actually two words: <i>be</i> ("in") and <i>reshit</i> ("beginning"). When this
- * program shows the text without annotation, the words are strung together (<i>bereshit</i>), but when
- * annotation is included, the words are split (<i>be-&nbsp;reshit</i>).
- */
+//****************************************************************************************************
+// DisplaySingleMonadObject class
+//
+// A DisplaySingleMonadObject is a DisplayMonadObject that can display a text component at the
+// lowest level, corresponding to a single monad in an Emdros database. This is typically a single
+// word.
+//
+// Hebrew is a special case here. In most languages, words are separated by spaces. In Hebrew, that
+// is not necessarily the case. The Hebrew Bible starts with the word "bereshit" ("in the
+// beginning"), but this is actually two words: "be" ("in") and "reshit" ("beginning"). When this
+// program shows the text without annotation, the words are strung together ("bereshit"), but when
+// annotation is included, the words are split ("be- reshit").
+// 
 class DisplaySingleMonadObject extends DisplayMonadObject {
-    /** Is this {@code DisplaySingleObject} created as part of a quiz? */
-    private inQuiz : boolean;
+    // Is this DisplaySingleObject created as part of a quiz?
+    private inQuiz          : boolean; // True if we are displaying an exercise
+    public static itemIndex : number;  // The number replacing a word in the displayed text of some exercises
+    private monad           : number;  // The Emdros monad of this object
 
-    static itemIndex : number;
-
-    private monad : number;
-
-    /** Creates a {@code DisplaySingleMonadObject}. This includes setting up a mouse listener that
-     * highlights enclosing phrase and clause frames. Note that this constructor does not set the
-     * text; that is done by a subsequent call to {@link #setText(String,String,Font,Color)}.
-     * @param smo The {@link SingleMonadObject} displayed by this {@code DisplaySingleMonadObject}.
-     * @param objType The Emdros object type represented by this {@code DisplaySingleMonadObject}.
-     * @param inQuiz Is this part of a quiz (in which case we must not display chapter and verse).
-     */
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Paramters:
+    //     smo: The SingleMonadObject displayed by this DisplaySingleMonadObject.
+    //     objType: The Emdros object type represented by this DisplaySingleMonadObject.
+    //     inQuiz: True if we are displaying an exercise.
+    //    
     constructor(smo : SingleMonadObject, objType : string, inQuiz : boolean) {
         super(smo,objType,0);
         this.inQuiz = inQuiz;
@@ -103,114 +171,133 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         this.mix = 0;
     }
 
-
+    //---------------------------------------------------------------------------------------------------
+    // generateHtml method
+    //
+    // See description under DisplayMonadObject.
+    //
     public generateHtml(qd : QuizData, sentenceTextArr : string[]) : JQuery {
-        var smo : SingleMonadObject = <SingleMonadObject>this.displayedMo;
-        var uhSize : number = smo.bcv.length;
-        var chapter : string = null;
-        var verse : string = null;
-        var refs : number[] = null;
-        var urls : string[][] = null;
+        let smo     : SingleMonadObject = this.displayedMo as SingleMonadObject; // The SingleMonadObject being displayed by this DisplaySingleMonadObject
+
+        let uhSize  : number = smo.bcv.length;  // The size of the hierarchy book/chapter/verse. This is currently always 3
+        let chapter : string = null;            // Current chapter, set if the current word is the first word of a chapter
+        let verse   : string = null;            // Current verse, set if the current word is the first word of a verse
+
+        // For displaying link icons (only set on the first word in a verse):
+        let refs : number[]   = null; // Any picture database references associated with the current verse
+        let urls : string[][] = null; // Any URLs associated with the current verse
 
         if (uhSize!=0) {
+            // Sanity check:
             if (uhSize!=smo.sameAsPrev.length) throw 'BAD2';
             if (uhSize!=smo.sameAsNext.length) throw 'BAD3';
 
-            // If this is not a quiz, add book, chapter, and verse
+            // If this is not an exercise, add book, chapter, and verse
             if (!this.inQuiz) {
-                document.title = l10n.universe['book'][smo.bcv[0]] + ' ' + smo.bcv[1];
-                $('#textcontainer h1').html(document.title);
+                document.title = l10n.universe['book'][smo.bcv[0]] + ' ' + smo.bcv[1]; // Text in title bar
+                $('#textcontainer h1').html(document.title); // Text in page heading
 
-                for (var i : number = 0; i<uhSize; ++i) {
+                for (let i : number = 0; i<uhSize; ++i) {
                     if (!smo.sameAsPrev[i]) {
-                        if (i==1)
-                            chapter=smo.bcv[i];
+                        if (i==1) {
+                            // The current word is the first word in a chapter
+                            chapter = smo.bcv[i];
+                        }
                         else if (i==2) {
-                            verse=smo.bcv[i];
-                            refs=smo.pics;
-                            urls=smo.urls;
+                            // The current word is the first word in a verse
+                            verse = smo.bcv[i];
+                            refs = smo.pics;
+                            urls = smo.urls;
                         }
                     }
                 }
 	    }
         }
 
-        var text : string;
-        var id_d : number = qd ? qd.monad2Id[this.monad] : null;
-        if (id_d) {
+        let text : string; // The text to display for the current word
+        if (qd && qd.monad2Id[this.monad]) {
             // This is a quiz object
             if (qd.quizFeatures.dontShow)
-                text = '({0})'.format(++DisplaySingleMonadObject.itemIndex)
+                text = `(${++DisplaySingleMonadObject.itemIndex})`;
             else
                 text = this.displayedMo.mo.features[configuration.surfaceFeature] ;
-            text = '<em>' + text + '</em>';
+            text = `<em>${text}</em>`;
         }
         else
             text = this.displayedMo.mo.features[configuration.surfaceFeature];
 
-        var chapterstring : string = chapter==null ? '' : '<span class="chapter">{0}</span>&#x200a;'.format(chapter);
-        var versestring : string = verse==null ? '' : '<span class="verse">{0}</span>'.format(verse);
-        var refstring : string;
+        // Representation of chapter and verse number:
+        let chapterstring : string = chapter==null ? '' : `<span class="chapter">${chapter}</span>&#x200a;`; // Currently not used
+        let versestring   : string = verse==null   ? '' : `<span class="verse">${verse}</span>`;
+
+        let refstring : string;  // String of icons representing pictures
         
         if (refs===null)
             refstring = '';
         else if (refs.length===4) // Only one reference
-            refstring = '<a target="_blank" title="{2}" href="http://resources.3bmoodle.dk/link.php?picno={0}"><img src="{1}images/p.png"></a>'
-            .format(refs[3],site_url,localize('click_for_picture'));
+            refstring = `<a target="_blank" title="${localize('click_for_picture')}" href="http://resources.3bmoodle.dk/link.php?picno=${refs[3]}"><img src="${site_url}images/p.png"></a>`;
         else // More than one reference
-            refstring = '<a target="_blank" title="{4}" href="http://resources.3bmoodle.dk/img.php?book={0}&chapter={1}&verse={2}"><img src="{3}images/pblue.png"></a>'
-            .format(refs[0],refs[1],refs[2],site_url,localize('click_for_pictures'));
+            refstring = `<a target="_blank" title="${localize('click_for_pictures')}" href="http://resources.3bmoodle.dk/img.php?book=${refs[0]}&chapter=${refs[1]}&verse=${refs[2]}"><img src="${site_url}images/pblue.png"></a>`;
         
-        var urlstring : string = '';
-        if (urls!==null) {
-            var len = urls.length;
-            for (var uix : number = 0; uix<urls.length; ++uix) {
-                urlstring += '<a target="_blank" title="{0}" href="{1}"><img src="{2}images/{3}.png"></a>'
-                .format(localize(urlTypeString[urls[uix][1]]),urls[uix][0],site_url,urls[uix][1]);
-            }
-        }
-        var grammar = '';
+        let urlstring : string = ''; // String of icons representing URLs
+        if (urls!==null)
+            for (let uix : number = 0; uix<urls.length; ++uix)
+                urlstring += `<a target="_blank" title="${localize(urlTypeString[urls[uix][1]])}" href="${urls[uix][0]}"><img src="${site_url}images/${urls[uix][1]}.png"></a>`;
+
+        let grammar : string = ''; // Will hold the interlinear grammar information
         configuration.sentencegrammar[0]
             .walkFeatureValues(smo, 0, this.objType, false,
-                               (whattype:number, objType:string, origObjType:string, featName:string, featValLoc:string) => {
-                                   switch (whattype) {
-                                   case WHAT.feature:
-                                       var wordclass : string;
-                                       var fs : FeatureSetting = getFeatureSetting(objType,featName);
-                                       if (fs.foreignText)
-                                           wordclass = charset.foreignClass;
-                                       else if (fs.transliteratedText)
-                                           wordclass = charset.transliteratedClass;
-                                       else
-                                           wordclass = 'ltr';
+                                 (whattype    : WHAT,
+                                  objType     : string,
+                                  origObjType : string,
+                                  featName    : string,
+                                  featValLoc  : string) => {
+                                      switch (whattype) {
+                                      case WHAT.feature:
+                                          let wordclass : string; // The class attribute of an HTML element
+                                          let fs : FeatureSetting = getFeatureSetting(objType,featName);
+                                          if (fs.foreignText)
+                                              wordclass = charset.foreignClass;
+                                          else if (fs.transliteratedText)
+                                              wordclass = charset.transliteratedClass;
+                                          else
+                                              wordclass = 'ltr';
 
-                                       // For Spanish, English and German in ETCBC4, display only the first gloss
-                                       
-                                       if (configuration.databaseName=="ETCBC4"
-                                           && (featName=="english" || featName=="spanish" || featName=="german")) {
-                                           featValLoc = featValLoc.replace(/(&[gl]t);/,'$1Q')
-                                               .replace(/([^,;(]+).*/,'$1')
-                                               .replace(/(&[gl]t)Q/,'$1;');
-                                       }
+                                          // For Spanish, English and German in ETCBC4, display only the first gloss
+                                          
+                                          if (configuration.databaseName=="ETCBC4"
+                                              && (featName=="english" || featName=="spanish" || featName=="german")) {
+                                              featValLoc = featValLoc.replace(/(&[gl]t);/,'$1Q')  // Remove ';' from "&gt;" and "&lt;" 
+                                                                     .replace(/([^,;(]+).*/,'$1') // Remove everything after ',' or ';' or '('
+                                                                     .replace(/(&[gl]t)Q/,'$1;'); // Reinsert ';' in "&gt;" and "&lt;" 
+                                          }
 
-                                       grammar += '<span class="wordgrammar dontshowit {0} {2}">{1}</span>'.format(featName,featValLoc,wordclass);
-                                       break;
+                                          grammar += `<span class="wordgrammar dontshowit ${featName} ${wordclass}">${featValLoc}</span>`;
+                                          break;
 
-                                   case WHAT.metafeature:
-                                       grammar += '<span class="wordgrammar dontshowit {0} ltr">{1}</span>'.format(featName,featValLoc);
-                                       break;
-                                   }
-                               });
+                                      case WHAT.metafeature:
+                                          grammar += `<span class="wordgrammar dontshowit ${featName} ltr">${featValLoc}</span>`;
+                                          break;
+                                      }
+                                  });
 
-        var follow_space : string = '<span class="wordspace"> </span>'; // Enables line wrapping
-        var follow_class : string = ''; 
+        let follow_space : string = '<span class="wordspace"> </span>'; // Enables line wrapping
+        let follow_class : string = ''; 
 
         if (charset.isHebrew) {
-            var suffix = smo.mo.features[configuration.suffixFeature];
+            let suffix = smo.mo.features[configuration.suffixFeature];
             text += suffix;
-            if (suffix==='' || suffix==='-' || suffix==='\u05be') {
+            if (suffix==='' || suffix==='-' || suffix==='\u05be' /* maqaf */) {
                 follow_space = ''; // Prevents line wrapping
+
+                // Enable optional word spacing. This is handled by the util.WordSpaceFollowerBox class.
+                // CSS class 'cont' identifies words concatenated to the next word.
+                // CSS class 'contx' identifies words linked to the next word with a hypen/maqaf.
+                // CSS class 'cont1' means "do not add word spacing".
+                // CSS class 'cont2' means "add a hyphen and word spacing".
+                // CSS class 'cont2x' means "add word spacing" (a hyphen/maqaf is already present).
                 follow_class = suffix==='' ? ' cont cont1' : ' contx cont1';
+
                 sentenceTextArr[0] += text;
             }
             else
@@ -219,91 +306,87 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         else
             sentenceTextArr[0] += text + ' ';
             
-        return $('<span class="textblock inline"><span class="textdisplay {0}" data-idd="{1}">{2}{3}{4}{5}{6}</span>{7}</span>{8}'
-                 .format(charset.foreignClass + follow_class,
-                         smo.mo.id_d,
-                         '', //chapterstring,
-                         versestring,
-                         refstring,
-                         urlstring,
-                         text,
-                         grammar,
-                         follow_space));
+        return $(`<span class="textblock inline"><span class="textdisplay ${charset.foreignClass + follow_class}" data-idd="${smo.mo.id_d}">${versestring}${refstring}${urlstring}${text}</span>${grammar}</span>${follow_space}`);
     }
 }
 
 
-// TODO: Fix this
-class Color {
-    constructor(a:number,b:number,c:number) {}
-}
-
-
+//****************************************************************************************************
+// DisplayMultipleMonadObject class
+//
+// A DisplayMultipleMonadObject is a DisplayMonadObject that can display a text component above the
+// word level, such as a clause. However, a DisplayMultipleMonadObject always represents a
+// contiguous set of monads, so if the clause is split, two or more DisplayMultipleMonadObjects will
+// be required, and their fields 'hasPredecessor' and 'hasSuccessor' will be set to represent that
+// fact.
+//
+// A DisplayMultipleMonadObject may be displayed with a border around it. If it has a predecessor or
+// or a successor, a side border will be missing.
+// 
 class DisplayMultipleMonadObject extends DisplayMonadObject {
-    /** The title in the border. */
-    private borderTitle : string;
-
-    /** Is this textual component split on the left (that is, is it part of, for example, a split
-     * clause whose other half is displayed to the left)? */
-    public hasPredecessor : boolean;
-
-    /** Is this textual component split on the right (that is, is it part of, for example, a split
-     * clause whose other half is displayed to the right)? */
-    public hasSuccessor : boolean;
-
-    /** Is this object the <i>patriarch</i> (that is, the single top-level object)? */
-    private isPatriarch : boolean;
+    private borderTitle    : string;  // The title in the border (that is, the name of the object type)
+    private hasPredecessor : boolean; // Is this textual component split and has a preceding part?
+    private hasSuccessor   : boolean; // Is this textual component split and has a succeeding part?
+    private isPatriarch    : boolean; // Is this object the patriarch (that is, the single top-level object)?
 
 
-    /** A collection colors to use for the unhightlighted and highlighted frames at various levels. */
-    static frameColors : util.Pair<Color,Color>[] = [new util.Pair(new Color(0.000, 0.27, 0.98), new Color(0.000, 0.98, 0.71)),
-                                                     new util.Pair(new Color(0.667, 0.27, 0.98), new Color(0.667, 0.98, 0.71)),
-                                                     new util.Pair(new Color(0.39, 0.27, 0.98),  new Color(0.39, 0.98, 0.71))];
-    
-    private myColors : util.Pair<Color,Color>;
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Creates a DisplayMultipleMonadObject for a non-partriarch textual component.
+    //
+    // Parameters
+    //     mmo: The MultipleMonadObject displayed (perhaps in part) by this DisplayMultipleMonadObject.
+    //     objType: The Emdros object type represented by this DisplayMonadObject.
+    //     level: The level of the object (for example, 1=phrase, 2=clause, etc.).
+    //     monadPair: The (single range) monad set being displayed by this object.
+    //     monadix: The index in the monad set ranges that make up this object.
+    //     hasPredecessor: Is this a later part of a split text component?
+    //     hasSuccessor: Is this an earlier part of a split text component?
+    // 
+    constructor(mmo : MultipleMonadObject, objType : string, level : number,  monadPair : MonadPair,
+                monadix : number, hasPredecessor : boolean, hasSuccessor : boolean);
 
-
-
-    /** Creates a {@code DisplayMultipleMonadObject} for a non-partriarch textual component.
-     * @param mmo The {@link MultipleMonadObject} displayed (perhaps in part) by this {@code DisplayMultipleMonadObject}.
-     * @param monadPair The (single range) monad set being displayed by this object.
-     * @param hasPredecessor Is this a later part of a split text component?
-     * @param hasSuccessor Is this an earlier part of a split text component?
-     * @param objType The Emdros object type represented by this {@code DisplayMonadObject}.
-     * @param level The level of the object.
-     */
-    constructor(mmo : MultipleMonadObject, objType : string, level : number,  monadPair : MonadPair, monadix : number, hasPredecessor : boolean, hasSuccessor : boolean);
-
-    /** Creates a {@code DisplayMultipleMonadObject} for the partriarch (that is, top-level) textual component.
-     * @param mmo The {@link MultipleMonadObject} displayed by this {@code DisplayMultipleMonadObject}.
-     * @param monadSet The (not necessarily single range) monad set being displayed by this object.
-     * @param objType The Emdros object type represented by this {@code DisplayMonadObject}.
-     * @param level The level of the object.
-     */
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Creates a DisplayMultipleMonadObject for the partriarch (that is, top-level) textual component.
+    //
+    // Parameters
+    //     mmo: The MultipleMonadObject displayed (perhaps in part) by this DisplayMultipleMonadObject.
+    //     objType: The Emdros object type represented by this DisplayMonadObject.
+    //     level: The level of the object (for example, 1=phrase, 2=clause, 3=etc.).
+    //     monadSet: The (not necessarily single range) monad set being displayed by this object.
+    //
     constructor(mmo : MultipleMonadObject, objType : string, level : number, monadSet : MonadSet);
 
-    // Implementation of the overloaded constructors
-    constructor(mmo : MultipleMonadObject, objType : string, level : number, monadSet : any, monadix? : number, hasPredecessor? : boolean, hasSuccessor? : boolean) {
-        super(mmo,objType,level);
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // The implementation of the above overloaded constructors.
+    //
+    constructor(mmo : MultipleMonadObject, objType : string, level : number, monadSet : MonadPair | MonadSet,
+                monadix? : number, hasPredecessor? : boolean, hasSuccessor? : boolean) {
+        super(mmo, objType, level);
 
         if (arguments.length == 7) {
             // Non-patriarch
             this.isPatriarch = false;
-            this.range = monadSet;
+            this.range = monadSet as MonadPair;
             this.mix = monadix;
             this.children = [];
 
             this.hasPredecessor = hasPredecessor;
             this.hasSuccessor = hasSuccessor;
             this.borderTitle = getObjectFriendlyName(objType);
-
-            this.myColors = DisplayMultipleMonadObject.frameColors[(level-1)%DisplayMultipleMonadObject.frameColors.length];
         }
         else {
             // Patriarch
             this.isPatriarch = true;
 
-            this.range = {low: monadSet.segments[0].low, high: monadSet.segments[monadSet.segments.length-1].high};
+            let mseg : MonadPair[] = (monadSet as MonadSet).segments;
+            this.range = {low:  mseg[0].low,
+                          high: mseg[mseg.length-1].high};
             this.mix = 0;
             this.children = [];
 
@@ -312,53 +395,73 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
         }
     }
 
+    //---------------------------------------------------------------------------------------------------
+    // generateHtml method
+    //
+    // See description under DisplayMonadObject.
+    //
     public generateHtml(qd : QuizData, sentenceTextArr : string[]) : JQuery {
-        var spanclass : string = 'lev{0} dontshowborder noseplin'.format(this.level);
+        let spanclass : string = `lev${this.level} dontshowborder noseplin`; // The class of the <span> element containing this object
         if (this.hasPredecessor)
             spanclass += ' hasp';
         if (this.hasSuccessor)
             spanclass += ' hass';
 
-        var grammar = '';
-
-        var indent : number = 0;
+        let grammar : string = ''; // The class off the <span> element containing grammar information
+        let indent  : number = 0;  // The current indentation level (for Hebrew clauses)
 
         if (configuration.sentencegrammar[this.level]) {
+            // Generate the <span> elements for the features of this Emdros object
             configuration.sentencegrammar[this.level]
-            .walkFeatureValues(this.displayedMo, this.mix, this.objType, true,
-                               (whattype:number, objType:string, origObjType:string, featName:string, featValLoc:string) => {
-                                   if (whattype==WHAT.feature || whattype==WHAT.metafeature) {
-                                       if (configuration.databaseName=='ETCBC4' && objType=="clause_atom" && featName=="tab")
-                                           indent=+featValLoc;
-                                       else
-                                           grammar += '<span class="xgrammar dontshowit {0}_{1}">:{2}</span>'.format(objType,featName,featValLoc);
-                                   }
-                               });
-        }
-        var jq : JQuery;
-        if (this.isPatriarch)
-            jq = $('<span class="{0}"></span>'.format(spanclass));
-        else {
-            if (this.displayedMo.mo.name=="dummy")
-                jq = $('<span class="{0}"><span class="nogram dontshowit" data-idd="{1}" data-mix="0"></span></span>'.format(spanclass,
-                                                                                                     this.displayedMo.mo.id_d));
-            else if (configuration.databaseName=='ETCBC4' && this.level==2)
-                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span><span class="xgrammar clause_atom_tab dontshowit indentation" data-indent={5}></span></span>'
-                       .format(spanclass,
-                               this.displayedMo.mo.id_d,
-                               this.mix,
-                               getObjectShortFriendlyName(this.objType),
-                               grammar,indent));
-            else
-                jq = $('<span class="notdummy {0}"><span class="gram dontshowit" data-idd="{1}" data-mix="{2}">{3}{4}</span></span>'
-                       .format(spanclass,
-                               this.displayedMo.mo.id_d,
-                               this.mix,
-                               getObjectShortFriendlyName(this.objType),
-                               grammar));
+                .walkFeatureValues(this.displayedMo, this.mix, this.objType, true,
+                                   (whattype:WHAT, objType:string, origObjType:string, featName:string, featValLoc:string) => {
+                                       if (whattype==WHAT.feature || whattype==WHAT.metafeature) {
+                                           if (configuration.databaseName=='ETCBC4' && objType=="clause_atom" && featName=="tab")
+                                               indent = +featValLoc;
+                                           else
+                                               grammar += `<span class="xgrammar dontshowit ${objType}_${featName}">:${featValLoc}</span>`;
+                                       }
+                                   });
         }
 
-        for (var ch in this.children) {
+        let jq : JQuery; // The resulting HTMl is built in this JQuery object
+
+        if (this.isPatriarch) {
+            // The patriarch object (topmost level) is not displayable
+            jq = $(`<span class="${spanclass}"></span>`);
+        }
+        else if (this.displayedMo.mo.name=="dummy") {
+            // We have an object that is not part of the hierarchy (frequent with Greek "δὲ").
+            // Such an object is not displayable.
+            jq = $(`<span class="${spanclass}"><span class="nogram dontshowit" data-idd="${this.displayedMo.mo.id_d}" data-mix="0"></span></span>`);
+        }
+        else if (configuration.databaseName=='ETCBC4' && this.level==2) {
+            // Special case: Add indentation information to Hebrew clauses.
+            // Note that the indentation <span class="xgrammar...> element is added at a less deep HTML level
+            // than the other <span class="xgrammar...> elements.
+            // (Don't use multi-line `strings` here - we don't want whitespace between the HTML elements.)
+            jq = $(`<span class="notdummy ${spanclass}">`
+                   + `<span class="gram dontshowit" data-idd="${this.displayedMo.mo.id_d}" data-mix="${this.mix}">`
+                   + getObjectShortFriendlyName(this.objType)
+                   + grammar
+                   + '</span>'
+                   + `<span class="xgrammar clause_atom_tab dontshowit indentation" data-indent="${indent}">`
+                   + '</span>'
+                   + '</span>');
+        }
+        else {
+            // Normal case: We have a displayable object
+            // (Don't use multi-line `strings` here - we don't want whitespace between the HTML elements.)
+            jq = $(`<span class="notdummy ${spanclass}">`
+                   + `<span class="gram dontshowit" data-idd="${this.displayedMo.mo.id_d}" data-mix="${this.mix}">`
+                   + getObjectShortFriendlyName(this.objType)
+                   + grammar
+                   + '</span>'
+                   + '</span>');
+        }
+
+        // Generate HTML for Emdros objects at lower levels
+        for (let ch in this.children) {
             if (isNaN(+ch)) continue; // Not numeric
             jq.append(this.children[ch].generateHtml(qd, sentenceTextArr));
         }

@@ -155,14 +155,6 @@ var util;
         return dumped_text;
     }
     util.mydump = mydump;
-    var Pair = /** @class */ (function () {
-        function Pair(first, second) {
-            this.first = first;
-            this.second = second;
-        }
-        return Pair;
-    }());
-    util.Pair = Pair;
     var resetChain = [];
     function addToResetChain(fb) {
         resetChain.push(fb);

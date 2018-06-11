@@ -75,7 +75,7 @@ class Quiz {
 
         if (this.currentPanelQuestion!==null)
             // Update statistics
-            this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(1));
+            this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(true));
      
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
             $('#virtualkbid').appendTo('#virtualkbcontainer'); // Move the keyboard back to its initial position
@@ -83,7 +83,7 @@ class Quiz {
             $('#quiztab').empty();
             $('#quiztab').append('<tr id="quiztabhead"></tr>');
      
-            var currentDict : Dictionary = new Dictionary(dictionaries,this.currentDictIx,true);
+            var currentDict : Dictionary = new Dictionary(dictionaries,this.currentDictIx,quizdata);
      
             $('#quizdesc').html(quizdata.desc);
             $('#quizdesc').find('a').attr('target','_blank'); // Force all hyperlinks to open new browser tab
@@ -93,7 +93,7 @@ class Quiz {
                 $('div#progressbar').progressbar({value: this.currentDictIx+1, max: dictionaries.sentenceSets.length});
             $('#progresstext').html((this.currentDictIx+1)+'/'+dictionaries.sentenceSets.length);
             
-            this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, false);
+            this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict);
             
             if (this.currentDictIx+1 === dictionaries.sentenceSets.length)
                 $('button#next_question').attr('disabled', 'disabled');
@@ -119,7 +119,7 @@ class Quiz {
             if (this.currentPanelQuestion===null)
                 alert('System error: No current question panel');
             else
-                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(1));
+                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(true));
             
             // Send statistics to server
             $('.grammarselector').empty();
@@ -146,7 +146,7 @@ class Quiz {
             if (this.currentPanelQuestion===null)
                 alert('System error: No current question panel');
             else
-                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(0));
+                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(false));
             
             // Send statistics to server
             $('.grammarselector').empty();

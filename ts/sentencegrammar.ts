@@ -457,7 +457,7 @@ class GrammarFeature implements SentenceGrammarItem {
     //------------------------------------------------------------------------------------------
     // walkFeatureNames method
     //
-    // See description under SentenceGrammarItem
+    // See description under SentenceGrammarItem.
     //
     public walkFeatureNames(objType  : string,
                             callback : (whattype    : WHAT,
@@ -475,7 +475,7 @@ class GrammarFeature implements SentenceGrammarItem {
         let locname : string = 
             l10n.grammarfeature && l10n.grammarfeature[this.realObjectType] && l10n.grammarfeature[this.realObjectType][this.realFeatureName] 
             ? l10n.grammarfeature[this.realObjectType][this.realFeatureName]
-            : l10n.emdrosobject[this.realObjectType][this.realFeatureName];
+            : l10n.emdrosobject[this.realObjectType][this.realFeatureName] as string;
 
         callback(WHAT.feature, this.realObjectType, objType, this.realFeatureName, locname, this);
     }
@@ -501,7 +501,7 @@ class GrammarFeature implements SentenceGrammarItem {
     //------------------------------------------------------------------------------------------
     // walkFeatureValues method
     //
-    // See description under SentenceGrammarItem
+    // See description under SentenceGrammarItem.
     //
     public walkFeatureValues(monob    : MonadObject,
                              mix      : number,
@@ -570,7 +570,7 @@ class GrammarFeature implements SentenceGrammarItem {
     //------------------------------------------------------------------------------------------
     // containsFeature method
     //
-    // See description under SentenceGrammarItem
+    // See description under SentenceGrammarItem.
     //
     public containsFeature(f : string) : boolean {
         return this.name===f;

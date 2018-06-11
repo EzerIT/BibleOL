@@ -26,10 +26,22 @@ function getFeatureSetting(otype, feature) {
         return getObjectSetting(otype).featuresetting[feature];
 }
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-/// @file
-/// @brief Characteristics of the current character set
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+// Character set management
+//****************************************************************************************************
+// Charset class
+//
+// This class handles characteristics of the current character set.
+//
 var Charset = /** @class */ (function () {
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Initializes the members of this object.
+    //
+    // Parameter:
+    //     The character set from the configuration variable.
+    //
     function Charset(cs) {
         switch (cs) {
             case 'hebrew':
@@ -338,7 +350,7 @@ var GrammarFeature = /** @class */ (function () {
     //------------------------------------------------------------------------------------------
     // walkFeatureNames method
     //
-    // See description under SentenceGrammarItem
+    // See description under SentenceGrammarItem.
     //
     GrammarFeature.prototype.walkFeatureNames = function (objType, callback) {
         // Normally localized feature names are found in l10n.emdrosobject, but occasionally special
@@ -369,7 +381,7 @@ var GrammarFeature = /** @class */ (function () {
     //------------------------------------------------------------------------------------------
     // walkFeatureValues method
     //
-    // See description under SentenceGrammarItem
+    // See description under SentenceGrammarItem.
     //
     GrammarFeature.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         var featType = typeinfo.obj2feat[this.realObjectType][this.realFeatureName];
@@ -416,7 +428,7 @@ var GrammarFeature = /** @class */ (function () {
     //------------------------------------------------------------------------------------------
     // containsFeature method
     //
-    // See description under SentenceGrammarItem
+    // See description under SentenceGrammarItem.
     //
     GrammarFeature.prototype.containsFeature = function (f) {
         return this.name === f;
@@ -441,32 +453,79 @@ function getSentenceGrammarFor(oType) {
     return null;
 }
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+//****************************************************************************************************
+// getObjectFriendlyName function
+//
+// Retrieves the localized name of an Emdros object type.
+//
+// Param:
+//     otype: The Emdros object type.
+// Returns:
+//     The localized name for the Emdros object type.
+//
 function getObjectFriendlyName(otype) {
     if (otype === 'Patriarch') // Shouldn't happen
         return otype;
     var fn = l10n.emdrosobject[otype]._objname;
     return fn ? fn : otype;
 }
+//****************************************************************************************************
+// getObjectShortFriendlyName function
+//
+// Retrieves the abbreviated localized name of an Emdros object type.
+//
+// Param:
+//     otype: The Emdros object type.
+// Returns:
+//     The abreviated localized name for the Emdros object type, if it exists. Otherwise the
+//     unabbreviated localized name is returned.
+//
 function getObjectShortFriendlyName(otype) {
     if (l10n.emdrosobject[otype + '_abbrev'] === undefined)
         return getObjectFriendlyName(otype);
     else
         return l10n.emdrosobject[otype + '_abbrev']._objname;
 }
+//****************************************************************************************************
+// getFeatureFriendlyName function
+//
+// Retrieves the localized name of an Emdros object feature.
+//
+// Param:
+//     otype: The Emdros object type.
+//     feature: The Emdros object feature.
+// Returns:
+//     The localized name for the Emdros object feature.
+//
 function getFeatureFriendlyName(otype, feature) {
     if (feature === 'visual')
         return localize('visual');
     var fn = l10n.emdrosobject[otype][feature];
     return fn ? fn : feature;
 }
+//****************************************************************************************************
+// getFeatureValueFriendlyName function
+//
+// Retrieves the localized name of an Emdros object feature value.
+//
+// Param:
+//     featureType: The Emdros object feature type.
+//     value: The Emdros object feature value.
+//     abbrev: True if the function should return an abbreviated name, if one exists.
+//     doStripSort: True if an optional sort index should be removed from the localized value.
+// Returns:
+//     The localized name for the Emdros object feature value.
+//
 function getFeatureValueFriendlyName(featureType, value, abbrev, doStripSort) {
     if (abbrev && l10n.emdrostype[featureType + '_abbrev'] !== undefined)
         // TODO: We assume there is no "list of " types here
         return doStripSort
             ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType + '_abbrev'][value])
             : l10n.emdrostype[featureType + '_abbrev'][value];
-    // TODO: For now we handle "list of ..." here. Is this OK with all the other locations where this is used?
+    // TODO: For now, we handle "list of ..." here.
+    // Currently, "list of ..." is only used with Hebrew verb classes.
+    // The correctness of this code must be reconsidered if "list of ..." is used for other features.
     if (featureType.substr(0, 8) === 'list of ') {
         featureType = featureType.substr(8); // Remove "list of "
         value = value.substr(1, value.length - 2); // Remove parenteses
@@ -474,8 +533,8 @@ function getFeatureValueFriendlyName(featureType, value, abbrev, doStripSort) {
             return doStripSort
                 ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType]['NA'])
                 : l10n.emdrostype[featureType]['NA'];
-        var verb_classes = value.split(',');
-        var localized_verb_classes = [];
+        var verb_classes = value.split(','); // Turn the list of values into an array
+        var localized_verb_classes = []; // Localized values will be stored here
         for (var ix in verb_classes) {
             if (isNaN(+ix))
                 continue; // Not numeric
@@ -484,13 +543,24 @@ function getFeatureValueFriendlyName(featureType, value, abbrev, doStripSort) {
                 : l10n.emdrostype[featureType][verb_classes[ix]]);
         }
         localized_verb_classes.sort();
-        return localized_verb_classes.join(', ');
+        return localized_verb_classes.join(', '); // Turn the array of localized values into a string
     }
-    // TODO Distinguish between friendly name A and S (Westminster)
     return doStripSort
         ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType][value])
         : l10n.emdrostype[featureType][value];
 }
+//****************************************************************************************************
+// getFeatureValueOtherFormat function
+//
+// Retrieves the localized name of a range containing an Emdros object feature value.
+//
+// Param:
+//     otype: The Emdros object type
+//     featureName: The Emdros object feature.
+//     value: The Emdros object feature value.
+// Returns:
+//     The localized name for the range containing the Emdros object feature value.
+//
 function getFeatureValueOtherFormat(otype, featureName, value) {
     var table = l10n.emdrosobject[otype][featureName + '_VALUES'];
     for (var ix = 0; ix < table.length; ++ix)
@@ -499,7 +569,17 @@ function getFeatureValueOtherFormat(otype, featureName, value) {
     return '?';
 }
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+//****************************************************************************************************
+// localize function
+//
+// Looks up a localized string.
+//
+// Parameter:
+//     s: The key for the string.
+// Returns:
+//     The localized value of s.
+//
 function localize(s) {
     var str = l10n_js[s];
     return str === undefined ? '??' + s + '??' : str;
@@ -2227,14 +2307,6 @@ var util;
         return dumped_text;
     }
     util.mydump = mydump;
-    var Pair = /** @class */ (function () {
-        function Pair(first, second) {
-            this.first = first;
-            this.second = second;
-        }
-        return Pair;
-    }());
-    util.Pair = Pair;
     var resetChain = [];
     function addToResetChain(fb) {
         resetChain.push(fb);

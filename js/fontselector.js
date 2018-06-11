@@ -155,14 +155,6 @@ var util;
         return dumped_text;
     }
     util.mydump = mydump;
-    var Pair = /** @class */ (function () {
-        function Pair(first, second) {
-            this.first = first;
-            this.second = second;
-        }
-        return Pair;
-    }());
-    util.Pair = Pair;
     var resetChain = [];
     function addToResetChain(fb) {
         resetChain.push(fb);
@@ -196,7 +188,17 @@ var util;
     util.AddBetween = AddBetween;
 })(util || (util = {}));
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+//****************************************************************************************************
+// localize function
+//
+// Looks up a localized string.
+//
+// Parameter:
+//     s: The key for the string.
+// Returns:
+//     The localized value of s.
+//
 function localize(s) {
     var str = l10n_js[s];
     return str === undefined ? '??' + s + '??' : str;

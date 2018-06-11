@@ -83,7 +83,7 @@ $(function() {
         else
             $('progress#progress').hide();
 
-        // Run the exercize
+        // Run the exercise
         quiz = new Quiz(quizdata.quizid);
         quiz.nextQuestion();
     }
@@ -92,7 +92,7 @@ $(function() {
         $('#cleargrammar').on('click',() => { GrammarSelectionBox.clearBoxes(true); });
 
         // Generate the text to display
-        let currentDict : Dictionary = new Dictionary(dictionaries,0,false);
+        let currentDict : Dictionary = new Dictionary(dictionaries,0,null);
         currentDict.generateSentenceHtml(null);
         $('.grammarselector input:enabled:checked').trigger('change'); // Make sure the relevant features are displayed
     }
