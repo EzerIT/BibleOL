@@ -75,7 +75,7 @@
 </div>
 
 <script>
-    var useTooltip = <?= $useTooltip_str ?>;
+     var useTooltip = <?= $useTooltip_str ?>;
     var configuration = <?= $dbinfo_json ?>;
     var dictionaries = <?= $dictionaries_json ?>;
     var l10n = <?= $l10n_json ?>;
