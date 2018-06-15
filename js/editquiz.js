@@ -8,40 +8,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-// -*- js -*-
 function getObjectSetting(otype) {
     return configuration.objectSettings[otype];
 }
 function getFeatureSetting(otype, feature) {
-    // Handle the pseudo-feature
     if (feature === 'visual') {
         otype = configuration.objHasSurface;
         feature = configuration.surfaceFeature;
     }
-    var io = feature.indexOf('_TYPE_'); // Separates feature from format
+    var io = feature.indexOf('_TYPE_');
     if (io != -1)
-        // This is a feature with a special format (which is not used here)
-        return getObjectSetting(otype).featuresetting[feature.substr(0, io)];
-    else
-        return getObjectSetting(otype).featuresetting[feature];
+        feature = feature.substr(0, io);
+    return getObjectSetting(otype).featuresetting[feature];
 }
-// -*- js -*-
-// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
-// Character set management
-//****************************************************************************************************
-// Charset class
-//
-// This class handles characteristics of the current character set.
-//
-var Charset = /** @class */ (function () {
-    //------------------------------------------------------------------------------------------
-    // Constructor method
-    //
-    // Initializes the members of this object.
-    //
-    // Parameter:
-    //     The character set from the configuration variable.
-    //
+var Charset = (function () {
     function Charset(cs) {
         switch (cs) {
             case 'hebrew':
@@ -74,63 +54,24 @@ var Charset = /** @class */ (function () {
     }
     return Charset;
 }());
-// -*- js -*-
-// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-// The code here handles walking through the "sentencegrammar" part of the configuration object.
-//
-// Before using the classes in this file, the function addMethodsSgi() must called to enhace the
-// configuration object with polymorhic functions, turning the contents of "sentencegrammar" into
-// objects of various types.
-//
-// For example, addMethodsSgi() will turn this part of the configuration object:
-//     {
-//         "mytype": "GrammarFeature",
-//         "name": "g_lex_utf8"
-//     }
-// into an object of class GrammarFeature with appropriate polymorphic functions added (such as
-// walkFeatureNames, walkFeatureValues etc.)
-//****************************************************************************************************
-// addMethods function
-//
-// Takes method from a class and adds them to an object. Thereafter calls the method
-// pseudoConstructor() if it exists.
-//
-// Parameters:
-//     obj: The object to which methods should be added.
-//     classname: The class from which methods should be taken.
-//     param: The argument to pseudoConstructor().
-//
 function addMethods(obj, classname, param) {
-    // Copy all methods except constructor
     for (var f in classname.prototype) {
         if (f === 'constructor')
             continue;
         obj[f] = classname.prototype[f];
     }
-    obj.pseudoConstructor && obj.pseudoConstructor(param); // Call pseudoConstructor if it exists
+    obj.pseudoConstructor && obj.pseudoConstructor(param);
 }
-//****************************************************************************************************
-// addMethodsSgi function
-//
-// Recursively enhances a part of the configuration object to be a polymorphic object of the class
-// specified by the mytype field of the configuration object.
-//
-// Parameters:
-//     sgi: The part of the configuration object that is to be enhanced.
-//     param: The argument to pseudoConstructor() for the enhanced classes.
-//
 function addMethodsSgi(sgi, param) {
-    addMethods(sgi, eval(sgi.mytype), param); // sgi.mytype is the name of the subclass
-    // Do the same with all members of the items array
+    addMethods(sgi, eval(sgi.mytype), param);
     if (sgi.items) {
         for (var i in sgi.items) {
             if (isNaN(+i))
-                continue; // Not numeric
+                continue;
             addMethodsSgi(sgi.items[+i], param);
         }
     }
 }
-// The WHAT enum is used to identify various stages when walking through a configuration object.
 var WHAT;
 (function (WHAT) {
     WHAT[WHAT["feature"] = 0] = "feature";
@@ -138,52 +79,31 @@ var WHAT;
     WHAT[WHAT["groupstart"] = 2] = "groupstart";
     WHAT[WHAT["groupend"] = 3] = "groupend";
 })(WHAT || (WHAT = {}));
-//****************************************************************************************************
-// GrammarGroup class
-//
-// A GrammarGroup groups GrammarFeatures and GrammarMetaFeatures into logical units, such as
-// "Features that describe the lexeme" or "Features that describe the morphology".
-//
-var GrammarGroup = /** @class */ (function () {
+var GrammarGroup = (function () {
     function GrammarGroup() {
     }
-    //------------------------------------------------------------------------------------------
-    // walkFeatureNames method
-    //
-    // See description under SentenceGrammarItem
-    //
     GrammarGroup.prototype.walkFeatureNames = function (objType, callback) {
         callback(WHAT.groupstart, objType, objType, this.name, l10n.grammargroup[objType][this.name], this);
         for (var i in this.items) {
             if (isNaN(+i))
-                continue; // Not numeric
+                continue;
             this.items[+i].walkFeatureNames(objType, callback);
         }
         callback(WHAT.groupend, objType, objType, this.name, null, this);
     };
-    //------------------------------------------------------------------------------------------
-    // walkFeatureValues method
-    //
-    // See description under SentenceGrammarItem
-    //
     GrammarGroup.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         callback(WHAT.groupstart, objType, objType, this.name, null, this);
         for (var i in this.items) {
             if (isNaN(+i))
-                continue; // Not numeric
+                continue;
             this.items[+i].walkFeatureValues(monob, mix, objType, abbrev, callback);
         }
         callback(WHAT.groupend, objType, objType, this.name, null, this);
     };
-    //------------------------------------------------------------------------------------------
-    // containsFeature method
-    //
-    // See description under SentenceGrammarItem
-    //
     GrammarGroup.prototype.containsFeature = function (f) {
         for (var i in this.items) {
             if (isNaN(+i))
-                continue; // Not numeric
+                continue;
             if (this.items[+i].containsFeature(f))
                 return true;
         }
@@ -191,81 +111,40 @@ var GrammarGroup = /** @class */ (function () {
     };
     return GrammarGroup;
 }());
-//****************************************************************************************************
-// GrammarSubFeature class
-//
-// A GrammarSubFeature is a member of a GrammarMetaFeature.
-//
-var GrammarSubFeature = /** @class */ (function () {
+var GrammarSubFeature = (function () {
     function GrammarSubFeature() {
     }
-    //------------------------------------------------------------------------------------------
-    // getFeatValPart method
-    //
-    // Retrieve the localized feature value.
-    //
-    // Parameters:
-    //     monob: The MonadObject containing the value we are retrieving.
-    //     objType: The type of the grammar object (word, phrase, etc.)
-    //
     GrammarSubFeature.prototype.getFeatValPart = function (monob, objType) {
         return l10n.grammarsubfeature[objType][this.name][monob.mo.features[this.name]];
     };
-    //------------------------------------------------------------------------------------------
-    // containsFeature method
-    //
-    // See description under SentenceGrammarItem
-    //
     GrammarSubFeature.prototype.containsFeature = function (f) {
         return this.name === f;
     };
     return GrammarSubFeature;
 }());
-//****************************************************************************************************
-// SentenceGrammar class
-//
-// A SentenceGrammar groups GrammarGroups, GrammarFeatures and GrammarMetaFeatures for a single
-// Emdros object type, such as word or phrase.
-//
-//
-var SentenceGrammar = /** @class */ (function (_super) {
+var SentenceGrammar = (function (_super) {
     __extends(SentenceGrammar, _super);
     function SentenceGrammar() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    //------------------------------------------------------------------------------------------
-    // walkFeatureNames method
-    //
-    // See description under SentenceGrammarItem
-    //
     SentenceGrammar.prototype.walkFeatureNames = function (objType, callback) {
         for (var i in this.items) {
             if (isNaN(+i))
-                continue; // Not numeric
+                continue;
             this.items[+i].walkFeatureNames(objType, callback);
         }
     };
-    //------------------------------------------------------------------------------------------
-    // walkFeatureValues method
-    //
-    // See description under SentenceGrammarItem
-    //
     SentenceGrammar.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         for (var i in this.items) {
             if (isNaN(+i))
-                continue; // Not numeric
+                continue;
             this.items[+i].walkFeatureValues(monob, mix, objType, abbrev, callback);
         }
     };
-    //------------------------------------------------------------------------------------------
-    // containsFeature method
-    //
-    // See description under SentenceGrammarItem
-    //
     SentenceGrammar.prototype.containsFeature = function (f) {
         for (var i in this.items) {
             if (isNaN(+i))
-                continue; // Not numeric
+                continue;
             if (this.items[+i].containsFeature(f))
                 return true;
         }
@@ -273,46 +152,25 @@ var SentenceGrammar = /** @class */ (function (_super) {
     };
     return SentenceGrammar;
 }(GrammarGroup));
-//****************************************************************************************************
-// GrammarMetaFeature class
-//
-// A GrammarMetaFeature describes a combined value of a number of Emdros features (for example,
-// person, gender, and number).
-//
-var GrammarMetaFeature = /** @class */ (function () {
+var GrammarMetaFeature = (function () {
     function GrammarMetaFeature() {
     }
-    //------------------------------------------------------------------------------------------
-    // walkFeatureNames method
-    //
-    // See description under SentenceGrammarItem
-    //
     GrammarMetaFeature.prototype.walkFeatureNames = function (objType, callback) {
         callback(WHAT.metafeature, objType, objType, this.name, l10n.grammarmetafeature[objType][this.name], this);
     };
-    //------------------------------------------------------------------------------------------
-    // walkFeatureValues method
-    //
-    // See description under SentenceGrammarItem
-    //
     GrammarMetaFeature.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         var res = '';
         for (var i in this.items) {
             if (isNaN(+i))
-                continue; // Not numeric
+                continue;
             res += this.items[+i].getFeatValPart(monob, objType);
         }
         callback(WHAT.metafeature, objType, objType, this.name, res, this);
     };
-    //------------------------------------------------------------------------------------------
-    // containsFeature method
-    //
-    // See description under SentenceGrammarItem
-    //
     GrammarMetaFeature.prototype.containsFeature = function (f) {
         for (var i in this.items) {
             if (isNaN(+i))
-                continue; // Not numeric
+                continue;
             if (this.items[+i].containsFeature(f))
                 return true;
         }
@@ -320,23 +178,12 @@ var GrammarMetaFeature = /** @class */ (function () {
     };
     return GrammarMetaFeature;
 }());
-//****************************************************************************************************
-// GrammarFeature class
-//
-// A GrammarFeature describes a feature of an Emdros object.
-//
-var GrammarFeature = /** @class */ (function () {
+var GrammarFeature = (function () {
     function GrammarFeature() {
     }
-    //------------------------------------------------------------------------------------------
-    // pseudoConstructor method
-    //
-    // Sets information about whether this is a subobject feature (see above) or not.
-    //
     GrammarFeature.prototype.pseudoConstructor = function (objType) {
         var io = this.name.indexOf(':');
         if (io != -1) {
-            // This is a feature of a sub-object
             this.isSubObj = true;
             this.realObjectType = this.name.substr(0, io);
             this.realFeatureName = this.name.substr(io + 1);
@@ -347,30 +194,12 @@ var GrammarFeature = /** @class */ (function () {
             this.realFeatureName = this.name;
         }
     };
-    //------------------------------------------------------------------------------------------
-    // walkFeatureNames method
-    //
-    // See description under SentenceGrammarItem.
-    //
     GrammarFeature.prototype.walkFeatureNames = function (objType, callback) {
-        // Normally localized feature names are found in l10n.emdrosobject, but occasionally special
-        // translations exists that are to be used in the grammal selection box. These special
-        // translations are found in l10n.grammarfeature.
         var locname = l10n.grammarfeature && l10n.grammarfeature[this.realObjectType] && l10n.grammarfeature[this.realObjectType][this.realFeatureName]
             ? l10n.grammarfeature[this.realObjectType][this.realFeatureName]
             : l10n.emdrosobject[this.realObjectType][this.realFeatureName];
         callback(WHAT.feature, this.realObjectType, objType, this.realFeatureName, locname, this);
     };
-    //------------------------------------------------------------------------------------------
-    // icon2class method
-    //
-    // Converts the name of an icon to the required HTML element classes.
-    //
-    // Parameter:
-    //     icon: The name of the icon.
-    // Returns:
-    //     The HTML element class string.
-    //
     GrammarFeature.prototype.icon2class = function (icon) {
         if (icon.substr(0, 10) === 'glyphicon-')
             return 'glyphicon ' + icon;
@@ -378,21 +207,13 @@ var GrammarFeature = /** @class */ (function () {
             return 'bolicon ' + icon;
         return '';
     };
-    //------------------------------------------------------------------------------------------
-    // walkFeatureValues method
-    //
-    // See description under SentenceGrammarItem.
-    //
     GrammarFeature.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         var featType = typeinfo.obj2feat[this.realObjectType][this.realFeatureName];
-        // Normally featType will contain the type of the feature. However, the feature name can
-        // contain the string _TYPE_, in which case the an alternative type is used.
-        // The variable realRealFeature name is set to the part of the feature name that comes before _TYPE_.
-        var io = this.realFeatureName.indexOf('_TYPE_'); // Separates feature from format
+        var io = this.realFeatureName.indexOf('_TYPE_');
         var realRealFeatureName = io == -1 ? this.realFeatureName : this.realFeatureName.substr(0, io);
         var res = this.isSubObj
             ? monob.subobjects[mix][0].features[realRealFeatureName]
-            : (monob.mo.features ? monob.mo.features[realRealFeatureName] : ''); // Empty for dummy objects
+            : (monob.mo.features ? monob.mo.features[realRealFeatureName] : '');
         switch (featType) {
             case 'string':
             case 'ascii':
@@ -403,7 +224,6 @@ var GrammarFeature = /** @class */ (function () {
                 if (res.length == 0)
                     res = '-';
                 else {
-                    // Assume res is an array, where each element is an array of two elements
                     var res2 = '';
                     for (var i = 0; i < res.length; ++i)
                         res2 += "<a style=\"padding-right:1px;padding-left:1px;\" href=\"" + res[i]['url'] + "\" target=\"_blank\">"
@@ -425,142 +245,63 @@ var GrammarFeature = /** @class */ (function () {
         }
         callback(WHAT.feature, this.realObjectType, objType, this.realFeatureName, res, this);
     };
-    //------------------------------------------------------------------------------------------
-    // containsFeature method
-    //
-    // See description under SentenceGrammarItem.
-    //
     GrammarFeature.prototype.containsFeature = function (f) {
         return this.name === f;
     };
     return GrammarFeature;
 }());
-//****************************************************************************************************
-// getSentenceGrammarFor function
-//
-// Retrieves from the configuraion structure the SentenceGrammar object that describes a particular
-// Emdros object type.
-//
-// Parameter:
-//     oType: The name of the Emdros object.
-// Returns:
-//     The corresponding SentenceGrammar object.
-//
 function getSentenceGrammarFor(oType) {
     for (var i = 0; i < configuration.sentencegrammar.length; ++i)
         if (configuration.sentencegrammar[i].objType === oType)
             return configuration.sentencegrammar[i];
     return null;
 }
-// -*- js -*-
-// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
-//****************************************************************************************************
-// getObjectFriendlyName function
-//
-// Retrieves the localized name of an Emdros object type.
-//
-// Param:
-//     otype: The Emdros object type.
-// Returns:
-//     The localized name for the Emdros object type.
-//
 function getObjectFriendlyName(otype) {
-    if (otype === 'Patriarch') // Shouldn't happen
+    if (otype === 'Patriarch')
         return otype;
     var fn = l10n.emdrosobject[otype]._objname;
     return fn ? fn : otype;
 }
-//****************************************************************************************************
-// getObjectShortFriendlyName function
-//
-// Retrieves the abbreviated localized name of an Emdros object type.
-//
-// Param:
-//     otype: The Emdros object type.
-// Returns:
-//     The abreviated localized name for the Emdros object type, if it exists. Otherwise the
-//     unabbreviated localized name is returned.
-//
 function getObjectShortFriendlyName(otype) {
     if (l10n.emdrosobject[otype + '_abbrev'] === undefined)
         return getObjectFriendlyName(otype);
     else
         return l10n.emdrosobject[otype + '_abbrev']._objname;
 }
-//****************************************************************************************************
-// getFeatureFriendlyName function
-//
-// Retrieves the localized name of an Emdros object feature.
-//
-// Param:
-//     otype: The Emdros object type.
-//     feature: The Emdros object feature.
-// Returns:
-//     The localized name for the Emdros object feature.
-//
 function getFeatureFriendlyName(otype, feature) {
     if (feature === 'visual')
         return localize('visual');
     var fn = l10n.emdrosobject[otype][feature];
     return fn ? fn : feature;
 }
-//****************************************************************************************************
-// getFeatureValueFriendlyName function
-//
-// Retrieves the localized name of an Emdros object feature value.
-//
-// Param:
-//     featureType: The Emdros object feature type.
-//     value: The Emdros object feature value.
-//     abbrev: True if the function should return an abbreviated name, if one exists.
-//     doStripSort: True if an optional sort index should be removed from the localized value.
-// Returns:
-//     The localized name for the Emdros object feature value.
-//
 function getFeatureValueFriendlyName(featureType, value, abbrev, doStripSort) {
     if (abbrev && l10n.emdrostype[featureType + '_abbrev'] !== undefined)
-        // TODO: We assume there is no "list of " types here
         return doStripSort
             ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType + '_abbrev'][value])
             : l10n.emdrostype[featureType + '_abbrev'][value];
-    // TODO: For now, we handle "list of ..." here.
-    // Currently, "list of ..." is only used with Hebrew verb classes.
-    // The correctness of this code must be reconsidered if "list of ..." is used for other features.
     if (featureType.substr(0, 8) === 'list of ') {
-        featureType = featureType.substr(8); // Remove "list of "
-        value = value.substr(1, value.length - 2); // Remove parenteses
+        featureType = featureType.substr(8);
+        value = value.substr(1, value.length - 2);
         if (value.length == 0)
             return doStripSort
                 ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType]['NA'])
                 : l10n.emdrostype[featureType]['NA'];
-        var verb_classes = value.split(','); // Turn the list of values into an array
-        var localized_verb_classes = []; // Localized values will be stored here
+        var verb_classes = value.split(',');
+        var localized_verb_classes = [];
         for (var ix in verb_classes) {
             if (isNaN(+ix))
-                continue; // Not numeric
+                continue;
             localized_verb_classes.push(doStripSort
                 ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType][verb_classes[ix]])
                 : l10n.emdrostype[featureType][verb_classes[ix]]);
         }
         localized_verb_classes.sort();
-        return localized_verb_classes.join(', '); // Turn the array of localized values into a string
+        return localized_verb_classes.join(', ');
     }
     return doStripSort
         ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType][value])
         : l10n.emdrostype[featureType][value];
 }
-//****************************************************************************************************
-// getFeatureValueOtherFormat function
-//
-// Retrieves the localized name of a range containing an Emdros object feature value.
-//
-// Param:
-//     otype: The Emdros object type
-//     featureName: The Emdros object feature.
-//     value: The Emdros object feature value.
-// Returns:
-//     The localized name for the range containing the Emdros object feature value.
-//
 function getFeatureValueOtherFormat(otype, featureName, value) {
     var table = l10n.emdrosobject[otype][featureName + '_VALUES'];
     for (var ix = 0; ix < table.length; ++ix)
@@ -568,30 +309,17 @@ function getFeatureValueOtherFormat(otype, featureName, value) {
             return table[ix].text;
     return '?';
 }
-// -*- js -*-
-// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
-//****************************************************************************************************
-// localize function
-//
-// Looks up a localized string.
-//
-// Parameter:
-//     s: The key for the string.
-// Returns:
-//     The localized value of s.
-//
 function localize(s) {
     var str = l10n_js[s];
     return str === undefined ? '??' + s + '??' : str;
 }
-var FeatureHandler = /** @class */ (function () {
+var FeatureHandler = (function () {
     function FeatureHandler(typ, key) {
         this.type = typ;
         this.name = key;
         this.comparator = 'equals';
     }
     FeatureHandler.prototype.normalize = function () {
-        // Nothing
     };
     FeatureHandler.prototype.hasValues = function () {
         alert('Abstract function hasValues() called');
@@ -619,7 +347,7 @@ var FeatureHandler = /** @class */ (function () {
     };
     return FeatureHandler;
 }());
-var StringFeatureHandler = /** @class */ (function (_super) {
+var StringFeatureHandler = (function (_super) {
     __extends(StringFeatureHandler, _super);
     function StringFeatureHandler(key) {
         var _this = _super.call(this, 'stringfeature', key) || this;
@@ -655,7 +383,7 @@ var StringFeatureHandler = /** @class */ (function (_super) {
     };
     return StringFeatureHandler;
 }(FeatureHandler));
-var IntegerFeatureHandler = /** @class */ (function (_super) {
+var IntegerFeatureHandler = (function (_super) {
     __extends(IntegerFeatureHandler, _super);
     function IntegerFeatureHandler(key) {
         var _this = _super.call(this, 'integerfeature', key) || this;
@@ -692,7 +420,7 @@ var IntegerFeatureHandler = /** @class */ (function (_super) {
     };
     return IntegerFeatureHandler;
 }(FeatureHandler));
-var RangeIntegerFeatureHandler = /** @class */ (function (_super) {
+var RangeIntegerFeatureHandler = (function (_super) {
     __extends(RangeIntegerFeatureHandler, _super);
     function RangeIntegerFeatureHandler(key) {
         return _super.call(this, 'rangeintegerfeature', key) || this;
@@ -722,7 +450,7 @@ var RangeIntegerFeatureHandler = /** @class */ (function (_super) {
     };
     return RangeIntegerFeatureHandler;
 }(FeatureHandler));
-var EnumFeatureHandler = /** @class */ (function (_super) {
+var EnumFeatureHandler = (function (_super) {
     __extends(EnumFeatureHandler, _super);
     function EnumFeatureHandler(key) {
         var _this = _super.call(this, 'enumfeature', key) || this;
@@ -746,7 +474,7 @@ var EnumFeatureHandler = /** @class */ (function (_super) {
     };
     return EnumFeatureHandler;
 }(FeatureHandler));
-var EnumListFeatureHandler = /** @class */ (function (_super) {
+var EnumListFeatureHandler = (function (_super) {
     __extends(EnumListFeatureHandler, _super);
     function EnumListFeatureHandler(key) {
         var _this = _super.call(this, 'enumlistfeature', key) || this;
@@ -785,7 +513,7 @@ var EnumListFeatureHandler = /** @class */ (function (_super) {
     };
     return EnumListFeatureHandler;
 }(FeatureHandler));
-var QereFeatureHandler = /** @class */ (function (_super) {
+var QereFeatureHandler = (function (_super) {
     __extends(QereFeatureHandler, _super);
     function QereFeatureHandler(key) {
         var _this = _super.call(this, 'qerefeature', key) || this;
@@ -806,7 +534,7 @@ var QereFeatureHandler = /** @class */ (function (_super) {
     };
     return QereFeatureHandler;
 }(FeatureHandler));
-var ListValuesHandler = /** @class */ (function () {
+var ListValuesHandler = (function () {
     function ListValuesHandler() {
         this.type = 'listvalues';
         this.yes_values = [];
@@ -851,7 +579,7 @@ var ListValuesHandler = /** @class */ (function () {
     };
     return ListValuesHandler;
 }());
-var PanelTemplMql = /** @class */ (function () {
+var PanelTemplMql = (function () {
     function PanelTemplMql(md, name_prefix) {
         var _this = this;
         this.featureCombo = $('<select></select>');
@@ -886,7 +614,6 @@ var PanelTemplMql = /** @class */ (function () {
                         break;
                 }
                 vh.normalize();
-                // Turn vhand into an associative array:
                 md.featHand.vhand[vh.name] = vh;
             }
         }
@@ -920,7 +647,7 @@ var PanelTemplMql = /** @class */ (function () {
             }
         }
         this.objectTypeCombo.on('change', function () {
-            $('#virtualkbid').appendTo('#virtualkbcontainer'); // Move the keyboard back to its initial position
+            $('#virtualkbid').appendTo('#virtualkbcontainer');
             _this.fpan.html('<div id="{0}_fpan"></div>'.format(_this.name_prefix));
             _this.currentBox = null;
             _this.featureCombo.html('<select></select>');
@@ -928,9 +655,8 @@ var PanelTemplMql = /** @class */ (function () {
             _this.updateMql();
         });
         this.clear = $('<button id="clear_button" type="button">' + localize('clear_button') + '</button>');
-        //this.clear.button(); Don't use this. The JQuery UI theme works for buttons but not dropdowns
         this.clear.click(function () {
-            $('#virtualkbid').appendTo('#virtualkbcontainer'); // Move the keyboard back to its initial position
+            $('#virtualkbid').appendTo('#virtualkbcontainer');
             _this.rbFriendly.prop('checked', true);
             _this.objectTypeCombo.find(':selected').prop('selected', false);
             _this.objectTypeCombo.find('[data-reset]').prop('selected', true);
@@ -956,7 +682,7 @@ var PanelTemplMql = /** @class */ (function () {
         if (s.length === 0)
             e.data.ifh.removeValue(e.data.i);
         else {
-            if (s.match(/\D/g) !== null) // Note: Rejects minus sign
+            if (s.match(/\D/g) !== null)
                 $('#' + e.data.err_id).html(localize('not_integer'));
             else
                 e.data.ifh.setValue(e.data.i, +s);
@@ -969,7 +695,7 @@ var PanelTemplMql = /** @class */ (function () {
         if (s.length === 0)
             e.data.rfh[e.data.i] = null;
         else {
-            if (s.match(/\D/g) !== null) // Note: Rejects minus sign
+            if (s.match(/\D/g) !== null)
                 $('#' + e.data.err_id).html(localize('not_integer'));
             else
                 e.data.rfh[e.data.i] = +s;
@@ -1009,7 +735,7 @@ var PanelTemplMql = /** @class */ (function () {
     PanelTemplMql.prototype.monitorChange = function (elem, sfh, i) {
         var _this = this;
         clearInterval(this.intervalHandler);
-        if (this.lastMonitored !== elem.attr('id')) { // A new element has focus
+        if (this.lastMonitored !== elem.attr('id')) {
             this.monitorOrigVal = elem.val();
             this.lastMonitored = elem.attr('id');
         }
@@ -1025,20 +751,13 @@ var PanelTemplMql = /** @class */ (function () {
             }
         }, 500);
     };
-    /**
-     * Creates the various feature selection panels associated with a newly selected quiz object type.
-     * @param otype
-     * @param fhs
-     */
     PanelTemplMql.prototype.objectSelectionUpdated = function (otype, fhs) {
         var _this = this;
         this.handlers = [];
         this.groups = [];
-        // Create selection boxes for all features of this object type
         for (var key in getObjectSetting(otype).featuresetting) {
             var valueType = typeinfo.obj2feat[otype][key];
             var featset = getFeatureSetting(otype, key);
-            // Ignore specified features plus features of type id_d
             if (featset.ignoreSelect)
                 continue;
             var group = $('<div></div>');
@@ -1114,12 +833,11 @@ var PanelTemplMql = /** @class */ (function () {
                     sel.append(butEquals, "=", butDiffers, "&#x2260;");
                     group.append(sel);
                     sel.on('click', ifh, function (e) {
-                        // val() may return an empty value if the user clicks on, say, the = sign
                         var v = $(e.target).val();
                         switch (v) {
                             case 'equals':
                             case 'differs':
-                                e.data.comparator = v; // e.data is ifh
+                                e.data.comparator = v;
                                 _this.updateMql();
                                 break;
                         }
@@ -1144,7 +862,6 @@ var PanelTemplMql = /** @class */ (function () {
             }
             else if (valueType === 'ascii' || valueType === 'string') {
                 if (key === 'qere_utf8' || key === 'qere_translit') {
-                    // Special handling of qere feature in ETCBC4
                     var qfh = null;
                     if (fhs)
                         qfh = fhs[key];
@@ -1159,7 +876,7 @@ var PanelTemplMql = /** @class */ (function () {
                     group.append(sel);
                     sel.on('click', qfh, function (e) {
                         var target = $(e.target);
-                        e.data.setValue(target.prop('checked')); // e.data is qfh
+                        e.data.setValue(target.prop('checked'));
                         _this.updateMql();
                     });
                     this.handlers.push(qfh);
@@ -1191,13 +908,12 @@ var PanelTemplMql = /** @class */ (function () {
                     sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
                     group.append(sel);
                     sel.on('click', sfh, function (e) {
-                        // val() may return an empty value if the user clicks on, say, the = sign
                         var v = $(e.target).val();
                         switch (v) {
                             case 'equals':
                             case 'differs':
                             case 'matches':
-                                e.data.comparator = v; // e.data is sfh
+                                e.data.comparator = v;
                                 _this.updateMql();
                                 break;
                         }
@@ -1225,7 +941,7 @@ var PanelTemplMql = /** @class */ (function () {
                     }
                     else {
                         for (var i = 0; i < sfh.values.length; ++i) {
-                            var jtf = $('<input type="text" size="20">'); // VerifiedField
+                            var jtf = $('<input type="text" size="20">');
                             if (sfh.values[i])
                                 jtf.val(sfh.values[i]);
                             jtf.on('keyup', null, { sfh: sfh, i: i }, $.proxy(this.stringTextModifiedListener, this));
@@ -1244,7 +960,6 @@ var PanelTemplMql = /** @class */ (function () {
                 var stripped_valueType = valueType.substr(8);
                 var enumValues = typeinfo.enum2values[stripped_valueType];
                 if (!enumValues) {
-                    // We cannot handle lists of non-enums
                     console.log('Unknown valueType', valueType);
                 }
                 var elfh = null;
@@ -1269,7 +984,7 @@ var PanelTemplMql = /** @class */ (function () {
                     tab_contents.on('click', lv, function (e) {
                         var target = $(e.target);
                         if (target.attr('type') === 'radio') {
-                            e.data.modifyValue(target.attr('data-name'), target.attr('value')); // e.data is lv
+                            e.data.modifyValue(target.attr('data-name'), target.attr('value'));
                             _this.updateMql();
                         }
                     });
@@ -1278,7 +993,7 @@ var PanelTemplMql = /** @class */ (function () {
                 group.tabs();
                 this.handlers.push(elfh);
             }
-            else { // valueType is an enum
+            else {
                 var enumValues = typeinfo.enum2values[valueType];
                 if (!enumValues) {
                     console.log('Unknown valueType', valueType);
@@ -1305,12 +1020,11 @@ var PanelTemplMql = /** @class */ (function () {
                     sel.append(butEquals, '=', butDiffers, '&#x2260;');
                     group.append(sel);
                     sel.on('click', efh, function (e) {
-                        // val() may return an empty value if the user clicks on, say, the = sign
                         var v = $(e.target).val();
                         switch (v) {
                             case 'equals':
                             case 'differs':
-                                e.data.comparator = v; // e.data is efh
+                                e.data.comparator = v;
                                 _this.updateMql();
                                 break;
                         }
@@ -1329,7 +1043,6 @@ var PanelTemplMql = /** @class */ (function () {
                         checkBoxes.push(scb);
                     }
                     checkBoxes.sort(function (a, b) { return StringWithSort.compare(a.getSws(), b.getSws()); });
-                    // Decide how many columns and rows to use for feature values
                     var columns = checkBoxes.length > 12 ? 3 :
                         checkBoxes.length > 4 ? 2 : 1;
                     var rows = Math.ceil(checkBoxes.length / columns);
@@ -1347,9 +1060,8 @@ var PanelTemplMql = /** @class */ (function () {
                     group2.on('click', efh, function (e) {
                         var target = $(e.target);
                         if (target.attr('type') === 'checkbox') {
-                            // The user clicked on a checkbox
                             if (target.prop('checked'))
-                                e.data.addValue(target.attr('value')); // e.data is efh
+                                e.data.addValue(target.attr('value'));
                             else
                                 e.data.removeValue(target.attr('value'));
                             _this.updateMql();
@@ -1374,7 +1086,6 @@ var PanelTemplMql = /** @class */ (function () {
         this.rbMql.prop('checked', true);
         this.rbMql.click();
     };
-    // Default value. Overidden in PanelTemplSentenceSelector
     PanelTemplMql.prototype.getUseForQo = function () {
         return false;
     };
@@ -1430,13 +1141,8 @@ var PanelTemplMql = /** @class */ (function () {
     };
     return PanelTemplMql;
 }());
-// -*- js -*-
-/* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-var PanelTemplSentenceSelector = /** @class */ (function (_super) {
+var PanelTemplSentenceSelector = (function (_super) {
     __extends(PanelTemplSentenceSelector, _super);
-    /**
-     * Constructor.
-     */
     function PanelTemplSentenceSelector(md, ttabs, where, qoselTab, featureTab) {
         var _this = _super.call(this, md, 'sensel') || this;
         _this.questObjTypeLab = $('<span>' + localize('sentence_unit_type_prompt') + '</span>');
@@ -1576,13 +1282,8 @@ var PanelTemplSentenceSelector = /** @class */ (function (_super) {
     };
     return PanelTemplSentenceSelector;
 }(PanelTemplMql));
-// -*- js -*-
-/* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-var PanelTemplQuizObjectSelector = /** @class */ (function (_super) {
+var PanelTemplQuizObjectSelector = (function (_super) {
     __extends(PanelTemplQuizObjectSelector, _super);
-    /**
-     * Constructor.
-     */
     function PanelTemplQuizObjectSelector(md, where, featureTab) {
         var _this = _super.call(this, md, 'qosel') || this;
         _this.featSelLab = $('<span>' + localize('feature_prompt') + '</span>');
@@ -1656,9 +1357,6 @@ var PanelTemplQuizObjectSelector = /** @class */ (function (_super) {
     };
     return PanelTemplQuizObjectSelector;
 }(PanelTemplMql));
-// -*- js -*-
-/* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-// Hand coded database dependency for qere detection
 function database_has_qere() {
     return configuration.databaseName === "ETCBC4";
 }
@@ -1685,7 +1383,7 @@ var ButtonSelection;
     ButtonSelection[ButtonSelection["SHOW_QERE"] = 5] = "SHOW_QERE";
 })(ButtonSelection || (ButtonSelection = {}));
 ;
-var ButtonsAndLabel = /** @class */ (function () {
+var ButtonsAndLabel = (function () {
     function ButtonsAndLabel(lab, featName, otype, select, useDropDown, canShow, canRequest, canDisplayGrammar, canShowQere) {
         var _this = this;
         this.featName = featName;
@@ -1723,10 +1421,10 @@ var ButtonsAndLabel = /** @class */ (function () {
             this.ddCheck.prop('checked', select != ButtonSelection.REQUEST);
         }
         else if (canShowQere) {
-            this.ddCheck = this.showQere; // Drop down and showQere share a position
+            this.ddCheck = this.showQere;
         }
         else
-            this.ddCheck = $('<span></span>'); // Empty space filler
+            this.ddCheck = $('<span></span>');
         if (canRequest) {
             if (useDropDown) {
                 this.ddCheck.prop('disabled', !this.reqFeat.prop('checked'));
@@ -1797,36 +1495,29 @@ var ButtonsAndLabel = /** @class */ (function () {
     };
     return ButtonsAndLabel;
 }());
-var PanelForOneOtype = /** @class */ (function () {
+var PanelForOneOtype = (function () {
     function PanelForOneOtype(otype, ptqf) {
         this.allBAL = [];
         this.panel = $('<table class="striped featuretable"></table>');
         var useSavedFeatures = otype === ptqf.initialOtype;
         this.panel.append('<tr><th>{0}</th><th>{1}</th><th>{2}</th><th>{3}</th><th>{4}</th><th class="leftalign">{5}</th></tr>'
             .format(localize('show'), localize('request'), localize('dont_care'), localize('dont_show'), localize('multiple_choice'), localize('feature')));
-        // First set up "visual" pseudo feature
         this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, configuration.objHasSurface === otype && !!getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql, true, configuration.objHasSurface === otype, false, false);
         this.panel.append(this.visualBAL.getRow());
-        // Now handle genuine features
         var hasSurfaceFeature = otype === configuration.objHasSurface;
         var sg = getSentenceGrammarFor(otype);
-        var keylist = []; // Will hold sorted list of keys
+        var keylist = [];
         for (var key in getObjectSetting(otype).featuresetting) {
-            // Ignore specified features
             if (getFeatureSetting(otype, key).ignoreShowRequest && (sg === null || !sg.containsFeature(key)))
                 continue;
-            // Ignore features of type 'url'
             if (typeinfo.obj2feat[otype][key] === 'url')
                 continue;
-            // Ignore the genuine feature already presented as "visual"
             if (hasSurfaceFeature && key === configuration.surfaceFeature)
                 continue;
             keylist.push(key);
         }
-        // Next, loop through the keys in the sorted order
         for (var ix = 0; ix < keylist.length; ++ix) {
             var key2 = keylist[ix];
-            // This can be simplified when ignoreShowRequest is removed
             var ignoreShowRequest = getFeatureSetting(otype, key2).ignoreShowRequest;
             var ignoreShow = getFeatureSetting(otype, key2).ignoreShow;
             var ignoreRequest = getFeatureSetting(otype, key2).ignoreRequest;
@@ -1841,11 +1532,10 @@ var PanelForOneOtype = /** @class */ (function () {
         this.panel.append('<tr><td colspan="5"></td><td class="leftalign">&nbsp;</tr>');
         this.panel.append('<tr><td colspan="2"></td><th>{0}</th><th>{1}</th><th>{2}</th><th class="leftalign">{3}</th></tr>'
             .format(localize('dont_care'), localize('dont_show'), database_has_qere() && !otype_has_qere(otype) ? localize('show_qere') : '', localize('other_sentence_unit_types')));
-        // Generate buttons for other types:
         for (var level in configuration.sentencegrammar) {
             var leveli = +level;
             if (isNaN(leveli))
-                continue; // Not numeric
+                continue;
             var otherOtype = configuration.sentencegrammar[leveli].objType;
             if (otherOtype !== otype && configuration.objectSettings[otherOtype].mayselect) {
                 var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), 'otherOtype_' + otherOtype, otype, useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, false, false, false, true, database_has_qere() && otype_has_qere(otherOtype));
@@ -1865,9 +1555,9 @@ var PanelForOneOtype = /** @class */ (function () {
     };
     return PanelForOneOtype;
 }());
-var PanelTemplQuizFeatures = /** @class */ (function () {
+var PanelTemplQuizFeatures = (function () {
     function PanelTemplQuizFeatures(otype, qf, where) {
-        this.panels = []; // Maps quiz object -> associated panel
+        this.panels = [];
         this.fpan = $('<div id="fpan"></div>');
         this.initialOtype = otype;
         this.initialQf = qf;
@@ -1906,7 +1596,7 @@ var PanelTemplQuizFeatures = /** @class */ (function () {
         if (this.initialQf && this.initialQf.dontShowObjects) {
             for (var i = 0; i < this.initialQf.dontShowObjects.length; ++i) {
                 if (this.initialQf.dontShowObjects[i].content === otype) {
-                    if (this.initialQf.dontShowObjects[i].show) // We assume the feature to show is qere
+                    if (this.initialQf.dontShowObjects[i].show)
                         return ButtonSelection.SHOW_QERE;
                     else
                         return ButtonSelection.DONT_SHOW;
@@ -1956,7 +1646,7 @@ var PanelTemplQuizFeatures = /** @class */ (function () {
                 qf.requestFeatures.push({ name: bal.getFeatName(), usedropdown: bal.isSelected_ddCheck() });
             else if (bal.isSelected_dontShowFeat()) {
                 var fn = bal.getFeatName();
-                if (fn.substring(0, 11) === 'otherOtype_') // 11 is the length of 'otherOtype_'
+                if (fn.substring(0, 11) === 'otherOtype_')
                     qf.dontShowObjects.push({ content: fn.substring(11) });
                 else
                     qf.dontShowFeatures.push(fn);
@@ -1997,8 +1687,6 @@ var PanelTemplQuizFeatures = /** @class */ (function () {
     };
     return PanelTemplQuizFeatures;
 }());
-// -*- js -*-
-/* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 var VerbClassSelection;
 (function (VerbClassSelection) {
     VerbClassSelection[VerbClassSelection["YES"] = 0] = "YES";
@@ -2006,7 +1694,7 @@ var VerbClassSelection;
     VerbClassSelection[VerbClassSelection["DONT_CARE"] = 2] = "DONT_CARE";
 })(VerbClassSelection || (VerbClassSelection = {}));
 ;
-var VerbClassButtonsAndLabel = /** @class */ (function () {
+var VerbClassButtonsAndLabel = (function () {
     function VerbClassButtonsAndLabel(lab, name, dataName, select) {
         this.yes = $('<input type="radio" name="{0}" value="yes" data-name="{1}">'.format(name, dataName));
         this.no = $('<input type="radio" name="{0}" value="no" data-name="{1}">'.format(name, dataName));
@@ -2043,7 +1731,7 @@ var VerbClassButtonsAndLabel = /** @class */ (function () {
     };
     return VerbClassButtonsAndLabel;
 }());
-var PanelForOneVcChoice = /** @class */ (function () {
+var PanelForOneVcChoice = (function () {
     function PanelForOneVcChoice(enumValues, valueType, prefix, lv) {
         this.allBAL = [];
         this.panel = $('<table class="striped featuretable"></table>');
@@ -2053,7 +1741,6 @@ var PanelForOneVcChoice = /** @class */ (function () {
         for (var ix = 0; ix < enumValues.length; ++ix)
             swsValues.push(new StringWithSort(getFeatureValueFriendlyName(valueType, enumValues[ix], false, false), enumValues[ix]));
         swsValues.sort(function (a, b) { return StringWithSort.compare(a, b); });
-        // Next, loop through the keys in the sorted order
         for (var ix = 0; ix < swsValues.length; ++ix) {
             var vc = swsValues[ix].getInternal();
             var vcsel = VerbClassSelection.DONT_CARE;
@@ -2071,22 +1758,7 @@ var PanelForOneVcChoice = /** @class */ (function () {
     };
     return PanelForOneVcChoice;
 }());
-// -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-/// @file
-/// @brief Contains the StringWithSort class.
-/// Represents a string with a sort index. Strings with sort indexes are specified in the properties
-/// files in as, for example, "#8 Foobar", where 8 is the sort index and "Foobar" is the string. The
-/// sort index will be used when ordering objects. Objects of this class can also be constructed from
-/// strings without a sort index, in which case comparison reverts to lexical case-free comparison.
-/// @see #StringWithSort::compare
-var StringWithSort = /** @class */ (function () {
-    /// Constructs a StringWithSort object with an internal name.
-    /// @param s String with an optional sort index. This string may take the form "#X SSS" where X
-    /// is a non-negative integer and SSS is the string proper; in this case X will be used as the
-    /// sort index. Alternatively this parameter may be specified as a string without a sort index,
-    /// in which case the sort index will be set to -1 and comparison will be lexical.
-    /// @param internal The internal (that is, languague independent) name for this value.
+var StringWithSort = (function () {
     function StringWithSort(s, internal) {
         if (internal === void 0) { internal = null; }
         if (s.length > 0 && s.charAt(0) === '#') {
@@ -2100,52 +1772,32 @@ var StringWithSort = /** @class */ (function () {
         }
         this.internal = internal;
     }
-    /// Extracts the proper string part of a string with an optional sort index.
-    /// @param s String with an optional sort index.
-    /// @return The proper string part.
+    StringWithSort.prototype.getInternal = function () {
+        return this.internal;
+    };
+    StringWithSort.prototype.getString = function () {
+        return this.str;
+    };
     StringWithSort.stripSortIndex = function (s) {
         return (s.length > 0 && s.charAt(0) === '#')
             ? s.substring(s.indexOf(' ') + 1)
             : s;
     };
-    /// Gets the internal value.
-    /// @return The internal (that is, language independent) value. This may be null.
-    StringWithSort.prototype.getInternal = function () {
-        return this.internal;
-    };
-    /// Gets the string proper.
-    /// @return The string with the sort index removed.
-    StringWithSort.prototype.getString = function () {
-        return this.str;
-    };
-    /// Compares two StringWithSort objects. If the two objects have different sort indexes, the
-    /// sort index will be used for ordering. If the two objects have the same sort index or if one
-    /// of the sort indexes is -1, lexcial case insensitive ordering will be used.
-    /// @param sws1 The first object to be compared.
-    /// @param sws2 The second object to be compared.
-    /// @return -1, 0, or 1, depending on whether sws1 is less than, equal to, or greater than
-    /// sws2.
     StringWithSort.compare = function (sws1, sws2) {
         if (sws1.sort == -1 || sws2.sort == -1 || sws1.sort == sws2.sort) {
-            // Use lexical comparison
             var s1 = sws1.str.toLowerCase();
             var s2 = sws2.str.toLowerCase();
             return s1 < s2 ? -1 : s1 > s2 ? 1 : 0;
         }
         else
-            return sws1.sort < sws2.sort ? -1 : 1; // Note: No zero here because equality is handled above
+            return sws1.sort < sws2.sort ? -1 : 1;
     };
     return StringWithSort;
 }());
-// -*- js -*-
-var SortingCheckBox = /** @class */ (function () {
-    /** Creates an initially unselected check box with text.
-     * @param text The text to display, optionally starting with '#' followed by a sort index.
-     * @see StringWithSort
-     */
+var SortingCheckBox = (function () {
     function SortingCheckBox(name, value, text) {
         this.sws = new StringWithSort(text);
-        this.checkbox = $('<input type="checkbox" name="{0}" value="{1}">'.format(name, value));
+        this.checkbox = $("<input type=\"checkbox\" name=\"" + name + "\" value=\"" + value + "\">");
         this.jq = $('<span></span>');
         this.jq.append(this.checkbox, this.sws.getString());
     }
@@ -2160,8 +1812,6 @@ var SortingCheckBox = /** @class */ (function () {
     };
     return SortingCheckBox;
 }());
-// -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 String.prototype.format = function () {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function (match, num) {
@@ -2170,28 +1820,30 @@ String.prototype.format = function () {
             : match;
     });
 };
-// Modern browsers have trim()
 if (!String.prototype.trim) {
-    // This browser doesn't have trim()
     String.prototype.trim = function () {
         return this.replace(/^\s+|\s+$/g, '');
     };
 }
 var util;
 (function (util) {
-    // A followerBox handles a checkbox that can either be set explicitly or implicitly. "Show border"
-    // is an example of this. The user case request "Show border" explicitly by clicking its checkbox,
-    // or implictly by choosing to display a feature.
-    var FollowerBox = /** @class */ (function () {
+    var FollowerBox = (function () {
         function FollowerBox(level, idstring) {
             this.level = level;
             this.idstring = idstring;
             this.is_explicit = false;
-            this.resetCount();
-            addToResetChain(this);
-        }
-        FollowerBox.prototype.resetCount = function () {
             this.count = 0;
+            this.addToResetChain();
+        }
+        FollowerBox.prototype.addToResetChain = function () {
+            FollowerBox.resetChain.push(this);
+        };
+        FollowerBox.resetCheckboxCounters = function () {
+            for (var i in this.resetChain) {
+                if (isNaN(+i))
+                    continue;
+                this.resetChain[i].count = 0;
+            }
         };
         FollowerBox.prototype.explicit = function (val) {
             this.is_explicit = val;
@@ -2213,41 +1865,42 @@ var util;
                 this.setit(this.is_explicit);
             }
         };
+        FollowerBox.resetChain = [];
         return FollowerBox;
     }());
     util.FollowerBox = FollowerBox;
-    var BorderFollowerBox = /** @class */ (function (_super) {
+    var BorderFollowerBox = (function (_super) {
         __extends(BorderFollowerBox, _super);
         function BorderFollowerBox(level) {
-            return _super.call(this, level, '#lev{0}_sb_cb'.format(level)) || this;
+            return _super.call(this, level, "#lev" + level + "_sb_cb") || this;
         }
         BorderFollowerBox.prototype.setit = function (val) {
             if (val) {
-                $('.lev' + this.level + '> .gram').removeClass('dontshowit').addClass('showit');
-                $('.lev' + this.level).removeClass('dontshowborder').addClass('showborder');
+                $(".lev" + this.level + " > .gram").removeClass('dontshowit').addClass('showit');
+                $(".lev" + this.level).removeClass('dontshowborder').addClass('showborder');
             }
             else {
-                $('.lev' + this.level + '> .gram').removeClass('showit').addClass('dontshowit');
-                $('.lev' + this.level).removeClass('showborder').addClass('dontshowborder');
+                $(".lev" + this.level + " > .gram").removeClass('showit').addClass('dontshowit');
+                $(".lev" + this.level).removeClass('showborder').addClass('dontshowborder');
             }
         };
         return BorderFollowerBox;
     }(FollowerBox));
     util.BorderFollowerBox = BorderFollowerBox;
-    var SeparateLinesFollowerBox = /** @class */ (function (_super) {
+    var SeparateLinesFollowerBox = (function (_super) {
         __extends(SeparateLinesFollowerBox, _super);
         function SeparateLinesFollowerBox(level) {
-            return _super.call(this, level, '#lev{0}_seplin_cb'.format(level)) || this;
+            return _super.call(this, level, "#lev" + level + "_seplin_cb") || this;
         }
         SeparateLinesFollowerBox.prototype.setit = function (val) {
             var oldSepLin = val ? 'noseplin' : 'seplin';
             var newSepLin = val ? 'seplin' : 'noseplin';
-            $('.notdummy.lev' + this.level).removeClass(oldSepLin).addClass(newSepLin);
+            $(".notdummy.lev" + this.level).removeClass(oldSepLin).addClass(newSepLin);
         };
         return SeparateLinesFollowerBox;
     }(FollowerBox));
     util.SeparateLinesFollowerBox = SeparateLinesFollowerBox;
-    var WordSpaceFollowerBox = /** @class */ (function (_super) {
+    var WordSpaceFollowerBox = (function (_super) {
         __extends(WordSpaceFollowerBox, _super);
         function WordSpaceFollowerBox(level) {
             return _super.call(this, level, '#ws_cb') || this;
@@ -2279,6 +1932,25 @@ var util;
         return WordSpaceFollowerBox;
     }(FollowerBox));
     util.WordSpaceFollowerBox = WordSpaceFollowerBox;
+    var AddBetween = (function () {
+        function AddBetween(separator) {
+            this.separator = separator;
+            this.first = true;
+        }
+        AddBetween.prototype.getStr = function () {
+            if (this.first) {
+                this.first = false;
+                return '';
+            }
+            else
+                return this.separator;
+        };
+        AddBetween.prototype.reset = function () {
+            this.first = true;
+        };
+        return AddBetween;
+    }());
+    util.AddBetween = AddBetween;
     function mydump(arr, level, maxlevel) {
         if (level === void 0) { level = 0; }
         if (maxlevel === void 0) { maxlevel = 5; }
@@ -2307,61 +1979,13 @@ var util;
         return dumped_text;
     }
     util.mydump = mydump;
-    var resetChain = [];
-    function addToResetChain(fb) {
-        resetChain.push(fb);
-    }
-    function resetCheckboxCounters() {
-        for (var i in resetChain) {
-            if (isNaN(+i))
-                continue; // Not numeric
-            resetChain[i].resetCount();
-        }
-    }
-    util.resetCheckboxCounters = resetCheckboxCounters;
-    var AddBetween = /** @class */ (function () {
-        function AddBetween(text) {
-            this.text = text;
-            this.first = true;
-        }
-        AddBetween.prototype.getStr = function () {
-            if (this.first) {
-                this.first = false;
-                return '';
-            }
-            else
-                return this.text;
-        };
-        AddBetween.prototype.reset = function () {
-            this.first = true;
-        };
-        return AddBetween;
-    }());
-    util.AddBetween = AddBetween;
 })(util || (util = {}));
-// -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-/// <reference path="configuration.ts" />
-/// <reference path="charset.ts" />
-/// <reference path="sentencegrammar.ts" />
-/// <reference path="localization.ts" />
-/// <reference path="localization_general.ts" />
-/// <reference path="paneltemplmql.ts" />
-/// <reference path="paneltemplsentenceselector.ts" />
-/// <reference path="paneltemplquizobjectselector.ts" />
-/// <reference path="paneltemplquizfeatures.ts" />
-/// <reference path="verbclasspanel.ts" />
-/// <reference path="stringwithsort.ts" />
-/// <reference path="sortingcheckbox.ts" />
-/// <reference path="util.ts" />
 var VirtualKeyboard;
 var origMayLocate;
-var panelSent; // Sentence selection panel
-var panelSentUnit; // Sentence unit selection panel
-var panelFeatures; // Features panel
+var panelSent;
+var panelSentUnit;
+var panelFeatures;
 var isSubmitting = false;
-var last_quiz_name;
-var mayOverwrite = false;
 var checked_passages;
 var ckeditor;
 var charset;
@@ -2380,58 +2004,6 @@ function isDirty() {
             return true;
     return panelSent.isDirty() || panelSentUnit.isDirty() || panelFeatures.isDirty();
 }
-// CT - 2016-11-07:
-// The execution of this function is postponed one second to ensure that ckeditor and VirtualKeyboard
-// have been loaded.
-// This delay needed to be inserted after adding the Chinese interface; but later it seemed to be unnecessary.
-// Maybe it can be removed again by replaceing setTimeout(....,1000) with $(....).
-setTimeout(function () {
-    for (var i in configuration.sentencegrammar) {
-        if (isNaN(+i))
-            continue; // Not numeric
-        addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
-    }
-    $(window).on('beforeunload', function () {
-        if (isDirty())
-            return 'You haven\'t saved your changes.';
-    });
-    charset = new Charset(configuration.charSet);
-    if (VirtualKeyboard) {
-        VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
-        VirtualKeyboard.toggle('firstinput', 'virtualkbid');
-    }
-    ckeditor = $('#txtdesc').ckeditor({
-        uiColor: '#feeebd',
-        toolbarGroups: [
-            { name: 'clipboard', groups: ['clipboard', 'undo'] },
-            { name: 'editing', groups: ['find', 'selection'] },
-            { name: 'links' },
-            { name: 'insert' },
-            //{ name: 'forms' },
-            //{ name: 'tools' },
-            { name: 'document', groups: ['mode' /*, 'document', 'doctools'*/] },
-            //{ name: 'others' },
-            '/',
-            { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
-            { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi'] },
-            { name: 'styles' },
-            { name: 'colors' },
-            { name: 'about' }
-        ],
-        // Remove some buttons, provided by the standard plugins, which we don't need
-        removeButtons: 'Print,Preview,NewPage,Save,Flash,PageBreak,Iframe,CreateDiv,language',
-        // Make dialogs simpler.
-        removeDialogTabs: 'image:advanced;link:advanced'
-    });
-    ckeditor.val(decoded_3et.desc);
-    $('#quiz_tabs').tabs({ disabled: [3] });
-    origMayLocate = decoded_3et.maylocate;
-    $('#maylocate_cb').prop('checked', origMayLocate);
-    panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
-    panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'), panelFeatures);
-    panelSent = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'), panelSentUnit, panelFeatures);
-    $('.quizeditor').show();
-}, 1000);
 function show_error(id, message) {
     $(id + '-text').text(message);
     $(id).show();
@@ -2454,14 +2026,13 @@ function save_quiz() {
         return;
     }
     hide_error('#filename-error');
-    $('#filename-dialog-save').off('click'); // Remove any previous handler
+    $('#filename-dialog-save').off('click');
     $('#filename-dialog-save').on('click', function () {
         if ($('#filename-name').val().trim() == '')
             show_error('#filename-error', localize('missing_filename'));
         else {
             quiz_name = $('#filename-name').val().trim();
-            // Check if file may be written
-            $.ajax('{0}?dir={1}&quiz={2}'.format(check_url, encodeURIComponent(dir_name), encodeURIComponent(quiz_name)))
+            $.ajax(check_url + "?dir=" + encodeURIComponent(dir_name) + "&quiz=" + encodeURIComponent(quiz_name))
                 .done(function (data, textStatus, jqXHR) {
                 switch (data.trim()) {
                     case 'OK':
@@ -2481,7 +2052,7 @@ function save_quiz() {
                 }
             })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                show_error('#filename-error', '{0} {1}'.format(localize('error_response'), errorThrown));
+                show_error('#filename-error', localize('error_response') + " " + errorThrown);
             });
         }
     });
@@ -2507,34 +2078,24 @@ function save_quiz2() {
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
-    var form = $('<form action="{0}" method="post">'.format(submit_to)
-        + '<input type="hidden" name="dir" value="{0}">'.format(encodeURIComponent(dir_name))
-        + '<input type="hidden" name="quiz" value="{0}">'.format(encodeURIComponent(quiz_name))
-        + '<input type="hidden" name="quizdata" value="{0}">'.format(encodeURIComponent(JSON.stringify(decoded_3et)))
-        + '</form>');
+    var form = $("<form action=\"" + submit_to + "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"" + encodeURIComponent(dir_name) + "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"" + encodeURIComponent(quiz_name) + "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"" + encodeURIComponent(JSON.stringify(decoded_3et)) + "\">\n                           </form>");
     $('body').append(form);
     isSubmitting = true;
     form.submit();
 }
 function shebanq_to_qo(qo, mql) {
     if (qo === null) {
-        $('#qo-dialog-text').html('<p>{0}</p><p>{1}</p>'.format(localize('sentence_selection_imported'), localize('no_focus')));
+        $('#qo-dialog-text').html("<p>" + localize('sentence_selection_imported') + "</p><p>" + localize('no_focus') + "</p>");
         $('#qo-yesbutton').hide();
         $('#qo-nobutton').hide();
         $('#qo-okbutton').show();
         $('#qo-dialog-confirm').modal('show');
     }
     else {
-        // This is a multi-level format substitution
-        // Replace & < and > with HTML entities
         var msg = mql.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        // Embded in HTML formatting
-        msg = '<br><code>[{0} {1}]</code><br>'.format(qo, msg);
-        // Embed in localized string
+        msg = "<br><code>[" + qo + " " + msg + "]</code><br>";
         msg = localize('use_qo_selection').format(msg);
-        // Format for dialog
-        msg = '<p>{0}</p><p>{1}</p>'.format(localize('sentence_selection_imported'), msg);
-        // Set the dialog text
+        msg = "<p>" + localize('sentence_selection_imported') + "</p><p>" + msg + "</p>";
         $('#qo-dialog-text').html(msg);
         $('#qo-yesbutton').show();
         $('#qo-nobutton').show();
@@ -2554,10 +2115,13 @@ function import_from_shebanq() {
     $('#import-shebanq-button').off('click');
     $('#import-shebanq-button').on('click', function () {
         $('.ui-dialog *').css('cursor', 'wait');
-        $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url, (encodeURIComponent($('#import-shebanq-qid').val()).trim()), (encodeURIComponent($('#import-shebanq-dbvers').val()).trim())))
+        var shebanq_id = encodeURIComponent($('#import-shebanq-qid').val()).trim();
+        var shebanq_dbvers = encodeURIComponent($('#import-shebanq-dbvers').val()).trim();
+        $.ajax(import_shebanq_url + "?id=" + shebanq_id + "&version=" + shebanq_dbvers)
             .done(function (data, textStatus, jqXHR) {
             $('.ui-dialog *').css('cursor', 'auto');
             var result = JSON.parse(data);
+            console.log(result);
             if (result.error === null) {
                 panelSent.setMql(result.sentence_mql);
                 $('#import-shebanq-dialog').modal('hide');
@@ -2568,9 +2132,52 @@ function import_from_shebanq() {
             }
         })
             .fail(function (jqXHR, textStatus, errorThrown) {
+            console.log('prop');
             $('.ui-dialog *').css('cursor', 'auto');
-            show_error('#import-shebanq-error', '{0} {1}'.format(localize('error_response'), errorThrown));
+            show_error('#import-shebanq-error', localize('error_response') + " " + errorThrown);
         });
     });
     $('#import-shebanq-dialog').modal('show');
 }
+setTimeout(function () {
+    for (var i in configuration.sentencegrammar) {
+        if (isNaN(+i))
+            continue;
+        addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
+    }
+    $(window).on('beforeunload', function () {
+        if (isDirty())
+            return 'You haven\'t saved your changes.';
+    });
+    charset = new Charset(configuration.charSet);
+    if (VirtualKeyboard) {
+        VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
+        VirtualKeyboard.toggle('firstinput', 'virtualkbid');
+    }
+    ckeditor = $('#txtdesc').ckeditor({
+        uiColor: '#feeebd',
+        toolbarGroups: [
+            { name: 'clipboard', groups: ['clipboard', 'undo'] },
+            { name: 'editing', groups: ['find', 'selection'] },
+            { name: 'links' },
+            { name: 'insert' },
+            { name: 'document', groups: ['mode'] },
+            '/',
+            { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
+            { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi'] },
+            { name: 'styles' },
+            { name: 'colors' },
+            { name: 'about' }
+        ],
+        removeButtons: 'Print,Preview,NewPage,Save,Flash,PageBreak,Iframe,CreateDiv,language',
+        removeDialogTabs: 'image:advanced;link:advanced'
+    });
+    ckeditor.val(decoded_3et.desc);
+    $('#quiz_tabs').tabs({ disabled: [3] });
+    origMayLocate = decoded_3et.maylocate;
+    $('#maylocate_cb').prop('checked', origMayLocate);
+    panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
+    panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'), panelFeatures);
+    panelSent = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'), panelSentUnit, panelFeatures);
+    $('.quizeditor').show();
+}, 1000);

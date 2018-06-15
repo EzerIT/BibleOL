@@ -18,7 +18,10 @@ interface QuizData {
     desc         : string;
     maylocate    : boolean;
     monad2Id     : number[];
-    id2FeatVal   : string[][];
+    id2FeatVal   : util.str2strArr[]; // The value is normally a string, but in the case of value
+                                      // suggestions for a multiple choice question the key ends in
+                                      // "!suggest!" and the value is an array of stings containing
+                                      // the suggestions
 }
 
 interface ExtendedQuizFeatures {

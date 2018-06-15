@@ -74,12 +74,12 @@ class PanelQuestion {
     // Returns:
     //     A list of feature/value pairs for each question object.
     //
-    private buildQuizObjectFeatureList() : string[][] {
-        let qoFeatures : string[][] = [];  // The feature/value pairs for each question object
+    private buildQuizObjectFeatureList() : util.str2strArr[] {
+        let qoFeatures : util.str2strArr[] = [];  // The feature/value pairs for each question object
 
-        let hasSeen    : boolean[]  = [];  // Maps id_d => true if the id_d has been seen. (An id_d
-                                           // can occur several times; for example, the id_d of a
-                                           // clause may occur for each monad within the clause.)
+        let hasSeen    : boolean[]         = [];  // Maps id_d => true if the id_d has been seen. (An id_d
+                                                  // can occur several times; for example, the id_d of a
+                                                  // clause may occur for each monad within the clause.)
         
         let allmonads : number[] = getMonadArray(this.sentence); // All monads in the sentence
         for (let i=0, len=allmonads.length; i<len; ++i) {
@@ -95,7 +95,7 @@ class PanelQuestion {
     }
     
     //------------------------------------------------------------------------------------------
-    // constructor method
+    // Constructor method
     //
     // Parameter:
     //     qd: The information required to generate a exercise.
@@ -191,17 +191,17 @@ class PanelQuestion {
 
         // Create table entries for each question item
         
-        let featuresHere    : FeatureMap = typeinfo.obj2feat[oType];          // Maps feature name => feature type
-        let qoFeatures      : string[][] = this.buildQuizObjectFeatureList(); // Feature/value pairs for each question object
-        let hasForeignInput : boolean = false;                                // Do we need a virtual keyboard?
-        let firstInput      : string = 'id="firstinput"';                     // ID of <input> to receive virtual keyboard focus
+        let featuresHere    : FeatureMap        = typeinfo.obj2feat[oType];          // Maps feature name => feature type
+        let qoFeatures      : util.str2strArr[] = this.buildQuizObjectFeatureList(); // Feature/value pairs for each question object
+        let hasForeignInput : boolean           = false;                             // Do we need a virtual keyboard?
+        let firstInput      : string            = 'id="firstinput"';                 // ID of <input> to receive virtual keyboard focus
         
         // Loop through all the quiz objects
         for (let qoid in qoFeatures) {
             if (isNaN(+qoid)) continue; // Not numeric
 
-            let currentRow : JQuery   = $('<tr></tr>');    // Current question item
-            let fvals      : string[] = qoFeatures[+qoid]; // Feature/value pairs for current quiz object
+            let currentRow : JQuery          = $('<tr></tr>');    // Current question item
+            let fvals      : util.str2strArr = qoFeatures[+qoid]; // Feature/value pairs for current quiz object
             
             if (dontShow) {
                 currentRow.append('<td>' + (+qoid+1) + '</td>');  // Item number
@@ -214,7 +214,7 @@ class PanelQuestion {
                 if (isNaN(+sfi)) continue; // Not numeric
 
                 let sf       : string         = showFeatures[+sfi];          // Feature name
-                let val      : string         = fvals[sf];                   // Feature value
+                let val      : string         = fvals[sf] as string;         // Feature value
                 let featType : string         = featuresHere[sf];            // Feature type
                 let featset  : FeatureSetting = getFeatureSetting(oType,sf); // Feature configuration
 
@@ -271,7 +271,7 @@ class PanelQuestion {
 
                 let rf            : string  = requestFeatures[+rfi].name;         // Feature name
                 let usedropdown   : boolean = requestFeatures[+rfi].usedropdown;  // Use multiple choice?
-                let correctAnswer : string  = fvals[rf];                          // Feature value (i.e., the correct answer)
+                let correctAnswer : string  = fvals[rf] as string;                // Feature value (i.e., the correct answer)
                 let featType      : string  = featuresHere[rf];                   // Feature type
                 let featset       : FeatureSetting = getFeatureSetting(oType,rf); // Feature configuration
 		let v             : JQuery  = null;                               // Component to hold the data entry field or a message
@@ -291,7 +291,7 @@ class PanelQuestion {
 
                 if (featset.alternateshowrequestDb!=null && usedropdown) {
                     // Multiple choice question item
-                    let suggestions : string[] = fvals[rf + '!suggest!']; // Values to choose between
+                    let suggestions : string[] = fvals[rf + '!suggest!'] as string[]; // Values to choose between
 
                     if (suggestions==null) // No suggestions, just display the answer
                         v = $(`<td class="${PanelQuestion.charclass(featset)}">${correctAnswer}</td>`);
@@ -347,7 +347,7 @@ class PanelQuestion {
                         // Append optArray to mc_select
                         $.each(optArray, (ix : number, o : JQuery) => mc_select.append(o));
 
-                        v = cwyn.appendMeTo($('<td></td>'));
+                        v = cwyn.getJQuery();
                     }
                 }
                 else if (featType==='string' || featType==='ascii') {
@@ -374,7 +374,7 @@ class PanelQuestion {
                         cwyn = new ComponentWithYesNo(vf,COMPONENT_TYPE.textField);
                     }
                     cwyn.addKeypressListener();
-                    v = cwyn.appendMeTo($('<td></td>'));
+                    v = cwyn.getJQuery();
                     
                     let trimmedAnswer : string = correctAnswer.trim()
                         .replace(/&lt;/g,'<')
@@ -395,7 +395,7 @@ class PanelQuestion {
                     let intf : JQuery = $('<input type="number">');
                     let cwyn : ComponentWithYesNo = new ComponentWithYesNo(intf,COMPONENT_TYPE.textField);
                     cwyn.addKeypressListener();
-                    v = cwyn.appendMeTo($('<td></td>'));
+                    v = cwyn.getJQuery();
                     this.vAnswers.push(new Answer(cwyn,null,correctAnswer,null));
                 }
                 else if (featType.substr(0,8)==='list of ') {
@@ -456,7 +456,7 @@ class PanelQuestion {
                     
                     let cwyn : ComponentWithYesNo = new ComponentWithYesNo(selections,COMPONENT_TYPE.checkBoxes);
                     cwyn.addChangeListener();
-                    v = cwyn.appendMeTo($('<td></td>'));
+                    v = cwyn.getJQuery();
                     this.vAnswers.push(new Answer(cwyn,null,correctAnswer,null));
                 }
                 else {
@@ -538,7 +538,7 @@ class PanelQuestion {
                         // Append optArray to mc_select
                         $.each(optArray, (ix : number, o : JQuery) => mc_select.append(o));
                         
-                        v = cwyn.appendMeTo($('<td></td>'));
+                        v = cwyn.getJQuery();
                     }
                 }
                 

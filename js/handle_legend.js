@@ -8,8 +8,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-// -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 String.prototype.format = function () {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function (match, num) {
@@ -18,28 +16,30 @@ String.prototype.format = function () {
             : match;
     });
 };
-// Modern browsers have trim()
 if (!String.prototype.trim) {
-    // This browser doesn't have trim()
     String.prototype.trim = function () {
         return this.replace(/^\s+|\s+$/g, '');
     };
 }
 var util;
 (function (util) {
-    // A followerBox handles a checkbox that can either be set explicitly or implicitly. "Show border"
-    // is an example of this. The user case request "Show border" explicitly by clicking its checkbox,
-    // or implictly by choosing to display a feature.
-    var FollowerBox = /** @class */ (function () {
+    var FollowerBox = (function () {
         function FollowerBox(level, idstring) {
             this.level = level;
             this.idstring = idstring;
             this.is_explicit = false;
-            this.resetCount();
-            addToResetChain(this);
-        }
-        FollowerBox.prototype.resetCount = function () {
             this.count = 0;
+            this.addToResetChain();
+        }
+        FollowerBox.prototype.addToResetChain = function () {
+            FollowerBox.resetChain.push(this);
+        };
+        FollowerBox.resetCheckboxCounters = function () {
+            for (var i in this.resetChain) {
+                if (isNaN(+i))
+                    continue;
+                this.resetChain[i].count = 0;
+            }
         };
         FollowerBox.prototype.explicit = function (val) {
             this.is_explicit = val;
@@ -61,41 +61,42 @@ var util;
                 this.setit(this.is_explicit);
             }
         };
+        FollowerBox.resetChain = [];
         return FollowerBox;
     }());
     util.FollowerBox = FollowerBox;
-    var BorderFollowerBox = /** @class */ (function (_super) {
+    var BorderFollowerBox = (function (_super) {
         __extends(BorderFollowerBox, _super);
         function BorderFollowerBox(level) {
-            return _super.call(this, level, '#lev{0}_sb_cb'.format(level)) || this;
+            return _super.call(this, level, "#lev" + level + "_sb_cb") || this;
         }
         BorderFollowerBox.prototype.setit = function (val) {
             if (val) {
-                $('.lev' + this.level + '> .gram').removeClass('dontshowit').addClass('showit');
-                $('.lev' + this.level).removeClass('dontshowborder').addClass('showborder');
+                $(".lev" + this.level + " > .gram").removeClass('dontshowit').addClass('showit');
+                $(".lev" + this.level).removeClass('dontshowborder').addClass('showborder');
             }
             else {
-                $('.lev' + this.level + '> .gram').removeClass('showit').addClass('dontshowit');
-                $('.lev' + this.level).removeClass('showborder').addClass('dontshowborder');
+                $(".lev" + this.level + " > .gram").removeClass('showit').addClass('dontshowit');
+                $(".lev" + this.level).removeClass('showborder').addClass('dontshowborder');
             }
         };
         return BorderFollowerBox;
     }(FollowerBox));
     util.BorderFollowerBox = BorderFollowerBox;
-    var SeparateLinesFollowerBox = /** @class */ (function (_super) {
+    var SeparateLinesFollowerBox = (function (_super) {
         __extends(SeparateLinesFollowerBox, _super);
         function SeparateLinesFollowerBox(level) {
-            return _super.call(this, level, '#lev{0}_seplin_cb'.format(level)) || this;
+            return _super.call(this, level, "#lev" + level + "_seplin_cb") || this;
         }
         SeparateLinesFollowerBox.prototype.setit = function (val) {
             var oldSepLin = val ? 'noseplin' : 'seplin';
             var newSepLin = val ? 'seplin' : 'noseplin';
-            $('.notdummy.lev' + this.level).removeClass(oldSepLin).addClass(newSepLin);
+            $(".notdummy.lev" + this.level).removeClass(oldSepLin).addClass(newSepLin);
         };
         return SeparateLinesFollowerBox;
     }(FollowerBox));
     util.SeparateLinesFollowerBox = SeparateLinesFollowerBox;
-    var WordSpaceFollowerBox = /** @class */ (function (_super) {
+    var WordSpaceFollowerBox = (function (_super) {
         __extends(WordSpaceFollowerBox, _super);
         function WordSpaceFollowerBox(level) {
             return _super.call(this, level, '#ws_cb') || this;
@@ -127,6 +128,25 @@ var util;
         return WordSpaceFollowerBox;
     }(FollowerBox));
     util.WordSpaceFollowerBox = WordSpaceFollowerBox;
+    var AddBetween = (function () {
+        function AddBetween(separator) {
+            this.separator = separator;
+            this.first = true;
+        }
+        AddBetween.prototype.getStr = function () {
+            if (this.first) {
+                this.first = false;
+                return '';
+            }
+            else
+                return this.separator;
+        };
+        AddBetween.prototype.reset = function () {
+            this.first = true;
+        };
+        return AddBetween;
+    }());
+    util.AddBetween = AddBetween;
     function mydump(arr, level, maxlevel) {
         if (level === void 0) { level = 0; }
         if (maxlevel === void 0) { maxlevel = 5; }
@@ -155,80 +175,32 @@ var util;
         return dumped_text;
     }
     util.mydump = mydump;
-    var resetChain = [];
-    function addToResetChain(fb) {
-        resetChain.push(fb);
-    }
-    function resetCheckboxCounters() {
-        for (var i in resetChain) {
-            if (isNaN(+i))
-                continue; // Not numeric
-            resetChain[i].resetCount();
-        }
-    }
-    util.resetCheckboxCounters = resetCheckboxCounters;
-    var AddBetween = /** @class */ (function () {
-        function AddBetween(text) {
-            this.text = text;
-            this.first = true;
-        }
-        AddBetween.prototype.getStr = function () {
-            if (this.first) {
-                this.first = false;
-                return '';
-            }
-            else
-                return this.text;
-        };
-        AddBetween.prototype.reset = function () {
-            this.first = true;
-        };
-        return AddBetween;
-    }());
-    util.AddBetween = AddBetween;
 })(util || (util = {}));
-// -*- js -*-
-/* 2015 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-// The idea for some of the following code is taken from
-// http://stackoverflow.com/questions/18575582/how-to-detect-responsive-breakpoints-of-twitter-bootstrap-3-using-javascript
-// This code provides information about Bootstrap's current concept of the window size
 var resizer;
 (function (resizer) {
-    // Returns the current window size, either 'xs', 'sm', 'md', or 'lg'.
     function getWindowSize() {
         return $('.device-sizer:visible').attr('data-size');
     }
     resizer.getWindowSize = getWindowSize;
-    // Checks if the current window size is siz (which is either 'xs', 'sm', 'md', or 'lg')
     function sizeIs(siz) {
         return $('.device-is-' + siz).is(':visible');
     }
     resizer.sizeIs = sizeIs;
     var timers = {};
-    // Specify a function that listens for window resizings.
-    // Use a separate uniqueId for each instance that listens for a resize.
     function addResizeListener(callback, data, uniqueId) {
-        // When the window resizes, wait for 500 ms and if no further resize occurs, call the callback function
         $(window).resize(function () {
-            // If the window was recently resized, restart the timer, otherwize start the timer
             if (timers[uniqueId])
                 clearTimeout(timers[uniqueId]);
-            timers[uniqueId] = setTimeout(function () { return callback(data); }, 500); // Call callback in 500 ms
+            timers[uniqueId] = setTimeout(function () { return callback(data); }, 500);
         });
     }
     resizer.addResizeListener = addResizeListener;
     $(function () {
-        // Insert size detectors before </body>
         var sizes = ['xs', 'sm', 'md', 'lg'];
         for (var i = 0; i < sizes.length; ++i)
-            $('body').append('<div class="visible-{0}-block device-is-{0} device-sizer" data-size="{0}"></div>'
-                .format(sizes[i]));
+            $('body').append("<div class=\"visible-" + sizes[i] + "-block device-is-" + sizes[i] + " device-sizer\" data-size=\"" + sizes[i] + "\"></div>");
     });
 })(resizer || (resizer = {}));
-// -*- js -*-
-/* 2017 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-/// <reference path="util.ts" />
-/// <reference path="resizer.ts" />
 function set_legend_height(data) {
     switch (resizer.getWindowSize()) {
         case 'xs':

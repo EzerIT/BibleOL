@@ -58,7 +58,7 @@
 
 
 // Maps URL type to non-localized hypterlink title
-let urlTypeString = {
+let urlTypeString : { [code : string] : string; } = {
     'u' : 'click_for_web_site',
     'v' : 'click_for_video',
     'd' : 'click_for_document',

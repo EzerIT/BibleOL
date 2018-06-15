@@ -444,8 +444,8 @@ class Dictionary {
                         <td class="bol-tooltip leftalign ${charset.foreignClass}">${monob.mo.features[configuration.surfaceFeature]}</td>
                     </tr>`;
         }
-        
-        let map : string[] = []; // Maps feature name => localized feature name
+
+        let map : util.str2str = {}; // Maps feature name => localized feature name
 
         // Popualate 'map':
         sengram.walkFeatureNames(sengram.objType, (whattype    : WHAT,

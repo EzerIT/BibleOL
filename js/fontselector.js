@@ -8,8 +8,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-// -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 String.prototype.format = function () {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function (match, num) {
@@ -18,28 +16,30 @@ String.prototype.format = function () {
             : match;
     });
 };
-// Modern browsers have trim()
 if (!String.prototype.trim) {
-    // This browser doesn't have trim()
     String.prototype.trim = function () {
         return this.replace(/^\s+|\s+$/g, '');
     };
 }
 var util;
 (function (util) {
-    // A followerBox handles a checkbox that can either be set explicitly or implicitly. "Show border"
-    // is an example of this. The user case request "Show border" explicitly by clicking its checkbox,
-    // or implictly by choosing to display a feature.
-    var FollowerBox = /** @class */ (function () {
+    var FollowerBox = (function () {
         function FollowerBox(level, idstring) {
             this.level = level;
             this.idstring = idstring;
             this.is_explicit = false;
-            this.resetCount();
-            addToResetChain(this);
-        }
-        FollowerBox.prototype.resetCount = function () {
             this.count = 0;
+            this.addToResetChain();
+        }
+        FollowerBox.prototype.addToResetChain = function () {
+            FollowerBox.resetChain.push(this);
+        };
+        FollowerBox.resetCheckboxCounters = function () {
+            for (var i in this.resetChain) {
+                if (isNaN(+i))
+                    continue;
+                this.resetChain[i].count = 0;
+            }
         };
         FollowerBox.prototype.explicit = function (val) {
             this.is_explicit = val;
@@ -61,41 +61,42 @@ var util;
                 this.setit(this.is_explicit);
             }
         };
+        FollowerBox.resetChain = [];
         return FollowerBox;
     }());
     util.FollowerBox = FollowerBox;
-    var BorderFollowerBox = /** @class */ (function (_super) {
+    var BorderFollowerBox = (function (_super) {
         __extends(BorderFollowerBox, _super);
         function BorderFollowerBox(level) {
-            return _super.call(this, level, '#lev{0}_sb_cb'.format(level)) || this;
+            return _super.call(this, level, "#lev" + level + "_sb_cb") || this;
         }
         BorderFollowerBox.prototype.setit = function (val) {
             if (val) {
-                $('.lev' + this.level + '> .gram').removeClass('dontshowit').addClass('showit');
-                $('.lev' + this.level).removeClass('dontshowborder').addClass('showborder');
+                $(".lev" + this.level + " > .gram").removeClass('dontshowit').addClass('showit');
+                $(".lev" + this.level).removeClass('dontshowborder').addClass('showborder');
             }
             else {
-                $('.lev' + this.level + '> .gram').removeClass('showit').addClass('dontshowit');
-                $('.lev' + this.level).removeClass('showborder').addClass('dontshowborder');
+                $(".lev" + this.level + " > .gram").removeClass('showit').addClass('dontshowit');
+                $(".lev" + this.level).removeClass('showborder').addClass('dontshowborder');
             }
         };
         return BorderFollowerBox;
     }(FollowerBox));
     util.BorderFollowerBox = BorderFollowerBox;
-    var SeparateLinesFollowerBox = /** @class */ (function (_super) {
+    var SeparateLinesFollowerBox = (function (_super) {
         __extends(SeparateLinesFollowerBox, _super);
         function SeparateLinesFollowerBox(level) {
-            return _super.call(this, level, '#lev{0}_seplin_cb'.format(level)) || this;
+            return _super.call(this, level, "#lev" + level + "_seplin_cb") || this;
         }
         SeparateLinesFollowerBox.prototype.setit = function (val) {
             var oldSepLin = val ? 'noseplin' : 'seplin';
             var newSepLin = val ? 'seplin' : 'noseplin';
-            $('.notdummy.lev' + this.level).removeClass(oldSepLin).addClass(newSepLin);
+            $(".notdummy.lev" + this.level).removeClass(oldSepLin).addClass(newSepLin);
         };
         return SeparateLinesFollowerBox;
     }(FollowerBox));
     util.SeparateLinesFollowerBox = SeparateLinesFollowerBox;
-    var WordSpaceFollowerBox = /** @class */ (function (_super) {
+    var WordSpaceFollowerBox = (function (_super) {
         __extends(WordSpaceFollowerBox, _super);
         function WordSpaceFollowerBox(level) {
             return _super.call(this, level, '#ws_cb') || this;
@@ -127,6 +128,25 @@ var util;
         return WordSpaceFollowerBox;
     }(FollowerBox));
     util.WordSpaceFollowerBox = WordSpaceFollowerBox;
+    var AddBetween = (function () {
+        function AddBetween(separator) {
+            this.separator = separator;
+            this.first = true;
+        }
+        AddBetween.prototype.getStr = function () {
+            if (this.first) {
+                this.first = false;
+                return '';
+            }
+            else
+                return this.separator;
+        };
+        AddBetween.prototype.reset = function () {
+            this.first = true;
+        };
+        return AddBetween;
+    }());
+    util.AddBetween = AddBetween;
     function mydump(arr, level, maxlevel) {
         if (level === void 0) { level = 0; }
         if (maxlevel === void 0) { maxlevel = 5; }
@@ -155,108 +175,55 @@ var util;
         return dumped_text;
     }
     util.mydump = mydump;
-    var resetChain = [];
-    function addToResetChain(fb) {
-        resetChain.push(fb);
-    }
-    function resetCheckboxCounters() {
-        for (var i in resetChain) {
-            if (isNaN(+i))
-                continue; // Not numeric
-            resetChain[i].resetCount();
-        }
-    }
-    util.resetCheckboxCounters = resetCheckboxCounters;
-    var AddBetween = /** @class */ (function () {
-        function AddBetween(text) {
-            this.text = text;
-            this.first = true;
-        }
-        AddBetween.prototype.getStr = function () {
-            if (this.first) {
-                this.first = false;
-                return '';
-            }
-            else
-                return this.text;
-        };
-        AddBetween.prototype.reset = function () {
-            this.first = true;
-        };
-        return AddBetween;
-    }());
-    util.AddBetween = AddBetween;
 })(util || (util = {}));
-// -*- js -*-
-// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
-//****************************************************************************************************
-// localize function
-//
-// Looks up a localized string.
-//
-// Parameter:
-//     s: The key for the string.
-// Returns:
-//     The localized value of s.
-//
 function localize(s) {
     var str = l10n_js[s];
     return str === undefined ? '??' + s + '??' : str;
 }
-// -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
-/// <reference path="fontdetect.d.ts" />
-/// <reference path="util.ts" />
-/// <reference path="localization_general.ts" />
-var FontSelector = /** @class */ (function () {
+var FontSelector = (function () {
     function FontSelector(alphabet, sample, direction) {
         this.alphabet = alphabet;
         this.sample = sample;
         this.direction = direction;
         this.detector = new Detector(alphabet);
         this.inputName = alphabet + 'choice';
-        this.tableSelector = $('#' + alphabet + 'font');
+        this.tableSelector = $("#" + alphabet + "font");
     }
     FontSelector.prototype.familyChange = function () {
         var val = $('input:radio[name="' + this.alphabet + 'choice"]:checked').attr('data-family');
-        if (val === 'XXmineXX') { // Personal font
+        if (val === 'XXmineXX') {
             val = this.myfont_text.prop('value');
-            $('#' + this.alphabet + '_mysample').css('font-family', val);
+            $("#" + this.alphabet + "_mysample").css('font-family', val);
         }
-        $('.' + this.alphabet + 'sample').css('font-family', val);
+        $("." + this.alphabet + "sample").css('font-family', val);
     };
     FontSelector.prototype.personalChange = function () {
-        $('input:radio[value="{0}_mine"]'.format(this.alphabet)).prop('checked', true);
+        $("input:radio[value=\"" + this.alphabet + "_mine\"]").prop('checked', true);
         this.familyChange();
     };
     FontSelector.prototype.detectFonts = function (fontlist, personal_font, default_val) {
         var _this = this;
         for (var i = 0, len = fontlist.length; i < len; ++i) {
             if (fontlist[i].webfont || this.detector.detect(fontlist[i].name)) {
-                var radio_button = $('<input name="{0}" type="radio" data-family="{1}" value="{2}_{3}">'
-                    .format(this.inputName, fontlist[i].name, this.alphabet, i));
-                var td1 = $('<td>').append(fontlist[i].name);
-                var td2 = $('<td class="sample" style="direction:{0}; font-family:{1}; font-size:16pt;">'
-                    .format(this.direction, fontlist[i].name))
+                var radio_button = $("<input name=\"" + this.inputName + "\" type=\"radio\" data-family=\"" + fontlist[i].name + "\" value=\"" + this.alphabet + "_" + i + "\">");
+                var td1_1 = $('<td>').append(fontlist[i].name);
+                var td2_1 = $("<td class=\"sample\" style=\"direction:" + this.direction + "; font-family:" + fontlist[i].name + "; font-size:16pt;\">")
                     .append(this.sample);
-                var td3 = $('<td class="centeralign">').append(radio_button);
-                var tr = $('<tr>').append(td1).append(td2).append(td3);
-                this.tableSelector.append(tr);
+                var td3_1 = $('<td class="centeralign">').append(radio_button);
+                var tr_1 = $('<tr>').append(td1_1).append(td2_1).append(td3_1);
+                this.tableSelector.append(tr_1);
             }
         }
-        // Add personal font
-        this.myfont_text = $('<input type="text" name="{0}_myfont" value="{1}">'.format(this.alphabet, personal_font));
-        this.myfont_radio_button = $('<input name="{0}" type="radio" data-family="XXmineXX" value="{1}_mine">'.format(this.inputName, this.alphabet));
+        this.myfont_text = $("<input type=\"text\" name=\"" + this.alphabet + "_myfont\" value=\"" + personal_font + "\">");
+        this.myfont_radio_button = $("<input name=\"" + this.inputName + "\" type=\"radio\" data-family=\"XXmineXX\" value=\"" + this.alphabet + "_mine\">");
         var td1 = $('<td>').append(localize('or_write_preferred') + '<br>').append(this.myfont_text);
-        var td2 = $('<td class="sample" id="{0}_mysample" style="direction:{1}; font-family:{2}; font-size:16pt;">'
-            .format(this.alphabet, this.direction, personal_font))
+        var td2 = $("<td class=\"sample\" id=\"" + this.alphabet + "_mysample\" style=\"direction:" + this.direction + "; font-family:" + personal_font + "; font-size:16pt;\">")
             .append(this.sample);
         var td3 = $('<td class="centeralign">').append(this.myfont_radio_button);
         var tr = $('<tr>').append(td1).append(td2).append(td3);
         this.tableSelector.append(tr);
-        $('input:radio[value="{0}"]'.format(default_val)).prop('checked', true);
-        // Handle changing of font selection
-        $('input:radio[name="{0}"]'.format(this.inputName)).on('change', function () { return _this.familyChange(); });
+        $("input:radio[value=\"" + default_val + "\"]").prop('checked', true);
+        $("input:radio[name=\"" + this.inputName + "\"]").on('change', function () { return _this.familyChange(); });
         this.familyChange();
         this.myfont_text.on('input', function (e) { return _this.personalChange(); });
     };

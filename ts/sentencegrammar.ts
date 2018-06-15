@@ -422,7 +422,7 @@ class GrammarMetaFeature implements SentenceGrammarItem {
 //
 class GrammarFeature implements SentenceGrammarItem {
     public mytype : string; // The string 'GrammarFeature'
-    public name : string;   // The name of the Emdros feature
+    public name   : string; // The name of the Emdros feature
 
     // The feature can either belong to the Emdros object of the SentenceGrammar of which this
     // GrammarFeature is a member, or it can belong to a subobject of the Emdros object.
@@ -430,9 +430,9 @@ class GrammarFeature implements SentenceGrammarItem {
     // subobject, and realFeatureName is set to the name of the subobject feature.
     // Otherwise, isSubObj is set to false, realObjectType is set to the current object type, and
     // realFeatureName is set to this.name.
-    private isSubObj : boolean; 
-    private realObjectType;
-    private realFeatureName;
+    private isSubObj        : boolean; 
+    private realObjectType  : string;
+    private realFeatureName : string;
 
     //------------------------------------------------------------------------------------------
     // pseudoConstructor method
@@ -525,7 +525,7 @@ class GrammarFeature implements SentenceGrammarItem {
         let io : number = this.realFeatureName.indexOf('_TYPE_'); // Separates feature from format
         let realRealFeatureName : string = io==-1 ? this.realFeatureName : this.realFeatureName.substr(0,io);
         
-        let res : string = this.isSubObj
+        let res : any = this.isSubObj
             ? (monob as MultipleMonadObject).subobjects[mix][0].features[realRealFeatureName]
             : (monob.mo.features ? monob.mo.features[realRealFeatureName] : ''); // Empty for dummy objects
 

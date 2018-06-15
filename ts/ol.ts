@@ -1,7 +1,7 @@
 // -*- js -*-
 // Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
 
-// Main functions for handling text display and quizzes.
+// Main functions for handling displaying of text and exercises
 
 /// <reference path="util.ts" />
 /// <reference path="configuration.ts" />

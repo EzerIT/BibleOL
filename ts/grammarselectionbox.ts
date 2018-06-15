@@ -38,7 +38,7 @@ class GrammarSelectionBox {
     private wordSpaceBox        : util.WordSpaceFollowerBox;            // Handles checkbox for "word spacing"
     
     //****************************************************************************************************
-    // adjustDivLevWidth method
+    // adjustDivLevWidth static method
     //
     // Ensures that the width of a <span class="levX"> is at least as wide as the <span
     // class="gram"> holding its grammar information.
@@ -363,7 +363,7 @@ class GrammarSelectionBox {
     }
 
     //------------------------------------------------------------------------------------------
-    // clearBoxes method
+    // clearBoxes static method
     //
     // If we are not running a quiz and 'force' is false, the method checks or unchecks the
     // checkboxes in the grammar selection box according to the values stored in the browser.
@@ -403,7 +403,7 @@ class GrammarSelectionBox {
     }
 
     //****************************************************************************************************
-    // buildGrammarAccordion method
+    // buildGrammarAccordion static method
     //
     // Builds accordion for grammar selector.
     //

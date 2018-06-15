@@ -39,11 +39,11 @@ interface MonadSet {
 // Represents a single monad object harvested from an MQL request.
 //
 interface MatchedObject {
-    id_d     : number;                     // Emdros id_d of the object
-    name     : string;                     // Name of object type
-    monadset : MonadSet;                   // Monads that make up the object
-    features : {[key : string] : string;}; // Maps feature name => feature value
-    sheaf    : any;                        // Not used, but set by server
+    id_d     : number;                  // Emdros id_d of the object
+    name     : string;                  // Name of object type
+    monadset : MonadSet;                // Monads that make up the object
+    features : {[key : string] : any;}; // Maps feature name => feature value
+    sheaf    : any;                     // Not used, but set by server
 }
 
 

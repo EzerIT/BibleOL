@@ -107,8 +107,8 @@ class Quiz {
         }
         else
             alert('No more questions');
-     
-        util.resetCheckboxCounters();
+
+        util.FollowerBox.resetCheckboxCounters(); // Reset counters in preparation for the following trigger() call
         $('.grammarselector input:enabled:checked').trigger('change'); // Make sure grammar is displayed for relevant checkboxes
     }
 

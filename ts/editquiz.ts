@@ -1,5 +1,8 @@
 // -*- js -*-
-/* 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+
+// Main functions and variables for handling creation and modification of exercises
+
 
 /// <reference path="configuration.ts" />
 /// <reference path="charset.ts" />
@@ -15,48 +18,73 @@
 /// <reference path="sortingcheckbox.ts" />
 /// <reference path="util.ts" />
 
-// Dummy interfaces
-interface MonadObject { mo : any}
+// Dummy interfaces, used by sentencegrammar.ts instead of the full monadobject.ts.
+interface MonadObject { mo : any }
 interface MultipleMonadObject extends MonadObject { subobjects : any }
 
-
+//****************************************************************************************************
+// myalertInterface interface
+//
+// The function signature use by the myalert function, which displays an alert dialog in the browser.
+//
+// Parameters:
+//     dialogtitle: The title of the dialog box.
+//     dialogtext: The text of the dialog box.
+//
 interface myalertInterface{
     (dialogtitle : string, dialogtext : string) : void;
 }
 
-declare var myalert: myalertInterface;
+//****************************************************************************************************
+// myalert function
+//
+// Displays a runtime alert in the browser.
+// The function is defined in the server code.
+//
+declare let myalert: myalertInterface;
 
+//****************************************************************************************************
+// Extension of the JQuery interface
+//
 interface JQuery{
-    jstree : Function;
+    jstree   : Function;
     ckeditor : Function;    
 }
 
-declare var decoded_3et        : any;
-declare var initial_universe   : string[];
-declare var submit_to          : string;
-declare var check_url          : string;
-declare var import_shebanq_url : string;
-declare var quiz_name          : string;
-declare var dir_name           : string;
-
-var VirtualKeyboard  : any;
-
-
-var origMayLocate : boolean;
-var panelSent     : PanelTemplSentenceSelector; // Sentence selection panel
-var panelSentUnit : PanelTemplQuizObjectSelector; // Sentence unit selection panel
-var panelFeatures : PanelTemplQuizFeatures; // Features panel
-var isSubmitting  : boolean = false;
-
-var last_quiz_name : string;
-var mayOverwrite   : boolean = false;
-
-var checked_passages : any[];
-var ckeditor : any;
-
-var charset : Charset;
+//****************************************************************************************************
+// Variables defined by server code
+//
+declare let decoded_3et        : any;      // JSON version of exercise template
+declare let initial_universe   : string[]; // Bible passes from exercise template
+declare let submit_to          : string;   // URL to which the edited exercise should be sent
+declare let check_url          : string;   // URL for ajax queries about the validity of an exercise file name
+declare let import_shebanq_url : string;   // URL for ajax queries for imports from SHEBANQ (Note: This is a URL on the Bible OL server, not the SHEBANQ server)
+declare let quiz_name          : string;   // Name of exercise file
+declare let dir_name           : string;   // Name of exercise file directory
 
 
+//****************************************************************************************************
+// Other globale variables
+//
+let VirtualKeyboard  : any;                          // Virtual keyboard
+let origMayLocate    : boolean;                      // Does the exercise original allow users to locate passages?
+let panelSent        : PanelTemplSentenceSelector;   // Sentence selection panel
+let panelSentUnit    : PanelTemplQuizObjectSelector; // Sentence unit selection panel
+let panelFeatures    : PanelTemplQuizFeatures;       // Features panel
+let isSubmitting     : boolean = false;              // Are we in the process of sending an exercise to the server?
+let checked_passages : any[];                        // Selected Bible passages
+let ckeditor         : any;                          // Text editor
+let charset          : Charset;                      // Character set
+
+
+//****************************************************************************************************
+// isDirty function
+//
+// Checks if the user has changed anyting in the exercise
+//
+// Returns:
+//     True if something in the exercise has been changed.
+//
 function isDirty() : boolean {
     if (isSubmitting)
         return false;
@@ -72,24 +100,310 @@ function isDirty() : boolean {
     if ($('#maylocate_cb').prop('checked')!=origMayLocate)
         return true;
     
-    for (var i=0; i<checked_passages.length; ++i)
+    for (let i=0; i<checked_passages.length; ++i)
         if ($(checked_passages[i]).data('ref') !== initial_universe[i])
             return true;
 
     return panelSent.isDirty() || panelSentUnit.isDirty() || panelFeatures.isDirty();
 }
 
-// CT - 2016-11-07:
+
+//****************************************************************************************************
+// show_error function
+//
+// Displays an error message in a dialog.
+//
+// Parameters:
+//     id: HTML ID of dialog.
+//     message: The text to display.
+//
+function show_error(id : string, message : string) : void {
+    $(id + '-text').text(message);
+    $(id).show();
+}
+
+//****************************************************************************************************
+// hide_error function
+//
+// Hides an error message in a dialog.
+//
+// Parameters:
+//     id: HTML ID of dialog.
+//
+function hide_error(id : string) : void {
+    $(id).hide();
+}
+
+//****************************************************************************************************
+// save_quiz function
+//
+// Called when the user presses the "Save" button after editing an exercise.
+//
+// Phase 1:
+// This function displays the filename dialog, then when the user has typed a file name, the
+// function checks the validity of that name.
+//
+// Phase 2:
+// Control is passed to save_quiz2 or check_overwrite (which may in turn call save_quiz2) for
+// further processing.
+//
+function save_quiz() : void {
+    checked_passages = $('#passagetree').jstree('get_checked',null,false);
+
+    if (checked_passages.length==0) {
+        myalert(localize('passage_selection'), localize('no_passages'));
+        return;
+    }
+
+    if (panelFeatures.noRequestFeatures()) {
+        myalert(localize('feature_specification'), localize('no_request_feature'));
+        return;
+    }
+
+    if (panelFeatures.noShowFeatures()) {
+        myalert(localize('feature_specification'), localize('no_show_feature'));
+        return;
+    }
+    
+
+    hide_error('#filename-error');
+
+    // Set up handler for the 'Save' button in the filename dialog
+    
+    $('#filename-dialog-save').off('click'); // Remove any previous handler
+    $('#filename-dialog-save').on('click',() => {
+        // This code is executed when the user clicks 'Save' in the filename dialog
+        
+        if (($('#filename-name').val() as string).trim() == '')
+            show_error('#filename-error', localize('missing_filename'));
+        else {
+            quiz_name = ($('#filename-name').val() as string).trim();
+
+            // Ask the server if file may be written
+            $.ajax(`${check_url}?dir=${encodeURIComponent(dir_name)}&quiz=${encodeURIComponent(quiz_name)}`)
+                .done((data, textStatus, jqXHR) => {
+
+                    // Check reply form check_url
+                    switch (data.trim()) {
+                    case 'OK':
+                        // Everthing is find
+                        $('#filename-dialog').modal('hide');
+                        save_quiz2(); // Proceed to phase 2
+                        break;
+                        
+                    case 'EXISTS':
+                        // The file already exists
+                        $('#filename-dialog').modal('hide');
+                        check_overwrite(); // Check if it is OK to overwrite it
+                        break;
+                        
+                    case 'BADNAME':
+                        // The filename is illegal
+                        show_error('#filename-error', localize('badname'));
+                        break;
+                        
+                    default:
+                        // Error message - display it
+                        show_error('#filename-error', data);
+                        break;
+                    }
+                })
+                .fail((jqXHR, textStatus, errorThrown) => {
+                    // Ajax request failed - display error
+                    show_error('#filename-error', `${localize('error_response')} ${errorThrown}`);
+                });
+        }
+    });
+
+    // Show the filename dialog
+    $('#filename-dialog').modal('show');
+}
+
+//****************************************************************************************************
+// check_overwrite function
+//
+// Called if the file in which we try to save an exercise already exists. Asks the user to confirm a
+// file overwrite.
+//
+function check_overwrite() : void {
+    $('#overwrite-yesbutton').off('click');
+    $('#overwrite-yesbutton').on('click',() => {
+        // The user clicked the 'Yes' button
+        save_quiz2(); // Proceed to phase 2 of the file saving
+        $('#overwrite-dialog-confirm').modal('hide');
+    });
+
+    // Show the overwrite dialog
+    $('#overwrite-dialog-confirm').modal('show');
+}
+
+//****************************************************************************************************
+// save_quiz2 function
+//
+// Phase 2 of saving an exercise to a file. This function creates an HTML form and posts it to the
+// server.
+//
+function save_quiz2() : void {
+    // Build decoded_3et so that it contains the new exercise
+    
+    decoded_3et.desc = ckeditor.val();
+    
+    decoded_3et.selectedPaths = [];
+    
+    for (let i=0; i<checked_passages.length; ++i) {
+        let r = $(checked_passages[i]).data('ref');
+        if (r!='')
+            decoded_3et.selectedPaths.push(r);
+    }
+
+    decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
+
+    decoded_3et.sentenceSelection   = panelSent.getInfo();
+    decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
+    decoded_3et.quizFeatures        = panelFeatures.getInfo();
+
+    // The HTML form contains the directory, the filename and the exercise as a JSON string
+    let form : JQuery = $(`<form action="${submit_to}" method="post">
+                             <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">
+                             <input type="hidden" name="quiz"     value="${encodeURIComponent(quiz_name)}">
+                             <input type="hidden" name="quizdata" value="${encodeURIComponent(JSON.stringify(decoded_3et))}">
+                           </form>`);
+    
+    $('body').append(form);
+
+    isSubmitting = true;
+    form.submit();
+}
+
+//****************************************************************************************************
+// shebanq_to_qo function
+//
+// Called when a query has been retrieved from SHEBANQ. This function asks the user if data from
+// SHEBANQ should also be used to set the sentence unit selection.
+//
+// Parameters:
+//     qo: Question object (that is, the sentence unit for the question).
+//     mql: The MQL for sentence unit selection.
+//
+function shebanq_to_qo(qo : string, mql : string) : void {
+    if (qo===null) {
+        // The query specified no object with FOCUS
+        $('#qo-dialog-text').html(`<p>${localize('sentence_selection_imported')}</p><p>${localize('no_focus')}</p>`);
+        $('#qo-yesbutton').hide();
+        $('#qo-nobutton').hide();
+        $('#qo-okbutton').show();
+
+        $('#qo-dialog-confirm').modal('show');
+    }
+    else {
+        // Decode the MQL string
+        
+        // This is a multi-level format substitution
+        // Replace & < and > with HTML entities
+        let msg : string = mql.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        
+        // Embded in HTML formatting
+        msg = `<br><code>[${qo} ${msg}]</code><br>`;
+
+        // Embed in localized string
+        msg = localize('use_qo_selection').format(msg);
+
+        // Format for dialog
+        msg = `<p>${localize('sentence_selection_imported')}</p><p>${msg}</p>`;
+
+        // Set the dialog text
+        $('#qo-dialog-text').html(msg);
+
+        $('#qo-yesbutton').show();
+        $('#qo-nobutton').show();
+        $('#qo-okbutton').hide();
+
+        $('#qo-yesbutton').off('click');
+        $('#qo-yesbutton').on('click',() => {
+            // The user selected to use the data for sentence unit selection
+            $('#qo-dialog-confirm').modal('hide');
+            panelSentUnit.setOtype(qo);
+            panelSentUnit.setUsemql();
+            panelSentUnit.setMql(mql);
+        });
+
+        // Ask if user wants to use the data for sentence unit selection
+        $('#qo-dialog-confirm').modal('show');
+    }
+}
+
+//****************************************************************************************************
+// import_from_shebanq function
+//
+// Shows the "Import from SHEBANQ" dialog to the user and retrieves the requested MQL statement from
+// the Bible OL server, which in turn retrieves it from the SHEBANQ server.
+//
+function import_from_shebanq() : void {
+    hide_error('#import-shebanq-error');
+
+    $('#import-shebanq-button').off('click');
+    $('#import-shebanq-button').on('click',() => {
+        // The user clicked the "Import" button in the dialog
+        $('.ui-dialog *').css('cursor', 'wait');
+
+        // Encode data from the dialog
+        let shebanq_id     : string = encodeURIComponent($('#import-shebanq-qid').val()    as string).trim();
+        let shebanq_dbvers : string = encodeURIComponent($('#import-shebanq-dbvers').val() as string).trim();
+
+        // Ask the Bible OL server to ask SHEBANQ for the data
+        $.ajax(`${import_shebanq_url}?id=${shebanq_id}&version=${shebanq_dbvers}`)
+            .done((data, textStatus, jqXHR) => {
+                // Request was answered
+                
+                $('.ui-dialog *').css('cursor', 'auto');
+
+                let result :
+                    {
+                        error             : string; // Error information
+                        sentence_mql      : string; // MQL for sentence selection
+                        sentence_unit     : string; // Sentence unit (object with FOCUS in the MQL request)
+                        sentence_unit_mql : string; // MQL for sentence unit selection
+                    }
+                    = JSON.parse(data);
+
+                console.log(result);
+                if (result.error===null) {
+                    panelSent.setMql(result.sentence_mql); // Use sentence_mql for sentence selection
+                    $('#import-shebanq-dialog').modal('hide');
+                    shebanq_to_qo(result.sentence_unit, result.sentence_unit_mql); // Optionally set sentence unit selection
+                }
+                else {
+                    show_error('#import-shebanq-error', result.error);
+                }
+            })
+            .fail((jqXHR, textStatus, errorThrown) => {
+                console.log('prop');
+                // Communication error
+                $('.ui-dialog *').css('cursor', 'auto');
+                show_error('#import-shebanq-error', `${localize('error_response')} ${errorThrown}`);
+            });
+    });
+
+
+    $('#import-shebanq-dialog').modal('show');
+}
+
+//****************************************************************************************************
+// The main program
+// 
 // The execution of this function is postponed one second to ensure that ckeditor and VirtualKeyboard
 // have been loaded.
 // This delay needed to be inserted after adding the Chinese interface; but later it seemed to be unnecessary.
 // Maybe it can be removed again by replaceing setTimeout(....,1000) with $(....).
+//
 setTimeout(function() {
-    for (var i in configuration.sentencegrammar) {
+    // Add polymorphic function to the contents of configuration.sentencegrammar
+    for (let i in configuration.sentencegrammar) {
         if (isNaN(+i)) continue; // Not numeric
         addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
     }
 
+    // Warn the user if they leave the webpage with unsaved changes
     $(window).on('beforeunload', function() {
         if (isDirty())
             return 'You haven\'t saved your changes.';
@@ -103,6 +417,7 @@ setTimeout(function() {
         VirtualKeyboard.toggle('firstinput','virtualkbid');
     }
 
+    // Configure the text editor
     ckeditor = $('#txtdesc').ckeditor(
         {
             uiColor : '#feeebd',
@@ -131,201 +446,17 @@ setTimeout(function() {
         }
     );
 
+    // Show the exercise description in the text editor
     ckeditor.val(decoded_3et.desc);
 
-    $('#quiz_tabs').tabs({ disabled: [3] });
+    $('#quiz_tabs').tabs({ disabled: [3] }); // Set up the tabs with the "sentence unit selection" tab disabled
 
     origMayLocate = decoded_3et.maylocate;
     $('#maylocate_cb').prop('checked', origMayLocate);
     
     panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
-
-    panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'),
-                                                     panelFeatures);
-    panelSent = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'),
-                                               panelSentUnit, panelFeatures);
+    panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'), panelFeatures);
+    panelSent     = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'), panelSentUnit, panelFeatures);
 
     $('.quizeditor').show();
 },1000);
-
-function show_error(id : string, message : string) {
-    $(id + '-text').text(message);
-    $(id).show();
-}
-
-function hide_error(id : string) {
-    $(id).hide();
-}
-
-function save_quiz() {
-    checked_passages = $('#passagetree').jstree('get_checked',null,false);
-
-    if (checked_passages.length==0) {
-        myalert(localize('passage_selection'), localize('no_passages'));
-        return;
-    }
-
-    if (panelFeatures.noRequestFeatures()) {
-        myalert(localize('feature_specification'), localize('no_request_feature'));
-        return;
-    }
-
-    if (panelFeatures.noShowFeatures()) {
-        myalert(localize('feature_specification'), localize('no_show_feature'));
-        return;
-    }
-    
-
-    hide_error('#filename-error');
-
-    $('#filename-dialog-save').off('click'); // Remove any previous handler
-    $('#filename-dialog-save').on('click',() => {
-        if (($('#filename-name').val() as string).trim() == '')
-            show_error('#filename-error', localize('missing_filename'));
-        else {
-            quiz_name = ($('#filename-name').val() as string).trim();
-
-            // Check if file may be written
-            $.ajax('{0}?dir={1}&quiz={2}'.format(check_url,
-                                                 encodeURIComponent(dir_name),
-                                                 encodeURIComponent(quiz_name)))
-                .done((data, textStatus, jqXHR) => {
-                    switch (data.trim()) {
-                    case 'OK':
-                        $('#filename-dialog').modal('hide');
-                        save_quiz2();
-                        break;
-                    case 'EXISTS':
-                        $('#filename-dialog').modal('hide');
-                        check_overwrite();
-                        break;
-                    case 'BADNAME':
-                        show_error('#filename-error', localize('badname'));
-                        break;
-                    default:
-                        show_error('#filename-error', data);
-                        break;
-                    }
-                })
-                .fail((jqXHR, textStatus, errorThrown) => {
-                    show_error('#filename-error',
-                               '{0} {1}'.format(localize('error_response'), errorThrown));
-                });
-        }
-    });
-    $('#filename-dialog').modal('show');        
-}
-
-function check_overwrite() {
-    $('#overwrite-yesbutton').off('click');
-    $('#overwrite-yesbutton').on('click',() => {
-        save_quiz2();
-        $('#overwrite-dialog-confirm').modal('hide');
-    });
-    $('#overwrite-dialog-confirm').modal('show');
-}
-
-function save_quiz2() {
-    decoded_3et.desc = ckeditor.val();
-    
-    decoded_3et.selectedPaths = [];
-    
-    for (var i=0; i<checked_passages.length; ++i) {
-        var r = $(checked_passages[i]).data('ref');
-        if (r!='')
-            decoded_3et.selectedPaths.push(r);
-    }
-
-    decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
-
-    decoded_3et.sentenceSelection = panelSent.getInfo();
-    decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
-    decoded_3et.quizFeatures = panelFeatures.getInfo();
-    
-    var form : JQuery = $('<form action="{0}" method="post">'.format(submit_to)
-                          + '<input type="hidden" name="dir" value="{0}">'.format(encodeURIComponent(dir_name))
-                          + '<input type="hidden" name="quiz" value="{0}">'.format(encodeURIComponent(quiz_name))
-                          + '<input type="hidden" name="quizdata" value="{0}">'.format(encodeURIComponent(JSON.stringify(decoded_3et)))
-                          + '</form>');
-    
-    $('body').append(form);
-
-    isSubmitting = true;
-    form.submit();
-}
-
-function shebanq_to_qo(qo : string, mql : string) {
-    if (qo===null) {
-        $('#qo-dialog-text').html('<p>{0}</p><p>{1}</p>'.format(localize('sentence_selection_imported'),
-                                                                localize('no_focus')));
-        $('#qo-yesbutton').hide();
-        $('#qo-nobutton').hide();
-        $('#qo-okbutton').show();
-
-        $('#qo-dialog-confirm').modal('show');
-    }
-    else {
-        // This is a multi-level format substitution
-        // Replace & < and > with HTML entities
-        var msg = mql.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        
-        // Embded in HTML formatting
-        msg = '<br><code>[{0} {1}]</code><br>'.format(qo, msg);
-
-        // Embed in localized string
-        msg = localize('use_qo_selection').format(msg);
-
-        // Format for dialog
-        msg = '<p>{0}</p><p>{1}</p>'.format(localize('sentence_selection_imported'), msg);
-
-        // Set the dialog text
-        $('#qo-dialog-text').html(msg);
-
-        $('#qo-yesbutton').show();
-        $('#qo-nobutton').show();
-        $('#qo-okbutton').hide();
-
-        $('#qo-yesbutton').off('click');
-        $('#qo-yesbutton').on('click',() => {
-            $('#qo-dialog-confirm').modal('hide');
-            panelSentUnit.setOtype(qo);
-            panelSentUnit.setUsemql();
-            panelSentUnit.setMql(mql);
-        });
-        $('#qo-dialog-confirm').modal('show');
-    }
-}
-
-function import_from_shebanq() {
-    hide_error('#import-shebanq-error');
-
-    $('#import-shebanq-button').off('click');
-    $('#import-shebanq-button').on('click',() => {
-        $('.ui-dialog *').css('cursor', 'wait');
-
-        $.ajax('{0}?id={1}&version={2}'.format(import_shebanq_url,
-                                               (encodeURIComponent($('#import-shebanq-qid').val() as string).trim()),
-                                               (encodeURIComponent($('#import-shebanq-dbvers').val() as string).trim())))
-            .done((data, textStatus, jqXHR) => {
-                $('.ui-dialog *').css('cursor', 'auto');
-
-                var result = JSON.parse(data);
-                if (result.error===null) {
-                    panelSent.setMql(result.sentence_mql);
-                    $('#import-shebanq-dialog').modal('hide');
-                    shebanq_to_qo(result.sentence_unit, result.sentence_unit_mql);
-                }
-                else {
-                    show_error('#import-shebanq-error', result.error);
-                }
-            })
-            .fail((jqXHR, textStatus, errorThrown) => {
-                $('.ui-dialog *').css('cursor', 'auto');
-                show_error('#import-shebanq-error',
-                           '{0} {1}'.format(localize('error_response'), errorThrown));
-            });
-    });
-
-
-    $('#import-shebanq-dialog').modal('show');
-}
