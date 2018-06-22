@@ -66,7 +66,7 @@ namespace util {
     }
 
     //************************************************************************************************
-    // str2str interface
+    // str2num interface
     //
     // Represents an associative array that maps string => number
     //

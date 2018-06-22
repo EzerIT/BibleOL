@@ -287,7 +287,7 @@ class PanelTemplQuizFeatures {
     public initialOtype  : string;
     private oldOtype     : string;
     private initialQf    : QuizFeatures;
-    private panels       : PanelForOneOtype[] = [];  // Maps quiz object -> associated panel
+    private panels       : { [ key : string ] : PanelForOneOtype } = {};  // Maps quiz object -> associated panel
     private visiblePanel : PanelForOneOtype;	
     private fpan         : JQuery = $('<div id="fpan"></div>');
 

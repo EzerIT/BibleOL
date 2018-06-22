@@ -321,14 +321,6 @@ var FeatureHandler = (function () {
     }
     FeatureHandler.prototype.normalize = function () {
     };
-    FeatureHandler.prototype.hasValues = function () {
-        alert('Abstract function hasValues() called');
-        return false;
-    };
-    FeatureHandler.prototype.toMql = function () {
-        alert('Abstract function toMql() called');
-        return '';
-    };
     FeatureHandler.prototype.getComparator = function () {
         switch (this.comparator) {
             case 'equals': return '=';
@@ -425,6 +417,18 @@ var RangeIntegerFeatureHandler = (function (_super) {
     function RangeIntegerFeatureHandler(key) {
         return _super.call(this, 'rangeintegerfeature', key) || this;
     }
+    RangeIntegerFeatureHandler.prototype.set_low_high = function (index, val) {
+        switch (index) {
+            case 'value_low':
+                this.value_low = val;
+                break;
+            case 'value_high':
+                this.value_high = val;
+                break;
+            default:
+                throw 'Illegal index in access_low_high';
+        }
+    };
     RangeIntegerFeatureHandler.prototype.isSetLow = function () {
         return this.value_low !== null && this.value_low !== undefined;
     };
@@ -570,9 +574,9 @@ var ListValuesHandler = (function () {
     ListValuesHandler.prototype.toMql = function (featName) {
         var stringValues = [];
         for (var ix = 0; ix < this.yes_values.length; ++ix)
-            stringValues.push('{0} HAS {1}'.format(featName, this.yes_values[+ix]));
+            stringValues.push(featName + " HAS " + this.yes_values[+ix]);
         for (var ix = 0; ix < this.no_values.length; ++ix)
-            stringValues.push('NOT {0} HAS {1}'.format(featName, this.no_values[+ix]));
+            stringValues.push("NOT " + featName + " HAS " + this.no_values[+ix]);
         if (stringValues.length === 1)
             return stringValues[0];
         return '(' + stringValues.join(' AND ') + ')';
@@ -582,11 +586,11 @@ var ListValuesHandler = (function () {
 var PanelTemplMql = (function () {
     function PanelTemplMql(md, name_prefix) {
         var _this = this;
-        this.featureCombo = $('<select></select>');
-        this.objectTypeCombo = $('<select></select>');
+        this.fname2fh = {};
+        this.groups = {};
+        this.handlers = [];
         this.initialMd = md;
         this.name_prefix = name_prefix;
-        this.fpan = $('<div id="{0}_fpan"></div>'.format(this.name_prefix));
         if (md.featHand) {
             for (var i = 0; i < md.featHand.vhand.length; ++i) {
                 var vh = md.featHand.vhand[i];
@@ -614,41 +618,42 @@ var PanelTemplMql = (function () {
                         break;
                 }
                 vh.normalize();
-                md.featHand.vhand[vh.name] = vh;
+                this.fname2fh[vh.name] = vh;
             }
         }
-        this.rbMql = $('<input type="radio" name="{0}_usemql" value="yes">'.format(this.name_prefix));
+        this.fpan = $("<div id=\"" + this.name_prefix + "_fpan\"></div>");
+        this.rbMql = $("<input type=\"radio\" name=\"" + this.name_prefix + "_usemql\" value=\"yes\">");
         this.rbMql.click(function () {
             if (_this.rbMql.is(':checked'))
                 _this.switchToMql(true);
         });
-        this.rbFriendly = $('<input type="radio" name="{0}_usemql" value="no">'.format(this.name_prefix));
+        this.rbFriendly = $("<input type=\"radio\" name=\"" + this.name_prefix + "_usemql\" value=\"no\">");
         this.rbFriendly.click(function () {
             if (_this.rbFriendly.is(':checked')) {
                 _this.switchToMql(false);
                 _this.updateMql();
             }
         });
-        this.rbMqlLabel = $('<span>YOU SHOULD NOT SEE THIS</span>');
-        this.rbFriendlyLabel = $('<span>YOU SHOULD NOT SEE THIS</span>');
-        this.mqlText = $('<textarea id="{0}_mqltext" cols="45" rows="2">'.format(this.name_prefix));
+        this.mqlText = $("<textarea id=\"" + this.name_prefix + "_mqltext\" cols=\"45\" rows=\"2\">");
+        this.featureCombo = $('<select></select>');
         this.featureCombo.on('change', function () {
             _this.currentBox.hide();
             _this.currentBox = _this.groups[_this.featureCombo.val()];
             _this.currentBox.show();
         });
-        var setObject = (md != null && md.object != null) ? md.object : configuration.objHasSurface;
+        this.objectTypeCombo = $('<select></select>');
+        var selObject = (md != null && md.object != null) ? md.object : configuration.objHasSurface;
         for (var s in configuration.objectSettings) {
             if (configuration.objectSettings[s].mayselect) {
-                var selectString = s === setObject ? 'selected="selected"' : '';
-                var resetString = s === configuration.objHasSurface ? 'data-reset="yes"' : '';
-                this.objectTypeCombo.append('<option value="{0}" {1} {2}>{3}</option>'
-                    .format(s, selectString, resetString, getObjectFriendlyName(s)));
+                this.objectTypeCombo.append("<option value=\"" + s + "\""
+                    + (s === selObject ? ' selected="selected"' : '')
+                    + (s === configuration.objHasSurface ? ' data-reset="yes"' : '')
+                    + (">" + getObjectFriendlyName(s) + "</option>"));
             }
         }
         this.objectTypeCombo.on('change', function () {
             $('#virtualkbid').appendTo('#virtualkbcontainer');
-            _this.fpan.html('<div id="{0}_fpan"></div>'.format(_this.name_prefix));
+            _this.fpan.html("<div id=\"" + _this.name_prefix + "_fpan\"></div>");
             _this.currentBox = null;
             _this.featureCombo.html('<select></select>');
             _this.objectSelectionUpdated(_this.objectTypeCombo.val(), null);
@@ -660,7 +665,7 @@ var PanelTemplMql = (function () {
             _this.rbFriendly.prop('checked', true);
             _this.objectTypeCombo.find(':selected').prop('selected', false);
             _this.objectTypeCombo.find('[data-reset]').prop('selected', true);
-            _this.fpan.html('<div id="{0}_fpan"></div>'.format(_this.name_prefix));
+            _this.fpan.html("<div id=\"" + _this.name_prefix + "_fpan\"></div>");
             _this.currentBox = null;
             _this.featureCombo.html('<select></select>');
             _this.objectSelectionUpdated(configuration.objHasSurface, null);
@@ -668,40 +673,6 @@ var PanelTemplMql = (function () {
             _this.switchToMql(false);
         });
     }
-    PanelTemplMql.prototype.stringTextModifiedListener = function (e) {
-        var s = $(e.currentTarget).val();
-        if (s.length === 0)
-            e.data.sfh.removeValue(e.data.i);
-        else
-            e.data.sfh.setValue(e.data.i, s);
-        this.updateMql();
-    };
-    PanelTemplMql.prototype.integerTextModifiedListener = function (e) {
-        var s = $(e.currentTarget).val();
-        $('#' + e.data.err_id).html('');
-        if (s.length === 0)
-            e.data.ifh.removeValue(e.data.i);
-        else {
-            if (s.match(/\D/g) !== null)
-                $('#' + e.data.err_id).html(localize('not_integer'));
-            else
-                e.data.ifh.setValue(e.data.i, +s);
-        }
-        this.updateMql();
-    };
-    PanelTemplMql.prototype.rangeIntegerTextModifiedListener = function (e) {
-        var s = $(e.currentTarget).val();
-        $('#' + e.data.err_id).html('');
-        if (s.length === 0)
-            e.data.rfh[e.data.i] = null;
-        else {
-            if (s.match(/\D/g) !== null)
-                $('#' + e.data.err_id).html(localize('not_integer'));
-            else
-                e.data.rfh[e.data.i] = +s;
-        }
-        this.updateMql();
-    };
     PanelTemplMql.prototype.finish_construct = function () {
         if (this.initialMd == null) {
             this.rbFriendly.prop('checked', true);
@@ -713,14 +684,14 @@ var PanelTemplMql = (function () {
             this.rbMql.prop('checked', true);
             this.mqlText.html(this.initialMd.mql);
             if (this.initialMd.featHand)
-                this.objectSelectionUpdated(this.initialMd.object, this.initialMd.featHand.vhand);
+                this.objectSelectionUpdated(this.initialMd.object, this.fname2fh);
             else
                 this.objectSelectionUpdated(this.initialMd.object, null);
             this.switchToMql(true);
         }
         else {
             this.rbFriendly.prop('checked', true);
-            this.objectSelectionUpdated(this.initialMd.object, this.initialMd.featHand.vhand);
+            this.objectSelectionUpdated(this.initialMd.object, this.fname2fh);
             this.updateMql();
             this.switchToMql(false);
         }
@@ -751,10 +722,45 @@ var PanelTemplMql = (function () {
             }
         }, 500);
     };
+    PanelTemplMql.prototype.stringTextModifiedListener = function (e) {
+        var s = $(e.currentTarget).val();
+        var sfh = e.data.sfh;
+        if (s.length === 0)
+            sfh.removeValue(e.data.i);
+        else
+            sfh.setValue(e.data.i, s);
+        this.updateMql();
+    };
+    PanelTemplMql.prototype.integerTextModifiedListener = function (e) {
+        var s = $(e.currentTarget).val();
+        var ifh = e.data.ifh;
+        $('#' + e.data.err_id).html('');
+        if (s.length === 0)
+            ifh.removeValue(e.data.i);
+        else {
+            if (s.match(/\D/g) !== null)
+                $('#' + e.data.err_id).html(localize('not_integer'));
+            else
+                ifh.setValue(e.data.i, +s);
+        }
+        this.updateMql();
+    };
+    PanelTemplMql.prototype.rangeIntegerTextModifiedListener = function (e) {
+        var s = $(e.currentTarget).val();
+        var rfh = e.data.rfh;
+        $('#' + e.data.err_id).html('');
+        if (s.length === 0)
+            rfh.set_low_high(e.data.i, null);
+        else {
+            if (s.match(/\D/g) !== null)
+                $('#' + e.data.err_id).html(localize('not_integer'));
+            else
+                rfh.set_low_high(e.data.i, +s);
+        }
+        this.updateMql();
+    };
     PanelTemplMql.prototype.objectSelectionUpdated = function (otype, fhs) {
         var _this = this;
-        this.handlers = [];
-        this.groups = [];
         for (var key in getObjectSetting(otype).featuresetting) {
             var valueType = typeinfo.obj2feat[otype][key];
             var featset = getFeatureSetting(otype, key);
@@ -762,7 +768,7 @@ var PanelTemplMql = (function () {
                 continue;
             var group = $('<div></div>');
             this.groups[key] = group;
-            var selectString;
+            var selectString = void 0;
             if (featset.isDefault) {
                 group.show();
                 this.currentBox = group;
@@ -772,8 +778,7 @@ var PanelTemplMql = (function () {
                 group.hide();
                 selectString = '';
             }
-            this.featureCombo.append('<option value="{0}" {1}>{2}</option>'
-                .format(key, selectString, getFeatureFriendlyName(otype, key)));
+            this.featureCombo.append("<option value=\"" + key + "\" " + selectString + ">" + getFeatureFriendlyName(otype, key) + "</option>");
             if (valueType === 'integer') {
                 if (featset.isRange) {
                     var rfh = null;
@@ -784,23 +789,24 @@ var PanelTemplMql = (function () {
                     var group2 = $('<table></table>');
                     var rowLow = $('<tr></tr>');
                     var rowHigh = $('<tr></tr>');
-                    var cellLab;
-                    var cellInput;
-                    var cellErr;
-                    var jtf = $('<input type="text" size="8">');
+                    var cellLab = void 0;
+                    var cellInput = void 0;
+                    var cellErr = void 0;
+                    var jtf = void 0;
+                    jtf = $('<input type="text" size="8">');
                     if (rfh.isSetLow())
                         jtf.val(String(rfh.value_low));
-                    var err_id = 'err_{0}_low'.format(key, i);
+                    var err_id = "err_" + key + "_low";
                     jtf.on('keyup', null, { rfh: rfh, i: 'value_low', err_id: err_id }, $.proxy(this.rangeIntegerTextModifiedListener, this));
                     cellLab = $('<td>' + localize('low_value_prompt') + '</td>');
                     cellInput = $('<td></td>');
                     cellInput.append(jtf);
-                    cellErr = $('<td id="{0}"></td>'.format(err_id));
+                    cellErr = $("<td id=\"" + err_id + "\"></td>");
                     rowLow.append(cellLab, cellInput, cellErr);
                     jtf = $('<input type="text" size="8">');
                     if (rfh.isSetHigh())
                         jtf.val(String(rfh.value_high));
-                    err_id = 'err_{0}_high'.format(key, i);
+                    err_id = "err_" + key + "_high";
                     jtf.on('keyup', null, { rfh: rfh, i: 'value_high', err_id: err_id }, $.proxy(this.rangeIntegerTextModifiedListener, this));
                     cellLab = $('<td>' + localize('high_value_prompt') + '</td>');
                     cellInput = $('<td></td>');
@@ -817,10 +823,8 @@ var PanelTemplMql = (function () {
                         ifh = fhs[key];
                     if (!ifh)
                         ifh = new IntegerFeatureHandler(key);
-                    var butEquals = $('<input type="radio" name="{0}_{1}_comp" value="equals">'
-                        .format(this.name_prefix, key));
-                    var butDiffers = $('<input type="radio" name="{0}_{1}_comp" value="differs">'
-                        .format(this.name_prefix, key));
+                    var butEquals = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"equals\">");
+                    var butDiffers = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"differs\">");
                     switch (ifh.comparator) {
                         case 'equals':
                             butEquals.prop('checked', true);
@@ -847,13 +851,13 @@ var PanelTemplMql = (function () {
                         var jtf = $('<input type="text" size="8">');
                         if (ifh.values[i])
                             jtf.val(String(ifh.values[i]));
-                        var err_id = 'err_{0}_{1}'.format(key, i);
+                        var err_id = "err_" + key + "_" + i;
                         jtf.on('keyup', null, { ifh: ifh, i: i, err_id: err_id }, $.proxy(this.integerTextModifiedListener, this));
                         var row = $('<tr></tr>');
                         var cell = $('<td></td>');
                         cell.append(jtf);
                         row.append(cell);
-                        row.append('<td id="{0}"></td>'.format(err_id));
+                        row.append("<td id=\"" + err_id + "\"></td>");
                         group2.append(row);
                     }
                     group.append(group2);
@@ -867,8 +871,7 @@ var PanelTemplMql = (function () {
                         qfh = fhs[key];
                     if (!qfh)
                         qfh = new QereFeatureHandler(key);
-                    var butOmitqere = $('<input type="checkbox" name="{0}_{1}_sel" value="omit">'
-                        .format(this.name_prefix, key));
+                    var butOmitqere = $("<input type=\"checkbox\" name=\"" + this.name_prefix + "_" + key + "_sel\" value=\"omit\">");
                     if (qfh.omit)
                         butOmitqere.prop('checked', true);
                     var sel = $('<span></span>');
@@ -887,12 +890,9 @@ var PanelTemplMql = (function () {
                         sfh = fhs[key];
                     if (!sfh)
                         sfh = new StringFeatureHandler(key);
-                    var butEquals = $('<input type="radio" name="{0}_{1}_comp" value="equals">'
-                        .format(this.name_prefix, key));
-                    var butDiffers = $('<input type="radio" name="{0}_{1}_comp" value="differs">'
-                        .format(this.name_prefix, key));
-                    var butMatches = $('<input type="radio" name="{0}_{1}_comp" value="matches">'
-                        .format(this.name_prefix, key));
+                    var butEquals = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"equals\">");
+                    var butDiffers = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"differs\">");
+                    var butMatches = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"matches\">");
                     switch (sfh.comparator) {
                         case 'equals':
                             butEquals.prop('checked', true);
@@ -919,38 +919,29 @@ var PanelTemplMql = (function () {
                         }
                     });
                     var group2 = $('<table></table>');
-                    if (featset.foreignText) {
-                        for (var i = 0; i < sfh.values.length; ++i) {
-                            var kbdRowId = '{0}_{1}_row{2}'.format(this.name_prefix, key, +i + 1);
-                            var jtf = $('<input class="{0}" type="text" size="20" id="{1}_{2}_input{3}">'.format(charset.foreignClass, this.name_prefix, key, +i + 1));
-                            if (sfh.values[i])
-                                jtf.val(sfh.values[i]);
+                    for (var i = 0; i < sfh.values.length; ++i) {
+                        var jtf = featset.foreignText
+                            ? $("<input class=\"" + charset.foreignClass + "\" type=\"text\" size=\"20\" id=\"" + this.name_prefix + "_" + key + "_input" + (+i + 1) + "\">")
+                            : $('<input type="text" size="20">');
+                        if (sfh.values[i])
+                            jtf.val(sfh.values[i]);
+                        var kbdRowId = void 0;
+                        if (featset.foreignText) {
+                            kbdRowId = this.name_prefix + "_" + key + "_row" + (+i + 1);
                             jtf.on('focus', null, { kbdRowId: kbdRowId, sfh: sfh, i: i }, function (e) {
                                 $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
                                 VirtualKeyboard.attachInput(e.currentTarget);
                                 _this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i);
                             });
-                            jtf.on('keyup', null, { sfh: sfh, i: i }, $.proxy(this.stringTextModifiedListener, this));
-                            var row = $('<tr></tr>');
-                            var cell = $('<td></td>');
-                            cell.append(jtf);
-                            row.append(cell);
-                            group2.append(row);
-                            group2.append('<tr><td id="{0}" style="text-align:right;"></td></tr>'.format(kbdRowId));
                         }
-                    }
-                    else {
-                        for (var i = 0; i < sfh.values.length; ++i) {
-                            var jtf = $('<input type="text" size="20">');
-                            if (sfh.values[i])
-                                jtf.val(sfh.values[i]);
-                            jtf.on('keyup', null, { sfh: sfh, i: i }, $.proxy(this.stringTextModifiedListener, this));
-                            var row = $('<tr></tr>');
-                            var cell = $('<td></td>');
-                            cell.append(jtf);
-                            row.append(cell);
-                            group2.append(row);
-                        }
+                        jtf.on('keyup', null, { sfh: sfh, i: i }, $.proxy(this.stringTextModifiedListener, this));
+                        var row = $('<tr></tr>');
+                        var cell = $('<td></td>');
+                        cell.append(jtf);
+                        row.append(cell);
+                        group2.append(row);
+                        if (featset.foreignText)
+                            group2.append("<tr><td id=\"" + kbdRowId + "\" style=\"text-align:right;\"></td></tr>");
                     }
                     group.append(group2);
                     this.handlers.push(sfh);
@@ -1557,7 +1548,7 @@ var PanelForOneOtype = (function () {
 }());
 var PanelTemplQuizFeatures = (function () {
     function PanelTemplQuizFeatures(otype, qf, where) {
-        this.panels = [];
+        this.panels = {};
         this.fpan = $('<div id="fpan"></div>');
         this.initialOtype = otype;
         this.initialQf = qf;

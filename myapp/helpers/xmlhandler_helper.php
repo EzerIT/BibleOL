@@ -48,11 +48,6 @@ class XmlHandler {
                 $handlers[] = $this->top;
                 break;
 
-		  case 'databasedescription':
-				$this->top = new DatabaseInfo($tagname, $attributes);
-				$handlers[] = $this->top;
-				break;
-        
 		  case 'questiontemplate':
 				$this->top = new Template($tagname, $attributes);
 				$handlers[] = $this->top;

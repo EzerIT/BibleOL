@@ -160,7 +160,7 @@ class MqlData extends XmlHandler {
 	 * Template data
 	 ************************************************************************************************/
 	public $object;
-	public $mql; // null means use m_featHand
+	public $mql;
 	public $featHand;
 	public $useForQo; // Only relevant for sentence selection data
 

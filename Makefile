@@ -14,7 +14,7 @@ js/editquiz.js:	ts/editquiz.ts ts/configuration.ts ts/localization.ts \
 	ts/paneltemplquizfeatures.ts ts/sentencegrammar.ts \
 	ts/stringwithsort.ts ts/sortingcheckbox.ts ts/util.ts ts/verbclasspanel.ts ts/resizer.ts \
 	ts/charset.ts ts/localization_general.ts
-	tsc --removeComments --noImplicitAny --out $@ $<
+	tsc --removeComments --noImplicitAny  --out $@ $<
 
 js/fontselector.js:	ts/fontselector.ts ts/fontdetect.d.ts ts/util.ts ts/localization_general.ts
 	tsc --removeComments --noImplicitAny --out $@ $<
