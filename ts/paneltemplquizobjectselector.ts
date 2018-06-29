@@ -79,9 +79,9 @@ class PanelTemplQuizObjectSelector extends PanelTemplMql {
     //
     private doLayout(where : JQuery) : void {
         // The layout is a table containing a number of rows
-        var table : JQuery = $('<table></table>');
-        var row   : JQuery;
-        var cell  : JQuery;
+        let table : JQuery = $('<table></table>');
+        let row   : JQuery;
+        let cell  : JQuery;
 
         // 1st row: Contains the question object type combobox
         row = $('<tr></tr>');

@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{2 May 2018}
+\date{29 June 2018}
 
 \makeindex
 
@@ -1997,7 +1997,8 @@ in the ETCBC4 database.
 \begin{lstlisting}[escapechar=\#,caption=A sample featuresetting value,label=list-fssample]
     "featuresetting": {
         "lexeme_occurrences": {
-            "ignoreShowRequest": true,
+            "ignoreShow": true,
+            "ignoreRequest": true,
             "isRange": true
         },
         "english": {
@@ -2047,10 +2048,6 @@ object:
   ignoreRequest & A value of \emph{true} means that this feature cannot be requested as part of an
   exercise. In other words, there is no ``Request'' button for this feature on the ``Features'' tab
   when creating an exercise.\\
-
-  ignoreShowRequest & A value of \emph{true} means that both \emph{ignoreShow} and
-  \emph{ignoreRequest} should be taken as \emph{true}.\footnote{The intention is to remove this key
-    from \emph{featuresetting} in the future.}\\
 
   hideWord & If this value is \emph{true} and the feature is a request feature for an exercise, the
   corresponding words should be replaced by a number in
@@ -3374,6 +3371,7 @@ interface SingleMonadObject extends MonadObject {%\index{SingleMonadObject TypeS
     text : string;
     suffix : string;
     bcv : string[];
+    bcv_loc : string;
     sameAsNext : boolean[];
     sameAsPrev : boolean[];
     pics : number[];
@@ -3381,6 +3379,7 @@ interface SingleMonadObject extends MonadObject {%\index{SingleMonadObject TypeS
 }
 
 interface MultipleMonadObject extends MonadObject {%\index{MultipleMonadObject TypeScript interface@\emph{MultipleMonadObject} TypeScript interface}%
+    subobjects : MatchedObject[][];
 }
 \end{lstlisting}
 
@@ -3421,6 +3420,7 @@ class SingleMonadObject extends MonadObject {%\index{SingleMonadObject PHP class
     public $text;
     public $suffix;
     public $bcv;        // An array of strings or integers
+    public $bcv_loc;    // Localized version of bcv
     public $sameAsNext; // An array of Booleans
     public $sameAsPrev; // An array of Booleans
     public $pics;       // An array of integers
@@ -3428,6 +3428,7 @@ class SingleMonadObject extends MonadObject {%\index{SingleMonadObject PHP class
 }
 
 class MultipleMonadObject extends MonadObject {%\index{MultipleMonadObject PHP class@\emph{MultipleMonadObject} PHP class}%
+    public $subobjects; // MatchedObjects for any subobjects retrieved for this MultipleMonadObject
 }
 \end{lstlisting}
 
@@ -3623,6 +3624,8 @@ suffix & A string containing the suffix feature, if any, of the word. (See Secti
 bcv & An array containing the Bible reference for the verse containing the word. For a word in
 \bibleref{Genesis}{1}{7}, \emph{bcv} is the array [~``Genesis'',~1,~7~].\\
 
+bcv\_loc & A localized version of the Bible reference.\\
+
 sameAsNext & An array of Booleans. \emph{sameAsNext[0]} is \emph{true} if this word belongs to the
 same book\index{book} as the next word; \emph{sameAsNext[1]} is \emph{true} if this word belongs to
 the same chapter\index{chapter} as the next word; \emph{sameAsNext[2]} is \emph{true} if this word
@@ -3648,9 +3651,13 @@ For more information see Section
 \ref{sec-resource-web}.\\
 \end{my-longtabu}
 
-A \emph{MultipleMonadObject}%
-\index{MultipleMonadObject TypeScript interface@\emph{MultipleMonadObject} TypeScript interface}
-has no fields other than those defined for \emph{MonadObject}.
+In addition to the fields mentioned above, a \emph{MultipleMonadObject} has this member:
+
+\begin{my-longtabu}{lX}{ \headii{Field}{Contents} }
+  subobjects & Subobjects (for example, \emph{clause\_atom} as a subobject of \emph{clause}) in
+  cases where a sentencegrammar refers to such objects.\\
+\end{my-longtabu}
+
 
 %%%%%%%%%%%%%%%%%%%% The MatchedObject Class %%%%%%%%%%%%%%%%%%%%
 \section{The \emph{MatchedObject} Class}%
@@ -3729,6 +3736,7 @@ interface QuizData {
     quizid : number;
     quizFeatures : ExtendedQuizFeatures;
     desc : string;
+    maylocate : boolean;
     monad2Id : number[];
     id2FeatVal : string[][];
 }
@@ -3737,6 +3745,7 @@ interface ExtendedQuizFeatures {%\index{ExtendedQuizFeatures TypeScript interfac
     showFeatures : string[];
     requestFeatures : {name : string; usedropdown : boolean; }[];
     dontShowFeatures : string[];
+    dontShowObjects : { content : string; show? : string; } [];
     objectType : string;
     dontShow : boolean;
     useVirtualKeyboard : boolean;
@@ -3750,6 +3759,7 @@ class Quiz_data {
     public $quizid;
     public $quizFeatures;     // An ExtendedQuizFeatures object
     public $desc;
+    public $maylocate;
     public $monad2Id;         // An array of integers
     public $id2FeatVal;       // An array of arrays of strings
 }
@@ -3758,6 +3768,7 @@ class ExtendedQuizFeatures {%\index{ExtendedQuizFeatures PHP class@\emph{Extende
     public $showFeatures;     // An array of strings
     public $requestFeatures;  // An array of string/Boolean pairs
     public $dontShowFeatures; // An array of strings
+    public $dontShowObjects;  // An array of string/string pairs
     public $objectType;
     public $dontShow;
     public $useVirtualKeyboard;
@@ -3780,6 +3791,8 @@ The fields of the \emph{QuizData} interface are:
                  the exercise should be presented to the user. Details are given below.\\
 
   desc & The description of the exercise from the quiz template file.\\
+
+  maylocate & A Boolean value indicating if the exercise may display a ``Locate'' checkbox to the user.\\
 
   monad2Id & An array that maps monads\index{monad} to the ID\_Ds\index{Emdros!ID\_D} of a quiz
              object\index{quiz object (a.k.a. sentence unit)}. If a quiz object covers more
@@ -3825,6 +3838,23 @@ interface has these members:
 
     dontShowFeatures & Array of strings naming features that must not be available in the grammar
     selection box and the grammar information box.\index{grammar information box}\\
+
+    dontShowObjects & An array of objects naming Emdros object types that must not be available in
+    the grammar selection box and the grammar information box. Each object has this layout:
+
+    \begin{minipage}{8cm}
+    \begin{verbatim}
+
+    {
+        content : string;
+        show? : boolean;
+    }
+    \end{verbatim}
+    \end{minipage}
+
+    The \emph{content} field contains the name of the Emdros object type, the optional \emph{show}
+    names a feature of that Emdros object that may be displayed nonetheless. Currently, this is only
+    used to display features that are qere forms of Hebrew words.\\
 
     objectType & The Emdros type of the quiz objects.\\
 

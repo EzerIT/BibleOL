@@ -96,9 +96,7 @@ class Quiz {
 
         if (this.currentPanelQuestion!==null)
             // Update statistics.
-            // Set gradingFlag to true for now. It may be changed when the exercise is ended, and
-            // the server only uses the final value.
-            this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(true));
+            this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
 
         // Sanity check: are there more questions?
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
@@ -156,12 +154,14 @@ class Quiz {
             if (this.currentPanelQuestion===null)
                 alert('System error: No current question panel');
             else
-                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(gradingFlag));
-            
-            // Send statistics to server
+                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
+
+            this.quiz_statistics.grading = gradingFlag;
+
             $('.grammarselector').empty();
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
             
+            // Send statistics to server
             $.post(
                 site_url + 'statistics/update_stat',
                 this.quiz_statistics

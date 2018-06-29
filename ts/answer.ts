@@ -216,7 +216,7 @@ class Answer {
     // Returns:
     //     The user's first answer to this question itme.
     //
-    public usersAnswer() : string{
+    public usersAnswer() : string {
         return this.firstAnswer;
     }
 

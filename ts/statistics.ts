@@ -35,7 +35,6 @@ class QuestionStatistics {
     public location   : string; // The Bible reference for the text
     public start_time : number; // UNIX time on client at the start of this question
     public end_time   : number; // UNIX time on client at the end of this question
-    public grading    : number; // Should the exercise be used for grading? (Relevant only for last question.)
     public show_feat  : ShowFeatStatistics = new ShowFeatStatistics(); // Display features
     public req_feat   : ReqFeatStatistics  = new ReqFeatStatistics();  // Request features
 }
@@ -47,6 +46,7 @@ class QuestionStatistics {
 //
 class QuizStatistics {
     public questions : QuestionStatistics[] = []; // All the questions of the exericse
+    public grading   : boolean;                   // Should the exercise be used for grading?
 
     //------------------------------------------------------------------------------------------
     // Constructor method

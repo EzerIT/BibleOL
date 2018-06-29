@@ -1708,7 +1708,7 @@ var PanelQuestion = (function () {
         return featset.foreignText ? charset.foreignClass
             : featset.transliteratedText ? charset.transliteratedClass : '';
     };
-    PanelQuestion.prototype.updateQuestionStat = function (gradingFlag) {
+    PanelQuestion.prototype.updateQuestionStat = function () {
         this.question_stat.end_time = Math.round((new Date()).getTime() / 1000);
         for (var i = 0, len = this.vAnswers.length; i < len; ++i) {
             var ans = this.vAnswers[i];
@@ -1717,7 +1717,6 @@ var PanelQuestion = (function () {
             this.question_stat.req_feat.users_answer.push(ans.usersAnswer());
             this.question_stat.req_feat.users_answer_was_correct.push(ans.usersAnswerWasCorrect());
         }
-        this.question_stat.grading = +gradingFlag;
         return this.question_stat;
     };
     PanelQuestion.prototype.buildQuizObjectFeatureList = function () {
@@ -1850,7 +1849,7 @@ var Quiz = (function () {
         };
         monitorUser();
         if (this.currentPanelQuestion !== null)
-            this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(true));
+            this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
             $('#virtualkbid').appendTo('#virtualkbcontainer');
             $('#textarea').empty();
@@ -1885,7 +1884,8 @@ var Quiz = (function () {
             if (this.currentPanelQuestion === null)
                 alert('System error: No current question panel');
             else
-                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(gradingFlag));
+                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
+            this.quiz_statistics.grading = gradingFlag;
             $('.grammarselector').empty();
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
             $.post(site_url + 'statistics/update_stat', this.quiz_statistics)

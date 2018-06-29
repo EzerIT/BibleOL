@@ -31,7 +31,7 @@ interface MultipleMonadObject extends MonadObject { subobjects : any }
 //     dialogtitle: The title of the dialog box.
 //     dialogtext: The text of the dialog box.
 //
-interface myalertInterface{
+interface myalertInterface {
     (dialogtitle : string, dialogtext : string) : void;
 }
 
@@ -46,7 +46,7 @@ declare let myalert: myalertInterface;
 //****************************************************************************************************
 // Extension of the JQuery interface
 //
-interface JQuery{
+interface JQuery {
     jstree   : Function;
     ckeditor : Function;    
 }

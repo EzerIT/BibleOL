@@ -56,7 +56,7 @@ function fix_legend_height(toChange : JQuery, source : JQuery) {
     resizer.addResizeListener(set_legend_height, {'toChange': toChange, 'source': source}, 'abcdef');
 
     if (!resizer.sizeIs('xs')) {
-        var cheight = source.height();
+        let cheight = source.height();
         if (toChange.height()<cheight)
             $(toChange).height(cheight);
     }

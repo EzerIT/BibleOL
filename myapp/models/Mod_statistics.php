@@ -174,11 +174,11 @@ class Mod_statistics extends CI_Model {
                 }
                 $this->db->insert_batch('sta_requestfeature',$data);
             }
-
-            // Set end time for quiz
-            $query = $this->db->where('id',$quizid)->update('sta_quiz',array('end' => $time,
-                                                                             'grading' => $question['grading']));
         }
+
+        // Set end time and grading for quiz
+        $query = $this->db->where('id',$quizid)->update('sta_quiz',array('end' => $time,
+                                                                         'grading' => $this->input->post('grading')=='true' ? 1 : 0));
     }
 
     // Get all templates with finished quizzes for user $user_id

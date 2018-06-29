@@ -43,12 +43,10 @@ class PanelQuestion {
     // Updates the private question statistics with information about the student's answers and
     // returns the statistics.
     //
-    // Parameter:
-    //     gradingFlag: May the statistics be used for grading the student?
     // Returns:
     //     The question statistics.
     //
-    public updateQuestionStat(gradingFlag : boolean) : QuestionStatistics {
+    public updateQuestionStat() : QuestionStatistics {
         this.question_stat.end_time = Math.round((new Date()).getTime() / 1000);
 
         for (let i=0, len=this.vAnswers.length; i<len; ++i) {
@@ -60,8 +58,6 @@ class PanelQuestion {
             this.question_stat.req_feat.users_answer_was_correct.push(ans.usersAnswerWasCorrect());
         }
 
-	this.question_stat.grading = +gradingFlag; // Convert GradingFlag to a number
-        
         return this.question_stat;
     }
 
@@ -229,7 +225,7 @@ class PanelQuestion {
                 if (featType=='hint') {
                     // The feature value looks like this:
                     // "featurename=value" or "featurename=value,featurename=value"
-                    let sp : Array<string> = val.split(/[,=]/);
+                    let sp : string[] = val.split(/[,=]/);
                     if (sp.length==2) {
                         val = getFeatureFriendlyName(oType, sp[0]) + "=" +
                             getFeatureValueFriendlyName(featuresHere[sp[0]],sp[1],false,true);

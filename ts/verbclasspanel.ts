@@ -54,8 +54,8 @@ class VerbClassButtonsAndLabel {
     // Returns HTML for the table row managed by this class.
     //
     public getRow() : JQuery {
-        var row  : JQuery = $('<tr></tr>');
-        var cell : JQuery;
+        let row  : JQuery = $('<tr></tr>');
+        let cell : JQuery;
 
         cell = $('<td></td>')                  .append(this.yes);       row.append(cell);
         cell = $('<td></td>')                  .append(this.no);        row.append(cell);
@@ -95,8 +95,8 @@ class PanelForOneVcChoice  {
                           + `<th class="leftalign">${localize('verb_class')}</th>`
                           + '</tr>');
 
-        var swsValues : StringWithSort[] = []; // Sortable values of all the enumeration constants
-        for (var ix=0; ix<enumValues.length; ++ix)
+        let swsValues : StringWithSort[] = []; // Sortable values of all the enumeration constants
+        for (let ix=0; ix<enumValues.length; ++ix)
             swsValues.push(new StringWithSort(getFeatureValueFriendlyName(valueType, enumValues[ix], false, false), enumValues[ix]));
 
         // Sort the enumeration constants
@@ -104,9 +104,9 @@ class PanelForOneVcChoice  {
 
 
         // Loop through the keys in the sorted order
-        for (var ix=0; ix<swsValues.length; ++ix) {
-            var vc    : string             = swsValues[ix].getInternal();  // Verb class name
-            var vcsel : VerbClassSelection = VerbClassSelection.DONT_CARE; // Radio button setting
+        for (let ix=0; ix<swsValues.length; ++ix) {
+            let vc    : string             = swsValues[ix].getInternal();  // Verb class name
+            let vcsel : VerbClassSelection = VerbClassSelection.DONT_CARE; // Radio button setting
 
             // Modfy vcsel to reflect the initial setting
             if (lv.yes_values.indexOf(vc)!=-1)
@@ -115,7 +115,7 @@ class PanelForOneVcChoice  {
                 vcsel = VerbClassSelection.NO;
 
             // Create a line of radio buttons
-            var bal = new VerbClassButtonsAndLabel(swsValues[ix].getString(),  // Localized name of the verb class
+            let bal = new VerbClassButtonsAndLabel(swsValues[ix].getString(),  // Localized name of the verb class
                                                    `${prefix}_${vc}`,          // Value of the name="..." attribute of the <input> element for the radio button
                                                    vc,                         // Name of the verb class
                                                    vcsel);                     // Initially selected radio button
