@@ -1,5 +1,7 @@
 // -*- js -*-
-/* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+
+// Code to handle feature selection for sentences when creating an exercise
 
 // This fixes an error in @types/jqueryui:
 
@@ -9,29 +11,92 @@ interface JQuery {
 }
 
 
-
+//****************************************************************************************************
+// PanelTemplSentenceSelector class
+//
+// Handles the sentence selection tab. It contains code for generating feature selectors for
+// sentence selection.
+//
+// This class is a subclass of PanelTemplMql which handles much of the HTML generation.
+//
 class PanelTemplSentenceSelector extends PanelTemplMql {
-    private cbUseForQo : JQuery;
-    private cbUseForQoLabel : JQuery;
-    private templTabs : JQuery;
-    private questObjTypeLab : JQuery = $('<span>' + localize('sentence_unit_type_prompt') + '</span>');
-    private featSelLab : JQuery = $('<span>' + localize('feature_prompt') + '</span>');
-    private importShebanq : JQuery = $('<button type="button">' + localize('import_shebanq') + '</button>');
-    private dirty : boolean;
-    private featureTab : PanelTemplQuizFeatures;
-    private qoselTab : PanelTemplQuizObjectSelector;
+    private cbUseForQo      : JQuery = $('<input type="checkbox" name="useforqol">');                     // 'Use for sentence unit selection' checkbox
+    private cbUseForQoLabel : JQuery = $(`<span>${localize('use_for_qosel')}</span>`);                    // Label for cbUseForQo
+    private questObjTypeLab : JQuery = $(`<span>${localize('sentence_unit_type_prompt')}</span>`);        // 'Sentence unit type' label
+    private featSelLab	    : JQuery = $(`<span>${localize('feature_prompt')}</span>`);                   // 'Feature:' label
+    private importShebanq   : JQuery = $(`<button type="button">${localize('import_shebanq')}</button>`); // Import from SHEBANQ label
+    private dirty           : boolean;                                                                    // Has the user modifie this panel?
     
-    public switchToMql(useMql : boolean) : void {
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Creates the panel for sentence selection.
+    //
+    // The parameters and additional class fields are described below.
+    //
+    constructor(initialMd          : MqlData,			   // The initial contents of the panel
+		private templTabs  : JQuery,			   // The <div> containing the five tabs
+		where		   : JQuery,			   // The <div> where this class should store the generated HTML
+		private qoselTab   : PanelTemplQuizObjectSelector, // The tab for sentence unit selection
+		private featureTab : PanelTemplQuizFeatures	   // The tab for feature selection
+               ) {
+	super(initialMd, 'sensel');
+	this.dirty = false;
+
+        // Set handler for changes to the 'use for sentence unit selection' checkbox
+	this.cbUseForQo.click(() => {
+            if (this.cbUseForQo.is(':checked'))
+                this.templTabs.tabs('disable',3);
+            else
+                this.templTabs.tabs('enable',3);
+
+            this.populateFeatureTab(null);
+            this.dirty = true;
+        });
+
+        // Set localized text for MQL/friendly selector buttons
+        this.rbMqlLabel = $(`<span>${localize('mql_qosel_prompt')}</span>`);
+        this.rbFriendlyLabel = $(`<span>${localize('friendly_featsel_prompt')}</span>`);
+
+        this.doLayout(where); // Do the actual layout of the panel
+
+        // Handle initial setting of 'use for sentence unit selection'
+	if (this.initialMd==null || this.initialMd.useForQo) {
+            this.cbUseForQo.prop('checked',true);
+            this.templTabs.tabs('disable',3);
+        }
+        else {
+            this.cbUseForQo.prop('checked',false);
+            this.templTabs.tabs('enable',3);
+        }
+
+        // Set handler for for 'Import from SHEBANQ' button
+	this.importShebanq.click(import_from_shebanq);
+
+        this.finish_construct();
+    }
+
+    //------------------------------------------------------------------------------------------
+    // switchToMql method
+    //
+    // Switches between the friendly feature selector and MQL input.
+    //
+    // Parameter:
+    //     useMql: True to switch to MQL, false to switch to friendly feature selector.
+    //
+    protected switchToMql(useMql : boolean) : void {
+        // Enable/disable various HTML elements in the panel
         this.mqlText.prop('disabled', !useMql);
 	this.objectTypeCombo.prop('disabled', useMql);
 	this.featureCombo.prop('disabled', useMql);
         this.cbUseForQo.prop('disabled', useMql);
 
+        // Show that certain HTML elements are enabled or disabled
         if (useMql) {
 	    this.questObjTypeLab.addClass('disabled');
 	    this.featSelLab.addClass('disabled');
             this.cbUseForQoLabel.addClass('disabled');
-            this.cbUseForQo.prop('checked', false);
+            this.cbUseForQo.prop('checked', false); // We must use sentence unit selection if MQL is enabled
             this.templTabs.tabs('enable',3);
             this.importShebanq.prop('disabled',false);
         }
@@ -42,6 +107,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
             this.importShebanq.prop('disabled',true);
         }
 
+        // Hide or show the current feature selector
 	if (this.currentBox) {
             if (useMql)
 		this.currentBox.hide();
@@ -52,33 +118,59 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         this.populateFeatureTab(null);
     }
 
-    public makeMql() : string {
-        return '[' + this.getOtype() + ' NORETRIEVE ' + super.makeMql() + ']';
+    //------------------------------------------------------------------------------------------
+    // makeMql method
+    //
+    // Convert the settings of the friendly feature selectors to MQL. The feature selection is
+    // embedded in an appropriate [ otype NORETRIEVE ... ] MQL string.
+    //
+    // Returns:
+    //     The generated MQL string.
+    //
+    protected makeMql() : string {
+        return `[${this.getOtype()} NORETRIEVE ${super.makeMql()}]`;
     }
     
-    public getMqlEmulQos() : string {
-    	return super.makeMql();
-    }
-
-    public getUseForQo() : boolean {
+    //------------------------------------------------------------------------------------------
+    // getUseForQo method
+    //
+    // Returns the value of the "Use for sentence unit selection" checkbox.
+    //
+    protected getUseForQo() : boolean {
         return this.cbUseForQo.prop('checked');
     }
     
+    //------------------------------------------------------------------------------------------
+    // isDirty method
+    //
+    // Returns true if the user has changed the data in the exercise template.
+    //
     public isDirty() : boolean {
 	return super.isDirty() || this.dirty;
     }
- 
-    private doLayout(where : JQuery) : void {
-        var table : JQuery = $('<table></table>');
-        var row : JQuery;
-        var cell : JQuery;
 
+    //------------------------------------------------------------------------------------------
+    // doLayout method
+    //
+    // Performs the actual layout of the HTML code generated by this class and its superclass.
+    //
+    // Parameter:
+    //     where: The <div> where this class should store the generated HTML.
+    //
+    private doLayout(where : JQuery) : void {
+        // The layout is a table containing a number of rows
+        var table : JQuery = $('<table></table>');
+        var row   : JQuery;
+        var cell  : JQuery;
+
+        // 1st row: Contains the 'Use for sentence unit selection' checkbox
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
         cell.append(this.cbUseForQo, this.cbUseForQoLabel);
         row.append(cell);
         table.append(row);
 
+        // 2nd row: Contains the MQL selector radio button and the MQL <textarea>
         row = $('<tr></tr>');
         cell = $('<td></td>');
        
@@ -89,7 +181,8 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         cell.append(this.mqlText);
         row.append(cell);
         table.append(row);
-        
+
+        // 3rd row: Contains the 'Import from SHEBANQ' button
         row = $('<tr></tr>');
         cell = $('<td></td>');
         row.append(cell);
@@ -98,12 +191,14 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         row.append(cell);
         table.append(row);
 
+        // 4th row: Contains the friendly feature selector radio button
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
         cell.append(this.rbFriendly, this.rbFriendlyLabel);
         row.append(cell);
         table.append(row);
 
+        // 5th row: Contains the question object type combobox
         row = $('<tr></tr>');
         cell = $('<td></td>');
        
@@ -114,7 +209,8 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         cell.append(this.objectTypeCombo);
         row.append(cell);
         table.append(row);
-        
+
+        // 6th row: Contains the feature selector combobox
         row = $('<tr></tr>');
         cell = $('<td></td>');
        
@@ -125,7 +221,8 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         cell.append(this.featureCombo);
         row.append(cell);
         table.append(row);
-        
+
+        // 7th row: Contains the 'Clear' button and the feature selector panels
         row = $('<tr></tr>');
         cell = $('<td id="clearbuttoncell"></td>');
 
@@ -140,56 +237,23 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         where.append(table);
     }
 
-
-    /**
-     * Constructor.
-     */
-    constructor(md : MqlData, ttabs : JQuery, where : JQuery,
-                qoselTab : PanelTemplQuizObjectSelector, featureTab : PanelTemplQuizFeatures) {
-	super(md, 'sensel');
-	this.templTabs = ttabs;
-	this.dirty = false;
-        this.featureTab = featureTab;
-        this.qoselTab = qoselTab;
-
-        this.cbUseForQo = $('<input type="checkbox" name="useforqol">');
-        this.cbUseForQoLabel = $('<span>' + localize('use_for_qosel') + '</span>');
-
-	this.cbUseForQo.click(() => {
-            if (this.cbUseForQo.is(':checked'))
-                this.templTabs.tabs('disable',3);
-            else
-                this.templTabs.tabs('enable',3);
-
-            this.populateFeatureTab(null);
-            this.dirty = true;
-        });
-
-        this.rbMqlLabel = $('<span>' + localize('mql_qosel_prompt') + '</span>');
-        this.rbFriendlyLabel = $('<span>' + localize('friendly_featsel_prompt') + '</span>');
-
-        this.doLayout(where);
-
-	if (this.initialMd==null || this.initialMd.useForQo) {
-            this.cbUseForQo.prop('checked',true);
-            this.templTabs.tabs('disable',3);
-        }
-        else {
-            this.cbUseForQo.prop('checked',false);
-            this.templTabs.tabs('enable',3);
-        }
-
-	this.importShebanq.click(import_from_shebanq);
-        this.finish_construct();
-    }
-
+    //------------------------------------------------------------------------------------------
+    // populateFeatureTab method
+    //
+    // Generate the content of the 'Features' tab based on the newly selected question object type.
+    //
+    // Parameter:
+    //     otype: The question object to set.
+    //
     public populateFeatureTab(otype: string) : void {
         if (this.cbUseForQo.prop('checked')) {
+            // The current class has the object type
             if (otype === null)
                 otype = this.getOtype();
             this.featureTab.populate(otype);
         }
         else
+            // The sentence unit selector tab has the object type
             this.qoselTab.populateFeatureTab(null);
     }
 }

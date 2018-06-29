@@ -9,18 +9,10 @@
     "suffixFeature": "g_suffix_translit",
     "charSet": "transliterated_hebrew",
     "objectSettings": {
-        "book": {
-
-        },
-        "chapter": {
-
-        },
-        "verse": {
-
-        },
-        "half_verse": {
-
-        },
+        "book": {},
+        "chapter": {},
+        "verse": {},
+        "half_verse": {},
         "word": {
             "mayselect": true,
             "additionalfeatures": [
@@ -28,109 +20,134 @@
             ],
             "featuresetting": {
                 "lexeme_occurrences": {
-                    "ignoreShowRequest": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
                     "isRange": true
                 },
                 "frequency_rank": {
-                    "ignoreShowRequest": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
                     "isRange": true
                 },
                 "number": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_suffix": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_suffix_translit": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_suffix_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "hint": {
                     "ignoreSelect": true,
                     "ignoreRequest": true,
                     "indirdb": "ETCBC4_hints.db",
                     "sql_command": "SELECT hint FROM hints WHERE self='%1$s'",
-                    "sqlargs": [ "self" ],
+                    "sqlargs": [
+                        "self"
+                    ],
                     "multiple": false
                 },
                 "glossurl": {
                     "ignoreSelect": true,
                     "indirdb": "mysql",
                     "sql_command": "SELECT url, icon FROM {PRE}heb_urls WHERE lex='%s' AND language='%s'",
-                    "sqlargs": [ "lex", "language" ],
+                    "sqlargs": [
+                        "lex",
+                        "language"
+                    ],
                     "multiple": true
                 },
                 "g_cons": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_cons_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_lex": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_lex_cons_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_lex_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_lex_translit": {
                     "foreignText": true
                 },
                 "g_nme": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_nme_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_nme_cons_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_nme_translit": {
                     "foreignText": true
                 },
                 "g_pfm": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_pfm_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_pfm_cons_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_pfm_translit": {
                     "foreignText": true
                 },
                 "g_prs": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_prs_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
                     "foreignText": true
                 },
                 "g_prs_cons_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
                     "foreignText": true
                 },
                 "g_prs_translit": {
@@ -140,69 +157,83 @@
                 },
                 "g_uvf": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_uvf_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_uvf_cons_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_uvf_translit": {
                     "foreignText": true
                 },
                 "g_vbe": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_vbe_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_vbe_cons_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_vbe_translit": {
                     "foreignText": true
                 },
                 "g_vbs": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_vbs_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_vbs_cons_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_vbs_translit": {
                     "foreignText": true
                 },
                 "g_word": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_word_cons_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_word_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
                     "transliteratedText": true
                 },
                 "g_word_nocant": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_word_nocant_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_word_nopunct_translit": {
                     "alternateshowrequestDb": "ETCBC4_words.db",
@@ -216,27 +247,33 @@
                 },
                 "lex": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "lex_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "lex_cons_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "nme": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_voc_lex": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "g_voc_lex_cons_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
                     "foreignText": true
                 },
                 "g_voc_lex_translit": {
@@ -249,106 +286,102 @@
                     "ignoreRequest": true,
                     "indirdb": "mysql",
                     "sql_command": "SELECT CONCAT('%3$s ',roman) FROM {PRE}lexicon_%1$s WHERE lex='%2$s'",
-                    "sqlargs": [ "language", "lex", "g_voc_lex_translit" ],
+                    "sqlargs": [
+                        "language",
+                        "lex",
+                        "g_voc_lex_translit"
+                    ],
                     "multiple": false
                 },
                 "g_voc_lex_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
                     "transliteratedText": true
                 },
                 "distributional_parent": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "functional_parent": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "pfm": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "prs": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "uvf": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "vbe": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "vbs": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
-                "language": {
-
-                },
-                "ls": {
-
-                },
-                "vs": {
-
-                },
+                "language": {},
+                "ls": {},
+                "vs": {},
                 "vt": {
                     "hideValues": [
                         "weyq"
                     ]
                 },
-                "ps": {
-
-                },
-                "nu": {
-
-                },
-                "gn": {
-
-                },
+                "ps": {},
+                "nu": {},
+                "gn": {},
                 "st": {
                     "hideValues": [
                         "unknown"
                     ]
                 },
-                "pdp": {
-
-                },
+                "pdp": {},
                 "sp": {
                     "isDefault": true
                 },
-                "suffix_gender": {
-
-                },
-                "suffix_number": {
-
-                },
-                "suffix_person": {
-
-                },
-                "prs_gn" : {
+                "suffix_gender": {},
+                "suffix_number": {},
+                "suffix_person": {},
+                "prs_gn": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
-                "prs_nu" : {
+                "prs_nu": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
-                "prs_ps" : {
+                "prs_ps": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
-                "verb_class": {
-                },
+                "verb_class": {},
                 "qere": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "qere_utf8": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
                     "foreignText": true
                 },
                 "qere_translit": {
@@ -359,7 +392,11 @@
                     "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
                     "indirdb": "mysql",
                     "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_LANG lang ON lang.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
-                    "sqlargs": [ "language", "lex", "vs" ],
+                    "sqlargs": [
+                        "language",
+                        "lex",
+                        "vs"
+                    ],
                     "multiple": false
                 }
             }
@@ -372,11 +409,13 @@
                 },
                 "mother": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "mother_object_type": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 }
             }
         },
@@ -385,36 +424,38 @@
             "featuresetting": {
                 "dist": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "number": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "distributional_parent": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "functional_parent": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "mother": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
-                "det": {
-
-                },
+                "det": {},
                 "typ": {
                     "isDefault": true
                 },
-                "rela": {
-
-                },
+                "rela": {},
                 "dist_unit": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 }
             }
         },
@@ -423,36 +464,35 @@
             "featuresetting": {
                 "dist": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "number": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "functional_parent": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "mother": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
-                "det": {
-
-                },
+                "det": {},
                 "typ": {
                     "isDefault": true
                 },
-                "rela": {
-
-                },
+                "rela": {},
                 "dist_unit": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
-                "function": {
-
-                }
+                "function": {}
             }
         },
         "clause_atom": {
@@ -460,34 +500,39 @@
             "featuresetting": {
                 "code": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "dist": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "number": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
-                "tab": {
-
-                },
+                "tab": {},
                 "distributional_parent": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "functional_parent": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "mother": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "is_root": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "typ": {
                     "isDefault": true,
@@ -502,26 +547,26 @@
             "featuresetting": {
                 "dist": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "number": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
-                "domain": {
-
-                },
+                "domain": {},
                 "functional_parent": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "mother": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
-                "txt": {
-
-                },
+                "txt": {},
                 "typ": {
                     "isDefault": true,
                     "hideValues": [
@@ -533,25 +578,21 @@
                         "unknown"
                     ]
                 },
-                "rela": {
-
-                },
+                "rela": {},
                 "mother_object_type": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "dist_unit": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 }
             }
         },
-        "sentence_atom": {
-
-        },
-        "sentence": {
-
-        }
+        "sentence_atom": {},
+        "sentence": {}
     },
     "universeHierarchy": [
         {

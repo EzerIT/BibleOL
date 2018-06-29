@@ -1,5 +1,7 @@
 var => let
 
+<XXX> => as XXX
+
 Er alle forekomster af string.format() blevet fjernet? (Svaret vil være nej fordi .format bruges ved
 Answer.matchRegexp.)
 

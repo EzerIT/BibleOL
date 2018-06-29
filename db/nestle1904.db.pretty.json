@@ -9,15 +9,9 @@
     "suffixFeature": null,
     "charSet": "greek",
     "objectSettings": {
-        "chapter": {
-
-        },
-        "verse": {
-
-        },
-        "book": {
-
-        },
+        "chapter": {},
+        "verse": {},
+        "book": {},
         "clause2": {
             "mayselect": true,
             "featuresetting": {
@@ -34,9 +28,7 @@
                 }
             }
         },
-        "sentence": {
-
-        },
+        "sentence": {},
         "word": {
             "mayselect": true,
             "featuresetting": {
@@ -61,61 +53,52 @@
                     "hideWord": true,
                     "foreignText": true
                 },
-                "tense": {
-
-                },
-                "mood": {
-
-                },
-                "voice": {
-
-                },
-                "person": {
-
-                },
-                "gender": {
-
-                },
-                "number": {
-
-                },
-                "possessor_number": {
-
-                },
-                "case": {
-
-                },
-                "suffix": {
-
-                },
+                "tense": {},
+                "mood": {},
+                "voice": {},
+                "person": {},
+                "gender": {},
+                "number": {},
+                "possessor_number": {},
+                "case": {},
+                "suffix": {},
                 "strongs": {
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "strongs_unreliable": {
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "self": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "functional_tag": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "form_tag": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "ref": {
                     "ignoreSelect": true,
-                    "ignoreShowRequest": true
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "gloss": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i",
                     "indirdb": "mysql",
                     "sql_command": "SELECT gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_LANG lang ON lang.lex_id=gr.id WHERE strongs=%d AND strongs_unreliable=('%s'='true')",
-                    "sqlargs": [ "strongs", "strongs_unreliable" ],
+                    "sqlargs": [
+                        "strongs",
+                        "strongs_unreliable"
+                    ],
                     "multiple": false
                 }
             }

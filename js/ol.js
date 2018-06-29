@@ -1798,45 +1798,37 @@ var QuestionStatistics = (function () {
     return QuestionStatistics;
 }());
 var QuizStatistics = (function () {
-    function QuizStatistics(qid) {
+    function QuizStatistics(quizid) {
+        this.quizid = quizid;
         this.questions = [];
-        this.quizid = qid;
     }
     return QuizStatistics;
 }());
-var tOutInner;
-var tOutOuter;
-var tDialog;
 var Quiz = (function () {
     function Quiz(qid) {
         var _this = this;
         this.currentDictIx = -1;
         this.currentPanelQuestion = null;
-        this.xx = 8;
         this.quiz_statistics = new QuizStatistics(qid);
         $('#quiztab').append('<tr id="quiztabhead"></tr>');
         $('button#next_question').click(function () { return _this.nextQuestion(); });
-        $('button#finish').click(function () { return _this.finishQuiz(); });
-        $('button#finishNoStats').click(function () { return _this.finishQuizNoStats(); });
+        $('button#finish').click(function () { return _this.finishQuiz(true); });
+        $('button#finishNoStats').click(function () { return _this.finishQuiz(false); });
     }
     Quiz.prototype.nextQuestion = function () {
-        var timeouter = 600000;
-        var timeinner = 600000;
-        var timeoutinner = 28000;
-        var fun1 = function () {
-            window.clearTimeout(tOutOuter);
-            window.clearTimeout(tOutInner);
-            window.clearTimeout(tDialog);
-            tOutInner = window.setTimeout(function () {
+        var _this = this;
+        var timeBeforeHbOpen = 600000;
+        var timeBeforeHbClose = 28000;
+        var monitorUser = function () {
+            window.clearTimeout(_this.tHbOpen);
+            window.clearTimeout(_this.tHbClose);
+            _this.tHbOpen = window.setTimeout(function () {
                 heartbeatDialog.dialog('open');
-                tDialog = window.setTimeout(function () {
+                _this.tHbClose = window.setTimeout(function () {
                     heartbeatDialog.dialog('close');
                     $('#next_question').fadeOut();
-                    window.clearTimeout(tOutOuter);
-                    window.clearTimeout(tOutInner);
-                    return;
-                }, timeoutinner);
-            }, timeinner);
+                }, timeBeforeHbClose);
+            }, timeBeforeHbOpen);
             var heartbeatDialog = $('<div></div>')
                 .html(localize('done_practicing'))
                 .dialog({
@@ -1850,17 +1842,13 @@ var Quiz = (function () {
                 buttons: [{
                         text: localize('go_on'),
                         click: function () {
-                            $(this).dialog('close');
-                            window.clearTimeout(tOutOuter);
-                            window.clearTimeout(tOutInner);
-                            window.clearTimeout(tDialog);
-                            tOutOuter = window.setTimeout(fun1, timeouter);
-                            return;
+                            heartbeatDialog.dialog('close');
+                            window.setTimeout(monitorUser, 0);
                         }
                     }]
             });
         };
-        fun1();
+        monitorUser();
         if (this.currentPanelQuestion !== null)
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(true));
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
@@ -1890,14 +1878,14 @@ var Quiz = (function () {
         util.FollowerBox.resetCheckboxCounters();
         $('.grammarselector input:enabled:checked').trigger('change');
     };
-    Quiz.prototype.finishQuiz = function () {
+    Quiz.prototype.finishQuiz = function (gradingFlag) {
         if (quizdata.quizid == -1)
             window.location.replace(site_url + 'text/select_quiz');
         else {
             if (this.currentPanelQuestion === null)
                 alert('System error: No current question panel');
             else
-                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(true));
+                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(gradingFlag));
             $('.grammarselector').empty();
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
             $.post(site_url + 'statistics/update_stat', this.quiz_statistics)
@@ -1906,27 +1894,7 @@ var Quiz = (function () {
                 $('#textcontainer')
                     .removeClass('textcontainer-background')
                     .addClass('alert alert-danger')
-                    .html('<h1>' + localize('error_response') + '</h1><p>{0}</p>'.format(errorThrow));
-            });
-        }
-    };
-    Quiz.prototype.finishQuizNoStats = function () {
-        if (quizdata.quizid == -1)
-            window.location.replace(site_url + 'text/select_quiz');
-        else {
-            if (this.currentPanelQuestion === null)
-                alert('System error: No current question panel');
-            else
-                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat(false));
-            $('.grammarselector').empty();
-            $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
-            $.post(site_url + 'statistics/update_stat', this.quiz_statistics)
-                .done(function () { return window.location.replace(site_url + 'text/select_quiz'); })
-                .fail(function (jqXHR, textStatus, errorThrow) {
-                $('#textcontainer')
-                    .removeClass('textcontainer-background')
-                    .addClass('alert alert-danger')
-                    .html('<h1>' + localize('error_response') + '</h1><p>{0}</p>'.format(errorThrow));
+                    .html("<h1>" + localize('error_response') + "</h1><p>" + errorThrow + "</p>");
             });
         }
     };

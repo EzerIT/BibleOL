@@ -40,7 +40,6 @@ interface FeatureSetting {
     foreignText?             : boolean;
     transliteratedText?      : boolean;
     ignoreSelect?            : boolean;
-    ignoreShowRequest?       : boolean;  // Should be removed. Means: ignoreShow==true && ignoreRequest==true
     ignoreShow?              : boolean;
     ignoreRequest?           : boolean;
     isDefault?               : boolean;
@@ -120,9 +119,9 @@ function getFeatureSetting(otype : string, feature : string) : FeatureSetting {
 //
 interface TypeInfo {
     objTypes    : string[];
-    obj2feat    : {[objType : string] : FeatureMap;};
+    obj2feat    : { [objType : string] : FeatureMap };
     enumTypes   : string[];
-    enum2values : { [enumname : string] : string[]; };
+    enum2values : { [enumname : string] : string[] };
 }
 
 interface FeatureMap {

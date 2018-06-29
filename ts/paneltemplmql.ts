@@ -1,7 +1,8 @@
 // -*- js -*-
 // Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
 
-// Code to handle feature selection when creating an exercise
+// Code to handle feature selection when creating an exercise. This code is used by the sentence
+// selection tab and the sentence unit selection tab.
 
 
 
@@ -11,10 +12,6 @@
 // Superclass of all the handlers for feature searches in an exercise.
 //
 abstract class FeatureHandler {
-    public type       : string; // The feature type ('stringfeature', 'integerfeature',
-                                // 'rangeintegerfeature', 'enumfeature', 'enumlistfeature', or
-                                // 'qerefeature')
-    public name       : string; // The name of the feature
     public comparator : string; // Feature comparator. (Not used in all subclasses, but included
                                 // here for the sake of a couple of methods.)
 
@@ -23,13 +20,13 @@ abstract class FeatureHandler {
     //
     // Initializes the class fields.
     //
-    // Parameters:
-    //     type: The feature type ('stringfeature', 'integerfeature' etc.).
-    //     key: The feature name.
+    // The parameters and additional class fields are described below.
     //
-    constructor(typ : string, key : string) {
-        this.type       = typ;
-        this.name       = key;
+    constructor(public type : string,  // The feature type ('stringfeature', 'integerfeature',
+                                       // 'rangeintegerfeature', 'enumfeature', 'enumlistfeature', or
+                                       // 'qerefeature')
+                public name : string   // The name of the feature
+               ) {
         this.comparator = 'equals';
     }
 
@@ -50,7 +47,7 @@ abstract class FeatureHandler {
     //
     public abstract hasValues() : boolean;
 
-    
+
     //------------------------------------------------------------------------------------------
     // toMql method
     //
@@ -106,10 +103,10 @@ class StringFeatureHandler extends FeatureHandler {
     // Constructor method
     //
     // Parameter:
-    //     key: The feature name.
+    //     name: The feature name.
     //
-    constructor(key : string) {
-        super('stringfeature', key);
+    constructor(name : string) {
+        super('stringfeature', name);
         this.values = [];
         this.normalize();
     }
@@ -197,10 +194,10 @@ class IntegerFeatureHandler extends FeatureHandler {
     // Constructor method
     //
     // Parameter:
-    //     key: The feature name.
+    //     name: The feature name.
     //
-    constructor(key : string) {
-        super('integerfeature', key);
+    constructor(name : string) {
+        super('integerfeature', name);
         this.values = [];
         this.normalize();
     }
@@ -283,8 +280,8 @@ class IntegerFeatureHandler extends FeatureHandler {
 //
 class RangeIntegerFeatureHandler extends FeatureHandler {
     // Either of these values may be null or undefined to indicate the absense of a limit.
-    public value_low : number;  // The lower limit to the range of requested values 
-    public value_high : number; // The upper limit to the range of requested values 
+    public value_low : number;  // The lower limit to the range of requested values
+    public value_high : number; // The upper limit to the range of requested values
 
     //------------------------------------------------------------------------------------------
     // set_low_high method
@@ -300,11 +297,11 @@ class RangeIntegerFeatureHandler extends FeatureHandler {
         case 'value_low':
             this.value_low = val;
             break;
-            
+
         case 'value_high':
             this.value_high = val;
             break;
-            
+
         default:
             throw 'Illegal index in access_low_high';
         }
@@ -314,10 +311,10 @@ class RangeIntegerFeatureHandler extends FeatureHandler {
     // Constructor method
     //
     // Parameter:
-    //     key: The feature name.
+    //     name: The feature name.
     //
-    constructor(key : string) {
-        super('rangeintegerfeature', key);
+    constructor(name : string) {
+        super('rangeintegerfeature', name);
     }
 
     //------------------------------------------------------------------------------------------
@@ -382,10 +379,10 @@ class EnumFeatureHandler extends FeatureHandler {
     // Constructor method
     //
     // Parameter:
-    //     key: The feature name.
+    //     name: The feature name.
     //
-    constructor(key : string) {
-        super('enumfeature', key);
+    constructor(name : string) {
+        super('enumfeature', name);
         this.values = [];
     }
 
@@ -451,10 +448,10 @@ class EnumListFeatureHandler extends FeatureHandler {
     // Constructor method
     //
     // Parameter:
-    //     key: The feature name.
+    //     name: The feature name.
     //
-    constructor(key : string) {
-        super('enumlistfeature', key);
+    constructor(name : string) {
+        super('enumlistfeature', name);
         this.listvalues = [];
         this.normalize();
     }
@@ -523,12 +520,12 @@ class QereFeatureHandler extends FeatureHandler {
     //------------------------------------------------------------------------------------------
     // Constructor method
     //
-    // 
-    // Parameter:
-    //     key: The name of the feature holding a qere value.
     //
-    constructor(key : string) {
-        super('qerefeature', key);
+    // Parameter:
+    //     name: The name of the feature holding a qere value.
+    //
+    constructor(name : string) {
+        super('qerefeature', name);
         this.omit = false;
     }
 
@@ -589,7 +586,7 @@ class ListValuesHandler {
         this.yes_values = [];
         this.no_values = [];
     }
-    
+
 
     //------------------------------------------------------------------------------------------
     // modifyValue method
@@ -681,13 +678,13 @@ interface MqlData {
 //****************************************************************************************************
 // PanelTemplMql class
 //
-// This is a superclass for the sentence selection and sentence unit selection panels
+// This is a superclass for the sentence selection and sentence unit selection tabs
 // (PanelTemplSentenceSelector and PanelTemplQuizObjectSelector). It contains code for generating
 // feature selectors.
 //
 // This class does not do the actual layout. That is done by the doLayout methods in the subclasses.
 //
-class PanelTemplMql {
+abstract class PanelTemplMql {
     protected currentBox      : JQuery;  // The feature selector currently displayed
     protected featureCombo    : JQuery;  // Feature name combobox
     protected fpan            : JQuery;  // <div> to contain all feature selectors
@@ -698,37 +695,31 @@ class PanelTemplMql {
     protected rbMql           : JQuery;  // Radio button for selecting MQL input
     protected rbMqlLabel      : JQuery;  // Localized label for MQL feature selector
     protected clear           : JQuery;  // The 'Clear' button
-    protected initialMd       : MqlData; // The initial contents of the panel
 
-    private   fname2fh        : { [key:string] : FeatureHandler; } = {}; // Maps feature name => feature handler for features
-                                                                         // in initial contents of exercise file
-    private   groups          : { [key:string] : JQuery; } = {};         // Maps feature name => feature selector
-    private   handlers        : FeatureHandler[] = [];                   // FeatureHandlers for all features
-    private   txtEntry        : string;                                  // The initial contents of the MQL text
-    private   name_prefix     : string;                                  // Used as prefix for HTML element names
-                                                                         // ('sensel' for sentence selector,
-                                                                         // 'qosel' for sentence unit selector).
+    private   fname2fh        : { [key:string] : FeatureHandler } = {}; // Maps feature name => feature handler for features
+                                                                        // in initial contents of exercise file
+    private   groups          : { [key:string] : JQuery };              // Maps feature name => feature selector
+    private   handlers        : FeatureHandler[];                       // FeatureHandlers for all features
+    private   txtEntry        : string;                                 // The initial contents of the MQL text
 
-    
+
     //------------------------------------------------------------------------------------------
     // Constructor method
     //
     // Creates the common parts of the feature selection panel.
     //
-    // Parameter:
-    //     md: Selection information from exercise file.
-    //     name_prefix: Identifies subclass ('sensel' for sentence selector, 'qosel' for sentence
-    //                  unit selector).
+    // The parameters and additional class fields are described below.
     //
-    constructor(md : MqlData, name_prefix : string) {
-        this.initialMd = md;
-        this.name_prefix = name_prefix;
-
-        if (md.featHand) {
+    constructor(protected initialMd   : MqlData, // The initial contents of the panel
+                private   name_prefix : string   // Used as prefix for HTML element names ('sensel'
+                                                 // for sentence selector, 'qosel' for sentence unit
+                                                 // selector)
+               ) {
+        if (initialMd.featHand) {
             // Exercise file has friendly feature selectors
-            
-            for (let i=0; i<md.featHand.vhand.length; ++i) {
-                let vh : FeatureHandler = md.featHand.vhand[i]; // Current feature handler
+
+            for (let i=0; i<initialMd.featHand.vhand.length; ++i) {
+                let vh : FeatureHandler = initialMd.featHand.vhand[i]; // Current feature handler
 
                 // Make feature handler polymorphic by adding relevant methods
                 switch (vh.type) {
@@ -780,7 +771,7 @@ class PanelTemplMql {
  		this.switchToMql(true);
         });
 
-        
+
         ////////////////////////////////////////////////////////////
         // The radio button that switches to friendly input
         this.rbFriendly = $(`<input type="radio" name="${this.name_prefix}_usemql" value="no">`);
@@ -807,16 +798,16 @@ class PanelTemplMql {
             this.currentBox.show();
         });
 
-        
+
         ////////////////////////////////////////////////////////////
         // The object type combobox
         this.objectTypeCombo = $('<select></select>');
-        
-        let selObject : string = (md!=null && md.object!=null) ? md.object : configuration.objHasSurface; // Initially selected object
+
+        let selObject : string = (initialMd!=null && initialMd.object!=null) ? initialMd.object : configuration.objHasSurface; // Initially selected object
 
         // Loop through all objects that may be selected
         for (let s in configuration.objectSettings) {
-            if (configuration.objectSettings[s].mayselect) { 
+            if (configuration.objectSettings[s].mayselect) {
                 this.objectTypeCombo.append(`<option value="${s}"`
                                             + (s===selObject ? ' selected="selected"' : '')                // Select initial object
                                             + (s===configuration.objHasSurface ? ' data-reset="yes"' : '') // Select surface object on reset
@@ -826,7 +817,7 @@ class PanelTemplMql {
 
         this.objectTypeCombo.on('change', () => {
             // When a new object type is selected, reset the contents of all selectors
-            
+
             $('#virtualkbid').appendTo('#virtualkbcontainer'); // Move the keyboard back to its initial position
 
             this.fpan.html(`<div id="${this.name_prefix}_fpan"></div>`);
@@ -843,7 +834,7 @@ class PanelTemplMql {
 
         this.clear.click(() => {
             // When 'Clear' is pressed, reset everything and select the surface object ('[data-reset]')
-            
+
             $('#virtualkbid').appendTo('#virtualkbcontainer'); // Move the keyboard back to its initial position
 
 	    this.rbFriendly.prop('checked',true);
@@ -854,7 +845,7 @@ class PanelTemplMql {
             this.featureCombo.html('<select></select>');
 	    this.objectSelectionUpdated(configuration.objHasSurface,null);
 	    this.updateMql();
-	    this.switchToMql(false);		
+	    this.switchToMql(false);
 	});
     }
 
@@ -870,7 +861,7 @@ class PanelTemplMql {
             this.rbFriendly.prop('checked',true);
 	    this.objectSelectionUpdated(configuration.objHasSurface,null);
 	    this.updateMql();
-	    this.switchToMql(false);		
+	    this.switchToMql(false);
 	}
 	else if (this.initialMd.mql!=null) {
             // We're handling an existing exercise using the MQL selector
@@ -878,7 +869,7 @@ class PanelTemplMql {
 	    this.mqlText.html(this.initialMd.mql);
             if (this.initialMd.featHand)
 	        this.objectSelectionUpdated(this.initialMd.object,this.fname2fh);
-            else 
+            else
 	        this.objectSelectionUpdated(this.initialMd.object,null);
 	    this.switchToMql(true);
 	}
@@ -906,7 +897,7 @@ class PanelTemplMql {
     }
 
     //------------------------------------------------------------------------------------------
-    // setMql method
+    // getMql method
     //
     // Retrieves the text in the MQL <textarea>.
     //
@@ -920,7 +911,7 @@ class PanelTemplMql {
 
     //------------------------------------------------------------------------------------------
     // Variables for managing changes to input fields under virtual keyboard control
-    // 
+    //
     private intervalHandler : number; // The ID of the timer
     private monitorOrigVal  : string; // The previous value of the monitored <input> element
     private lastMonitored   : string; // The ID of the monitored <input> element
@@ -992,7 +983,7 @@ class PanelTemplMql {
         let ifh : IntegerFeatureHandler = e.data.ifh;
 
         $('#' + e.data.err_id).html(''); // Clear error indication
-        
+
         if (s.length===0)              // The input value is empty
             ifh.removeValue(e.data.i);
         else {                         // The input value is not empty
@@ -1001,7 +992,7 @@ class PanelTemplMql {
             else
                 ifh.setValue(e.data.i, +s);
         }
-        
+
         this.updateMql();
     }
 
@@ -1016,7 +1007,7 @@ class PanelTemplMql {
     private rangeIntegerTextModifiedListener(e : JQueryEventObject) : void {
         let s   : string                     = $(e.currentTarget).val() as string;
         let rfh : RangeIntegerFeatureHandler = e.data.rfh;
-        
+
         $('#' + e.data.err_id).html(''); // Clear error indication
 
         if (s.length===0)                // The input value is empty
@@ -1027,7 +1018,7 @@ class PanelTemplMql {
             else
                 rfh.set_low_high(e.data.i, +s);
         }
-        
+
         this.updateMql();
     }
 
@@ -1035,15 +1026,17 @@ class PanelTemplMql {
     //------------------------------------------------------------------------------------------
     // objectSelectionUpdated method
     //
-    // Creates the various feature selection panels associated with a newly selected quiz object
-    // type.
+    // Creates HTML for the various feature selection panels associated with a newly selected quiz
+    // object type.
     //
     // Parameters:
     //     otype: Quiz object type.
     //     fhs: Maps feature name => feature handler. This parameter is only set when we're editing
     //          an existing exercise with feature handlers, otherwise this parameter is null.
     //
-    private objectSelectionUpdated(otype : string, fhs : { [key:string] : FeatureHandler; }) : void {
+    private objectSelectionUpdated(otype : string, fhs : { [key:string] : FeatureHandler }) : void {
+        this.handlers = [];
+        this.groups = {};
 
  	// Create selection boxes for all features of this object type
         for (let key in getObjectSetting(otype).featuresetting) {
@@ -1054,8 +1047,7 @@ class PanelTemplMql {
             if (featset.ignoreSelect)
                 continue;
 
-            let group : JQuery = $('<div></div>');
-
+            let group : JQuery = $('<div></div>');  // The current feature selector
             this.groups[key] = group;
 
             let selectString : string;
@@ -1073,518 +1065,671 @@ class PanelTemplMql {
             // Add feature name to feature combobox
             this.featureCombo.append(`<option value="${key}" ${selectString}>${getFeatureFriendlyName(otype,key)}</option>`);
 
-            //////////////////////////////////////////////////////////////////
-            // Set up feature handlers based on the type of the feature values
+            ////////////////////////////////////////////////////////////////
+            // Generate input panels based on the type of the feature values
             //
-            if (valueType === 'integer') {
-                if (featset.isRange) {
-                    ///////////////////////////
-                    // Integer range feature //
-                    ///////////////////////////
-                    
-                    let rfh : RangeIntegerFeatureHandler = null;
-                    if (fhs)
-                        rfh = fhs[key] as RangeIntegerFeatureHandler; // Use existing feature handler...
-                    if (!rfh)
-                        rfh = new RangeIntegerFeatureHandler(key);    // ...or create a new one
+            switch (valueType) {
+            case 'integer':
+                if (featset.isRange)
+                    this.generateIntegerRangePanel(key, fhs);
+                else
+                    this.generateIntegerPanel(key, fhs);
+                break;
 
-                    // Append this HTML structure to the variable group:    From these variables
-                    // <table>                                               group2
-                    //   <tr>                                                rowLow
-                    //     <td>Label</td>                                    cellLab
-                    //     <td><input type="text"...></td>                   cellInput
-                    //     <td id="err_id"></td>                             cellErr
-                    //   </tr>                                               rowLow
-                    //   <tr>                                                rowHigh
-                    //     <td>Label</td>                                    cellLab
-                    //     <td><input type="text"...></td>                   cellInput
-                    //     <td id="err_id"></td>                             cellErr
-                    //   </tr>                                               rowHigh
-                    // </table>                                              group2
+            case 'ascii':
+            case 'string':
+                if (key===Qere.feature())
+                    this.generateQerePanel(key, fhs);
+                else
+                    this.generateStringPanel(key, fhs, featset.foreignText);
+ 	        break;
 
-                    let group2    : JQuery = $('<table></table>');
-                    let rowLow    : JQuery = $('<tr></tr>');
-                    let rowHigh   : JQuery = $('<tr></tr>');
-
-                    let cellLab   : JQuery; // Table cell containing label
-                    let cellInput : JQuery; // Table cell containing input field
-                    let cellErr   : JQuery; // Table cell containing error indication
-
-                    let jtf       : JQuery; // Integer text field
-
-
-                    ////////////////////////////////////////////////////////////
-                    // First row
-                    //
-                    jtf = $('<input type="text" size="8">'); // Integer text field
-
-                    if (rfh.isSetLow())
-                        jtf.val(String(rfh.value_low));
-
-                    let err_id : string = `err_${key}_low`;
-
-                    // Set handler for field changes
-                    jtf.on('keyup', null,
-                           {rfh: rfh, i: 'value_low', err_id: err_id}, // Event data
-                           $.proxy(this.rangeIntegerTextModifiedListener,this));
-                    
-                    cellLab = $('<td>' + localize('low_value_prompt') + '</td>');
-                    cellInput = $('<td></td>');
-                    cellInput.append(jtf);
-                    cellErr = $(`<td id="${err_id}"></td>`);
-                    rowLow.append(cellLab,cellInput,cellErr);
-
-
-                    ////////////////////////////////////////////////////////////
-                    // Second row
-                    //
-                    jtf = $('<input type="text" size="8">');
-                    if (rfh.isSetHigh())
-                        jtf.val(String(rfh.value_high));
-
-                    err_id = `err_${key}_high`;
-
-                    // Set handler for field changes
-                    jtf.on('keyup', null,
-                           {rfh: rfh, i: 'value_high', err_id: err_id}, // Event data
-                           $.proxy(this.rangeIntegerTextModifiedListener,this));
-                    
-                    cellLab = $('<td>' + localize('high_value_prompt') + '</td>');
-                    cellInput = $('<td></td>');
-                    cellInput.append(jtf);
-                    cellErr = $('<td id="{0}"></td>'.format(err_id));
-                    rowHigh.append(cellLab,cellInput,cellErr);
-                    
-
-                    ////////////////////////////////////////////////////////////
-                    // Add to group and handlers
-                    //
-                    group2.append(rowLow, rowHigh);
-                    group.append(group2);
-                    this.handlers.push(rfh);
-                }
-                else {
-                    /////////////////////
-                    // Integer feature //
-                    /////////////////////
-                    
-                    let ifh : IntegerFeatureHandler = null;
-                    if (fhs)
-                        ifh = fhs[key] as IntegerFeatureHandler; // Use existing feature handler...
-                    if (!ifh)
-                        ifh = new IntegerFeatureHandler(key);    // ...or create a new one
-
-                    // Append this HTML structure to the variable group:    From these variables
-                    // <span>                                                sel
-                    //   <input type="radio" ... value="equals">             butEquals
-                    //   =
-                    //   <input type="radio" ... value="differs">            butDiffers
-                    //   ≠
-                    // </span>                                               sel
-                    // <table>                                               group2
-                    //   <tr>                                                row
-                    //     <td><input type="text"...></td>                   cell
-                    //     <td id="err_id"></td>
-                    //   </tr>                                               row
-                    //   ...
-                    // </table>                                              group2
-
-                    let butEquals  : JQuery = $(`<input type="radio" name="${this.name_prefix}_${key}_comp" value="equals">`);
-                    let butDiffers : JQuery = $(`<input type="radio" name="${this.name_prefix}_${key}_comp" value="differs">`);
-
-                    switch (ifh.comparator) {
-                    case 'equals':  butEquals.prop('checked',true);  break;
-                    case 'differs': butDiffers.prop('checked',true); break;
-                    }
-
-                    let sel : JQuery = $('<span></span>');
-                    sel.append(butEquals, "=", butDiffers, "&#x2260;");
-                    group.append(sel);
-
-                    // Set handler radio button changes
-                    sel.on('click', ifh, (e : JQueryEventObject) => {
-                        // val() normally returns 'equals' or 'differs', but it may return an empty
-                        // value if the user clicks on, say, the = sign.
-                        let v = $(e.target).val();
-                        switch (v) {
-                        case 'equals':
-                        case 'differs':
-                            e.data.comparator = v; // e.data is ifh
-                            this.updateMql();
-                            break;
-                        }
-                    });
-
-                    let group2 : JQuery = $('<table></table>');
-                 
-                    for (let i=0; i<ifh.values.length; ++i) {
-                        let jtf : JQuery = $('<input type="text" size="8">'); // Integer text field
-                        if (ifh.values[i])
-                            jtf.val(String(ifh.values[i]));
-
-                        let err_id : string = `err_${key}_${i}`;
-                        
-                        // Set handler for field changes
-                        jtf.on('keyup', null,
-                               {ifh: ifh, i: i, err_id: err_id}, // Event data
-                               $.proxy(this.integerTextModifiedListener,this));
-
-                        let row  : JQuery = $('<tr></tr>');
-                        let cell : JQuery = $('<td></td>');
-                        cell.append(jtf);
-                        row.append(cell);
-                        row.append(`<td id="${err_id}"></td>`);
-                        group2.append(row);
-                    }
-                    group.append(group2);
-                    this.handlers.push(ifh);
-                }
- 	    }
- 	    else if (valueType==='ascii' || valueType==='string') {
-                if (key==='qere_utf8' || key==='qere_translit') { // Hard coded qere feature names for ETCBC4
-                    //////////////////
-		    // Qere feature //
-		    //////////////////
-                    
-                    let qfh : QereFeatureHandler = null;
-                    if (fhs)
-                        qfh = <QereFeatureHandler>fhs[key]; // Use existing feature handler...
-                    if (!qfh)
-                        qfh = new QereFeatureHandler(key);  // ...or create a new one
-
-                    // Append this HTML structure to the variable group:    From these variables
-                    // <span>                                                sel
-                    //   <input type="checkbox" ... value="omit">            butOmitqere
-                    // </span>                                               sel
-
-                    let butOmitqere : JQuery = $(`<input type="checkbox" name="${this.name_prefix}_${key}_sel" value="omit">`);
-                    if (qfh.omit)
-                        butOmitqere.prop('checked',true);
-
-                    let sel : JQuery = $('<span></span>');
-                    sel.append(butOmitqere, localize('omit_qere'));
-                    group.append(sel);
-
-                    // Set handler checkbox changes
-                    sel.on('click', qfh, (e : JQueryEventObject) => {
-                        let target : JQuery = $(e.target);
-                        e.data.setValue(target.prop('checked'));  // e.data is qfh
-                        this.updateMql();
-                    });
-
-                    this.handlers.push(qfh);
-                }
-                else {
-                    ////////////////////
-                    // String feature //
-                    ////////////////////
-                    
-                    let sfh : StringFeatureHandler = null;
-                    if (fhs)
-                        sfh = <StringFeatureHandler>fhs[key]; // Use existing feature handler...
-                    if (!sfh)
-                        sfh = new StringFeatureHandler(key);  // ...or create a new one
-
-                    // Append this HTML structure to the variable group:    From these variables
-                    // <span>                                                sel
-                    //   <input type="radio" ... value="equals">             butEquals
-                    //   =
-                    //   <input type="radio" ... value="differs">            butDiffers
-                    //   ≠
-                    //   <input type="radio" ... value="differs">            butMatches
-                    //   ~
-                    // </span>                                               sel
-                    // <table>                                               group2
-                    //   <tr>                                                row
-                    //     <td><input type="text"...></td>                   cell
-                    //     <td id="err_id"></td>
-                    //   </tr>                                               row
-                    //   ...
-                    //   <tr><td id="${kbdRowId}" ...></td></tr>             (Only if virtual keyboard is used)
-                    // </table>                                              group2
-
-                    let butEquals  : JQuery = $(`<input type="radio" name="${this.name_prefix}_${key}_comp" value="equals">`);
-                    let butDiffers : JQuery = $(`<input type="radio" name="${this.name_prefix}_${key}_comp" value="differs">`);
-                    let butMatches : JQuery = $(`<input type="radio" name="${this.name_prefix}_${key}_comp" value="matches">`);
-
-                    switch (sfh.comparator) {
-                    case 'equals':  butEquals.prop('checked',true);  break;
-                    case 'differs': butDiffers.prop('checked',true); break;
-                    case 'matches': butMatches.prop('checked',true); break;
-                    }
-
-                    let sel : JQuery = $('<span></span>');
-                    sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
-                    group.append(sel);
-
-                    // Set handler radio button changes
-                    sel.on('click', sfh, (e : JQueryEventObject) => {
-                        // val() normally returns 'equals', 'differs', or 'matches', but it may
-                        // return an empty value if the user clicks on, say, the = sign.
-                        let v = $(e.target).val();
-                        switch (v) {
-                        case 'equals':
-                        case 'differs':
-                        case 'matches':
-                            e.data.comparator = v; // e.data is sfh
-                            this.updateMql();
-                            break;
-                        }
-                    });
-
-                    let group2 : JQuery = $('<table></table>');
-                    
-                    for (let i=0; i<sfh.values.length; ++i) {
-                        let jtf : JQuery =
-                            featset.foreignText
-                            ? $(`<input class="${charset.foreignClass}" type="text" size="20" id="${this.name_prefix}_${key}_input${+i+1}">`)
-                            : $('<input type="text" size="20">');
-                                
-                        if (sfh.values[i])
-                                jtf.val(sfh.values[i]);
-
-                        let kbdRowId : string; // ID of row containing virtual keyboard
-                        if (featset.foreignText) {
-                            kbdRowId = `${this.name_prefix}_${key}_row${+i+1}`;
-
-                            // Move virtual keyboard when an input field gets focus
-                            jtf.on('focus', null,
-                                   {kbdRowId : kbdRowId, sfh: sfh, i: i}, // Event data
-                                   (e : JQueryEventObject) => {
-                                       $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
-                                       VirtualKeyboard.attachInput(e.currentTarget);
-                                       
-                                       // Monitor changes to the input field
-                                       this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i);
-                                   });
-                        }
-
-                        // Set handler for direct field changes
-                        jtf.on('keyup', null,
-                               {sfh: sfh, i: i}, // Event data
-                               $.proxy(this.stringTextModifiedListener,this));
-
-                        let row  : JQuery = $('<tr></tr>');
-                        let cell : JQuery = $('<td></td>');
-                        cell.append(jtf);
-                        row.append(cell);
-                        group2.append(row);
-
-                        if (featset.foreignText)
-                            group2.append(`<tr><td id="${kbdRowId}" style="text-align:right;"></td></tr>`);
-                    }
-                    group.append(group2);
-                    this.handlers.push(sfh);
-                }
- 	    }
-            else if (valueType.substr(0,8)==='list of ') {
-                let stripped_valueType : string = valueType.substr(8);
- 	        let enumValues = typeinfo.enum2values[stripped_valueType];
-
-                if (!enumValues) {
-                    // We cannot handle lists of non-enums
-                    console.log('Unknown valueType',valueType);
-                }
-
-                let elfh : EnumListFeatureHandler = null;
-                if (fhs)
-                    elfh = <EnumListFeatureHandler>fhs[key];
-                if (!elfh)
-                    elfh = new EnumListFeatureHandler(key);
-                
-                let group_tabs : JQuery = $('<div id="list_tabs_{0}"></div>'.format(key));
-                let group_ul : JQuery = $('<ul></ul>');
-                group_tabs.append(group_ul);
-                
-                let tab_labels : string[] = [localize('1st_choice'),
-                                             localize('2nd_choice'),
-                                             localize('3rd_choice'),
-                                             localize('4th_choice')];
-                for (let tabno=0; tabno<4; ++tabno) {
-                    let lv : ListValuesHandler = elfh.listvalues[tabno];
-
-                    group_ul.append('<li><a href="#tab_{0}_{1}">{2}</li>'.format(key,tabno,tab_labels[tabno]));
-                    let tab_contents : JQuery = $('<div id="tab_{0}_{1}"></div>'.format(key,tabno));
-                    
-                    let vc_choice : PanelForOneVcChoice 
-                        = new PanelForOneVcChoice(enumValues,
-                                                  stripped_valueType, 
-                                                  '{0}_{1}_{2}_{3}'.format(this.name_prefix, otype, key, tabno),
-                                                  lv);
-                    tab_contents.append(vc_choice.getPanel());
-                    group_tabs.append(tab_contents);
-		    tab_contents.on('click', lv, (e : JQueryEventObject) => {
-                        let target : JQuery = $(e.target);
-                        if (target.attr('type')==='radio') {
-                            e.data.modifyValue(target.attr('data-name'), target.attr('value')); // e.data is lv
-                            this.updateMql();
-                        }
-                    });
-                }
-                group.append(group_tabs);
-                group.tabs();
-                this.handlers.push(elfh);
+            default:
+                if (valueType.substr(0,8)==='list of ')
+                    this.generateListOfPanel(key, fhs, valueType.substr(8), otype);
+                else   // valueType is an enum
+                    this.generateEnumPanel(key, fhs, featset, valueType);
+                break;
             }
-            else {  // valueType is an enum
- 	        let enumValues = typeinfo.enum2values[valueType];
 
-                if (!enumValues) {
-                    console.log('Unknown valueType',valueType);
-                }
-                else {
-                    let efh : EnumFeatureHandler = null;
-                    if (fhs)
-                        efh = <EnumFeatureHandler>fhs[key];
-                    if (!efh)
-                        efh = new EnumFeatureHandler(key);
-
-                    let butEquals  : JQuery = $('<input type="radio" name="{0}_{1}_comp" value="equals">'
-                                                .format(this.name_prefix,key));
-		    let butDiffers : JQuery = $('<input type="radio" name="{0}_{1}_comp" value="differs">'
-                                                .format(this.name_prefix,key));
-
-                    switch (efh.comparator) {
-                    case 'equals': butEquals.prop('checked',true); break;
-                    case 'differs': butDiffers.prop('checked',true); break;
-                    }
-
-                    let sel : JQuery = $('<span></span>');
-                    sel.append(butEquals, '=', butDiffers, '&#x2260;');
-                    group.append(sel);
-
-                    sel.on('click', efh, (e : JQueryEventObject) => {
-                        // val() may return an empty value if the user clicks on, say, the = sign
-                        let v = $(e.target).val();
-                        switch (v) {
-                        case 'equals':
-                        case 'differs':
-                            e.data.comparator = v; // e.data is efh
-                            this.updateMql();
-                            break;
-                        }
-                    });
-
-
-                    let checkBoxes : SortingCheckBox[] = [];
-
-                    for (let i = 0; i<enumValues.length; ++i) {
-                        let s : string = enumValues[i];
-
-                        let hv : string[] = featset.hideValues;
-		        let ov : string[] = featset.otherValues;
-                        if ((hv && hv.indexOf(s)!==-1) || ((ov && ov.indexOf(s)!==-1)))
-                            continue;
-
-                        let scb = new SortingCheckBox(this.name_prefix + '_' + key, s, getFeatureValueFriendlyName(valueType, s, false, false));
-                        if (!efh.values) alert('Assert efh.values failed for type ' + key);
-                        scb.setSelected(efh.values && efh.values.indexOf(s)!==-1);
-                        checkBoxes.push(scb);
-                    }
-
-                    checkBoxes.sort((a : SortingCheckBox, b : SortingCheckBox) => StringWithSort.compare(a.getSws(),b.getSws()));
-
-		    // Decide how many columns and rows to use for feature values
-		    let columns : number = 
-		        checkBoxes.length>12 ? 3 :
-		        checkBoxes.length>4 ? 2 : 1;
-
-                    let rows : number = Math.ceil(checkBoxes.length / columns);
-
-                    let group2 : JQuery = $('<table></table>');
-                    for (let r=0; r<rows; ++r) {
-                        let rw : JQuery = $('<tr></tr>');
-                        for (let c=0; c<columns; ++c) {
-                            let cell : JQuery = $('<td></td>');
-                            if (c*rows + r < checkBoxes.length)
-                                cell.append(checkBoxes[c*rows + r].getJQuery());
-                            rw.append(cell);
-                        }
-                        group2.append(rw);
-                    }
-
-
-		    group2.on('click', efh, (e : JQueryEventObject) => {
-                        let target : JQuery = $(e.target);
-                        if (target.attr('type')==='checkbox') {
-                            // The user clicked on a checkbox
-                            if (target.prop('checked'))
-                                e.data.addValue(target.attr('value'));  // e.data is efh
-                            else
-                                e.data.removeValue(target.attr('value'));
-                            this.updateMql();
-                        }
-                    });
-
-                    group.append(group2);
-                    this.handlers.push(efh);
- 	        }
-            }
 	    this.fpan.append(group);
  	}
 
         this.populateFeatureTab(otype);
     }
 
+    //------------------------------------------------------------------------------------------
+    // generateIntegerRangePanel method
+    //
+    // Creates HTML for the feature selection panel associated an integer range feature.
+    //
+    // Parameters:
+    //     key: Feature name
+    //     fhs: Maps feature name => feature handler. This parameter is only set when we're editing
+    //          an existing exercise with feature handlers, otherwise this parameter is null.
+    //
+    private generateIntegerRangePanel(key : string, fhs : { [key:string] : FeatureHandler }) : void {
+        let rfh : RangeIntegerFeatureHandler = (fhs && fhs[key]) ? fhs[key] as RangeIntegerFeatureHandler : new RangeIntegerFeatureHandler(key);
+
+        // Append this HTML structure to this.groups[key]:    From these variables
+        // <table>                                               group2
+        //   <tr>                                                rowLow
+        //     <td>Label</td>                                    cellLab
+        //     <td><input type="text"...></td>                   cellInput
+        //     <td id="err_id"></td>                             cellErr
+        //   </tr>                                               rowLow
+        //   <tr>                                                rowHigh
+        //     <td>Label</td>                                    cellLab
+        //     <td><input type="text"...></td>                   cellInput
+        //     <td id="err_id"></td>                             cellErr
+        //   </tr>                                               rowHigh
+        // </table>                                              group2
+
+        let group2    : JQuery = $('<table></table>');
+        let rowLow    : JQuery = $('<tr></tr>');
+        let rowHigh   : JQuery = $('<tr></tr>');
+
+        let cellLab   : JQuery; // Table cell containing label
+        let cellInput : JQuery; // Table cell containing input field
+        let cellErr   : JQuery; // Table cell containing error indication
+
+        let jtf       : JQuery; // Integer text field
+
+
+        ////////////////////////////////////////////////////////////
+        // First row
+        //
+        jtf = $('<input type="text" size="8">'); // Integer text field
+
+        if (rfh.isSetLow())
+            jtf.val(String(rfh.value_low));
+
+        let err_id : string = `err_${key}_low`;
+
+        // Set handler for field changes
+        jtf.on('keyup', null,
+               {rfh: rfh, i: 'value_low', err_id: err_id}, // Event data
+               $.proxy(this.rangeIntegerTextModifiedListener,this));
+
+        cellLab = $('<td>' + localize('low_value_prompt') + '</td>');
+        cellInput = $('<td></td>');
+        cellInput.append(jtf);
+        cellErr = $(`<td id="${err_id}"></td>`);
+        rowLow.append(cellLab,cellInput,cellErr);
+
+
+        ////////////////////////////////////////////////////////////
+        // Second row
+        //
+        jtf = $('<input type="text" size="8">');
+        if (rfh.isSetHigh())
+            jtf.val(String(rfh.value_high));
+
+        err_id = `err_${key}_high`;
+
+        // Set handler for field changes
+        jtf.on('keyup', null,
+               {rfh: rfh, i: 'value_high', err_id: err_id}, // Event data
+               $.proxy(this.rangeIntegerTextModifiedListener,this));
+
+        cellLab = $('<td>' + localize('high_value_prompt') + '</td>');
+        cellInput = $('<td></td>');
+        cellInput.append(jtf);
+        cellErr = $(`<td id="${err_id}"></td>`);
+        rowHigh.append(cellLab,cellInput,cellErr);
+
+
+        ////////////////////////////////////////////////////////////
+        // Add to group and handlers
+        //
+        group2.append(rowLow, rowHigh);
+        this.groups[key].append(group2);
+        this.handlers.push(rfh);
+    }
+
+    //------------------------------------------------------------------------------------------
+    // generateIntegerPanel method
+    //
+    // Creates HTML for the feature selection panel associated an integer feature.
+    //
+    // Parameters:
+    //     key: Feature name.
+    //     fhs: Maps feature name => feature handler. This parameter is only set when we're editing
+    //          an existing exercise with feature handlers, otherwise this parameter is null.
+    //
+    private generateIntegerPanel(key : string, fhs : { [key:string] : FeatureHandler }) : void {
+        let ifh : IntegerFeatureHandler = (fhs && fhs[key]) ? fhs[key] as IntegerFeatureHandler : new IntegerFeatureHandler(key);
+
+        // Append this HTML structure to this.groups[key]:    From these variables
+        // <span>                                                sel
+        //   <input type="radio" ... value="equals">             butEquals
+        //   =
+        //   <input type="radio" ... value="differs">            butDiffers
+        //   ≠
+        // </span>                                               sel
+        // <table>                                               group2
+        //   <tr>                                                row
+        //     <td><input type="text"...></td>                   cell
+        //     <td id="err_id"></td>
+        //   </tr>                                               row
+        //   ...
+        // </table>                                              group2
+
+        let butEquals  : JQuery = $(`<input type="radio" name="${this.name_prefix}_${key}_comp" value="equals">`);
+        let butDiffers : JQuery = $(`<input type="radio" name="${this.name_prefix}_${key}_comp" value="differs">`);
+
+        switch (ifh.comparator) {
+        case 'equals':  butEquals.prop('checked',true);  break;
+        case 'differs': butDiffers.prop('checked',true); break;
+        }
+
+        let sel : JQuery = $('<span></span>');
+        sel.append(butEquals, "=", butDiffers, "&#x2260;");
+        this.groups[key].append(sel);
+
+        // Set handler for radio button changes
+        sel.on('click', ifh, (e : JQueryEventObject) => {
+            // val() normally returns 'equals' or 'differs', but it may return an empty
+            // value if the user clicks on, say, the = sign.
+            let v : string = $(e.target).val() as string;
+            switch (v) {
+            case 'equals':
+            case 'differs':
+                e.data.comparator = v; // e.data is ifh
+                this.updateMql();
+                break;
+            }
+        });
+
+        let group2 : JQuery = $('<table></table>');
+
+        for (let i=0; i<ifh.values.length; ++i) {
+            let jtf : JQuery = $('<input type="text" size="8">'); // Integer text field
+            if (ifh.values[i])
+                jtf.val(String(ifh.values[i]));
+
+            let err_id : string = `err_${key}_${i}`;
+
+            // Set handler for field changes
+            jtf.on('keyup', null,
+                   {ifh: ifh, i: i, err_id: err_id}, // Event data
+                   $.proxy(this.integerTextModifiedListener,this));
+
+            let row  : JQuery = $('<tr></tr>');
+            let cell : JQuery = $('<td></td>');
+            cell.append(jtf);
+            row.append(cell);
+            row.append(`<td id="${err_id}"></td>`);
+            group2.append(row);
+        }
+        this.groups[key].append(group2);
+        this.handlers.push(ifh);
+    }
+
+    //------------------------------------------------------------------------------------------
+    // generateStringPanel method
+    //
+    // Creates HTML for the feature selection panel associated a string feature.
+    //
+    // Parameters:
+    //     key: Feature name.
+    //     fhs: Maps feature name => feature handler. This parameter is only set when we're editing
+    //          an existing exercise with feature handlers, otherwise this parameter is null.
+    //     isForeign: True if the string feature uses an alphabet that requires a virtual keyboard.
+    //
+    private generateStringPanel(key : string, fhs : { [key:string] : FeatureHandler }, isForeign : boolean) : void {
+        let sfh : StringFeatureHandler = (fhs && fhs[key]) ? fhs[key] as StringFeatureHandler : new StringFeatureHandler(key);
+
+        // Append this HTML structure to this.groups[key]:    From these variables
+        // <span>                                                sel
+        //   <input type="radio" ... value="equals">             butEquals
+        //   =
+        //   <input type="radio" ... value="differs">            butDiffers
+        //   ≠
+        //   <input type="radio" ... value="differs">            butMatches
+        //   ~
+        // </span>                                               sel
+        // <table>                                               group2
+        //   <tr>                                                row
+        //     <td><input type="text"...></td>                   cell
+        //   </tr>                                               row
+        //   ...
+        //   <tr><td id="${kbdRowId}" ...></td></tr>             (Only if virtual keyboard is used)
+        // </table>                                              group2
+
+        let butEquals  : JQuery = $(`<input type="radio" name="${this.name_prefix}_${key}_comp" value="equals">`);
+        let butDiffers : JQuery = $(`<input type="radio" name="${this.name_prefix}_${key}_comp" value="differs">`);
+        let butMatches : JQuery = $(`<input type="radio" name="${this.name_prefix}_${key}_comp" value="matches">`);
+
+        switch (sfh.comparator) {
+        case 'equals':  butEquals.prop('checked',true);  break;
+        case 'differs': butDiffers.prop('checked',true); break;
+        case 'matches': butMatches.prop('checked',true); break;
+        }
+
+        let sel : JQuery = $('<span></span>');
+        sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
+        this.groups[key].append(sel);
+
+        // Set handler for radio button changes
+        sel.on('click', sfh, (e : JQueryEventObject) => {
+            // val() normally returns 'equals', 'differs', or 'matches', but it may
+            // return an empty value if the user clicks on, say, the = sign.
+            let v : string = $(e.target).val() as string;
+            switch (v) {
+            case 'equals':
+            case 'differs':
+            case 'matches':
+                e.data.comparator = v; // e.data is sfh
+                this.updateMql();
+                break;
+            }
+        });
+
+        let group2 : JQuery = $('<table></table>');
+
+        for (let i=0; i<sfh.values.length; ++i) {
+            let jtf : JQuery =
+                isForeign
+                ? $(`<input class="${charset.foreignClass}" type="text" size="20" id="${this.name_prefix}_${key}_input${+i+1}">`)
+                : $('<input type="text" size="20">');
+
+            if (sfh.values[i])
+                jtf.val(sfh.values[i]);
+
+            let kbdRowId : string; // ID of row containing virtual keyboard
+            if (isForeign) {
+                kbdRowId = `${this.name_prefix}_${key}_row${+i+1}`;
+
+                // Move virtual keyboard when an input field gets focus
+                jtf.on('focus', null,
+                       {kbdRowId : kbdRowId, sfh: sfh, i: i}, // Event data
+                       (e : JQueryEventObject) => {
+                           $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
+                           VirtualKeyboard.attachInput(e.currentTarget);
+
+                           // Monitor changes to the input field
+                           this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i);
+                       });
+            }
+
+            // Set handler for direct field changes
+            jtf.on('keyup', null,
+                   {sfh: sfh, i: i}, // Event data
+                   $.proxy(this.stringTextModifiedListener,this));
+
+            let row  : JQuery = $('<tr></tr>');
+            let cell : JQuery = $('<td></td>');
+            cell.append(jtf);
+            row.append(cell);
+            group2.append(row);
+
+            if (isForeign)
+                group2.append(`<tr><td id="${kbdRowId}" style="text-align:right;"></td></tr>`);
+        }
+        this.groups[key].append(group2);
+        this.handlers.push(sfh);
+    }
+
+    //------------------------------------------------------------------------------------------
+    // generateQerePanel method
+    //
+    // Creates HTML for the feature selection panel associated a qere feature.
+    //
+    // Parameters:
+    //     key: Feature name.
+    //     fhs: Maps feature name => feature handler. This parameter is only set when we're editing
+    //          an existing exercise with feature handlers, otherwise this parameter is null.
+    //
+    private generateQerePanel(key : string, fhs : { [key:string] : FeatureHandler }) : void {
+        let qfh : QereFeatureHandler = (fhs && fhs[key]) ? fhs[key] as QereFeatureHandler : new QereFeatureHandler(key);
+
+        // Append this HTML structure to this.groups[key]:    From these variables
+        // <span>                                                sel
+        //   <input type="checkbox" ... value="omit">            butOmitqere
+        // </span>                                               sel
+
+        let butOmitqere : JQuery = $(`<input type="checkbox" name="${this.name_prefix}_${key}_sel" value="omit">`);
+        if (qfh.omit)
+            butOmitqere.prop('checked',true);
+
+        let sel : JQuery = $('<span></span>');
+        sel.append(butOmitqere, localize('omit_qere'));
+        this.groups[key].append(sel);
+
+        // Set handler for checkbox changes
+        sel.on('click', qfh, (e : JQueryEventObject) => {
+            let target : JQuery = $(e.target);
+            e.data.setValue(target.prop('checked'));  // e.data is qfh
+            this.updateMql();
+        });
+
+        this.handlers.push(qfh);
+    }
+
+    //------------------------------------------------------------------------------------------
+    // generateListOfPanel method
+    //
+    // Creates HTML for the feature selection panel associated a feature of type "list of ...".
+    // Note: At present this is always "list of verb_class_t" (for Hebrew verb classes in the ETCBC4
+    // database).
+    //
+    // Parameters:
+    //     key: Feature name.
+    //     fhs: Maps feature name => feature handler. This parameter is only set when we're editing
+    //          an existing exercise with feature handlers, otherwise this parameter is null.
+    //     stripped_valueType: The type name following "list of ..." in the feature type.
+    //     otype: Quiz object type.
+    //
+    private generateListOfPanel(key                : string,
+                                fhs                : { [key:string] : FeatureHandler },
+                                stripped_valueType : string,
+                                otype              : string
+                               ) : void {
+ 	let enumValues : string[] = typeinfo.enum2values[stripped_valueType];
+
+        if (!enumValues) {
+            // We cannot handle lists of non-enums
+            console.log('Unknown valueType',`list of ${stripped_valueType}`);
+        }
+
+        let elfh : EnumListFeatureHandler = (fhs && fhs[key]) ? fhs[key] as EnumListFeatureHandler : new EnumListFeatureHandler(key);
+
+
+        // Append this HTML structure to this.groups[key]:    From these variables
+        // <div id="list_tabs_${key}">                           group_tabs
+        //   <ul>                                                group_ul
+        //     <li>
+        //       <a href="#tab_${key}_0">LABEL 0</a>
+        //     </li>
+        //     <li>
+        //       <a href="#tab_${key}_1">LABEL 1</a>
+        //     </li>
+        //     ...
+        //   </ul>                                               group_ul
+        //   <div id="tab_${key}_0">                             tab_contents
+        //     ...                                               vc_choice
+        //   </div>                                              tab_contents
+        //   <div id="tab_${key}_1">                             tab_contents
+        //     ...                                               vc_choice
+        //   </div>                                              tab_contents
+        //   ...
+        // </div>                                                group_tabs
+
+        let group_tabs : JQuery = $(`<div id="list_tabs_${key}"></div>`);
+        let group_ul   : JQuery = $('<ul></ul>');
+        group_tabs.append(group_ul);
+
+        // Create four tabs, one for each verb class choice.
+        let tab_labels : string[] = [localize('1st_choice'),
+                                     localize('2nd_choice'),
+                                     localize('3rd_choice'),
+                                     localize('4th_choice')];
+
+        for (let tabno=0; tabno<4; ++tabno) {
+            group_ul.append(`<li><a href="#tab_${key}_${tabno}">${tab_labels[tabno]}</a></li>`);
+
+            let lv : ListValuesHandler = elfh.listvalues[tabno]; // Handler for a collection of values
+
+            let tab_contents : JQuery = $(`<div id="tab_${key}_${tabno}"></div>`);
+
+            let vc_choice : PanelForOneVcChoice
+                = new PanelForOneVcChoice(enumValues,                                      // Enumeration constants
+                                          stripped_valueType,                              // Text folliwing 'list of ...' in feature type
+                                          `${this.name_prefix}_${otype}_${key}_${tabno}`,  // Prefix to add to the name="..." attribute
+                                          lv);                                             // Handler for the verb class collections
+            tab_contents.append(vc_choice.getPanel());
+            group_tabs.append(tab_contents);
+
+            // Set handler for checkbox changes. We add one handler for all the checkboxes in
+            // vc_choice and use the e.target information to identify the checkbox actually changed.
+	    tab_contents.on('click', lv, (e : JQueryEventObject) => {
+                let target : JQuery = $(e.target);
+                if (target.attr('type')==='radio') {
+                    // The user clicked on a radio button
+                    e.data.modifyValue(target.attr('data-name'), target.attr('value')); // e.data is lv
+                    this.updateMql();
+                }
+            });
+        }
+        this.groups[key].append(group_tabs).tabs();
+        this.handlers.push(elfh);
+    }
+
+    //------------------------------------------------------------------------------------------
+    // generateEnumPanel method
+    //
+    // Creates HTML for the feature selection panel associated a enumeration feature.
+    //
+    // Parameters:
+    //     key: Feature name.
+    //     fhs: Maps feature name => feature handler. This parameter is only set when we're editing
+    //          an existing exercise with feature handlers, otherwise this parameter is null.
+    //     featset: The FeatureSetting for the feature.
+    //     valueType: The type of the feature value.
+    //
+    private generateEnumPanel(key : string, fhs : { [key:string] : FeatureHandler }, featset : FeatureSetting, valueType : string) : void {
+ 	let enumValues : string[] = typeinfo.enum2values[valueType];
+
+        if (!enumValues) {
+            console.log('Unknown valueType',valueType);
+            return;
+        }
+
+        let efh : EnumFeatureHandler = (fhs && fhs[key]) ? fhs[key] as EnumFeatureHandler : new EnumFeatureHandler(key);
+
+        // Append this HTML structure to this.groups[key]:    From these variables
+        // <span>                                                sel
+        //   <input type="radio" ... value="equals">             butEquals
+        //   =
+        //   <input type="radio" ... value="differs">            butDiffers
+        //   ≠
+        // </span>                                               sel
+        // <table>                                               group2
+        //   <tr>                                                row
+        //     <td>                                              cell
+        //       <span><input type="checkbox"...></span>         checkBoxes[n]
+        //     </td>                                             cell
+        //   </tr>                                               row
+        //   ...
+        // </table>                                              group2
+
+
+        let butEquals  : JQuery = $(`<input type="radio" name="${this.name_prefix}_${key}_comp" value="equals">`);
+	let butDiffers : JQuery = $(`<input type="radio" name="${this.name_prefix}_${key}_comp" value="differs">`);
+
+        switch (efh.comparator) {
+        case 'equals': butEquals.prop('checked',true); break;
+        case 'differs': butDiffers.prop('checked',true); break;
+        }
+
+        let sel : JQuery = $('<span></span>');
+        sel.append(butEquals, '=', butDiffers, '&#x2260;');
+        this.groups[key].append(sel);
+
+        // Set handler for radio button changes
+        sel.on('click', efh, (e : JQueryEventObject) => {
+            // val() normally returns 'equals' or 'differs', but it may return an empty
+            // value if the user clicks on, say, the = sign.
+            let v : string = $(e.target).val() as string;
+            switch (v) {
+            case 'equals':
+            case 'differs':
+                e.data.comparator = v; // e.data is efh
+                this.updateMql();
+                break;
+            }
+        });
+
+
+        let checkBoxes : SortingCheckBox[] = [];
+
+        for (let i = 0; i<enumValues.length; ++i) {
+            let s : string = enumValues[i];
+
+            let hv : string[] = featset.hideValues;
+	    let ov : string[] = featset.otherValues;
+            if ((hv && hv.indexOf(s)!==-1) || ((ov && ov.indexOf(s)!==-1)))
+                continue;
+
+            let scb = new SortingCheckBox(this.name_prefix + '_' + key, s, getFeatureValueFriendlyName(valueType, s, false, false));
+            scb.setSelected(efh.values && efh.values.indexOf(s)!==-1);
+            checkBoxes.push(scb);
+        }
+
+        checkBoxes.sort((a : SortingCheckBox, b : SortingCheckBox) => StringWithSort.compare(a.getSws(),b.getSws()));
+
+	// Decide how many columns and rows to use for feature values
+	let columns : number =
+	    checkBoxes.length>12 ? 3 :
+	    checkBoxes.length>4 ? 2 : 1;
+
+        let rows : number = Math.ceil(checkBoxes.length / columns);
+
+        let group2 : JQuery = $('<table></table>');
+
+        // Create a table of size columns×rows
+        for (let r=0; r<rows; ++r) {
+            let row : JQuery = $('<tr></tr>');
+            for (let c=0; c<columns; ++c) {
+                let cell : JQuery = $('<td></td>');
+                if (c*rows + r < checkBoxes.length)
+                    cell.append(checkBoxes[c*rows + r].getJQuery());
+                row.append(cell);
+            }
+            group2.append(row);
+        }
+
+        // Set handler for checkbox changes. We add one handler for all the checkboxes in
+        // group2 and use the e.target information to identify the checkbox actually changed.
+	group2.on('click', efh, (e : JQueryEventObject) => {
+            let target : JQuery = $(e.target);
+            if (target.attr('type')==='checkbox') {
+                // The user clicked on a checkbox
+                if (target.prop('checked'))
+                    e.data.addValue(target.attr('value'));  // e.data is efh
+                else
+                    e.data.removeValue(target.attr('value'));
+                this.updateMql();
+            }
+        });
+
+        this.groups[key].append(group2);
+        this.handlers.push(efh);
+    }
+
+    //------------------------------------------------------------------------------------------
+    // getOtype method
+    //
+    // Returns the question object currently selected by the user.
+    //
     protected getOtype() : string {
         return this.objectTypeCombo.val() as string;
     }
 
+    //------------------------------------------------------------------------------------------
+    // getOtype method
+    //
+    // Sets the question object type in the combobox.
+    //
+    // Parameter:
+    //     otype: The question object to set.
+    //
     public setOtype(otype : string) {
         this.objectTypeCombo.val(otype);
         this.objectTypeCombo.change();
     }
 
+    //------------------------------------------------------------------------------------------
+    // setUsemql method
+    //
+    // Sets the checkbox that indicates that MQL is to be used.
+    //
     public setUsemql() {
         this.rbMql.prop('checked', true);
         this.rbMql.click();
     }
-    
-    
-    // Default value. Overidden in PanelTemplSentenceSelector
-    protected getUseForQo() : boolean {
-	return false;
-    }
-	
+
+
+    //------------------------------------------------------------------------------------------
+    // getUseForQo method
+    //
+    // Returns the value of the "Use for sentence unit selection" checkbox.
+    //
+    protected abstract getUseForQo() : boolean;
+
+    //------------------------------------------------------------------------------------------
+    // isDirty method
+    //
+    // Returns true if the user has changed the data in the exercise template.
+    //
     public isDirty() : boolean {
 	return this.getMql() !== this.txtEntry;
     }
-	
+
+    //------------------------------------------------------------------------------------------
+    // makeMql method
+    //
+    // Convert the settings of the friendly feature selectors to MQL.
+    //
+    // Returns:
+    //     The generated MQL string.
+    //
     protected makeMql() : string {
+	let sb : string = ''; // The MQL string is built here
+
         if (this.handlers) {
-	    let sb : string = '';
-	    let first : boolean = true;
+            let abet : util.AddBetween = new util.AddBetween(' AND ');
 
 	    for (let i=0; i<this.handlers.length; ++i) {
 	        let fh : FeatureHandler = this.handlers[i];
 
-		if (fh.hasValues()) {
-		    if (first)
-			first = false;
-		    else
-			sb += ' AND ';
-		    sb += fh.toMql();
-		}
+		if (fh.hasValues())
+		    sb += abet.getStr() + fh.toMql();
 	    }
-            return sb;
         }
-        else
-            return '';
+
+        return sb;
     }
 
-    protected switchToMql(useMql : boolean) : void {
-        alert('Abstract function switchToMql() called');
-    }
-	
-    protected updateMql() : void {
+
+    //------------------------------------------------------------------------------------------
+    // switchToMql method
+    //
+    // Switches between the friendly feature selector and MQL input.
+    //
+    // Parameter:
+    //     useMql: True to switch to MQL, false to switch to friendly feature selector.
+    //
+    protected abstract switchToMql(useMql : boolean) : void;
+
+
+    //------------------------------------------------------------------------------------------
+    // updateMql method
+    //
+    // Updates the value of the MQL <textarea> with the values from the friendly feature selector.
+    //
+    private updateMql() : void {
  	this.setMql(this.makeMql());
     }
 
 
-    protected populateFeatureTab(otype: string) : void {
-        alert('Abstract function populateFeatureTab() called');
-    }
+    //------------------------------------------------------------------------------------------
+    // populateFeatureTab method
+    //
+    // Generate the content of the 'Features' tab based on the newly selected question object type.
+    //
+    // Parameter:
+    //     otype: The question object to set.
+    //
+    public abstract populateFeatureTab(otype: string) : void;
 
 
+    //------------------------------------------------------------------------------------------
+    // getInfo method
+    //
+    // Returns the feature selection as a MqlData object.
+    //
     public getInfo() : MqlData {
         let res : MqlData = {
             object   : this.getOtype(),

@@ -1,65 +1,131 @@
 // -*- js -*-
-/* Copyright 2013 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
+// Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
 
+// Code to handle the specification of display and request features when creating an exercise. This
+// code is used by the 'Features' tab of the exercise editor.
+
+
+//****************************************************************************************************
+// QuizFeatures interface
+//
+// Specifies the way features should be presented to or requested from a user when running an exercise.
+//
 interface QuizFeatures {
-    showFeatures : string[];
-    requestFeatures : { name : string; usedropdown : boolean;} [];
-    dontShowFeatures : string[];
-    dontShowObjects : { content : string; show? : string;} [];
+    showFeatures     : string[]; // Features to show to the user
+    requestFeatures  : {         // Features to request from the user
+        name         : string;       // Name of feature
+        usedropdown  : boolean;      // Is a drop down list used for this feature?
+    } [];
+    dontShowFeatures : string[]; // Features to hide from the user
+    dontShowObjects  : {         // Object types to hide from the user
+        content      : string;       // Name of object type
+        show?        : string;       // Feature to show even though object is hidden
+    } [];
 }
 
 
-// Hand coded database dependency for qere detection
+//****************************************************************************************************
+// Qere class
+//
+// Contains static methods with hand coded database dependency for qere detection.
+//
+class Qere {
+    private static dbName  : string = 'ETCBC4'; // Emdros database with qere forms
+    private static dbOtype : string = 'word';   // Emdros object type with qere forms
 
-function database_has_qere() : boolean {
-    return configuration.databaseName==="ETCBC4";
+    //------------------------------------------------------------------------------------------
+    // database_has_qere static method
+    //
+    // Returns true if the current Emdros database has words with a qere form.
+    //
+    public static database_has_qere() : boolean {
+        return configuration.databaseName===Qere.dbName;
+    }
+
+    //------------------------------------------------------------------------------------------
+    // otype_has_qere static method
+    //
+    // Checks if the specified Emdros object type has a qere form.
+    //
+    // Parameter:
+    //     otype: Emdros object type.
+    // Returns:
+    //     True if the specified Emdros object type has a qere form.
+    //
+    public static otype_has_qere(otype : string) : boolean {
+        return otype===Qere.dbOtype;
+    }
+
+    //------------------------------------------------------------------------------------------
+    // otype static method
+    //
+    // Returns the name of the Emdros object type that has a qere form.
+    //
+    public static otype() : string {
+        return Qere.dbOtype;
+    }
+
+    //------------------------------------------------------------------------------------------
+    // feature static method
+    //
+    // Returns the name of the Emdros feature containing the qere form.
+    //
+    public static feature() : string {
+        if (configuration.propertiesName==="ETCBC4")
+            return "qere_utf8";
+        if (configuration.propertiesName==="ETCBC4-translit")
+            return "qere_translit";
+        return null;
+    }
 }
 
-function otype_has_qere(otype : string) : boolean {
-    return otype==="word";
-}
-
-function qere_otype() : string {
-    return "word";
-}
-
-function qere_feature() : string {
-    if (configuration.propertiesName==="ETCBC4")
-        return "qere_utf8";
-    if (configuration.propertiesName==="ETCBC4-translit")
-        return "qere_translit";
-    return null;
-}
-
-
+//****************************************************************************************************
+// ButtonSelection enumeration
+//
+// Names the radio buttons and checkboxes that speficy the handling of a feature
+//
 enum ButtonSelection { SHOW, REQUEST, REQUEST_DROPDOWN, DONT_CARE, DONT_SHOW, SHOW_QERE };
 
+
+//****************************************************************************************************
+// ButtonsAndLabel class
+//
+// Handles the buttons and name of a single feature, corresponding to one line in the "Features" tab.
+//
 class ButtonsAndLabel {
-    private showFeat	 : JQuery;
-    private reqFeat	 : JQuery;
-    private dcFeat	 : JQuery;
-    private dontShowFeat : JQuery;
-    private ddCheck	 : JQuery;
-    private feat	 : JQuery;
-    private showQere     : JQuery;
+    private showFeat	 : JQuery; // The "Show" radio button
+    private reqFeat	 : JQuery; // The "Request" radio button
+    private dcFeat	 : JQuery; // The "Don't care" radio button
+    private dontShowFeat : JQuery; // The "Don't show" radio button
+    private ddCheck	 : JQuery; // The "Multiple choice" checkbox
+    private showQere	 : JQuery; // The "Show qere" radio button
+    private feat	 : JQuery; // The <span> element containing the feature name
 
-    constructor(lab                       : string,
-                private featName          : string,
-                otype                     : string,
-                select                    : ButtonSelection,
-                private useDropDown       : boolean,
-                private canShow           : boolean,
-                private canRequest        : boolean,
-                private canDisplayGrammar : boolean,
-                private canShowQere       : boolean) {
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Generates HTML code for a single line in the "Features" tab.
+    //
+    // The parameters and additional class fields are described below.
+    //
+    constructor(lab                       : string,          // The localized name of the feature
+                private featName          : string,          // The Emdros name of the feature
+                otype                     : string,          // The Emdros object type
+                select                    : ButtonSelection, // Initially selected radio button
+                private useDropDown       : boolean,         // Can multiple choice be used?
+                private canShow           : boolean,         // Can this be a display feature?
+                private canRequest        : boolean,         // Can this be a request feature?
+                private canDisplayGrammar : boolean,         // Can this be a "don't show" feature?
+                private canShowQere       : boolean          // Include a "show qere" button?
+               ) {
 
-        this.showFeat     = canShow           ? $('<input type="radio" name="feat_{0}_{1}" value="show">'.format(otype,featName))         : $('<span></span>');
-        this.reqFeat      = canRequest        ? $('<input type="radio" name="feat_{0}_{1}" value="request">'.format(otype,featName))      : $('<span></span>');
-        this.dcFeat       = $('<input type="radio" name="feat_{0}_{1}" value="dontcare">'.format(otype,featName));
-        this.dontShowFeat = canDisplayGrammar ? $('<input type="radio" name="feat_{0}_{1}" value="dontshowfeat">'.format(otype,featName)) : $('<span></span>');
-        this.showQere     = canShowQere       ? $('<input type="radio" name="feat_{0}_{1}" value="showqere">'.format(otype,featName))     : $('<span></span>');
-	this.feat         = $('<span>{0}</span>'.format(lab));
-	
+        this.showFeat     = canShow           ? $(`<input type="radio" name="feat_${otype}_${featName}" value="show">`)         : $('<span></span>');
+        this.reqFeat      = canRequest        ? $(`<input type="radio" name="feat_${otype}_${featName}" value="request">`)      : $('<span></span>');
+        this.dcFeat       =                     $(`<input type="radio" name="feat_${otype}_${featName}" value="dontcare">`);
+        this.dontShowFeat = canDisplayGrammar ? $(`<input type="radio" name="feat_${otype}_${featName}" value="dontshowfeat">`) : $('<span></span>');
+        this.showQere     = canShowQere       ? $(`<input type="radio" name="feat_${otype}_${featName}" value="showqere">`)     : $('<span></span>');
+	this.feat         =                     $(`<span>${lab}</span>`);
+
 	switch (select) {
         case ButtonSelection.SHOW:             this.showFeat.prop('checked',true);     break;
         case ButtonSelection.REQUEST:
@@ -70,7 +136,7 @@ class ButtonsAndLabel {
 	}
 
         if (useDropDown) {
-            this.ddCheck = $('<input type="checkbox" name="dd_{0}_{1}">'.format(otype,featName));
+            this.ddCheck = $(`<input type="checkbox" name="dd_${otype}_${featName}">`);
             this.ddCheck.prop('checked', select!=ButtonSelection.REQUEST);
         }
         else if (canShowQere) {
@@ -81,6 +147,7 @@ class ButtonsAndLabel {
 
         if (canRequest) {
             if (useDropDown) {
+                // Enable or disable the "multiple choice" checkbox as required
                 this.ddCheck.prop('disabled', !this.reqFeat.prop('checked'));
                 if (canShow)
                     this.showFeat.click(() => this.ddCheck.prop('disabled', true));
@@ -92,215 +159,269 @@ class ButtonsAndLabel {
         }
     }
 
+    //------------------------------------------------------------------------------------------
+    // getRow method
+    //
+    // Returns HTML for the table row managed by this class.
+    //
     public getRow() : JQuery {
-        var row : JQuery = $('<tr></tr>');
-        var cell : JQuery;
+        let row  : JQuery = $('<tr></tr>');
+        let cell : JQuery;
 
-        cell = $('<td></td>');
-        cell.append(this.showFeat);
-        row.append(cell);
-
-        cell = $('<td></td>');
-        cell.append(this.reqFeat);
-        row.append(cell);
-
-        cell = $('<td></td>');
-        cell.append(this.dcFeat);
-        row.append(cell);
-
-        cell = $('<td></td>');
-        cell.append(this.dontShowFeat);
-        row.append(cell);
-
-        cell = $('<td></td>');
-        cell.append(this.ddCheck);
-        row.append(cell);
-
-        cell = $('<td class="leftalign"></td>');
-        cell.append(this.feat);
-        row.append(cell);
+        cell = $('<td></td>')                  .append(this.showFeat);     row.append(cell);
+        cell = $('<td></td>')                  .append(this.reqFeat);      row.append(cell);
+        cell = $('<td></td>')                  .append(this.dcFeat);       row.append(cell);
+        cell = $('<td></td>')                  .append(this.dontShowFeat); row.append(cell);
+        cell = $('<td></td>')                  .append(this.ddCheck);      row.append(cell);
+        cell = $('<td class="leftalign"></td>').append(this.feat);         row.append(cell);
 
         return row;
     }
 
-    public isSelected_showFeat() : boolean {
-        if (this.canShow)
-            return this.showFeat.prop('checked');
-        else
-            return false;
+    //------------------------------------------------------------------------------------------
+    // isSelected method
+    //
+    // Checks if the specified radio button or checkbox is selected
+    //
+    // Parameter:
+    //     button: The radio button or checkbox to check.
+    // Returns:
+    //     True if the radio button or checkbox is available and checked
+    //
+    public isSelected(button : ButtonSelection) {
+        switch (button) {
+        case ButtonSelection.SHOW:
+            return this.canShow && this.showFeat.prop('checked');
+
+        case ButtonSelection.REQUEST:
+            return this.canRequest && this.reqFeat.prop('checked');
+
+        case ButtonSelection.REQUEST_DROPDOWN:
+            return this.useDropDown && this.ddCheck.prop('checked');
+
+        case ButtonSelection.DONT_CARE:
+            return this.dcFeat.prop('checked');
+
+        case ButtonSelection.DONT_SHOW:
+            return this.canDisplayGrammar && this.dontShowFeat.prop('checked');
+
+        case ButtonSelection.SHOW_QERE:
+            return this.canShowQere && this.showQere.prop('checked');
+        }
     }
 
-    public isSelected_reqFeat() : boolean {
-        if (this.canRequest)
-            return this.reqFeat.prop('checked');
-        else
-            return false;
-    }
-
-    public isSelected_dontShowFeat() : boolean {
-        if (this.canDisplayGrammar)
-            return this.dontShowFeat.prop('checked');
-        else
-            return false;
-    }
-
-    public isSelected_showQere() : boolean {
-        if (this.canShowQere)
-            return this.showQere.prop('checked');
-        else
-            return false;
-    }
-
-    public isSelected_ddCheck() : boolean {
-        if (this.useDropDown)
-            return this.ddCheck.prop('checked');
-        else
-            return false;
-    }
-
+    //------------------------------------------------------------------------------------------
+    // getFeatName method
+    //
+    // Returns the name of the Emdros feature.
+    //
     public getFeatName() : string {
         return this.featName;
     }
 }
 
-class PanelForOneOtype  {
-    public visualBAL : ButtonsAndLabel;
-    public allBAL    : ButtonsAndLabel[] = [];
-    private panel    : JQuery = $('<table class="striped featuretable"></table>');
-     
-    constructor(otype : string, ptqf : PanelTemplQuizFeatures) {
-        var useSavedFeatures : boolean = otype === ptqf.initialOtype;
-        
-        this.panel.append('<tr><th>{0}</th><th>{1}</th><th>{2}</th><th>{3}</th><th>{4}</th><th class="leftalign">{5}</th></tr>'
-                          .format(localize('show'), 
-                                  localize('request'), 
-                                  localize('dont_care'), 
-                                  localize('dont_show'), 
-                                  localize('multiple_choice'), 
-                                  localize('feature')));
 
-        // First set up "visual" pseudo feature
-        this.visualBAL = new ButtonsAndLabel(localize('visual'),'visual', otype,
-                                             useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE,
-                                             configuration.objHasSurface===otype && !!getFeatureSetting(otype,configuration.surfaceFeature).alternateshowrequestSql,
-                                             true,
-                                             configuration.objHasSurface===otype,
-                                             false,
-                                             false);
+//****************************************************************************************************
+// PanelForOneOtype class
+//
+// This class contains the exercise feature settings for a single Emdros object type.
+//
+class PanelForOneOtype  {
+    public visualBAL : ButtonsAndLabel;                                            // The setting for the "visual" pseudo feature
+    public allBAL    : ButtonsAndLabel[] = [];                                     // The settings for all other features
+    private panel    : JQuery = $('<table class="striped featuretable"></table>'); // The entire feature selection panel
+
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Creates a feature setting panel for a single Emdros object type.
+    //
+    // Parameters:
+    //     otype: The Emdros object type.
+    //     ptqf: The PanelTemplQuizFeatures object of which panel is a member.
+    //
+    constructor(otype : string, ptqf : PanelTemplQuizFeatures) {
+        //////////////////////////////////////////////////
+        // Create buttons for the specified object type //
+        //////////////////////////////////////////////////
+
+        let useSavedFeatures : boolean = otype === ptqf.initialOtype; // Use features read from exercise file?
+
+        // Add headings to the table
+        this.panel.append('<tr>'
+                          + `<th>${localize('show')}</th>`
+                          + `<th>${localize('request')}</th>`
+                          + `<th>${localize('dont_care')}</th>`
+                          + `<th>${localize('dont_show')}</th>`
+                          + `<th>${localize('multiple_choice')}</th>`
+                          + `<th class="leftalign">${localize('feature')}</th>`
+                          + '</tr>');
+
+        // Set up "visual" pseudo feature
+        this.visualBAL = new ButtonsAndLabel(localize('visual'),                  // The localized name of the feature
+                                             'visual',                            // The Emdros name of the feature
+                                             otype,                               // The Emdros object type
+                                             useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, // Initially selected radio button
+                                             configuration.objHasSurface===otype && !!getFeatureSetting(otype,configuration.surfaceFeature).alternateshowrequestSql, // Can multiple choice be used?
+                                             true,                                // Can this be a display feature?
+                                             configuration.objHasSurface===otype, // Can this be a request feature?
+                                             false,                               // Can this be a "don't show" feature?
+                                             false);                              // Include a "show qere" button?
 
         this.panel.append(this.visualBAL.getRow());
-         
-        // Now handle genuine features
-        var hasSurfaceFeature : boolean = otype === configuration.objHasSurface;
-         
-        var sg : SentenceGrammar = getSentenceGrammarFor(otype);
 
+        // Set up genuine features
+        let hasSurfaceFeature : boolean         = otype===configuration.objHasSurface;
+        let sg                : SentenceGrammar = getSentenceGrammarFor(otype);
+        let keylist           : string[]        = []; // Will hold list of relevant feature names
 
-        var keylist : string[] = []; // Will hold sorted list of keys
-        for (var key in getObjectSetting(otype).featuresetting) {
-            // Ignore specified features
-            if (getFeatureSetting(otype, key).ignoreShowRequest && (sg===null || !sg.containsFeature(key)))
+        // Note:
+        // getFeatureSetting(otype, featName).ignoreShow means featName cannot be a display feature.
+        // getFeatureSetting(otype, featName).ignoreRequest means featName cannot be a request feature.
+        // sg===null && !sg.containsFeature(featName) means featName cannot be a "don't show" feature (because it is never shown).
+        
+        // Go through all features and identify the ones to include in the panel
+        for (let featName in getObjectSetting(otype).featuresetting) {
+            // Ignore features marked to be ignored, unless they belong to a SentenceGrammar
+            if (getFeatureSetting(otype, featName).ignoreShow
+                && getFeatureSetting(otype, featName).ignoreRequest
+                && (sg===null || !sg.containsFeature(featName)))
                 continue;
 
             // Ignore features of type 'url'
-            if (typeinfo.obj2feat[otype][key]==='url')
+            if (typeinfo.obj2feat[otype][featName]==='url')
                 continue;
 
             // Ignore the genuine feature already presented as "visual"
-            if (hasSurfaceFeature && key===configuration.surfaceFeature)
+            if (hasSurfaceFeature && featName===configuration.surfaceFeature)
                 continue;
-            keylist.push(key);
+            keylist.push(featName);
         }
-         
-        // Next, loop through the keys in the sorted order
-        for (var ix=0; ix<keylist.length; ++ix) {
-            var key2 : string = keylist[ix];
 
-            // This can be simplified when ignoreShowRequest is removed
-            var ignoreShowRequest : boolean = getFeatureSetting(otype, key2).ignoreShowRequest;
-            var ignoreShow : boolean = getFeatureSetting(otype, key2).ignoreShow;
-            var ignoreRequest : boolean = getFeatureSetting(otype, key2).ignoreRequest;
-            if (ignoreShowRequest) {
-                ignoreShow = true;
-                ignoreRequest = true;
-            }
+        // Loop through the relevant features and create radio buttons for each
+        for (let ix=0; ix<keylist.length; ++ix) {
+            let featName : string = keylist[ix]; // Feture name
 
-            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, key2),
-                                          key2,
-                                          otype,
-                                          useSavedFeatures ? ptqf.getSelector(key2) : ButtonSelection.DONT_CARE,
-                                          !!getFeatureSetting(otype,key2).alternateshowrequestSql,
-                                          !ignoreShow,
-                                          !ignoreRequest,
-                                          sg!==null && sg.containsFeature(key2),
-                                          false);
+            let bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName),                     // The localized name of the feature  
+                                          featName,                                                    // The Emdros name of the feature     
+                                          otype,                                                       // The Emdros object type             
+                                          useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, // Initially selected radio button    
+                                          !!getFeatureSetting(otype,featName).alternateshowrequestSql, // Can multiple choice be used?       
+                                          !getFeatureSetting(otype, featName).ignoreShow,              // Can this be a display feature?     
+                                          !getFeatureSetting(otype, featName).ignoreRequest,           // Can this be a request feature?     
+                                          sg!==null && sg.containsFeature(featName),                   // Can this be a "don't show" feature?
+                                          false);                                                      // Include a "show qere" button?
 
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }
 
-        this.panel.append('<tr><td colspan="5"></td><td class="leftalign">&nbsp;</tr>');
-        this.panel.append('<tr><td colspan="2"></td><th>{0}</th><th>{1}</th><th>{2}</th><th class="leftalign">{3}</th></tr>'
-                          .format(localize('dont_care'),
-                                  localize('dont_show'),
-                                  database_has_qere() && !otype_has_qere(otype) ? localize('show_qere') : '',
-                                  localize('other_sentence_unit_types')));
         
+        ////////////////////////////////////////////////////////////////////////////////////////
+        // Create buttons for the additional object types to be included in the current panel //
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        // Add space between rows
+        this.panel.append('<tr><td colspan="5"></td><td class="leftalign">&nbsp;</tr>');
+
+        // Add headings to the table
+        this.panel.append('<tr>'
+                          + '<td colspan="2"></td>'
+                          + `<th>${localize('dont_care')}</th>`
+                          + `<th>${localize('dont_show')}</th>`
+                          + `<th>${Qere.database_has_qere() && !Qere.otype_has_qere(otype) ? localize('show_qere') : ''}</th>`
+                          + `<th class="leftalign">${localize('other_sentence_unit_types')}</th>`
+                          + '</tr>');
+
         // Generate buttons for other types:
-        for (var level in configuration.sentencegrammar) {
-            var leveli : number = +level;
+        for (let level in configuration.sentencegrammar) {
+            let leveli : number = +level;
             if (isNaN(leveli)) continue; // Not numeric
 
-            var otherOtype = configuration.sentencegrammar[leveli].objType;
+            let otherOtype : string = configuration.sentencegrammar[leveli].objType;
             if (otherOtype!==otype && configuration.objectSettings[otherOtype].mayselect) {
-                var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype),
-                                              'otherOtype_' + otherOtype,
-                                              otype,
-                                              useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE,
-                                              false,
-                                              false,
-                                              false,
-                                              true,
-                                              database_has_qere() && otype_has_qere(otherOtype));
-                
+                let bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), // The localized name of the object  
+                                              'otherOtype_' + otherOtype,        // The pseudo name of the feature     
+                                              otype,                             // The Emdros object type             
+                                              useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, // Initially selected radio button    
+                                              false,                             // Can multiple choice be used?       
+					      false,				 // Can this be a display feature?     
+					      false,				 // Can this be a request feature?     
+					      true,				 // Can this be a "don't show" feature?
+                                              Qere.database_has_qere() && Qere.otype_has_qere(otherOtype)); // Include a "show qere" button?
+
                 this.allBAL.push(bal);
                 this.panel.append(bal.getRow());
             }
         }
     }
 
+    //------------------------------------------------------------------------------------------
+    // hide method
+    //
+    // Hides the panel for the current object type.
+    //
     public hide() : void {
         this.panel.hide();
     }
 
+    //------------------------------------------------------------------------------------------
+    // show method
+    //
+    // Shows the panel for the current object type.
+    //
     public show() : void {
         this.panel.show();
     }
 
+    //------------------------------------------------------------------------------------------
+    // getPanel method
+    //
+    // Returns the HTML for the current object type.
+    //
     public getPanel() : JQuery {
         return this.panel;
     }
 }
 
 
+//****************************************************************************************************
+// PanelTemplQuizFeatures class
+//
+// This class holds the contents of the 'Features' tab. Note that this can include feature selection
+// panels for several object types, if the user switches between object types while creating an
+// exercise.
+//
 class PanelTemplQuizFeatures {
-    public initialOtype  : string;
-    private oldOtype     : string;
-    private initialQf    : QuizFeatures;
-    private panels       : { [ key : string ] : PanelForOneOtype } = {};  // Maps quiz object -> associated panel
-    private visiblePanel : PanelForOneOtype;	
-    private fpan         : JQuery = $('<div id="fpan"></div>');
+    private oldOtype     : string;                                        // The previously displayed object type
+    private panels       : { [ keyk : string ] : PanelForOneOtype } = {}; // Maps object type => associated panel
+    private visiblePanel : PanelForOneOtype;                              // The currently visible panel
+    private fpan         : JQuery = $('<div id="fpan"></div>');           // The HTML is built here
 
-
-    constructor(otype : string, qf : QuizFeatures, where : JQuery) {
-	this.initialOtype = otype;
-        this.initialQf = qf;
-
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Creates the panel for specifying display and request features.
+    //
+    // The parameters and additional class fields are described below.
+    //
+    constructor(public initialOtype : string,       // Emdros object from exercise file
+                private initialQf   : QuizFeatures, // Feature specification from exercise file
+                where               : JQuery        // The <div> where this class should store the generated HTML
+               ) {
         where.append(this.fpan);
     }
 
+    //------------------------------------------------------------------------------------------
+    // populate method
+    //
+    // Generate a panel for a specific Emdros object type.
+    //
+    // Parameter:
+    //     otype: The Emdros object type.
+    //
     public populate(otype : string) : void {
-        if (otype === this.oldOtype)
+        if (otype === this.oldOtype) // This is the object type from the exercise file
             return;
 
         this.oldOtype = otype;
@@ -318,28 +439,49 @@ class PanelTemplQuizFeatures {
 	this.visiblePanel.show();
     }
 
+    //------------------------------------------------------------------------------------------
+    // getSelector method
+    //
+    // Returns the initial radio button setting for a specific feature.
+    //
+    // Parameter:
+    //     feat: The name of the feature.
+    // Returns:
+    //     The radiobutton setting for the specifed feature.
+    //
     public getSelector(feat : string) : ButtonSelection {
-	if (this.initialQf) 
-            for (var i=0; i<this.initialQf.showFeatures.length; ++i)
-		if (this.initialQf.showFeatures[i]===feat)
-		    return ButtonSelection.SHOW;
- 
-	if (this.initialQf)
-            for (var i=0; i<this.initialQf.requestFeatures.length; ++i)
-		if (this.initialQf.requestFeatures[i].name===feat)
-		    return this.initialQf.requestFeatures[i].usedropdown ? ButtonSelection.REQUEST_DROPDOWN : ButtonSelection.REQUEST;
-	
-	if (this.initialQf && this.initialQf.dontShowFeatures)
-            for (var i=0; i<this.initialQf.dontShowFeatures.length; ++i)
+	if (!this.initialQf)
+	    return ButtonSelection.DONT_CARE;
+
+        for (let i=0; i<this.initialQf.showFeatures.length; ++i)
+	    if (this.initialQf.showFeatures[i]===feat)
+		return ButtonSelection.SHOW;
+
+        for (let i=0; i<this.initialQf.requestFeatures.length; ++i)
+	    if (this.initialQf.requestFeatures[i].name===feat)
+		return this.initialQf.requestFeatures[i].usedropdown ? ButtonSelection.REQUEST_DROPDOWN : ButtonSelection.REQUEST;
+
+	if (this.initialQf.dontShowFeatures)
+            for (let i=0; i<this.initialQf.dontShowFeatures.length; ++i)
 		if (this.initialQf.dontShowFeatures[i]===feat)
 		    return ButtonSelection.DONT_SHOW;
 
 	return ButtonSelection.DONT_CARE;
     }
 
+    //------------------------------------------------------------------------------------------
+    // getObjectSelector method
+    //
+    // Returns the initial radio button setting for a specific additional object.
+    //
+    // Parameter:
+    //     otype: The name of the additional object.
+    // Returns:
+    //     The radiobutton setting for the specifed feature.
+    //
     public getObjectSelector(otype : string) : ButtonSelection {
 	if (this.initialQf && this.initialQf.dontShowObjects) {
-            for (var i=0; i<this.initialQf.dontShowObjects.length; ++i) {
+            for (let i=0; i<this.initialQf.dontShowObjects.length; ++i) {
 		if (this.initialQf.dontShowObjects[i].content===otype) {
                     if (this.initialQf.dontShowObjects[i].show) // We assume the feature to show is qere
 		        return ButtonSelection.SHOW_QERE;
@@ -352,37 +494,52 @@ class PanelTemplQuizFeatures {
 	return ButtonSelection.DONT_CARE;
     }
 
+    //------------------------------------------------------------------------------------------
+    // noRequestFeatures method
+    //
+    // Returns true if no request features have been specified.
+    //
     public noRequestFeatures() : boolean {
 	if (!this.visiblePanel)
 	    return true;
-		
-	if (this.visiblePanel.visualBAL.isSelected_reqFeat())
+
+	if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST))
             return false;
 
-        for (var i=0; i<this.visiblePanel.allBAL.length; ++i)
-	    if (this.visiblePanel.allBAL[i].isSelected_reqFeat())
+        for (let i=0; i<this.visiblePanel.allBAL.length; ++i)
+	    if (this.visiblePanel.allBAL[i].isSelected(ButtonSelection.REQUEST))
                 return false;
 
 	return true;
     }
-	
+
+    //------------------------------------------------------------------------------------------
+    // noRequestFeatures method
+    //
+    // Returns true if no display features have been specified.
+    //
     public noShowFeatures() : boolean {
 	if (!this.visiblePanel)
 	    return true;
-		
-	if (this.visiblePanel.visualBAL.isSelected_showFeat())
+
+	if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.SHOW))
             return false;
 
-        for (var i=0; i<this.visiblePanel.allBAL.length; ++i)
-	    if (this.visiblePanel.allBAL[i].isSelected_showFeat())
+        for (let i=0; i<this.visiblePanel.allBAL.length; ++i)
+	    if (this.visiblePanel.allBAL[i].isSelected(ButtonSelection.SHOW))
                 return false;
 
 	return true;
     }
 
 
+    //------------------------------------------------------------------------------------------
+    // getInfo method
+    //
+    // Returns the feature specification as a QuizFeatures object.
+    //
     public getInfo() : QuizFeatures {
-        var qf : QuizFeatures =  {
+        let qf : QuizFeatures = {
             showFeatures     : [],
             requestFeatures  : [],
             dontShowFeatures : [],
@@ -392,36 +549,43 @@ class PanelTemplQuizFeatures {
 
 	if (!this.visiblePanel)
 	    return null;
-		
-	if (this.visiblePanel.visualBAL.isSelected_showFeat())
+
+        // Store information about the "visual" pseudo feature
+	if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.SHOW))
 	    qf.showFeatures.push('visual');
-	else if (this.visiblePanel.visualBAL.isSelected_reqFeat())
-	    qf.requestFeatures.push({name : 'visual', usedropdown : this.visiblePanel.visualBAL.isSelected_ddCheck()});
+	else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST))
+	    qf.requestFeatures.push({name : 'visual', usedropdown : this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN)});
 
-        for (var i=0; i<this.visiblePanel.allBAL.length; ++i) {
-            var bal : ButtonsAndLabel = this.visiblePanel.allBAL[i];
+        // Store informaiton about other features and about additional object types
+        for (let i=0; i<this.visiblePanel.allBAL.length; ++i) {
+            let bal : ButtonsAndLabel = this.visiblePanel.allBAL[i];
 
-	    if (bal.isSelected_showFeat())
+	    if (bal.isSelected(ButtonSelection.SHOW))
 		qf.showFeatures.push(bal.getFeatName());
-	    else if (bal.isSelected_reqFeat())
-	        qf.requestFeatures.push({name : bal.getFeatName(), usedropdown : bal.isSelected_ddCheck()});
-	    else if (bal.isSelected_dontShowFeat()) {
-                var fn = bal.getFeatName();
+	    else if (bal.isSelected(ButtonSelection.REQUEST))
+	        qf.requestFeatures.push({name : bal.getFeatName(), usedropdown : bal.isSelected(ButtonSelection.REQUEST_DROPDOWN)});
+	    else if (bal.isSelected(ButtonSelection.DONT_SHOW)) {
+                let fn = bal.getFeatName();
                 if (fn.substring(0,11) === 'otherOtype_') // 11 is the length of 'otherOtype_'
                     qf.dontShowObjects.push({content: fn.substring(11)});
                 else
 		    qf.dontShowFeatures.push(fn);
             }
-	    else if (bal.isSelected_showQere()) {
-                qf.dontShowObjects.push({content: qere_otype(), show: qere_feature()});
+	    else if (bal.isSelected(ButtonSelection.SHOW_QERE)) {
+                qf.dontShowObjects.push({content: Qere.otype(), show: Qere.feature()});
             }
 	}
 	return qf;
     }
 
+    //------------------------------------------------------------------------------------------
+    // isDirty method
+    //
+    // Returns true if the user has changed the data in the exercise template.
+    //
     public isDirty() : boolean {
-        var qfnow : QuizFeatures = this.getInfo();
-        
+        let qfnow : QuizFeatures = this.getInfo();
+
         if (qfnow.showFeatures.length !== this.initialQf.showFeatures.length ||
             qfnow.requestFeatures.length !== this.initialQf.requestFeatures.length ||
             qfnow.dontShowFeatures.length !== this.initialQf.dontShowFeatures.length ||
@@ -429,28 +593,28 @@ class PanelTemplQuizFeatures {
             return true;
         }
 
-        for (var i=0; i<qfnow.showFeatures.length; ++i)
+        for (let i=0; i<qfnow.showFeatures.length; ++i)
             if (qfnow.showFeatures[i] !== this.initialQf.showFeatures[i]) {
-            return true;
-        }
-        for (var i=0; i<qfnow.requestFeatures.length; ++i)
+                return true;
+            }
+        
+        for (let i=0; i<qfnow.requestFeatures.length; ++i)
             if (qfnow.requestFeatures[i].name !== this.initialQf.requestFeatures[i].name ||
                 qfnow.requestFeatures[i].usedropdown !== this.initialQf.requestFeatures[i].usedropdown) {
-            return true;
-        }
-        
-        for (var i=0; i<qfnow.dontShowFeatures.length; ++i)
-            if (qfnow.dontShowFeatures[i] !== this.initialQf.dontShowFeatures[i]) {
-            return true;
-        }
+                return true;
+            }
 
-        for (var i=0; i<qfnow.dontShowObjects.length; ++i)
+        for (let i=0; i<qfnow.dontShowFeatures.length; ++i)
+            if (qfnow.dontShowFeatures[i] !== this.initialQf.dontShowFeatures[i]) {
+                return true;
+            }
+
+        for (let i=0; i<qfnow.dontShowObjects.length; ++i)
             if (qfnow.dontShowObjects[i].content !== this.initialQf.dontShowObjects[i].content ||
                 qfnow.dontShowObjects[i].show !== this.initialQf.dontShowObjects[i].show) {
-            return true;
-        }
+                return true;
+            }
 
         return false;
     }
 }
- 

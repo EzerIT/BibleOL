@@ -314,9 +314,9 @@ function localize(s) {
     return str === undefined ? '??' + s + '??' : str;
 }
 var FeatureHandler = (function () {
-    function FeatureHandler(typ, key) {
-        this.type = typ;
-        this.name = key;
+    function FeatureHandler(type, name) {
+        this.type = type;
+        this.name = name;
         this.comparator = 'equals';
     }
     FeatureHandler.prototype.normalize = function () {
@@ -341,8 +341,8 @@ var FeatureHandler = (function () {
 }());
 var StringFeatureHandler = (function (_super) {
     __extends(StringFeatureHandler, _super);
-    function StringFeatureHandler(key) {
-        var _this = _super.call(this, 'stringfeature', key) || this;
+    function StringFeatureHandler(name) {
+        var _this = _super.call(this, 'stringfeature', name) || this;
         _this.values = [];
         _this.normalize();
         return _this;
@@ -377,8 +377,8 @@ var StringFeatureHandler = (function (_super) {
 }(FeatureHandler));
 var IntegerFeatureHandler = (function (_super) {
     __extends(IntegerFeatureHandler, _super);
-    function IntegerFeatureHandler(key) {
-        var _this = _super.call(this, 'integerfeature', key) || this;
+    function IntegerFeatureHandler(name) {
+        var _this = _super.call(this, 'integerfeature', name) || this;
         _this.values = [];
         _this.normalize();
         return _this;
@@ -414,8 +414,8 @@ var IntegerFeatureHandler = (function (_super) {
 }(FeatureHandler));
 var RangeIntegerFeatureHandler = (function (_super) {
     __extends(RangeIntegerFeatureHandler, _super);
-    function RangeIntegerFeatureHandler(key) {
-        return _super.call(this, 'rangeintegerfeature', key) || this;
+    function RangeIntegerFeatureHandler(name) {
+        return _super.call(this, 'rangeintegerfeature', name) || this;
     }
     RangeIntegerFeatureHandler.prototype.set_low_high = function (index, val) {
         switch (index) {
@@ -456,8 +456,8 @@ var RangeIntegerFeatureHandler = (function (_super) {
 }(FeatureHandler));
 var EnumFeatureHandler = (function (_super) {
     __extends(EnumFeatureHandler, _super);
-    function EnumFeatureHandler(key) {
-        var _this = _super.call(this, 'enumfeature', key) || this;
+    function EnumFeatureHandler(name) {
+        var _this = _super.call(this, 'enumfeature', name) || this;
         _this.values = [];
         return _this;
     }
@@ -480,8 +480,8 @@ var EnumFeatureHandler = (function (_super) {
 }(FeatureHandler));
 var EnumListFeatureHandler = (function (_super) {
     __extends(EnumListFeatureHandler, _super);
-    function EnumListFeatureHandler(key) {
-        var _this = _super.call(this, 'enumlistfeature', key) || this;
+    function EnumListFeatureHandler(name) {
+        var _this = _super.call(this, 'enumlistfeature', name) || this;
         _this.listvalues = [];
         _this.normalize();
         return _this;
@@ -519,8 +519,8 @@ var EnumListFeatureHandler = (function (_super) {
 }(FeatureHandler));
 var QereFeatureHandler = (function (_super) {
     __extends(QereFeatureHandler, _super);
-    function QereFeatureHandler(key) {
-        var _this = _super.call(this, 'qerefeature', key) || this;
+    function QereFeatureHandler(name) {
+        var _this = _super.call(this, 'qerefeature', name) || this;
         _this.omit = false;
         return _this;
     }
@@ -584,16 +584,14 @@ var ListValuesHandler = (function () {
     return ListValuesHandler;
 }());
 var PanelTemplMql = (function () {
-    function PanelTemplMql(md, name_prefix) {
+    function PanelTemplMql(initialMd, name_prefix) {
         var _this = this;
-        this.fname2fh = {};
-        this.groups = {};
-        this.handlers = [];
-        this.initialMd = md;
+        this.initialMd = initialMd;
         this.name_prefix = name_prefix;
-        if (md.featHand) {
-            for (var i = 0; i < md.featHand.vhand.length; ++i) {
-                var vh = md.featHand.vhand[i];
+        this.fname2fh = {};
+        if (initialMd.featHand) {
+            for (var i = 0; i < initialMd.featHand.vhand.length; ++i) {
+                var vh = initialMd.featHand.vhand[i];
                 switch (vh.type) {
                     case 'enumfeature':
                         addMethods(vh, EnumFeatureHandler, null);
@@ -642,7 +640,7 @@ var PanelTemplMql = (function () {
             _this.currentBox.show();
         });
         this.objectTypeCombo = $('<select></select>');
-        var selObject = (md != null && md.object != null) ? md.object : configuration.objHasSurface;
+        var selObject = (initialMd != null && initialMd.object != null) ? initialMd.object : configuration.objHasSurface;
         for (var s in configuration.objectSettings) {
             if (configuration.objectSettings[s].mayselect) {
                 this.objectTypeCombo.append("<option value=\"" + s + "\""
@@ -760,7 +758,8 @@ var PanelTemplMql = (function () {
         this.updateMql();
     };
     PanelTemplMql.prototype.objectSelectionUpdated = function (otype, fhs) {
-        var _this = this;
+        this.handlers = [];
+        this.groups = {};
         for (var key in getObjectSetting(otype).featuresetting) {
             var valueType = typeinfo.obj2feat[otype][key];
             var featset = getFeatureSetting(otype, key);
@@ -779,292 +778,283 @@ var PanelTemplMql = (function () {
                 selectString = '';
             }
             this.featureCombo.append("<option value=\"" + key + "\" " + selectString + ">" + getFeatureFriendlyName(otype, key) + "</option>");
-            if (valueType === 'integer') {
-                if (featset.isRange) {
-                    var rfh = null;
-                    if (fhs)
-                        rfh = fhs[key];
-                    if (!rfh)
-                        rfh = new RangeIntegerFeatureHandler(key);
-                    var group2 = $('<table></table>');
-                    var rowLow = $('<tr></tr>');
-                    var rowHigh = $('<tr></tr>');
-                    var cellLab = void 0;
-                    var cellInput = void 0;
-                    var cellErr = void 0;
-                    var jtf = void 0;
-                    jtf = $('<input type="text" size="8">');
-                    if (rfh.isSetLow())
-                        jtf.val(String(rfh.value_low));
-                    var err_id = "err_" + key + "_low";
-                    jtf.on('keyup', null, { rfh: rfh, i: 'value_low', err_id: err_id }, $.proxy(this.rangeIntegerTextModifiedListener, this));
-                    cellLab = $('<td>' + localize('low_value_prompt') + '</td>');
-                    cellInput = $('<td></td>');
-                    cellInput.append(jtf);
-                    cellErr = $("<td id=\"" + err_id + "\"></td>");
-                    rowLow.append(cellLab, cellInput, cellErr);
-                    jtf = $('<input type="text" size="8">');
-                    if (rfh.isSetHigh())
-                        jtf.val(String(rfh.value_high));
-                    err_id = "err_" + key + "_high";
-                    jtf.on('keyup', null, { rfh: rfh, i: 'value_high', err_id: err_id }, $.proxy(this.rangeIntegerTextModifiedListener, this));
-                    cellLab = $('<td>' + localize('high_value_prompt') + '</td>');
-                    cellInput = $('<td></td>');
-                    cellInput.append(jtf);
-                    cellErr = $('<td id="{0}"></td>'.format(err_id));
-                    rowHigh.append(cellLab, cellInput, cellErr);
-                    group2.append(rowLow, rowHigh);
-                    group.append(group2);
-                    this.handlers.push(rfh);
-                }
-                else {
-                    var ifh = null;
-                    if (fhs)
-                        ifh = fhs[key];
-                    if (!ifh)
-                        ifh = new IntegerFeatureHandler(key);
-                    var butEquals = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"equals\">");
-                    var butDiffers = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"differs\">");
-                    switch (ifh.comparator) {
-                        case 'equals':
-                            butEquals.prop('checked', true);
-                            break;
-                        case 'differs':
-                            butDiffers.prop('checked', true);
-                            break;
-                    }
-                    var sel = $('<span></span>');
-                    sel.append(butEquals, "=", butDiffers, "&#x2260;");
-                    group.append(sel);
-                    sel.on('click', ifh, function (e) {
-                        var v = $(e.target).val();
-                        switch (v) {
-                            case 'equals':
-                            case 'differs':
-                                e.data.comparator = v;
-                                _this.updateMql();
-                                break;
-                        }
-                    });
-                    var group2 = $('<table></table>');
-                    for (var i = 0; i < ifh.values.length; ++i) {
-                        var jtf = $('<input type="text" size="8">');
-                        if (ifh.values[i])
-                            jtf.val(String(ifh.values[i]));
-                        var err_id = "err_" + key + "_" + i;
-                        jtf.on('keyup', null, { ifh: ifh, i: i, err_id: err_id }, $.proxy(this.integerTextModifiedListener, this));
-                        var row = $('<tr></tr>');
-                        var cell = $('<td></td>');
-                        cell.append(jtf);
-                        row.append(cell);
-                        row.append("<td id=\"" + err_id + "\"></td>");
-                        group2.append(row);
-                    }
-                    group.append(group2);
-                    this.handlers.push(ifh);
-                }
-            }
-            else if (valueType === 'ascii' || valueType === 'string') {
-                if (key === 'qere_utf8' || key === 'qere_translit') {
-                    var qfh = null;
-                    if (fhs)
-                        qfh = fhs[key];
-                    if (!qfh)
-                        qfh = new QereFeatureHandler(key);
-                    var butOmitqere = $("<input type=\"checkbox\" name=\"" + this.name_prefix + "_" + key + "_sel\" value=\"omit\">");
-                    if (qfh.omit)
-                        butOmitqere.prop('checked', true);
-                    var sel = $('<span></span>');
-                    sel.append(butOmitqere, localize('omit_qere'));
-                    group.append(sel);
-                    sel.on('click', qfh, function (e) {
-                        var target = $(e.target);
-                        e.data.setValue(target.prop('checked'));
-                        _this.updateMql();
-                    });
-                    this.handlers.push(qfh);
-                }
-                else {
-                    var sfh = null;
-                    if (fhs)
-                        sfh = fhs[key];
-                    if (!sfh)
-                        sfh = new StringFeatureHandler(key);
-                    var butEquals = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"equals\">");
-                    var butDiffers = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"differs\">");
-                    var butMatches = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"matches\">");
-                    switch (sfh.comparator) {
-                        case 'equals':
-                            butEquals.prop('checked', true);
-                            break;
-                        case 'differs':
-                            butDiffers.prop('checked', true);
-                            break;
-                        case 'matches':
-                            butMatches.prop('checked', true);
-                            break;
-                    }
-                    var sel = $('<span></span>');
-                    sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
-                    group.append(sel);
-                    sel.on('click', sfh, function (e) {
-                        var v = $(e.target).val();
-                        switch (v) {
-                            case 'equals':
-                            case 'differs':
-                            case 'matches':
-                                e.data.comparator = v;
-                                _this.updateMql();
-                                break;
-                        }
-                    });
-                    var group2 = $('<table></table>');
-                    for (var i = 0; i < sfh.values.length; ++i) {
-                        var jtf = featset.foreignText
-                            ? $("<input class=\"" + charset.foreignClass + "\" type=\"text\" size=\"20\" id=\"" + this.name_prefix + "_" + key + "_input" + (+i + 1) + "\">")
-                            : $('<input type="text" size="20">');
-                        if (sfh.values[i])
-                            jtf.val(sfh.values[i]);
-                        var kbdRowId = void 0;
-                        if (featset.foreignText) {
-                            kbdRowId = this.name_prefix + "_" + key + "_row" + (+i + 1);
-                            jtf.on('focus', null, { kbdRowId: kbdRowId, sfh: sfh, i: i }, function (e) {
-                                $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
-                                VirtualKeyboard.attachInput(e.currentTarget);
-                                _this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i);
-                            });
-                        }
-                        jtf.on('keyup', null, { sfh: sfh, i: i }, $.proxy(this.stringTextModifiedListener, this));
-                        var row = $('<tr></tr>');
-                        var cell = $('<td></td>');
-                        cell.append(jtf);
-                        row.append(cell);
-                        group2.append(row);
-                        if (featset.foreignText)
-                            group2.append("<tr><td id=\"" + kbdRowId + "\" style=\"text-align:right;\"></td></tr>");
-                    }
-                    group.append(group2);
-                    this.handlers.push(sfh);
-                }
-            }
-            else if (valueType.substr(0, 8) === 'list of ') {
-                var stripped_valueType = valueType.substr(8);
-                var enumValues = typeinfo.enum2values[stripped_valueType];
-                if (!enumValues) {
-                    console.log('Unknown valueType', valueType);
-                }
-                var elfh = null;
-                if (fhs)
-                    elfh = fhs[key];
-                if (!elfh)
-                    elfh = new EnumListFeatureHandler(key);
-                var group_tabs = $('<div id="list_tabs_{0}"></div>'.format(key));
-                var group_ul = $('<ul></ul>');
-                group_tabs.append(group_ul);
-                var tab_labels = [localize('1st_choice'),
-                    localize('2nd_choice'),
-                    localize('3rd_choice'),
-                    localize('4th_choice')];
-                for (var tabno = 0; tabno < 4; ++tabno) {
-                    var lv = elfh.listvalues[tabno];
-                    group_ul.append('<li><a href="#tab_{0}_{1}">{2}</li>'.format(key, tabno, tab_labels[tabno]));
-                    var tab_contents = $('<div id="tab_{0}_{1}"></div>'.format(key, tabno));
-                    var vc_choice = new PanelForOneVcChoice(enumValues, stripped_valueType, '{0}_{1}_{2}_{3}'.format(this.name_prefix, otype, key, tabno), lv);
-                    tab_contents.append(vc_choice.getPanel());
-                    group_tabs.append(tab_contents);
-                    tab_contents.on('click', lv, function (e) {
-                        var target = $(e.target);
-                        if (target.attr('type') === 'radio') {
-                            e.data.modifyValue(target.attr('data-name'), target.attr('value'));
-                            _this.updateMql();
-                        }
-                    });
-                }
-                group.append(group_tabs);
-                group.tabs();
-                this.handlers.push(elfh);
-            }
-            else {
-                var enumValues = typeinfo.enum2values[valueType];
-                if (!enumValues) {
-                    console.log('Unknown valueType', valueType);
-                }
-                else {
-                    var efh = null;
-                    if (fhs)
-                        efh = fhs[key];
-                    if (!efh)
-                        efh = new EnumFeatureHandler(key);
-                    var butEquals = $('<input type="radio" name="{0}_{1}_comp" value="equals">'
-                        .format(this.name_prefix, key));
-                    var butDiffers = $('<input type="radio" name="{0}_{1}_comp" value="differs">'
-                        .format(this.name_prefix, key));
-                    switch (efh.comparator) {
-                        case 'equals':
-                            butEquals.prop('checked', true);
-                            break;
-                        case 'differs':
-                            butDiffers.prop('checked', true);
-                            break;
-                    }
-                    var sel = $('<span></span>');
-                    sel.append(butEquals, '=', butDiffers, '&#x2260;');
-                    group.append(sel);
-                    sel.on('click', efh, function (e) {
-                        var v = $(e.target).val();
-                        switch (v) {
-                            case 'equals':
-                            case 'differs':
-                                e.data.comparator = v;
-                                _this.updateMql();
-                                break;
-                        }
-                    });
-                    var checkBoxes = [];
-                    for (var i = 0; i < enumValues.length; ++i) {
-                        var s = enumValues[i];
-                        var hv = featset.hideValues;
-                        var ov = featset.otherValues;
-                        if ((hv && hv.indexOf(s) !== -1) || ((ov && ov.indexOf(s) !== -1)))
-                            continue;
-                        var scb = new SortingCheckBox(this.name_prefix + '_' + key, s, getFeatureValueFriendlyName(valueType, s, false, false));
-                        if (!efh.values)
-                            alert('Assert efh.values failed for type ' + key);
-                        scb.setSelected(efh.values && efh.values.indexOf(s) !== -1);
-                        checkBoxes.push(scb);
-                    }
-                    checkBoxes.sort(function (a, b) { return StringWithSort.compare(a.getSws(), b.getSws()); });
-                    var columns = checkBoxes.length > 12 ? 3 :
-                        checkBoxes.length > 4 ? 2 : 1;
-                    var rows = Math.ceil(checkBoxes.length / columns);
-                    var group2 = $('<table></table>');
-                    for (var r = 0; r < rows; ++r) {
-                        var rw = $('<tr></tr>');
-                        for (var c = 0; c < columns; ++c) {
-                            var cell = $('<td></td>');
-                            if (c * rows + r < checkBoxes.length)
-                                cell.append(checkBoxes[c * rows + r].getJQuery());
-                            rw.append(cell);
-                        }
-                        group2.append(rw);
-                    }
-                    group2.on('click', efh, function (e) {
-                        var target = $(e.target);
-                        if (target.attr('type') === 'checkbox') {
-                            if (target.prop('checked'))
-                                e.data.addValue(target.attr('value'));
-                            else
-                                e.data.removeValue(target.attr('value'));
-                            _this.updateMql();
-                        }
-                    });
-                    group.append(group2);
-                    this.handlers.push(efh);
-                }
+            switch (valueType) {
+                case 'integer':
+                    if (featset.isRange)
+                        this.generateIntegerRangePanel(key, fhs);
+                    else
+                        this.generateIntegerPanel(key, fhs);
+                    break;
+                case 'ascii':
+                case 'string':
+                    if (key === Qere.feature())
+                        this.generateQerePanel(key, fhs);
+                    else
+                        this.generateStringPanel(key, fhs, featset.foreignText);
+                    break;
+                default:
+                    if (valueType.substr(0, 8) === 'list of ')
+                        this.generateListOfPanel(key, fhs, valueType.substr(8), otype);
+                    else
+                        this.generateEnumPanel(key, fhs, featset, valueType);
+                    break;
             }
             this.fpan.append(group);
         }
         this.populateFeatureTab(otype);
+    };
+    PanelTemplMql.prototype.generateIntegerRangePanel = function (key, fhs) {
+        var rfh = (fhs && fhs[key]) ? fhs[key] : new RangeIntegerFeatureHandler(key);
+        var group2 = $('<table></table>');
+        var rowLow = $('<tr></tr>');
+        var rowHigh = $('<tr></tr>');
+        var cellLab;
+        var cellInput;
+        var cellErr;
+        var jtf;
+        jtf = $('<input type="text" size="8">');
+        if (rfh.isSetLow())
+            jtf.val(String(rfh.value_low));
+        var err_id = "err_" + key + "_low";
+        jtf.on('keyup', null, { rfh: rfh, i: 'value_low', err_id: err_id }, $.proxy(this.rangeIntegerTextModifiedListener, this));
+        cellLab = $('<td>' + localize('low_value_prompt') + '</td>');
+        cellInput = $('<td></td>');
+        cellInput.append(jtf);
+        cellErr = $("<td id=\"" + err_id + "\"></td>");
+        rowLow.append(cellLab, cellInput, cellErr);
+        jtf = $('<input type="text" size="8">');
+        if (rfh.isSetHigh())
+            jtf.val(String(rfh.value_high));
+        err_id = "err_" + key + "_high";
+        jtf.on('keyup', null, { rfh: rfh, i: 'value_high', err_id: err_id }, $.proxy(this.rangeIntegerTextModifiedListener, this));
+        cellLab = $('<td>' + localize('high_value_prompt') + '</td>');
+        cellInput = $('<td></td>');
+        cellInput.append(jtf);
+        cellErr = $("<td id=\"" + err_id + "\"></td>");
+        rowHigh.append(cellLab, cellInput, cellErr);
+        group2.append(rowLow, rowHigh);
+        this.groups[key].append(group2);
+        this.handlers.push(rfh);
+    };
+    PanelTemplMql.prototype.generateIntegerPanel = function (key, fhs) {
+        var _this = this;
+        var ifh = (fhs && fhs[key]) ? fhs[key] : new IntegerFeatureHandler(key);
+        var butEquals = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"equals\">");
+        var butDiffers = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"differs\">");
+        switch (ifh.comparator) {
+            case 'equals':
+                butEquals.prop('checked', true);
+                break;
+            case 'differs':
+                butDiffers.prop('checked', true);
+                break;
+        }
+        var sel = $('<span></span>');
+        sel.append(butEquals, "=", butDiffers, "&#x2260;");
+        this.groups[key].append(sel);
+        sel.on('click', ifh, function (e) {
+            var v = $(e.target).val();
+            switch (v) {
+                case 'equals':
+                case 'differs':
+                    e.data.comparator = v;
+                    _this.updateMql();
+                    break;
+            }
+        });
+        var group2 = $('<table></table>');
+        for (var i = 0; i < ifh.values.length; ++i) {
+            var jtf = $('<input type="text" size="8">');
+            if (ifh.values[i])
+                jtf.val(String(ifh.values[i]));
+            var err_id = "err_" + key + "_" + i;
+            jtf.on('keyup', null, { ifh: ifh, i: i, err_id: err_id }, $.proxy(this.integerTextModifiedListener, this));
+            var row = $('<tr></tr>');
+            var cell = $('<td></td>');
+            cell.append(jtf);
+            row.append(cell);
+            row.append("<td id=\"" + err_id + "\"></td>");
+            group2.append(row);
+        }
+        this.groups[key].append(group2);
+        this.handlers.push(ifh);
+    };
+    PanelTemplMql.prototype.generateStringPanel = function (key, fhs, isForeign) {
+        var _this = this;
+        var sfh = (fhs && fhs[key]) ? fhs[key] : new StringFeatureHandler(key);
+        var butEquals = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"equals\">");
+        var butDiffers = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"differs\">");
+        var butMatches = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"matches\">");
+        switch (sfh.comparator) {
+            case 'equals':
+                butEquals.prop('checked', true);
+                break;
+            case 'differs':
+                butDiffers.prop('checked', true);
+                break;
+            case 'matches':
+                butMatches.prop('checked', true);
+                break;
+        }
+        var sel = $('<span></span>');
+        sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
+        this.groups[key].append(sel);
+        sel.on('click', sfh, function (e) {
+            var v = $(e.target).val();
+            switch (v) {
+                case 'equals':
+                case 'differs':
+                case 'matches':
+                    e.data.comparator = v;
+                    _this.updateMql();
+                    break;
+            }
+        });
+        var group2 = $('<table></table>');
+        for (var i = 0; i < sfh.values.length; ++i) {
+            var jtf = isForeign
+                ? $("<input class=\"" + charset.foreignClass + "\" type=\"text\" size=\"20\" id=\"" + this.name_prefix + "_" + key + "_input" + (+i + 1) + "\">")
+                : $('<input type="text" size="20">');
+            if (sfh.values[i])
+                jtf.val(sfh.values[i]);
+            var kbdRowId = void 0;
+            if (isForeign) {
+                kbdRowId = this.name_prefix + "_" + key + "_row" + (+i + 1);
+                jtf.on('focus', null, { kbdRowId: kbdRowId, sfh: sfh, i: i }, function (e) {
+                    $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
+                    VirtualKeyboard.attachInput(e.currentTarget);
+                    _this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i);
+                });
+            }
+            jtf.on('keyup', null, { sfh: sfh, i: i }, $.proxy(this.stringTextModifiedListener, this));
+            var row = $('<tr></tr>');
+            var cell = $('<td></td>');
+            cell.append(jtf);
+            row.append(cell);
+            group2.append(row);
+            if (isForeign)
+                group2.append("<tr><td id=\"" + kbdRowId + "\" style=\"text-align:right;\"></td></tr>");
+        }
+        this.groups[key].append(group2);
+        this.handlers.push(sfh);
+    };
+    PanelTemplMql.prototype.generateQerePanel = function (key, fhs) {
+        var _this = this;
+        var qfh = (fhs && fhs[key]) ? fhs[key] : new QereFeatureHandler(key);
+        var butOmitqere = $("<input type=\"checkbox\" name=\"" + this.name_prefix + "_" + key + "_sel\" value=\"omit\">");
+        if (qfh.omit)
+            butOmitqere.prop('checked', true);
+        var sel = $('<span></span>');
+        sel.append(butOmitqere, localize('omit_qere'));
+        this.groups[key].append(sel);
+        sel.on('click', qfh, function (e) {
+            var target = $(e.target);
+            e.data.setValue(target.prop('checked'));
+            _this.updateMql();
+        });
+        this.handlers.push(qfh);
+    };
+    PanelTemplMql.prototype.generateListOfPanel = function (key, fhs, stripped_valueType, otype) {
+        var _this = this;
+        var enumValues = typeinfo.enum2values[stripped_valueType];
+        if (!enumValues) {
+            console.log('Unknown valueType', "list of " + stripped_valueType);
+        }
+        var elfh = (fhs && fhs[key]) ? fhs[key] : new EnumListFeatureHandler(key);
+        var group_tabs = $("<div id=\"list_tabs_" + key + "\"></div>");
+        var group_ul = $('<ul></ul>');
+        group_tabs.append(group_ul);
+        var tab_labels = [localize('1st_choice'),
+            localize('2nd_choice'),
+            localize('3rd_choice'),
+            localize('4th_choice')];
+        for (var tabno = 0; tabno < 4; ++tabno) {
+            group_ul.append("<li><a href=\"#tab_" + key + "_" + tabno + "\">" + tab_labels[tabno] + "</a></li>");
+            var lv = elfh.listvalues[tabno];
+            var tab_contents = $("<div id=\"tab_" + key + "_" + tabno + "\"></div>");
+            var vc_choice = new PanelForOneVcChoice(enumValues, stripped_valueType, this.name_prefix + "_" + otype + "_" + key + "_" + tabno, lv);
+            tab_contents.append(vc_choice.getPanel());
+            group_tabs.append(tab_contents);
+            tab_contents.on('click', lv, function (e) {
+                var target = $(e.target);
+                if (target.attr('type') === 'radio') {
+                    e.data.modifyValue(target.attr('data-name'), target.attr('value'));
+                    _this.updateMql();
+                }
+            });
+        }
+        this.groups[key].append(group_tabs).tabs();
+        this.handlers.push(elfh);
+    };
+    PanelTemplMql.prototype.generateEnumPanel = function (key, fhs, featset, valueType) {
+        var _this = this;
+        var enumValues = typeinfo.enum2values[valueType];
+        if (!enumValues) {
+            console.log('Unknown valueType', valueType);
+            return;
+        }
+        var efh = (fhs && fhs[key]) ? fhs[key] : new EnumFeatureHandler(key);
+        var butEquals = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"equals\">");
+        var butDiffers = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"differs\">");
+        switch (efh.comparator) {
+            case 'equals':
+                butEquals.prop('checked', true);
+                break;
+            case 'differs':
+                butDiffers.prop('checked', true);
+                break;
+        }
+        var sel = $('<span></span>');
+        sel.append(butEquals, '=', butDiffers, '&#x2260;');
+        this.groups[key].append(sel);
+        sel.on('click', efh, function (e) {
+            var v = $(e.target).val();
+            switch (v) {
+                case 'equals':
+                case 'differs':
+                    e.data.comparator = v;
+                    _this.updateMql();
+                    break;
+            }
+        });
+        var checkBoxes = [];
+        for (var i = 0; i < enumValues.length; ++i) {
+            var s = enumValues[i];
+            var hv = featset.hideValues;
+            var ov = featset.otherValues;
+            if ((hv && hv.indexOf(s) !== -1) || ((ov && ov.indexOf(s) !== -1)))
+                continue;
+            var scb = new SortingCheckBox(this.name_prefix + '_' + key, s, getFeatureValueFriendlyName(valueType, s, false, false));
+            scb.setSelected(efh.values && efh.values.indexOf(s) !== -1);
+            checkBoxes.push(scb);
+        }
+        checkBoxes.sort(function (a, b) { return StringWithSort.compare(a.getSws(), b.getSws()); });
+        var columns = checkBoxes.length > 12 ? 3 :
+            checkBoxes.length > 4 ? 2 : 1;
+        var rows = Math.ceil(checkBoxes.length / columns);
+        var group2 = $('<table></table>');
+        for (var r = 0; r < rows; ++r) {
+            var row = $('<tr></tr>');
+            for (var c = 0; c < columns; ++c) {
+                var cell = $('<td></td>');
+                if (c * rows + r < checkBoxes.length)
+                    cell.append(checkBoxes[c * rows + r].getJQuery());
+                row.append(cell);
+            }
+            group2.append(row);
+        }
+        group2.on('click', efh, function (e) {
+            var target = $(e.target);
+            if (target.attr('type') === 'checkbox') {
+                if (target.prop('checked'))
+                    e.data.addValue(target.attr('value'));
+                else
+                    e.data.removeValue(target.attr('value'));
+                _this.updateMql();
+            }
+        });
+        this.groups[key].append(group2);
+        this.handlers.push(efh);
     };
     PanelTemplMql.prototype.getOtype = function () {
         return this.objectTypeCombo.val();
@@ -1077,39 +1067,23 @@ var PanelTemplMql = (function () {
         this.rbMql.prop('checked', true);
         this.rbMql.click();
     };
-    PanelTemplMql.prototype.getUseForQo = function () {
-        return false;
-    };
     PanelTemplMql.prototype.isDirty = function () {
         return this.getMql() !== this.txtEntry;
     };
     PanelTemplMql.prototype.makeMql = function () {
+        var sb = '';
         if (this.handlers) {
-            var sb = '';
-            var first = true;
+            var abet = new util.AddBetween(' AND ');
             for (var i = 0; i < this.handlers.length; ++i) {
                 var fh = this.handlers[i];
-                if (fh.hasValues()) {
-                    if (first)
-                        first = false;
-                    else
-                        sb += ' AND ';
-                    sb += fh.toMql();
-                }
+                if (fh.hasValues())
+                    sb += abet.getStr() + fh.toMql();
             }
-            return sb;
         }
-        else
-            return '';
-    };
-    PanelTemplMql.prototype.switchToMql = function (useMql) {
-        alert('Abstract function switchToMql() called');
+        return sb;
     };
     PanelTemplMql.prototype.updateMql = function () {
         this.setMql(this.makeMql());
-    };
-    PanelTemplMql.prototype.populateFeatureTab = function (otype) {
-        alert('Abstract function populateFeatureTab() called');
     };
     PanelTemplMql.prototype.getInfo = function () {
         var res = {
@@ -1134,17 +1108,17 @@ var PanelTemplMql = (function () {
 }());
 var PanelTemplSentenceSelector = (function (_super) {
     __extends(PanelTemplSentenceSelector, _super);
-    function PanelTemplSentenceSelector(md, ttabs, where, qoselTab, featureTab) {
-        var _this = _super.call(this, md, 'sensel') || this;
-        _this.questObjTypeLab = $('<span>' + localize('sentence_unit_type_prompt') + '</span>');
-        _this.featSelLab = $('<span>' + localize('feature_prompt') + '</span>');
-        _this.importShebanq = $('<button type="button">' + localize('import_shebanq') + '</button>');
-        _this.templTabs = ttabs;
-        _this.dirty = false;
-        _this.featureTab = featureTab;
+    function PanelTemplSentenceSelector(initialMd, templTabs, where, qoselTab, featureTab) {
+        var _this = _super.call(this, initialMd, 'sensel') || this;
+        _this.templTabs = templTabs;
         _this.qoselTab = qoselTab;
+        _this.featureTab = featureTab;
         _this.cbUseForQo = $('<input type="checkbox" name="useforqol">');
-        _this.cbUseForQoLabel = $('<span>' + localize('use_for_qosel') + '</span>');
+        _this.cbUseForQoLabel = $("<span>" + localize('use_for_qosel') + "</span>");
+        _this.questObjTypeLab = $("<span>" + localize('sentence_unit_type_prompt') + "</span>");
+        _this.featSelLab = $("<span>" + localize('feature_prompt') + "</span>");
+        _this.importShebanq = $("<button type=\"button\">" + localize('import_shebanq') + "</button>");
+        _this.dirty = false;
         _this.cbUseForQo.click(function () {
             if (_this.cbUseForQo.is(':checked'))
                 _this.templTabs.tabs('disable', 3);
@@ -1153,8 +1127,8 @@ var PanelTemplSentenceSelector = (function (_super) {
             _this.populateFeatureTab(null);
             _this.dirty = true;
         });
-        _this.rbMqlLabel = $('<span>' + localize('mql_qosel_prompt') + '</span>');
-        _this.rbFriendlyLabel = $('<span>' + localize('friendly_featsel_prompt') + '</span>');
+        _this.rbMqlLabel = $("<span>" + localize('mql_qosel_prompt') + "</span>");
+        _this.rbFriendlyLabel = $("<span>" + localize('friendly_featsel_prompt') + "</span>");
         _this.doLayout(where);
         if (_this.initialMd == null || _this.initialMd.useForQo) {
             _this.cbUseForQo.prop('checked', true);
@@ -1196,10 +1170,7 @@ var PanelTemplSentenceSelector = (function (_super) {
         this.populateFeatureTab(null);
     };
     PanelTemplSentenceSelector.prototype.makeMql = function () {
-        return '[' + this.getOtype() + ' NORETRIEVE ' + _super.prototype.makeMql.call(this) + ']';
-    };
-    PanelTemplSentenceSelector.prototype.getMqlEmulQos = function () {
-        return _super.prototype.makeMql.call(this);
+        return "[" + this.getOtype() + " NORETRIEVE " + _super.prototype.makeMql.call(this) + "]";
     };
     PanelTemplSentenceSelector.prototype.getUseForQo = function () {
         return this.cbUseForQo.prop('checked');
@@ -1277,10 +1248,10 @@ var PanelTemplQuizObjectSelector = (function (_super) {
     __extends(PanelTemplQuizObjectSelector, _super);
     function PanelTemplQuizObjectSelector(md, where, featureTab) {
         var _this = _super.call(this, md, 'qosel') || this;
-        _this.featSelLab = $('<span>' + localize('feature_prompt') + '</span>');
+        _this.featSelLab = $("<span>" + localize('feature_prompt') + "</span>");
         _this.featureTab = featureTab;
-        _this.rbMqlLabel = $('<span>' + localize('mql_featsel_prompt') + '</span>');
-        _this.rbFriendlyLabel = $('<span>' + localize('friendly_featsel_prompt') + '</span>');
+        _this.rbMqlLabel = $("<span>" + localize('mql_featsel_prompt') + "</span>");
+        _this.rbFriendlyLabel = $("<span>" + localize('friendly_featsel_prompt') + "</span>");
         _this.doLayout(where);
         _this.finish_construct();
         return _this;
@@ -1304,7 +1275,7 @@ var PanelTemplQuizObjectSelector = (function (_super) {
         var row;
         var cell;
         row = $('<tr></tr>');
-        cell = $('<td>' + localize('sentence_unit_type_prompt') + '</td>');
+        cell = $("<td>" + localize('sentence_unit_type_prompt') + "</td>");
         row.append(cell);
         cell = $('<td></td>');
         cell.append(this.objectTypeCombo);
@@ -1341,6 +1312,9 @@ var PanelTemplQuizObjectSelector = (function (_super) {
         table.append(row);
         where.append(table);
     };
+    PanelTemplQuizObjectSelector.prototype.getUseForQo = function () {
+        return false;
+    };
     PanelTemplQuizObjectSelector.prototype.populateFeatureTab = function (otype) {
         if (otype === null)
             otype = this.getOtype();
@@ -1348,22 +1322,29 @@ var PanelTemplQuizObjectSelector = (function (_super) {
     };
     return PanelTemplQuizObjectSelector;
 }(PanelTemplMql));
-function database_has_qere() {
-    return configuration.databaseName === "ETCBC4";
-}
-function otype_has_qere(otype) {
-    return otype === "word";
-}
-function qere_otype() {
-    return "word";
-}
-function qere_feature() {
-    if (configuration.propertiesName === "ETCBC4")
-        return "qere_utf8";
-    if (configuration.propertiesName === "ETCBC4-translit")
-        return "qere_translit";
-    return null;
-}
+var Qere = (function () {
+    function Qere() {
+    }
+    Qere.database_has_qere = function () {
+        return configuration.databaseName === Qere.dbName;
+    };
+    Qere.otype_has_qere = function (otype) {
+        return otype === Qere.dbOtype;
+    };
+    Qere.otype = function () {
+        return Qere.dbOtype;
+    };
+    Qere.feature = function () {
+        if (configuration.propertiesName === "ETCBC4")
+            return "qere_utf8";
+        if (configuration.propertiesName === "ETCBC4-translit")
+            return "qere_translit";
+        return null;
+    };
+    Qere.dbName = 'ETCBC4';
+    Qere.dbOtype = 'word';
+    return Qere;
+}());
 var ButtonSelection;
 (function (ButtonSelection) {
     ButtonSelection[ButtonSelection["SHOW"] = 0] = "SHOW";
@@ -1383,12 +1364,12 @@ var ButtonsAndLabel = (function () {
         this.canRequest = canRequest;
         this.canDisplayGrammar = canDisplayGrammar;
         this.canShowQere = canShowQere;
-        this.showFeat = canShow ? $('<input type="radio" name="feat_{0}_{1}" value="show">'.format(otype, featName)) : $('<span></span>');
-        this.reqFeat = canRequest ? $('<input type="radio" name="feat_{0}_{1}" value="request">'.format(otype, featName)) : $('<span></span>');
-        this.dcFeat = $('<input type="radio" name="feat_{0}_{1}" value="dontcare">'.format(otype, featName));
-        this.dontShowFeat = canDisplayGrammar ? $('<input type="radio" name="feat_{0}_{1}" value="dontshowfeat">'.format(otype, featName)) : $('<span></span>');
-        this.showQere = canShowQere ? $('<input type="radio" name="feat_{0}_{1}" value="showqere">'.format(otype, featName)) : $('<span></span>');
-        this.feat = $('<span>{0}</span>'.format(lab));
+        this.showFeat = canShow ? $("<input type=\"radio\" name=\"feat_" + otype + "_" + featName + "\" value=\"show\">") : $('<span></span>');
+        this.reqFeat = canRequest ? $("<input type=\"radio\" name=\"feat_" + otype + "_" + featName + "\" value=\"request\">") : $('<span></span>');
+        this.dcFeat = $("<input type=\"radio\" name=\"feat_" + otype + "_" + featName + "\" value=\"dontcare\">");
+        this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_" + otype + "_" + featName + "\" value=\"dontshowfeat\">") : $('<span></span>');
+        this.showQere = canShowQere ? $("<input type=\"radio\" name=\"feat_" + otype + "_" + featName + "\" value=\"showqere\">") : $('<span></span>');
+        this.feat = $("<span>" + lab + "</span>");
         switch (select) {
             case ButtonSelection.SHOW:
                 this.showFeat.prop('checked', true);
@@ -1408,7 +1389,7 @@ var ButtonsAndLabel = (function () {
                 break;
         }
         if (useDropDown) {
-            this.ddCheck = $('<input type="checkbox" name="dd_{0}_{1}">'.format(otype, featName));
+            this.ddCheck = $("<input type=\"checkbox\" name=\"dd_" + otype + "_" + featName + "\">");
             this.ddCheck.prop('checked', select != ButtonSelection.REQUEST);
         }
         else if (canShowQere) {
@@ -1431,55 +1412,35 @@ var ButtonsAndLabel = (function () {
     ButtonsAndLabel.prototype.getRow = function () {
         var row = $('<tr></tr>');
         var cell;
-        cell = $('<td></td>');
-        cell.append(this.showFeat);
+        cell = $('<td></td>').append(this.showFeat);
         row.append(cell);
-        cell = $('<td></td>');
-        cell.append(this.reqFeat);
+        cell = $('<td></td>').append(this.reqFeat);
         row.append(cell);
-        cell = $('<td></td>');
-        cell.append(this.dcFeat);
+        cell = $('<td></td>').append(this.dcFeat);
         row.append(cell);
-        cell = $('<td></td>');
-        cell.append(this.dontShowFeat);
+        cell = $('<td></td>').append(this.dontShowFeat);
         row.append(cell);
-        cell = $('<td></td>');
-        cell.append(this.ddCheck);
+        cell = $('<td></td>').append(this.ddCheck);
         row.append(cell);
-        cell = $('<td class="leftalign"></td>');
-        cell.append(this.feat);
+        cell = $('<td class="leftalign"></td>').append(this.feat);
         row.append(cell);
         return row;
     };
-    ButtonsAndLabel.prototype.isSelected_showFeat = function () {
-        if (this.canShow)
-            return this.showFeat.prop('checked');
-        else
-            return false;
-    };
-    ButtonsAndLabel.prototype.isSelected_reqFeat = function () {
-        if (this.canRequest)
-            return this.reqFeat.prop('checked');
-        else
-            return false;
-    };
-    ButtonsAndLabel.prototype.isSelected_dontShowFeat = function () {
-        if (this.canDisplayGrammar)
-            return this.dontShowFeat.prop('checked');
-        else
-            return false;
-    };
-    ButtonsAndLabel.prototype.isSelected_showQere = function () {
-        if (this.canShowQere)
-            return this.showQere.prop('checked');
-        else
-            return false;
-    };
-    ButtonsAndLabel.prototype.isSelected_ddCheck = function () {
-        if (this.useDropDown)
-            return this.ddCheck.prop('checked');
-        else
-            return false;
+    ButtonsAndLabel.prototype.isSelected = function (button) {
+        switch (button) {
+            case ButtonSelection.SHOW:
+                return this.canShow && this.showFeat.prop('checked');
+            case ButtonSelection.REQUEST:
+                return this.canRequest && this.reqFeat.prop('checked');
+            case ButtonSelection.REQUEST_DROPDOWN:
+                return this.useDropDown && this.ddCheck.prop('checked');
+            case ButtonSelection.DONT_CARE:
+                return this.dcFeat.prop('checked');
+            case ButtonSelection.DONT_SHOW:
+                return this.canDisplayGrammar && this.dontShowFeat.prop('checked');
+            case ButtonSelection.SHOW_QERE:
+                return this.canShowQere && this.showQere.prop('checked');
+        }
     };
     ButtonsAndLabel.prototype.getFeatName = function () {
         return this.featName;
@@ -1491,45 +1452,51 @@ var PanelForOneOtype = (function () {
         this.allBAL = [];
         this.panel = $('<table class="striped featuretable"></table>');
         var useSavedFeatures = otype === ptqf.initialOtype;
-        this.panel.append('<tr><th>{0}</th><th>{1}</th><th>{2}</th><th>{3}</th><th>{4}</th><th class="leftalign">{5}</th></tr>'
-            .format(localize('show'), localize('request'), localize('dont_care'), localize('dont_show'), localize('multiple_choice'), localize('feature')));
+        this.panel.append('<tr>'
+            + ("<th>" + localize('show') + "</th>")
+            + ("<th>" + localize('request') + "</th>")
+            + ("<th>" + localize('dont_care') + "</th>")
+            + ("<th>" + localize('dont_show') + "</th>")
+            + ("<th>" + localize('multiple_choice') + "</th>")
+            + ("<th class=\"leftalign\">" + localize('feature') + "</th>")
+            + '</tr>');
         this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, configuration.objHasSurface === otype && !!getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql, true, configuration.objHasSurface === otype, false, false);
         this.panel.append(this.visualBAL.getRow());
         var hasSurfaceFeature = otype === configuration.objHasSurface;
         var sg = getSentenceGrammarFor(otype);
         var keylist = [];
-        for (var key in getObjectSetting(otype).featuresetting) {
-            if (getFeatureSetting(otype, key).ignoreShowRequest && (sg === null || !sg.containsFeature(key)))
+        for (var featName in getObjectSetting(otype).featuresetting) {
+            if (getFeatureSetting(otype, featName).ignoreShow
+                && getFeatureSetting(otype, featName).ignoreRequest
+                && (sg === null || !sg.containsFeature(featName)))
                 continue;
-            if (typeinfo.obj2feat[otype][key] === 'url')
+            if (typeinfo.obj2feat[otype][featName] === 'url')
                 continue;
-            if (hasSurfaceFeature && key === configuration.surfaceFeature)
+            if (hasSurfaceFeature && featName === configuration.surfaceFeature)
                 continue;
-            keylist.push(key);
+            keylist.push(featName);
         }
         for (var ix = 0; ix < keylist.length; ++ix) {
-            var key2 = keylist[ix];
-            var ignoreShowRequest = getFeatureSetting(otype, key2).ignoreShowRequest;
-            var ignoreShow = getFeatureSetting(otype, key2).ignoreShow;
-            var ignoreRequest = getFeatureSetting(otype, key2).ignoreRequest;
-            if (ignoreShowRequest) {
-                ignoreShow = true;
-                ignoreRequest = true;
-            }
-            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, key2), key2, otype, useSavedFeatures ? ptqf.getSelector(key2) : ButtonSelection.DONT_CARE, !!getFeatureSetting(otype, key2).alternateshowrequestSql, !ignoreShow, !ignoreRequest, sg !== null && sg.containsFeature(key2), false);
+            var featName = keylist[ix];
+            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName), featName, otype, useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, !!getFeatureSetting(otype, featName).alternateshowrequestSql, !getFeatureSetting(otype, featName).ignoreShow, !getFeatureSetting(otype, featName).ignoreRequest, sg !== null && sg.containsFeature(featName), false);
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }
         this.panel.append('<tr><td colspan="5"></td><td class="leftalign">&nbsp;</tr>');
-        this.panel.append('<tr><td colspan="2"></td><th>{0}</th><th>{1}</th><th>{2}</th><th class="leftalign">{3}</th></tr>'
-            .format(localize('dont_care'), localize('dont_show'), database_has_qere() && !otype_has_qere(otype) ? localize('show_qere') : '', localize('other_sentence_unit_types')));
+        this.panel.append('<tr>'
+            + '<td colspan="2"></td>'
+            + ("<th>" + localize('dont_care') + "</th>")
+            + ("<th>" + localize('dont_show') + "</th>")
+            + ("<th>" + (Qere.database_has_qere() && !Qere.otype_has_qere(otype) ? localize('show_qere') : '') + "</th>")
+            + ("<th class=\"leftalign\">" + localize('other_sentence_unit_types') + "</th>")
+            + '</tr>');
         for (var level in configuration.sentencegrammar) {
             var leveli = +level;
             if (isNaN(leveli))
                 continue;
             var otherOtype = configuration.sentencegrammar[leveli].objType;
             if (otherOtype !== otype && configuration.objectSettings[otherOtype].mayselect) {
-                var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), 'otherOtype_' + otherOtype, otype, useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, false, false, false, true, database_has_qere() && otype_has_qere(otherOtype));
+                var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), 'otherOtype_' + otherOtype, otype, useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, false, false, false, true, Qere.database_has_qere() && Qere.otype_has_qere(otherOtype));
                 this.allBAL.push(bal);
                 this.panel.append(bal.getRow());
             }
@@ -1547,11 +1514,11 @@ var PanelForOneOtype = (function () {
     return PanelForOneOtype;
 }());
 var PanelTemplQuizFeatures = (function () {
-    function PanelTemplQuizFeatures(otype, qf, where) {
+    function PanelTemplQuizFeatures(initialOtype, initialQf, where) {
+        this.initialOtype = initialOtype;
+        this.initialQf = initialQf;
         this.panels = {};
         this.fpan = $('<div id="fpan"></div>');
-        this.initialOtype = otype;
-        this.initialQf = qf;
         where.append(this.fpan);
     }
     PanelTemplQuizFeatures.prototype.populate = function (otype) {
@@ -1569,15 +1536,15 @@ var PanelTemplQuizFeatures = (function () {
         this.visiblePanel.show();
     };
     PanelTemplQuizFeatures.prototype.getSelector = function (feat) {
-        if (this.initialQf)
-            for (var i = 0; i < this.initialQf.showFeatures.length; ++i)
-                if (this.initialQf.showFeatures[i] === feat)
-                    return ButtonSelection.SHOW;
-        if (this.initialQf)
-            for (var i = 0; i < this.initialQf.requestFeatures.length; ++i)
-                if (this.initialQf.requestFeatures[i].name === feat)
-                    return this.initialQf.requestFeatures[i].usedropdown ? ButtonSelection.REQUEST_DROPDOWN : ButtonSelection.REQUEST;
-        if (this.initialQf && this.initialQf.dontShowFeatures)
+        if (!this.initialQf)
+            return ButtonSelection.DONT_CARE;
+        for (var i = 0; i < this.initialQf.showFeatures.length; ++i)
+            if (this.initialQf.showFeatures[i] === feat)
+                return ButtonSelection.SHOW;
+        for (var i = 0; i < this.initialQf.requestFeatures.length; ++i)
+            if (this.initialQf.requestFeatures[i].name === feat)
+                return this.initialQf.requestFeatures[i].usedropdown ? ButtonSelection.REQUEST_DROPDOWN : ButtonSelection.REQUEST;
+        if (this.initialQf.dontShowFeatures)
             for (var i = 0; i < this.initialQf.dontShowFeatures.length; ++i)
                 if (this.initialQf.dontShowFeatures[i] === feat)
                     return ButtonSelection.DONT_SHOW;
@@ -1599,20 +1566,20 @@ var PanelTemplQuizFeatures = (function () {
     PanelTemplQuizFeatures.prototype.noRequestFeatures = function () {
         if (!this.visiblePanel)
             return true;
-        if (this.visiblePanel.visualBAL.isSelected_reqFeat())
+        if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST))
             return false;
         for (var i = 0; i < this.visiblePanel.allBAL.length; ++i)
-            if (this.visiblePanel.allBAL[i].isSelected_reqFeat())
+            if (this.visiblePanel.allBAL[i].isSelected(ButtonSelection.REQUEST))
                 return false;
         return true;
     };
     PanelTemplQuizFeatures.prototype.noShowFeatures = function () {
         if (!this.visiblePanel)
             return true;
-        if (this.visiblePanel.visualBAL.isSelected_showFeat())
+        if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.SHOW))
             return false;
         for (var i = 0; i < this.visiblePanel.allBAL.length; ++i)
-            if (this.visiblePanel.allBAL[i].isSelected_showFeat())
+            if (this.visiblePanel.allBAL[i].isSelected(ButtonSelection.SHOW))
                 return false;
         return true;
     };
@@ -1625,25 +1592,25 @@ var PanelTemplQuizFeatures = (function () {
         };
         if (!this.visiblePanel)
             return null;
-        if (this.visiblePanel.visualBAL.isSelected_showFeat())
+        if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.SHOW))
             qf.showFeatures.push('visual');
-        else if (this.visiblePanel.visualBAL.isSelected_reqFeat())
-            qf.requestFeatures.push({ name: 'visual', usedropdown: this.visiblePanel.visualBAL.isSelected_ddCheck() });
+        else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST))
+            qf.requestFeatures.push({ name: 'visual', usedropdown: this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN) });
         for (var i = 0; i < this.visiblePanel.allBAL.length; ++i) {
             var bal = this.visiblePanel.allBAL[i];
-            if (bal.isSelected_showFeat())
+            if (bal.isSelected(ButtonSelection.SHOW))
                 qf.showFeatures.push(bal.getFeatName());
-            else if (bal.isSelected_reqFeat())
-                qf.requestFeatures.push({ name: bal.getFeatName(), usedropdown: bal.isSelected_ddCheck() });
-            else if (bal.isSelected_dontShowFeat()) {
+            else if (bal.isSelected(ButtonSelection.REQUEST))
+                qf.requestFeatures.push({ name: bal.getFeatName(), usedropdown: bal.isSelected(ButtonSelection.REQUEST_DROPDOWN) });
+            else if (bal.isSelected(ButtonSelection.DONT_SHOW)) {
                 var fn = bal.getFeatName();
                 if (fn.substring(0, 11) === 'otherOtype_')
                     qf.dontShowObjects.push({ content: fn.substring(11) });
                 else
                     qf.dontShowFeatures.push(fn);
             }
-            else if (bal.isSelected_showQere()) {
-                qf.dontShowObjects.push({ content: qere_otype(), show: qere_feature() });
+            else if (bal.isSelected(ButtonSelection.SHOW_QERE)) {
+                qf.dontShowObjects.push({ content: Qere.otype(), show: Qere.feature() });
             }
         }
         return qf;
@@ -1687,10 +1654,10 @@ var VerbClassSelection;
 ;
 var VerbClassButtonsAndLabel = (function () {
     function VerbClassButtonsAndLabel(lab, name, dataName, select) {
-        this.yes = $('<input type="radio" name="{0}" value="yes" data-name="{1}">'.format(name, dataName));
-        this.no = $('<input type="radio" name="{0}" value="no" data-name="{1}">'.format(name, dataName));
-        this.dontcare = $('<input type="radio" name="{0}" value="dontcare" data-name="{1}">'.format(name, dataName));
-        this.label = $('<span>{0}</span>'.format(lab));
+        this.yes = $("<input type=\"radio\" name=\"" + name + "\" value=\"yes\"      data-name=\"" + dataName + "\">");
+        this.no = $("<input type=\"radio\" name=\"" + name + "\" value=\"no\"       data-name=\"" + dataName + "\">");
+        this.dontcare = $("<input type=\"radio\" name=\"" + name + "\" value=\"dontcare\" data-name=\"" + dataName + "\">");
+        this.label = $("<span>" + lab + "</span>");
         switch (select) {
             case VerbClassSelection.YES:
                 this.yes.prop('checked', true);
@@ -1706,17 +1673,13 @@ var VerbClassButtonsAndLabel = (function () {
     VerbClassButtonsAndLabel.prototype.getRow = function () {
         var row = $('<tr></tr>');
         var cell;
-        cell = $('<td></td>');
-        cell.append(this.yes);
+        cell = $('<td></td>').append(this.yes);
         row.append(cell);
-        cell = $('<td></td>');
-        cell.append(this.no);
+        cell = $('<td></td>').append(this.no);
         row.append(cell);
-        cell = $('<td></td>');
-        cell.append(this.dontcare);
+        cell = $('<td></td>').append(this.dontcare);
         row.append(cell);
-        cell = $('<td class="leftalign"></td>');
-        cell.append(this.label);
+        cell = $('<td class="leftalign"></td>').append(this.label);
         row.append(cell);
         return row;
     };
@@ -1726,8 +1689,12 @@ var PanelForOneVcChoice = (function () {
     function PanelForOneVcChoice(enumValues, valueType, prefix, lv) {
         this.allBAL = [];
         this.panel = $('<table class="striped featuretable"></table>');
-        this.panel.append('<tr><th>{0}</th><th>{1}</th><th>{2}</th><th class="leftalign">{3}</th></tr>'
-            .format(localize('verb_class_yes'), localize('verb_class_no'), localize('verb_class_dont_care'), localize('verb_class')));
+        this.panel.append('<tr>'
+            + ("<th>" + localize('verb_class_yes') + "</th>")
+            + ("<th>" + localize('verb_class_no') + "</th>")
+            + ("<th>" + localize('verb_class_dont_care') + "</th>")
+            + ("<th class=\"leftalign\">" + localize('verb_class') + "</th>")
+            + '</tr>');
         var swsValues = [];
         for (var ix = 0; ix < enumValues.length; ++ix)
             swsValues.push(new StringWithSort(getFeatureValueFriendlyName(valueType, enumValues[ix], false, false), enumValues[ix]));
@@ -1739,7 +1706,7 @@ var PanelForOneVcChoice = (function () {
                 vcsel = VerbClassSelection.YES;
             else if (lv.no_values.indexOf(vc) != -1)
                 vcsel = VerbClassSelection.NO;
-            var bal = new VerbClassButtonsAndLabel(swsValues[ix].getString(), '{0}_{1}'.format(prefix, vc), vc, vcsel);
+            var bal = new VerbClassButtonsAndLabel(swsValues[ix].getString(), prefix + "_" + vc, vc, vcsel);
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }

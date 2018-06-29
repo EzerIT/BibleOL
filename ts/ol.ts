@@ -19,16 +19,6 @@
 /// <reference path="quiz.ts" />
 /// <reference path="resizer.ts" />
 
-// If you want to compile with --noImplicitAny, you will now (as of TypeScript v1) get this error:
-//      error TS7017: Index signature of object type implicitly has an 'any' type.
-// if you are indexing arrays with strings.
-// According to https://typescript.codeplex.com/discussions/535628 you can fix this by adding:
-//      interface Object {
-//          [idx: string]: any;
-//      }
-// to the beginning of your code. Unfortunately, this breaks a definition of data() in the
-// JQuery interface.
-
 
 //****************************************************************************************************
 // Global variables
