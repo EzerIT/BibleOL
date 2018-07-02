@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{29 June 2018}
+\date{2 July 2018}
 
 \makeindex
 
@@ -863,16 +863,20 @@ In order to install Emdros, you should follow the instructions given in in Secti
 \subsection{Installing Lessc\index{lessc!installation}}\label{sec-installing-lessc}
  
 \emph{Lessc}\index{lessc} is the Less\index{Less} compiler. It runs under \emph{nodejs}\index{nodejs}, which is
-a stand-alone JavaScript\index{JavaScript} runtime system. For information about how to install and use the Less
-compiler, see \url{http://lesscss.org}. There, they recommend that \emph{lessc} be installed using
-this shell command:
+a stand-alone JavaScript\index{JavaScript} runtime system.
+
+For information about how to use the Less compiler, see \url{http://lesscss.org}.
+
+The \emph{lessc} command can be installed using this shell command:
  
 \begin{lstlisting}[language=bash]
-npm install -g less
+sudo npm install -g less
 \end{lstlisting}
  
-You may not need the ``-g'' option. If you do include it, you may need to prefix the command by
-``sudo''.
+The ``-g'' option means the software is installed globally and can be used by all users of the
+computer. Alternatively, the ``-g'' option and the ``sudo'' can be omitted, which will install
+\emph{lessc} only for the local user; but in that case the \emph{lessc} command must be executed using
+the pathname \mbox{\emph{\textasciitilde/node\_modules/.bin/lessc}}.
  
 I use version 3.0.1 of \emph{lessc}.
 
@@ -880,19 +884,26 @@ I use version 3.0.1 of \emph{lessc}.
  
 \emph{Tsc}\index{tsc} is the TypeScript\index{TypeScript} compiler. It
 runs under \emph{nodejs},\index{nodejs} which is a stand-alone JavaScript\index{JavaScript} runtime
-system. For information about how to install and use the TypeScript compiler, see
-\url{http://www.typescriptlang.org}. There, they recommend that \emph{tsc} be installed using this
-shell command:
+system. For information about how to use the TypeScript compiler, see
+\url{http://www.typescriptlang.org}.
+
+The \emph{tsc} command can be installed using these shell commands:
  
 \begin{lstlisting}[language=bash]
-npm install -g typescript
+sudo npm install -g typescript
+sudo npm install -g @types/bootstrap @types/jquery @types/jqueryui
 \end{lstlisting}
- 
-You may not need the ``-g'' option. If you do include it, you may need to prefix the command by
-``sudo''.
- 
+
+The ``-g'' option means the software is installed globally and can be used by all users of the
+computer. Alternatively, the ``-g'' option and the ``sudo'' can be omitted, which will install
+typescript only for the local user; but in that case the \emph{tsc} command must be executed using
+the pathname \mbox{\emph{\textasciitilde/node\_modules/.bin/tsc}}.
+
 I use version 2.8.1 of \emph{tsc}.
 
+Note: If you are building an older version of Bible OL (that is, on in which the file
+\mbox{\emph{ts/jquery/jquery.d.ts}} exists), you must not install the modules \emph{@types/bootstrap,
+  @types/jquery,} and \emph{@types/jqueryui} mentioned above.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2278,7 +2289,12 @@ feature. The format is given in Listing \ref{list-gf-syntax}.
 \end{lstlisting}
 
 The \emph{name} value may simply be the name of a feature of the current Emdros object type, or it
-may be a string in the form ``objectType:featureName'', if the feature belongs to another object type.
+may be a string in the form ``objectType:featureName'', if the feature belongs to another object
+type. Alternatively, it may have the form ``objectType:featureName\texttt{\_TYPE\_}featureType'' if
+a type other than the standard feature type is required. Currently, this is only used with the
+ETCBC4 database, where the GrammarFeature name ``\texttt{clause\_atom:code\_TYPE\_text}'' is used to
+denote a \emph{text} interpretation of the \emph{code} feature of the \emph{clause\_atom} object
+type; the \emph{code} feature normally has type \emph{integer} rather than \emph{text.}
 
 \Needspace*{5cm}%
 In the grammar selection box\index{grammar selection box}, a GrammarFeature is displayed thus:
@@ -5732,6 +5748,42 @@ the text display area it is simply ``Clause1'', as shown in Figure \ref{fig-clau
   \end{center}
 \end{figure}
 
+As mentioned in Section \ref{sec-grammarfeature}, the ETCBC4 has a special feature name,
+``\texttt{clause\_atom:code\_TYPE\_text}''. This requests a textual interpretation of the
+\emph{code} feature which in reality is an integer value. The translation from integer to string is
+handled by a special structure in the localization information for the Emdros object
+\emph{clause\_atom,} as shown in Listing \ref{list-clause-atom-code}.
+
+
+\begin{lstlisting}[numbers=left,caption=Handling integer to text translation,label=list-clause-atom-code]
+        "clause_atom": {
+            "_objname": "Clause atom",
+            "code_TYPE_text": "Linkage",
+            "code_TYPE_text_VALUES": [
+                {
+                    "first": 0,
+                    "last": 0,
+                    "text": "No relation"
+                },
+                {
+                    "first": 10,
+                    "last": 16,
+                    "text": "Relative"
+                },
+                {
+                    "first": 50,
+                    "last": 74,
+                    "text": "Inf.constr."
+                },
+                ... %\textrm{\scriptsize(Additional ranges omitted)}%
+            ]
+            ... %\textrm{\scriptsize(Additional features omitted)}%
+        }
+\end{lstlisting}
+
+Here, the name ``\texttt{code\_TYPE\_text\_VALUES}'' identifies ranges of integer values that should
+be presented textually as a particular text. For example, if the value of the \emph{code} feature is
+between 10 and 16 (inclusive), the corresponding text is \emph{``Relative''.}
 
 \subsection{The \emph{emdrostype} Key}\label{enum-loc}\index{emdrostype|hyperit}
 
