@@ -793,29 +793,7 @@
                 },
                 {
                     "mytype": "GrammarFeature",
-                    "name": "domain",
-                    "coloring": {
-                        "D": [
-                            255,
-                            0,
-                            0
-                        ],
-                        "N": [
-                            0,
-                            128,
-                            0
-                        ],
-                        "Q": [
-                            0,
-                            0,
-                            255
-                        ],
-                        "?": [
-                            0,
-                            0,
-                            0
-                        ]
-                    }
+                    "name": "domain"
                 },
                 {
                     "mytype": "GrammarFeature",
