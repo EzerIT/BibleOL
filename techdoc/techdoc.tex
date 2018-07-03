@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{2 July 2018}
+\date{3 July 2018}
 
 \makeindex
 
@@ -1098,8 +1098,8 @@ If the client requests an exercise to be displayed, the data exchange is:
 \item The client requests the server to load a particular URL. The URL contains information about which
   quiz template to use and how many questions to generate.
 \item The server sends the requested exercise to the client.
-\item When the user clicks on the ``GRADE task''\index{grade task button@``GRADE task''
-  button}\index{finish button@``Finish'' button|see {``GRADE task'' button}} or ``SAVE
+\item When the user clicks on the``GRADE task''\index{grade task button@``GRADE task'' button}%
+  \index{finish button@``Finish'' button|see {``GRADE task'' button}} or ``SAVE
   outcome''\index{save outcome button@``SAVE outcome'' button} button, the client sends the user's
   answers to the server.
 \end{enumerate}
@@ -1742,6 +1742,10 @@ Database Specification File\index{Database Specification File}\index{Specificati
 Database Type Information File\index{Database Type Information File}\index{Type Information File|see {Database Type Information File}} &
 \ref{sec-tif}\\
 
+.glosslang.json &
+Lexicon Information File\index{Lexicon Information File}\index{glosslang file|see {Lexicon Information File}} &
+\ref{sec-lif}\\
+
 .bookorder &
 Database Book Order File\index{Database Book Order File}\index{Book Order File|see {Database Book Order File}} &
 \ref{sec-bookorder}\\
@@ -2133,13 +2137,15 @@ retrieved from other data sources.
 As an example of a pseudofeature, consider Listing \ref{list-ps-syntax}.
 
 \begin{lstlisting}[escapechar=\#,caption=Featuresetting syntax for a pseudofeature,label=list-ps-syntax]
-    "english": {
+    "glossurl": {
         "ignoreSelect": true,
-        "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
         "indirdb": "mysql",
-        "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_en en ON en.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
-        "sqlargs": [ "language", "lex", "vs" ],
-        "multiple": false
+        "sql_command": "SELECT url, icon FROM {PRE}heb_urls WHERE lex='%s' AND language='%s'",
+        "sqlargs": [
+            "lex",
+            "language"
+        ],
+        "multiple": true
     }
 \end{lstlisting}
 
@@ -2151,31 +2157,77 @@ A pseudofeature uses the keys \emph{indirdb, sql\_command, sqlargs,} and \emph{m
   pseudofeature is found in the user database\index{user database} (see Section
   \ref{chap-user-database}).
 \item \emph{sql\_command} is the SQL command required to retrieve the value of the feature. A
-  typical example is given in the listing above. The system will replace the string
-  \texttt{\{PRE\}} with the correct database table prefix. The strings \texttt{\%1\$s}, \texttt{\%2\$s}, etc.
-  indicate the position of the parameters required for the request. These parameters are specified
-  under the key \emph{sqlargs}. The string \texttt{\%1\$s} refers to the first parameter in
-  \emph{sqlargs}, \texttt{\%2\$s} refers to the second parameter in \emph{sqlargs}, etc.
+  typical example is given in the listing above. The system will replace the string \texttt{\{PRE\}}
+  with the correct database table prefix. Each occurrence of the string \texttt{\%s} will be
+  replaced by the value of a feature named in \emph{sqlargs}. Alternatively the strings
+  \texttt{\%1\$s}, \texttt{\%2\$s}, etc. can be used to specify a specific entry in \emph{sqlargs}.
 \item \emph{sqlargs} is an array of features whose values are to be used in place of the
-  \texttt{\%\ldots\$s} strings in \emph{sql\_command}.
+  \texttt{\%s} strings in \emph{sql\_command}.
 \item \emph{multiple} is true if the database may contain more than one record for a given pseudofeature.
 \end{itemize}
 
-Taking the pseudofeature \emph{english} from Listing \ref{list-ps-syntax} as an example, we see that
+Taking the pseudofeature \emph{glossurl} from Listing \ref{list-ps-syntax} as an example, we see that
 the feature is found in the user database because \emph{indirdb} has the value ``mysql''.
 
 If we assume that the database table prefix\footnote{The database table prefix can be set in the
   file \texttt{myapp/config/database.php} (See Section \ref{sec-database-php}).} is ``bol\_'', and
-if the \emph{language, lex,} and \emph{vs} features have the values ``Hebrew'', ``B.@R@>'', and  ``qal'', respectively,
+if the \emph{lex} and \emph{language} features have the values ``B.@R@>'' and ``Hebrew'', respectively,
 the value of the pseudofeature is found by executing the SQL query
 
 \begin{lstlisting}[language=SQL]
-SELECT gloss FROM bol_lexicon_Hebrew h JOIN bol_lexicon_Hebrew_en en ON en.lex_id=h.id
-    WHERE lex='B.@R@>' AND vs='qal'
+SELECT url, icon FROM bol_heb_urls WHERE lex='B.@R@>' AND language='Hebrew'
+\end{lstlisting}
+
+The SQL query is allowed to return multiple values because \emph{multiple} is \emph{true.}
+
+
+\subsubsection{The ``gloss'' Feature}\label{sec-gloss-feature}\index{gloss feature@``gloss'' Feature}
+
+The feature named ``gloss'' is treated specially. Bible OL automatically replaces it with a number
+of features each representing a taget language for a lexicon. The ``gloss'' feature must have
+an \emph{sql\_command} setting that contains the string ``LANG''. This string will be replaced by
+the language code for the target language. For example, the ``gloss'' feature specification may look
+like this:
+
+\begin{lstlisting}[escapechar=\#]
+    "gloss": {
+        ...
+        "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_LANG lang ON lang.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
+        "sqlargs": [
+            "language",
+            "lex",
+            "vs"
+        ],
+        ...
+    }
+\end{lstlisting}
+
+Bible OL may replace this with these specifications:
+
+\begin{lstlisting}[escapechar=\#]
+    "english": {
+        ...
+        "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_en lang ON lang.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
+        "sqlargs": [
+            "language",
+            "lex",
+            "vs"
+        ],
+        ...
+    }
+    "german": {
+        ...
+        "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_de lang ON lang.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
+        "sqlargs": [
+            "language",
+            "lex",
+            "vs"
+        ],
+        ...
+    }
 \end{lstlisting}
 
 
-The SQL query is expected to return a single value because \emph{multiple} is \emph{false.}
 
 \subsection{The \emph{sentencegrammar} Key}\label{sentencegrammar}\index{sentencegrammar}
 
@@ -2240,7 +2292,7 @@ three key/value pairs:
 \item \emph{mytype} with a value that is always ``SentenceGrammar''.
 \item \emph{objType} with a value that identifies an Emdros object.
 \item \emph{items} (optional), which is an array of \emph{GrammarFeature,
-  GrammarMetaFeature,} or \emph{GrammarGroup} specifications, as detailed below.
+  GrammarMetaFeature,} \emph{GrammarGroup,} or \emph{GrammarGroupGlosses} specifications, as detailed below.
 \end{itemize}
 
 If you compare the listing of \emph{sentencegrammar} above, with the grammar selection box shown on
@@ -2249,8 +2301,8 @@ corresponds to a top level box in the illustration.
 
 For each Emdros object (that is, for each element in the \emph{sentencegrammar} array) the value of
 \emph{items} is an array that specified the features that can be displayed for the particular Emdros
-object. Each entry in the \emph{items} array can have one of three forms: \emph{GrammarFeature,
-  GrammarMetaFeature,} or \emph{GrammarGroup}, as specified in their \emph{mytype} value.
+object. Each entry in the \emph{items} array can have one of four forms: \emph{GrammarFeature,
+  GrammarMetaFeature,} \emph{GrammarGroup}, or \emph{GrammarGroupGlosses}, as specified in their \emph{mytype} value.
 
 Listing \ref{list-itemssample} shows a typical \emph{items} array.
 
@@ -2273,7 +2325,7 @@ Listing \ref{list-itemssample} shows a typical \emph{items} array.
     ]
 \end{lstlisting}
 
-In this example, the \emph{items} array has two elements, one with \emph{mytype=GrammarFeature},
+In this example, the \emph{items} array has three elements, one with \emph{mytype=GrammarFeature},
 one with \emph{mytype=GrammarGroup}, and one with \emph{mytype=GrammarMetaFeature.}
 
 \subsection{GrammarFeature}\label{sec-grammarfeature}\index{GrammarFeature|hyperit}
@@ -2415,6 +2467,44 @@ In the grammar information box\index{grammar information box}, a GrammarGroup is
 \begin{center}
   \includegraphics[width=0.5\textwidth]{morph2.png}
 \end{center}
+
+
+\subsection{GrammarGroupGlosses}\label{sec-grammargroupglosses}\index{GrammarGroupGlosses|hyperit}
+ 
+A \emph{sentencegrammar} item with \emph{mytype=GrammarGroupGlosses} is a placeholder for
+information about glosses that translate the source language of the Emdros database (such as Hebrew
+or Greek) into a target language (such as English or German). The GrammarGroupGlosses entry must
+always look as shown in Listing \ref{list-ggg-syntax}.
+ 
+\begin{lstlisting}[caption=GrammarGroupGlosses syntax,label=list-ggg-syntax]
+    {
+        "mytype": "GrammarGroupGlosses",
+        "name": "glosses",
+        "items": []
+    }
+\end{lstlisting}
+ 
+Bible OL will automatically replace this specification with a GrammarGroup specification that
+contains all the available translations as separate GrammarFeatures. For example, Bible OL may
+replace the GrammarGroupGlosses specification with this:
+ 
+\begin{lstlisting}
+    {
+        "mytype":"GrammarGroup",
+        "name":"glosses",
+        "items": [
+            {
+                "mytype":"GrammarFeature",
+                "name":"english"
+            },
+            {
+                "mytype":"GrammarFeature",
+                "name":"german"
+            }
+        ]
+    }
+\end{lstlisting}
+
 
 \subsection{The \emph{subsetOf} Key}\label{subsetof}\index{subset|hyperit}
 
@@ -2577,6 +2667,46 @@ Listing \ref{list-enum2values-sample} shows a subset of \emph{enum2values} for t
 
 For example, lines \ref{line-bool-start}-\ref{line-bool-end} show that the enumeration type
 \emph{boolean\_t} has the values \emph{false} and \emph{true.}
+
+%%%%%%%%%%%%%%%%%%%% Lexicon Information File: PRIM.glosslang.json %%%%%%%%%%%%%%%%%%%%
+\section{Lexicon Information File: PRIM.glosslag.json}\label{sec-lif}\index{Lexicon Information File|hyperit}
+
+The Emdros databases in Bible OL have an associated Lexicon Information File. This file contains
+information about the lexicons available for that database.
+
+This Lexicon Information File contains the following key/value pairs:
+
+\begin{my-longtabu}{lX}{ \headii{Key}{Value} }
+  from & An array of abbreviations of the source languages found in the lexicon for the database.
+  The available abbreviations are \emph{heb} for Hebrew, \emph{aram} form Aramaic, and \emph{greek}
+  for Greek.\\
+
+  to & An array of abbreviations of the target languages found in the lexicon for the database.
+  The abbreviations are the two-letter language codes defined in international standard ISO~639-1
+  (for example, \emph{en} for English and \emph{de} for German).\\
+\end{my-longtabu}
+
+As an example, listing \ref{list-glosslang-example} shows the content of the file
+\texttt{db/ETCBC4.glosslang.json}.
+
+\begin{lstlisting}[caption=A sample Lexicon Information file,label=list-glosslang-example]
+{
+    "from": [
+        "heb",
+        "aram"
+    ],
+    "to": [
+        "en",
+        "de",
+        "es",
+        "nl"
+    ]
+}
+\end{lstlisting}
+
+This file states that lexicons exist that translate from Hebrew and Aramaic into English, German,
+Spanish, and Dutch.
+
 
 %%%%%%%%%%%%%%%%%%%% Database Book Order File: PRIM.bookorder %%%%%%%%%%%%%%%%%%%%
 \section{Database Book Order File: PRIM.bookorder}\label{sec-bookorder}\index{Database Book Order File|hyperit}
@@ -3301,8 +3431,9 @@ panel, and constructing the grammar selection box\index{grammar selection box} a
 information box.\index{grammar information box}
 
 As the user answers the questions, the client keeps track of the answers, but no communication with
-the server takes place before the user presses the ``GRADE task''\index{grade task button@``GRADE
-  task'' button} or ``SAVE outcome''\index{save outcome button@``SAVE outcome'' button} button. What
+the server takes place before the user presses the
+``GRADE task''\index{grade task button@``GRADE task'' button}
+or ``SAVE outcome''\index{save outcome button@``SAVE outcome'' button} button. What
 happens when one of these buttons is pressed, depends on whether the user is logged in or not. If
 the user not logged in, the client instructs the server to display the \emph{Select a Quiz} web
 page. But if the user is logged in, the client sends the result to the server URL
