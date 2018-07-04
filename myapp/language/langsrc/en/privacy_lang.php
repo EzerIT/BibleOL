@@ -59,7 +59,7 @@ $lang['privacy_text'] = "(en)<h1>Privacy Policy</h1>\n"
         . "<h2>Contact</h2>\n"
         . "\n"
         . "<p>If you have questions or requests in connection with this\n"
-        . "Privacy Policy, you may contact Claus Tøndering at <a href=\"mailto:claus@ezer.dk\">claus@ezer.dk</a>.</p>\n"
+        . "Privacy Policy, you may contact DBI at <a href=\"mailto:dbi@dbi.edu\">dbi@dbi.edu</a>.</p>\n"
         . "\n"
         . "<h2>How Can You Change Your Data?</h2>\n"
         . "\n"
@@ -91,7 +91,7 @@ $lang['privacy_text'] = "(en)<h1>Privacy Policy</h1>\n"
         . "There, you will also find a summary of the collected exercise results.</p>\n"
         . "\n"
         . "<p>If you want a complete electronic record of all your data,\n"
-        . "you may contact Claus Tøndering at <a href=\"mailto:claus@ezer.dk\">claus@ezer.dk</a>.</p>\n"
+        . "you may contact DBI at <a href=\"mailto:dbi@dbi.edu\">dbi@dbi.edu</a>.</p>\n"
         . "\n"
         . "<h2>Data Loss</h2>\n"
         . "\n"
@@ -112,4 +112,4 @@ $lang['privacy_text'] = "(en)<h1>Privacy Policy</h1>\n"
         . "website in question.</p>";
 $lang['you_rejected_header'] = "You rejected the Privacy Policy";
 $lang['you_rejected_oauth2_text'] = "You chose to reject our Privacy Policy. This means that you cannot have an account on Bible Online Learner.";
-$lang['you_rejected_text'] = "You chose to reject our Privacy Policy. This means that you cannot use an account on Bible Online Learner. If you want us to delete your account, please contact one of the system administrators, for example, claus@ezer.dk. Your account will automatically be deleted if you do not use it for 18 months.";
+$lang['you_rejected_text'] = "You chose to reject our Privacy Policy. This means that you cannot use an account on Bible Online Learner. If you want us to delete your account, please contact one of the system administrators, for example, at dbi@dbi.edu. Your account will automatically be deleted if you do not use it for 18 months.";
