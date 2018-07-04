@@ -1,0 +1,31 @@
+<?php
+
+$lang['form_validation_alpha'] = "Het <i>{field}</i> veld mag uitsluitend alfabetische karakters bevatten.";
+$lang['form_validation_alpha_dash'] = "Het <i>{field}</i> veld mag uitsluitend alfanumerieke karakters, underscores en dashes bevatten.";
+$lang['form_validation_alpha_numeric'] = "Het <i>{field}</i> veld mag uitsluitend alfanumerieke karakters bevatten.";
+$lang['form_validation_alpha_numeric_spaces'] = "Het <i>{field}</i> veld mag uitsluitend alfanumerieke karakters en spaties bevatten.";
+$lang['form_validation_decimal'] = "Het <i>{field}</i> veld moet een getal bevatten.";
+$lang['form_validation_differs'] = "Het <i>{field}</i> veld moet verschillen van het <i>{param}</i> veld.";
+$lang['form_validation_error_message_not_set'] = "Niet in staat om een error message te geven die overeenkomt met je veldnaam <i>{field}</i>.";
+$lang['form_validation_exact_length'] = "Het <i>{field}</i> veld moet exact {param} karakters lang zijn.";
+$lang['form_validation_greater_than'] = "Het <i>{field}</i> veld moet een getal bevatten dat groter is dan {param}.";
+$lang['form_validation_greater_than_equal_to'] = "Het <i>{field}</i> veld moet een getal bevatten dat groter is dan of gelijk aan {param}.";
+$lang['form_validation_integer'] = "Het <i>{field}</i> veld moet een integer (een heel getal) bevatten.";
+$lang['form_validation_in_list'] = "Het <i>{field}</i> veld moet een van de volgende zijn: {param}.";
+$lang['form_validation_isset'] = "Het <i>{field}</i> veld moet een waarde hebben.";
+$lang['form_validation_is_natural'] = "Het <i>{field}</i> mag uitsluitend getallen bevatten.";
+$lang['form_validation_is_natural_no_zero'] = "Het <i>{field}</i> veld mag uitsluitend getallen bevatten die groter dan nul zijn.";
+$lang['form_validation_is_numeric'] = "Het <i>{field}</i> veld mag uitsluitend getallen bevatten.";
+$lang['form_validation_is_unique'] = "Het <i>{field}</i> veld moet een unieke waarde hebben.";
+$lang['form_validation_less_than'] = "Het <i>{field}</i> veld moet een getal bevatten kleiner dan {param}.";
+$lang['form_validation_less_than_equal_to'] = "Het <i>{field}</i> veld moet een getal bevatten dat kleiner is dan of gelijk aan {param}.";
+$lang['form_validation_matches'] = "Het <i>{field}</i> veld komt niet overeen met het <i>{param}</i> veld.";
+$lang['form_validation_max_length'] = "Het <i>{field}</i> veld kan niet langer zijn dan {param} karakters.";
+$lang['form_validation_min_length'] = "Het <i>{field}</i> veld moet ten minste {param} karakters lang zijn.";
+$lang['form_validation_numeric'] = "Het <i>{field}</i> veld mag uitsluitend getallen bevatten.";
+$lang['form_validation_regex_match'] = "Het <i>{field}</i> veld is niet in het correcte format.";
+$lang['form_validation_required'] = "Het <i>{field}</i> veld is vereist.";
+$lang['form_validation_valid_email'] = "Het <i>{field}</i> veld moet een geldig emailadres bevatten.";
+$lang['form_validation_valid_emails'] = "Het <i>{field}</i> veld mag uitsluitend geldige emailadressen bevatten.";
+$lang['form_validation_valid_ip'] = "Het <i>{field}</i> veld moet een geldig IP-adres bevatten.";
+$lang['form_validation_valid_url'] = "Het <i>{field}</i> veld moet een geldige URL bevatten.";

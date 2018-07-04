@@ -748,7 +748,7 @@ class Mod_translate extends CI_Model {
                 $query = $this->db->select('lex,tally,vs,CONCAT(vocalized_lexeme_utf8," ",roman) lexeme,gloss')
                     ->from("lexicon_{$src_language} c")
                     ->join("lexicon_{$src_language}_{$dst_lang}", 'lex_id=c.id','left')
-                    ->order_by('sortorder')
+                    ->order_by('sortorder,lex,vs')
                     ->get();
 
                 $res = array();
@@ -784,7 +784,7 @@ class Mod_translate extends CI_Model {
                 $query = $this->db->select('tally,lemma,strongs,strongs_unreliable,gloss')
                     ->from("lexicon_{$src_language} c")
                     ->join("lexicon_{$src_language}_{$dst_lang}", 'lex_id=c.id','left')
-                    ->order_by('sortorder')
+                    ->order_by('sortorder,strongs,strongs_unreliable')
                     ->get();
 
                 foreach ($query->result() as $row) {
