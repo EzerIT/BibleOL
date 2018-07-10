@@ -263,10 +263,10 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
                                           else
                                               wordclass = 'ltr';
 
-                                          // For Spanish, English and German in ETCBC4, display only the first gloss
+                                          // For some languages and databases, show only the first gloss
                                           
-                                          if (configuration.databaseName=="ETCBC4"
-                                              && (featName=="english" || featName=="spanish" || featName=="german")) {
+                                          if ((configuration.databaseName=="ETCBC4" && (featName=="english" || featName=="spanish" || featName=="german" || featName=="swahili"))
+                                              || (configuration.databaseName=="nestle1904" && featName=="swahili")) {
                                               featValLoc = featValLoc.replace(/(&[gl]t);/,'$1Q')  // Remove ';' from "&gt;" and "&lt;" 
                                                                      .replace(/([^,;(]+).*/,'$1') // Remove everything after ',' or ';' or '('
                                                                      .replace(/(&[gl]t)Q/,'$1;'); // Reinsert ';' in "&gt;" and "&lt;" 

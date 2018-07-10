@@ -90,6 +90,7 @@ $lang['showing_per_page'] = "Der vises %s brugere per side";
 $lang['simp_chinese'] = "Kinesisk (forenklet)";
 $lang['spanish'] = "Spansk";
 $lang['specify_user_information'] = "Angiv brugeroplysninger";
+$lang['swahili'] = "Swahili";
 $lang['teacher'] = "Facilitator";
 $lang['this_user_facebook'] = "Denne bruger logger ind med Facebook";
 $lang['this_user_google'] = "Denne bruger logger ind med Google";

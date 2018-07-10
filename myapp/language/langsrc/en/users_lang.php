@@ -88,6 +88,7 @@ $lang['showing_per_page'] = "Each page shows %s users";
 $lang['simp_chinese'] = "Chinese (simplified)";
 $lang['spanish'] = "Spanish";
 $lang['specify_user_information'] = "Specify user information";
+$lang['swahili'] = "Swahili";
 $lang['teacher'] = "Facilitator";
 $lang['this_user_facebook'] = "This user logs in with Facebook";
 $lang['this_user_google'] = "This user logs in with Google";

@@ -11,6 +11,7 @@ class Language {
         'nl' => 'dutch',
         'pt' => 'portuguese',
         'es' => 'spanish',
+        'sw' => 'swahili',
         'zh-simp' => 'simp_chinese',
         'zh-trad' => 'trad_chinese',
     );

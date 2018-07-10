@@ -252,6 +252,10 @@ $comment['specify_user_information'] = "";
 $format['specify_user_information'] = "";
 $use_textarea['specify_user_information'] = false;
 
+$comment['swahili'] = "";
+$format['swahili'] = "";
+$use_textarea['swahili'] = false;
+
 $comment['teacher'] = "";
 $format['teacher'] = "";
 $use_textarea['teacher'] = false;
