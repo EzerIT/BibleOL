@@ -20,7 +20,8 @@ class Mod_intro_text extends CI_Model {
             '<img style="float:right;" src="images/eplotlogo.png" alt="Logo">' .
             $this->lang->line('intro_right2') .
             '<img style="float:right;" alt="SHEBANQ Logo" src="images/shebanq_logo55.png">' .
-            $this->lang->line('intro_right3');
+            $this->lang->line('intro_right3') .
+            $this->lang->line('intro_right4');
     }
 
     function left_text_title() {

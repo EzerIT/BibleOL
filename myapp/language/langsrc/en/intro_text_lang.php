@@ -31,6 +31,7 @@ $lang['intro_right2'] = "<p>Bible Online Learner is based on PLOTLearner, a PC p
         . "       EuroPLOT project, and the site is maintained by <a href=\"http://3bmoodle.dk\"\n"
         . "       target=\"_blank\">3BM Bible Software and Multimedia</a>.</p>";
 $lang['intro_right3'] = "<p>The SHEBANQ web site was created by Wido van Peursen and Dirk Roorda.</p>";
+$lang['intro_right4'] = "<p>The Swahili lexicon was developed by Dr David Instone-Brewer and funded by the United Bible Societies. Its use in Bible Online Learner is at present only experimental.</p>";
 $lang['intro_right_head'] = "Bible Online Learner for Free Global Learning";
 $lang['welcome'] = "Welcome to Bible Online Learner";
 $lang['welcome2'] = "%s, welcome to Bible Online Learner";
