@@ -348,7 +348,7 @@ var StringFeatureHandler = (function (_super) {
         return _this;
     }
     StringFeatureHandler.prototype.normalize = function () {
-        while (this.values.length < 4)
+        while (this.values.length < 10)
             this.values.push(null);
     };
     StringFeatureHandler.prototype.setValue = function (index, val) {

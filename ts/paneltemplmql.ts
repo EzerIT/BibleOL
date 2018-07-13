@@ -114,10 +114,10 @@ class StringFeatureHandler extends FeatureHandler {
     //------------------------------------------------------------------------------------------
     // normalize method
     //
-    // Ensures that the values array has 4 elements by adding null values when necessary.
+    // Ensures that the values array has 10 elements by adding null values when necessary.
     //
     public normalize() : void {
-        while (this.values.length<4)
+        while (this.values.length<10)
             this.values.push(null);
     }
 
