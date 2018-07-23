@@ -177,7 +177,12 @@ span.verse {
   display: block;
 }
 .english.wordgrammar.showit,
+.danish.wordgrammar.showit,
 .german.wordgrammar.showit,
+.dutch.wordgrammar.showit,
+.portuguese.wordgrammar.showit,
+.spanish.wordgrammar.showit,
+.swahili.wordgrammar.showit,
 .lexeme_occurrences.wordgrammar.showit,
 .frequency_rank.wordgrammar.showit,
 .strongs.wordgrammar.showit {
