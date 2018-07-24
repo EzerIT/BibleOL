@@ -23,7 +23,8 @@ div.hr-replacement {
   margin: 20px 0;
 }
 .navbar-brand {
-  font-size: 18pt;
+  font-size: 22pt;
+  font-family: 'Lobster', sans-serif;
   color: blue !important;
 }
 .navbar-text.logo {

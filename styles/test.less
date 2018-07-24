@@ -1,0 +1,15 @@
+/* Compile with
+lessc --global-var='debug=false' styles/test.less
+or
+lessc --global-var='debug=true' styles/test.less
+*/
+
+/* guard for class */
+article when (@debug = true) {
+    background-color: red;
+}
+
+/* and when debug is off: */
+article when not (@debug = true) {
+    background-color: green;
+}

@@ -196,9 +196,9 @@ var resizer;
     }
     resizer.addResizeListener = addResizeListener;
     $(function () {
-        var sizes = ['xs', 'sm', 'md', 'lg'];
+        var sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
         for (var i = 0; i < sizes.length; ++i)
-            $('body').append("<div class=\"visible-" + sizes[i] + "-block device-is-" + sizes[i] + " device-sizer\" data-size=\"" + sizes[i] + "\"></div>");
+            $('body').append("<div class=\"visible-" + sizes[i] + "-block device-is-" + sizes[i] + " device-sizer\" data-size=\"" + sizes[i] + "\">" + sizes[i] + "</div>");
     });
 })(resizer || (resizer = {}));
 function set_legend_height(data) {

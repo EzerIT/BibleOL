@@ -1,30 +1,40 @@
 <?php
- 
+
+/* For top level menu item */
+function make_anchor1(string $url, string $txt, $th) {
+    return anchor(site_url($url), $th->lang->line($txt), 'class="nav-link pt-3 pb-3 pl-3 pr-3"');
+}
+
+/* For dropdown menu item */
+function make_anchor2(string $url, string $txt, $th) {
+    return anchor(site_url($url), $th->lang->line($txt), 'class="dropdown-item"');
+}
+
 $this->lang->load('menu', $this->language);
 
 $ix = 0;
-$head[] = anchor(site_url(), $this->lang->line('home'));
+$head[] = make_anchor1('', 'home', $this);
  
 if (!$this->mod_users->is_logged_in_noaccept()) {
     // The user has not logged in, or has logged in and accepted policy
     $ix = count($head);
     $head[] = $this->lang->line('text_and_exercises');
-    $content[$ix][] = anchor(site_url('text/select_text'), $this->lang->line('display_text'));
-    $content[$ix][] = anchor(site_url('text/select_quiz'), $this->lang->line('exercises'));
+    $content[$ix][] = make_anchor2('text/select_text', 'display_text', $this);
+    $content[$ix][] = make_anchor2('text/select_quiz', 'exercises', $this);
 }
  
 if ($this->mod_users->is_logged_in()) {
     // Logged in
     $ix = count($head);
     $head[] = $this->lang->line('my_data');
-    //$content[$ix][] = anchor(site_url('statistics'), $this->lang->line('statistics'));
-    $content[$ix][] = anchor(site_url('config'), $this->lang->line('font_preferences'));
-    $content[$ix][] = anchor(site_url('users/profile'), $this->lang->line('profile'));
-    $content[$ix][] = anchor(site_url('userclass/enroll'), $this->lang->line('enroll_in_class'));
-    $content[$ix][] = anchor(site_url('statistics/student_time'), $this->lang->line('my_progress'));
+    //$content[$ix][] = make_anchor2('statistics', 'statistics', $this);
+    $content[$ix][] = make_anchor2('config', 'font_preferences', $this);
+    $content[$ix][] = make_anchor2('users/profile', 'profile', $this);
+    $content[$ix][] = make_anchor2('userclass/enroll', 'enroll_in_class', $this);
+    $content[$ix][] = make_anchor2('statistics/student_time', 'my_progress', $this);
 
     if ($this->mod_users->is_teacher())
-        $content[$ix][] = anchor(site_url('statistics/teacher_progress'), $this->lang->line('students_progress'));
+        $content[$ix][] = make_anchor2('statistics/teacher_progress', 'students_progress', $this);
 
     if ($this->config->item('lj_enabled')) {
         $this->load->helper('lj_menu_helper');
@@ -37,77 +47,71 @@ if ($this->mod_users->is_logged_in()) {
         $head[] = $this->lang->line('administration');
         if ($this->mod_users->is_teacher()) {
             // Teacher
-            $content[$ix][] = anchor(site_url('users'), $this->lang->line('users'));
-            $content[$ix][] = anchor(site_url('classes'), $this->lang->line('classes'));
-            $content[$ix][] = anchor(site_url('file_manager'), $this->lang->line('manage_exercises'));
+            $content[$ix][] = make_anchor2('users', 'users', $this);
+            $content[$ix][] = make_anchor2('classes', 'classes', $this);
+            $content[$ix][] = make_anchor2('file_manager', 'manage_exercises', $this);
         }
         if ($this->mod_users->is_translator()) {
-            $content[$ix][] = anchor(site_url('translate/translate_if'), $this->lang->line('translate_interface'));
-            $content[$ix][] = anchor(site_url('translate/translate_grammar'), $this->lang->line('translate_grammar'));
-            $content[$ix][] = anchor(site_url('translate/translate_lex'), $this->lang->line('translate_lexicon'));
-            $content[$ix][] = anchor(site_url('translate/select_download_lex'), $this->lang->line('download_lexicon'));
+            $content[$ix][] = make_anchor2('translate/translate_if', 'translate_interface', $this);
+            $content[$ix][] = make_anchor2('translate/translate_grammar', 'translate_grammar', $this);
+            $content[$ix][] = make_anchor2('translate/translate_lex', 'translate_lexicon', $this);
+            $content[$ix][] = make_anchor2('translate/select_download_lex', 'download_lexicon', $this);
         }
         if ($this->mod_users->is_admin())
-            $content[$ix][] = anchor(site_url('urls'), $this->lang->line('manage_gloss_links'));
+            $content[$ix][] = make_anchor2('urls', 'manage_gloss_links', $this);
     }
  
     $ix = count($head);
     $head[] = $this->lang->line('user_access');
-    $content[$ix][] = anchor(site_url('login'), $this->lang->line('logout'));
-    $content[$ix][] = anchor(site_url('privacy'), $this->lang->line('privacy_policy'));
+    $content[$ix][] = make_anchor2('login', 'logout', $this);
+    $content[$ix][] = make_anchor2('privacy', 'privacy_policy', $this);
 }
 elseif ($this->mod_users->is_logged_in_noaccept()) {
     // The user did not accept policy.
     $ix = count($head);
     $head[] = $this->lang->line('user_access');
-    $content[$ix][] = anchor(site_url('login'), $this->lang->line('logout'));
-    $content[$ix][] = anchor(site_url('privacy'), $this->lang->line('privacy_policy'));
+    $content[$ix][] = make_anchor2('login', 'logout', $this);
+    $content[$ix][] = make_anchor2('privacy', 'privacy_policy', $this);
 }
 else {
     // Not logged in 
  
     $ix = count($head);
     $head[] = $this->lang->line('user_access');
-    $content[$ix][] = anchor(site_url('login'), $this->lang->line('login'));
-    $content[$ix][] = anchor(site_url('privacy'), $this->lang->line('privacy_policy'));
+    $content[$ix][] = make_anchor2('login', 'login', $this);
+    $content[$ix][] = make_anchor2('privacy', 'privacy_policy', $this);
 }
  
 $cols = $ix+1;
  
 ?>
-
-<nav id="myNavbar" class="navbar navbar-default navbar-static-top">
-  <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
-        <span class="sr-only">Toggle navigation</span><!-- For screen reader -->
-        <span class="icon-bar"></span><!-- Line on menu toggle button -->
-        <span class="icon-bar"></span><!-- Line on menu toggle button -->
-        <span class="icon-bar"></span><!-- Line on menu toggle button -->
-      </button>
+  <nav class="navbar navbar-expand-md navbar-light bg-light pt-0 pb-0">
+      <div class="mx-lg-auto divnavbar">
       <a class="navbar-brand" href="<?= site_url('/') ?>">Bible Online Learner</a>
-    </div>
+      <button class="navbar-toggler mt-1 mb-1" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainMenu">
+        <ul class="navbar-nav mr-auto">
 
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="nav navbar-nav">
         <?php for ($c=0; $c<$cols; ++$c): ?>
           <?php if (!isset($content[$c])): ?>
-            <li><?= $head[$c] ?></li>
+            <li class="nav-item"><?= $head[$c] ?></li>
           <?php else: ?>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                 aria-haspopup="true" aria-expanded="false"><?= $head[$c] ?><span class="caret"></span></a>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle pt-3 pb-3 pl-3 pr-3" href="#" id="navbarDropdownX" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $head[$c] ?></a>
 
-              <ul class="dropdown-menu">
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownX">
 
                 <?php for ($r=0; $r<count($content[$c]); ++$r): ?>
-                  <li><?= $content[$c][$r] ?></li>
+                  <?= $content[$c][$r] ?>
                 <?php endfor; ?>
 
-              </ul>
+              </div>
             </li>
           <?php endif; ?>
         <?php endfor; ?>
+
         <?php if ($langselect): ?>
           <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"

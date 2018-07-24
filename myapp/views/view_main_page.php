@@ -1,92 +1,60 @@
-<?php /* Assumption isset($right_title) implies isset($left_title) */ ?>
+<?php /* Assumption isset($right_title) implies isset($left_title) */
+
+/* Optionally shows a panel title and text */
+function show_panel(&$title, &$text, $extraclass='') {
+    if (!isset($text))
+        return;
+
+    echo "<div class=\"card\">\n";
+    echo "  <h6 class=\"card-header bg-primary text-light\">$title</h6>\n";
+    echo "  <div class=\"card-body $extraclass\">$text</div>\n";
+    echo "</div>\n";
+}
+
+/* Shows a panel title and optionally a text */
+function show_panel2(&$title, &$text) {
+    echo "<div class=\"card\">\n";
+    echo "  <h6 class=\"card-header bg-primary text-light\">$title</h6>\n";
+    if (isset($text))
+        echo "  <div class=\"card-body\">$text</div>\n";
+    echo "</div>\n";
+}
+
+/* Shows logos */
+function logos() {
+    echo "  <div class=\"card mt-3 d-none d-md-block\">\n";
+    echo "    <div class=\"card-body centeralign\">\n";
+    echo "      <a class=\"navbar-link\" href=\"http://www.ezer.dk\" target=\"_blank\"><img alt=\"\" src=\"",site_url('images/ezer_web_trans_lille.png'),"\"></a>\n";
+    echo "      <p>&nbsp;</p>\n";
+    echo "      <a class=\"navbar-link\" href=\"http://3bmoodle.dk\" target=\"_blank\"><img alt=\"\" height=\"43\" src=\"",site_url('images/3bm_logo.png'),"\"></a>\n";
+    echo "    </div>\n";
+    echo "  </div>\n";
+}
+
+?>    
+
+
+<div class="col-md-3" id="leftpanel">
+  <?php
+      show_panel2($left_title, $left);
+
+      if (isset($logos))
+          logos();
+
+      show_panel($extraleft_title, $extraleft, 'student-legend');
+  ?>
+</div>
+
+
+<div class="<?= isset($right_title) ? 'col-md-6' : 'col-md-9' ?>" id="centerpanel">
+  <div class="centerblock">
+    <?= $center ?>
+  </div>
+</div>
+
 
 <?php if (isset($right_title)): ?>
-
-  <div class="col-sm-3" id="leftpanel">
-
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h3 class="panel-title"><?= $left_title ?></h3>
-      </div>
-      <?php if (isset($left)): ?>
-        <div class="panel-body"><?= $left ?></div>
-      <?php endif; ?>  
-    </div>
-
-    <?php if (isset($logos)): ?>
-      <div class="panel panel-primary hidden-xs">
-        <div class="panel-body centeralign">
-          <a class="navbar-link" href="http://www.ezer.dk" target="_blank"><img alt="" src="<?= site_url('images/ezer_web_trans_lille.png') ?>"></a>
-          <p>&nbsp;</p>
-          <a class="navbar-link" href="http://3bmoodle.dk" target="_blank"><img alt="" height="43" src="<?= site_url('images/3bm_logo.png') ?>"></a>
-        </div>
-      </div>
-    <?php endif; ?>
-
-    <?php if (isset($extraleft)): ?>
-      <div class="panel panel-primary" id="extraleft">
-        <div class="panel-heading">
-          <h3 class="panel-title"><?= $extraleft_title ?></h3>
-        </div>
-        <div class="panel-body student-legend">
-          <?= $extraleft ?>
-        </div>
-      </div>
-    <?php endif; ?>
-  </div>
-   
-  <div class="col-sm-6" id="centerpanel">
-    <div class="centerblock">
-      <?= $center ?>
-    </div>
-  </div>
-   
-  <div class="col-sm-3" id="rightpanel">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h3 class="panel-title"><?= $right_title ?></h3>
-      </div>
-      <?php if (isset($right)): ?>
-        <div class="panel-body"><?= $right ?></div>
-      <?php endif; ?>  
-    </div>
-  </div>
-
-<?php elseif (isset($left_title)): ?>
-
-  <div class="col-sm-3" id="leftpanel">
-
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h3 class="panel-title"><?= $left_title ?></h3>
-      </div>
-      <?php if (isset($left)): ?>
-        <div class="panel-body"><?= $left ?></div>
-      <?php endif; ?>  
-    </div>
-
-    <?php if (isset($extraleft)): ?>
-      <div class="panel panel-primary" id="extraleft">
-        <div class="panel-heading">
-          <h3 class="panel-title"><?= $extraleft_title ?></h3>
-        </div>
-        <div class="panel-body student-legend">
-          <?= $extraleft ?>
-        </div>
-        </div>
-    <?php endif; ?>
-
-  </div>
-   
-  <div class="col-sm-9" id="centerpanel">
-    <div class="centerblock">
-      <?= $center ?>
-    </div>
-  </div>
-
-<?php else: ?>
-
-  <div class="col-sm-12" id="leftpanel">
-    <?= $center ?>
+  <div class="col-md-3" id="rightpanel">
+    <?php show_panel($right_title, $right) ?>
   </div>
 <?php endif; ?>

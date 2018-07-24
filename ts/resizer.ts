@@ -67,9 +67,9 @@ namespace resizer {
     // browser window has a particular size.
     $(function() {
         // Insert size detectors before </body>
-        let sizes = ['xs', 'sm', 'md', 'lg'];
+        let sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
         for (let i=0; i<sizes.length; ++i)
-            $('body').append(`<div class="visible-${sizes[i]}-block device-is-${sizes[i]} device-sizer" data-size="${sizes[i]}"></div>`);
+            $('body').append(`<div class="visible-${sizes[i]}-block device-is-${sizes[i]} device-sizer" data-size="${sizes[i]}">${sizes[i]}</div>`);
     });
 }
 
