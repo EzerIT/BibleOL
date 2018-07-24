@@ -1,5 +1,14 @@
 // Emacs: -*- mode: css -*-
 
+// Compile with
+//    lessc --global-var='chinese=false' styles/ol.less
+// to produce non-Chinese version.
+//
+// Compile with
+//    lessc --global-var='chinese=true' styles/ol.less
+// to produce Chinese version.
+
+
 // Placing color names in variables, causes LESS to change them into their corresponding hex values.
 // Thus we avoid browser problems.
 
@@ -12,14 +21,27 @@
 
 body {
     background-color: white;
-    font-size: 10pt;
+    font-size: if((@chinese),12pt,10pt);
     font-family: Segoe UI, Arial, sans-serif;
     overflow: scroll; // Make sure scroll bar is always present (if not, popops may cause confusion)
 }
 
 h1 {
-    font-weight: bold;
+    font-weight: if((@chinese),normal,bold);
 }
+
+th when (@chinese) {
+    font-weight: normal;
+}
+
+b when (@chinese) {
+    font-weight: normal;
+}
+
+strong when (@chinese) {
+    font-weight: normal;
+}
+
 
 .heb-default {
     font-family: "Ezra SIL Webfont";
@@ -161,7 +183,25 @@ span.verse {
 }
 
 .showit {
-    .wordgrammar& { display: block; }
+    .wordgrammar& when not (@chinese) {
+        display: block;
+    }
+    .wordgrammar& when (@chinese) {
+        display: block;
+        
+        // NOTE: You must add gloss languages with Latin script as they are added to the system
+        .english&,
+        .danish&,
+        .german&,
+        .dutch&,
+        .portuguese&,
+        .spanish&,
+        .swahili&,
+        .lexeme_occurrences&,
+        .frequency_rank&,
+        .strongs&
+        { font-size: 10pt; }
+    }
     .xgrammar& { display: inline; }
     .gram& { display: inline-block; white-space: nowrap; }
 }
@@ -187,7 +227,7 @@ div.objectlevel {
 }
 
 div.grammarselector {
-    font-size: 8pt;
+    font-size: if((@chinese),12pt,8pt);
     display: inline-block;
     margin-bottom: 10px;
 }
@@ -196,7 +236,7 @@ div.grammardisplay {
     border-radius: 6px;
     margin-right: 15px;
     float: right;
-    font-size: 8pt;
+    font-size: if((@chinese),10pt,8pt);
     display: none;
     position: absolute;
     right: 0;
@@ -220,7 +260,7 @@ div.grammardisplay {
 }
 
 .like-label {
-    font-weight: bold;
+    font-weight: if((@chinese),normal,bold);
 }
 
 
@@ -329,10 +369,10 @@ img {
 div.centerblock {
     h1 {
         margin-top: 0;
-        font-size: 16pt;
+        font-size: if((@chinese),19pt,16pt);
     }
     h2 {
-        font-size: 14pt;
+        font-size: if((@chinese),17pt,14pt);
     }
 }
 
@@ -578,3 +618,37 @@ table.autowidth {
 }
 
 .bolicon-logos { &:before { content: "\24c1"; } }  // L in circle
+
+// Bootstrap overloads for Chinese
+
+.panel-title when (@chinese) {
+    font-size: 19px;
+}
+
+label when (@chinese) {
+    font-weight: normal;
+}
+
+.label when (@chinese) {
+    font-weight: normal;
+    font-size: 100%;
+}
+
+.btn when (@chinese) {
+    font-size: 17px;
+}
+
+// Jquery UI overloads for Chinese
+
+.ui-accordion-header when (@chinese) {
+   font-weight: normal !important;
+}
+
+.ui-state-active when (@chinese) {
+   font-weight: normal !important;
+}
+
+.ui-state-default when (@chinese) {
+   font-weight: normal !important;
+}
+    
