@@ -13,8 +13,12 @@ body {
 h1 {
   font-weight: normal;
 }
-th,
-b,
+th {
+  font-weight: normal;
+}
+b {
+  font-weight: normal;
+}
 strong {
   font-weight: normal;
 }
@@ -332,6 +336,11 @@ div.centerblock h2 {
 #errorcenter {
   max-width: 300px;
 }
+#rejectcenter {
+  max-width: 600px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 table.padded {
   border-spacing: 5px;
   border-collapse: separate;
@@ -437,6 +446,10 @@ div.statistics table th,
 div.statistics table td {
   text-align: center;
 }
+div.student-legend {
+  max-height: 400px;
+  overflow-y: auto;
+}
 div#virtualkbid {
   float: right;
 }
@@ -501,12 +514,16 @@ table.featuretable {
 }
 table.featuretable th,
 table.featuretable td {
+  text-align: center;
   padding-left: 10px;
   padding-right: 10px;
 }
 table.iconlist td {
   padding-right: 30px;
   text-align: right;
+}
+table.autowidth {
+  width: auto !important;
 }
 .bolicon {
   font-weight: bold;
@@ -527,8 +544,12 @@ label {
 .btn {
   font-size: 17px;
 }
-.ui-accordion-header,
-.ui-state-active,
+.ui-accordion-header {
+  font-weight: normal !important;
+}
+.ui-state-active {
+  font-weight: normal !important;
+}
 .ui-state-default {
   font-weight: normal !important;
 }

@@ -23,10 +23,10 @@ js/handle_legend.js: ts/handle_legend.ts ts/util.ts ts/resizer.ts
 	tsc --removeComments --noImplicitAny --out $@ $<
 
 styles/ol.css:	styles/ol.less
-	lessc $< > $@
+	lessc --global-var='chinese=false' $< > $@
 
-styles/ol_zh.css:	styles/ol_zh.less
-	lessc $< > $@
+styles/ol_zh.css:	styles/ol.less
+	lessc --global-var='chinese=true' $< > $@
 
 clean: cleanugly
 	rm -f $(ALL_TARGETS)
