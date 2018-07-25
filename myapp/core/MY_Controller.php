@@ -13,6 +13,7 @@ function predump($x) {
 class MY_Controller extends CI_Controller {
     public $language;
     public $language_short;
+    public $language_short2;   // Used by lang attribute in <html lang="..."> element
 
     public function __construct() {
         parent::__construct();
@@ -38,13 +39,19 @@ class MY_Controller extends CI_Controller {
           case 'zh':
           case 'zh-cn':
           case 'zh-sg':
+          case 'zh-simp':
+          case 'zh-Hans':
                 $this->language_short = 'zh-simp';
+                $this->language_short2 = 'zh-Hans';
                 $this->language = 'zh-simp';
                 break;
 
           case 'zh-tw':
           case 'zh-hk':
+          case 'zh-trad':
+          case 'zh-Hant':
                 $this->language_short = 'zh-trad';
+                $this->language_short2 = 'zh-Hant';
                 $this->language = 'zh-trad';
                 break;
 
@@ -53,13 +60,13 @@ class MY_Controller extends CI_Controller {
           case 'nl':
           case 'pt':
           case 'es':
-          case 'zh-simp':
-          case 'zh-trad':
                 $this->language_short = $this->language;
+                $this->language_short2 = $this->language;
                 break;
 
           default:
                 $this->language_short = 'en';
+                $this->language_short2 = 'en';
                 $this->language = 'english';  // English language files are not named 'en', but 'english'
                 break;
         }

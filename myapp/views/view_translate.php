@@ -224,7 +224,7 @@ else
           </table>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('close_button') ?></button>
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('close_button') ?></button>
         </div>
       </div>
     </div>
@@ -239,7 +239,7 @@ else
         <?php $page_parms = $get_parms;
               $page_parms['offset'] = $p;
         ?>
-         <li <?= $p==$get_parms['offset'] ? 'class="active"' : '' ?>><a href="<?= build_url($editing,$page_parms) ?>"><?= $p+1 ?></a></li>
+         <li class="<?= $p==$get_parms['offset'] ? 'active' : '' ?> page-item"><a class="page-link" href="<?= build_url($editing,$page_parms) ?>"><?= $p+1 ?></a></li>
       <?php endfor; ?>
     </ul>
   </nav>
@@ -335,7 +335,7 @@ else
             <?php endif; ?>
           </td>
           <td class="centeralign">
-        <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name ?>" href="#"><?= $this->lang->line('revert') ?></a>
+        <a class="badge badge-danger revertbutton" data-name="<?= $line->symbolic_name ?>" href="#"><?= $this->lang->line('revert') ?></a>
             <input type="hidden" class="modif-indicator" name="modif-<?= $line->symbolic_name ?>" value="false"></td>
           </td>
 
@@ -355,7 +355,7 @@ else
               <input type="text" class="textinput" name="<?= $line->symbolic_name_dash ?>" size="40" value="<?= replace_quot($line->text_edit) ?>">
             <?php endif; ?>
           <td class="centeralign">
-            <a class="label label-danger revertbutton" data-name="<?= $line->symbolic_name_dash ?>" href="#"><?= $this->lang->line('revert') ?></a>
+            <a class="badge badge-danger revertbutton" data-name="<?= $line->symbolic_name_dash ?>" href="#"><?= $this->lang->line('revert') ?></a>
             <input type="hidden" class="modif-indicator" name="modif-<?= $line->symbolic_name_dash ?>" value="false"></td>
           </td>
           </td>
@@ -388,7 +388,7 @@ else
             <input type="text" class="textinput" name="<?= $line->lex_id ?>" size="40" value="<?= replace_quot($line->text_edit) ?>">
           </td>
           <td class="centeralign">
-            <a class="label label-danger revertbutton" data-name="<?= $line->lex_id ?>" href="#"><?= $this->lang->line('revert') ?></a>
+            <a class="badge badge-danger revertbutton" data-name="<?= $line->lex_id ?>" href="#"><?= $this->lang->line('revert') ?></a>
             <input type="hidden" class="modif-indicator" name="modif-<?= $line->lex_id ?>" value="false"></td>
           </td>
 
@@ -401,6 +401,6 @@ else
 </div>
 
 <p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('submit_changes') ?>">
-   <a class="btn btn-default revert-all" href="#"><?= $this->lang->line('revert_all') ?></a></p>
+   <a class="btn btn-outline-dark revert-all" href="#"><?= $this->lang->line('revert_all') ?></a></p>
 
 <form>

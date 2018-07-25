@@ -5,16 +5,16 @@ function show_panel(&$title, &$text, $extraclass='') {
     if (!isset($text))
         return;
 
-    echo "<div class=\"card\">\n";
-    echo "  <h6 class=\"card-header bg-primary text-light\">$title</h6>\n";
+    echo "<div class=\"card mb-3\">\n";
+    echo "  <h5 class=\"card-header bg-primary text-light\">$title</h5>\n";
     echo "  <div class=\"card-body $extraclass\">$text</div>\n";
     echo "</div>\n";
 }
 
 /* Shows a panel title and optionally a text */
 function show_panel2(&$title, &$text) {
-    echo "<div class=\"card\">\n";
-    echo "  <h6 class=\"card-header bg-primary text-light\">$title</h6>\n";
+    echo "<div class=\"card mb-3\">\n";
+    echo "  <h5 class=\"card-header bg-primary text-light\">$title</h5>\n";
     if (isset($text))
         echo "  <div class=\"card-body\">$text</div>\n";
     echo "</div>\n";
@@ -22,7 +22,7 @@ function show_panel2(&$title, &$text) {
 
 /* Shows logos */
 function logos() {
-    echo "  <div class=\"card mt-3 d-none d-md-block\">\n";
+    echo "  <div class=\"card mb-3 d-none d-md-block\">\n";
     echo "    <div class=\"card-body centeralign\">\n";
     echo "      <a class=\"navbar-link\" href=\"http://www.ezer.dk\" target=\"_blank\"><img alt=\"\" src=\"",site_url('images/ezer_web_trans_lille.png'),"\"></a>\n";
     echo "      <p>&nbsp;</p>\n";

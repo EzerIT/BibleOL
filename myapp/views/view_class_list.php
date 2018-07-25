@@ -21,16 +21,16 @@
       <td class="leftalign"><?= $cl->ownerid==0 ? $this->lang->line('no_owner') : make_full_name($cl) ?></td>
       <td class="leftalign">
         <?php if ($myid==$cl->ownerid || $isadmin): ?>
-          <a class="label label-primary" href="<?= site_url("userclass/users_in_class?classid=$cl->clid") ?>"><?= str_replace(' ', '&nbsp;', $this->lang->line('assign_users')) ?></a>
-          <a class="label label-primary" href="<?= site_url("classes/edit_one_class?classid=$cl->clid") ?>"><?= $this->lang->line('class_edit') ?></a>
-          <a class="label label-danger" onclick="genericConfirmSm('<?= $this->lang->line('delete_class') ?>',
+          <a class="badge badge-primary" href="<?= site_url("userclass/users_in_class?classid=$cl->clid") ?>"><?= str_replace(' ', '&nbsp;', $this->lang->line('assign_users')) ?></a>
+          <a class="badge badge-primary" href="<?= site_url("classes/edit_one_class?classid=$cl->clid") ?>"><?= $this->lang->line('class_edit') ?></a>
+          <a class="badge badge-danger" onclick="genericConfirmSm('<?= $this->lang->line('delete_class') ?>',
                                        '<?= sprintf($this->lang->line('delete_class_confirm'), "\'$cl->classname\'") ?>',
                                        '<?= site_url("classes/delete_class?classid=$cl->clid") ?>');
                         return false;"
                href="#"><?= $this->lang->line('class_delete') ?></a>
         <?php endif; ?>
         <?php if ($isadmin): ?>
-          <a class="label label-primary" onclick="changeOwnerClass(<?= $cl->clid ?>); return false;" href="#"><?= $this->lang->line('change_owner_class') ?></a>
+          <a class="badge badge-primary" onclick="changeOwnerClass(<?= $cl->clid ?>); return false;" href="#"><?= $this->lang->line('change_owner_class') ?></a>
         <?php endif; ?>
       </td>
     </tr>
@@ -67,7 +67,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" id="chown-class-dialog-ok" class="btn btn-primary"><?= $this->lang->line('OK_button') ?></button>
-          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
         </div>
       </div>
     </div>

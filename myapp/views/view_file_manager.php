@@ -31,7 +31,7 @@
       </td>
       <?php if ($dirlist['is_empty'][$d[0]]): ?>
 
-        <td><a class="label label-danger" onclick="genericConfirmSm('<?= $this->lang->line('delete_folder_confirm') ?>',
+        <td><a class="badge badge-danger" onclick="genericConfirmSm('<?= $this->lang->line('delete_folder_confirm') ?>',
                                      '<?= sprintf($this->lang->line('delete_folder_question'), "\'$d[0]\'") ?>',
                                      '<?= site_url(build_get('file_manager/delete_folder',array('dir' => $dirlist['relativedir'], 'delete' => $d[0]))) ?>');
                       return false;"
@@ -74,9 +74,9 @@
                   // Adding the attibute 'download' to the <a ...> tag removes the error, but prevents
                   // the server from sending error messages during download.
             ?>
-            <a class="label label-primary" href="<?= site_url(build_get('file_manager/download_ex', array('dir' => $dirlist['relativedir'], 'file' => $f->filename))) ?>"><?= $this->lang->line('download') ?></a>
-            <a class="label label-primary" href="<?= site_url(build_get('text/edit_quiz',array('quiz' => $dirlist['relativedir'] . '/' . $f->filename))) ?>"><?= $this->lang->line('edit') ?></a>
-            <a class="label label-primary" href="#" onclick="rename('<?= substr($f->filename,0,-4) ?>'); return false;"><?= $this->lang->line('rename') ?></a></span>
+            <a class="badge badge-primary" href="<?= site_url(build_get('file_manager/download_ex', array('dir' => $dirlist['relativedir'], 'file' => $f->filename))) ?>"><?= $this->lang->line('download') ?></a>
+            <a class="badge badge-primary" href="<?= site_url(build_get('text/edit_quiz',array('quiz' => $dirlist['relativedir'] . '/' . $f->filename))) ?>"><?= $this->lang->line('edit') ?></a>
+            <a class="badge badge-primary" href="#" onclick="rename('<?= substr($f->filename,0,-4) ?>'); return false;"><?= $this->lang->line('rename') ?></a></span>
         </td>
       </tr>
     <?php endforeach; ?>
@@ -138,7 +138,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" id="mkdir-dialog-ok" class="btn btn-primary"><?= $this->lang->line('OK_button') ?></button>
-          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
         </div>
       </div>
     </div>
@@ -200,7 +200,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" id="rename-dialog-ok" class="btn btn-primary"><?= $this->lang->line('OK_button') ?></button>
-          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
         </div>
       </div>
     </div>
@@ -260,7 +260,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" id="newquiz-dialog-ok" class="btn btn-primary"><?= $this->lang->line('OK_button') ?></button>
-          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
         </div>
       </div>
     </div>
@@ -297,7 +297,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" id="copy-dialog-warning-ok" class="btn btn-primary"><?= $this->lang->line('OK_button') ?></button>
-          <button type="button" id="copy-dialog-warning-cancel" class="btn btn-default"><?= $this->lang->line('cancel_button') ?></button>
+          <button type="button" id="copy-dialog-warning-cancel" class="btn btn-outline-dark"><?= $this->lang->line('cancel_button') ?></button>
         </div>
       </div>
     </div>
@@ -355,7 +355,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" id="delete-dialog-confirm-yes" class="btn btn-primary"><?= $this->lang->line('yes') ?></button>
-          <button type="button" id="delete-dialog-confirm-no" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
+          <button type="button" id="delete-dialog-confirm-no" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
         </div>
       </div>
     </div>
@@ -408,7 +408,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" id="chown-dialog-ok" class="btn btn-primary"><?= $this->lang->line('OK_button') ?></button>
-          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
         </div>
       </div>
     </div>

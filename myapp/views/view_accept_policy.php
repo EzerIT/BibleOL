@@ -10,9 +10,9 @@
    }
 ?>
 
-<div class="panel panel-default">
-  <div class="panel-heading"><?= $this->lang->line('do_you_accept') ?></div>
-  <div class="panel-body">
+<div class="card mb-3">
+  <h5 class="card-header bg-light text-dark"><?= $this->lang->line('do_you_accept') ?></h5>
+  <div class="card-body">
     <?= form_open("login/accept_policy_yes") ?>
       <input type="hidden" name="acceptance_code" value="<?= $acceptance_code ?>" />
       <input type="hidden" name="policy_lang" value="<?= $policy_lang ?>" />

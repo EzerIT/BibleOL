@@ -6,7 +6,7 @@ global $editing_glob;
 $editing_glob = $editing;
 
 function button_type(int $index, int $button_index) {
-    return $index===$button_index ? "btn-info" : "btn-default";
+    return $index===$button_index ? "btn-info" : "btn-outline-dark";
 }
 
 
@@ -33,11 +33,9 @@ function show_buttons(string $head,
 
     $right_to_left = in_array($get_parms['src_lang'], array('heb','aram'));
 ?>
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <h3 class="panel-title"><?= $head ?></h3>
-      </div>
-      <div class="panel-body">
+    <div class="card mb-3">
+      <h5 class="card-header bg-info text-light"><?= $head ?></h5>
+      <div class="card-body">
         <table>
           <tr>
             <td>
@@ -64,8 +62,8 @@ function show_buttons(string $head,
              </tr>
            <?php endfor; ?>
         </table>
-      </div><!--panel-body-->
-    </div><!--panel-->
+      </div><!--card-body-->
+    </div><!--card-->
 <?php
 }
 ?>
@@ -77,17 +75,15 @@ function show_buttons(string $head,
     <?php show_buttons($this->lang->line('aramaic_glosses'), array('src_lang'=>'aram')  + $get_parms, $aram_buttons,  'heb-default',$gloss_count); ?>
 
     <?php if ($get_parms['src_lang']=='all-with-greek'): ?>
-          <?php show_buttons($this->lang->line('greek_glosses'), array('src_lang'=>'greek') + $get_parms, $greek_buttons, 'greek-default',$gloss_count); ?>
+      <?php show_buttons($this->lang->line('greek_glosses'), array('src_lang'=>'greek') + $get_parms, $greek_buttons, 'greek-default',$gloss_count); ?>
     <?php else: ?>
 
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <h3 class="panel-title"><?= $this->lang->line('greek_glosses') ?></h3>
-        </div>
-        <div class="panel-body">
+      <div class="card mb-3">
+        <h5 class="card-header bg-info text-light"><?= $this->lang->line('greek_glosses') ?></h5>
+        <div class="card-body">
           <?= $this->lang->line('no_greek') ?>
-        </div><!--panel-body-->
-      </div><!--panel-->
+        </div><!--card-body-->
+      </div><!--card-->
 
     <?php endif; ?>
     <?php break; ?>

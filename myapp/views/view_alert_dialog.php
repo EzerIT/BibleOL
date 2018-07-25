@@ -19,7 +19,7 @@
         <span id="alert-text"></span>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('OK_button') ?></button>
+        <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('OK_button') ?></button>
       </div>
     </div>
   </div>

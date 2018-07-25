@@ -31,7 +31,7 @@
 
 <div class="buttons">
   <a class="btn btn-primary" href="#" onclick="save_quiz(); return false;"><?= $this->lang->line('save_button') ?></a>
-  <a class="btn btn-default" href="<?=site_url(build_get('file_manager',array('dir' => $dir))) ?>"><?= $this->lang->line('cancel_button') ?></a>
+  <a class="btn btn-outline-dark" href="<?=site_url(build_get('file_manager',array('dir' => $dir))) ?>"><?= $this->lang->line('cancel_button') ?></a>
 </div>
 </div>
 
@@ -76,7 +76,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" id="filename-dialog-save" class="btn btn-primary"><?= $this->lang->line('save_button') ?></button>
-          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
         </div>
       </div>
     </div>
@@ -100,7 +100,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" id="overwrite-yesbutton" class="btn btn-primary"><?= $this->lang->line('yes') ?></button>
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
+        <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
       </div>
     </div>
   </div>
@@ -133,7 +133,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" id="import-shebanq-button" class="btn btn-primary"><?= $this->lang->line('import_button') ?></button>
-          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
         </div>
       </div>
     </div>
@@ -157,7 +157,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" id="qo-yesbutton" class="btn btn-primary"><?= $this->lang->line('yes') ?></button>
-        <button type="button" id="qo-nobutton" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
+        <button type="button" id="qo-nobutton" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
         <button type="button" id="qo-okbutton" class="btn btn-primary" data-dismiss="modal"><?= $this->lang->line('OK_button') ?></button>
       </div>
     </div>

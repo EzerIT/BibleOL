@@ -1,10 +1,8 @@
-<div class="center-block" id="errorcenter">
-  <div class="panel panel-danger">
-    <div class="panel-heading">
-      <h3 class="panel-title"><?= $this->lang->line('error_colon') ?></h3>
+<div class="mx-auto" id="errorcenter">
+  <div class="card mb-3">
+    <h5 class="card-header bg-danger text-light"><?= $this->lang->line('error_colon') ?></h5>
+    <div class="card-body">
+      <?= $text ?>
     </div>
-      <div class="panel-body">
-        <?= $text ?>
-      </div>
   </div>
 </div>

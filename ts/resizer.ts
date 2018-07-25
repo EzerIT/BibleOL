@@ -15,7 +15,7 @@ namespace resizer {
     // getWindowSize function
     //
     // Returns the current browser window size, using the Bootstrap size indicators 'xs', 'sm',
-    // 'md', or 'lg'.
+    // 'md', 'lg', or 'xl'.
     //
     export function getWindowSize() : string {
         return $('.device-sizer:visible').attr('data-size');
@@ -27,7 +27,7 @@ namespace resizer {
     // Checks if the current browser window has a particular Bootstrap size.
     //
     // Parameter:
-    //      siz: Bootstrap size indicator ('xs', 'sm', 'md', or 'lg').
+    //      siz: Bootstrap size indicator ('xs', 'sm', 'md', 'lg', or 'xl').
     // Returns:
     //      True if the browser window has the specified size (neither more nor less).
     //
@@ -67,9 +67,12 @@ namespace resizer {
     // browser window has a particular size.
     $(function() {
         // Insert size detectors before </body>
-        let sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
-        for (let i=0; i<sizes.length; ++i)
-            $('body').append(`<div class="visible-${sizes[i]}-block device-is-${sizes[i]} device-sizer" data-size="${sizes[i]}">${sizes[i]}</div>`);
+        $('body')
+            .append(`<div class="d-block            d-sm-none device-is-xs device-sizer" data-size="xs"></div>`)
+            .append(`<div class="d-none  d-sm-block d-md-none device-is-sm device-sizer" data-size="sm"></div>`)
+            .append(`<div class="d-none  d-md-block d-lg-none device-is-md device-sizer" data-size="md"></div>`)
+            .append(`<div class="d-none  d-lg-block d-xl-none device-is-lg device-sizer" data-size="lg"></div>`)
+            .append(`<div class="d-none  d-xl-block           device-is-xl device-sizer" data-size="xl"></div>`);
     });
 }
 

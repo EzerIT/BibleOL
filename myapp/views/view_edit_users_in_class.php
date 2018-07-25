@@ -42,6 +42,6 @@
 
 <p style="height:2px">&nbsp;</p>
 <p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
-   <a class="btn btn-secondary" href="<?= site_url('classes') ?>"><?= $this->lang->line('cancel_button') ?></a>
+   <a class="btn btn-outline-dark" href="<?= site_url('classes') ?>"><?= $this->lang->line('cancel_button') ?></a>
 </p>
 </form>

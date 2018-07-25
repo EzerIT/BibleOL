@@ -130,7 +130,7 @@
   </div>
   <div class="buttons">
     <button class="btn btn-primary" type="submit" value="Submit"><?= $this->lang->line('OK_button') ?></button>
-    <input class="btn btn-default" type="button" onclick="window.location='<?=site_url() ?>';" value="<?= $this->lang->line('cancel_button') ?>">
+    <input class="btn btn-outline-dark" type="button" onclick="window.location='<?=site_url() ?>';" value="<?= $this->lang->line('cancel_button') ?>">
   </div>
 </form>
 <script>

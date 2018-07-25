@@ -1920,9 +1920,12 @@ var resizer;
     }
     resizer.addResizeListener = addResizeListener;
     $(function () {
-        var sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
-        for (var i = 0; i < sizes.length; ++i)
-            $('body').append("<div class=\"visible-" + sizes[i] + "-block device-is-" + sizes[i] + " device-sizer\" data-size=\"" + sizes[i] + "\">" + sizes[i] + "</div>");
+        $('body')
+            .append("<div class=\"d-block            d-sm-none device-is-xs device-sizer\" data-size=\"xs\"></div>")
+            .append("<div class=\"d-none  d-sm-block d-md-none device-is-sm device-sizer\" data-size=\"sm\"></div>")
+            .append("<div class=\"d-none  d-md-block d-lg-none device-is-md device-sizer\" data-size=\"md\"></div>")
+            .append("<div class=\"d-none  d-lg-block d-xl-none device-is-lg device-sizer\" data-size=\"lg\"></div>")
+            .append("<div class=\"d-none  d-xl-block           device-is-xl device-sizer\" data-size=\"xl\"></div>");
     });
 })(resizer || (resizer = {}));
 var supportsProgress;

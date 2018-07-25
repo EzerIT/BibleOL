@@ -4,10 +4,12 @@
 .ltr {
   direction: ltr;
 }
-body {
+html {
   background-color: white;
   font-size: 10pt;
   font-family: Segoe UI, Arial, sans-serif;
+}
+body {
   overflow: scroll;
 }
 h1 {
@@ -22,8 +24,22 @@ div.hr-replacement {
   height: 1px;
   margin: 20px 0;
 }
+@media screen and (max-width: 991px) {
+  .divnavbar {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
 .navbar-brand {
-  font-size: 22pt;
+  font-size: 20pt;
   font-family: 'Lobster', sans-serif;
   color: blue !important;
 }
@@ -510,4 +526,10 @@ table.autowidth {
 }
 .bolicon-logos:before {
   content: "\24c1";
+}
+label {
+  font-weight: bold;
+}
+.badge {
+  font-weight: normal;
 }

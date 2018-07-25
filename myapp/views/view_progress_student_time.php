@@ -5,8 +5,8 @@
 ?>
 
 <p style="margin-top:10px">
-  <a id="showsel" class="label label-primary" href="#"><?= $this->lang->line('show_selector') ?></a>
-  <a id="hidesel" class="label label-primary" style="display:none" href="#"><?= $this->lang->line('hide_selector') ?></a>
+  <a id="showsel" class="badge badge-primary" href="#"><?= $this->lang->line('show_selector') ?></a>
+  <a id="hidesel" class="badge badge-primary" style="display:none" href="#"><?= $this->lang->line('hide_selector') ?></a>
 </p>
 
 <script>
@@ -29,9 +29,9 @@
         );
     });
 </script>
-        
-<div class="panel panel-default" id="selector" style="display:none">
-  <div class="panel-body">
+
+<div class="card mb-3" id="selector" style="display:none">
+  <div class="card-body">
     <?= form_open("statistics/student_time",array('method'=>'get')) ?>
       <input type="hidden" name="userid" value="<?= $userid ?>">
         
@@ -125,8 +125,8 @@
 
 
   <p style="margin-top:10px">
-    <a id="show1" class="label label-primary" href="#"><?= $this->lang->line('show_table') ?></a>
-    <a id="hide1" class="label label-primary" style="display:none" href="#"><?= $this->lang->line('hide_table') ?></a>
+    <a id="show1" class="badge badge-primary" href="#"><?= $this->lang->line('show_table') ?></a>
+    <a id="hide1" class="badge badge-primary" style="display:none" href="#"><?= $this->lang->line('hide_table') ?></a>
   </p>
   <div class="table-responsive" id="table1" style="display:none">
   <table class="type2 table table-striped autowidth">
@@ -155,8 +155,8 @@
   </canvas>
 
   <p style="margin-top:10px">
-    <a id="show2" class="label label-primary" href="#"><?= $this->lang->line('show_table') ?></a>
-    <a id="hide2" class="label label-primary" style="display:none" href="#"><?= $this->lang->line('hide_table') ?></a>
+    <a id="show2" class="badge badge-primary" href="#"><?= $this->lang->line('show_table') ?></a>
+    <a id="hide2" class="badge badge-primary" style="display:none" href="#"><?= $this->lang->line('hide_table') ?></a>
   </p>
   <div class="table-responsive" id="table2" style="display:none">
     <table class="type2 table table-striped autowidth">

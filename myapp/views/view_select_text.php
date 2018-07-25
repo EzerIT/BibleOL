@@ -46,7 +46,7 @@
 
   <div class="row">
   <div class="form-group">
-    <label for="chapter" class="col-sm-3 control-label"><?= $this->lang->line('chapter_prompt') ?></label>
+    <label for="chapter" class="col-sm-3 col-form-label"><?= $this->lang->line('chapter_prompt') ?></label>
     <div class="col-sm-9">
       <input type="text" id="chapter" name="chapter" value="<?= set_value('chapter') ?>"> <span id="valid_chap"></span>
     </div>
@@ -55,7 +55,7 @@
   
   <div class="row">
   <div class="form-group">
-    <label for="vfrom" class="col-sm-3 control-label"><?= $this->lang->line('first_verse_prompt') ?></label>
+    <label for="vfrom" class="col-sm-3 col-form-label"><?= $this->lang->line('first_verse_prompt') ?></label>
     <div class="col-sm-9">
       <input type="text" id="vfrom" name="vfrom" value="<?= set_value('vfrom') ?>">
     </div>
@@ -64,7 +64,7 @@
 
   <div class="row">
   <div class="form-group">
-    <label for="vto" class="col-sm-3 control-label"><?= $this->lang->line('last_verse_prompt') ?></label>
+    <label for="vto" class="col-sm-3 col-form-label"><?= $this->lang->line('last_verse_prompt') ?></label>
     <div class="col-sm-9">
       <input type="text" id="vto" name="vto" value="<?= set_value('vto') ?>">
     </div>
@@ -73,7 +73,7 @@
 
   <div class="row">
   <div class="form-group">
-    <label for="showicons" class="col-sm-3 control-label"><?= $this->lang->line('show_link_icons_prompt') ?></label>
+    <label for="showicons" class="col-sm-3 col-form-label"><?= $this->lang->line('show_link_icons_prompt') ?></label>
     <div class="col-sm-9">
       <input class="checkbox" id="showicons" name="showicons" value="on" type="checkbox" <?= set_checkbox('showicons','on') ?>>
     </div>

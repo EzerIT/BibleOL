@@ -3,7 +3,7 @@
 <nav>
   <ul class="pagination">
     <?php for ($p=0; $p<$page_count; ++$p): ?>
-      <li <?= $p==$offset ? 'class="active"' : '' ?>><a href="<?= site_url("users?offset=$p&orderby=$orderby&$sortorder") ?>"><?= $p+1 ?></a></li>
+      <li class="<?= $p==$offset ? 'active' : '' ?> page-item"><a class="page-link" href="<?= site_url("users?offset=$p&orderby=$orderby&$sortorder") ?>"><?= $p+1 ?></a></li>
     <?php endfor; ?>
   </ul>
 </nav>
@@ -48,12 +48,12 @@
       <td><?= $user->istranslator ? $this->lang->line('yes') : $this->lang->line('no') ?></td>
       <td class="leftalign"><?= $user->last_login<$user->created_time ? $this->lang->line('never') : date($this->lang->line('date_time_format'), $user->last_login) ?></td>
       <td class="leftalign">
-     <a class="label label-primary" href="<?= site_url("userclass/classes_for_user?userid=$user->id&offset=$offset&orderby=$orderby&$sortorder") ?>"><?= str_replace(' ', '&nbsp;', $this->lang->line('assign_to_class')) ?></a>
-     <a class="label label-primary" href="<?= site_url("users/edit_one_user?userid=$user->id&offset=$offset&orderby=$orderby&$sortorder") ?>"><?= $this->lang->line('user_edit') ?></a>
+     <a class="badge badge-primary" href="<?= site_url("userclass/classes_for_user?userid=$user->id&offset=$offset&orderby=$orderby&$sortorder") ?>"><?= str_replace(' ', '&nbsp;', $this->lang->line('assign_to_class')) ?></a>
+     <a class="badge badge-primary" href="<?= site_url("users/edit_one_user?userid=$user->id&offset=$offset&orderby=$orderby&$sortorder") ?>"><?= $this->lang->line('user_edit') ?></a>
      <?php // You cannot delete yourself.
            // You cannot delete a teacher or an administrator, unless you are an administrator.
            if ($my_id!=$user->id && ((!$user->isadmin && !$user->isteacher) || $isadmin)): ?>
-          <a  class="label label-danger" onclick="genericConfirmSm('<?= $this->lang->line('delete_user') ?>',
+          <a  class="badge badge-danger" onclick="genericConfirmSm('<?= $this->lang->line('delete_user') ?>',
                                      '<?= sprintf($this->lang->line('delete_user_confirm'), "\'$user->username\'") ?>',
                                      '<?= site_url("users/delete_user?userid=$user->id&offset=$offset&orderby=$orderby&$sortorder") ?>');
                       return false;"

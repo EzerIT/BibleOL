@@ -4,10 +4,12 @@
 .ltr {
   direction: ltr;
 }
-body {
+html {
   background-color: white;
   font-size: 12pt;
   font-family: Segoe UI, Arial, sans-serif;
+}
+body {
   overflow: scroll;
 }
 h1 {
@@ -31,8 +33,23 @@ div.hr-replacement {
   height: 1px;
   margin: 20px 0;
 }
+@media screen and (max-width: 991px) {
+  .divnavbar {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
 .navbar-brand {
-  font-size: 18pt;
+  font-size: 20pt;
+  font-family: 'Lobster', sans-serif;
   color: blue !important;
 }
 .navbar-text.logo {
@@ -537,7 +554,7 @@ table.autowidth {
 label {
   font-weight: normal;
 }
-.label {
+.badge {
   font-weight: normal;
   font-size: 100%;
 }

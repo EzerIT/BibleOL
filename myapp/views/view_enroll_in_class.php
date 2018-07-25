@@ -15,7 +15,7 @@
       <td class="leftalign">
         <?= anchor(build_get('userclass/enroll_in',array('classid' => $cl->clid)),
                    $this->lang->line('enroll'),
-                   array('class' => 'label label-primary')) ?>
+                   array('class' => 'badge badge-primary')) ?>
 
       </td>
     </tr>
@@ -41,7 +41,7 @@
     <tr>
       <td class="leftalign" style="width:200px"><?= $cl->classname ?></td>
       <td class="leftalign">
-        <a class="label label-warning" onclick="genericConfirmSm('<?= $this->lang->line('unenroll_class') ?>',
+        <a class="badge badge-warning" onclick="genericConfirmSm('<?= $this->lang->line('unenroll_class') ?>',
                                        '<?= sprintf($this->lang->line('unenroll_class_confirm'), "\'$cl->classname\'") ?>',
                                        '<?= site_url("userclass/unenroll_from?classid=$cl->clid") ?>');
                         return false;"
@@ -51,13 +51,13 @@
                 echo $this->lang->line('teacher_can_access'),'&nbsp;',
                     anchor(build_get('userclass/manage_access',array('classid' => $cl->clid, 'grant' => false)),
                            $this->lang->line('revoke_access'),
-                           array('class' => 'label label-danger'));
+                           array('class' => 'badge badge-danger'));
             }
             else {
                 echo $this->lang->line('teacher_cannot_access'),'&nbsp;',
                     anchor(build_get('userclass/manage_access',array('classid' => $cl->clid, 'grant' => true)),
                            $this->lang->line('grant_access'),
-                           array('class' => 'label label-success'));
+                           array('class' => 'badge badge-success'));
             }
         ?>
       </td>

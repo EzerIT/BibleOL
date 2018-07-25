@@ -55,7 +55,7 @@ function make_icon_radio_button(string $name) {
        <?php if (isset($w->urls)): ?>
          <?php for ($i=0; $i<3; ++$i): ?>
            <?php if (isset($w->urls[$i])): ?>
-             <a class="label label-primary"
+             <a class="badge badge-primary" href="#"
                 onclick="edit_url(<?= $w->urls[$i]->id ?>,
                                   '<?= '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . ' ' . $w->roman . '</span>' ?>',
                                   '<?= str_replace("'", 'QQzQQ', htmlspecialchars($w->urls[$i]->url)) ?>',
@@ -63,14 +63,13 @@ function make_icon_radio_button(string $name) {
                          return false;"><?= $this->lang->line('urls_edit') ?></a>
 
 
-             <a class="label label-danger"
+             <a class="badge badge-danger" href="#"
                 onclick="deleteUrlConfirm('<?= sprintf($this->lang->line('delete_url_confirm'),
                                                        '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . ' ' . $w->roman . '</span>',
                                                        str_replace("'", 'QQzQQ', htmlspecialchars($w->urls[$i]->url))
                                                        ) ?>',
                                                        <?= $w->urls[$i]->id ?>);
-                         return false;"
-               href="#"><?= $this->lang->line('urls_delete') ?></a>
+                         return false;"><?= $this->lang->line('urls_delete') ?></a>
              <br/>
            <?php else: ?>
              <?php $make_add = true; ?>
@@ -78,7 +77,7 @@ function make_icon_radio_button(string $name) {
          <?php endfor; ?>
        <?php endif; ?>
        <?php if ($make_add): ?>
-          <a class="label label-primary"
+          <a class="badge badge-primary" href="#"
              onclick="create_url('<?= $w->lex ?>',
                                  '<?= '<span class=&quot;heb-default rtl&quot;>' . $w->vocalized_lexeme_utf8 . ' ' . $w->roman . '</span>' ?>');
                       return false;"><?= $this->lang->line('urls_add') ?></a>
@@ -146,7 +145,7 @@ function make_icon_radio_button(string $name) {
         </div>
         <div class="modal-footer">
           <button type="button" id="edit-url-dialog-ok" class="btn btn-primary"><?= $this->lang->line('OK_button') ?></button>
-          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
         </div>
       </div>
     </div>
@@ -228,7 +227,7 @@ function make_icon_radio_button(string $name) {
         </div>
         <div class="modal-footer">
           <button type="button" id="delete-yesbutton" class="btn btn-primary"><?= $this->lang->line('yes') ?></button>
-          <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
         </div>
       </div>
     </div>

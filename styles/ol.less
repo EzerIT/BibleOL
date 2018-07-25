@@ -19,10 +19,13 @@
 .rtl { direction: rtl; }
 .ltr { direction: ltr; }
 
-body {
+html {
     background-color: white;
     font-size: if((@chinese),12pt,10pt);
     font-family: Segoe UI, Arial, sans-serif;
+}
+
+body {
     overflow: scroll; // Make sure scroll bar is always present (if not, popops may cause confusion)
 }
 
@@ -54,8 +57,25 @@ div.hr-replacement {  // Because Bootstrap messes with <hr>
     margin: 20px 0;
 }
 
+@media screen and (max-width:991px) {
+    // Place menu button on right when size is xs, sm, or md
+    .divnavbar {
+      position: relative;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      -ms-flex-align: center;
+      align-items: center;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      width: 100%;
+    }
+}
+
+
 .navbar-brand {
-    font-size: 22pt;
+    font-size: 20pt;
     font-family: 'Lobster', sans-serif;
     color: blue !important;
 }
@@ -626,13 +646,17 @@ table.autowidth {
     font-size: 19px;
 }
 
-label when (@chinese) {
-    font-weight: normal;
+label {
+    font-weight: if((@chinese),normal,bold);
 }
 
-.label when (@chinese) {
+.badge when (@chinese) {
     font-weight: normal;
     font-size: 100%;
+}
+
+.badge when not (@chinese) {
+    font-weight: normal;
 }
 
 .btn when (@chinese) {

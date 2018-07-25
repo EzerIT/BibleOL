@@ -18,11 +18,11 @@
    }
 
    function make_js(string $file) {
-       echo "<script type=\"text/javascript\" src=\"", site_url(add_stat($file)), "\"></script>\n";
+       echo "<script src=\"", site_url(add_stat($file)), "\"></script>\n";
     }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="<?= $this->language_short2 ?>">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?= $title ?></title>
@@ -46,7 +46,6 @@
        make_js('js/jquery-1.9.1.min.js');
        make_js('bootstrap_local/js/bootstrap.min.js');
        make_js('jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js');
-       make_js('js/simpledropdown.js');
     
        if (!isset($js_list))
            $js_list=array();

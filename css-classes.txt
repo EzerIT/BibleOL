@@ -1,0 +1,23 @@
+For Bootstrap
+
+badge
+badge-*
+bg-*
+btn-*
+card
+card-*
+mb-*
+mt-*
+mx-auto
+text-light
+
+
+For Bible OL:
+input.narrow
+table.form
+table.type1
+table.type2
+table.type3
+td.norb
+td.nolb
+

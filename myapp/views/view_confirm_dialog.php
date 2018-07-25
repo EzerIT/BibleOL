@@ -37,7 +37,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" id="yesbutton" class="btn btn-primary"><?= $this->lang->line('yes') ?></button>
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
+        <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
       </div>
     </div>
   </div>

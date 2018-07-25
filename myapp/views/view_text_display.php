@@ -68,7 +68,7 @@
       <div class="modal-body" id="grammar-info-body">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?= $this->lang->line('close_button') ?></button>
+        <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('close_button') ?></button>
       </div>
     </div>
   </div>

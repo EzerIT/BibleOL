@@ -1,22 +1,20 @@
 <?php $valerr = validation_errors('<p class="alert alert-danger">','</p>'); ?>
 
 
-<div class="center-block" id="logincenter">
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-       <h1 class="panel-title"><?= $this->lang->line('please_log_in') ?></h1>
-    </div>
-    <div class="panel-body">
+<div class="mx-auto" id="logincenter">
+  <div class="card mt-3">
+    <h5 class="card-header bg-primary text-light"><?= $this->lang->line('please_log_in') ?></h5>
+    <div class="card-body">
       <?= !empty($valerr) ? $valerr : ''?>
       <?= form_open('login') ?>
           
         <table class="padded">
           <tr>
-            <td><label for="login_name" class="control-label"><?= $this->lang->line('user_name') ?></label></td>
+            <td><label for="login_name" class="col-form-label text-nowrap"><?= $this->lang->line('user_name') ?></label></td>
             <td><input type="text" id="login_name" name="login_name"></td>
           </tr>
           <tr>
-            <td><label for="password" class="control-label"><?= $this->lang->line('password') ?></label></td>
+            <td><label for="password" class="col-form-label text-nowrap"><?= $this->lang->line('password') ?></label></td>
             <td><input class="logintext" type="password" id="password" name="password"></td>
           </tr>
         </table>
