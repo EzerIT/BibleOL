@@ -26,6 +26,7 @@
             "g_word_translit": "Text (transliterated)",
             "g_word_cons_utf8": "Text (consonants only)",
             "g_word_nocant_utf8": "Text (no cantillation marks)",
+            "g_word_nostress_utf8": "Text (no stress marks)",
             "g_voc_lex_cons_utf8": "Lexeme (consonants only)",
             "g_voc_lex_utf8": "Lexeme",
             "g_voc_lex_utf8_variant": "Lexeme (with variant)",

@@ -223,6 +223,15 @@
                     "hideWord": true,
                     "foreignText": true
                 },
+                "g_word_nostress": {
+                    "ignoreSelect": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true
+                },
+                "g_word_nostress_utf8": {
+                    "hideWord": true,
+                    "foreignText": true
+                },
                 "g_word_nopunct_translit": {
                     "ignoreSelect": true,
                     "ignoreShow": true,

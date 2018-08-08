@@ -20,6 +20,7 @@
             "g_word_nopunct_translit": "经文词语（无标点）",
             "g_word_cons_utf8": "经文词语，只显示辅音",
             "g_word_nocant_utf8": "经文词语（无读音符号）",
+            "g_word_nostress_utf8": "Text (no stress marks)",
             "g_voc_lex_cons_utf8": "基本词形，只显示辅音",
             "g_voc_lex_utf8": "基本词形（希伯来文）",
             "g_voc_lex_translit": "基本词形",
