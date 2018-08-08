@@ -35,7 +35,7 @@ function logos() {
 
 
 <div class="col-md-3" id="leftpanel">
-  <?php
+<?php
       show_panel2($left_title, $left);
 
       if (isset($logos))

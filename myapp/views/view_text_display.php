@@ -61,9 +61,9 @@
 <div class="modal fade" id="grammar-info-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="grammar-info-label"></h4>
+      <div class="modal-header justify-content-between">
+        <div><h4 class="modal-title" id="grammar-info-label"></h4></div>
+        <div><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
       </div>
       <div class="modal-body" id="grammar-info-body">
       </div>
@@ -75,7 +75,7 @@
 </div>
 
 <script>
-     var useTooltip = <?= $useTooltip_str ?>;
+    var useTooltip = <?= $useTooltip_str ?>;
     var configuration = <?= $dbinfo_json ?>;
     var dictionaries = <?= $dictionaries_json ?>;
     var l10n = <?= $l10n_json ?>;
@@ -84,6 +84,8 @@
     var quizdata = <?= $quizData_json ?>;
     var site_url = '<?= site_url() ?>';
 
+    <?php $this->load->helper('icon_helper'); ?>
+    var l_icon_map = <?= L_icon::json() ?>;
          
     $(function() {
             $('.mqlarea').hide();

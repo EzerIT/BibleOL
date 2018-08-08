@@ -26,12 +26,12 @@
 <div id="generic-dialog-confirm" class="modal fade">
   <div class="modal-dialog" id="generic-dialog-confirm2">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="generic-confirm-title">&nbsp;</h4>
+      <div class="modal-header justify-content-between">
+        <div><h4 class="modal-title" id="generic-confirm-title">&nbsp;</h4></div>
+        <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
       </div>
       <div class="modal-body">
-        <span class="glyphicon glyphicon-question-sign" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
+        <span class="fas fa-question-circle" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
         <span id="generic-confirm-text"></span>
         <span id="generic-destination" style="display:none"></span>
       </div>

@@ -18,6 +18,17 @@
 
 
 //****************************************************************************************************
+// l_icon_map variable
+// 
+// The l_icon_map array maps the internal name for a lexeme icon to the CSS class to use.
+//
+declare let l_icon_map : {
+    [l_icon_name : string] : string;
+};
+
+
+
+//****************************************************************************************************
 // addMethods function
 //
 // Takes method from a class and adds them to an object. Thereafter calls the method
@@ -491,11 +502,7 @@ class GrammarFeature implements SentenceGrammarItem {
     //     The HTML element class string.
     //
     private icon2class(icon : string) : string {
-        if (icon.substr(0,10)==='glyphicon-')
-            return 'glyphicon ' + icon;
-        if (icon.substr(0,8)==='bolicon-')
-            return 'bolicon ' + icon;
-        return '';
+        return l_icon_map[icon] ? l_icon_map[icon] : l_icon_map['l-icon-default'];
     }
 
     //------------------------------------------------------------------------------------------

@@ -46,13 +46,13 @@
   <div id="chown-class-dialog" class="modal fade">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"><?= $this->lang->line('change_owner_title') ?></h4>
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title"><?= $this->lang->line('change_owner_title') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
         </div>
         <div class="modal-body">
           <div class="alert alert-danger" id="chown-class-error" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="fas fa-exclamation-circle" aria-hidden="true"></span>
             <span id="chown-class-error-text"></span>
           </div>
           <span><?= $this->lang->line('new_owner_prompt') ?></span>

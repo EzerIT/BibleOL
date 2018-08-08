@@ -336,11 +336,7 @@ var GrammarFeature = (function () {
         callback(WHAT.feature, this.realObjectType, objType, this.realFeatureName, locname, this);
     };
     GrammarFeature.prototype.icon2class = function (icon) {
-        if (icon.substr(0, 10) === 'glyphicon-')
-            return 'glyphicon ' + icon;
-        if (icon.substr(0, 8) === 'bolicon-')
-            return 'bolicon ' + icon;
-        return '';
+        return l_icon_map[icon] ? l_icon_map[icon] : l_icon_map['l-icon-default'];
     };
     GrammarFeature.prototype.walkFeatureValues = function (monob, mix, objType, abbrev, callback) {
         var featType = typeinfo.obj2feat[this.realObjectType][this.realFeatureName];

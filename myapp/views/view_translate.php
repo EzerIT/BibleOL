@@ -204,9 +204,9 @@ else
   <div class="modal fade" id="untranslated-info-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title"><?= $this->lang->line('untranslated_strings') ?></h4>
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title"><?= $this->lang->line('untranslated_strings') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
         </div>
         <div class="modal-body">
           <table class="table table-striped">
@@ -249,7 +249,7 @@ else
   function make_trans_line_header($editing, $label, $field, $get_parms) {
       if ($get_parms['orderby']===$field) {
           $link_sortorder = $get_parms['sortorder']=='desc' ? 'asc' : 'desc';
-          $arrow = ' <span class="glyphicon glyphicon-triangle-' . ($get_parms['sortorder']=='desc' ? 'bottom' : 'top') . '" aria-hidden="true">';
+          $arrow = ' <span class="fas fa-caret-' . ($get_parms['sortorder']=='desc' ? 'down' : 'up') . '" aria-hidden="true">';
       }
       else {
           $link_sortorder = 'asc';

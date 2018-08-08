@@ -1,18 +1,10 @@
 <?php
 
-function icon2class(string $icon) {
-   if (strpos($icon, 'glyphicon-')===0)
-       return "glyphicon $icon";
-   if (strpos($icon, 'bolicon-')===0)
-       return "bolicon $icon";
-   return '';
-}
-   
-
+$this->load->helper('icon_helper');
 
 function make_icon_radio_button(string $name) {
    return get_instance()->lang->line("icon_$name")
-          . "&nbsp;<span class=\"" . icon2class($name) . "\"></span>&nbsp;"
+       . "&nbsp;<span class=\"" . L_icon::css_class($name) . "\"></span>&nbsp;"
           . "<input type=\"radio\" name=\"icon\" value=\"$name\">";
 }
 ?>
@@ -36,7 +28,7 @@ function make_icon_radio_button(string $name) {
        <?php if (isset($w->urls)): ?>
          <?php for ($i=0; $i<3; ++$i): ?>
            <?php if (isset($w->urls[$i])): ?>
-             <span class="<?= icon2class($w->urls[$i]->icon) ?>" aria-hidden="true"></span><br/>
+             <span class="<?= L_icon::css_class($w->urls[$i]->icon) ?>" aria-hidden="true"></span><br/>
            <?php endif; ?>
          <?php endfor; ?>
        <?php endif; ?>
@@ -96,14 +88,14 @@ function make_icon_radio_button(string $name) {
   <div id="edit-url-dialog" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 id="heading-create" class="modal-title"><?= sprintf($this->lang->line('create_url_heading'), '<span id="create-url-gloss"></span>') ?></h4>
-          <h4 id="heading-edit" class="modal-title"><?= sprintf($this->lang->line('edit_url_heading'), '<span id="edit-url-gloss"></span>') ?></h4>
+        <div class="modal-header justify-content-between">
+          <div><h4 id="heading-create" class="modal-title"><?= sprintf($this->lang->line('create_url_heading'), '<span id="create-url-gloss"></span>') ?></h4>
+          <h4 id="heading-edit" class="modal-title"><?= sprintf($this->lang->line('edit_url_heading'), '<span id="edit-url-gloss"></span>') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
         </div>
         <div class="modal-body">
           <div class="alert alert-danger" id="edit-url-error" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="fas fa-exclamation-circle" aria-hidden="true"></span>
             <span id="edit-url-error-text"></span>
           </div>
 
@@ -118,19 +110,19 @@ function make_icon_radio_button(string $name) {
               <label for=""><?= $this->lang->line('link_icon') ?></label>
               <table class="iconlist" id="iconlist">
                 <tr>
-                  <td><?= make_icon_radio_button('glyphicon-link') ?></td>
-                  <td><?= make_icon_radio_button('glyphicon-file') ?></td>
-                  <td><?= make_icon_radio_button('bolicon-logos') ?></td>
+                  <td><?= make_icon_radio_button('l-icon-link') ?></td>
+                  <td><?= make_icon_radio_button('l-icon-file') ?></td>
+                  <td><?= make_icon_radio_button('l-icon-logos') ?></td>
                 </tr>
                 <tr>
-                  <td><?= make_icon_radio_button('glyphicon-music') ?></td>
-                  <td><?= make_icon_radio_button('glyphicon-picture') ?></td>
-                  <td><?= make_icon_radio_button('glyphicon-film') ?></td>
+                  <td><?= make_icon_radio_button('l-icon-music') ?></td>
+                  <td><?= make_icon_radio_button('l-icon-picture') ?></td>
+                  <td><?= make_icon_radio_button('l-icon-film') ?></td>
                 </tr>
                 <tr>
-                  <td><?= make_icon_radio_button('glyphicon-volume-down') ?></td>
-                  <td><?= make_icon_radio_button('glyphicon-book') ?></td>
-                  <td><?= make_icon_radio_button('glyphicon-globe') ?></td>
+                  <td><?= make_icon_radio_button('l-icon-speaker') ?></td>
+                  <td><?= make_icon_radio_button('l-icon-book') ?></td>
+                  <td><?= make_icon_radio_button('l-icon-globe') ?></td>
                 </tr>
               </table>
 
@@ -179,7 +171,7 @@ function make_icon_radio_button(string $name) {
         $('#edit-url-gloss').html(gloss);
         $('#edit-url-link').attr('value',url.replace(/QQzQQ/g,"'"));
         $('#iconlist input').prop('checked',false);
-        $('#iconlist input[value="glyphicon-link"]').prop('checked',true);  // Default selection
+        $('#iconlist input[value="l-icon-link"]').prop('checked',true);  // Default selection
         $('#iconlist input[value="' + icon +'"]').prop('checked',true);
         $('#edit-url-scrolltop').attr('value',$(document).scrollTop()); // For positioning the window later
         $('#heading-create').hide();
@@ -194,7 +186,7 @@ function make_icon_radio_button(string $name) {
         $('#edit-url-lex').attr('value',lex);
         $('#edit-url-link').attr('value','');
         $('#iconlist input').prop('checked',false);
-        $('#iconlist input[value="glyphicon-link"]').prop('checked',true);  // Default selection
+        $('#iconlist input[value="l-icon-link"]').prop('checked',true);  // Default selection
         $('#edit-url-scrolltop').attr('value',$(document).scrollTop()); // For positioning the window later
         $('#heading-create').show();
         $('#heading-edit').hide();
@@ -211,12 +203,12 @@ function make_icon_radio_button(string $name) {
   <div id="delete-url-dialog" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="delete-url-title"><?= $this->lang->line('delete_url') ?></h4>
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title" id="delete-url-title"><?= $this->lang->line('delete_url') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
         </div>
         <div class="modal-body">
-          <span class="glyphicon glyphicon-question-sign" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
+          <span class="fas fa-question-circle" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
           <span id="delete-confirm-text"></span>
 
           <form id="delete-url-form" action="<?= site_url('urls/delete_url') ?>" method="post">

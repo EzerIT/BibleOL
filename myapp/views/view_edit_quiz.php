@@ -60,13 +60,13 @@
   <div id="filename-dialog" class="modal fade">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"><?= $this->lang->line('specify_file_name') ?></h4>
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title"><?= $this->lang->line('specify_file_name') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
         </div>
         <div class="modal-body">
           <div class="alert alert-danger" id="filename-error" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="fas fa-exclamation-circle" aria-hidden="true"></span>
             <span id="filename-error-text"></span>
           </div>
           <div class="form-group">
@@ -90,12 +90,12 @@
 <div id="overwrite-dialog-confirm" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title"><?= $this->lang->line('overwrite') ?></h4>
+      <div class="modal-header justify-content-between">
+        <div><h4 class="modal-title"><?= $this->lang->line('overwrite') ?></h4></div>
+        <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
       </div>
       <div class="modal-body">
-        <span class="glyphicon glyphicon-question-sign" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
+        <span class="fas fa-question-circle" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
         <span><?= $this->lang->line('file_exists_overwrite') ?></span>
       </div>
       <div class="modal-footer">
@@ -113,13 +113,13 @@
   <div id="import-shebanq-dialog" class="modal fade">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"><?= $this->lang->line('import_from_shebanq') ?></h4>
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title"><?= $this->lang->line('import_from_shebanq') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
         </div>
         <div class="modal-body">
           <div class="alert alert-danger" id="import-shebanq-error" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="fas fa-exclamation-circle" aria-hidden="true"></span>
             <span id="import-shebanq-error-text"></span>
           </div>
           <div class="form-group">
@@ -147,12 +147,12 @@
 <div id="qo-dialog-confirm" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title"><?= $this->lang->line('mql_sentence_unit') ?></h4>
+      <div class="modal-header justify-content-between">
+        <div><h4 class="modal-title"><?= $this->lang->line('mql_sentence_unit') ?></h4></div>
+        <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
       </div>
       <div class="modal-body">
-        <span class="glyphicon glyphicon-question-sign" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
+        <span class="fas fa-question-circle" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
         <p id="qo-dialog-text"></p>
       </div>
       <div class="modal-footer">

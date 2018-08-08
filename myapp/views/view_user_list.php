@@ -12,7 +12,7 @@
   function make_user_header($me, $label, $field, $sortorder, $orderby) {
       if ($orderby===$field) {
           $link_sortorder = $sortorder=='desc' ? 'asc' : 'desc';
-          $arrow = ' <span class="glyphicon glyphicon-triangle-' . ($sortorder=='desc' ? 'bottom' : 'top') . '" aria-hidden="true">';
+          $arrow = ' <span class="fas fa-caret-' . ($sortorder=='desc' ? 'down' : 'up') . '" aria-hidden="true">';
       }
       else {
           $link_sortorder = 'asc';

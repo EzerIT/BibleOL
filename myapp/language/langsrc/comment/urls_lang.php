@@ -40,41 +40,41 @@ $comment['icon'] = "";
 $format['icon'] = "";
 $use_textarea['icon'] = false;
 
-$comment['icon_bolicon-logos'] = "";
-$format['icon_bolicon-logos'] = "";
-$use_textarea['icon_bolicon-logos'] = false;
+$comment['icon_l-icon-logos'] = "";
+$format['icon_l-icon-logos'] = "";
+$use_textarea['icon_l-icon-logos'] = false;
 
-$comment['icon_glyphicon-book'] = "";
-$format['icon_glyphicon-book'] = "";
-$use_textarea['icon_glyphicon-book'] = false;
+$comment['icon_l-icon-book'] = "";
+$format['icon_l-icon-book'] = "";
+$use_textarea['icon_l-icon-book'] = false;
 
-$comment['icon_glyphicon-file'] = "";
-$format['icon_glyphicon-file'] = "";
-$use_textarea['icon_glyphicon-file'] = false;
+$comment['icon_l-icon-file'] = "";
+$format['icon_l-icon-file'] = "";
+$use_textarea['icon_l-icon-file'] = false;
 
-$comment['icon_glyphicon-film'] = "";
-$format['icon_glyphicon-film'] = "";
-$use_textarea['icon_glyphicon-film'] = false;
+$comment['icon_l-icon-film'] = "";
+$format['icon_l-icon-film'] = "";
+$use_textarea['icon_l-icon-film'] = false;
 
-$comment['icon_glyphicon-globe'] = "";
-$format['icon_glyphicon-globe'] = "";
-$use_textarea['icon_glyphicon-globe'] = false;
+$comment['icon_l-icon-globe'] = "";
+$format['icon_l-icon-globe'] = "";
+$use_textarea['icon_l-icon-globe'] = false;
 
-$comment['icon_glyphicon-link'] = "";
-$format['icon_glyphicon-link'] = "";
-$use_textarea['icon_glyphicon-link'] = false;
+$comment['icon_l-icon-link'] = "";
+$format['icon_l-icon-link'] = "";
+$use_textarea['icon_l-icon-link'] = false;
 
-$comment['icon_glyphicon-music'] = "";
-$format['icon_glyphicon-music'] = "";
-$use_textarea['icon_glyphicon-music'] = false;
+$comment['icon_l-icon-music'] = "";
+$format['icon_l-icon-music'] = "";
+$use_textarea['icon_l-icon-music'] = false;
 
-$comment['icon_glyphicon-picture'] = "";
-$format['icon_glyphicon-picture'] = "";
-$use_textarea['icon_glyphicon-picture'] = false;
+$comment['icon_l-icon-picture'] = "";
+$format['icon_l-icon-picture'] = "";
+$use_textarea['icon_l-icon-picture'] = false;
 
-$comment['icon_glyphicon-volume-down'] = "";
-$format['icon_glyphicon-volume-down'] = "";
-$use_textarea['icon_glyphicon-volume-down'] = false;
+$comment['icon_l-icon-speaker'] = "";
+$format['icon_l-icon-speaker'] = "";
+$use_textarea['icon_l-icon-speaker'] = false;
 
 $comment['illegal_lang_code'] = "";
 $format['illegal_lang_code'] = "";

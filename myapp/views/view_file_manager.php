@@ -16,7 +16,7 @@
   <?php if (!is_null($dirlist['parentdir'])): ?>
     <tr>
       <td>
-        <span class="glyphicon glyphicon-arrow-up" style="display:inline-block;"></span>
+        <span class="fas fa-arrow-up" style="display:inline-block;"></span>
         <a href="<?= site_url(build_get('file_manager',array('dir' => $dirlist['parentdir']))) ?>"><?= $this->lang->line('parent_folder') ?></a>
       </td>
       <td></td>
@@ -26,7 +26,7 @@
   <?php foreach ($dirlist['directories'] as $d): ?>
     <tr>
       <td>
-        <span class="glyphicon glyphicon-folder-close" style="display:inline-block;"></span>
+        <span class="fas fa-folder" style="display:inline-block;"></span>
         <a href="<?= site_url(build_get('file_manager',array('dir' => composedir($dirlist['relativedir'], $d[0])))) ?>"><?= $d[0] ?>
       </td>
       <?php if ($dirlist['is_empty'][$d[0]]): ?>
@@ -115,13 +115,13 @@
   <div id="mkdir-dialog" class="modal fade">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"><?= $this->lang->line('create_folder_heading') ?></h4>
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title"><?= $this->lang->line('create_folder_heading') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
         </div>
         <div class="modal-body">
           <div class="alert alert-danger" id="mkdir-error" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="fas fa-exclamation-circle" aria-hidden="true"></span>
             <span id="mkdir-error-text"></span>
           </div>
 
@@ -176,13 +176,13 @@
   <div id="rename-dialog" class="modal fade">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"><?= $this->lang->line('rename_file_heading') ?></h4>
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title"><?= $this->lang->line('rename_file_heading') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
         </div>
         <div class="modal-body">
           <div class="alert alert-danger" id="rename-error" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="fas fa-exclamation-circle" aria-hidden="true"></span>
             <span id="rename-error-text"></span>
           </div>
 
@@ -239,9 +239,9 @@
   <div id="newquiz-dialog" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"><?= $this->lang->line('create_exercise_heading') ?></h4>
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title"><?= $this->lang->line('create_exercise_heading') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
         </div>
         <div class="modal-body">
           <form id="newquiz-form" action="<?= site_url('text/new_quiz') ?>" method="post">
@@ -287,12 +287,12 @@
   <div id="copy-dialog-warning" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="copy-dialog-warning-title"></h4>
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title" id="copy-dialog-warning-title"></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
         </div>
         <div class="modal-body">
-          <span class="glyphicon glyphicon-alert" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
+          <span class="fas fa-exclamation-triangle" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
           <span><?= sprintf($this->lang->line('click_and_go_to'), '<span id="copiedmoved"></span>') ?></span>
         </div>
         <div class="modal-footer">
@@ -345,12 +345,12 @@
   <div id="delete-dialog-confirm" class="modal fade">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"><?= $this->lang->line('confirm_deletion') ?></h4>
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title"><?= $this->lang->line('confirm_deletion') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
         </div>
         <div class="modal-body">
-          <span class="glyphicon glyphicon-question-sign" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
+          <span class="fas fa-question-circle" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
           <span><?= $this->lang->line('delete_file_confirm') ?></span>
         </div>
         <div class="modal-footer">
@@ -389,13 +389,13 @@
   <div id="chown-dialog" class="modal fade">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"><?= $this->lang->line('change_owner_title') ?></h4>
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title"><?= $this->lang->line('change_owner_title') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
         </div>
         <div class="modal-body">
           <div class="alert alert-danger" id="chown-error" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="fas fa-exclamation-circle" aria-hidden="true"></span>
             <span id="chown-error-text"></span>
           </div>
           <span><?= $this->lang->line('new_owner_prompt') ?></span>

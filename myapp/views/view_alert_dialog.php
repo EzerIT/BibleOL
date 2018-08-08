@@ -10,12 +10,12 @@
 <div id="alert-dialog" class="modal fade">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="alert-title">&nbsp;</h4>
+      <div class="modal-header justify-content-between">
+        <div><h4 class="modal-title" id="alert-title">&nbsp;</h4></div>
+        <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
       </div>
       <div class="modal-body">
-        <span class="glyphicon glyphicon-alert" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
+        <span class="fas fa-exclamation-triangle" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
         <span id="alert-text"></span>
       </div>
       <div class="modal-footer">
