@@ -26,6 +26,7 @@
             "g_word_translit": "经文词语音译",
             "g_word_cons_utf8": "经文词语字母",
             "g_word_nocant_utf8": "经文词语，无读音符号",
+            "g_word_nostress_utf8": "Text (no stress marks)",
             "g_voc_lex_cons_utf8": "基本词形字母",
             "g_voc_lex_utf8": "基本词形",
             "g_voc_lex_utf8_variant": "基本词形 (with variant)",

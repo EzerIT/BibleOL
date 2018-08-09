@@ -81,6 +81,8 @@
             "g_voc_lex_utf8_variant": "string",
             "g_word_nocant": "string",
             "g_word_nocant_utf8": "string",
+            "g_word_nostress": "string",
+            "g_word_nostress_utf8": "string",
             "lex": "string",
             "language": "language_t",
             "ls": "lexical_set_t",
