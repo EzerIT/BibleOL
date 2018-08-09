@@ -70,11 +70,9 @@
       </div>
        
       <div class="row">
-        <div class="form-group">
-          <label for="nongraded" class="col-sm-3 col-form-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
-          <div class="col-sm-9">
-            <input class="checkbox" id="nongraded" name="nongraded" value="on" type="checkbox" <?= set_checkbox('nongraded','on') ?>>
-          </div>
+        <div class="form-group col">
+          <label for="nongraded" class="col-form-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
+          <input class="checkbox" id="nongraded" name="nongraded" value="on" type="checkbox" <?= set_checkbox('nongraded','on') ?>>
         </div>
       </div>
        

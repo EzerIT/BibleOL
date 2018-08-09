@@ -185,6 +185,7 @@ var FontSelector = (function () {
         this.alphabet = alphabet;
         this.sample = sample;
         this.direction = direction;
+        this.text_align = direction == 'rtl' ? 'right' : 'left';
         this.detector = new Detector(alphabet);
         this.inputName = alphabet + 'choice';
         this.tableSelector = $("#" + alphabet + "font");
@@ -207,7 +208,7 @@ var FontSelector = (function () {
             if (fontlist[i].webfont || this.detector.detect(fontlist[i].name)) {
                 var radio_button = $("<input name=\"" + this.inputName + "\" type=\"radio\" data-family=\"" + fontlist[i].name + "\" value=\"" + this.alphabet + "_" + i + "\">");
                 var td1_1 = $('<td>').append(fontlist[i].name);
-                var td2_1 = $("<td class=\"sample\" style=\"direction:" + this.direction + "; font-family:" + fontlist[i].name + "; font-size:16pt;\">")
+                var td2_1 = $("<td class=\"sample\" style=\"direction:" + this.direction + "; text-align:" + this.text_align + "; font-family:" + fontlist[i].name + "; font-size:16pt;\">")
                     .append(this.sample);
                 var td3_1 = $('<td class="centeralign">').append(radio_button);
                 var tr_1 = $('<tr>').append(td1_1).append(td2_1).append(td3_1);
@@ -217,7 +218,7 @@ var FontSelector = (function () {
         this.myfont_text = $("<input type=\"text\" name=\"" + this.alphabet + "_myfont\" value=\"" + personal_font + "\">");
         this.myfont_radio_button = $("<input name=\"" + this.inputName + "\" type=\"radio\" data-family=\"XXmineXX\" value=\"" + this.alphabet + "_mine\">");
         var td1 = $('<td>').append(localize('or_write_preferred') + '<br>').append(this.myfont_text);
-        var td2 = $("<td class=\"sample\" id=\"" + this.alphabet + "_mysample\" style=\"direction:" + this.direction + "; font-family:" + personal_font + "; font-size:16pt;\">")
+        var td2 = $("<td class=\"sample\" id=\"" + this.alphabet + "_mysample\" style=\"direction:" + this.direction + "; text-align:" + this.text_align + "; font-family:" + personal_font + "; font-size:16pt;\">")
             .append(this.sample);
         var td3 = $('<td class="centeralign">').append(this.myfont_radio_button);
         var tr = $('<tr>').append(td1).append(td2).append(td3);

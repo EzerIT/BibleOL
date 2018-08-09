@@ -17,6 +17,7 @@ class FontSelector {
     private alphabet            : string;   // Name of alphabet ('hebrew', 'hebrew-translit', or 'greek')
     private sample              : string;   // Sample text in specified alphabet
     private direction           : string;   // 'rtl' or 'ltr' for right-to-left or left-to-right writing
+    private text_align          : string;   // 'right' or 'left' for right-to-left or left-to-right writing
     private detector            : Detector; // Font detector
     private inputName           : string;   // Name of <input type="radio"> element for selecting a particular font
     private tableSelector       : JQuery;   // Table element containing font list
@@ -35,6 +36,7 @@ class FontSelector {
         this.alphabet      = alphabet;
         this.sample        = sample;
         this.direction     = direction;
+        this.text_align    = direction=='rtl' ? 'right' : 'left';
         this.detector      = new Detector(alphabet);
         this.inputName     = alphabet + 'choice';
         this.tableSelector = $(`#${alphabet}font`);
@@ -87,7 +89,7 @@ class FontSelector {
                 let radio_button = $(`<input name="${this.inputName}" type="radio" data-family="${fontlist[i].name}" value="${this.alphabet}_${i}">`);
 
                 let td1 = $('<td>').append(fontlist[i].name);
-                let td2 = $(`<td class="sample" style="direction:${this.direction}; font-family:${fontlist[i].name}; font-size:16pt;">`)
+                let td2 = $(`<td class="sample" style="direction:${this.direction}; text-align:${this.text_align}; font-family:${fontlist[i].name}; font-size:16pt;">`)
                     .append(this.sample);
                 let td3 = $('<td class="centeralign">').append(radio_button);
                 let tr = $('<tr>').append(td1).append(td2).append(td3);
@@ -100,7 +102,7 @@ class FontSelector {
         this.myfont_radio_button = $(`<input name="${this.inputName}" type="radio" data-family="XXmineXX" value="${this.alphabet}_mine">`);
 
         let td1 = $('<td>').append(localize('or_write_preferred')+'<br>').append(this.myfont_text);
-        let td2 = $(`<td class="sample" id="${this.alphabet}_mysample" style="direction:${this.direction}; font-family:${personal_font}; font-size:16pt;">`)
+        let td2 = $(`<td class="sample" id="${this.alphabet}_mysample" style="direction:${this.direction}; text-align:${this.text_align}; font-family:${personal_font}; font-size:16pt;">`)
             .append(this.sample);
         let td3 = $('<td class="centeralign">').append(this.myfont_radio_button);
         let tr = $('<tr>').append(td1).append(td2).append(td3);

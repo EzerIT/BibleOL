@@ -20,6 +20,7 @@ function heightsize($fs) {
     .<?= $f->name ?> {
         font-family: <?= $f->font_family ?> !important;
         direction: <?= $f->direction ?>;
+        text-align: <?= $f->direction=='rtl' ? 'right' : 'left' ?>
     }
 
     <?php if ($f->name==='hebrew'): ?>

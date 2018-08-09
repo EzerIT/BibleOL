@@ -7,8 +7,8 @@
 
 <?= form_open('text/select_text') ?>
 
-  <div class="row">
   <div class="form-group">
+  <div class="row">
     <p class="col-sm-3 like-label"><?= $this->lang->line('corpus_prompt') ?></p>
     <div class="col-sm-9">
       
@@ -28,8 +28,8 @@
   </div>
     
 
+  <div class="form-group mb-0">
   <div class="row">
-  <div class="form-group">
     <p class="col-sm-3 like-label"><?= $this->lang->line('book_prompt') ?></p>
     <div class="col-sm-9">
       <?php foreach($databases as $db): ?>
@@ -44,8 +44,8 @@
   </div>
 
 
+  <div class="form-group mb-0">
   <div class="row">
-  <div class="form-group">
     <label for="chapter" class="col-sm-3 col-form-label"><?= $this->lang->line('chapter_prompt') ?></label>
     <div class="col-sm-9">
       <input type="text" id="chapter" name="chapter" value="<?= set_value('chapter') ?>"> <span id="valid_chap"></span>
@@ -53,8 +53,8 @@
   </div>
   </div>
   
+  <div class="form-group mb-0">
   <div class="row">
-  <div class="form-group">
     <label for="vfrom" class="col-sm-3 col-form-label"><?= $this->lang->line('first_verse_prompt') ?></label>
     <div class="col-sm-9">
       <input type="text" id="vfrom" name="vfrom" value="<?= set_value('vfrom') ?>">
@@ -62,8 +62,8 @@
   </div>
   </div>
 
+  <div class="form-group mb-0">
   <div class="row">
-  <div class="form-group">
     <label for="vto" class="col-sm-3 col-form-label"><?= $this->lang->line('last_verse_prompt') ?></label>
     <div class="col-sm-9">
       <input type="text" id="vto" name="vto" value="<?= set_value('vto') ?>">
@@ -71,11 +71,11 @@
   </div>
   </div>
 
+  <div class="form-group mb-0">
   <div class="row">
-  <div class="form-group">
     <label for="showicons" class="col-sm-3 col-form-label"><?= $this->lang->line('show_link_icons_prompt') ?></label>
     <div class="col-sm-9">
-      <input class="checkbox" id="showicons" name="showicons" value="on" type="checkbox" <?= set_checkbox('showicons','on') ?>>
+      <input class="checkbox mt-sm-3" id="showicons" name="showicons" value="on" type="checkbox" <?= set_checkbox('showicons','on') ?>>
     </div>
   </div>
   </div>
