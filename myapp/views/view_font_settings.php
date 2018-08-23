@@ -28,18 +28,22 @@
 <?= form_open('config/fonts') ?>
   <div>
    <!-- Nav tabs -->
+   <?php $active = 'active'; ?>
    <ul class="nav nav-tabs" role="tablist">
       <?php foreach ($alphabets as $alph): ?>
-        <li role="presentation" style="font-size:14pt"><a href="#tab_<?= $alph ?>" role="tab" data-toggle="tab"><?= ucfirst($this->lang->line('alphabet_'.$font_setting[$alph]->name)) ?></a></li>
+        <li class="nav-item" role="presentation" style="font-size:14pt"><a class="nav-link <?= $active ?>" href="#tab_<?= $alph ?>" role="tab" data-toggle="tab"><?= ucfirst($this->lang->line('alphabet_'.$font_setting[$alph]->name)) ?></a></li>
+        <?php $active = ''; ?>
       <?php endforeach; ?>
     </ul>
  
     <!-- Tab panes -->
     <div class="tab-content">
+    <?php $active = 'active'; ?>
     <?php foreach ($alphabets as $alph): ?>
-      <div id="tab_<?= $alph ?>" class="fontsetting tab-pane" role="tabpanel">
+      <div id="tab_<?= $alph ?>" class="fontsetting tab-pane <?= $active ?>" role="tabpanel">
+        <?php $active = ''; ?>
         <h1><?= $this->lang->line('select_font_family') ?></h1>
-        <p class="visible-xs-block"><?= $this->lang->line('scrolling') ?></p>
+        <p class="d-md-none"><?= $this->lang->line('scrolling') ?></p>
         <div class="table-responsive"> 
           <table id="<?= $alph ?>font" class="type2 table table-striped">
             <tr>
@@ -53,7 +57,7 @@
         <div class="hr-replacement"></div>
 
         <h1><?= $this->lang->line('select_attributes') ?></h1>
-        <p class="visible-xs-block"><?= $this->lang->line('scrolling') ?></p>
+        <p class="d-md-none"><?= $this->lang->line('scrolling') ?></p>
         <div class="table-responsive"> 
           <table class="type3 table table-striped">
             <tr>
@@ -133,10 +137,3 @@
     <input class="btn btn-outline-dark" type="button" onclick="window.location='<?=site_url() ?>';" value="<?= $this->lang->line('cancel_button') ?>">
   </div>
 </form>
-<script>
-  $(function() {
-          $('[role=presentation]:first').addClass('active');
-          $('[role=tabpanel]:first').addClass('active');
-//      $("#font_tabs").tabs();
-  });
-</script>

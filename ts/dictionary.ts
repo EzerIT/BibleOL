@@ -303,6 +303,7 @@ class Dictionary {
     private static handleDisplaySize(thisDict : Dictionary) {
         switch (resizer.getWindowSize()) {
         case 'xs':
+        case 'sm':
             thisDict.dontHoverForGrammar(); // Disable grammar information box
             break;
 

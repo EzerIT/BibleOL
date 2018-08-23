@@ -21,6 +21,7 @@
 function set_legend_height(data : any) {
     switch (resizer.getWindowSize()) {
     case 'xs':
+    case 'sm':
         data.toChange.height('auto');
         break;
 
@@ -55,7 +56,7 @@ function legend_adjust(toChange : JQuery, source : JQuery) {
 function fix_legend_height(toChange : JQuery, source : JQuery) {
     resizer.addResizeListener(set_legend_height, {'toChange': toChange, 'source': source}, 'abcdef');
 
-    if (!resizer.sizeIs('xs')) {
+    if (!resizer.sizeIs('xs') && !resizer.sizeIs('sm')) {
         let cheight = source.height();
         if (toChange.height()<cheight)
             $(toChange).height(cheight);

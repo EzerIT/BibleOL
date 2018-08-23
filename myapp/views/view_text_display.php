@@ -1,11 +1,11 @@
-<div class="col-md-3">
+<div class="col-lg-3">
   <div class="grammarselector" id="gramselect"></div>
   <?php if (!$is_quiz): ?>
     <p><a class="btn btn-primary" id="cleargrammar" href="#"><?= $this->lang->line('clear_grammar') ?></a></p>
   <?php endif; ?>
 </div>
 
-<div class="col-md-6 col-sm-8">
+<div class="col-lg-6 col-md-8">
   <?php if ($is_quiz && !$is_logged_in): ?>
     <div class="centerblock alert alert-warning">
          <h1><?= $this->lang->line('warning') ?></h1>
@@ -53,7 +53,7 @@
   </div>
 </div>
 
-<div id="grammardisplaycontainer" class="col-md-3 col-sm-4">
+<div id="grammardisplaycontainer" class="col-lg-3 col-md-4">
   <div class="grammardisplay ui-widget ui-widget-content" id="aa2"></div>
 </div>
 

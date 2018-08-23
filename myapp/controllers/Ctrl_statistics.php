@@ -22,6 +22,7 @@ class Ctrl_statistics extends MY_Controller {
         $this->show_stat();
 	}
 
+    // Note: This function is never used. It is retained for the purpose of direct links to /statistics
 	public function show_stat() {
         try {
             $this->check_logged_in();

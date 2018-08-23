@@ -1093,6 +1093,7 @@ var Dictionary = (function () {
     Dictionary.handleDisplaySize = function (thisDict) {
         switch (resizer.getWindowSize()) {
             case 'xs':
+            case 'sm':
                 thisDict.dontHoverForGrammar();
                 break;
             default:
