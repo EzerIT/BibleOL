@@ -37,7 +37,7 @@
 
 <?php if (!empty($dirlist['files'])): ?>
   <h2><?= $this->lang->line('select_exercise') ?></h2>
-  <table class="type2 table table-striped">
+  <table class="type2 table table-striped table-sm">
     <tr>
       <th><?= $this->lang->line('quiz_name') ?></th>
       <th class="centeralign"><?= $this->lang->line('select_number_preset') ?></th>

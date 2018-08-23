@@ -10,7 +10,7 @@
 
 
   <?php foreach ($allclasses as $cl): ?>
-    <tr class="dirclasslist">
+    <tr>
       <td><?= $cl->classname ?></td>
       <td class="centeralign"><input type="checkbox" class="narrow" name="inclass[]" value="<?= $cl->clid ?>" <?= set_checkbox('inclass[]', $cl->clid, in_array($cl->clid, $old_classes)) ?>></td>
     </tr>

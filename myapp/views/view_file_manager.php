@@ -11,7 +11,7 @@
 
   <h2><?= $this->lang->line('folders') ?></h2>
 
-  <table class="type2 table table-condensed">
+  <table class="type2 table table-sm">
 
   <?php if (!is_null($dirlist['parentdir'])): ?>
     <tr>
@@ -55,7 +55,7 @@
     <input type="hidden" name="dir" value="<?= $dirlist['relativedir'] ?>">
     <input type="hidden" name="operation" value="">
     <input type="hidden" name="newowner" value="">
-    <table class="type2 table table-striped table-condensed">
+    <table class="type2 table table-striped table-sm">
       <tr>
         <th><?= $this->lang->line('mark') ?></th>
         <th><?= $this->lang->line('name') ?></th>
@@ -67,7 +67,7 @@
         <td><input type="checkbox" name="file[]" value="<?= $f->filename ?>"></td>
         <td class="leftalign"><?= substr($f->filename,0,-4) ?></td>
         <td class="leftalign"><?= $f->username ?></td>
-        <td><span class="small">
+        <td>
             <?php // Note: The following download link will cause this error to be written on Chrome's console:
                   // "Resource interpreted as Document but transferred with MIME type application/octet-stream".
                   // (See https://code.google.com/p/chromium/issues/detail?id=9891.)
@@ -76,7 +76,7 @@
             ?>
             <a class="badge badge-primary" href="<?= site_url(build_get('file_manager/download_ex', array('dir' => $dirlist['relativedir'], 'file' => $f->filename))) ?>"><?= $this->lang->line('download') ?></a>
             <a class="badge badge-primary" href="<?= site_url(build_get('text/edit_quiz',array('quiz' => $dirlist['relativedir'] . '/' . $f->filename))) ?>"><?= $this->lang->line('edit') ?></a>
-            <a class="badge badge-primary" href="#" onclick="rename('<?= substr($f->filename,0,-4) ?>'); return false;"><?= $this->lang->line('rename') ?></a></span>
+            <a class="badge badge-primary" href="#" onclick="rename('<?= substr($f->filename,0,-4) ?>'); return false;"><?= $this->lang->line('rename') ?></a>
         </td>
       </tr>
     <?php endforeach; ?>

@@ -45,7 +45,7 @@
         <h1><?= $this->lang->line('select_font_family') ?></h1>
         <p class="d-md-none"><?= $this->lang->line('scrolling') ?></p>
         <div class="table-responsive"> 
-          <table id="<?= $alph ?>font" class="type2 table table-striped">
+          <table id="<?= $alph ?>font" class="type2 table table-striped fontsamples">
             <tr>
               <th class="leftalign"><?= $this->lang->line('name') ?></th>
               <th class="centeralign"><?= $this->lang->line('sample') ?></th>
@@ -59,7 +59,7 @@
         <h1><?= $this->lang->line('select_attributes') ?></h1>
         <p class="d-md-none"><?= $this->lang->line('scrolling') ?></p>
         <div class="table-responsive"> 
-          <table class="type3 table table-striped">
+          <table class="type3 table table-striped fontsamples">
             <tr>
               <th class="settingsfor"><?= $this->lang->line('select_settings_for') ?></th>
               <th><?= $this->lang->line('bold') ?></th>

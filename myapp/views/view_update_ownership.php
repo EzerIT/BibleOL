@@ -3,7 +3,7 @@
     <p><?= $this->lang->line('ownership_none') ?></p>
 <?php else: ?>
     <?php sort($added); ?>
-    <table class="type1 small">
+    <table class="type1">
       <?php foreach ($added as $a): ?>
           <tr><td class="leftalign"><?= $a ?></td></tr>
       <?php endforeach; ?>
@@ -15,7 +15,7 @@
     <p><?= $this->lang->line('ownership_none') ?></p>
 <?php else: ?>
     <?php sort($deleted); ?>
-    <table class="type1 small">
+    <table class="type1">
       <?php foreach ($deleted as $a): ?>
           <tr><td class="leftalign"><?= $a ?></td></tr>
       <?php endforeach; ?>
