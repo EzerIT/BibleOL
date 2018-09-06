@@ -66,6 +66,7 @@ $lang['expiry_warning_message_local'] = "If you want to keep your account, simpl
         . "and log in using the user name '%s'.";
 $lang['expiry_warning_subject'] = "Inactive account on Bible Online Learner";
 $lang['first_name'] = "First name";
+$lang['french'] = "French";
 $lang['german'] = "German";
 $lang['google_no_response_delete'] = "Google did not respond to this request. This typically happens if you logged in here more than an hour ago. Try logging in here again and then delete your profile.";
 $lang['go_to_home'] = "Go to home page";

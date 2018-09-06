@@ -14,6 +14,7 @@ class Ctrl_lang extends MY_Controller {
               case 'nl':
               case 'pt':
               case 'da':
+              case 'fr':
               case 'zh-simp':
               case 'zh-trad':
                     $this->session->set_userdata('language', $newlang);

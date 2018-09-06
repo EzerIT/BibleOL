@@ -116,6 +116,7 @@ $cols = $ix+1;
                <li><a href="<?= site_url('/lang?lang=da') ?>">Dansk</a></li>
                <li><a href="<?= site_url('/lang?lang=en') ?>">English</a></li>
                <li><a href="<?= site_url('/lang?lang=de') ?>">Deutsch</a></li>
+               <li><a href="<?= site_url('/lang?lang=fr') ?>">Français</a></li>
                <li><a href="<?= site_url('/lang?lang=nl') ?>">Nederlands</a></li>
                <li><a href="<?= site_url('/lang?lang=pt') ?>">Português</a></li>
                <li><a href="<?= site_url('/lang?lang=es') ?>">Español</a></li>

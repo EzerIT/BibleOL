@@ -8,6 +8,7 @@ class Language {
         'en' => 'english',
         'da' => 'danish',
         'de' => 'german',
+        'fr' => 'french',
         'nl' => 'dutch',
         'pt' => 'portuguese',
         'es' => 'spanish',

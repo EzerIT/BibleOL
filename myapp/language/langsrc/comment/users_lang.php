@@ -164,6 +164,10 @@ $comment['first_name'] = "";
 $format['first_name'] = "";
 $use_textarea['first_name'] = false;
 
+$comment['french'] = "";
+$format['french'] = "";
+$use_textarea['french'] = false;
+
 $comment['german'] = "";
 $format['german'] = "";
 $use_textarea['german'] = false;
