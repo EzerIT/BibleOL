@@ -1,4 +1,4 @@
-<?php
+'<?php
 
 $lang['aramaic_glosses'] = "Aramaic glosses";
 $lang['bad_post_parameters'] = "Browser sent wrong parameters";
@@ -10,12 +10,12 @@ $lang['english'] = "English";
 $lang['greek_glosses'] = "Greek glosses";
 $lang['hebrew_glosses'] = "Hebrew glosses";
 $lang['icon'] = "Icon";
-$lang['icon_l-icon-logos'] = "Logos";
 $lang['icon_l-icon-book'] = "Book";
 $lang['icon_l-icon-file'] = "File";
 $lang['icon_l-icon-film'] = "Film";
 $lang['icon_l-icon-globe'] = "Map";
 $lang['icon_l-icon-link'] = "Link";
+$lang['icon_l-icon-logos'] = "Logos";
 $lang['icon_l-icon-music'] = "Music";
 $lang['icon_l-icon-picture'] = "Picture";
 $lang['icon_l-icon-speaker'] = "Sound";

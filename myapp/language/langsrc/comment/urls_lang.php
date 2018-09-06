@@ -40,10 +40,6 @@ $comment['icon'] = "";
 $format['icon'] = "";
 $use_textarea['icon'] = false;
 
-$comment['icon_l-icon-logos'] = "";
-$format['icon_l-icon-logos'] = "";
-$use_textarea['icon_l-icon-logos'] = false;
-
 $comment['icon_l-icon-book'] = "";
 $format['icon_l-icon-book'] = "";
 $use_textarea['icon_l-icon-book'] = false;
@@ -63,6 +59,10 @@ $use_textarea['icon_l-icon-globe'] = false;
 $comment['icon_l-icon-link'] = "";
 $format['icon_l-icon-link'] = "";
 $use_textarea['icon_l-icon-link'] = false;
+
+$comment['icon_l-icon-logos'] = "";
+$format['icon_l-icon-logos'] = "";
+$use_textarea['icon_l-icon-logos'] = false;
 
 $comment['icon_l-icon-music'] = "";
 $format['icon_l-icon-music'] = "";
