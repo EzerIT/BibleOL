@@ -7,33 +7,33 @@
 
 <?= form_open('text/select_text') ?>
 
-  <div class="form-group">
-  <div class="row">
-    <p class="col-sm-3 like-label"><?= $this->lang->line('corpus_prompt') ?></p>
-    <div class="col-sm-9">
-      
+  <fieldset class="form-group">
+    <div class="row">
+      <div class="col-form-label col-sm-3 pt-0 like-label"><?= $this->lang->line('corpus_prompt') ?></div><!-- <legend> not allowed here -->
+      <div class="col-sm-9">
       <?php $default = true; ?>
       <?php foreach($databases as $db): ?>
-      <input type="radio"
+        <div class="form-check">
+          <input class="form-check-input" type="radio"
              name="db"
              id="db_<?= $db['name'] ?>"
              value="<?= $db['name'] ?>"
              <?= set_radio('db', $db['name'], $default) ?>
              >
-      <?= str_replace(" ","&nbsp;", $db['loc_desc']) ?><br>
-      <?php $default = false; ?>
+          <label class="form-check-label font-weight-normal" for="db_<?= $db['name'] ?>"><?= str_replace(" ","&nbsp;", $db['loc_desc']) ?></label>
+        </div>
+        <?php $default = false; ?>
       <?php endforeach; ?>
+      </div>
     </div>
-  </div>
-  </div>
-    
+  </fieldset>
 
-  <div class="form-group mb-0">
-  <div class="row">
-    <p class="col-sm-3 like-label"><?= $this->lang->line('book_prompt') ?></p>
+
+  <div class="form-group row mb-0">
+    <label for="bookname" class="col-sm-3 col-form-label"><?= $this->lang->line('book_prompt') ?></label>
     <div class="col-sm-9">
       <?php foreach($databases as $db): ?>
-      <select name="book_<?= $db['name'] ?>">
+      <select id="bookname" name="book_<?= $db['name'] ?>">
         <?php foreach($db['order'] as $book_name): ?>
         <option value="<?= $book_name[0] ?>" data-chaps="<?= @$book_name[1] ?>" <?= set_select('book_'.$db['name'], $book_name[0]) ?>><?= $db['loc_books']->{$book_name[0]} ?></option>
         <?php endforeach; ?>
@@ -41,50 +41,46 @@
       <?php endforeach; ?>
     </div>
   </div>
-  </div>
 
-
-  <div class="form-group mb-0">
-  <div class="row">
+  
+  <div class="form-group row mb-0">
     <label for="chapter" class="col-sm-3 col-form-label"><?= $this->lang->line('chapter_prompt') ?></label>
     <div class="col-sm-9">
-      <input type="text" id="chapter" name="chapter" value="<?= set_value('chapter') ?>"> <span id="valid_chap"></span>
+      <input type="text" id="chapter" name="chapter" value="<?= set_value('chapter') ?>">  <small id="valid_chap" class="text-muted"></small>
     </div>
   </div>
-  </div>
   
-  <div class="form-group mb-0">
-  <div class="row">
+  <div class="form-group row mb-0">
     <label for="vfrom" class="col-sm-3 col-form-label"><?= $this->lang->line('first_verse_prompt') ?></label>
     <div class="col-sm-9">
       <input type="text" id="vfrom" name="vfrom" value="<?= set_value('vfrom') ?>">
     </div>
   </div>
-  </div>
 
-  <div class="form-group mb-0">
-  <div class="row">
+  <div class="form-group row mb-0">
     <label for="vto" class="col-sm-3 col-form-label"><?= $this->lang->line('last_verse_prompt') ?></label>
     <div class="col-sm-9">
       <input type="text" id="vto" name="vto" value="<?= set_value('vto') ?>">
     </div>
   </div>
-  </div>
 
-  <div class="form-group mb-0">
-  <div class="row">
+  <div class="form-group row">
     <label for="showicons" class="col-sm-3 col-form-label"><?= $this->lang->line('show_link_icons_prompt') ?></label>
     <div class="col-sm-9">
-      <input class="checkbox mt-sm-3" id="showicons" name="showicons" value="on" type="checkbox" <?= set_checkbox('showicons','on') ?>>
+      <div class="form-check">
+        <input class="form-check-input checkbox position-static mt-sm-2" id="showicons" name="showicons" value="on" type="checkbox" <?= set_checkbox('showicons','on') ?>>
+      </div>
     </div>
   </div>
-  </div>
 
-  <div class="row">
-  <p class="col-sm-12"><button type="submit" class="btn btn-primary"><?= $this->lang->line('display') ?></button></p>
+  <div class="form-group row">
+    <div class="col-sm-12">
+      <button type="submit" class="btn btn-primary"><?= $this->lang->line('display') ?></button>
+    </div>
   </div>
-
+  
 </form>
+      
 
 <script>
   $(function() {
