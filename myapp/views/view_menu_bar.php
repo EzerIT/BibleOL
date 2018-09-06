@@ -119,6 +119,7 @@ $cols = $ix+1;
               <a class="dropdown-item" href="<?= site_url('/lang?lang=da') ?>">Dansk</a>
               <a class="dropdown-item" href="<?= site_url('/lang?lang=en') ?>">English</a>
               <a class="dropdown-item" href="<?= site_url('/lang?lang=de') ?>">Deutsch</a>
+              <a class="dropdown-item" href="<?= site_url('/lang?lang=fr') ?>">Français</a>
               <a class="dropdown-item" href="<?= site_url('/lang?lang=nl') ?>">Nederlands</a>
               <a class="dropdown-item" href="<?= site_url('/lang?lang=pt') ?>">Português</a>
               <a class="dropdown-item" href="<?= site_url('/lang?lang=es') ?>">Español</a>

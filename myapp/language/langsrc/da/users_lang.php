@@ -68,6 +68,7 @@ $lang['expiry_warning_message_local'] = "Hvis du ønsker at bevare din konto, sk
         . "websted og logge ind med brugernavnet '%s'.";
 $lang['expiry_warning_subject'] = "Inaktiv konto på Bible Online Learner";
 $lang['first_name'] = "Fornavn";
+$lang['french'] = "Fransk";
 $lang['german'] = "Tysk";
 $lang['google_no_response_delete'] = "Google svarede ikke på denne anmodning. Dette sker typisk hvis du loggede ind for mere end en time siden. Prøv at logge ind her igen, og nedlæg så din profil.";
 $lang['go_to_home'] = "Gå til hjemmesiden";
