@@ -3,13 +3,6 @@
 
 // Code to handle feature selection for sentences when creating an exercise
 
-// This fixes an error in @types/jqueryui:
-
-interface JQuery {
-    tabs(methodName: 'enable', index: number): void;
-    tabs(methodName: 'disable', index: number): void;
-}
-
 
 //****************************************************************************************************
 // PanelTemplSentenceSelector class

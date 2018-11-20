@@ -1349,7 +1349,7 @@ abstract class PanelTemplMql {
                            VirtualKeyboard.attachInput(e.currentTarget);
 
                            // Monitor changes to the input field
-                           this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i);
+                           this.monitorChange(<JQuery<HTMLElement>>$(e.currentTarget), e.data.sfh, e.data.i);
                        });
             }
 
@@ -1399,7 +1399,7 @@ abstract class PanelTemplMql {
 
         // Set handler for checkbox changes
         sel.on('click', qfh, (e : JQueryEventObject) => {
-            let target : JQuery = $(e.target);
+            let target = $(e.target);
             e.data.setValue(target.prop('checked'));  // e.data is qfh
             this.updateMql();
         });
@@ -1484,7 +1484,7 @@ abstract class PanelTemplMql {
             // Set handler for checkbox changes. We add one handler for all the checkboxes in
             // vc_choice and use the e.target information to identify the checkbox actually changed.
 	    tab_contents.on('click', lv, (e : JQueryEventObject) => {
-                let target : JQuery = $(e.target);
+                let target = $(e.target);
                 if (target.attr('type')==='radio') {
                     // The user clicked on a radio button
                     e.data.modifyValue(target.attr('data-name'), target.attr('value')); // e.data is lv
@@ -1603,7 +1603,7 @@ abstract class PanelTemplMql {
         // Set handler for checkbox changes. We add one handler for all the checkboxes in
         // group2 and use the e.target information to identify the checkbox actually changed.
 	group2.on('click', efh, (e : JQueryEventObject) => {
-            let target : JQuery = $(e.target);
+            let target = $(e.target);
             if (target.attr('type')==='checkbox') {
                 // The user clicked on a checkbox
                 if (target.prop('checked'))

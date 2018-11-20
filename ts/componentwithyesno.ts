@@ -143,7 +143,7 @@ class ComponentWithYesNo {
         if (this.elemType===COMPONENT_TYPE.textFieldWithVirtKeyboard) {
             // We must do continuous polling of changes
             this.elem.on('focus',
-                         (e : JQueryEventObject) => this.monitorChange($(e.currentTarget)));
+                         (e : JQueryEventObject) => this.monitorChange(<JQuery<HTMLElement>>$(e.currentTarget)));
         }
     }
 
