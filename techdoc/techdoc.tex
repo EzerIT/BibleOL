@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{3 July 2018}
+\date{21 November 2018}
 
 \makeindex
 
@@ -837,22 +837,21 @@ git-hooks/setup.sh
 \noindent
 as described in Section \ref{sec-download-bol}.
 
-Bible OL uses a number of Git submodules: CodeIgniter, ckeditor, zocial, jstree, and
-virtualkeyboard. The ``-\thinspace-recursive'' flag in the ``git clone'' command causes these submodules to be
+Bible OL uses a number of Git submodules: ckeditor, zocial, jstree, and
+virtualkeyboard. The \mbox{``-\thinspace-recursive''} flag in the ``git clone'' command causes these submodules to be
 cloned from the ``EzerIT'' repository. You may want to replace them with your own copies of the
 repositories. The following table lists their names and their location on GitHub:
 
 \begin{my-tabu}{lll}{ \headiii{Submodule}{My forked location}{Original location} }
-bootstrap        \index{Bootstrap}       & EzerIT/bootstrap           & twbs/bootstrap \\
 ckeditor         \index{ckeditor}        & EzerIT/ckeditor-releases   & ckeditor/ckeditor-releases \\
 zocial           \index{zocial}          & EzerIT/css-social-buttons  & samcollins/css-social-buttons \\
 jstree           \index{jstree}          & EzerIT/jstree              & vakata/jstree \\
 virtualkeyboard  \index{virtualkeyboard} & EzerIT/virtualkeyboard     & \emph{Not on GitHub} \\
 \end{my-tabu}
 
-Previous versions of Bible OL also used a submodule called CodeIgniter. This is no longer a
-submodule but an integrated part of the Bible OL software tree; it is located in the directory
-\texttt{CodeIgniter\_Local}.
+Previous versions of Bible OL also used submodules called CodeIgniter and bootstrap. They are no longer
+submodules but an integrated part of the Bible OL software tree; they are located in the directories
+\texttt{CodeIgniter\_Local} and \texttt{bootstrap\_local}, respectively.
 
 \subsection{Installing Emdros\index{Emdros!installation}}\label{sec-install-start}
  
@@ -1022,7 +1021,7 @@ On the client side Bible OL uses a JavaScript/TypeScript framework known as
 
 On the client side Bible OL uses a JavaScript framework known as
 \emph{Bootstrap.}\footnote{\url{https://getbootstrap.com}.} Currently, Bible OL uses Bootstrap
-version 3.3.5 with a few minor modifications.
+version 4.1.2.
 
 %%%%%%%%%%%%%%%%%%%% RGraph %%%%%%%%%%%%%%%%%%%%
 \section{RGraph}\index{RGraph|hyperit}
@@ -1227,7 +1226,7 @@ examples can be found in \url{http://emdros.org/petersen-emdros-COLING-2004.pdf}
 The source code contains the following directories (in alphabetical order):
 
 \begin{my-longtabu}{>{\ttfamily}p{3.3cm}X}{ \headii{\textrm{Name}}{Contents} }
-bootstrap\index{Bootstrap} & A JavaScript framework used on the client side of Bible OL.
+bootstrap\_local\index{Bootstrap} & A JavaScript framework used on the client side of Bible OL.
 
 Webpage: \url{https://getbootstrap.com}.
 
@@ -5018,7 +5017,8 @@ id       & Integer & Unique number identifying this entry.\\
 lex      & Text    & The value of the \emph{lex} feature from the ETCBC4 database.\\
 language & Text    & The value of the \emph{language} feature from the ETCBC4 database.\\
 url      & Text    & The URL that is the destination of the hyperlink.\\
-icon     & Text    & The name of an icon (typically taken from the list of Bootstrap icons) to use for this hyperlnk.\\
+icon     & Text    & The name of an icon to use for this hyperlnk. The valid icon names can be found
+in the file \texttt{myapp/helpers/icon\_helper.php}.\\
 \end{my-longtabu}
 
 
