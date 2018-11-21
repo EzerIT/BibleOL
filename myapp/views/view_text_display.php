@@ -51,6 +51,7 @@
     <p><button id="togglemql"><?= $this->lang->line('toggle_mql') ?></button></p>
     <pre class="mqlarea"><?= $mql_list ?></pre>
   </div>
+  <div style="margin-bottom:700px"><!-- Make room for a too long grammar information box relating to last item in text --></div>
 </div>
 
 <div id="grammardisplaycontainer" class="col-lg-3 col-md-4">
