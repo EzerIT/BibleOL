@@ -1,4 +1,4 @@
-'<?php
+<?php
 
 $lang['aramaic_glosses'] = "Aramaic glosses";
 $lang['bad_post_parameters'] = "Browser sent wrong parameters";
