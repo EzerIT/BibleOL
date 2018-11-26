@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{21 November 2018}
+\date{26 November 2018}
 
 \makeindex
 
@@ -679,17 +679,14 @@ Some files may be marked ``unchanged'', others may be marked ``updated +++++''. 
 
 Populate the database with Hebrew and Greek lexicons by issuing these commands:
 \begin{lstlisting}[language=bash]
-for s in aram heb
-do
-    for d in en de da
-    do
-        echo Source language: $s. Destination language: $d.
-        php index.php translate import_lex $s $d lexicons/${s}_${d}.csv
-    done
-done
-
-echo Source language: greek. Destination language: en.
-php index.php translate import_lex greek en lexicons/greek_en.csv 
+for i in lexicons/*.csv; do
+    j=${i/lexicons\//}
+    s=${j/_*.csv/}
+    j2=${j/*_/}
+    d=${j2/.csv/}
+    echo Source language: $s. Destination language: $d.
+    php index.php translate import_lex $s $d $i
+ done
 \end{lstlisting}
 
 (On my computer, this takes about a minute.)
