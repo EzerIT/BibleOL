@@ -6,24 +6,48 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Base Site URL
 |--------------------------------------------------------------------------
 |
-| URL to your CodeIgniter root. Typically this will be your base URL,
-| WITH a trailing slash:
+
+| $config['base_url'] is the URL to your CodeIgniter root. Typically this
+| will be your base URL, WITH a trailing slash:
 |
 |	http://example.com/
 |
-| WARNING: You MUST set this value!
-|
-| If it is not set, then CodeIgniter will try guess the protocol and path
-| your installation, but due to security concerns the hostname will be set
-| to $_SERVER['SERVER_ADDR'] if available, or localhost otherwise.
-| The auto-detection mechanism exists only for convenience during
-| development and MUST NOT be used in production!
-|
-| If you need to allow multiple domains, remember that this file is still
-| a PHP script and you can easily do that on your own.
+| This variable is set from three components:
+|     $config['sites_protocol'], which is either 'http' or 'https'
+|     $config['base_site'], which is the host name of the site
+|     $config['all_sites'], which is an array of strings that are added in
+|                           front of the base_site value to create sister sites.
 |
 */
-$config['base_url'] = 'http://example.com';
+
+$config['sites_protocol'] = 'http';
+$config['base_site'] = 'example.com';
+$config['all_sites'] = array();
+
+
+/* The following code generates $config['base_url'] and $config['url_variant'] based
+|  on the above values.
+*/
+
+$foundsite = false;
+if (isset($_SERVER['HTTP_HOST'])) {
+    foreach ($config['all_sites'] as $site) {
+        if ($_SERVER['HTTP_HOST'] == $site . '.' . $config['base_site']) {
+            $foundsite = true;
+            $config['base_url'] = sprintf('%s://%s.%s/',$config['sites_protocol'], $site, $config['base_site']);
+            $config['url_variant'] = $site;
+            break;
+        }
+    }
+}
+
+if (!$foundsite) {
+    $config['base_url'] = sprintf('%s://%s/',$config['sites_protocol'], $config['base_site']);
+    $config['url_variant'] = null;
+}
+
+
+
 
 /*
 |--------------------------------------------------------------------------
