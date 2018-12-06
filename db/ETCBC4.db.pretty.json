@@ -341,8 +341,8 @@
                     ]
                 },
                 "ps": {},
-                "nu": {},
                 "gn": {},
+                "nu": {},
                 "st": {
                     "hideValues": [
                         "unknown"
@@ -352,20 +352,20 @@
                 "sp": {
                     "isDefault": true
                 },
+                "suffix_person": {},
                 "suffix_gender": {},
                 "suffix_number": {},
-                "suffix_person": {},
+                "prs_ps": {
+                    "ignoreSelect": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true
+                },
                 "prs_gn": {
                     "ignoreSelect": true,
                     "ignoreShow": true,
                     "ignoreRequest": true
                 },
                 "prs_nu": {
-                    "ignoreSelect": true,
-                    "ignoreShow": true,
-                    "ignoreRequest": true
-                },
-                "prs_ps": {
                     "ignoreSelect": true,
                     "ignoreShow": true,
                     "ignoreRequest": true

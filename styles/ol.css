@@ -449,11 +449,10 @@ div.student-legend {
   max-height: 400px;
   overflow-y: auto;
 }
-div#virtualkbid {
-  float: right;
-}
 div#virtualKeyboard {
   box-sizing: content-box;
+  position: sticky;
+  left: 5px;
 }
 .dropdown-menu {
   background-color: #e8e8e8;
