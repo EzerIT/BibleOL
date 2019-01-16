@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{26 November 2018}
+\date{4 January 2019}
 
 \makeindex
 
@@ -234,7 +234,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \maketitle
 
 \begin{center}
-Copyright © 2018 by Claus Tøndering, claus@ezer.dk
+Copyright © 2019 by Claus Tøndering, claus@ezer.dk
 
 \vspace{5mm}
 
@@ -264,7 +264,7 @@ server and developers who need to modify or expand the way Bible OL works.
 \section{License and Copyright}\index{license}\index{copyright}
 
 Except where otherwise noted, the Bible OL source code is distributed under an MIT
-License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2018 by Claus
+License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2019 by Claus
 Tøndering, claus@ezer.dk.
 
 The present document is made available under a Creative Commons Attribution 4.0 International
@@ -887,7 +887,7 @@ The \emph{tsc} command can be installed using these shell commands:
  
 \begin{lstlisting}[language=bash]
 sudo npm install -g typescript
-sudo npm install -g @types/bootstrap @types/jquery @types/jqueryui
+npm install @types/bootstrap @types/jquery @types/jqueryui
 \end{lstlisting}
 
 The ``-g'' option means the software is installed globally and can be used by all users of the
@@ -895,7 +895,9 @@ computer. Alternatively, the ``-g'' option and the ``sudo'' can be omitted, whic
 typescript only for the local user; but in that case the \emph{tsc} command must be executed using
 the pathname \mbox{\emph{\textasciitilde/node\_modules/.bin/tsc}}.
 
-I use version 2.8.1 of \emph{tsc}.
+Note that there is no ``sudo'' and no ``-g'' option on the second ``npm'' command.
+
+I use version 3.2.2 of \emph{tsc}.
 
 Note: If you are building an older version of Bible OL (that is, on in which the file
 \mbox{\emph{ts/jquery/jquery.d.ts}} exists), you must not install the modules \emph{@types/bootstrap,
@@ -5307,9 +5309,7 @@ Section \ref{sec-installing-tsc} describes how to install the TypeScript compile
 
 The Bible OL implementation compiles TypeScript files only once and stores the resulting JavaScript
 files. This is achieved through the Makefile\index{Makefile} in the top directory. The command ``make all'' (or
-simply ``make'')\index{make} will compile the TypeScript files (and the Less file). The Makefile checks that the
-\emph{tsc} compiler version is 1.0.1.0. This is probably unnecessary, and should be removed as newer
-versions appear.
+simply ``make'')\index{make} will compile the TypeScript files (and the Less file).
 
 The TypeScript files are found in the directory \texttt{ts}; the resulting JavaScript files are
 stored in the directory \texttt{js}.
