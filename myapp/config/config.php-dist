@@ -47,8 +47,6 @@ if (!$foundsite) {
 }
 
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -415,7 +413,7 @@ $config['sess_regenerate_destroy'] = FALSE;
 |
 */
 $config['cookie_prefix']	= '';
-$config['cookie_domain']	= '';
+$config['cookie_domain']	= !empty($config['all_sites']) ? ('.' . $config['base_site']) : '';
 $config['cookie_path']		= '/';
 $config['cookie_secure']	= FALSE;
 $config['cookie_httponly'] 	= FALSE;
