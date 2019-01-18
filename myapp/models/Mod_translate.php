@@ -852,7 +852,7 @@ class Mod_translate extends CI_Model {
         $this->dbforge->add_key('lex_id');
         $this->dbforge->create_table("lexicon_{$src_language}_{$dst_lang}");
 
-        $this->db->query("ALTER TABLE {PRE}lexicon_{$src_language}_{$dst_lang} ADD FOREIGN KEY lexid (lex_id) REFERENCES {PRE}lexicon_{$src_language}(id) ON DELETE SET NULL ON UPDATE CASCADE");
+        $this->db->query("ALTER TABLE {PRE}lexicon_{$src_language}_{$dst_lang} ADD FOREIGN KEY (lex_id) REFERENCES {PRE}lexicon_{$src_language}(id) ON DELETE SET NULL ON UPDATE CASCADE");
 
         $toinsert = array();
 
