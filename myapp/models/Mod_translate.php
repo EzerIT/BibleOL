@@ -14,6 +14,8 @@ class Mod_translate extends CI_Model {
                          'ETCBC4-translit',
                          'nestle1904');
 
+    private $min_tally = 5;
+    
     public function __construct() {
         parent::__construct();
         $this->load->database();
@@ -309,7 +311,7 @@ class Mod_translate extends CI_Model {
           case 'aram':
                 $src_lexicon = $src_lang=='heb' ? 'Hebrew' : 'Aramaic';
 
-                $query = $this->db->select('lex,vs,CONCAT(vocalized_lexeme_utf8," ",roman) lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,c.id lex_id')
+                $query = $this->db->select('lex,vs,CONCAT(vocalized_lexeme_utf8," ",roman) lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
                     ->from("lexicon_{$src_lexicon} c")
                     ->join("lexicon_{$src_lexicon}_{$lang_show} s", 's.lex_id=c.id','left')
                     ->join("lexicon_{$src_lexicon}_{$lang_edit} e", 'e.lex_id=c.id','left')
@@ -320,7 +322,7 @@ class Mod_translate extends CI_Model {
                 break;
 
           case 'greek':
-                $query = $this->db->select('strongs,strongs_unreliable,lemma lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,c.id lex_id')
+                $query = $this->db->select('strongs,strongs_unreliable,lemma lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
                     ->from('lexicon_greek c')
                     ->join("lexicon_greek_$lang_show s", 's.lex_id=c.id','left')
                     ->join("lexicon_greek_$lang_edit e", 'e.lex_id=c.id','left')
@@ -385,50 +387,68 @@ class Mod_translate extends CI_Model {
         return array(array(), $l10n['universe']['reference']);
     }
 
-    public function get_frequent_glosses(string $src_lang, string $lang_edit, string $lang_show, int $gloss_count) {
+
+    public function get_frequent_glosses(string $src_lang, string $lang_edit, string $lang_show, int $gloss_start, int $gloss_count) {
         switch ($src_lang) {
           case 'heb':
           case 'aram':
                 $src_lexicon = $src_lang=='heb' ? 'Hebrew' : 'Aramaic';
-                
+
+                $query = $this->db->select('lex, tally, sortorder')
+                    ->from("lexicon_{$src_lexicon}")
+                    ->order_by('tally DESC, sortorder ASC')
+                    ->limit($gloss_count, $gloss_start)
+                    ->where('tally >',$this->min_tally)
+                    ->distinct()
+                    ->get();
+
+                $relevant_lex = array();
+                foreach ($query->result() as $row)
+                    $relevant_lex[] = '"' . $row->lex . '"';
+
                 $query = $this->db->select('lex,vs,CONCAT(vocalized_lexeme_utf8," ",roman) lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
                     ->from("lexicon_{$src_lexicon} c")
                     ->join("lexicon_{$src_lexicon}_{$lang_show} s", 's.lex_id=c.id','left')
                     ->join("lexicon_{$src_lexicon}_{$lang_edit} e", 'e.lex_id=c.id','left')
-                    ->order_by('tally','DESC')
-                    ->limit(2*$gloss_count)
+                    ->where("c.lex in (" . implode($relevant_lex, ',') . ")")
+                    ->order_by('tally DESC, sortorder ASC')
                     ->get();
 
-                
-                $last_lex = '';
-                $result = array();
-                foreach ($query->result() as $row) {
-                    // Stop when we have enough lexemes and we reach a distinct lexeme with a low tally
-                    if ($row->lex!==$last_lex && count($result)>=$gloss_count && $tally > $row->tally)
-                        break;
-
-                    $tally = $row->tally;
-                    $result[] = $row;
-                    $last_lex = $row->lex;
-                }
-                assert(count($result)>=$gloss_count); // To ensure that the SQL LIMIT is high enough
                 break;
 
           case 'greek':
-                $query = $this->db->select('strongs,strongs_unreliable,lemma lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,c.id lex_id')
+                $query = $this->db->select('strongs,strongs_unreliable,lemma lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
                     ->from('lexicon_greek c')
                     ->join("lexicon_greek_$lang_show s", 's.lex_id=c.id','left')
                     ->join("lexicon_greek_$lang_edit e", 'e.lex_id=c.id','left')
-                    ->order_by('tally','DESC')
-                    ->limit($gloss_count)
+                    ->where('tally >',$this->min_tally)
+                    ->order_by('tally DESC, sortorder ASC')
+                    ->limit($gloss_count, $gloss_start)
                     ->get();
-
-                $result = $query->result();
                 break;
         }
 
-        return $result;
-        
+        return $query->result();
+    }
+
+    public function get_number_glosses(string $src_lang) {
+        switch ($src_lang) {
+          case 'heb':
+          case 'aram':
+                $src_lexicon = $src_lang=='heb' ? 'Hebrew' : 'Aramaic';
+
+                $query = $this->db->select('COUNT(DISTINCT `lex`) c')
+                    ->where('tally >',$this->min_tally)
+                    ->get("lexicon_{$src_lexicon}");
+                break;
+
+          case 'greek':
+                $query = $this->db->select('COUNT(`lemma`) c')
+                    ->where('tally >',$this->min_tally)
+                    ->get("lexicon_greek");
+                break;
+        }
+        return $query->row()->c;
     }
 
     // $lang may be 'comment'
@@ -832,7 +852,7 @@ class Mod_translate extends CI_Model {
         $this->dbforge->add_key('lex_id');
         $this->dbforge->create_table("lexicon_{$src_language}_{$dst_lang}");
 
-        $this->db->query("ALTER TABLE {PRE}lexicon_{$src_language}_{$dst_lang} ADD FOREIGN KEY lexid (lex_id) REFERENCES {PRE}lexicon_{$src_language}(id) ON DELETE SET NULL ON UPDATE CASCADE");
+        $this->db->query("ALTER TABLE {PRE}lexicon_{$src_language}_{$dst_lang} ADD FOREIGN KEY (lex_id) REFERENCES {PRE}lexicon_{$src_language}(id) ON DELETE SET NULL ON UPDATE CASCADE");
 
         $toinsert = array();
 

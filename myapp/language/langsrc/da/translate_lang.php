@@ -1,10 +1,12 @@
 <?php
 
+$lang['alphabetically'] = "Alfabetisk";
+$lang['by_frequency'] = "Efter hyppighed";
 $lang['comment'] = "Kommentar";
 $lang['download_lex'] = "Download ordliste";
 $lang['download_lex_desc'] = "<p>Klik på den ordliste du ønsker. En CSV-fil med den valgte ordliste vil så blive downloadet.</p>";
 $lang['each_page_shows'] = "Hver side viser %d emner.";
-$lang['first_occurence'] = "Første forekomst";
+$lang['first_occurrence'] = "Første forekomst";
 $lang['illegal_source_language'] = "Ulovligt kildesprog";
 $lang['illegal_target_language'] = "Ulovligt målsprog";
 $lang['items_text_database'] = "Antal emner i denne tekstdatabase: %d.";
@@ -16,6 +18,7 @@ $lang['lexeme'] = "Leksem";
 $lang['malformed_url'] = "Forkert URL";
 $lang['modified'] = "Modificeret?";
 $lang['name_prefix'] = "Navnepræfiks";
+$lang['occurrences'] = "Forekomster";
 $lang['revert'] = "Fortryd";
 $lang['revert_all'] = "Fortryd alt";
 $lang['select_gloss_translate_range'] = "<p>Vælg det sprog og de gloser hvis oversættelse du ønsker at ændre.</p> <p>Du kan enten vælge de %d hyppigste gloser (de vil blive vist sorteret efter hyppighed), eller du kan vælge gloserne alfabetisk.</p>";

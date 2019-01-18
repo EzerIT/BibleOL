@@ -188,11 +188,6 @@ else
           echo "</select>\n";
           echo "</p>\n";
           break;
-// 
-//    case 'lexicon':
-//          echo '<p>',sprintf($this->lang->line('items_text_database'),$line_count),"</p>\n";
-//          echo '<p>',sprintf($this->lang->line('each_page_shows'),$lines_per_page),"</p>\n";
-//          break;
   }
 ?>
 
@@ -297,18 +292,20 @@ else
 
           case 'lexicon':
               if ($get_parms['src_lang']=='greek') {
+                  echo '<th>',$this->lang->line('occurrences'),'</th>';
                   echo '<th>',$this->lang->line('strongs'),'</th>';
                   echo '<th>',$this->lang->line('lexeme'),'</th>';
-                  echo '<th>',$this->lang->line('first_occurence'),'</th>';
+                  echo '<th>',$this->lang->line('first_occurrence'),'</th>';
                   echo "<th>$language_selector</th>";
                   echo "<th>$long_target_lang</th>";
                   echo '<th>',$this->lang->line('modified'),'</th>';
               }
               else {
+                  echo '<th>',$this->lang->line('occurrences'),'</th>';
                   echo '<th>',$this->lang->line('symbolic_lexeme'),'</th>';
                   echo '<th>',$this->lang->line('lexeme'),'</th>';
                   echo '<th>',$this->lang->line('stem'),'</th>';
-                  echo '<th>',$this->lang->line('first_occurence'),'</th>';
+                  echo '<th>',$this->lang->line('first_occurrence'),'</th>';
                   echo "<th>$language_selector</th>";
                   echo "<th>$long_target_lang</th>";
                   echo '<th>',$this->lang->line('modified'),'</th>';
@@ -364,7 +361,8 @@ else
 
         <?php case 'lexicon': ?>
           <?php if ($get_parms['src_lang']=='greek'): ?>
-            <td class="leftalign"><?= $line->strongs ?><?= $line->strongs_unreliable ? '?' : '' ?></td>
+            <td class="centeralign"><?= $line->tally ?></td>
+            <td class="centeralign"><?= $line->strongs ?><?= $line->strongs_unreliable ? '?' : '' ?></td>
             <td class="leftalign"><?= $line->lexeme ?></td>
             <td class="leftalign">
                  <a target="_blank" href="<?=
@@ -372,6 +370,7 @@ else
                   ?>"><?= sprintf($books['_label'], $books[$line->firstbook],$line->firstchapter,$line->firstverse) ?></a>
             </td>
           <?php else: ?>
+            <td class="centeralign"><?= $lastlex!=$line->lex ? $line->tally : '' ?></td>
             <td class="leftalign"><?= $lastlex!=$line->lex ? htmlspecialchars($line->lex) : '' ?></td>
             <td class="heb-default rtl"><?= $lastlex!=$line->lex ? $line->lexeme : '&nbsp;&nbsp;&#x2033;' ?></td>
             <?php $lastlex = $line->lex ?>

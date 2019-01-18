@@ -1,5 +1,13 @@
 <?php
 
+$comment['alphabetically'] = "";
+$format['alphabetically'] = "";
+$use_textarea['alphabetically'] = false;
+
+$comment['by_frequency'] = "";
+$format['by_frequency'] = "";
+$use_textarea['by_frequency'] = false;
+
 $comment['comment'] = "";
 $format['comment'] = "";
 $use_textarea['comment'] = false;
@@ -16,9 +24,9 @@ $comment['each_page_shows'] = "";
 $format['each_page_shows'] = "";
 $use_textarea['each_page_shows'] = false;
 
-$comment['first_occurence'] = "";
-$format['first_occurence'] = "";
-$use_textarea['first_occurence'] = false;
+$comment['first_occurrence'] = "";
+$format['first_occurrence'] = "";
+$use_textarea['first_occurrence'] = false;
 
 $comment['illegal_source_language'] = "";
 $format['illegal_source_language'] = "";
@@ -63,6 +71,10 @@ $use_textarea['modified'] = false;
 $comment['name_prefix'] = "";
 $format['name_prefix'] = "";
 $use_textarea['name_prefix'] = false;
+
+$comment['occurrences'] = "";
+$format['occurrences'] = "";
+$use_textarea['occurrences'] = false;
 
 $comment['revert'] = "";
 $format['revert'] = "";

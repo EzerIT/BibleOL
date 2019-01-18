@@ -265,7 +265,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
 
                                           // For some languages and databases, show only the first gloss
                                           
-                                          if ((configuration.databaseName=="ETCBC4" && (featName=="english" || featName=="spanish" || featName=="german" || featName=="swahili"))
+                                          if ((configuration.databaseName=="ETCBC4" && (featName=="english" || featName=="spanish" || featName=="german" || featName=="swahili" || featName=="danish"))
                                               || (configuration.databaseName=="nestle1904" && featName=="swahili")) {
                                               featValLoc = featValLoc.replace(/(&[gl]t);/,'$1Q')  // Remove ';' from "&gt;" and "&lt;" 
                                                                      .replace(/([^,;(]+).*/,'$1') // Remove everything after ',' or ';' or '('

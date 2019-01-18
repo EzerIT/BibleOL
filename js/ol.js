@@ -781,7 +781,7 @@ var DisplaySingleMonadObject = (function (_super) {
                         wordclass = charset.transliteratedClass;
                     else
                         wordclass = 'ltr';
-                    if ((configuration.databaseName == "ETCBC4" && (featName == "english" || featName == "spanish" || featName == "german" || featName == "swahili"))
+                    if ((configuration.databaseName == "ETCBC4" && (featName == "english" || featName == "spanish" || featName == "german" || featName == "swahili" || featName == "danish"))
                         || (configuration.databaseName == "nestle1904" && featName == "swahili")) {
                         featValLoc = featValLoc.replace(/(&[gl]t);/, '$1Q')
                             .replace(/([^,;(]+).*/, '$1')

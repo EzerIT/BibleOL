@@ -5,6 +5,7 @@ class Ctrl_urls extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->lang->load('urls', $this->language);
+        $this->lang->load('translate', $this->language);
         $this->load->model('mod_urls');
     }
 
@@ -25,14 +26,16 @@ class Ctrl_urls extends MY_Controller {
             $this->load->view('view_menu_bar', array('langselect' => true));
 
             $get_parms = array('src_lang' => 'all-no-greek',
-                               'buttonix' => 0);
+                               'buttonix' => null);
 
             $center_text = $this->load->view('view_select_gloss',
-                                             array('heb_buttons' => $heb_buttons,
+                                             array('heb_buttons'  => $heb_buttons,
                                                    'aram_buttons' => $aram_buttons,
-                                                   'gloss_count' => $this->gloss_count,
-                                                   'editing' => 'url',
-                                                   'get_parms' => $get_parms),
+                                                   'heb_glosses'  => $this->gloss_count,
+                                                   'aram_glosses' => $this->gloss_count,
+                                                   'gloss_count'  => $this->gloss_count,
+                                                   'editing'      => 'url',
+                                                   'get_parms'    => $get_parms),
                                              true);
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_gloss_range_head'),
                                                       'left' => sprintf($this->lang->line('select_gloss_range'),$this->gloss_count),
@@ -82,14 +85,15 @@ class Ctrl_urls extends MY_Controller {
                                'buttonix' => $button_index);
             
             $center_text = $this->load->view('view_select_gloss',
-                                             array('buttons' => $buttons,
+                                             array('buttons'     => $buttons,
+                                                   'num_glosses' => $this->gloss_count,
                                                    'gloss_count' => $this->gloss_count,
-                                                   'editing' => 'url',
-                                                   'get_parms' => $get_parms),
+                                                   'editing'     => 'url',
+                                                   'get_parms'   => $get_parms),
                                              true)
                 . $this->load->view('view_edit_url',
-                                    array('longlang' => $longlang,
-                                          'words' => $words,
+                                    array('longlang'  => $longlang,
+                                          'words'     => $words,
                                           'get_parms' => $get_parms),
                                     true);
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_gloss_range_head'),

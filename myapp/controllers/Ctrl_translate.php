@@ -73,27 +73,27 @@ class Ctrl_translate extends MY_Controller {
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
-            $get_parms = array('offset' => $offset,
+            $get_parms = array('offset'    => $offset,
                                'sortorder' => $sortorder,
-                               'orderby' => $orderby,
-                               'group' => $textgroup,
+                               'orderby'   => $orderby,
+                               'group'     => $textgroup,
                                'lang_show' => $lang_show,
                                'lang_edit' => $lang_edit);
 
             $center_text = $this->load->view('view_translate',
-                                             array('editing' => 'interface',
-                                                   'get_parms' => $get_parms,
-                                                   'group_list' => $textgroup_list,
-                                                   'lang_list' => $lang_list,
-                                                   'alllines' => $alllines,
-                                                   'untranslated' => $untranslated,
+                                             array('editing'        => 'interface',
+                                                   'get_parms'      => $get_parms,
+                                                   'group_list'     => $textgroup_list,
+                                                   'lang_list'      => $lang_list,
+                                                   'alllines'       => $alllines,
+                                                   'untranslated'   => $untranslated,
                                                    'lines_per_page' => $lines_per_page,
-                                                   'line_count' => $line_count,
-                                                   'page_count' => $page_count),
+                                                   'line_count'     => $line_count,
+                                                   'page_count'     => $page_count),
                                              true);
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('translate_user_interface'),
-                                                      'left' => $this->lang->line('translate_interface_desc'),
-                                                      'center' => $center_text));
+                                                      'left'       => $this->lang->line('translate_interface_desc'),
+                                                      'center'     => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
@@ -161,23 +161,23 @@ class Ctrl_translate extends MY_Controller {
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
-            $get_parms = array('group' => $grammargroup,
-                               'db' => $db,
+            $get_parms = array('group'     => $grammargroup,
+                               'db'        => $db,
                                'lang_show' => $lang_show,
                                'lang_edit' => $lang_edit);
 
             $center_text = $this->load->view('view_translate',
-                                             array('editing' => 'grammar',
-                                                   'get_parms' => $get_parms,
-                                                   'group_list' => $grammargroup_list,
-                                                   'db_list' => $db_list,
-                                                   'lang_list' => $lang_list,
-                                                   'alllines' => $alllines,
+                                             array('editing'      => 'grammar',
+                                                   'get_parms'    => $get_parms,
+                                                   'group_list'   => $grammargroup_list,
+                                                   'db_list'      => $db_list,
+                                                   'lang_list'    => $lang_list,
+                                                   'alllines'     => $alllines,
                                                    'untranslated' => $untranslated),
                                              true);
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('translate_grammar_terms'),
-                                                      'left' => $this->lang->line('translate_grammar_desc'),
-                                                      'center' => $center_text));
+                                                      'left'       => $this->lang->line('translate_grammar_desc'),
+                                                      'center'     => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
@@ -215,25 +215,33 @@ class Ctrl_translate extends MY_Controller {
             $aram_buttons = $this->mod_urls->get_aram_buttons_long();
             $greek_buttons = $this->mod_urls->get_greek_buttons_long();
 
+            $heb_glosses = $this->mod_translate->get_number_glosses('heb');
+            $aram_glosses = $this->mod_translate->get_number_glosses('aram');
+            $greek_glosses = $this->mod_translate->get_number_glosses('greek');
+
+            
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_lex')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
             $get_parms = array('src_lang' => 'all-with-greek',
-                               'buttonix' => 0);
+                               'buttonix' => null);
 
             $center_text = $this->load->view('view_select_gloss',
-                                             array('heb_buttons' => $heb_buttons,
-                                                   'aram_buttons' => $aram_buttons,
+                                             array('heb_buttons'   => $heb_buttons,
+                                                   'aram_buttons'  => $aram_buttons,
                                                    'greek_buttons' => $greek_buttons,
-                                                   'gloss_count' => $this->gloss_count,
-                                                   'editing' => 'lexicon',
-                                                   'get_parms' => $get_parms),
+                                                   'heb_glosses'   => $heb_glosses,
+                                                   'aram_glosses'  => $aram_glosses,
+                                                   'greek_glosses' => $greek_glosses,
+                                                   'gloss_count'   => $this->gloss_count,
+                                                   'editing'       => 'lexicon',
+                                                   'get_parms'     => $get_parms),
                                              true);
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_words_translate'),
-                                                      'left' => sprintf($this->lang->line('select_gloss_translate_range'),$this->gloss_count),
-                                                      'center' => $center_text));
+                                                      'left'       => sprintf($this->lang->line('select_gloss_translate_range'),$this->gloss_count),
+                                                      'center'     => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
@@ -285,38 +293,41 @@ class Ctrl_translate extends MY_Controller {
                     throw new DataException($this->lang->line('illegal_lang_code'));
             }
 
-            $words = $button_index==-1
-                ? $this->mod_translate->get_frequent_glosses($src_lang,$lang_edit,$lang_show,$this->gloss_count)
-                : $this->mod_translate->get_glosses($src_lang,$lang_edit,$lang_show,$buttons[$button_index][1],$buttons[$button_index][2]);
+            $words = $button_index<0
+                ? $this->mod_translate->get_frequent_glosses($src_lang,$lang_edit,$lang_show,
+                                                             (-1-$button_index)*$this->gloss_count,$this->gloss_count)
+                : $this->mod_translate->get_glosses($src_lang,$lang_edit,$lang_show,
+                                                    $buttons[$button_index][1],$buttons[$button_index][2]);
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_lex')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
-            $get_parms = array('src_lang' => $src_lang,
+            $get_parms = array('src_lang'  => $src_lang,
                                'lang_show' => $lang_show,
                                'lang_edit' => $lang_edit,
-                               'buttonix' => $button_index);
+                               'buttonix'  => $button_index);
 
             $center_text = $this->load->view('view_select_gloss',
-                                             array('buttons' => $buttons,
+                                             array('buttons'     => $buttons,
+                                                   'num_glosses' => $this->mod_translate->get_number_glosses($src_lang),
                                                    'gloss_count' => $this->gloss_count,
-                                                   'editing' => 'lexicon',
-                                                   'get_parms' => $get_parms),
+                                                   'editing'     => 'lexicon',
+                                                   'get_parms'   => $get_parms),
                                              true)
                 . $this->load->view('view_translate',
-                                             array('editing' => 'lexicon',
+                                             array('editing'   => 'lexicon',
                                                    'get_parms' => $get_parms,
                                                    'lang_list' => $dst_langs,
-                                                   'alllines' => $words,
-                                                   'stems' => $stems,
-                                                   'books' => $books),
+                                                   'alllines'  => $words,
+                                                   'stems'     => $stems,
+                                                   'books'     => $books),
                                              true);
 
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('translate_lex'),
-                                                      'left' => $this->lang->line('translate_lex_desc'),
-                                                      'center' => $center_text));
+                                                      'left'       => $this->lang->line('translate_lex_desc'),
+                                                      'center'     => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
@@ -401,8 +412,8 @@ class Ctrl_translate extends MY_Controller {
             foreach ($lexicon_lang_list as $src_lang => $targets) {
                 foreach ($targets as $dst_lang => $dst_lang_name) {
                     $all_lex[] = array('from_name' => $this->lang->line('lang_'.$src_lang),
-                                       'to_name' => $dst_lang_name,
-                                       'url' => site_url("/translate/download_lex/$src_lang/$dst_lang"));
+                                       'to_name'   => $dst_lang_name,
+                                       'url'       => site_url("/translate/download_lex/$src_lang/$dst_lang"));
                 }
             }
             
@@ -415,8 +426,8 @@ class Ctrl_translate extends MY_Controller {
                                              array('all_lex' => $all_lex),true);
 
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('download_lex'),
-                                                      'left' => $this->lang->line('download_lex_desc'),
-                                                      'center' => $center_text));
+                                                      'left'       => $this->lang->line('download_lex_desc'),
+                                                      'center'     => $center_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {
