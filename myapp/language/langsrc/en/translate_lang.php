@@ -1,10 +1,12 @@
 <?php
 
+$lang['alphabetically'] = "Alphabetically";
+$lang['by_frequency'] = "By frequency";
 $lang['comment'] = "Comment";
 $lang['download_lex'] = "Download Lexicon";
 $lang['download_lex_desc'] = "<p>Click the lexicon you want. This will download a CSV file with the selected lexicon.</p>";
 $lang['each_page_shows'] = "Each page shows %d items.";
-$lang['first_occurence'] = "First occurence";
+$lang['first_occurrence'] = "First occurrence";
 $lang['illegal_source_language'] = "Illegal source language";
 $lang['illegal_target_language'] = "Illegal target language";
 $lang['items_text_database'] = "Number of items in this text database: %d.";
@@ -16,6 +18,7 @@ $lang['lexeme'] = "Lexeme";
 $lang['malformed_url'] = "Malformed URL";
 $lang['modified'] = "Modified?";
 $lang['name_prefix'] = "Name prefix";
+$lang['occurrences'] = "Occurrences";
 $lang['revert'] = "Revert";
 $lang['revert_all'] = "Revert all";
 $lang['select_gloss_translate_range'] = "<p>Select the language and the range of glosses for which you wish to modify the translation.</p> <p>You can either select the %d most frequent glosses (they will be displayed sorted by frequency), or you can select glosses alphabetically.</p>";
