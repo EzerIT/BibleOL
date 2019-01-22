@@ -210,7 +210,7 @@ class Quiz_data {
         $this->CI->load->library('Suggest_answers');
 
         // The "\n" in the following MQL commands is required if the user entered text that ends with a comment
-        if (count($this->quizFeatures->allFeatures)==0)
+        if (empty($this->quizFeatures->allFeatures))
             $command .= "SELECT All OBJECTS IN $mset_union WHERE [$this->oType $this->mqlQuizObjectSelection\n] GOqxqxqx\n";
         else
             $command .= "SELECT All OBJECTS IN $mset_union WHERE [$this->oType $this->mqlQuizObjectSelection\n GET {$this->quizFeatures->allFeatures}] GOqxqxqx\n";
