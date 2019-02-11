@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<exam>
+  <examname>test_header</examname>
+  <exercise>
+    <exercisename>ETCBC4/demo/gender-translit.3et</exercisename>
+    <numq>0</numq>
+    <time>0</time>
+    <weight>1</weight>
+    <order>1</order>
+  </exercise>
+  <exercise>
+    <exercisename>ETCBC4/demo/number_state-translit.3et</exercisename>
+    <numq>4</numq>
+    <time>0</time>
+    <weight>1</weight>
+    <order>2</order>
+  </exercise>
+</exam>
