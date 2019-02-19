@@ -102,6 +102,50 @@ class MY_Lang extends CI_Lang {
 		return TRUE;
 	}
 
+    // Returns site-specific language table, or null for master site
+    private function create_site_lang_table(string $idiom) {
+        $CI =& get_instance();
+
+        if (!empty($CI->config->item('url_variant'))) {
+            // Not master site
+            
+            $CI =& get_instance();
+            $site_lang_table = 'language_' . $idiom . '_' . $CI->config->item('url_variant');
+            // Create database for organizational site if it does not exist
+            if (!$CI->db->table_exists($site_lang_table)) {
+                $CI->load->dbforge();
+                $CI->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
+                                              'textgroup' => array('type'=>'VARCHAR(25)'),
+                                              'symbolic_name' => array('type'=>'TINYTEXT'),
+                                              'text' => array('type'=>'TEXT')));
+                $CI->dbforge->add_key('id', TRUE);
+                $CI->dbforge->add_key('textgroup');
+                $CI->dbforge->create_table($site_lang_table);
+            }
+            return $site_lang_table;
+        }
+        else 
+            return null;
+    }
+    
+    // Load from speicific language database without looking elsewhere. Merge into $lang
+    private function load_from_db_specific(string $langfile, string $idiom, bool $org_site, array &$lang) {
+        $CI =& get_instance();
+
+        if ($org_site) {
+            $site_lang_table = $this->create_site_lang_table($idiom); // Make sure table exists
+            if (empty($site_lang_table))
+                return; // We are running on master site
+
+            $query = $CI->db->where('textgroup',$langfile)->get($site_lang_table);
+        }
+        else
+            $query = $CI->db->where('textgroup',$langfile)->get('language_'.$idiom);
+        
+        $strings = $query->result();
+        foreach ($strings as $s)
+            $lang[$s->symbolic_name] = $s->text;
+    }
     
     private function load_from_db($langfile, string $idiom, bool $return, bool $add_suffix /*ignored*/, string $alt_path /*ignored*/)
     {
@@ -117,13 +161,14 @@ class MY_Lang extends CI_Lang {
 			return;
 		}
 
-        $CI =& get_instance();
-        $query = $CI->db->where('textgroup',$langfile)->get('language_'.$idiom);
-        $strings = $query->result();
-
         $lang = array();
-        foreach ($strings as $s)
-            $lang[$s->symbolic_name] = $s->text;
+
+        // Read master site table
+        $this->load_from_db_specific($langfile, $idiom, false, $lang);
+
+        // Read organizational site table
+        $this->load_from_db_specific($langfile, $idiom, true, $lang);
+
 
         if (empty($lang))
             // Load from file instead of database
@@ -170,30 +215,27 @@ class MY_Lang extends CI_Lang {
             return $txt;
     }
 
-    public function load_secondary($langfile, $idiom)
+    public function load_secondary(string $langfile, string $idiom)
     {
         if ($idiom=='english' || $idiom=='none')
             $idiom = 'en';
 
-        $CI =& get_instance();
+        $lang = array();
+
+        // Read English strings from master site
+        $this->load_from_db_specific($langfile, 'en', false, $lang);
         
-        $lang = array();
+        // Read localized strings from master site
+        if ($idiom!='en')
+            $this->load_from_db_specific($langfile, $idiom, false, $lang);
 
-        if ($idiom!='en') {
-            $query = $CI->db->where('textgroup',$langfile)->get('language_en');  // For fallback strings
-            $strings = $query->result();
-            
-            foreach ($strings as $s)
-                $lang[$s->symbolic_name] = $s->text;
-        }
+        // Read English strings from organizational site
+        $this->load_from_db_specific($langfile, 'en', true, $lang);
+        
+        // Read localized strings from organizational site
+        if ($idiom!='en')
+            $this->load_from_db_specific($langfile, $idiom, true, $lang);
 
-        $query = $CI->db->where('textgroup',$langfile)->get('language_'.$idiom);
-        $strings = $query->result();
-
-        $lang = array();
-        foreach ($strings as $s)
-            $lang[$s->symbolic_name] = $s->text;
-            
         $this->secondary_lang = array_merge($this->secondary_lang, $lang);
     }
 
