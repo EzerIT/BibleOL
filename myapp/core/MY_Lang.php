@@ -109,7 +109,6 @@ class MY_Lang extends CI_Lang {
         if (!empty($CI->config->item('url_variant'))) {
             // Not master site
             
-            $CI =& get_instance();
             $site_lang_table = 'language_' . $idiom . '_' . $CI->config->item('url_variant');
             // Create database for organizational site if it does not exist
             if (!$CI->db->table_exists($site_lang_table)) {
