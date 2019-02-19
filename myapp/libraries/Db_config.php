@@ -160,6 +160,33 @@ class Db_config {
         return true;
     }
 
+
+    // Returns site-specific grammar table, or null for master site
+    private function create_site_grammar_table() {
+        $CI =& get_instance();
+
+        if (!empty($CI->config->item('url_variant'))) {
+            // Not master site
+
+            $site_grammar_table = 'db_localize_' . $CI->config->item('url_variant');
+            // Create database for organizational site if it does not exist
+            if (!$CI->db->table_exists($site_grammar_table)) {
+                $CI->load->dbforge();
+                $CI->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
+                                              'db' => array('type'=>'TINYTEXT'),
+                                              'lang' => array('type'=>'TINYTEXT'),
+                                              'json' => array('type'=>'MEDIUMTEXT')
+                                            ));
+                $CI->dbforge->add_key('id', TRUE);
+                $CI->dbforge->create_table($site_grammar_table);
+            }
+            return $site_grammar_table;
+        }
+        else 
+            return null;
+    }
+
+
     /// Initializes this object with information about a single Emdros database.
     /// @param $dbf A database_file object describing the select Emdros database.
     /// @param $language The selected localization language.
@@ -174,6 +201,18 @@ class Db_config {
         $query = $CI->db->select('json')->where('db',$dbf->propertiesName)->where('lang',$language)->get('db_localize');
         $this->l10n_json = $query->row()->json;
         $this->addgloss_l10n_json($language);
+
+        // Add translations for current site
+        $site_grammar_table = $this->create_site_grammar_table();
+        if ($site_grammar_table) {
+            $query = $CI->db->select('json')->where('db',$dbf->propertiesName)->where('lang',$language)->get($site_grammar_table);
+            if ($query->num_rows()!=0) {
+                // Replace the relevant localizations with site-specific values
+                $l1 = json_decode($this->l10n_json, true);
+                $l2 = json_decode($query->row()->json, true);
+                $this->l10n_json = json_encode(array_replace_recursive($l1, $l2));
+            }
+        }
 
         $this->typeinfo_json = $this->read_or_throw($dbf->typeinfo);
         $this->addgloss_typeinfo_json();
@@ -218,6 +257,7 @@ class Db_config {
         $this->dbinfo_json = json_encode($this->dbinfo);
     }
 
+    // Extends the typeinfo variable with information for various gloss languages
     private function addgloss_typeinfo_json() {
         $typinf = json_decode($this->typeinfo_json);
         
@@ -229,6 +269,7 @@ class Db_config {
         $this->typeinfo_json = json_encode($typinf);
     }
 
+    // Extends the l10n variable with words for various gloss languages
     private function addgloss_l10n_json(string $language) {
         $CI =& get_instance();
         $CI->lang->load('users', $language);
