@@ -267,7 +267,7 @@ div#quizdesc {
   margin-left: auto;
   margin-right: auto;
 }
-em {
+.red {
   color: red;
   font-style: normal;
 }

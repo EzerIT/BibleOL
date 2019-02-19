@@ -751,7 +751,7 @@ var DisplaySingleMonadObject = (function (_super) {
                 text = "(" + ++DisplaySingleMonadObject.itemIndex + ")";
             else
                 text = this.displayedMo.mo.features[configuration.surfaceFeature];
-            text = "<em>" + text + "</em>";
+            text = "<span class=\"red\">" + text + "</span>";
         }
         else
             text = this.displayedMo.mo.features[configuration.surfaceFeature];

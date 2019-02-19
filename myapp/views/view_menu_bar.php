@@ -57,8 +57,10 @@ if ($this->mod_users->is_logged_in()) {
             $content[$ix][] = make_anchor2('translate/translate_lex', 'translate_lexicon');
             $content[$ix][] = make_anchor2('translate/select_download_lex', 'download_lexicon');
         }
-        if ($this->mod_users->is_admin())
+        if ($this->mod_users->is_admin()) {
             $content[$ix][] = make_anchor2('urls', 'manage_gloss_links');
+            $content[$ix][] = make_anchor2('site/site_text', 'site_text');
+        }
     }
  
     $ix = count($head);
@@ -86,8 +88,8 @@ $cols = $ix+1;
  
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light pt-0 pb-0 mb-3">
-  <div class="divnavbar">
-    <a class="navbar-brand d-block d-lg-none" href="<?= site_url('/') ?>">Bible Online Learner</a>
+    <div class="divnavbar">
+        <a class="navbar-brand d-block d-lg-none" href="<?= site_url('/') ?>">Bible Online Learner</a>
     <button class="navbar-toggler mt-1 mb-1" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
