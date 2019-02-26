@@ -1,5 +1,12 @@
 <?php
 
+// Creates a database table for a lexicon.
+// Parameters:
+//   $src_language    The source language (e.g. "Hebrew", "Aramaic", "greek")
+//   $dst_lang        The abbreviated destination language (e.g. "en", "da")
+//   $variant         The organizational site name. Null if creating a global lexicon
+//   $keep            If the database table already exists, should we keep it?
+
 function create_lexicon_table(string $src_language, string $dst_lang, string $variant=null, bool $keep=false) {
     $CI =& get_instance();
     
