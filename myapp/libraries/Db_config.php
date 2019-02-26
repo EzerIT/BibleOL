@@ -226,11 +226,27 @@ class Db_config {
     private function addgloss_dbinfo() {
         $fsetting = $this->dbinfo->objectSettings->{$this->dbinfo->objHasSurface}->featuresetting;
         if (isset($fsetting->gloss)) {
+            $CI =& get_instance();
+            $CI->load->helper('create_lexicon_helper');
+
             // Replace 'gloss' with 'english', 'german, etc.
             foreach ($this->glosslang->to as $abb) {
+                if ($CI->config->item('url_variant')) {
+                    // Create organizational lexicons, unless they already exist
+                    foreach ($this->glosslang->from as $src_abb)
+                        create_lexicon_table(Language::$src_lang_abbrev[$src_abb], $abb, $CI->config->item('url_variant'), true);
+                }
+            
                 $langname = Language::$dst_lang_abbrev[$abb];
                 $fsetting->$langname = clone $fsetting->gloss;
                 $fsetting->$langname->sql_command = str_replace('LANG',$abb,$fsetting->gloss->sql_command);
+
+                if (empty($CI->config->item('url_variant')) || !isset($fsetting->gloss->sql_command_variant))
+                    $fsetting->$langname->sql_command_variant = null;
+                else
+                    $fsetting->$langname->sql_command_variant = str_replace(array('LANG','VARIANT'),
+                                                                            array($abb,$CI->config->item('url_variant')),
+                                                                            $fsetting->gloss->sql_command_variant);
                 $fsetting->$langname->isGloss = true;  // Extra feature
             }
             unset($fsetting->gloss);

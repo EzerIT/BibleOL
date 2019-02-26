@@ -824,6 +824,8 @@ class Mod_translate extends CI_Model {
     }
 
     public function import_lex(string $src_lang, string $dst_lang, string $csv_file) {
+        $this->load->helper('create_lexicon_helper');
+
         $src_language="";
         $header_array=array();
         $this->lex_common($src_lang, $src_language, $header_array);
@@ -839,21 +841,9 @@ class Mod_translate extends CI_Model {
         assert(count($record)==count($header_array),"Wrong number of fields in header");
         for ($i=0; $i<count($record); ++$i)
             assert($record[$i]==$header_array[$i][1],"Illegal field '$record[$i]' in header");
+
+        create_lexicon_table($src_language, $dst_lang);
         
-        $this->load->dbforge();
-        $this->dbforge->drop_table("lexicon_{$src_language}_{$dst_lang}",true);
- 
-        $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
-                                        'lex_id' => array('type'=>'INT',
-                                                          'null' => true),
-                                        'gloss' => array('type'=>'TEXT')
-                                      ));
-        $this->dbforge->add_key('id', TRUE);
-        $this->dbforge->add_key('lex_id');
-        $this->dbforge->create_table("lexicon_{$src_language}_{$dst_lang}");
-
-        $this->db->query("ALTER TABLE {PRE}lexicon_{$src_language}_{$dst_lang} ADD FOREIGN KEY (lex_id) REFERENCES {PRE}lexicon_{$src_language}(id) ON DELETE SET NULL ON UPDATE CASCADE");
-
         $toinsert = array();
 
         $header_count = count($header_array);

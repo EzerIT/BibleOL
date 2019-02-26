@@ -402,6 +402,7 @@
                     "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
                     "indirdb": "mysql",
                     "sql_command": "SELECT gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_LANG lang ON lang.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
+                    "sql_command_variant": "SELECT COALESCE(lang_var.gloss,lang.gloss) gloss FROM {PRE}lexicon_%1$s h JOIN {PRE}lexicon_%1$s_LANG lang ON lang.lex_id=h.id LEFT JOIN {PRE}lexicon_%1$s_LANG_VARIANT lang_var ON lang_var.lex_id=h.id WHERE lex='%2$s' AND vs='%3$s'",
                     "sqlargs": [
                         "language",
                         "lex",
