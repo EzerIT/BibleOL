@@ -14,7 +14,11 @@
 
 
    function make_css(string $file) {
-       echo "<link type=\"text/css\" href=\"", site_url(add_stat($file)), "\" rel=\"stylesheet\" />\n";
+       if (strncmp($file, 'https://', strlen('https://'))==0 ||
+           strncmp($file, 'http://', strlen('http://'))==0) // Remote stylesheet
+           echo "<link type=\"text/css\" href=\"$file\" rel=\"stylesheet\" />\n";
+       else // Local stylesheet
+           echo "<link type=\"text/css\" href=\"", site_url(add_stat($file)), "\" rel=\"stylesheet\" />\n";
    }
 
    function make_js(string $file) {

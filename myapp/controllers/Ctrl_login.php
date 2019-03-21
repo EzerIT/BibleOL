@@ -104,7 +104,10 @@ class Ctrl_login extends MY_Controller {
 
         // VIEW:
         $this->load->view('view_top1', array('title' => $this->lang->line('login'),
-                                             'css_list' => array('zocial/css/zocial.css')));
+                                             // Here, the Roboto font should be loaded, but apparently this has
+                                             // already happened through some unknown magic.
+                                             'css_list' => array( //'https://fonts.googleapis.com/css?family=Roboto',
+                                                                 'zocial/css/zocial.css')));
         $this->load->view('view_top2');
         $this->load->view('view_menu_bar', array('langselect' => true));
         $this->load->view('view_login', array('google_login_enabled' => $this->config->item('google_login_enabled'),
