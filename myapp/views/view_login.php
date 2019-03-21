@@ -30,11 +30,14 @@
     </div>
   </div>
    
-  <?php if ($google_login_enabled): ?>
+  <?php if ($google_login_enabled || $facebook_login_enabled): ?>
     <p class="text-center"><?= $this->lang->line('or') ?></p>
-    <p class="text-center"><a class="googlelogin" href="https://accounts.google.com/o/oauth2/auth?<?= htmlspecialchars($google_request) ?>"><img src="images/google.png"><span><?= $this->lang->line('sign_in_google') ?></span></a></p>
-    <p class="text-center"><a class="zocial facebook" href="https://www.facebook.com/dialog/oauth?<?= htmlspecialchars($facebook_request) ?>"><?= $this->lang->line('sign_in_facebook') ?></a></p>
- 
-  <p class="text-justify"><?= $this->lang->line('warn_multiple_login') ?></p>
+    <?php if ($google_login_enabled): ?>
+      <p class="text-center"><a class="googlelogin" href="https://accounts.google.com/o/oauth2/auth?<?= htmlspecialchars($google_request) ?>"><img src="images/google.png"><span><?= $this->lang->line('sign_in_google') ?></span></a></p>
+    <?php endif; ?>
+    <?php if ($facebook_login_enabled): ?>
+      <p class="text-center"><a class="zocial facebook" href="https://www.facebook.com/dialog/oauth?<?= htmlspecialchars($facebook_request) ?>"><?= $this->lang->line('sign_in_facebook') ?></a></p>
+    <?php endif; ?>
+    <p class="text-justify"><?= $this->lang->line('warn_multiple_login') ?></p>
   <?php endif; ?>
 </div>
