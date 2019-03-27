@@ -66,7 +66,10 @@ class Ctrl_translate extends MY_Controller {
             $alllines = $this->mod_translate->get_if_lines_part($lang_edit,$lang_show,$textgroup,$lines_per_page,$offset*$lines_per_page,$orderby,$sortorder);
 
 
-            $untranslated = $this->mod_translate->get_if_untranslated($lang_edit);
+            if ($this->config->item('url_variant'))
+                $untranslated = array(); // Organizational sites do not keep track of untranslated items
+            else
+                $untranslated = $this->mod_translate->get_if_untranslated($lang_edit);
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_user_interface')));
@@ -154,7 +157,10 @@ class Ctrl_translate extends MY_Controller {
 
             $alllines = $this->mod_translate->get_grammar_lines_part($lang_edit,$lang_show,$grammargroup);
 
-            $untranslated = $this->mod_translate->get_grammar_untranslated($lang_edit);
+            if ($this->config->item('url_variant'))
+                $untranslated = array(); // Organizational sites do not keep track of untranslated items
+            else
+                $untranslated = $this->mod_translate->get_grammar_untranslated($lang_edit);
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_grammar_terms')));
@@ -360,7 +366,7 @@ class Ctrl_translate extends MY_Controller {
         }
 
 		if ($_SERVER['argc']!=5)
-			die("Usage: php index.php translate if_db2php <language code> <destination directory>\n");
+			die("Usage: php index.php translate if_db2php <language code>[_<variant>] <destination directory>\n");
 
         $this->mod_translate->if_db2php($_SERVER['argv'][3],$_SERVER['argv'][4]);
     }
@@ -372,7 +378,7 @@ class Ctrl_translate extends MY_Controller {
         }
 
 		if ($_SERVER['argc']!=5)
-			die("Usage: php index.php translate if_php2db <language code> <source directory>\n");
+			die("Usage: php index.php translate if_php2db <language code>[_variant] <source directory>\n");
 
         if ($_SERVER['argv'][3] == 'comment')
             $this->mod_translate->if_phpcomment2db($_SERVER['argv'][4]);
@@ -386,10 +392,10 @@ class Ctrl_translate extends MY_Controller {
             die;
         }
 
-		if ($_SERVER['argc']!=4)
-			die("Usage: php index.php translate gram_db2prop <destination directory>\n");
+		if ($_SERVER['argc']!=4 && $_SERVER['argc']!=5)
+			die("Usage: php index.php translate gram_db2prop <destination directory> [<variant>]\n");
 
-        $this->mod_translate->gram_db2prop($_SERVER['argv'][3]);
+        $this->mod_translate->gram_db2prop($_SERVER['argv'][3], isset($_SERVER['argv'][4]) ? $_SERVER['argv'][4] : null);
     }
 
     function gram_prop2db() {
@@ -398,7 +404,10 @@ class Ctrl_translate extends MY_Controller {
             die;
         }
 
-        $this->mod_translate->gram_prop2db();
+		if ($_SERVER['argc']!=4 && $_SERVER['argc']!=5)
+			die("Usage: php index.php translate gram_prop2db <source directory> [<variant>]\n");
+
+        $this->mod_translate->gram_prop2db($_SERVER['argv'][3], isset($_SERVER['argv'][4]) ? $_SERVER['argv'][4] : null);
     }
 
     function select_download_lex()

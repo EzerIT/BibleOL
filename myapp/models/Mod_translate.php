@@ -2,6 +2,7 @@
 
 class Mod_translate extends CI_Model {
     private $grammar_edit_array; // Used for caching grammar localization information
+    private $grammar_edit_array_main; // Main site information
     private $grammar_show_array;
     private $grammar_comment_array;
     private $grammar_db;
@@ -86,6 +87,9 @@ class Mod_translate extends CI_Model {
     }
 
     public function get_if_lines_part(string $lang_edit, string $lang_show, string $textgroup, int $limit, int $offset, string $orderby, string $sortorder) {
+        if ($this->config->item('url_variant'))
+            $lang_edit .= '_' . $this->config->item('url_variant');  // Append variant to language abbreviation
+
         $query = $this->db->select("c.symbolic_name, comment, c.use_textarea, s.text text_show, e.text text_edit")
             ->from('language_comment c')
             ->join("language_$lang_show s", "s.symbolic_name=c.symbolic_name AND s.textgroup=c.textgroup",'left')
@@ -122,23 +126,50 @@ class Mod_translate extends CI_Model {
     }
 
     public function update_if_lines(string $lang_edit, string $textgroup, array $post) {
+        if ($this->config->item('url_variant'))
+            $lang_edit2 = $lang_edit . '_' . $this->config->item('url_variant');  // Append variant to language abbreviation
+        else
+            $lang_edit2 = $lang_edit;
+
         foreach ($post as $key => $value) {
+            $deleted = false; // Has variant version been deleted?
+            
             if (substr($key,0,6)==='modif-' && $value=="true") {
                 $key2 = substr($key,6);
-                if ($this->db->from("language_$lang_edit")
-                    ->where('textgroup',$textgroup)->where('symbolic_name', $key2)
-                    ->count_all_results() == 0) {
-                    // A record does not exist, insert one.
-                    $this->db->insert("language_$lang_edit", array('textgroup' => $textgroup,
-                                                                   'symbolic_name' => $key2,
-                                                                   'text' => $this->security->xss_clean($post[$key2])));
-                }
-                else {
-                    // Update existing record
-                    $this->db->where('textgroup',$textgroup)->where('symbolic_name', $key2)
-                        ->update("language_$lang_edit", array('text' => $this->security->xss_clean($post[$key2])));
+                $text = trim($this->security->xss_clean($post[$key2]));
+
+                if ($this->config->item('url_variant')) {
+                    $query = $this->db->select('text')    // Get global version of text
+                        ->where('textgroup',$textgroup)
+                        ->where('symbolic_name',$key2)
+                        ->get("language_{$lang_edit}");
+
+                    $row = $query->row();
+                    if (empty($text) || ($row && $row->text==$text)) {
+                        // Variant is empty or equal to global, delete variant
+                        $this->db
+                            ->where('textgroup',$textgroup)
+                            ->where('symbolic_name',$key2)
+                            ->delete("language_{$lang_edit2}");
+                        $deleted = true;
+                    }
                 }
 
+                if (!$deleted) {
+                    if ($this->db->from("language_{$lang_edit2}")
+                        ->where('textgroup',$textgroup)->where('symbolic_name', $key2)
+                        ->count_all_results() == 0) {
+                        // A record does not exist, insert one.
+                        $this->db->insert("language_{$lang_edit2}", array('textgroup' => $textgroup,
+                                                                          'symbolic_name' => $key2,
+                                                                          'text' => $this->security->xss_clean($post[$key2])));
+                    }
+                    else {
+                        // Update existing record
+                        $this->db->where('textgroup',$textgroup)->where('symbolic_name', $key2)
+                            ->update("language_{$lang_edit2}", array('text' => $this->security->xss_clean($post[$key2])));
+                    }
+                }
             }
         }
     }
@@ -218,8 +249,16 @@ class Mod_translate extends CI_Model {
         }
     }
         
-    private function get_l10n_and_build(string $lang, &$dst) {
-        $l10n = $this->db->select('json')->where('db',$this->grammar_db)->where('lang',$lang)->get('db_localize')->row()->json;
+    private function get_l10n_and_build(string $lang, &$dst, string $variant=null) {
+        $row = $this->db->select('json')->where('db',$this->grammar_db)->where('lang',$lang)
+            ->get($variant ? "db_localize_$variant" : 'db_localize')
+            ->row();
+
+        if ($row)
+            $l10n = $row->json;
+        else
+            $l10n = '[]';
+
         $dst = array();
         $this->build_grammar_array('', json_decode($l10n,true), $dst);
     }
@@ -245,19 +284,29 @@ class Mod_translate extends CI_Model {
     }
 
     public function get_grammar_lines_part(string $lang_edit, string $lang_show, string $grammargroup) {
-        $this->get_l10n_and_build($lang_edit, $this->grammar_edit_array);
+        $this->load->helper('varset');
+
+        if ($this->config->item('url_variant'))
+            $this->get_l10n_and_build($lang_edit, $this->grammar_edit_array, $this->config->item('url_variant'));
+        else
+            $this->get_l10n_and_build($lang_edit, $this->grammar_edit_array);
+        
         $this->get_l10n_and_build($lang_show, $this->grammar_show_array);
         $this->get_l10n_and_build('comment', $this->grammar_comment_array);
 
         // Sanity check
-        $count = count($this->grammar_edit_array);
+        $count = count($this->grammar_show_array);
 
-        if ($count != count($this->grammar_show_array) ||
-            count(array_diff_key($this->grammar_edit_array,$this->grammar_show_array))!=0)
-            throw new DataException("Localization information for language $lang_edit is incompatible with language $lang_show");
+        if (empty($this->config->item('url_variant'))) {
+            // Main site
+            if ($count != count($this->grammar_edit_array) ||
+                count(array_diff_key($this->grammar_edit_array,$this->grammar_show_array))!=0)
+                throw new DataException("Localization information for language $lang_edit is incompatible with language $lang_show");
+        }
+
         if ($count != count($this->grammar_comment_array) ||
-            count(array_diff_key($this->grammar_edit_array,$this->grammar_comment_array))!=0)
-            throw new DataException("Localization information for language $lang_edit is incompatible with comments information");
+            count(array_diff_key($this->grammar_show_array,$this->grammar_comment_array))!=0)
+            throw new DataException("Localization information for language $lang_show is incompatible with comments information");
 
         $res = array();
 
@@ -271,7 +320,7 @@ class Mod_translate extends CI_Model {
                                                                             // in HTML and . is not allowed
                                                                             // there
                 $data->text_show = $this->grammar_show_array[$key];
-                $data->text_edit = $this->grammar_edit_array[$key];
+                $data->text_edit = set_or_default($this->grammar_edit_array[$key], '');
                 $data->comment = $comment;
                 $res[] = $data;
             }
@@ -282,30 +331,69 @@ class Mod_translate extends CI_Model {
     public function update_grammar_lines(string $lang_edit, string $db, array $post) {
         $this->grammar_db = $db;
 
-        $this->get_l10n_and_build($lang_edit, $this->grammar_edit_array);
+        $variant = null;
+        
+        if ($this->config->item('url_variant')) {
+            $variant = $this->config->item('url_variant');
+            $this->get_l10n_and_build($lang_edit, $this->grammar_edit_array, $variant);
+            $this->get_l10n_and_build($lang_edit, $this->grammar_edit_array_main);
+        }
+        else
+            $this->get_l10n_and_build($lang_edit, $this->grammar_edit_array);
+
         $this->get_l10n_and_build('comment', $this->grammar_comment_array);
 
         foreach ($post as $key => $value) {
+            $deleted = false; // Has variant version been deleted?
+
             if (substr($key,0,6)==='modif-' && $value=="true") {
                 $key2 = substr($key,6);                    // Remove 'modif-'
                 $key3 = preg_replace('/--/', '.', $key2);  // Change '--' to '.'
 
-                if (!isset($this->grammar_edit_array[$key3]))
+                if (!isset($this->grammar_comment_array[$key3]))
                     throw new DataException("Unknown key: $key3");
 
-                $newval = $this->security->xss_clean($post[$key2]);
-                $this->grammar_edit_array[$key3] =
-                    substr($this->grammar_comment_array[$key3],0,5)=='f:num'
-                    ? intval($newval)
-                    : $newval;
+                $newval = trim($this->security->xss_clean($post[$key2]));
+
+                if ($this->config->item('url_variant')) {
+                    if (empty($newval) || $newval==$this->grammar_edit_array_main[$key3]) {
+                        // Variant is empty or equal to global, delete variant
+                        unset($this->grammar_edit_array[$key3]);
+                        $deleted = true;
+                    }
+                }
+
+                if (!$deleted)
+                    $this->grammar_edit_array[$key3] =
+                        substr($this->grammar_comment_array[$key3],0,5)=='f:num'
+                        ? intval($newval)
+                        : $newval;
             }
         }
 
-        $this->db->where('db',$db)->where('lang',$lang_edit)
-            ->update('db_localize', array('json' => $this->build_grammar_json($this->grammar_edit_array)) );
+        $table = $variant ? "db_localize_$variant" : 'db_localize';
+        
+        if ($this->db
+            ->from($table)
+            ->where('db',$db)->where('lang',$lang_edit)
+            ->count_all_results() == 0) {
+            // A record does not exist, insert one.
+            $this->db->insert($table, array('db' => $db,
+                                            'lang' => $lang_edit,
+                                            'json' => $this->build_grammar_json($this->grammar_edit_array)));
+        }
+        else {
+            // Update existing record
+            $this->db->where('db',$db)->where('lang',$lang_edit)
+                ->update($table,
+                         array('json' => $this->build_grammar_json($this->grammar_edit_array)) );
+        }
     }
 
     public function get_glosses(string $src_lang, string $lang_edit, string $lang_show, string $from, string $to) {
+        if ($this->config->item('url_variant'))
+            $lang_edit .= '_' . $this->config->item('url_variant');  // Append variant to language abbreviation
+
         switch ($src_lang) {
           case 'heb':
           case 'aram':
@@ -354,18 +442,44 @@ class Mod_translate extends CI_Model {
                 throw new DataException($this->lang->line('illegal_lang_code'));
         }
 
+        if ($this->config->item('url_variant'))
+            $table2 = $table . '_' . $this->config->item('url_variant');  // Append variant to language abbreviation
+        else
+            $table2 = $table;
+
         foreach ($post as $key => $value) {
+            $deleted = false; // Has variant version been deleted?
+ 
             if (substr($key,0,6)==='modif-' && $value=="true") {
                 $key2 = substr($key,6);
+                $text = trim($this->security->xss_clean($post[$key2]));
 
                 $update = array('lex_id' => $key2, 'gloss' => $post[$key2]);
         
-                if ($this->db->from($table)->where('lex_id',$key2)->count_all_results() == 0)
-                    // A record does not exist, insert one.
-                    $this->db->insert($table, $update);
-                else {
-                    // Update existing record
-                    $this->db->where('lex_id',$key2)->update($table, $update);
+                if ($this->config->item('url_variant')) {
+                    $query = $this->db->select('gloss')    // Get global version of gloss
+                        ->where('lex_id',$key2)
+                        ->get($table);
+
+                    $row = $query->row();
+                    if (empty($text) || ($row && $row->gloss==$text)) {
+                        // Variant is empty or equal to global, delete variant
+                        $this->db
+                            ->where('lex_id',$key2)
+                            ->delete($table2);
+                        $deleted = true;
+                    }
+                }
+
+                if (!$deleted) {
+                    if ($this->db->from($table2)->where('lex_id',$key2)->count_all_results() == 0) {
+                        // A record does not exist, insert one.
+                        $this->db->insert($table2, $update);
+                    }
+                    else {
+                        // Update existing record
+                        $this->db->where('lex_id',$key2)->update($table2, $update);
+                    }
                 }
             }
         }
@@ -389,6 +503,9 @@ class Mod_translate extends CI_Model {
 
 
     public function get_frequent_glosses(string $src_lang, string $lang_edit, string $lang_show, int $gloss_start, int $gloss_count) {
+        if ($this->config->item('url_variant'))
+            $lang_edit .= '_' . $this->config->item('url_variant');  // Append variant to language abbreviation
+
         switch ($src_lang) {
           case 'heb':
           case 'aram':
@@ -451,7 +568,7 @@ class Mod_translate extends CI_Model {
         return $query->row()->c;
     }
 
-    // $lang may be 'comment'
+    // $lang may be 'comment', or it may contain '_<variant>'
     public function if_db2php(string $lang, string $dest) {
         $this->load->helper('file');
         @mkdir("$dest/$lang"); // Fails if directory exists, but that's OK
@@ -501,7 +618,8 @@ class Mod_translate extends CI_Model {
         }
     }
 
-    // $src is the source directory where the php files are found
+    // $src is the source directory where the php files are found.
+    // $short_langname may contain '_<variant>'.
     public function if_php2db(string $short_langname, string $src) {
         $this->load->helper('directory');
         $this->load->dbforge();
@@ -614,38 +732,43 @@ class Mod_translate extends CI_Model {
         }
     }
         
-    public function gram_db2prop(string $dest) {
+    public function gram_db2prop(string $dest, string $variant=null) {
         $this->load->helper('file');
-        $query = $this->db->get('db_localize');
+
+        $query = $this->db->get($variant ? "db_localize_{$variant}" : 'db_localize');
 
         foreach ($query->result() as $row) {
-            if (!write_file("$dest/$row->db.$row->lang.prop.pretty.json",
-                            json_encode(json_decode($row->json), JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)))
-                die("Cannot write to file \"$dest/$row->db.$row->lang.prop.pretty.json\"\n");
+            $fulllang = $variant ? "{$row->lang}_{$variant}" : $row->lang;
+            if (!write_file("{$dest}/{$row->db}.{$fulllang}.prop.pretty.json",
+                            json_encode(json_decode($row->json), JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE) . "\n"))
+                die("Cannot write to file \"{$dest}/{$row->db}.{$fulllang}.prop.pretty.json\"\n");
         }
     }
     
-    public function gram_prop2db() {
+    public function gram_prop2db(string $src, string $variant=null) {
         $this->load->helper('directory');
-        $d = directory_map('db/property_files', 1); // A value of 2 allows us to recognize empty directories
+        $d = directory_map($src, 1);
+
+        $varstring = $variant ? "_{$variant}" : '';
+        $table = $variant ? "db_localize_{$variant}" : 'db_localize';
 
         foreach ($d as $file) {
-            if (preg_match('/(.*)\.(.*)\.prop.pretty.json$/', $file, $matches)) {
+            if (preg_match('/(.*)\.([^_]*)' . $varstring . '\.prop.pretty.json$/', $file, $matches)) {
                 list($filename,$db,$lang) = $matches;
                 echo "Handling file $filename - ";
-                $input = file_get_contents("db/property_files/$filename");
+                $input = file_get_contents("$src/$filename");
                 $props = json_decode($input);
                 if (is_null($props))
                     die("Error in JSON input\n");
 
 
-                $query = $this->db->where('db',$db)->where('lang',$lang)->get('db_localize');
+                $query = $this->db->where('db',$db)->where('lang',$lang)->get($table);
 
                 if ($query->num_rows() == 0) {
                     // A record does not exist, insert one.
-                    $this->db->insert('db_localize',array('db' => $db,
-                                                          'lang' => $lang,
-                                                          'json' => json_encode($props)));
+                    $this->db->insert($table,array('db' => $db,
+                                                   'lang' => $lang,
+                                                   'json' => json_encode($props)));
                     echo "inserted +++++\n";
                 }
                 else {
@@ -654,7 +777,7 @@ class Mod_translate extends CI_Model {
                         
                     $row = $query->row();
                     if ($row->json != $encoded_json) {
-                        $this->db->where('id',$row->id)->update('db_localize',array('json' => $encoded_json));
+                        $this->db->where('id',$row->id)->update($table,array('json' => $encoded_json));
                         echo "updated +++++\n";
                     }
                     else

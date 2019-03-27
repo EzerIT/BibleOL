@@ -106,7 +106,7 @@ class MY_Lang extends CI_Lang {
     private function create_site_lang_table(string $idiom) {
         $CI =& get_instance();
 
-        if (!empty($CI->config->item('url_variant'))) {
+        if ($CI->config->item('url_variant')) {
             // Not master site
             
             $site_lang_table = 'language_' . $idiom . '_' . $CI->config->item('url_variant');
@@ -162,12 +162,16 @@ class MY_Lang extends CI_Lang {
 
         $lang = array();
 
-        // Read master site table
-        $this->load_from_db_specific($langfile, $idiom, false, $lang);
 
-        // Read organizational site table
-        $this->load_from_db_specific($langfile, $idiom, true, $lang);
+        if ($langfile!=='db') {
+            // We cannot use a language database to handle database errors. Infinte recursion would occur.
+            
+            // Read master site table
+            $this->load_from_db_specific($langfile, $idiom, false, $lang);
 
+            // Read organizational site table
+            $this->load_from_db_specific($langfile, $idiom, true, $lang);
+        }
 
         if (empty($lang))
             // Load from file instead of database

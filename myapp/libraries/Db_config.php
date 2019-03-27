@@ -165,7 +165,7 @@ class Db_config {
     private function create_site_grammar_table() {
         $CI =& get_instance();
 
-        if (!empty($CI->config->item('url_variant'))) {
+        if ($CI->config->item('url_variant')) {
             // Not master site
 
             $site_grammar_table = 'db_localize_' . $CI->config->item('url_variant');
@@ -241,12 +241,13 @@ class Db_config {
                 $fsetting->$langname = clone $fsetting->gloss;
                 $fsetting->$langname->sql_command = str_replace('LANG',$abb,$fsetting->gloss->sql_command);
 
-                if (empty($CI->config->item('url_variant')) || !isset($fsetting->gloss->sql_command_variant))
-                    $fsetting->$langname->sql_command_variant = null;
-                else
+                if ($CI->config->item('url_variant') && $fsetting->gloss->sql_command_variant)
                     $fsetting->$langname->sql_command_variant = str_replace(array('LANG','VARIANT'),
                                                                             array($abb,$CI->config->item('url_variant')),
                                                                             $fsetting->gloss->sql_command_variant);
+                else
+                    $fsetting->$langname->sql_command_variant = null;
+
                 $fsetting->$langname->isGloss = true;  // Extra feature
             }
             unset($fsetting->gloss);
