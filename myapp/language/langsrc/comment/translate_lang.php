@@ -20,6 +20,14 @@ $comment['download_lex_desc'] = "HTML";
 $format['download_lex_desc'] = "";
 $use_textarea['download_lex_desc'] = true;
 
+$comment['download_lex_main'] = "";
+$format['download_lex_main'] = "";
+$use_textarea['download_lex_main'] = false;
+
+$comment['download_lex_site'] = "";
+$format['download_lex_site'] = "";
+$use_textarea['download_lex_site'] = false;
+
 $comment['each_page_shows'] = "";
 $format['each_page_shows'] = "";
 $use_textarea['each_page_shows'] = false;
@@ -27,6 +35,14 @@ $use_textarea['each_page_shows'] = false;
 $comment['first_occurrence'] = "";
 $format['first_occurrence'] = "";
 $use_textarea['first_occurrence'] = false;
+
+$comment['for_main_site'] = "";
+$format['for_main_site'] = "";
+$use_textarea['for_main_site'] = false;
+
+$comment['for_site'] = "";
+$format['for_site'] = "";
+$use_textarea['for_site'] = false;
 
 $comment['illegal_source_language'] = "";
 $format['illegal_source_language'] = "";

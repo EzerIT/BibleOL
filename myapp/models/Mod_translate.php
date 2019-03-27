@@ -850,7 +850,7 @@ class Mod_translate extends CI_Model {
         }
     }
     
-    public function download_lex(string $src_lang, string $dst_lang) {
+    public function download_lex(string $src_lang, string $dst_lang, string $variant=null) {
         $src_language="";
         $header_array=array();
         $this->lex_common($src_lang, $src_language, $header_array);
@@ -889,12 +889,21 @@ class Mod_translate extends CI_Model {
                 foreach ($stems as $st)
                     assert(in_array($st,$stem_sort_order),"Missing stem $st");
 
-                $query = $this->db->select('lex,tally,vs,CONCAT(vocalized_lexeme_utf8," ",roman) lexeme,gloss')
-                    ->from("lexicon_{$src_language} c")
-                    ->join("lexicon_{$src_language}_{$dst_lang}", 'lex_id=c.id','left')
-                    ->order_by('sortorder,lex,vs')
-                    ->get();
-
+                if ($variant) {
+                    $query = $this->db->select('lex,tally,vs,CONCAT(vocalized_lexeme_utf8," ",roman) lexeme,gloss')
+                        ->from("lexicon_{$src_language} c")
+                        ->join("lexicon_{$src_language}_{$dst_lang}_{$variant}", 'lex_id=c.id')
+                        ->order_by('sortorder,lex,vs')
+                        ->get();
+                }
+                else {
+                    $query = $this->db->select('lex,tally,vs,CONCAT(vocalized_lexeme_utf8," ",roman) lexeme,gloss')
+                        ->from("lexicon_{$src_language} c")
+                        ->join("lexicon_{$src_language}_{$dst_lang}", 'lex_id=c.id','left')
+                        ->order_by('sortorder,lex,vs')
+                        ->get();
+                }
+                
                 $res = array();
                 foreach ($query->result() as $row) {
                     if (!isset($res[$row->lex]))
@@ -925,11 +934,20 @@ class Mod_translate extends CI_Model {
                     $result .= '"' . $h[1] . '",';
                 $result[strlen($result)-1] = "\n"; // Replace final , with \n
 
-                $query = $this->db->select('tally,lemma,strongs,strongs_unreliable,gloss')
-                    ->from("lexicon_{$src_language} c")
-                    ->join("lexicon_{$src_language}_{$dst_lang}", 'lex_id=c.id','left')
-                    ->order_by('sortorder,strongs,strongs_unreliable')
-                    ->get();
+                if ($variant) {
+                    $query = $this->db->select('tally,lemma,strongs,strongs_unreliable,gloss')
+                        ->from("lexicon_{$src_language} c")
+                        ->join("lexicon_{$src_language}_{$dst_lang}_{$variant}", 'lex_id=c.id')
+                        ->order_by('sortorder,strongs,strongs_unreliable')
+                        ->get();
+                }
+                else {
+                    $query = $this->db->select('tally,lemma,strongs,strongs_unreliable,gloss')
+                        ->from("lexicon_{$src_language} c")
+                        ->join("lexicon_{$src_language}_{$dst_lang}", 'lex_id=c.id','left')
+                        ->order_by('sortorder,strongs,strongs_unreliable')
+                        ->get();
+                }
 
                 foreach ($query->result() as $row) {
                     $result .=

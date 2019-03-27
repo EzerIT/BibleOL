@@ -447,14 +447,15 @@ class Ctrl_translate extends MY_Controller {
     function download_lex()
     {
         if (is_cli()) {
-            if ($_SERVER['argc']!=5)
-                die("Usage: php index.php translate download_lex <source language> <target language>\n");
+            if ($_SERVER['argc']!=5 && $_SERVER['argc']!=6)
+                die("Usage: php index.php translate download_lex <source language> <target language> [<variant>]\n");
 
             $src_lang = strtolower($_SERVER['argv'][3]);
             $dst_lang = strtolower($_SERVER['argv'][4]);
+            $variant = isset($_SERVER['argv'][5]) ? $_SERVER['argv'][5] : null;
 
             try {
-                $result = $this->mod_translate->download_lex($src_lang, $dst_lang);
+                $result = $this->mod_translate->download_lex($src_lang, $dst_lang, $variant);
             }
             catch (DataException $e) {
                 die($e->getMessage() . "\n");
@@ -466,20 +467,24 @@ class Ctrl_translate extends MY_Controller {
             try {
                 $this->mod_users->check_translator();
             
-                if ($this->uri->total_segments()!=4) {
+                if ($this->uri->total_segments()!=4 && $this->uri->total_segments()!=5) {
                     throw new DataException($this->lang->line('malformed_url'));
                 }
 
                 $src_lang = strtolower($this->uri->segment(3));
                 $dst_lang = strtolower($this->uri->segment(4));
+                $variant = strtolower($this->uri->segment(5)); // Will be "" if segment(5) does not exist
 
-                $result = $this->mod_translate->download_lex($src_lang, $dst_lang);
+                $result = $this->mod_translate->download_lex($src_lang, $dst_lang, $variant);
 
 
                 // Output download headers:
                 header("Content-Type: text/csv");
                 header("Content-Length: " . strlen($result));
-                header("Content-Disposition: attachment; filename=\"{$src_lang}_{$dst_lang}.csv\"");
+                if ($variant)
+                    header("Content-Disposition: attachment; filename=\"{$src_lang}_{$dst_lang}_{$variant}.csv\"");
+                else
+                    header("Content-Disposition: attachment; filename=\"{$src_lang}_{$dst_lang}.csv\"");
 
                 echo $result;
             }
