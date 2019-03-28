@@ -501,11 +501,12 @@ class Ctrl_translate extends MY_Controller {
             die;
         }
 
-		if ($_SERVER['argc']!=6)
-			die("Usage: php index.php translate import_lex <source language> <target language> <CSV file>\n");
+		if ($_SERVER['argc']!=6 && $_SERVER['argc']!=7)
+			die("Usage: php index.php translate import_lex <source language> <target language> <CSV file> [<variant>]\n");
 
         try {
-            $this->mod_translate->import_lex($_SERVER['argv'][3],$_SERVER['argv'][4],$_SERVER['argv'][5]);
+            $variant = isset($_SERVER['argv'][6]) ? $_SERVER['argv'][6] : null;
+            $this->mod_translate->import_lex($_SERVER['argv'][3],$_SERVER['argv'][4],$_SERVER['argv'][5],$variant);
         }
         catch (DataException $e) {
             die($e->getMessage() . "\n");

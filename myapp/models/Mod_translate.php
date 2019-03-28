@@ -964,7 +964,7 @@ class Mod_translate extends CI_Model {
         return $result;
     }
 
-    public function import_lex(string $src_lang, string $dst_lang, string $csv_file) {
+    public function import_lex(string $src_lang, string $dst_lang, string $csv_file, string $variant=null) {
         $this->load->helper('create_lexicon_helper');
 
         $src_language="";
@@ -983,7 +983,7 @@ class Mod_translate extends CI_Model {
         for ($i=0; $i<count($record); ++$i)
             assert($record[$i]==$header_array[$i][1],"Illegal field '$record[$i]' in header");
 
-        create_lexicon_table($src_language, $dst_lang);
+        create_lexicon_table($src_language, $dst_lang, $variant);
         
         $toinsert = array();
 
@@ -1037,6 +1037,8 @@ class Mod_translate extends CI_Model {
         }
 
         if (!empty($toinsert))
-            $this->db->insert_batch("lexicon_{$src_language}_{$dst_lang}", $toinsert);
+            $this->db->insert_batch($variant ? "lexicon_{$src_language}_{$dst_lang}_{$variant}"
+                                             : "lexicon_{$src_language}_{$dst_lang}",
+                                    $toinsert);
     } 
   }
