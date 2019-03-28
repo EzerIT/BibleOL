@@ -533,6 +533,26 @@ label {
 .btn {
   font-size: 17px;
 }
+.googlelogin {
+  border: 0px solid #4285f4;
+  background: #4285f4;
+  margin: 0;
+  color: white;
+  display: inline-block;
+  font-family: "Roboto", serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.googlelogin span {
+  padding: 0 8px;
+}
+.googlelogin:hover {
+  text-decoration: none;
+  color: white;
+}
 .ui-accordion-header {
   font-weight: normal !important;
 }
