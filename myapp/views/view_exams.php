@@ -5,7 +5,7 @@
 	padding: 8px;
 	border: 1px solid white;
 	background-color: #337ab7;
-	color: white;	
+	color: white;
 	border-radius: 0px 0px 8px 8px;
 	border-style: none none solid;
 }
@@ -82,10 +82,10 @@
 								echo '<div id="wrap">';
 									echo '<div class="'.str_replace(".3et", "", basename($d[0])).' collapse">';
 										showContents($d);
-									echo '</div>';			
+									echo '</div>';
 								echo '</div>';
 							echo '</td>';
-						echo '</tr>';	
+						echo '</tr>';
 					} elseif($key != 0 && !is_array($d)) {
 						$ex_name = str_replace(".3et","",basename($d));
 						echo '<tr>';
@@ -95,34 +95,34 @@
 							$pth_arg = "'".str_replace("/var/www/BibleOL/quizzes/","",$d)."'";
 							$hi = "'hi'";
 							echo '<td><span id="add_btn_id" class="add_btn" onclick="addExercise('.$nm_arg.','.$pth_arg.')">Add</span></td>';
-						echo '</tr>';	
+						echo '</tr>';
 					}
 				}
 			echo '</table>';
-		
-   }    
+
+   }
 
 	showContents($dir_files);
 	?>
-	
+
 	<!-- Displays the exercises that have been selected for exam creation -->
 	<ul id="selected_exercises">
 		<li>Selected exercises:</li>
-	</ul>	
-	
+	</ul>
+
   </table>
-  
+
   <div>
     <a class="btn btn-primary" href="#" onclick="create_exam()"><?= $this->lang->line('create_exam_button') ?></a>
   </div>
-  
-	<p id="btn_test"></p> 
-	
-	 
+
+	<p id="btn_test"></p>
+
+
 	<!------------------------------------
 	- Make exam dialog
 	-------------------------------------->
-			
+
 	<div id="mkexam-dialog" class="modal fade">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
@@ -132,11 +132,6 @@
         </div>
         <div class="modal-body">
           <form id="mkexam-form" action="<?= site_url('exams/create_exam') ?>" method="post">
-          
-          	<div class="alert alert-danger" id="mkexam-error" role="alert" aria-hidden="true">
-            	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            	<span id="mkexam-error-text"></span>
-          	</div>
 
             <div class="form-group">
               <label for="mkexam-name">Exam name</label>
@@ -155,9 +150,9 @@
       </div>
     </div>
   </div>
-  
+
 <script>
-   /** Stores exercises that have been selected for exam creation */ 
+   /** Stores exercises that have been selected for exam creation */
 	var exercise_list;
 
 	/**
@@ -173,20 +168,20 @@
 		ul.appendChild(li);
 		exercise_list = exercise_list + "," + pth;
 	}
-	
+
 	function create_exam() {
-		var txt;		
-		
+		var txt;
+
 		if (!exercise_list.length) {
 			alert("You must select at least one exercise to create an exam");
 			return;
 		}
-		
+
 		txt = JSON.stringify(exercise_list);
 		document.getElementById("ex_list").value = txt;
 		$('#mkexam-dialog').modal('show');
 	}
-	
+
 	$(function() {
         $('#mkexam-dialog-ok').click(function() {
             exam_name = $('#mkexam-name').val().trim();
@@ -270,7 +265,7 @@
   <!-- Dialogs for this page follow -->
 
   <?php //*********************************************************************
-        // Make Directory dialog 
+        // Make Directory dialog
         //*********************************************************************
     ?>
   <div id="mkdir-dialog" class="modal fade">
@@ -331,7 +326,7 @@
 
 
   <?php //*********************************************************************
-        // Rename dialog 
+        // Rename dialog
         //*********************************************************************
     ?>
   <div id="rename-dialog" class="modal fade">
@@ -394,7 +389,7 @@
 
 
   <?php //*********************************************************************
-        // Create Quiz dialog 
+        // Create Quiz dialog
         //*********************************************************************
     ?>
   <div id="newquiz-dialog" class="modal fade">
@@ -446,7 +441,7 @@
 
 
   <?php //*********************************************************************
-        // Copy/Move Warning dialog 
+        // Copy/Move Warning dialog
         //*********************************************************************
     ?>
   <div id="copy-dialog-warning" class="modal fade">
@@ -587,7 +582,7 @@
                 $('#chown-error-text').text('<?= $this->lang->line('no_user_selected') ?>');
                 $('#chown-error').show();
                 return false;
-            }    
+            }
             $('input[name="newowner"]').val(userid);
             $('#copy-delete-form').submit();
         });

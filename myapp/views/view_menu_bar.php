@@ -14,7 +14,7 @@ $this->lang->load('menu', $this->language);
 
 $ix = 0;
 $head[] = make_anchor1('', 'home');
- 
+
 if (!$this->mod_users->is_logged_in_noaccept()) {
     // The user has not logged in, or has logged in and accepted policy
     $ix = count($head);
@@ -22,7 +22,7 @@ if (!$this->mod_users->is_logged_in_noaccept()) {
     $content[$ix][] = make_anchor2('text/select_text', 'display_text');
     $content[$ix][] = make_anchor2('text/select_quiz', 'exercises');
 }
- 
+
 if ($this->mod_users->is_logged_in()) {
     // Logged in
     $ix = count($head);
@@ -40,7 +40,7 @@ if ($this->mod_users->is_logged_in()) {
         $this->load->helper('lj_menu_helper');
         lj_menu_add($head, $content);
     }
-    
+
     if ($this->mod_users->is_teacher() || $this->mod_users->is_translator()) {
         // Teacher or translator
         $ix = count($head);
@@ -50,6 +50,7 @@ if ($this->mod_users->is_logged_in()) {
             $content[$ix][] = make_anchor2('users', 'users');
             $content[$ix][] = make_anchor2('classes', 'classes');
             $content[$ix][] = make_anchor2('file_manager', 'manage_exercises');
+            $content[$ix][] = make_anchor2('exams', 'manage_exams');
         }
         if ($this->mod_users->is_translator()) {
             $content[$ix][] = make_anchor2('translate/translate_if', 'translate_interface');
@@ -60,7 +61,7 @@ if ($this->mod_users->is_logged_in()) {
         if ($this->mod_users->is_admin())
             $content[$ix][] = make_anchor2('urls', 'manage_gloss_links');
     }
- 
+
     $ix = count($head);
     $head[] = $this->lang->line('user_access');
     $content[$ix][] = make_anchor2('login', 'logout');
@@ -74,16 +75,16 @@ elseif ($this->mod_users->is_logged_in_noaccept()) {
     $content[$ix][] = make_anchor2('privacy', 'privacy_policy');
 }
 else {
-    // Not logged in 
- 
+    // Not logged in
+
     $ix = count($head);
     $head[] = $this->lang->line('user_access');
     $content[$ix][] = make_anchor2('login', 'login');
     $content[$ix][] = make_anchor2('privacy', 'privacy_policy');
 }
- 
+
 $cols = $ix+1;
- 
+
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light pt-0 pb-0 mb-3">
   <div class="divnavbar">
@@ -100,18 +101,18 @@ $cols = $ix+1;
           <?php else: ?>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle pt-3 pb-3 pl-3 pr-3" href="#" id="navbarDropdown<?= $c ?>" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $head[$c] ?></a>
-         
+
               <div class="dropdown-menu" aria-labelledby="navbarDropdown<?= $c ?>">
-         
+
                 <?php for ($r=0; $r<count($content[$c]); ++$r): ?>
                   <?= $content[$c][$r] ?>
                 <?php endfor; ?>
-         
+
               </div>
             </li>
           <?php endif; ?>
         <?php endfor; ?>
-         
+
         <?php if ($langselect): ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle pt-3 pb-3 pl-3 pr-3" href="#" id="navbarDropdownLang" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?= site_url('images/icon20x24px-exported-transparent.png') ?>" alt=""> <?= $this->lang->line('language') ?></a>
