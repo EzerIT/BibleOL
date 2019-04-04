@@ -109,7 +109,7 @@ class Ctrl_statistics extends MY_Controller {
 
 
             $myclassids = $this->mod_userclass->get_classes_for_user($userid);
-            $myclasses = $this->mod_classes->get_classes_by_ids($myclassids);
+            $myclasses = $this->mod_classes->get_classes_by_ids($myclassids,$this->config->item('url_variant'));
 
             
             // $classid==0 means ignore class information
@@ -319,8 +319,8 @@ class Ctrl_statistics extends MY_Controller {
 
 //            $this->db->set_dbprefix('bol_');
             
-            $classes = $this->mod_classes->get_named_classes_owned(false);
-//            $classes = $this->mod_classes->get_named_classes_owned(!false);
+            $classes = $this->mod_classes->get_named_classes_owned(false,$this->config->item('url_variant'));
+//            $classes = $this->mod_classes->get_named_classes_owned(!false,$this->config->item('url_variant'));
             
             $this->load->view('view_top1', array('title' => $this->lang->line('teacher_graphs_title')));
             $this->load->view('view_top2');
@@ -356,7 +356,8 @@ class Ctrl_statistics extends MY_Controller {
             $this->form_validation->set_data($_GET);
 
             $classid = (int)$this->input->get('classid');
-            $class = $this->mod_classes->get_class_by_id($classid);
+            $class = $this->mod_classes->get_class_by_id($classid,$this->config->item('url_variant'));
+            
 //			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
 			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
 				throw new DataException($this->lang->line('illegal_class_id'));
@@ -485,7 +486,7 @@ class Ctrl_statistics extends MY_Controller {
             $this->form_validation->set_data($_GET);
 
             $classid = (int)$this->input->get('classid');
-            $class = $this->mod_classes->get_class_by_id($classid);
+            $class = $this->mod_classes->get_class_by_id($classid,$this->config->item('url_variant'));
 //			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
 			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
 				throw new DataException($this->lang->line('illegal_class_id'));

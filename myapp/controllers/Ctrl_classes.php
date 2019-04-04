@@ -26,7 +26,7 @@ class Ctrl_classes extends MY_Controller {
             else
                 $teachers = array();
 
-            $allclasses = $this->mod_classes->get_all_classes();
+            $allclasses = $this->mod_classes->get_all_classes($this->config->item('url_variant'));
             usort($allclasses, 'classname_cmp');
 
             // VIEW:
@@ -42,8 +42,14 @@ class Ctrl_classes extends MY_Controller {
                                                    'myid' => $this->mod_users->my_id(),
                                                    'isadmin' => $this->mod_users->is_admin()),
                                              true);
+            if ($this->config->item('url_variant'))
+                $left_text = '<p>' . $this->lang->line('configure_your_classes') . '<p>'
+                    . '<p><strong>' . $this->lang->line('classes_on_main') . '</strong></p>';
+            else
+                $left_text = $this->lang->line('configure_your_classes');
+
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('class_list'),
-                                                      'left' => $this->lang->line('configure_your_classes'),
+                                                      'left' => $left_text,
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }
@@ -84,12 +90,12 @@ class Ctrl_classes extends MY_Controller {
             if ($classid<=0)
                 throw new DataException($this->lang->line('illegal_class_id'));
 
-            $class_info = $this->mod_classes->get_class_by_id($classid);
+            $class_info = $this->mod_classes->get_class_by_id($classid,$this->config->item('url_variant'));
 
             if ($class_info->ownerid!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
                 throw new DataException($this->lang->line('not_class_owner'));
 
-            $this->mod_classes->delete_class($classid);
+            $this->mod_classes->delete_class($classid,$this->config->item('url_variant'));
             redirect('/classes');
         }
         catch (DataException $e) {
@@ -135,7 +141,7 @@ class Ctrl_classes extends MY_Controller {
             if ($classid==0)
                 throw new DataException($this->lang->line('illegal_class_id'));
 
-            $class_info = $this->mod_classes->get_class_by_id($classid);
+            $class_info = $this->mod_classes->get_class_by_id($classid,$this->config->item('url_variant'));
 
             if ($class_info->ownerid!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
                 throw new DataException($this->lang->line('not_class_owner'));
@@ -164,7 +170,7 @@ class Ctrl_classes extends MY_Controller {
                 $class_info->password = $this->input->post('password');
                 $class_info->enrol_before = $this->input->post('enrol_before');
 
-                $query = $this->mod_classes->set_class($class_info);
+                $query = $this->mod_classes->set_class($class_info,$this->config->item('url_variant'));
 
                 redirect('/classes');
             }

@@ -35,7 +35,7 @@ class Ctrl_userclass extends MY_Controller {
             if ($classid<=0)
                 throw new DataException($this->lang->line('illegal_class_id'));
 
-            $class_info = $this->mod_classes->get_class_by_id($classid);
+            $class_info = $this->mod_classes->get_class_by_id($classid,$this->config->item('url_variant'));
 
             if ($class_info->ownerid!=$this->mod_users->my_id() && !$this->mod_users->is_admin())
                 throw new DataException($this->lang->line('not_class_owner'));
@@ -108,8 +108,8 @@ class Ctrl_userclass extends MY_Controller {
 
             $user_info = $this->mod_users->get_user_by_id($userid);
 
-            $all_classes = $this->mod_classes->get_all_classes();
-            $owned_classes = $this->mod_classes->get_classes_owned();
+            $all_classes = $this->mod_classes->get_all_classes($this->config->item('url_variant'));
+            $owned_classes = $this->mod_classes->get_classes_owned($this->config->item('url_variant'));
             $old_classes = $this->mod_userclass->get_classes_for_user($userid);
             usort($all_classes, 'classname_cmp');
 
@@ -171,7 +171,7 @@ class Ctrl_userclass extends MY_Controller {
 
             $userid = $this->mod_users->my_id();
 
-            $all_classes = $this->mod_classes->get_all_classes();
+            $all_classes = $this->mod_classes->get_all_classes($this->config->item('url_variant'));
             $old_classes = $this->mod_userclass->get_classes_and_access_for_user($userid);
             $avail_classes = array();
 
@@ -218,7 +218,7 @@ class Ctrl_userclass extends MY_Controller {
             if (in_array(0,$classids_for_dir))
                 throw new DataException($this->lang->line('folder_not_enroll'));
             
-            $all_classes = $this->mod_classes->get_all_classes();
+            $all_classes = $this->mod_classes->get_all_classes($this->config->item('url_variant'));
             $old_classes = $this->mod_userclass->get_classes_for_user($userid);
 
             $avail_classes = array();
@@ -277,7 +277,7 @@ class Ctrl_userclass extends MY_Controller {
             $userid = $this->mod_users->my_id();
             $classid = isset($_GET['classid']) ? (int)$_GET['classid'] : 0;
 
-            $all_classes = $this->mod_classes->get_all_classes();
+            $all_classes = $this->mod_classes->get_all_classes($this->config->item('url_variant'));
             $old_classes = $this->mod_userclass->get_classes_for_user($userid);
             $avail_classes = array();
 

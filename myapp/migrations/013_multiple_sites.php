@@ -24,6 +24,10 @@ class Migration_Multiple_sites extends CI_Migration {
         $this->dbforge->add_key('site');
         $this->dbforge->add_key('language');
         $this->dbforge->create_table("sitetext");
+
+        $this->dbforge->add_column('class', array('site' => array('type'=>'VARCHAR(25)',
+                                                                  'null' => true,
+                                                                  'default' => null)));
     }
     
 	public function down()

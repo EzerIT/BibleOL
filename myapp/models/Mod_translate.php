@@ -87,13 +87,14 @@ class Mod_translate extends CI_Model {
     }
 
     public function get_if_lines_part(string $lang_edit, string $lang_show, string $textgroup, int $limit, int $offset, string $orderby, string $sortorder) {
-        if ($this->config->item('url_variant'))
-            $lang_edit .= '_' . $this->config->item('url_variant');  // Append variant to language abbreviation
+        $lang_edit_table = MY_Lang::create_site_lang_table($lang_edit);
+        if (!$lang_edit_table)
+            $lang_edit_table = "language_{$lang_edit}";
 
         $query = $this->db->select("c.symbolic_name, comment, c.use_textarea, s.text text_show, e.text text_edit")
             ->from('language_comment c')
             ->join("language_$lang_show s", "s.symbolic_name=c.symbolic_name AND s.textgroup=c.textgroup",'left')
-            ->join("language_$lang_edit e", "e.symbolic_name=c.symbolic_name AND e.textgroup=c.textgroup",'left')
+            ->join("$lang_edit_table e", "e.symbolic_name=c.symbolic_name AND e.textgroup=c.textgroup",'left')
             ->where('c.textgroup',$textgroup)
             ->order_by($orderby,$sortorder)->limit($limit,$offset)->get();
         return $query->result();

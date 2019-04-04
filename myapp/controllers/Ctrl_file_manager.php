@@ -263,7 +263,7 @@ class Ctrl_file_manager extends MY_Controller {
 
             $this->load->model('mod_classes');
             $this->load->model('mod_classdir');
-            $all_classes = $this->mod_classes->get_all_classes();
+            $all_classes = $this->mod_classes->get_all_classes($this->config->item('url_variant'));
             $old_classes = $this->mod_classdir->get_classes_for_dir($this->mod_quizpath->get_relative());
 
             $this->load->helper('form');

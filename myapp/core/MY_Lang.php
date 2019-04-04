@@ -103,7 +103,7 @@ class MY_Lang extends CI_Lang {
 	}
 
     // Returns site-specific language table, or null for master site
-    private function create_site_lang_table(string $idiom) {
+    public static function create_site_lang_table(string $idiom) {
         $CI =& get_instance();
 
         if ($CI->config->item('url_variant')) {
@@ -132,7 +132,7 @@ class MY_Lang extends CI_Lang {
         $CI =& get_instance();
 
         if ($org_site) {
-            $site_lang_table = $this->create_site_lang_table($idiom); // Make sure table exists
+            $site_lang_table = self::create_site_lang_table($idiom); // Make sure table exists
             if (empty($site_lang_table))
                 return; // We are running on master site
 

@@ -9,7 +9,7 @@
   </tr>
   <?php foreach ($allclasses as $cl): ?>
     <tr>
-      <td class="leftalign"><?= $cl->classname ?></td>
+      <td class="leftalign"><?= $cl->classname ?><?= $this->config->item('url_variant') && !$cl->site ? '*' : '' ?></td>
       <td class="leftalign">
         <?php if ($myid==$cl->ownerid || $isadmin): ?>
           <?= empty($cl->clpass) ? '-' : $cl->clpass ?>
@@ -22,14 +22,16 @@
       <td class="leftalign">
         <?php if ($myid==$cl->ownerid || $isadmin): ?>
           <a class="badge badge-primary" href="<?= site_url("userclass/users_in_class?classid=$cl->clid") ?>"><?= str_replace(' ', '&nbsp;', $this->lang->line('assign_users')) ?></a>
-          <a class="badge badge-primary" href="<?= site_url("classes/edit_one_class?classid=$cl->clid") ?>"><?= $this->lang->line('class_edit') ?></a>
-          <a class="badge badge-danger" onclick="genericConfirmSm('<?= $this->lang->line('delete_class') ?>',
-                                       '<?= sprintf($this->lang->line('delete_class_confirm'), "\'$cl->classname\'") ?>',
-                                       '<?= site_url("classes/delete_class?classid=$cl->clid") ?>');
-                        return false;"
-               href="#"><?= $this->lang->line('class_delete') ?></a>
+          <?php if ($this->config->item('url_variant')===$cl->site): ?>
+            <a class="badge badge-primary" href="<?= site_url("classes/edit_one_class?classid=$cl->clid") ?>"><?= $this->lang->line('class_edit') ?></a>
+            <a class="badge badge-danger" onclick="genericConfirmSm('<?= $this->lang->line('delete_class') ?>',
+                                         '<?= sprintf($this->lang->line('delete_class_confirm'), "\'$cl->classname\'") ?>',
+                                         '<?= site_url("classes/delete_class?classid=$cl->clid") ?>');
+                          return false;"
+                 href="#"><?= $this->lang->line('class_delete') ?></a>
+          <?php endif; ?>
         <?php endif; ?>
-        <?php if ($isadmin): ?>
+        <?php if ($isadmin && $this->config->item('url_variant')===$cl->site): ?>
           <a class="badge badge-primary" onclick="changeOwnerClass(<?= $cl->clid ?>); return false;" href="#"><?= $this->lang->line('change_owner_class') ?></a>
         <?php endif; ?>
       </td>
