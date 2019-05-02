@@ -79,14 +79,15 @@ class Dictionary {
                                           true);
             }
 
-            if (isset($fset->sql_command))
+            if (isset($fset->sql_command_variant))
+                $query = $this->indir_db_handle[$fset->indirdb]->query(vsprintf($fset->sql_command_variant,$key_array));
+            elseif (isset($fset->sql_command))
                 $query = $this->indir_db_handle[$fset->indirdb]->query(vsprintf($fset->sql_command,$key_array));
             else 
                 $query = $this->indir_db_handle[$fset->indirdb]
                     ->select($fset->sql[0])
                     ->where(vsprintf($fset->sql[2],$key_array), NULL, false)
                     ->get($fset->sql[1]);
-
 
             if ($fset->multiple) {
                 // We may get more than one answer from the database

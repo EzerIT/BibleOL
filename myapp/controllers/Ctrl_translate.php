@@ -66,7 +66,10 @@ class Ctrl_translate extends MY_Controller {
             $alllines = $this->mod_translate->get_if_lines_part($lang_edit,$lang_show,$textgroup,$lines_per_page,$offset*$lines_per_page,$orderby,$sortorder);
 
 
-            $untranslated = $this->mod_translate->get_if_untranslated($lang_edit);
+            if (!empty($_SESSION['variant']))
+                $untranslated = array(); // Variants do not keep track of untranslated items
+            else
+                $untranslated = $this->mod_translate->get_if_untranslated($lang_edit);
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_user_interface')));
@@ -154,7 +157,10 @@ class Ctrl_translate extends MY_Controller {
 
             $alllines = $this->mod_translate->get_grammar_lines_part($lang_edit,$lang_show,$grammargroup);
 
-            $untranslated = $this->mod_translate->get_grammar_untranslated($lang_edit);
+            if (!empty($_SESSION['variant']))
+                $untranslated = array(); // Variants do not keep track of untranslated items
+            else
+                $untranslated = $this->mod_translate->get_grammar_untranslated($lang_edit);
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_grammar_terms')));
@@ -360,7 +366,7 @@ class Ctrl_translate extends MY_Controller {
         }
 
 		if ($_SERVER['argc']!=5)
-			die("Usage: php index.php translate if_db2php <language code> <destination directory>\n");
+			die("Usage: php index.php translate if_db2php <language code>[_<variant>] <destination directory>\n");
 
         $this->mod_translate->if_db2php($_SERVER['argv'][3],$_SERVER['argv'][4]);
     }
@@ -372,7 +378,7 @@ class Ctrl_translate extends MY_Controller {
         }
 
 		if ($_SERVER['argc']!=5)
-			die("Usage: php index.php translate if_php2db <language code> <source directory>\n");
+			die("Usage: php index.php translate if_php2db <language code>[_variant] <source directory>\n");
 
         if ($_SERVER['argv'][3] == 'comment')
             $this->mod_translate->if_phpcomment2db($_SERVER['argv'][4]);
@@ -386,10 +392,10 @@ class Ctrl_translate extends MY_Controller {
             die;
         }
 
-		if ($_SERVER['argc']!=4)
-			die("Usage: php index.php translate gram_db2prop <destination directory>\n");
+		if ($_SERVER['argc']!=4 && $_SERVER['argc']!=5)
+			die("Usage: php index.php translate gram_db2prop <destination directory> [<variant>]\n");
 
-        $this->mod_translate->gram_db2prop($_SERVER['argv'][3]);
+        $this->mod_translate->gram_db2prop($_SERVER['argv'][3], isset($_SERVER['argv'][4]) ? $_SERVER['argv'][4] : null);
     }
 
     function gram_prop2db() {
@@ -398,13 +404,17 @@ class Ctrl_translate extends MY_Controller {
             die;
         }
 
-        $this->mod_translate->gram_prop2db();
+		if ($_SERVER['argc']!=4 && $_SERVER['argc']!=5)
+			die("Usage: php index.php translate gram_prop2db <source directory> [<variant>]\n");
+
+        $this->mod_translate->gram_prop2db($_SERVER['argv'][3], isset($_SERVER['argv'][4]) ? $_SERVER['argv'][4] : null);
     }
 
     function select_download_lex()
     {
         try {
             $this->mod_users->check_translator();
+            $this->load->helper('create_lexicon_helper');
 
             $lexicon_lang_list = $this->mod_translate->get_all_lexicon_langs();
 
@@ -413,7 +423,16 @@ class Ctrl_translate extends MY_Controller {
                 foreach ($targets as $dst_lang => $dst_lang_name) {
                     $all_lex[] = array('from_name' => $this->lang->line('lang_'.$src_lang),
                                        'to_name'   => $dst_lang_name,
+                                       'variant'   => null,
                                        'url'       => site_url("/translate/download_lex/$src_lang/$dst_lang"));
+
+                    foreach ($this->config->item('variants') as $variant) {
+                        if (!$this->mod_translate->empty_lex(Language::$src_lang_abbrev[$src_lang], $dst_lang, $variant))
+                            $all_lex[] = array('from_name' => $this->lang->line('lang_'.$src_lang),
+                                               'to_name'   => $dst_lang_name,
+                                               'variant'   => $variant,
+                                               'url'       => site_url("/translate/download_lex/$src_lang/$dst_lang/$variant"));
+                    }
                 }
             }
             
@@ -438,14 +457,15 @@ class Ctrl_translate extends MY_Controller {
     function download_lex()
     {
         if (is_cli()) {
-            if ($_SERVER['argc']!=5)
-                die("Usage: php index.php translate download_lex <source language> <target language>\n");
+            if ($_SERVER['argc']!=5 && $_SERVER['argc']!=6)
+                die("Usage: php index.php translate download_lex <source language> <target language> [<variant>]\n");
 
             $src_lang = strtolower($_SERVER['argv'][3]);
             $dst_lang = strtolower($_SERVER['argv'][4]);
+            $variant = isset($_SERVER['argv'][5]) ? $_SERVER['argv'][5] : null;
 
             try {
-                $result = $this->mod_translate->download_lex($src_lang, $dst_lang);
+                $result = $this->mod_translate->download_lex($src_lang, $dst_lang, $variant);
             }
             catch (DataException $e) {
                 die($e->getMessage() . "\n");
@@ -457,20 +477,24 @@ class Ctrl_translate extends MY_Controller {
             try {
                 $this->mod_users->check_translator();
             
-                if ($this->uri->total_segments()!=4) {
+                if ($this->uri->total_segments()!=4 && $this->uri->total_segments()!=5) {
                     throw new DataException($this->lang->line('malformed_url'));
                 }
 
                 $src_lang = strtolower($this->uri->segment(3));
                 $dst_lang = strtolower($this->uri->segment(4));
+                $variant = strtolower($this->uri->segment(5)); // Will be "" if segment(5) does not exist
 
-                $result = $this->mod_translate->download_lex($src_lang, $dst_lang);
+                $result = $this->mod_translate->download_lex($src_lang, $dst_lang, $variant);
 
 
                 // Output download headers:
                 header("Content-Type: text/csv");
                 header("Content-Length: " . strlen($result));
-                header("Content-Disposition: attachment; filename=\"{$src_lang}_{$dst_lang}.csv\"");
+                if ($variant)
+                    header("Content-Disposition: attachment; filename=\"{$src_lang}_{$dst_lang}_{$variant}.csv\"");
+                else
+                    header("Content-Disposition: attachment; filename=\"{$src_lang}_{$dst_lang}.csv\"");
 
                 echo $result;
             }
@@ -487,11 +511,12 @@ class Ctrl_translate extends MY_Controller {
             die;
         }
 
-		if ($_SERVER['argc']!=6)
-			die("Usage: php index.php translate import_lex <source language> <target language> <CSV file>\n");
+		if ($_SERVER['argc']!=6 && $_SERVER['argc']!=7)
+			die("Usage: php index.php translate import_lex <source language> <target language> <CSV file> [<variant>]\n");
 
         try {
-            $this->mod_translate->import_lex($_SERVER['argv'][3],$_SERVER['argv'][4],$_SERVER['argv'][5]);
+            $variant = isset($_SERVER['argv'][6]) ? $_SERVER['argv'][6] : null;
+            $this->mod_translate->import_lex($_SERVER['argv'][3],$_SERVER['argv'][4],$_SERVER['argv'][5],$variant);
         }
         catch (DataException $e) {
             die($e->getMessage() . "\n");

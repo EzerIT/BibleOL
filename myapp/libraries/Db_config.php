@@ -160,6 +160,31 @@ class Db_config {
         return true;
     }
 
+
+    // Returns variant grammar table, or null for main table
+    private function create_variant_grammar_table() {
+        $CI =& get_instance();
+
+        if (!empty($_SESSION['variant'])) {
+            $variant_grammar_table = 'db_localize_' . $_SESSION['variant'];
+            // Create database for variant if it does not exist
+            if (!$CI->db->table_exists($variant_grammar_table)) {
+                $CI->load->dbforge();
+                $CI->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
+                                              'db' => array('type'=>'TINYTEXT'),
+                                              'lang' => array('type'=>'TINYTEXT'),
+                                              'json' => array('type'=>'MEDIUMTEXT')
+                                            ));
+                $CI->dbforge->add_key('id', TRUE);
+                $CI->dbforge->create_table($variant_grammar_table);
+            }
+            return $variant_grammar_table;
+        }
+        else 
+            return null;
+    }
+
+
     /// Initializes this object with information about a single Emdros database.
     /// @param $dbf A database_file object describing the select Emdros database.
     /// @param $language The selected localization language.
@@ -175,6 +200,18 @@ class Db_config {
         $this->l10n_json = $query->row()->json;
         $this->addgloss_l10n_json($language);
 
+        // Add translations for current variant
+        $variant_grammar_table = $this->create_variant_grammar_table();
+        if ($variant_grammar_table) {
+            $query = $CI->db->select('json')->where('db',$dbf->propertiesName)->where('lang',$language)->get($variant_grammar_table);
+            if ($query->num_rows()!=0) {
+                // Replace the relevant localizations with variant values
+                $l1 = json_decode($this->l10n_json, true);
+                $l2 = json_decode($query->row()->json, true);
+                $this->l10n_json = json_encode(array_replace_recursive($l1, $l2));
+            }
+        }
+
         $this->typeinfo_json = $this->read_or_throw($dbf->typeinfo);
         $this->addgloss_typeinfo_json();
         $this->typeinfo = new TypeInfo($this->typeinfo_json);
@@ -187,11 +224,28 @@ class Db_config {
     private function addgloss_dbinfo() {
         $fsetting = $this->dbinfo->objectSettings->{$this->dbinfo->objHasSurface}->featuresetting;
         if (isset($fsetting->gloss)) {
+            $CI =& get_instance();
+            $CI->load->helper('create_lexicon_helper');
+
             // Replace 'gloss' with 'english', 'german, etc.
             foreach ($this->glosslang->to as $abb) {
+                if (!empty($_SESSION['variant'])) {
+                    // Create variant lexicons, unless they already exist
+                    foreach ($this->glosslang->from as $src_abb)
+                        create_lexicon_table(Language::$src_lang_abbrev[$src_abb], $abb, $_SESSION['variant'], true);
+                }
+            
                 $langname = Language::$dst_lang_abbrev[$abb];
                 $fsetting->$langname = clone $fsetting->gloss;
                 $fsetting->$langname->sql_command = str_replace('LANG',$abb,$fsetting->gloss->sql_command);
+
+                if (!empty($_SESSION['variant']) && $fsetting->gloss->sql_command_variant)
+                    $fsetting->$langname->sql_command_variant = str_replace(array('LANG','VARIANT'),
+                                                                            array($abb,$_SESSION['variant']),
+                                                                            $fsetting->gloss->sql_command_variant);
+                else
+                    $fsetting->$langname->sql_command_variant = null;
+
                 $fsetting->$langname->isGloss = true;  // Extra feature
             }
             unset($fsetting->gloss);
@@ -218,6 +272,7 @@ class Db_config {
         $this->dbinfo_json = json_encode($this->dbinfo);
     }
 
+    // Extends the typeinfo variable with information for various gloss languages
     private function addgloss_typeinfo_json() {
         $typinf = json_decode($this->typeinfo_json);
         
@@ -229,6 +284,7 @@ class Db_config {
         $this->typeinfo_json = json_encode($typinf);
     }
 
+    // Extends the l10n variable with words for various gloss languages
     private function addgloss_l10n_json(string $language) {
         $CI =& get_instance();
         $CI->lang->load('users', $language);

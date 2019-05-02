@@ -180,11 +180,13 @@ class Mod_users extends CI_Model {
 
         if (!empty($this->me->preflang) && $this->me->preflang!='none')
             $this->session->set_userdata('language', $this->me->preflang);
+
+        if (!empty($this->me->prefvariant) && $this->me->prefvariant!='none')
+            $_SESSION['variant'] = $this->me->prefvariant;
     }
 
     public function clear_login_session() {
         $this->session->unset_userdata('ol_user');
-        //$this->session->unset_userdata('language');
         $this->me = make_dummy_user();
     }
 
