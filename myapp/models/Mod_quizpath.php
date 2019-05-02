@@ -11,6 +11,8 @@ class Mod_quizpath extends CI_Model {
     private $check_access;
     private $users_classes;
 
+    private $foreign_sites;
+    
     public function __construct() {
         parent::__construct();
         $this->lang->load('file_manager', $this->language);
@@ -49,6 +51,13 @@ class Mod_quizpath extends CI_Model {
             if (!$this->mod_classdir->may_access($this->canonical_relative, $this->users_classes))
                 throw new DataException(sprintf($this->lang->line('access_denied_to'), $path));
         }
+
+        $this->foreign_sites = array();
+        foreach ($this->config->item('all_sites') as $site) {
+            if ($site!=$this->site)
+                $this->foreign_sites[] = $site;
+        }
+            
     }
 
     public function file_exists() {
@@ -75,11 +84,31 @@ class Mod_quizpath extends CI_Model {
         $directories = array();
         $dir_is_empty = array();
 
+        $site_suffix = $this->site ? "__{$this->site}__" : null;
+        $foreign_suffixes = array();
+        foreach ($this->foreign_sites as $fs)
+            $foreign_suffixes[] = "__{$fs}__";
+            
         foreach ($d as $ix => $nam)
             if (is_array($nam)) {
                 $ix = rtrim($ix, '/');
-                $directories[] = $ix;
-                $dir_is_empty[$ix] = count($nam)===0;
+
+                // Skip all folders that belong to foreign sites
+                foreach ($foreign_suffixes as $fs)
+                    if (self::endswith($ix,$fs))
+                        continue 2;
+
+                if ($site_suffix && self::endswith($ix,$site_suffix)) {
+                    $dirname = substr($ix,0,strlen($site_suffix)-1);
+                    $directories[] = $dirname;
+                    $dir_is_variant[$dirname] = true;
+                }
+                else {
+                    $dirname = $ix;
+                    $directories[] = $dirname;
+                    $dir_is_variant[$dirname] = false;
+                }
+                $dir_is_empty[$dirname] = count($nam)===0;
             }
             else {
                 if (self::endswith_nocase($nam,'.3et')) {
@@ -288,6 +317,10 @@ class Mod_quizpath extends CI_Model {
             return $real_path . '/' . basename($path);
 
         throw new DataException(sprintf($this->lang->line('cannot_open_file'), $path));
+    }
+
+    private static function endswith(string $haystack, string $needle) {
+        return substr($haystack, -strlen($needle))===$needle;
     }
 
     private static function endswith_nocase(string $haystack, string $needle) {

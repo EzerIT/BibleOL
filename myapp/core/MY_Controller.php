@@ -15,6 +15,8 @@ class MY_Controller extends CI_Controller {
     public $language_short;
     public $language_short2;   // Used by lang attribute in <html lang="..."> element
 
+    public $site;
+
     public function __construct() {
         parent::__construct();
         if (!isset($_SERVER['REMOTE_ADDR']))
@@ -75,6 +77,8 @@ class MY_Controller extends CI_Controller {
         }
 
         $this->lang->load('common', $this->language);
+
+        $this->site = $this->config->item('url_variant');
     }
 
     protected function error_view(string $msg, string $title) {

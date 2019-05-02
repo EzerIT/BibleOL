@@ -11,23 +11,27 @@ class Migration_Multiple_sites extends CI_Migration {
     }
 
 	public function up() {
-        $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
-                                        'use' => array('type'=>'VARCHAR(25)'),
-                                        'site' => array('type'=>'VARCHAR(25)',
-                                                        'null' => true,
-                                                        'default' => null),
-                                        'language' => array('type'=>'VARCHAR(15)'),
-                                        'text' => array('type'=>'LONGTEXT'),
-                                      ));
-        $this->dbforge->add_key('id', TRUE);
-        $this->dbforge->add_key('use');
-        $this->dbforge->add_key('site');
-        $this->dbforge->add_key('language');
-        $this->dbforge->create_table("sitetext");
+		$this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
+										'use' => array('type'=>'VARCHAR(25)'),
+										'site' => array('type'=>'VARCHAR(25)',
+														'null' => true,
+														'default' => null),
+										'language' => array('type'=>'VARCHAR(15)'),
+										'text' => array('type'=>'LONGTEXT'),
+									  ));
+		$this->dbforge->add_key('id', TRUE);
+		$this->dbforge->add_key('use');
+		$this->dbforge->add_key('site');
+		$this->dbforge->add_key('language');
+		$this->dbforge->create_table("sitetext");
+ 
+		$this->dbforge->add_column('class', array('site' => array('type'=>'VARCHAR(25)',
+																  'null' => true,
+																  'default' => null)));
 
-        $this->dbforge->add_column('class', array('site' => array('type'=>'VARCHAR(25)',
-                                                                  'null' => true,
-                                                                  'default' => null)));
+        $this->dbforge->add_column('exercisedir', array('site' => array('type'=>'VARCHAR(25)',
+                                                                        'null' => true,
+                                                                        'default' => null)));
     }
     
 	public function down()
