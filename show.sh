@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Writes all information about the user with ID $3 to standard output. DB name is $3, DB prefix is $2
+# Writes all information about the user with ID $3 to standard output. DB name is $1, DB prefix is $2
 
 header() { printf "\n+++ %s:\n" "$*"; }
 
