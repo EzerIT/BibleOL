@@ -127,20 +127,20 @@ $cols = $ix+1;
             <a class="nav-link dropdown-toggle pt-3 pb-3 pl-3 pr-3" href="#" id="navbarDropdownLang" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?= site_url('images/icon20x24px-exported-transparent.png') ?>" alt=""> <?= $this->lang->line('language') ?></a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownLang">
               <?php foreach ($languages as $abb => $language): ?>
-                <a class="dropdown-item <?= $abb===$this->session->userdata('language') ? 'active' : '' ?>" href="<?= site_url("/lang?lang=$abb") ?>"><?= $language ?></a>
+                <a class="dropdown-item <?= $abb===$this->session->userdata('language') || (is_null($this->session->userdata('language')) && $abb=='en') ? 'active' : '' ?>" href="<?= site_url("/lang?lang=$abb") ?>"><?= $language ?></a>
               <?php endforeach; ?>
             </div>
           </li>
 
           <?php if (!empty($this->config->item('variants'))): ?>
             <li class="nav-item dropdown">
-               <a class="nav-link dropdown-toggle pt-3 pb-3 pl-3 pr-3" href="#" id="navbarDropdownVar" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $this->lang->line('variant') ?></a>  <!-- TODO: Localize -->
+               <a class="nav-link dropdown-toggle pt-3 pb-3 pl-3 pr-3" href="#" id="navbarDropdownVar" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $this->lang->line('variant') ?></a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownVar">
                  <a class="dropdown-item <?= empty($_SESSION['variant']) ? 'active' : '' ?>"
-                    href="<?= site_url("/lang/variant?variant=none") ?>"
-                 ><?= $this->lang->line('no_variant') ?></a>  <!-- TODO: Localize -->
+                    href="<?= site_url("/lang/variant?variant=main") ?>"
+                 ><?= $this->lang->line('main_variant') ?></a>
                 <?php foreach ($this->config->item('variants') as $var): ?>
-                 <a class="dropdown-item <?= $var===$_SESSION['variant'] ? 'active' : '' ?>"
+                 <a class="dropdown-item <?= !empty($_SESSION['variant']) && $var===$_SESSION['variant'] ? 'active' : '' ?>"
                     href="<?= site_url("/lang/variant?variant=$var") ?>"
                  ><?= $var ?></a>
                 <?php endforeach; ?>

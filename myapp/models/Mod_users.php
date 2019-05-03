@@ -43,6 +43,7 @@ function make_dummy_user() {
     $u->warning_sent = 0;
     $u->isteacher = 0;
     $u->preflang = '';
+    $u->prefvariant = '';
     $u->family_name_first = 0;
     $u->istranslator = 0;
     $u->accept_policy = 0;
@@ -181,8 +182,11 @@ class Mod_users extends CI_Model {
         if (!empty($this->me->preflang) && $this->me->preflang!='none')
             $this->session->set_userdata('language', $this->me->preflang);
 
+        // If user's preferred variant is 'main', set current variant to '' (Indicating main variant)
+        // If user's preferred variant is '<something>', set current variant to '<something>'
+        // If user's preferred variant is 'none', don't change current variant
         if (!empty($this->me->prefvariant) && $this->me->prefvariant!='none')
-            $_SESSION['variant'] = $this->me->prefvariant;
+            $_SESSION['variant'] = $this->me->prefvariant=='main' ? '' : $this->me->prefvariant;
     }
 
     public function clear_login_session() {
@@ -222,6 +226,7 @@ class Mod_users extends CI_Model {
             $user->last_login = time()-10; // Assume that the user has logged in at least once to prevent expiry.
                                            // The -10 is used when listing users to indicate that this is a fake value.
             $user->preflang = 'none';
+            $user->prefvariant = '';
         }
         else {
             $query = $this->db->where('id',$userid)->get('user');
@@ -339,6 +344,7 @@ class Mod_users extends CI_Model {
 			$this->me->created_time = time();
 			$this->me->last_login = time();
 			$this->me->preflang = $this->language_short;
+			$this->me->prefvariant = empty($_SESSION['variant']) ? 'none' :  $_SESSION['variant'];
 
             $query = $this->db->insert('user', $this->me);
       

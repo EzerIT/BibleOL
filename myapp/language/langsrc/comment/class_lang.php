@@ -50,7 +50,7 @@ $use_textarea['configure_your_classes'] = false;
 
 $comment['date_format_or_blank'] = "";
 $format['date_format_or_blank'] = "";
-$use_textarea['date_format_or_blank'] = false;
+$use_textarea['date_format_or_blank'] = true;
 
 $comment['date_invalid'] = "";
 $format['date_invalid'] = "";

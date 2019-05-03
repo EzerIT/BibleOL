@@ -67,6 +67,23 @@
               <option value="zh-trad" <?= set_select('preflang', 'zh-trad', $user_info->preflang=='zh-trad') ?>><?= $this->lang->line('trad_chinese') ?></option>
             </select>
           <td class="nolb"></td>
+          <?php if (!empty($this->config->item('variants'))): ?>
+            <tr>
+              <td><?= $this->lang->line('preferred_variant') ?></td>
+              <td class="norb">
+                <select name="prefvariant">
+                 <option value="none" <?= set_select('prefvariant', 'none', $user_info->prefvariant=='none') ?>><?= $this->lang->line('no_variant_option') ?></option>
+                 <option value="main" <?= set_select('prefvariant', 'main', $user_info->prefvariant=='main') ?>><?= $this->lang->line('main_variant') ?></option>
+   
+                 <?php foreach ($this->config->item('variants') as $var): ?>
+                   <option value="<?= $var ?>" <?= set_select('prefvariant', $var, $user_info->prefvariant==$var) ?>><?= $var ?></option>
+                 <?php endforeach; ?>
+   
+                </select>
+              </td>
+              <td class="nolb"></td>
+            </tr>
+          <?php endif; ?>
           </td>
       </table>
       <p style="height:2px">&nbsp;</p>

@@ -158,7 +158,7 @@ else
   <?php endforeach; ?>
 </select>
 <?php if (!empty($_SESSION['variant'])): ?>
-      <strong><?= sprintf('For variant %s' /*$this->lang->line('for_variant')*/,$_SESSION['variant']) ?></strong>  <!-- TODO localize -->
+      <strong><?= sprintf($this->lang->line('for_variant'),$_SESSION['variant']) ?></strong>
 <?php endif; ?>
 </p>
 
@@ -278,29 +278,28 @@ function make_trans_line_header($editing, $label, $field, $get_parms, $add_text)
   <tr>
     <?php
         if (!empty($_SESSION['variant'])) {
-            $main_variant = $this->lang->line('for_main_site');  // TODO localize
-            $site_variant = sprintf('For variant %s' /*$this->lang->line('for_variant')*/,$_SESSION['variant']);  // TODO localize
-
+            $for_non_variant = '<span class="text-nowrap">' . $this->lang->line('for_non_variant') . '</span>';
+            $for_variant = sprintf($this->lang->line('for_variant'),$_SESSION['variant']);
         }
         else {
-            $main_variant = '';
-            $site_variant = '';
+            $for_non_variant = '';
+            $for_variant = '';
         }
 
         switch ($editing) {
             case 'interface':
                 echo make_trans_line_header($editing, $this->lang->line('symbolic_name'), 'symbolic_name', $get_parms, '');
                 echo '<th>',$this->lang->line('comment'),'</th>';
-                echo "<th>$language_selector $main_variant</th>";
-                echo make_trans_line_header($editing, $long_target_lang, 'text_edit', $get_parms, $site_variant);
+                echo "<th>$language_selector $for_non_variant</th>";
+                echo make_trans_line_header($editing, $long_target_lang, 'text_edit', $get_parms, $for_variant);
                 echo '<th>',$this->lang->line('modified'),'</th>';
                 break;
 
             case 'grammar':
                 echo '<th>',$this->lang->line('symbolic_name'),'</th>';
                 echo '<th>',$this->lang->line('comment'),'</th>';
-                echo "<th>$language_selector $main_variant</th>";
-                echo "<th>$long_target_lang $site_variant</th>";
+                echo "<th>$language_selector $for_non_variant</th>";
+                echo "<th>$long_target_lang $for_variant</th>";
                 echo '<th>',$this->lang->line('modified'),'</th>';
                 break;
 
