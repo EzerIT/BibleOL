@@ -426,13 +426,14 @@ class Ctrl_translate extends MY_Controller {
                                        'variant'   => null,
                                        'url'       => site_url("/translate/download_lex/$src_lang/$dst_lang"));
 
-                    foreach ($this->config->item('variants') as $variant) {
-                        if (!$this->mod_translate->empty_lex(Language::$src_lang_abbrev[$src_lang], $dst_lang, $variant))
-                            $all_lex[] = array('from_name' => $this->lang->line('lang_'.$src_lang),
-                                               'to_name'   => $dst_lang_name,
-                                               'variant'   => $variant,
-                                               'url'       => site_url("/translate/download_lex/$src_lang/$dst_lang/$variant"));
-                    }
+                    if (!empty($this->config->item('variants')))
+                        foreach ($this->config->item('variants') as $variant) {
+                            if (!$this->mod_translate->empty_lex(Language::$src_lang_abbrev[$src_lang], $dst_lang, $variant))
+                                $all_lex[] = array('from_name' => $this->lang->line('lang_'.$src_lang),
+                                                   'to_name'   => $dst_lang_name,
+                                                   'variant'   => $variant,
+                                                   'url'       => site_url("/translate/download_lex/$src_lang/$dst_lang/$variant"));
+                        }
                 }
             }
             
