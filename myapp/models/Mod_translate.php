@@ -672,7 +672,8 @@ class Mod_translate extends CI_Model {
                                     'text' => $text);
             }
 
-            $this->db->insert_batch('language_'.$short_langname, $toinsert);
+            if (!empty($toinsert))
+                $this->db->insert_batch('language_'.$short_langname, $toinsert);
 
             if (!empty($toinsertcomment)) 
                 $this->db->insert_batch('language_comment', $toinsertcomment);

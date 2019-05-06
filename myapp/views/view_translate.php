@@ -309,8 +309,8 @@ function make_trans_line_header($editing, $label, $field, $get_parms, $add_text)
                     echo '<th>',$this->lang->line('strongs'),'</th>';
                     echo '<th>',$this->lang->line('lexeme'),'</th>';
                     echo '<th>',$this->lang->line('first_occurrence'),'</th>';
-                    echo "<th>$language_selector</th>";
-                    echo "<th>$long_target_lang</th>";
+                    echo "<th>$language_selector $for_non_variant</th>";
+                    echo "<th>$long_target_lang $for_variant</th>";
                     echo '<th>',$this->lang->line('modified'),'</th>';
                 }
                 else {
@@ -319,8 +319,8 @@ function make_trans_line_header($editing, $label, $field, $get_parms, $add_text)
                     echo '<th>',$this->lang->line('lexeme'),'</th>';
                     echo '<th>',$this->lang->line('stem'),'</th>';
                     echo '<th>',$this->lang->line('first_occurrence'),'</th>';
-                    echo "<th>$language_selector</th>";
-                    echo "<th>$long_target_lang</th>";
+                    echo "<th>$language_selector $for_non_variant</th>";
+                    echo "<th>$long_target_lang $for_variant</th>";
                     echo '<th>',$this->lang->line('modified'),'</th>';
                 }
                 break;
