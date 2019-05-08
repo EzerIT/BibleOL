@@ -1,5 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+$config['variants'] = array();
+
 $config['users_per_page'] = 30;
 $config['lines_per_page'] = 20;
 $config['pw_salt'] = 'xxxxxxx';
