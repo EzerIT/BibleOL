@@ -65,28 +65,43 @@ class Ctrl_exams extends MY_Controller {
 
 					 $exercise_lst = $_POST['exercise_list'];
 
+           $base_pth = '/var/www/BibleOL/';
+
+           $exam_loc = $base_pth.'exam/'.$create;
+
 					 // chmod 7-7 required
-                mkdir('/var/www/BibleOL/exam/'.$create);
+                mkdir($exam_loc);
 
 					 //echo '<span>alert('.$exercise_lst.')</span>';
 
 					 $ex_ar = explode(',', $exercise_lst);
 
-					 $base_pth = '/var/www/BibleOL/';
+
 					 $ex_pth = $base_pth . 'quizzes';
 
                 foreach ( $ex_ar as $key => $exrcs){
                 	 $exrcs = str_replace('"', '', $exrcs);
                 	 $org_pth = $ex_pth . "/" . $exrcs;
                 	 if(($exrcs) != 'undefined') {
-						 	 $new_pth = $base_pth . "exam/" . $create . "/" . basename($exrcs);
+						 	 $new_pth = $exam_loc . "/" . basename($exrcs);
 						 	 copy($org_pth, $new_pth);
 						 }
                 }
 
 					 $this -> create_config_file($create, $ex_ar);
 
-					 header("Location: /exams/edit_exam?exam=$create");  
+           $test_file = fopen("test.txt", "w") or die ("Can't open");
+           $user_id = intval($this->session->userdata('ol_user'));  // Sets $user_id to 0 if userdata('ol_user') is not set
+
+           $query = $this->db->where('id',$user_id)->get('user');
+   		     $q = $this->mod_users->check_teacher;
+
+           $txt = gettype($q);
+           #$txt = 1;
+           fwrite($test_file, $txt);
+           fclose($test_file);
+
+					 header("Location: /exams/edit_exam?exam=$create");
             }
 
         }
@@ -109,7 +124,8 @@ class Ctrl_exams extends MY_Controller {
 	 		$root = $dom->createElement('exam');
 	 		$dom->appendChild($root);
 	 		$examname_node = $dom->createElement('examname', $examname);
-	 		$root->appendChild($examname_node);
+
+      $root->appendChild($examname_node);
 
 
 	 		// Add exercise tags to XML file
