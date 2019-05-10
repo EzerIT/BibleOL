@@ -28,4 +28,23 @@ class Ctrl_lang extends MY_Controller {
 
         redirect($_SERVER['HTTP_REFERER']);
     }
+
+    
+    public function variant() {
+        $this->lang->load('translate', $this->language);
+
+        if (isset($_GET['variant'])) {
+            $newvariant = $_GET['variant'];
+
+            if (in_array($newvariant, $this->config->item('variants')))
+                $_SESSION['variant'] = $newvariant;
+            elseif ($newvariant=='main')
+                $_SESSION['variant'] = null;
+            else {
+                $this->error_view($this->lang->line('unknown_variant'), $this->lang->line('set_variant'));  // TODO: Localize
+                return;
+            }
+        }
+        redirect($_SERVER['HTTP_REFERER']);
+    }
   }

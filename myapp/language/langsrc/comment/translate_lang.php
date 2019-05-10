@@ -28,6 +28,14 @@ $comment['first_occurrence'] = "";
 $format['first_occurrence'] = "";
 $use_textarea['first_occurrence'] = false;
 
+$comment['for_non_variant'] = "";
+$format['for_non_variant'] = "";
+$use_textarea['for_non_variant'] = false;
+
+$comment['for_variant'] = "";
+$format['for_variant'] = "";
+$use_textarea['for_variant'] = false;
+
 $comment['illegal_source_language'] = "";
 $format['illegal_source_language'] = "";
 $use_textarea['illegal_source_language'] = false;
@@ -60,6 +68,10 @@ $comment['lexeme'] = "";
 $format['lexeme'] = "";
 $use_textarea['lexeme'] = false;
 
+$comment['lex_variant'] = "";
+$format['lex_variant'] = "";
+$use_textarea['lex_variant'] = false;
+
 $comment['malformed_url'] = "";
 $format['malformed_url'] = "";
 $use_textarea['malformed_url'] = false;
@@ -91,6 +103,10 @@ $use_textarea['select_gloss_translate_range'] = true;
 $comment['select_words_translate'] = "";
 $format['select_words_translate'] = "";
 $use_textarea['select_words_translate'] = false;
+
+$comment['set_variant'] = "";
+$format['set_variant'] = "";
+$use_textarea['set_variant'] = false;
 
 $comment['show_strings_without_translation'] = "";
 $format['show_strings_without_translation'] = "";
@@ -151,6 +167,10 @@ $use_textarea['translate_lex_desc'] = true;
 $comment['translate_user_interface'] = "Title";
 $format['translate_user_interface'] = "";
 $use_textarea['translate_user_interface'] = false;
+
+$comment['unknown_variant'] = "";
+$format['unknown_variant'] = "";
+$use_textarea['unknown_variant'] = false;
 
 $comment['untranslated_strings'] = "Title";
 $format['untranslated_strings'] = "";

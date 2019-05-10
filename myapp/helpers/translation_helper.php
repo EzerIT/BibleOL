@@ -24,8 +24,8 @@ class Language {
     // The key is the abbreviation of a source language
     // The value is the Bible OL internal symbol for that language
     public static $src_lang_abbrev = array(
-        'heb' => 'hebrew',
-        'aram' => 'aramaic',
+        'heb' => 'Hebrew',
+        'aram' => 'Aramaic',
         'greek' => 'greek',
     );
   }

@@ -113,20 +113,40 @@ $cols = $ix+1;
         <?php endfor; ?>
          
         <?php if ($langselect): ?>
+          <?php $languages = array('da'      => 'Dansk',
+                                   'en'      => 'English',
+                                   'de'      => 'Deutsch',
+                                   'fr'      => 'Français',
+                                   'nl'      => 'Nederlands',
+                                   'pt'      => 'Português',
+                                   'es'      => 'Español',
+                                   'zh-simp' => '中文（简体）',
+                                   'zh-trad' => '中文（繁體）',
+              ); ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle pt-3 pb-3 pl-3 pr-3" href="#" id="navbarDropdownLang" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?= site_url('images/icon20x24px-exported-transparent.png') ?>" alt=""> <?= $this->lang->line('language') ?></a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownLang">
-              <a class="dropdown-item" href="<?= site_url('/lang?lang=da') ?>">Dansk</a>
-              <a class="dropdown-item" href="<?= site_url('/lang?lang=en') ?>">English</a>
-              <a class="dropdown-item" href="<?= site_url('/lang?lang=de') ?>">Deutsch</a>
-              <a class="dropdown-item" href="<?= site_url('/lang?lang=fr') ?>">Français</a>
-              <a class="dropdown-item" href="<?= site_url('/lang?lang=nl') ?>">Nederlands</a>
-              <a class="dropdown-item" href="<?= site_url('/lang?lang=pt') ?>">Português</a>
-              <a class="dropdown-item" href="<?= site_url('/lang?lang=es') ?>">Español</a>
-              <a class="dropdown-item" href="<?= site_url('/lang?lang=zh-simp') ?>">中文（简体）</a>
-              <a class="dropdown-item" href="<?= site_url('/lang?lang=zh-trad') ?>">中文（繁體）</a>
+              <?php foreach ($languages as $abb => $language): ?>
+                <a class="dropdown-item <?= $abb===$this->session->userdata('language') || (is_null($this->session->userdata('language')) && $abb=='en') ? 'active' : '' ?>" href="<?= site_url("/lang?lang=$abb") ?>"><?= $language ?></a>
+              <?php endforeach; ?>
             </div>
           </li>
+
+          <?php if (!empty($this->config->item('variants'))): ?>
+            <li class="nav-item dropdown">
+               <a class="nav-link dropdown-toggle pt-3 pb-3 pl-3 pr-3" href="#" id="navbarDropdownVar" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $this->lang->line('variant') ?></a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownVar">
+                 <a class="dropdown-item <?= empty($_SESSION['variant']) ? 'active' : '' ?>"
+                    href="<?= site_url("/lang/variant?variant=main") ?>"
+                 ><?= $this->lang->line('main_variant') ?></a>
+                <?php foreach ($this->config->item('variants') as $var): ?>
+                 <a class="dropdown-item <?= !empty($_SESSION['variant']) && $var===$_SESSION['variant'] ? 'active' : '' ?>"
+                    href="<?= site_url("/lang/variant?variant=$var") ?>"
+                 ><?= $var ?></a>
+                <?php endforeach; ?>
+              </div>
+            </li>
+          <?php endif; ?>
         <?php endif; ?>
       </ul>
     </div>

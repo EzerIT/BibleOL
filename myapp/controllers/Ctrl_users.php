@@ -196,6 +196,7 @@ class Ctrl_users extends MY_Controller {
             $this->form_validation->set_rules('family_name_first', '', '');
             $this->form_validation->set_rules('email', $this->lang->line('email'), 'trim|required|valid_email|strip_tags');
             $this->form_validation->set_rules('preflang', '', '');
+            $this->form_validation->set_rules('prefvariant', '', '');
             
             if ($this->form_validation->run()) {
                 $user_info->first_name = $this->input->post('first_name');
@@ -210,6 +211,7 @@ class Ctrl_users extends MY_Controller {
                 $user_info->last_login = 0;  // This means never logged in. User must log in within 48 hours.
                 $user_info->warning_sent = 0;
                 $user_info->preflang = $this->input->post('preflang');
+                $user_info->prefvariant = $this->input->post('prefvariant');
                 $user_info->accept_policy = time();
                 $user_info->policy_lang =  $this->input->post('policy_lang');
 
@@ -252,7 +254,9 @@ class Ctrl_users extends MY_Controller {
                                                                         'isadmin' => false,
                                                                         'isteacher' => false,
                                                                         'istranslator' => false,
-                                                                        'curlang' => $this->language_short), true);
+                                                                        'curlang' => $this->language_short,
+                                                                        'curvariant' => empty($_SESSION['variant']) ? 'none' :  $_SESSION['variant']),
+                                                 true);
 
                 $this->load->view('view_main_page', array('left_title' => $this->lang->line('specify_user_information'),
                                                           'center' => $center_text));
@@ -302,6 +306,7 @@ class Ctrl_users extends MY_Controller {
                 $this->form_validation->set_rules('isteacher', '', '');
                 $this->form_validation->set_rules('istranslator', '', '');
                 $this->form_validation->set_rules('preflang', '', '');
+                $this->form_validation->set_rules('prefvariant', '', '');
 
                 if ($this->form_validation->run()) {
                     if ($this->mod_users->is_admin())
@@ -312,6 +317,7 @@ class Ctrl_users extends MY_Controller {
                         $user_info->istranslator = $this->input->post('istranslator')==='yes';
                     
                     $user_info->preflang = $this->input->post('preflang');
+                    $user_info->prefvariant = $this->input->post('prefvariant');
 
                     $query = $this->mod_users->set_user($user_info, null);
 
@@ -329,7 +335,8 @@ class Ctrl_users extends MY_Controller {
                                                                             'isadmin' => $this->mod_users->is_admin(),
                                                                             'isteacher' => $this->mod_users->is_teacher(),
                                                                             'istranslator' => $this->mod_users->is_translator(),
-                                                                            'curlang' => $user_info->preflang), true);
+                                                                            'curlang' => $user_info->preflang,
+                                                                            'curvariant' => $user_info->prefvariant), true);
 
                     $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_user_information'),
                                                               'center' => $center_text));
@@ -348,6 +355,7 @@ class Ctrl_users extends MY_Controller {
                 $this->form_validation->set_rules('istranslator', '', '');
                 $this->form_validation->set_rules('email', $this->lang->line('email'), 'trim|valid_email|strip_tags');
                 $this->form_validation->set_rules('preflang', '', '');
+                $this->form_validation->set_rules('prefvariant', '', '');
 
                 if ($userid>0) {
                     // Extra validation when editing an existing user
@@ -375,6 +383,7 @@ class Ctrl_users extends MY_Controller {
 
                     $user_info->email = $this->input->post('email');
                     $user_info->preflang = $this->input->post('preflang');
+                    $user_info->prefvariant = $this->input->post('prefvariant');
 
                     if ($userid<=0)
                         $user_info->username = $this->input->post('username');
@@ -415,7 +424,8 @@ class Ctrl_users extends MY_Controller {
                                                                             'isadmin' => $this->mod_users->is_admin(),
                                                                             'isteacher' => $this->mod_users->is_teacher(),
                                                                             'istranslator' => $this->mod_users->is_translator(),
-                                                                            'curlang' => $user_info->preflang), true);
+                                                                            'curlang' => $user_info->preflang,
+                                                                            'curvariant' => $user_info->prefvariant), true);
 
                     $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_user_information'),
                                                               'center' => $center_text));
@@ -447,6 +457,7 @@ class Ctrl_users extends MY_Controller {
                if ($this->form_validation->run()) {
                    $user_info->family_name_first = $this->input->post('family_name_first')==='yes';
                    $user_info->preflang = $this->input->post('preflang');
+                   $user_info->prefvariant = $this->input->post('prefvariant');
                    $query = $this->mod_users->set_user($user_info, $pw);
                    redirect('/');
                }
@@ -479,6 +490,7 @@ class Ctrl_users extends MY_Controller {
                $this->form_validation->set_rules('family_name_first', '', '');
                $this->form_validation->set_rules('email', $this->lang->line('email'), 'trim|valid_email|strip_tags');
                $this->form_validation->set_rules('preflang', '', '');
+               $this->form_validation->set_rules('prefvariant', '', '');
 
                $this->form_validation->set_rules('password1', $this->lang->line('new_password'),
                                                  'trim|matches[password2]|callback_password_length_check');
@@ -491,6 +503,7 @@ class Ctrl_users extends MY_Controller {
                    $user_info->family_name_first = $this->input->post('family_name_first')==='yes';
                    $user_info->email = $this->input->post('email');
                    $user_info->preflang = $this->input->post('preflang');
+                   $user_info->prefvariant = $this->input->post('prefvariant');
 
                    $pw = $this->input->post('password1');
 

@@ -204,6 +204,10 @@ $comment['no_language'] = "";
 $format['no_language'] = "";
 $use_textarea['no_language'] = false;
 
+$comment['no_variant_option'] = "";
+$format['no_variant_option'] = "";
+$use_textarea['no_variant_option'] = false;
+
 $comment['number_of_users'] = "";
 $format['number_of_users'] = "";
 $use_textarea['number_of_users'] = false;
@@ -227,6 +231,10 @@ $use_textarea['portuguese'] = false;
 $comment['preferred_language'] = "";
 $format['preferred_language'] = "";
 $use_textarea['preferred_language'] = false;
+
+$comment['preferred_variant'] = "";
+$format['preferred_variant'] = "";
+$use_textarea['preferred_variant'] = false;
 
 $comment['pw_min_length'] = "";
 $format['pw_min_length'] = "";

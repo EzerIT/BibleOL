@@ -48,6 +48,10 @@ $comment['language'] = "";
 $format['language'] = "";
 $use_textarea['language'] = false;
 
+$comment['main_variant'] = "";
+$format['main_variant'] = "";
+$use_textarea['main_variant'] = false;
+
 $comment['missing_folder_name'] = "";
 $format['missing_folder_name'] = "";
 $use_textarea['missing_folder_name'] = false;
@@ -111,6 +115,10 @@ $use_textarea['this_is_top_folder'] = false;
 $comment['time_format'] = "Format specification available at <a target=\"_blank\" href=\"http://php.net/manual/en/function.date.php\">http://php.net/manual/en/function.date.php</a>";
 $format['time_format'] = "";
 $use_textarea['time_format'] = false;
+
+$comment['variant'] = "";
+$format['variant'] = "";
+$use_textarea['variant'] = false;
 
 $comment['yes'] = "";
 $format['yes'] = "";

@@ -157,6 +157,9 @@ else
      <option value="<?= $lshort ?>" <?= $lshort==$short_target_lang ? 'selected="selected"' : '' ?>><?= $llong ?></option>
   <?php endforeach; ?>
 </select>
+<?php if (!empty($_SESSION['variant'])): ?>
+      <strong><?= sprintf($this->lang->line('for_variant'),$_SESSION['variant']) ?></strong>
+<?php endif; ?>
 </p>
 
 <?php
@@ -241,7 +244,7 @@ else
 <?php endif; ?>
 
 <?php
-  function make_trans_line_header($editing, $label, $field, $get_parms) {
+function make_trans_line_header($editing, $label, $field, $get_parms, $add_text) {
       if ($get_parms['orderby']===$field) {
           $link_sortorder = $get_parms['sortorder']=='desc' ? 'asc' : 'desc';
           $arrow = ' <span class="fas fa-caret-' . ($get_parms['sortorder']=='desc' ? 'down' : 'up') . '" aria-hidden="true">';
@@ -253,7 +256,8 @@ else
       $get_parms['offset'] = 0;
       $get_parms['sortorder'] = $link_sortorder;
       $get_parms['orderby'] = $field;
-      return '<th style="white-space:nowrap"><a href="' . build_url($editing,$get_parms) . '">' . $label . $arrow . "</a></th>\n";
+
+      return '<th style="white-space:nowrap"><a href="' . build_url($editing,$get_parms) . '">' . $label . $arrow . "</a> $add_text</th>\n";
     }
 
     $language_selector = "<select id=\"langshowsel\">\n";
@@ -273,50 +277,59 @@ else
 <table id="trans_table" class="type2 table table-striped">
   <tr>
     <?php
-        switch ($editing) {
-          case 'interface':
-          echo make_trans_line_header($editing, $this->lang->line('symbolic_name'), 'symbolic_name', $get_parms);
-              echo '<th>',$this->lang->line('comment'),'</th>';
-              echo "<th>$language_selector</th>";
-              echo make_trans_line_header($editing, $long_target_lang, 'text_edit', $get_parms);
-              echo '<th>',$this->lang->line('modified'),'</th>';
-              break;
-
-          case 'grammar':
-              echo '<th>',$this->lang->line('symbolic_name'),'</th>';
-              echo '<th>',$this->lang->line('comment'),'</th>';
-              echo "<th>$language_selector</th>";
-              echo "<th>$long_target_lang</th>";
-              echo '<th>',$this->lang->line('modified'),'</th>';
-              break;
-
-          case 'lexicon':
-              if ($get_parms['src_lang']=='greek') {
-                  echo '<th>',$this->lang->line('occurrences'),'</th>';
-                  echo '<th>',$this->lang->line('strongs'),'</th>';
-                  echo '<th>',$this->lang->line('lexeme'),'</th>';
-                  echo '<th>',$this->lang->line('first_occurrence'),'</th>';
-                  echo "<th>$language_selector</th>";
-                  echo "<th>$long_target_lang</th>";
-                  echo '<th>',$this->lang->line('modified'),'</th>';
-              }
-              else {
-                  echo '<th>',$this->lang->line('occurrences'),'</th>';
-                  echo '<th>',$this->lang->line('symbolic_lexeme'),'</th>';
-                  echo '<th>',$this->lang->line('lexeme'),'</th>';
-                  echo '<th>',$this->lang->line('stem'),'</th>';
-                  echo '<th>',$this->lang->line('first_occurrence'),'</th>';
-                  echo "<th>$language_selector</th>";
-                  echo "<th>$long_target_lang</th>";
-                  echo '<th>',$this->lang->line('modified'),'</th>';
-              }
-              break;
+        if (!empty($_SESSION['variant'])) {
+            $for_non_variant = '<span class="text-nowrap">' . $this->lang->line('for_non_variant') . '</span>';
+            $for_variant = sprintf($this->lang->line('for_variant'),$_SESSION['variant']);
         }
-    ?>
-  </tr>
+        else {
+            $for_non_variant = '';
+            $for_variant = '';
+        }
 
-  <?php $lastlex = ''; ?>
-  <?php foreach ($alllines as $line): ?>
+        switch ($editing) {
+            case 'interface':
+                echo make_trans_line_header($editing, $this->lang->line('symbolic_name'), 'symbolic_name', $get_parms, '');
+                echo '<th>',$this->lang->line('comment'),'</th>';
+                echo "<th>$language_selector $for_non_variant</th>";
+                echo make_trans_line_header($editing, $long_target_lang, 'text_edit', $get_parms, $for_variant);
+                echo '<th>',$this->lang->line('modified'),'</th>';
+                break;
+
+            case 'grammar':
+                echo '<th>',$this->lang->line('symbolic_name'),'</th>';
+                echo '<th>',$this->lang->line('comment'),'</th>';
+                echo "<th>$language_selector $for_non_variant</th>";
+                echo "<th>$long_target_lang $for_variant</th>";
+                echo '<th>',$this->lang->line('modified'),'</th>';
+                break;
+
+            case 'lexicon':
+                if ($get_parms['src_lang']=='greek') {
+                    echo '<th>',$this->lang->line('occurrences'),'</th>';
+                    echo '<th>',$this->lang->line('strongs'),'</th>';
+                    echo '<th>',$this->lang->line('lexeme'),'</th>';
+                    echo '<th>',$this->lang->line('first_occurrence'),'</th>';
+                    echo "<th>$language_selector $for_non_variant</th>";
+                    echo "<th>$long_target_lang $for_variant</th>";
+                    echo '<th>',$this->lang->line('modified'),'</th>';
+                }
+                else {
+                    echo '<th>',$this->lang->line('occurrences'),'</th>';
+                    echo '<th>',$this->lang->line('symbolic_lexeme'),'</th>';
+                    echo '<th>',$this->lang->line('lexeme'),'</th>';
+                    echo '<th>',$this->lang->line('stem'),'</th>';
+                    echo '<th>',$this->lang->line('first_occurrence'),'</th>';
+                    echo "<th>$language_selector $for_non_variant</th>";
+                    echo "<th>$long_target_lang $for_variant</th>";
+                    echo '<th>',$this->lang->line('modified'),'</th>';
+                }
+                break;
+        }
+        ?>
+    </tr>
+
+    <?php $lastlex = ''; ?>
+    <?php foreach ($alllines as $line): ?>
     <tr>
       <?php switch ($editing):
         case 'interface': ?>
