@@ -13,7 +13,7 @@ class Migration_Language_variants extends CI_Migration {
 	public function up() {
 		$this->dbforge->add_column('user', array('prefvariant' => array('type'=>'tinytext',
                                                                         'null' => true,
-                                                                        'default' => 'none')));
+                                                                        'default' => null)));
     }
     
 	public function down()
