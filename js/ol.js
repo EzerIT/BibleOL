@@ -1529,6 +1529,7 @@ var PanelQuestion = (function () {
                     return "continue";
                 var rf = requestFeatures[+rfi].name;
                 var usedropdown = requestFeatures[+rfi].usedropdown;
+                var limitTo = requestFeatures[+rfi].limitTo;
                 var correctAnswer = fvals[rf];
                 var featType = featuresHere[rf];
                 var featset = getFeatureSetting(oType, rf);
@@ -1640,14 +1641,17 @@ var PanelQuestion = (function () {
                         mc_select_2.append('<option value="NoValueGiven"></option>');
                         var correctAnswerFriendly = getFeatureValueFriendlyName(featType, correctAnswer, false, false);
                         var hasAddedOther = false;
-                        var correctIsOther = featset.otherValues && featset.otherValues.indexOf(correctAnswer) !== -1;
+                        var correctIsOther = featset.otherValues && featset.otherValues.indexOf(correctAnswer) !== -1 ||
+                            limitTo && limitTo.length > 0 && limitTo.indexOf(correctAnswer) === -1;
                         for (var valix in values) {
                             if (isNaN(+valix))
                                 continue;
                             var s = values[+valix];
                             if (featset.hideValues && featset.hideValues.indexOf(s) !== -1)
                                 continue;
-                            if (featset.otherValues && featset.otherValues.indexOf(s) !== -1) {
+                            console.log(s, limitTo && limitTo.length > 0 && limitTo.indexOf(s) === -1);
+                            if (featset.otherValues && featset.otherValues.indexOf(s) !== -1 ||
+                                limitTo && limitTo.length > 0 && limitTo.indexOf(s) === -1) {
                                 if (!hasAddedOther) {
                                     hasAddedOther = true;
                                     var item = new StringWithSort('#1000 ' + localize('other_value'), 'othervalue');

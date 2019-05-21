@@ -98,6 +98,8 @@ class XmlHandler {
                 $obj = new stdClass;
                 $obj->name = $content;
                 $obj->usedropdown = false;
+                $obj->limitTo = !empty($this->limitTo) ? explode(',',$this->limitTo) : null;
+                $this->limitTo = null;
                 $this->setthis[] = $obj;
                 break;
 

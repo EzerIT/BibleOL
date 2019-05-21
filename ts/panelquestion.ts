@@ -147,10 +147,11 @@ class PanelQuestion {
         // Generate table of question items
         
         // Cache a few variables for easy access
-        let dontShow        : boolean                                    = qd.quizFeatures.dontShow;
-        let showFeatures    : string[]                                   = qd.quizFeatures.showFeatures;
-        let requestFeatures : {name : string; usedropdown : boolean; }[] = qd.quizFeatures.requestFeatures;
-        let oType           : string                                     = qd.quizFeatures.objectType;
+        let dontShow        : boolean  = qd.quizFeatures.dontShow;
+        let showFeatures    : string[] = qd.quizFeatures.showFeatures;
+        let requestFeatures : {name : string; usedropdown : boolean; limitTo : string[];}[]
+                                       = qd.quizFeatures.requestFeatures;
+        let oType           : string   = qd.quizFeatures.objectType;
 
         
         // Save question text and location for statistics
@@ -265,12 +266,13 @@ class PanelQuestion {
             for (let rfi in requestFeatures) {
                 if (isNaN(+rfi)) continue; // Not numeric
 
-                let rf            : string  = requestFeatures[+rfi].name;         // Feature name
-                let usedropdown   : boolean = requestFeatures[+rfi].usedropdown;  // Use multiple choice?
-                let correctAnswer : string  = fvals[rf] as string;                // Feature value (i.e., the correct answer)
-                let featType      : string  = featuresHere[rf];                   // Feature type
+                let rf            : string   = requestFeatures[+rfi].name;         // Feature name
+                let usedropdown   : boolean  = requestFeatures[+rfi].usedropdown;  // Use multiple choice?
+                let limitTo       : string[] = requestFeatures[+rfi].limitTo;
+                let correctAnswer : string   = fvals[rf] as string;                // Feature value (i.e., the correct answer)
+                let featType      : string   = featuresHere[rf];                   // Feature type
                 let featset       : FeatureSetting = getFeatureSetting(oType,rf); // Feature configuration
-		let v             : JQuery  = null;                               // Component to hold the data entry field or a message
+		let v             : JQuery   = null;                               // Component to hold the data entry field or a message
 
                 if (correctAnswer==null)
                     alert('Unexpected correctAnswer==null in panelquestion.ts');
@@ -491,7 +493,8 @@ class PanelQuestion {
                         let hasAddedOther         : boolean =         // Have we added an 'Other value' to the list of values?
                                                     false;
                         let correctIsOther        : boolean =         // Is the correct answer one of the values that make up 'Other value'?
-                                                    featset.otherValues && featset.otherValues.indexOf(correctAnswer)!==-1;
+                                                    featset.otherValues && featset.otherValues.indexOf(correctAnswer)!==-1 ||
+                                                    limitTo && limitTo.length>0 && limitTo.indexOf(correctAnswer)===-1;
                         
                         // Loop though all possible values and add the appropriate localized name
                         // or "Other value" to the combo box
@@ -502,7 +505,9 @@ class PanelQuestion {
                             if (featset.hideValues && featset.hideValues.indexOf(s)!==-1)
                                 continue;  // Don't show the value s
 
-                            if (featset.otherValues && featset.otherValues.indexOf(s)!==-1) {
+                            console.log(s,limitTo && limitTo.length>0 && limitTo.indexOf(s)===-1);
+                            if (featset.otherValues && featset.otherValues.indexOf(s)!==-1 ||
+                                limitTo && limitTo.length>0 && limitTo.indexOf(s)===-1) {
                                 // The value s is one of the values that make up 'Other value'
                                 if (!hasAddedOther) {
                                     hasAddedOther = true;
