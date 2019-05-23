@@ -53,7 +53,30 @@
 
 <!-- Dialogs for this page follow -->
 
-  <?php //*********************************************************************
+ <?php //*********************************************************************
+        // Feature limitTo dialog 
+        //*********************************************************************
+    ?>
+<div id="feature-limit-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header justify-content-between">
+        <div><h4 class="modal-title"><?= $this->lang->line('limit_features') ?></h4></div>
+        <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
+      </div>
+      <div class="modal-body">
+        <span class="fas fa-question-circle" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
+        <span id="feature-limit-body"></span>
+      </div>
+      <div class="modal-footer">
+          <button type="button" id="feature-limit-dialog-save" class="btn btn-primary"><?= $this->lang->line('save_button') ?></button>
+          <button type="button" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('cancel_button') ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <?php //*********************************************************************
         // Quiz Filename dialog 
         //*********************************************************************
     ?>

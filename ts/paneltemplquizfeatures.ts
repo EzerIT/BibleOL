@@ -4,6 +4,12 @@
 // Code to handle the specification of display and request features when creating an exercise. This
 // code is used by the 'Features' tab of the exercise editor.
 
+// TODO limitTo with all set => limitTo empty
+
+// limitTo has an internal and an external representation.
+// Internal: Empty array means none selected, half empty array means specified selected, full array means all selected.
+// External: Empty array means all selected, half empty array means specified selected, full array is never used.
+
 
 //****************************************************************************************************
 // QuizFeatures interface
@@ -13,13 +19,14 @@
 interface QuizFeatures {
     showFeatures     : string[]; // Features to show to the user
     requestFeatures  : {         // Features to request from the user
-        name         : string;       // Name of feature
-        usedropdown  : boolean;      // Is a drop down list used for this feature?
+        name         : string;   // Name of feature
+        usedropdown  : boolean;  // Is a drop down list used for this feature?
+        limitTo      : string[]; // List of feature values to display to student. An empty array means "all values".
     } [];
     dontShowFeatures : string[]; // Features to hide from the user
     dontShowObjects  : {         // Object types to hide from the user
-        content      : string;       // Name of object type
-        show?        : string;       // Feature to show even though object is hidden
+        content      : string;   // Name of object type
+        show?        : string;   // Feature to show even though object is hidden
     } [];
 }
 
@@ -100,7 +107,8 @@ class ButtonsAndLabel {
     private ddCheck	 : JQuery; // The "Multiple choice" checkbox
     private showQere	 : JQuery; // The "Show qere" radio button
     private feat	 : JQuery; // The <span> element containing the feature name
-
+    private limitter	 : JQuery; // The <span> element containing the limitTo selector
+    
     //------------------------------------------------------------------------------------------
     // Constructor method
     //
@@ -112,6 +120,7 @@ class ButtonsAndLabel {
                 private featName          : string,          // The Emdros name of the feature
                 otype                     : string,          // The Emdros object type
                 select                    : ButtonSelection, // Initially selected radio button
+                private limitTo           : string[],        // List of feature values to display to student. An empty array means "all values".
                 private useDropDown       : boolean,         // Can multiple choice be used?
                 private canShow           : boolean,         // Can this be a display feature?
                 private canRequest        : boolean,         // Can this be a request feature?
@@ -125,7 +134,8 @@ class ButtonsAndLabel {
         this.dontShowFeat = canDisplayGrammar ? $(`<input type="radio" name="feat_${otype}_${featName}" value="dontshowfeat">`) : $('<span></span>');
         this.showQere     = canShowQere       ? $(`<input type="radio" name="feat_${otype}_${featName}" value="showqere">`)     : $('<span></span>');
 	this.feat         =                     $(`<span>${lab}</span>`);
-
+        this.limitter     =                     $('<span></span>');
+        
 	switch (select) {
         case ButtonSelection.SHOW:             this.showFeat.prop('checked',true);     break;
         case ButtonSelection.REQUEST:
@@ -157,6 +167,46 @@ class ButtonsAndLabel {
                     this.dontShowFeat.click(() => this.ddCheck.prop('disabled', true));
             }
         }
+
+        let valueType : string = typeinfo.obj2feat[otype][featName];
+
+        if (typeinfo.enumTypes.indexOf(valueType)!=-1) {
+            /*console.log(typeinfo.obj2feat[otype][featName],
+                        typeinfo.enumTypes.indexOf(typeinfo.obj2feat[otype][featName]),
+                        typeinfo.enum2values[typeinfo.obj2feat[otype][featName]]);*/
+
+            if (canRequest) {
+                let badgeclass = (limitTo && limitTo.length>0) ? 'badge-danger' : 'badge-success';
+                let badgetext =  (limitTo && limitTo.length>0) ? 'limited' : 'unlimited';
+                
+                let limitButton : JQuery = $(`<a href="#" style="color:white" class="badge ${badgeclass}">${localize(badgetext)}</a>`);
+
+                limitButton.click(() => {
+                    let ld : LimitDialog = new LimitDialog(valueType,getFeatureSetting(otype,featName),
+                                                           limitTo,
+                                                           (newLimitTo : string[]) => {
+                                                               limitTo = newLimitTo;
+                                                               console.log(limitTo);
+                                                           });
+                });
+
+
+                let removeit = () => this.limitter.empty();
+                
+                this.reqFeat.change( () => this.limitter.append(limitButton) );
+
+                if (select===ButtonSelection.REQUEST)
+                    this.reqFeat.change();  // Trigger the change event
+                
+                this.dcFeat.change(removeit);
+
+                if (canShow)
+                    this.showFeat.change(removeit);
+
+                if (canDisplayGrammar)
+                    this.dontShowFeat.change(removeit);
+            }
+        }
     }
 
     //------------------------------------------------------------------------------------------
@@ -174,6 +224,7 @@ class ButtonsAndLabel {
         cell = $('<td></td>')                  .append(this.dontShowFeat); row.append(cell);
         cell = $('<td></td>')                  .append(this.ddCheck);      row.append(cell);
         cell = $('<td class="leftalign"></td>').append(this.feat);         row.append(cell);
+        cell = $('<td></td>')                  .append(this.limitter);     row.append(cell);
 
         return row;
     }
@@ -213,12 +264,91 @@ class ButtonsAndLabel {
     //------------------------------------------------------------------------------------------
     // getFeatName method
     //
+    // Returns the current feature limitations
+    //
+    public getLimitTo() : string[] {
+        return this.limitTo;
+    }
+    
+    //------------------------------------------------------------------------------------------
+    // getFeatName method
+    //
     // Returns the name of the Emdros feature.
     //
     public getFeatName() : string {
         return this.featName;
     }
+
+
 }
+
+class LimitDialog {
+    constructor(valueType : string, featset : FeatureSetting,
+                selected : string[],
+                private callback : (newLimitTo : string[]) => void) {
+        
+ 	let enumValues : string[] = typeinfo.enum2values[valueType];
+	let checkBoxes : SortingCheckBox[] = [];
+
+        for (let i = 0; i<enumValues.length; ++i) {
+	    let s : string = enumValues[i];
+ 
+	    let hv : string[] = featset.hideValues;
+	    let ov : string[] = featset.otherValues;
+	    if ((hv && hv.indexOf(s)!==-1) || ((ov && ov.indexOf(s)!==-1)))
+		continue;
+ 
+	    let scb = new SortingCheckBox('limitTo', s, getFeatureValueFriendlyName(valueType, s, false, false));
+	    scb.setSelected(!selected || selected.length===0 || selected.indexOf(s)!==-1);
+	    checkBoxes.push(scb);
+	}
+ 
+	checkBoxes.sort((a : SortingCheckBox, b : SortingCheckBox) => StringWithSort.compare(a.getSws(),b.getSws()));
+ 
+	// Decide how many columns and rows to use for feature values
+	let columns : number =
+	    checkBoxes.length>12 ? 3 :
+	    checkBoxes.length>4 ? 2 : 1;
+ 
+	let rows : number = Math.ceil(checkBoxes.length / columns);
+ 
+	let table : JQuery = $('<table></table>');
+ 
+	// Create a table of size columns×rows
+	for (let r=0; r<rows; ++r) {
+	    let row : JQuery = $('<tr></tr>');
+	    for (let c=0; c<columns; ++c) {
+		let cell : JQuery = $('<td></td>');
+		if (c*rows + r < checkBoxes.length)
+		    cell.append(checkBoxes[c*rows + r].getJQuery());
+		row.append(cell);
+	    }
+	    table.append(row);
+	}
+
+
+        $('#feature-limit-body').empty().append(table);
+        $('#feature-limit-dialog-save').click( () => this.saveButtonAction() );
+        $('#feature-limit-dialog').modal('show');
+    }
+
+    private saveButtonAction() {
+        let limitTo : string[] = [];
+
+        $('input[type=checkbox][name=limitTo]:checked').each(
+            function() {
+                limitTo.push(<string>$(this).val());
+            }
+        );
+
+        $('#feature-limit-dialog-save').off('click');
+
+        this.callback(limitTo);
+        
+        $('#feature-limit-dialog').modal('hide');
+    }
+}
+
 
 
 //****************************************************************************************************
@@ -255,13 +385,15 @@ class PanelForOneOtype  {
                           + `<th>${localize('dont_show')}</th>`
                           + `<th>${localize('multiple_choice')}</th>`
                           + `<th class="leftalign">${localize('feature')}</th>`
+                          + '<th></th>'
                           + '</tr>');
 
         // Set up "visual" pseudo feature
         this.visualBAL = new ButtonsAndLabel(localize('visual'),                  // The localized name of the feature
                                              'visual',                            // The Emdros name of the feature
                                              otype,                               // The Emdros object type
-                                             useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, // Initially selected radio button
+                                             useSavedFeatures ? ptqf.getSelector('visual',null) : ButtonSelection.DONT_CARE, // Initially selected radio button
+                                             null,                                // LimitTo
                                              configuration.objHasSurface===otype && !!getFeatureSetting(otype,configuration.surfaceFeature).alternateshowrequestSql, // Can multiple choice be used?
                                              true,                                // Can this be a display feature?
                                              configuration.objHasSurface===otype, // Can this be a request feature?
@@ -301,17 +433,16 @@ class PanelForOneOtype  {
         // Loop through the relevant features and create radio buttons for each
         for (let ix=0; ix<keylist.length; ++ix) {
             let featName : string = keylist[ix]; // Feture name
-
             let bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName),                     // The localized name of the feature  
                                           featName,                                                    // The Emdros name of the feature     
                                           otype,                                                       // The Emdros object type             
-                                          useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, // Initially selected radio button    
+                                          useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, // Initially selected radio button
+                                          ptqf.getLimitTo(featName),                                   // List of feature values to display to student
                                           !!getFeatureSetting(otype,featName).alternateshowrequestSql, // Can multiple choice be used?       
                                           !getFeatureSetting(otype, featName).ignoreShow,              // Can this be a display feature?     
                                           !getFeatureSetting(otype, featName).ignoreRequest,           // Can this be a request feature?     
                                           sg!==null && sg.containsFeature(featName),                   // Can this be a "don't show" feature?
                                           false);                                                      // Include a "show qere" button?
-
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }
@@ -331,6 +462,7 @@ class PanelForOneOtype  {
                           + `<th>${localize('dont_show')}</th>`
                           + `<th>${Qere.database_has_qere() && !Qere.otype_has_qere(otype) ? localize('show_qere') : ''}</th>`
                           + `<th class="leftalign">${localize('other_sentence_unit_types')}</th>`
+                          + '<th></th>'
                           + '</tr>');
 
         // Generate buttons for other types:
@@ -343,7 +475,8 @@ class PanelForOneOtype  {
                 let bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), // The localized name of the object  
                                               'otherOtype_' + otherOtype,        // The pseudo name of the feature     
                                               otype,                             // The Emdros object type             
-                                              useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, // Initially selected radio button    
+                                              useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, // Initially selected radio button
+                                              null,                              // limitTo
                                               false,                             // Can multiple choice be used?       
 					      false,				 // Can this be a display feature?     
 					      false,				 // Can this be a request feature?     
@@ -469,6 +602,22 @@ class PanelTemplQuizFeatures {
 	return ButtonSelection.DONT_CARE;
     }
 
+    public getLimitTo(feat : string) : string[] {
+	if (!this.initialQf)
+	    return [];
+
+        for (let i=0; i<this.initialQf.requestFeatures.length; ++i) {
+            let rf : { name : string; usedropdown : boolean; limitTo : string[]; } = this.initialQf.requestFeatures[i];
+	    if (rf.name===feat) {
+                if (rf.limitTo && rf.limitTo.length>0)
+                    return rf.limitTo;
+                else
+                    return [];
+            }
+        }
+    }        
+    
+
     //------------------------------------------------------------------------------------------
     // getObjectSelector method
     //
@@ -554,7 +703,7 @@ class PanelTemplQuizFeatures {
 	if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.SHOW))
 	    qf.showFeatures.push('visual');
 	else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST))
-	    qf.requestFeatures.push({name : 'visual', usedropdown : this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN)});
+	    qf.requestFeatures.push({name : 'visual', usedropdown : this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN), limitTo : null});
 
         // Store informaiton about other features and about additional object types
         for (let i=0; i<this.visiblePanel.allBAL.length; ++i) {
@@ -563,7 +712,7 @@ class PanelTemplQuizFeatures {
 	    if (bal.isSelected(ButtonSelection.SHOW))
 		qf.showFeatures.push(bal.getFeatName());
 	    else if (bal.isSelected(ButtonSelection.REQUEST))
-	        qf.requestFeatures.push({name : bal.getFeatName(), usedropdown : bal.isSelected(ButtonSelection.REQUEST_DROPDOWN)});
+	        qf.requestFeatures.push({name : bal.getFeatName(), usedropdown : bal.isSelected(ButtonSelection.REQUEST_DROPDOWN), limitTo : bal.getLimitTo()});
 	    else if (bal.isSelected(ButtonSelection.DONT_SHOW)) {
                 let fn = bal.getFeatName();
                 if (fn.substring(0,11) === 'otherOtype_') // 11 is the length of 'otherOtype_'

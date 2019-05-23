@@ -1355,7 +1355,7 @@ var ButtonSelection;
 })(ButtonSelection || (ButtonSelection = {}));
 ;
 var ButtonsAndLabel = (function () {
-    function ButtonsAndLabel(lab, featName, otype, select, useDropDown, canShow, canRequest, canDisplayGrammar, canShowQere) {
+    function ButtonsAndLabel(lab, featName, otype, select, limitTo, useDropDown, canShow, canRequest, canDisplayGrammar, canShowQere) {
         var _this = this;
         this.featName = featName;
         this.useDropDown = useDropDown;
@@ -1369,6 +1369,7 @@ var ButtonsAndLabel = (function () {
         this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_" + otype + "_" + featName + "\" value=\"dontshowfeat\">") : $('<span></span>');
         this.showQere = canShowQere ? $("<input type=\"radio\" name=\"feat_" + otype + "_" + featName + "\" value=\"showqere\">") : $('<span></span>');
         this.feat = $("<span>" + lab + "</span>");
+        this.limitter = $('<span></span>');
         switch (select) {
             case ButtonSelection.SHOW:
                 this.showFeat.prop('checked', true);
@@ -1407,6 +1408,29 @@ var ButtonsAndLabel = (function () {
                     this.dontShowFeat.click(function () { return _this.ddCheck.prop('disabled', true); });
             }
         }
+        var valueType = typeinfo.obj2feat[otype][featName];
+        if (typeinfo.enumTypes.indexOf(valueType) != -1) {
+            if (canRequest) {
+                var badgeclass = (limitTo && limitTo.length > 0) ? 'badge-danger' : 'badge-success';
+                var badgetext = (limitTo && limitTo.length > 0) ? 'limited' : 'unlimited';
+                var limitButton_1 = $("<a href=\"#\" style=\"color:white\" class=\"badge " + badgeclass + "\">" + localize(badgetext) + "</a>");
+                limitButton_1.click(function () {
+                    var ld = new LimitDialog(valueType, getFeatureSetting(otype, featName), limitTo, function (newLimitTo) {
+                        limitTo = newLimitTo;
+                        console.log(limitTo);
+                    });
+                });
+                var removeit = function () { return _this.limitter.empty(); };
+                this.reqFeat.change(function () { return _this.limitter.append(limitButton_1); });
+                if (select === ButtonSelection.REQUEST)
+                    this.reqFeat.change();
+                this.dcFeat.change(removeit);
+                if (canShow)
+                    this.showFeat.change(removeit);
+                if (canDisplayGrammar)
+                    this.dontShowFeat.change(removeit);
+            }
+        }
     }
     ButtonsAndLabel.prototype.getRow = function () {
         var row = $('<tr></tr>');
@@ -1422,6 +1446,8 @@ var ButtonsAndLabel = (function () {
         cell = $('<td></td>').append(this.ddCheck);
         row.append(cell);
         cell = $('<td class="leftalign"></td>').append(this.feat);
+        row.append(cell);
+        cell = $('<td></td>').append(this.limitter);
         row.append(cell);
         return row;
     };
@@ -1446,6 +1472,53 @@ var ButtonsAndLabel = (function () {
     };
     return ButtonsAndLabel;
 }());
+var LimitDialog = (function () {
+    function LimitDialog(valueType, featset, selected, callback) {
+        var _this = this;
+        this.callback = callback;
+        var enumValues = typeinfo.enum2values[valueType];
+        var checkBoxes = [];
+        for (var i = 0; i < enumValues.length; ++i) {
+            var s = enumValues[i];
+            var hv = featset.hideValues;
+            var ov = featset.otherValues;
+            if ((hv && hv.indexOf(s) !== -1) || ((ov && ov.indexOf(s) !== -1)))
+                continue;
+            var scb = new SortingCheckBox('limitTo', s, getFeatureValueFriendlyName(valueType, s, false, false));
+            scb.setSelected(!selected || selected.length === 0 || selected.indexOf(s) !== -1);
+            checkBoxes.push(scb);
+        }
+        checkBoxes.sort(function (a, b) { return StringWithSort.compare(a.getSws(), b.getSws()); });
+        var columns = checkBoxes.length > 12 ? 3 :
+            checkBoxes.length > 4 ? 2 : 1;
+        var rows = Math.ceil(checkBoxes.length / columns);
+        var table = $('<table></table>');
+        for (var r = 0; r < rows; ++r) {
+            var row = $('<tr></tr>');
+            for (var c = 0; c < columns; ++c) {
+                var cell = $('<td></td>');
+                if (c * rows + r < checkBoxes.length)
+                    cell.append(checkBoxes[c * rows + r].getJQuery());
+                row.append(cell);
+            }
+            table.append(row);
+        }
+        $('#feature-limit-body').empty().append(table);
+        $('#feature-limit-dialog-save').click(function () { return _this.saveButtonAction(); });
+        $('#feature-limit-dialog').modal('show');
+    }
+    LimitDialog.prototype.saveButtonAction = function () {
+        var limitTo = [];
+        var xthis = this;
+        $('input[type=checkbox][name=limitTo]:checked').each(function () {
+            limitTo.push($(this).val());
+        });
+        $('#feature-limit-dialog-save').off('click');
+        this.callback(limitTo);
+        $('#feature-limit-dialog').modal('hide');
+    };
+    return LimitDialog;
+}());
 var PanelForOneOtype = (function () {
     function PanelForOneOtype(otype, ptqf) {
         this.allBAL = [];
@@ -1458,8 +1531,9 @@ var PanelForOneOtype = (function () {
             + ("<th>" + localize('dont_show') + "</th>")
             + ("<th>" + localize('multiple_choice') + "</th>")
             + ("<th class=\"leftalign\">" + localize('feature') + "</th>")
+            + '<th></th>'
             + '</tr>');
-        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, configuration.objHasSurface === otype && !!getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql, true, configuration.objHasSurface === otype, false, false);
+        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual', null) : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && !!getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql, true, configuration.objHasSurface === otype, false, false);
         this.panel.append(this.visualBAL.getRow());
         var hasSurfaceFeature = otype === configuration.objHasSurface;
         var sg = getSentenceGrammarFor(otype);
@@ -1477,7 +1551,8 @@ var PanelForOneOtype = (function () {
         }
         for (var ix = 0; ix < keylist.length; ++ix) {
             var featName = keylist[ix];
-            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName), featName, otype, useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, !!getFeatureSetting(otype, featName).alternateshowrequestSql, !getFeatureSetting(otype, featName).ignoreShow, !getFeatureSetting(otype, featName).ignoreRequest, sg !== null && sg.containsFeature(featName), false);
+            var limitToRef = { val: null };
+            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName), featName, otype, useSavedFeatures ? ptqf.getSelector(featName, limitToRef) : ButtonSelection.DONT_CARE, limitToRef.val, !!getFeatureSetting(otype, featName).alternateshowrequestSql, !getFeatureSetting(otype, featName).ignoreShow, !getFeatureSetting(otype, featName).ignoreRequest, sg !== null && sg.containsFeature(featName), false);
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }
@@ -1488,6 +1563,7 @@ var PanelForOneOtype = (function () {
             + ("<th>" + localize('dont_show') + "</th>")
             + ("<th>" + (Qere.database_has_qere() && !Qere.otype_has_qere(otype) ? localize('show_qere') : '') + "</th>")
             + ("<th class=\"leftalign\">" + localize('other_sentence_unit_types') + "</th>")
+            + '<th></th>'
             + '</tr>');
         for (var level in configuration.sentencegrammar) {
             var leveli = +level;
@@ -1495,7 +1571,7 @@ var PanelForOneOtype = (function () {
                 continue;
             var otherOtype = configuration.sentencegrammar[leveli].objType;
             if (otherOtype !== otype && configuration.objectSettings[otherOtype].mayselect) {
-                var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), 'otherOtype_' + otherOtype, otype, useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, false, false, false, true, Qere.database_has_qere() && Qere.otype_has_qere(otherOtype));
+                var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), 'otherOtype_' + otherOtype, otype, useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, null, false, false, false, true, Qere.database_has_qere() && Qere.otype_has_qere(otherOtype));
                 this.allBAL.push(bal);
                 this.panel.append(bal.getRow());
             }
@@ -1534,15 +1610,22 @@ var PanelTemplQuizFeatures = (function () {
         }
         this.visiblePanel.show();
     };
-    PanelTemplQuizFeatures.prototype.getSelector = function (feat) {
+    PanelTemplQuizFeatures.prototype.getSelector = function (feat, limitToRef) {
         if (!this.initialQf)
             return ButtonSelection.DONT_CARE;
         for (var i = 0; i < this.initialQf.showFeatures.length; ++i)
             if (this.initialQf.showFeatures[i] === feat)
                 return ButtonSelection.SHOW;
-        for (var i = 0; i < this.initialQf.requestFeatures.length; ++i)
-            if (this.initialQf.requestFeatures[i].name === feat)
-                return this.initialQf.requestFeatures[i].usedropdown ? ButtonSelection.REQUEST_DROPDOWN : ButtonSelection.REQUEST;
+        for (var i = 0; i < this.initialQf.requestFeatures.length; ++i) {
+            var rf = this.initialQf.requestFeatures[i];
+            if (rf.name === feat) {
+                if (rf.limitTo && rf.limitTo.length > 0)
+                    limitToRef.val = rf.limitTo;
+                else
+                    limitToRef.val = [];
+                return rf.usedropdown ? ButtonSelection.REQUEST_DROPDOWN : ButtonSelection.REQUEST;
+            }
+        }
         if (this.initialQf.dontShowFeatures)
             for (var i = 0; i < this.initialQf.dontShowFeatures.length; ++i)
                 if (this.initialQf.dontShowFeatures[i] === feat)
@@ -1594,13 +1677,13 @@ var PanelTemplQuizFeatures = (function () {
         if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.SHOW))
             qf.showFeatures.push('visual');
         else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST))
-            qf.requestFeatures.push({ name: 'visual', usedropdown: this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN) });
+            qf.requestFeatures.push({ name: 'visual', usedropdown: this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN), limitTo: null });
         for (var i = 0; i < this.visiblePanel.allBAL.length; ++i) {
             var bal = this.visiblePanel.allBAL[i];
             if (bal.isSelected(ButtonSelection.SHOW))
                 qf.showFeatures.push(bal.getFeatName());
             else if (bal.isSelected(ButtonSelection.REQUEST))
-                qf.requestFeatures.push({ name: bal.getFeatName(), usedropdown: bal.isSelected(ButtonSelection.REQUEST_DROPDOWN) });
+                qf.requestFeatures.push({ name: bal.getFeatName(), usedropdown: bal.isSelected(ButtonSelection.REQUEST_DROPDOWN), limitTo: [] });
             else if (bal.isSelected(ButtonSelection.DONT_SHOW)) {
                 var fn = bal.getFeatName();
                 if (fn.substring(0, 11) === 'otherOtype_')
