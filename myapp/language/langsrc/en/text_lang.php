@@ -23,6 +23,7 @@ $lang['finish'] = "GRADE task";
 $lang['finish_no_grading'] = "SAVE outcome";
 $lang['first_verse'] = "First verse";
 $lang['first_verse_prompt'] = "First verse:";
+$lang['hide_features'] = "Hide values from student";
 $lang['import_button'] = "Import";
 $lang['import_from_shebanq'] = "Import from SHEBANQ";
 $lang['last_verse'] = "Last verse";

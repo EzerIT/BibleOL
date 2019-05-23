@@ -1412,13 +1412,18 @@ var ButtonsAndLabel = (function () {
         var valueType = typeinfo.obj2feat[otype][featName];
         if (typeinfo.enumTypes.indexOf(valueType) != -1) {
             if (canRequest) {
-                var badgeclass = (hideFeatures && hideFeatures.length > 0) ? 'badge-danger' : 'badge-success';
-                var badgetext = (hideFeatures && hideFeatures.length > 0) ? 'limited' : 'unlimited';
-                var limitButton_1 = $("<a href=\"#\" style=\"color:white\" class=\"badge " + badgeclass + "\">" + localize(badgetext) + "</a>");
+                var limitButton_1 = $("<a href=\"#\" style=\"color:white\" class=\"badge\"></a>");
+                var updateBadge_1 = function () {
+                    if (!hideFeatures || hideFeatures.length == 0)
+                        limitButton_1.removeClass('badge-danger').addClass('badge-success').html(localize('unlimited'));
+                    else
+                        limitButton_1.removeClass('badge-success').addClass('badge-danger').html(localize('limited'));
+                };
+                updateBadge_1();
                 limitButton_1.click(function () {
                     var ld = new LimitDialog(valueType, getFeatureSetting(otype, featName), hideFeatures, function (newHideFeatures) {
                         _this.hideFeatures = hideFeatures = newHideFeatures;
-                        console.log(hideFeatures);
+                        updateBadge_1();
                     });
                 });
                 var removeit = function () { return _this.limitter.empty(); };
@@ -1480,6 +1485,31 @@ var LimitDialog = (function () {
     function LimitDialog(valueType, featset, hideFeatures, callback) {
         var _this = this;
         this.callback = callback;
+        var butSetAll = $("<a class=\"badge badge-success\" style=\"margin:0 5px 5px 0\" href=\"#\">" + localize('set_all') + "</a>");
+        var butClearAll = $("<a class=\"badge badge-success\" style=\"margin:0 5px 5px 0\" href=\"#\">" + localize('clear_all') + "</a>");
+        butSetAll.click(function () { return $('input[type=checkbox][name=hideFeatures]').prop('checked', true); });
+        butClearAll.click(function () { return $('input[type=checkbox][name=hideFeatures]').prop('checked', false); });
+        var setclear = $('<div></div>');
+        setclear.append(butSetAll).append(butClearAll);
+        if (configuration.databaseName == 'ETCBC4' && valueType == 'verbal_stem_t') {
+            var butHebrew = $("<a class=\"badge badge-success\" style=\"margin:0 5px 5px 0\" href=\"#\">" + localize('set_hebrew') + "</a>");
+            var butAramaic = $("<a class=\"badge badge-success\" style=\"margin:0 5px 5px 0\" href=\"#\">" + localize('set_aramaic') + "</a>");
+            var hebrewStems_1 = ['NA', 'etpa', 'hif', 'hit', 'hof', 'hotp', 'hsht', 'htpo', 'nif', 'nit',
+                'pasq', 'piel', 'poal', 'poel', 'pual', 'qal', 'tif'];
+            var aramaicStems_1 = ['NA', 'afel', 'etpa', 'etpe', 'haf ', 'hof ', 'hsht', 'htpa', 'htpe',
+                'pael', 'peal', 'peil', 'shaf'];
+            butHebrew.click(function () {
+                $('input[type=checkbox][name=hideFeatures]').prop('checked', true);
+                for (var i = 0; i < hebrewStems_1.length; ++i)
+                    $('input[type=checkbox][name=hideFeatures][value=' + hebrewStems_1[i] + ']').prop('checked', false);
+            });
+            butAramaic.click(function () {
+                $('input[type=checkbox][name=hideFeatures]').prop('checked', true);
+                for (var i = 0; i < aramaicStems_1.length; ++i)
+                    $('input[type=checkbox][name=hideFeatures][value=' + aramaicStems_1[i] + ']').prop('checked', false);
+            });
+            setclear = setclear.add($('<div></div>').append(butHebrew).append(butAramaic));
+        }
         var enumValues = typeinfo.enum2values[valueType];
         var checkBoxes = [];
         for (var i = 0; i < enumValues.length; ++i) {
@@ -1507,7 +1537,7 @@ var LimitDialog = (function () {
             }
             table.append(row);
         }
-        $('#feature-limit-body').empty().append(table);
+        $('#feature-limit-body').empty().append(setclear).append(table);
         $('#feature-limit-dialog-save').off('click').on('click', function () { return _this.saveButtonAction(); });
         $('#feature-limit-dialog').modal('show');
     }

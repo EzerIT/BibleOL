@@ -23,6 +23,7 @@ $lang['finish'] = "BEDØM opgaven";
 $lang['finish_no_grading'] = "GEM resultat";
 $lang['first_verse'] = "Første vers";
 $lang['first_verse_prompt'] = "Første vers:";
+$lang['hide_features'] = "Skjul værdier for studerende";
 $lang['import_button'] = "Importér";
 $lang['import_from_shebanq'] = "Import fra SHEBANQ";
 $lang['last_verse'] = "Sidste vers:";

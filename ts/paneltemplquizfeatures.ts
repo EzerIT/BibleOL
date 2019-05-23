@@ -169,18 +169,25 @@ class ButtonsAndLabel {
                         typeinfo.enum2values[typeinfo.obj2feat[otype][featName]]);*/
 
             if (canRequest) {
-                let badgeclass = (hideFeatures && hideFeatures.length>0) ? 'badge-danger' : 'badge-success';
-                let badgetext =  (hideFeatures && hideFeatures.length>0) ? 'limited' : 'unlimited';
-                
-                let limitButton : JQuery = $(`<a href="#" style="color:white" class="badge ${badgeclass}">${localize(badgetext)}</a>`);
+                let limitButton : JQuery = $(`<a href="#" style="color:white" class="badge"></a>`);
 
+                let updateBadge = () => {
+                    if (!hideFeatures || hideFeatures.length==0) 
+                        limitButton.removeClass('badge-danger').addClass('badge-success').html(localize('unlimited'));
+                    else
+                        limitButton.removeClass('badge-success').addClass('badge-danger').html(localize('limited'));
+                }
+                                                                                                 
+                updateBadge();
+
+                
                 limitButton.click(() => {
                     let ld : LimitDialog = new LimitDialog(valueType,
                                                            getFeatureSetting(otype,featName),
                                                            hideFeatures,
                                                            (newHideFeatures : string[]) => {
                                                                this.hideFeatures = hideFeatures = newHideFeatures;
-                                                               console.log(hideFeatures);
+                                                               updateBadge();
                                                            });
                 });
 
@@ -281,10 +288,47 @@ class LimitDialog {
                 featset : FeatureSetting,
                 hideFeatures : string[],
                 private callback : (newHideFeatures : string[]) => void) {
+
+        let butSetAll   : JQuery = $(`<a class="badge badge-success" style="margin:0 5px 5px 0" href="#">${localize('set_all')}</a>`);
+	let butClearAll : JQuery = $(`<a class="badge badge-success" style="margin:0 5px 5px 0" href="#">${localize('clear_all')}</a>`);
+
+        butSetAll.click(() => $('input[type=checkbox][name=hideFeatures]').prop('checked',true));
+        butClearAll.click(() => $('input[type=checkbox][name=hideFeatures]').prop('checked',false));
+
+        
+        let setclear : JQuery = $('<div></div>');
+        setclear.append(butSetAll).append(butClearAll);
+
+        // Hard coded functionality
+        if (configuration.databaseName=='ETCBC4' && valueType=='verbal_stem_t') {
+            let butHebrew  : JQuery = $(`<a class="badge badge-success" style="margin:0 5px 5px 0" href="#">${localize('set_hebrew')}</a>`);
+	    let butAramaic : JQuery = $(`<a class="badge badge-success" style="margin:0 5px 5px 0" href="#">${localize('set_aramaic')}</a>`);
+
+            let hebrewStems : string[] = ['NA','etpa','hif','hit','hof','hotp','hsht','htpo','nif','nit',
+                                          'pasq','piel','poal','poel','pual','qal','tif'];
+            let aramaicStems : string[] = ['NA','afel','etpa','etpe','haf ','hof ','hsht','htpa','htpe',
+                                           'pael','peal','peil','shaf'];
+
+            butHebrew.click(() => {
+                $('input[type=checkbox][name=hideFeatures]').prop('checked',true);
+                for (let i=0; i<hebrewStems.length; ++i)
+                    $('input[type=checkbox][name=hideFeatures][value=' + hebrewStems[i] + ']').prop('checked',false);
+            });
+
+            butAramaic.click(() => {
+                $('input[type=checkbox][name=hideFeatures]').prop('checked',true);
+                for (let i=0; i<aramaicStems.length; ++i)
+                    $('input[type=checkbox][name=hideFeatures][value=' + aramaicStems[i] + ']').prop('checked',false);
+            });
+            
+            setclear = setclear.add($('<div></div>').append(butHebrew).append(butAramaic));
+        }
+
         
  	let enumValues : string[] = typeinfo.enum2values[valueType];
 	let checkBoxes : SortingCheckBox[] = [];
 
+        
         for (let i = 0; i<enumValues.length; ++i) {
 	    let s : string = enumValues[i];
  
@@ -322,7 +366,7 @@ class LimitDialog {
 	}
 
 
-        $('#feature-limit-body').empty().append(table);
+        $('#feature-limit-body').empty().append(setclear).append(table);
         $('#feature-limit-dialog-save').off('click').on('click', () => this.saveButtonAction() );
         $('#feature-limit-dialog').modal('show');
     }

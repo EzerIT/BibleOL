@@ -61,7 +61,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header justify-content-between">
-        <div><h4 class="modal-title"><?= $this->lang->line('limit_features') ?></h4></div>
+        <div><h4 class="modal-title"><?= $this->lang->line('hide_features') ?></h4></div>
         <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
       </div>
       <div class="modal-body">
