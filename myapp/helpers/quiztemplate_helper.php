@@ -1301,7 +1301,7 @@ class QuizFeatures extends XmlHandler {
 	public $dontShowFeatures = array();
 	public $dontShowObjects = array();
 
-    public $limitTo; // Value of "limitto" attribute in a <request> element
+    public $hideFeatures; // Value of "hidefeatures" attribute in a <request> element
     
     /************************************************************************************************
 	 * XML writer interface
@@ -1315,8 +1315,8 @@ class QuizFeatures extends XmlHandler {
         foreach ($quizfeatures->requestFeatures as $s) {
             if ($s->usedropdown)
 				$res .= sprintf("%4s<requestdd>%s</requestdd>\n", ' ', htmlspecialchars($s->name));
-			else if (!empty($s->limitTo))
-				$res .= sprintf("%4s<request limitto=\"%s\">%s</request>\n", ' ', implode(',',$s->limitTo), htmlspecialchars($s->name));
+			else if (!empty($s->hideFeatures))
+				$res .= sprintf("%4s<request hidefeatures=\"%s\">%s</request>\n", ' ', implode(',',$s->hideFeatures), htmlspecialchars($s->name));
             else
 				$res .= sprintf("%4s<request>%s</request>\n", ' ', htmlspecialchars($s->name));
         }
@@ -1351,7 +1351,7 @@ class QuizFeatures extends XmlHandler {
           case 'request':
                 $this->setthis = &$this->requestFeatures;
                 $this->setthis_type = SetThisType::PUSH_REQUEST_FEATURES;
-                $this->limitTo = isset($attributes['limitto']) ? $attributes['limitto'] : null;
+                $this->hideFeatures = isset($attributes['hidefeatures']) ? $attributes['hidefeatures'] : null;
                 break;
 
           case 'requestdd':

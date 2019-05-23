@@ -26,7 +26,7 @@ interface QuizData {
 
 interface ExtendedQuizFeatures {
     showFeatures       : string[];
-    requestFeatures    : { name : string; usedropdown : boolean; limitTo : string[];}[];
+    requestFeatures    : { name : string; usedropdown : boolean; hideFeatures : string[]; }[];
     dontShowFeatures   : string[];
     dontShowObjects    : { content : string; show? : string; } [];
     objectType         : string;

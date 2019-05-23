@@ -54,8 +54,8 @@
 <!-- Dialogs for this page follow -->
 
  <?php //*********************************************************************
-        // Feature limitTo dialog 
-        //*********************************************************************
+       // hideFeatures dialog 
+       //*********************************************************************
     ?>
 <div id="feature-limit-dialog" class="modal fade">
   <div class="modal-dialog">

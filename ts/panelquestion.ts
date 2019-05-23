@@ -149,7 +149,7 @@ class PanelQuestion {
         // Cache a few variables for easy access
         let dontShow        : boolean  = qd.quizFeatures.dontShow;
         let showFeatures    : string[] = qd.quizFeatures.showFeatures;
-        let requestFeatures : {name : string; usedropdown : boolean; limitTo : string[];}[]
+        let requestFeatures : {name : string; usedropdown : boolean; hideFeatures : string[];}[]
                                        = qd.quizFeatures.requestFeatures;
         let oType           : string   = qd.quizFeatures.objectType;
 
@@ -268,7 +268,7 @@ class PanelQuestion {
 
                 let rf            : string   = requestFeatures[+rfi].name;         // Feature name
                 let usedropdown   : boolean  = requestFeatures[+rfi].usedropdown;  // Use multiple choice?
-                let limitTo       : string[] = requestFeatures[+rfi].limitTo;
+                let hideFeatures  : string[] = requestFeatures[+rfi].hideFeatures;
                 let correctAnswer : string   = fvals[rf] as string;                // Feature value (i.e., the correct answer)
                 let featType      : string   = featuresHere[rf];                   // Feature type
                 let featset       : FeatureSetting = getFeatureSetting(oType,rf); // Feature configuration
@@ -494,7 +494,7 @@ class PanelQuestion {
                                                     false;
                         let correctIsOther        : boolean =         // Is the correct answer one of the values that make up 'Other value'?
                                                     featset.otherValues && featset.otherValues.indexOf(correctAnswer)!==-1 ||
-                                                    limitTo && limitTo.length>0 && limitTo.indexOf(correctAnswer)===-1;
+                                                    hideFeatures && hideFeatures.indexOf(correctAnswer)!==-1;
                         
                         // Loop though all possible values and add the appropriate localized name
                         // or "Other value" to the combo box
@@ -505,9 +505,8 @@ class PanelQuestion {
                             if (featset.hideValues && featset.hideValues.indexOf(s)!==-1)
                                 continue;  // Don't show the value s
 
-                            console.log(s,limitTo && limitTo.length>0 && limitTo.indexOf(s)===-1);
                             if (featset.otherValues && featset.otherValues.indexOf(s)!==-1 ||
-                                limitTo && limitTo.length>0 && limitTo.indexOf(s)===-1) {
+                                hideFeatures && hideFeatures.indexOf(s)!==-1) {
                                 // The value s is one of the values that make up 'Other value'
                                 if (!hasAddedOther) {
                                     hasAddedOther = true;

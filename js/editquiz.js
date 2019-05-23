@@ -1355,9 +1355,10 @@ var ButtonSelection;
 })(ButtonSelection || (ButtonSelection = {}));
 ;
 var ButtonsAndLabel = (function () {
-    function ButtonsAndLabel(lab, featName, otype, select, limitTo, useDropDown, canShow, canRequest, canDisplayGrammar, canShowQere) {
+    function ButtonsAndLabel(lab, featName, otype, select, hideFeatures, useDropDown, canShow, canRequest, canDisplayGrammar, canShowQere) {
         var _this = this;
         this.featName = featName;
+        this.hideFeatures = hideFeatures;
         this.useDropDown = useDropDown;
         this.canShow = canShow;
         this.canRequest = canRequest;
@@ -1411,13 +1412,13 @@ var ButtonsAndLabel = (function () {
         var valueType = typeinfo.obj2feat[otype][featName];
         if (typeinfo.enumTypes.indexOf(valueType) != -1) {
             if (canRequest) {
-                var badgeclass = (limitTo && limitTo.length > 0) ? 'badge-danger' : 'badge-success';
-                var badgetext = (limitTo && limitTo.length > 0) ? 'limited' : 'unlimited';
+                var badgeclass = (hideFeatures && hideFeatures.length > 0) ? 'badge-danger' : 'badge-success';
+                var badgetext = (hideFeatures && hideFeatures.length > 0) ? 'limited' : 'unlimited';
                 var limitButton_1 = $("<a href=\"#\" style=\"color:white\" class=\"badge " + badgeclass + "\">" + localize(badgetext) + "</a>");
                 limitButton_1.click(function () {
-                    var ld = new LimitDialog(valueType, getFeatureSetting(otype, featName), limitTo, function (newLimitTo) {
-                        limitTo = newLimitTo;
-                        console.log(limitTo);
+                    var ld = new LimitDialog(valueType, getFeatureSetting(otype, featName), hideFeatures, function (newHideFeatures) {
+                        _this.hideFeatures = hideFeatures = newHideFeatures;
+                        console.log(hideFeatures);
                     });
                 });
                 var removeit = function () { return _this.limitter.empty(); };
@@ -1467,13 +1468,16 @@ var ButtonsAndLabel = (function () {
                 return this.canShowQere && this.showQere.prop('checked');
         }
     };
+    ButtonsAndLabel.prototype.getHideFeatures = function () {
+        return this.hideFeatures;
+    };
     ButtonsAndLabel.prototype.getFeatName = function () {
         return this.featName;
     };
     return ButtonsAndLabel;
 }());
 var LimitDialog = (function () {
-    function LimitDialog(valueType, featset, selected, callback) {
+    function LimitDialog(valueType, featset, hideFeatures, callback) {
         var _this = this;
         this.callback = callback;
         var enumValues = typeinfo.enum2values[valueType];
@@ -1484,8 +1488,8 @@ var LimitDialog = (function () {
             var ov = featset.otherValues;
             if ((hv && hv.indexOf(s) !== -1) || ((ov && ov.indexOf(s) !== -1)))
                 continue;
-            var scb = new SortingCheckBox('limitTo', s, getFeatureValueFriendlyName(valueType, s, false, false));
-            scb.setSelected(!selected || selected.length === 0 || selected.indexOf(s) !== -1);
+            var scb = new SortingCheckBox('hideFeatures', s, getFeatureValueFriendlyName(valueType, s, false, false));
+            scb.setSelected(hideFeatures && hideFeatures.indexOf(s) !== -1);
             checkBoxes.push(scb);
         }
         checkBoxes.sort(function (a, b) { return StringWithSort.compare(a.getSws(), b.getSws()); });
@@ -1504,17 +1508,16 @@ var LimitDialog = (function () {
             table.append(row);
         }
         $('#feature-limit-body').empty().append(table);
-        $('#feature-limit-dialog-save').click(function () { return _this.saveButtonAction(); });
+        $('#feature-limit-dialog-save').off('click').on('click', function () { return _this.saveButtonAction(); });
         $('#feature-limit-dialog').modal('show');
     }
     LimitDialog.prototype.saveButtonAction = function () {
-        var limitTo = [];
-        var xthis = this;
-        $('input[type=checkbox][name=limitTo]:checked').each(function () {
-            limitTo.push($(this).val());
+        var hideFeatures = [];
+        $('input[type=checkbox][name=hideFeatures]:checked').each(function () {
+            hideFeatures.push($(this).val());
         });
         $('#feature-limit-dialog-save').off('click');
-        this.callback(limitTo);
+        this.callback(hideFeatures);
         $('#feature-limit-dialog').modal('hide');
     };
     return LimitDialog;
@@ -1533,7 +1536,7 @@ var PanelForOneOtype = (function () {
             + ("<th class=\"leftalign\">" + localize('feature') + "</th>")
             + '<th></th>'
             + '</tr>');
-        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual', null) : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && !!getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql, true, configuration.objHasSurface === otype, false, false);
+        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && !!getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql, true, configuration.objHasSurface === otype, false, false);
         this.panel.append(this.visualBAL.getRow());
         var hasSurfaceFeature = otype === configuration.objHasSurface;
         var sg = getSentenceGrammarFor(otype);
@@ -1551,8 +1554,7 @@ var PanelForOneOtype = (function () {
         }
         for (var ix = 0; ix < keylist.length; ++ix) {
             var featName = keylist[ix];
-            var limitToRef = { val: null };
-            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName), featName, otype, useSavedFeatures ? ptqf.getSelector(featName, limitToRef) : ButtonSelection.DONT_CARE, limitToRef.val, !!getFeatureSetting(otype, featName).alternateshowrequestSql, !getFeatureSetting(otype, featName).ignoreShow, !getFeatureSetting(otype, featName).ignoreRequest, sg !== null && sg.containsFeature(featName), false);
+            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName), featName, otype, useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, ptqf.getHideFeatures(featName), !!getFeatureSetting(otype, featName).alternateshowrequestSql, !getFeatureSetting(otype, featName).ignoreShow, !getFeatureSetting(otype, featName).ignoreRequest, sg !== null && sg.containsFeature(featName), false);
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }
@@ -1610,27 +1612,27 @@ var PanelTemplQuizFeatures = (function () {
         }
         this.visiblePanel.show();
     };
-    PanelTemplQuizFeatures.prototype.getSelector = function (feat, limitToRef) {
+    PanelTemplQuizFeatures.prototype.getSelector = function (feat) {
         if (!this.initialQf)
             return ButtonSelection.DONT_CARE;
         for (var i = 0; i < this.initialQf.showFeatures.length; ++i)
             if (this.initialQf.showFeatures[i] === feat)
                 return ButtonSelection.SHOW;
-        for (var i = 0; i < this.initialQf.requestFeatures.length; ++i) {
-            var rf = this.initialQf.requestFeatures[i];
-            if (rf.name === feat) {
-                if (rf.limitTo && rf.limitTo.length > 0)
-                    limitToRef.val = rf.limitTo;
-                else
-                    limitToRef.val = [];
-                return rf.usedropdown ? ButtonSelection.REQUEST_DROPDOWN : ButtonSelection.REQUEST;
-            }
-        }
+        for (var i = 0; i < this.initialQf.requestFeatures.length; ++i)
+            if (this.initialQf.requestFeatures[i].name === feat)
+                return this.initialQf.requestFeatures[i].usedropdown ? ButtonSelection.REQUEST_DROPDOWN : ButtonSelection.REQUEST;
         if (this.initialQf.dontShowFeatures)
             for (var i = 0; i < this.initialQf.dontShowFeatures.length; ++i)
                 if (this.initialQf.dontShowFeatures[i] === feat)
                     return ButtonSelection.DONT_SHOW;
         return ButtonSelection.DONT_CARE;
+    };
+    PanelTemplQuizFeatures.prototype.getHideFeatures = function (feat) {
+        if (!this.initialQf)
+            return null;
+        for (var i = 0; i < this.initialQf.requestFeatures.length; ++i)
+            if (this.initialQf.requestFeatures[i].name === feat)
+                return this.initialQf.requestFeatures[i].hideFeatures;
     };
     PanelTemplQuizFeatures.prototype.getObjectSelector = function (otype) {
         if (this.initialQf && this.initialQf.dontShowObjects) {
@@ -1677,13 +1679,13 @@ var PanelTemplQuizFeatures = (function () {
         if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.SHOW))
             qf.showFeatures.push('visual');
         else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST))
-            qf.requestFeatures.push({ name: 'visual', usedropdown: this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN), limitTo: null });
+            qf.requestFeatures.push({ name: 'visual', usedropdown: this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures: null });
         for (var i = 0; i < this.visiblePanel.allBAL.length; ++i) {
             var bal = this.visiblePanel.allBAL[i];
             if (bal.isSelected(ButtonSelection.SHOW))
                 qf.showFeatures.push(bal.getFeatName());
             else if (bal.isSelected(ButtonSelection.REQUEST))
-                qf.requestFeatures.push({ name: bal.getFeatName(), usedropdown: bal.isSelected(ButtonSelection.REQUEST_DROPDOWN), limitTo: [] });
+                qf.requestFeatures.push({ name: bal.getFeatName(), usedropdown: bal.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures: bal.getHideFeatures() });
             else if (bal.isSelected(ButtonSelection.DONT_SHOW)) {
                 var fn = bal.getFeatName();
                 if (fn.substring(0, 11) === 'otherOtype_')
@@ -1709,11 +1711,20 @@ var PanelTemplQuizFeatures = (function () {
             if (qfnow.showFeatures[i] !== this.initialQf.showFeatures[i]) {
                 return true;
             }
-        for (var i = 0; i < qfnow.requestFeatures.length; ++i)
+        for (var i = 0; i < qfnow.requestFeatures.length; ++i) {
             if (qfnow.requestFeatures[i].name !== this.initialQf.requestFeatures[i].name ||
                 qfnow.requestFeatures[i].usedropdown !== this.initialQf.requestFeatures[i].usedropdown) {
                 return true;
             }
+            if (qfnow.requestFeatures[i].hideFeatures !== this.initialQf.requestFeatures[i].hideFeatures) {
+                if (qfnow.requestFeatures[i].hideFeatures === null || this.initialQf.requestFeatures[i].hideFeatures === null
+                    || qfnow.requestFeatures[i].hideFeatures.length !== this.initialQf.requestFeatures[i].hideFeatures.length)
+                    return true;
+                for (var j = 0; j < qfnow.requestFeatures[i].hideFeatures.length; ++j)
+                    if (qfnow.requestFeatures[i].hideFeatures[j] !== this.initialQf.requestFeatures[i].hideFeatures[j])
+                        return true;
+            }
+        }
         for (var i = 0; i < qfnow.dontShowFeatures.length; ++i)
             if (qfnow.dontShowFeatures[i] !== this.initialQf.dontShowFeatures[i]) {
                 return true;
