@@ -24,6 +24,10 @@ $comment['cancel_button'] = "";
 $format['cancel_button'] = "";
 $use_textarea['cancel_button'] = false;
 
+$comment['clear_all'] = "";
+$format['clear_all'] = "";
+$use_textarea['clear_all'] = false;
+
 $comment['clear_button'] = "";
 $format['clear_button'] = "";
 $use_textarea['clear_button'] = false;
@@ -95,6 +99,10 @@ $use_textarea['import_shebanq'] = false;
 $comment['item_number'] = "";
 $format['item_number'] = "";
 $use_textarea['item_number'] = false;
+
+$comment['limited'] = "";
+$format['limited'] = "";
+$use_textarea['limited'] = false;
 
 $comment['low_value_prompt'] = "";
 $format['low_value_prompt'] = "";
@@ -188,6 +196,18 @@ $comment['separate_lines'] = "";
 $format['separate_lines'] = "";
 $use_textarea['separate_lines'] = false;
 
+$comment['set_all'] = "";
+$format['set_all'] = "";
+$use_textarea['set_all'] = false;
+
+$comment['set_aramaic'] = "";
+$format['set_aramaic'] = "";
+$use_textarea['set_aramaic'] = false;
+
+$comment['set_hebrew'] = "";
+$format['set_hebrew'] = "";
+$use_textarea['set_hebrew'] = false;
+
 $comment['show'] = "";
 $format['show'] = "";
 $use_textarea['show'] = false;
@@ -203,6 +223,10 @@ $use_textarea['show_qere'] = false;
 $comment['stop_practicing'] = "";
 $format['stop_practicing'] = "";
 $use_textarea['stop_practicing'] = false;
+
+$comment['unlimited'] = "";
+$format['unlimited'] = "";
+$use_textarea['unlimited'] = false;
 
 $comment['use_for_qosel'] = "";
 $format['use_for_qosel'] = "";

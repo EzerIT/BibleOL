@@ -256,6 +256,10 @@ $comment['show_link_icons_prompt'] = "";
 $format['show_link_icons_prompt'] = "";
 $use_textarea['show_link_icons_prompt'] = false;
 
+$comment['show_only_options'] = "";
+$format['show_only_options'] = "";
+$use_textarea['show_only_options'] = false;
+
 $comment['show_quiz_passages'] = "";
 $format['show_quiz_passages'] = "";
 $use_textarea['show_quiz_passages'] = false;

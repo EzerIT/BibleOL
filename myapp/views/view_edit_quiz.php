@@ -54,14 +54,14 @@
 <!-- Dialogs for this page follow -->
 
  <?php //*********************************************************************
-       // hideFeatures dialog 
+       // Limit features dialog 
        //*********************************************************************
     ?>
 <div id="feature-limit-dialog" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header justify-content-between">
-        <div><h4 class="modal-title"><?= $this->lang->line('hide_features') ?></h4></div>
+        <div><h4 class="modal-title"><?= $this->lang->line('show_only_options') ?></h4></div>
         <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
       </div>
       <div class="modal-body">

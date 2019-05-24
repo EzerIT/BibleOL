@@ -1499,14 +1499,14 @@ var LimitDialog = (function () {
             var aramaicStems_1 = ['NA', 'afel', 'etpa', 'etpe', 'haf ', 'hof ', 'hsht', 'htpa', 'htpe',
                 'pael', 'peal', 'peil', 'shaf'];
             butHebrew.click(function () {
-                $('input[type=checkbox][name=hideFeatures]').prop('checked', true);
+                $('input[type=checkbox][name=hideFeatures]').prop('checked', false);
                 for (var i = 0; i < hebrewStems_1.length; ++i)
-                    $('input[type=checkbox][name=hideFeatures][value=' + hebrewStems_1[i] + ']').prop('checked', false);
+                    $('input[type=checkbox][name=hideFeatures][value=' + hebrewStems_1[i] + ']').prop('checked', true);
             });
             butAramaic.click(function () {
-                $('input[type=checkbox][name=hideFeatures]').prop('checked', true);
+                $('input[type=checkbox][name=hideFeatures]').prop('checked', false);
                 for (var i = 0; i < aramaicStems_1.length; ++i)
-                    $('input[type=checkbox][name=hideFeatures][value=' + aramaicStems_1[i] + ']').prop('checked', false);
+                    $('input[type=checkbox][name=hideFeatures][value=' + aramaicStems_1[i] + ']').prop('checked', true);
             });
             setclear = setclear.add($('<div></div>').append(butHebrew).append(butAramaic));
         }
@@ -1519,7 +1519,7 @@ var LimitDialog = (function () {
             if ((hv && hv.indexOf(s) !== -1) || ((ov && ov.indexOf(s) !== -1)))
                 continue;
             var scb = new SortingCheckBox('hideFeatures', s, getFeatureValueFriendlyName(valueType, s, false, false));
-            scb.setSelected(hideFeatures && hideFeatures.indexOf(s) !== -1);
+            scb.setSelected(!hideFeatures || hideFeatures.indexOf(s) === -1);
             checkBoxes.push(scb);
         }
         checkBoxes.sort(function (a, b) { return StringWithSort.compare(a.getSws(), b.getSws()); });
@@ -1543,7 +1543,7 @@ var LimitDialog = (function () {
     }
     LimitDialog.prototype.saveButtonAction = function () {
         var hideFeatures = [];
-        $('input[type=checkbox][name=hideFeatures]:checked').each(function () {
+        $('input[type=checkbox][name=hideFeatures]:not(:checked)').each(function () {
             hideFeatures.push($(this).val());
         });
         $('#feature-limit-dialog-save').off('click');

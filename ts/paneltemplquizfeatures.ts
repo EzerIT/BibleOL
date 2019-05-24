@@ -164,10 +164,6 @@ class ButtonsAndLabel {
         let valueType : string = typeinfo.obj2feat[otype][featName];
 
         if (typeinfo.enumTypes.indexOf(valueType)!=-1) {
-            /*console.log(typeinfo.obj2feat[otype][featName],
-                        typeinfo.enumTypes.indexOf(typeinfo.obj2feat[otype][featName]),
-                        typeinfo.enum2values[typeinfo.obj2feat[otype][featName]]);*/
-
             if (canRequest) {
                 let limitButton : JQuery = $(`<a href="#" style="color:white" class="badge"></a>`);
 
@@ -263,7 +259,7 @@ class ButtonsAndLabel {
     }
 
     //------------------------------------------------------------------------------------------
-    // getFeatName method
+    // getHideFeatures method
     //
     // Returns the current feature limitations
     //
@@ -283,11 +279,26 @@ class ButtonsAndLabel {
 
 }
 
+//****************************************************************************************************
+// LimitDialog class
+//
+// This class manages the feature limitation dialog
+//
 class LimitDialog {
-    constructor(valueType : string,
-                featset : FeatureSetting,
-                hideFeatures : string[],
-                private callback : (newHideFeatures : string[]) => void) {
+
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Generates HTML code for a feature limitation dialog.
+    // Note: In the dialog features to hide are unchecked, and features to show are checked.
+    //
+    // The parameters and class fields are described below.
+    //
+    constructor(valueType : string,                                     // The type of the feature
+                featset : FeatureSetting,                               // Feature settings
+                hideFeatures : string[],                                // Array of feature values to hide
+                private callback : (newHideFeatures : string[]) => void // Function to call when the user clicks "Save"
+               ) {
 
         let butSetAll   : JQuery = $(`<a class="badge badge-success" style="margin:0 5px 5px 0" href="#">${localize('set_all')}</a>`);
 	let butClearAll : JQuery = $(`<a class="badge badge-success" style="margin:0 5px 5px 0" href="#">${localize('clear_all')}</a>`);
@@ -310,15 +321,15 @@ class LimitDialog {
                                            'pael','peal','peil','shaf'];
 
             butHebrew.click(() => {
-                $('input[type=checkbox][name=hideFeatures]').prop('checked',true);
+                $('input[type=checkbox][name=hideFeatures]').prop('checked',false);
                 for (let i=0; i<hebrewStems.length; ++i)
-                    $('input[type=checkbox][name=hideFeatures][value=' + hebrewStems[i] + ']').prop('checked',false);
+                    $('input[type=checkbox][name=hideFeatures][value=' + hebrewStems[i] + ']').prop('checked',true);
             });
 
             butAramaic.click(() => {
-                $('input[type=checkbox][name=hideFeatures]').prop('checked',true);
+                $('input[type=checkbox][name=hideFeatures]').prop('checked',false);
                 for (let i=0; i<aramaicStems.length; ++i)
-                    $('input[type=checkbox][name=hideFeatures][value=' + aramaicStems[i] + ']').prop('checked',false);
+                    $('input[type=checkbox][name=hideFeatures][value=' + aramaicStems[i] + ']').prop('checked',true);
             });
             
             setclear = setclear.add($('<div></div>').append(butHebrew).append(butAramaic));
@@ -338,7 +349,7 @@ class LimitDialog {
 		continue;
  
 	    let scb = new SortingCheckBox('hideFeatures', s, getFeatureValueFriendlyName(valueType, s, false, false));
-	    scb.setSelected(hideFeatures && hideFeatures.indexOf(s)!==-1);
+	    scb.setSelected(!hideFeatures || hideFeatures.indexOf(s)===-1);
 	    checkBoxes.push(scb);
 	}
  
@@ -365,17 +376,25 @@ class LimitDialog {
 	    table.append(row);
 	}
 
-
         $('#feature-limit-body').empty().append(setclear).append(table);
         $('#feature-limit-dialog-save').off('click').on('click', () => this.saveButtonAction() );
         $('#feature-limit-dialog').modal('show');
     }
 
+
+    
+    //------------------------------------------------------------------------------------------
+    // saveButtonAction method
+    //
+    // This function is called when the user clicks the "Save" button. It calls the callback
+    // function with information about which feaatures are NOT checked.
+    //
     // Note: This creates a new hideFeatures array so it will not affect the data stored in initialQf
+    //
     private saveButtonAction() {
         let hideFeatures : string[] = [];
 
-        $('input[type=checkbox][name=hideFeatures]:checked').each(
+        $('input[type=checkbox][name=hideFeatures]:not(:checked)').each(
             function() {
                 hideFeatures.push(<string>$(this).val());
             }
@@ -642,6 +661,16 @@ class PanelTemplQuizFeatures {
 	return ButtonSelection.DONT_CARE;
     }
 
+    //------------------------------------------------------------------------------------------
+    // getHideFeatures method
+    //
+    // Returns the initial value of feature limitations for a given feature.
+    //
+    // Parameter:
+    //     feat: The feature whose limitations we seek.
+    // Return:
+    //     An array of feature values to hide (or null for none)
+    //
     public getHideFeatures(feat : string) : string[] {
 	if (!this.initialQf)
 	    return null;
