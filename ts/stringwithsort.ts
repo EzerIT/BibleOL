@@ -89,6 +89,12 @@ class StringWithSort {
     //
     static compare(sws1 : StringWithSort, sws2 : StringWithSort) : number {
         if (sws1.sort==-1 || sws2.sort==-1 || sws1.sort==sws2.sort) {
+            // Othervalue
+            if (sws1.internal==='othervalue')
+                return 1;
+            if (sws2.internal==='othervalue')
+                return -1;
+            
             // Use lexical comparison
             let s1 : string = sws1.str.toLowerCase();
             let s2 : string = sws2.str.toLowerCase();
