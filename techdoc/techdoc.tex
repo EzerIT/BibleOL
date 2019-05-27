@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{4 January 2019}
+\date{27 May 2019}
 
 \makeindex
 
@@ -1665,7 +1665,7 @@ reformers wished to differentiate their system from the polytonic, the tonos on 
 sign: typically a dot or wedge: α\hspace{-0.5mm}̍\hspace{0.5mm}. However, the Greek government
 decreed in 1986 that the tonos shall be the acute. So you must now write ά instead of
 α\hspace{-0.5mm}̍\hspace{0.5mm}.\footnote{Source:
-  \url{http://www.opoudjis.net/unicode/unicode_gkbkgd.html}, accessed 24 April 2018.}
+  \url{http://www.opoudjis.net/unicode/unicode_gkbkgd.html}, accessed 27 May 2019.}
 
 This confusion has had an impact on the representation of the oxia and tonos accents in Unicode.
 Because of the decision from 1982, Unicode\index{Unicode} distinguishes between the oxia
@@ -2096,7 +2096,7 @@ object:
   \index{multiple-choice}
   database (see Chapter \ref{chap-multiple-choice}).\\
 
-  indirdb, sql\_command, sqlargs, multiple & These keys are used for pseudofeatures. See Section
+  indirdb, sql\_command, sql\_command\_variant, sqlargs, multiple & These keys are used for pseudofeatures. See Section
   \ref{sec-pseudofeature}. \\
   
 \end{my-longtabu}
@@ -2147,7 +2147,7 @@ As an example of a pseudofeature, consider Listing \ref{list-ps-syntax}.
     }
 \end{lstlisting}
 
-A pseudofeature uses the keys \emph{indirdb, sql\_command, sqlargs,} and \emph{multiple.}
+A pseudofeature uses the keys \emph{indirdb, sql\_command, sql\_command\_variant, sqlargs,} and \emph{multiple.}
 
 \begin{itemize}
 \item \emph{indirdb} gives the name of a database in which the pseudofeature can be found. The value
@@ -2159,8 +2159,11 @@ A pseudofeature uses the keys \emph{indirdb, sql\_command, sqlargs,} and \emph{m
   with the correct database table prefix. Each occurrence of the string \texttt{\%s} will be
   replaced by the value of a feature named in \emph{sqlargs}. Alternatively the strings
   \texttt{\%1\$s}, \texttt{\%2\$s}, etc. can be used to specify a specific entry in \emph{sqlargs}.
+\item \emph{sql\_command\_variant} (not shown in Listing \ref{list-ps-syntax}) is the SQL command
+  required to retrieve a variant value (see Section \ref{sec-variants}) of the feature. Its syntax is
+  similar to that of \emph{sql\_command}.
 \item \emph{sqlargs} is an array of features whose values are to be used in place of the
-  \texttt{\%s} strings in \emph{sql\_command}.
+  \texttt{\%s} strings in \emph{sql\_command} and \emph{sql\_command\_variant}.
 \item \emph{multiple} is true if the database may contain more than one record for a given pseudofeature.
 \end{itemize}
 
@@ -2184,7 +2187,9 @@ The SQL query is allowed to return multiple values because \emph{multiple} is \e
 The feature named ``gloss'' is treated specially. Bible OL automatically replaces it with a number
 of features each representing a taget language for a lexicon. The ``gloss'' feature must have
 an \emph{sql\_command} setting that contains the string ``LANG''. This string will be replaced by
-the language code for the target language. For example, the ``gloss'' feature specification may look
+the language code for the target language. If an \emph{sql\_command\_variant} setting is present, it must
+contain the strings ``LANG'' and ``VARIANT'', which will be replaced by the language code and the
+variant name, respectively. For example, the ``gloss'' feature specification may look
 like this:
 
 \begin{lstlisting}[escapechar=\#]
@@ -3049,7 +3054,12 @@ occur several times.
 \begin{my-longtabu}{lX}{ \headii{Element}{Contents} }
 \xml{show} & The name of a display feature.\\
 
-\xml{request} & The name of a request feature.\\
+\xml{request} & The name of a request feature. If this feature is of an enumeration type, and if the
+XML element has an attribute named \texttt{hidefeatures}, then that attribute is interpreted as a
+comma-separated list of feature values that should not be shown to the student taking the quiz, but
+which should instead be conflated into a single ``Other value'' option.\footnote{Note that the
+  \texttt{hidefeatures} attribute lists values that \emph{should not} be shown to the student; but
+  when teachers create exercises, they mark the values that \emph{should} be shown to the student.}\\
 
 \xml{requestdd} & The name of a request feature of string type which should be asked as a
 multiple-choice\index{multiple-choice} question (see Chapter \ref{chap-multiple-choice}).\\
@@ -3059,7 +3069,7 @@ information box.\\
 
 \xml{dontshowobject} & The name of an Emdros object whose features must not be available in the
 grammar selection box\index{grammar selection box} and the grammar information box. If, however,
-this XML element has an attribute named \texttt{show}, whose value is feature of the object, then
+this XML element has an attribute named \texttt{show}, whose value is a feature of the object, then
 that feature will be available. For example,
 \texttt{<dontshowobject show="qere\_utf8">word</dontshowobject>} means that all word features
 except \emph{qere\_utf8} will be unavailable.\\
@@ -4593,31 +4603,52 @@ The user database is a MySQL database that contains information about
 \item URLs linked to glosses.
 \end{itemize}
 
+
+\section{Languages and Variants}\label{sec-variants}\index{variants}
+
+When using the Bible OL website, users can select a local \emph{language} and, optionally, a
+\emph{variant}. The language setting is used to select which natural language (such as, English,
+German, or French) should be used for the interface. The variants allow several different versions of
+the same natural language. For example, the normal English name for a particular Hebrew verb
+tense may be ``Wayyiqtol'', but a variant may give the English name as ``Consecutive imperfect''.
+
+So the different variants control the localization of the interface, the grammar terms, and the
+lexicons.
+
+When a user has selected a variant, that variant is said to be ``active''.
+
+\section{User Database tables}
+
+
 The user database contains these tables:
 
 \begin{center}
 \begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l}
-alphabet      &  language\_comment      &  sta\_displayfeature \\
-bible\_refs   &  language\_LANG         &  sta\_question       \\
-bible\_urls   &  lexicon\_Aramaic       &  sta\_quiz           \\
-class         &  lexicon\_Aramaic\_LANG &  sta\_quiztemplate   \\
-classexercise &  lexicon\_greek         &  sta\_requestfeature \\
-db\_localize  &  lexicon\_greek\_LANG   &  sta\_universe       \\
-exercisedir   &  lexicon\_Hebrew        &  user                \\
-exerciseowner &  lexicon\_Hebrew\_LANG  &  userclass           \\
-font          &  migrations             &  userconfig          \\
-heb\_urls     &  personal\_font         &                      \\
+alphabet              & language\_LANG                  & personal\_font      \\
+bible\_refs           & language\_LANG\_VARIANT         & sta\_displayfeature \\
+bible\_urls           & lexicon\_Aramaic                & sta\_question       \\
+class                 & lexicon\_Aramaic\_LANG          & sta\_quiz           \\
+classexercise         & lexicon\_Aramaic\_LANG\_VARIANT & sta\_quiztemplate   \\
+db\_localize          & lexicon\_greek                  & sta\_requestfeature \\
+db\_localize\_VARIANT & lexicon\_greek\_LANG            & sta\_universe       \\
+exercisedir           & lexicon\_greek\_LANG\_VARIANT   & user                \\
+exerciseowner         & lexicon\_Hebrew                 & userclass           \\
+font                  & lexicon\_Hebrew\_LANG           & userconfig          \\
+heb\_urls             & lexicon\_Hebrew\_LANG\_VARIANT  &                     \\
+language\_comment     & migrations                      &                     \\
 \end{tabu}
 \end{center}
 
 The characters ``LANG'' in the names above should be replaced with language codes, such as ``en''
-for English or ``da'' for Danish.
+for English or ``da'' for Danish. The charaters ``VARIANT'' int the names above should be replaced
+with the names of the available variants; if no variants are available, the variant database tables
+do not exist.
 
 Additionally, the user database contains these tables that are used by Learning Journey (see Section \ref{sec-lj}):
 
 \begin{center}
-\begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l}
-sta\_grading & sta\_gradingfeature & sta\_gradingpath \\
+\begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l@{\hspace{1cm}}l}
+sta\_grading & sta\_gradingfeature & sta\_gradingpath & sta\_grading\_system \\
 \end{tabu}
 \end{center}
 
@@ -4652,6 +4683,7 @@ The \emph{user} table contains information of each registered user. It has the f
   last\_login         & Integer       & UNIX time when the user last logged in.                 \\
   warning\_sent       & Integer       & Number of email warnings sent about account inactivity. \\
   preflang            & Text          & User's preferred language.                              \\
+  prefvariant         & Text          & User's preferred variant.                               \\
   accept\_policy      & Integer       & UNIX time when the user accepted the privacy policy.    \\
   policy\_lang        & Text          & The language of the accepted privacy policy.            \\
   acc\_code           & Text          & Used in the policy acceptance handshake.                \\
@@ -4670,6 +4702,9 @@ the user ID provided by Facebook. Their \emph{oauth2\_login} field is set to \em
 The \emph{preflang} field is specified as either the two-letter ISO~639-1 code of the
 language\footnote{For example, ``en'' for English and ``da'' for Danish.} or ``none'' for no preferred
 language.
+
+The \emph{prefvariant} field is specified as either the name of the preferred variant, ``main''
+for the main variant, or ``none'' for no preferred variant.
 
 %%%%%%%%%%%%%%%%%%%% The class Table %%%%%%%%%%%%%%%%%%%%
 \section{The \emph{class} Table}\index{class table}
@@ -5038,17 +5073,17 @@ version & Integer & Current system version number as used by CodeIgniter.\\
 
 \section{The Localization Tables}\label{sec-localization-tables}\index{localization}
 
-The \emph{db\_localize} table and the tables with names starting with \emph{language\_} or
-\emph{lexicon\_} contain information for the localization of text.
+The tables with names starting with \emph{db\_localize}, \emph{language\_} or \emph{lexicon\_}
+contain information for the localization of text.
 
 
-\subsection{The \emph{db\_localize} Table}\label{sec-db-localize}\index{db\_localize table|hyperit}
+\subsection{The \emph{db\_localize} and \emph{db\_localize\_VARIANT} Tables}\label{sec-db-localize}\index{db\_localize table|hyperit}\index{db\_localize\_VARIANT table|hyperit}
 
-The \emph{db\_localize} table contains the Grammar Localization Structures\index{Grammar
-  Localization Structure}, that is, the translation of grammar terms into various languages. For details, see
-Section \ref{sec-gram-loc-struct}.
+The \emph{db\_localize} table and the optional \emph{db\_localize\_VARIANT} tables contain the
+Grammar Localization Structures\index{Grammar Localization Structure}, that is, the translation of
+grammar terms into various languages. For details, see Section \ref{sec-gram-loc-struct}.
 
-The table contains these fields:
+The tables contain these fields:
 
 \begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
 id     & Integer & Unique number identifying this entry.     \\
@@ -5059,6 +5094,11 @@ lang   & Text    & The language code code for the translation (``en'' for Englis
                    (see Section \ref{sec-gram-loc-comments}). \\
 json   & Text    & A JSON string containing the Grammar Localization Structure. \\
 \end{my-longtabu}
+
+If a variant is not active (see Section \ref{sec-variants}), the system only consults the
+\emph{db\_localize} table. If a variant is active and a corresponding entry exists in the relevant
+\emph{db\_localize\_VARIANT} table, that entry will be used instead of the entry in the
+\emph{db\_localize} table.
 
 
 \subsection{The \emph{language\_comment} Table}\label{sec-language-comment}\index{language\_comment
@@ -5085,10 +5125,11 @@ use\_textarea  & Boolean & \emph{True} if the translator's interface should use 
 \end{my-longtabu}
 
 
-\subsection{The \emph{language\_LANG} Tables}\label{sec-language-lang}\index{language\_LANG table|hyperit}
+\subsection{The \emph{language\_LANG} and \emph{language\_LANG\_VARIANT} Tables}\label{sec-language-lang}\index{language\_LANG table|hyperit}\index{language\_LANG\_VARIANT table|hyperit}
 
 The system contains a number of tables with names such as \emph{language\_en} for English,
-\emph{language\_da} for Danish, etc. They provide translations of the user interface.
+\emph{language\_da} for Danish, etc. Additionally variant tables for each language may exist. The
+tables provide translations of the user interface.
 
 The tables contain these fields:
 
@@ -5098,6 +5139,12 @@ textgroup      & Text    & See Section \ref{sec-loc-user-interface}. \\
 symbolic\_name & Text    & See Section \ref{sec-loc-user-interface}. \\
 text           & Text    & The relevant string translated into language \emph{LANG}. \\
 \end{my-longtabu}
+
+If a variant is not active (see Section \ref{sec-variants}), the system only consults the
+\emph{language\_LANG} table. If a variant is active and a corresponding entry exists in the relevant
+\emph{language\_LANG\_VARIANT} table, that entry will be used instead of the entry in the
+\emph{language\_LANG} table.
+
 
 
 \subsection{The \emph{lexicon\_Hebrew} and \emph{lexicon\_Aramaic} Tables}\label{sec-lexicon-heb}%
@@ -5123,13 +5170,16 @@ firstverse              & Integer & \\
 
 An entry is uniquely defined by its \emph{lex} and \emph{vs} fields.
 
-\subsection{The \emph{lexicon\_Hebrew\_LANG} and \emph{lexicon\_Aramaic\_LANG} Tables}\label{sec-lexicon-heb-lang}%
-\index{lexicon\_Hebrew\_LANG table|hyperit}\index{lexicon\_Aramaic\_LANG table|hyperit}
+\subsection{The \emph{lexicon\_Hebrew\_LANG}, \emph{lexicon\_Aramaic\_LANG},
+  \emph{lexicon\_Hebrew\_LANG\_VARIANT}, and \emph{lexicon\_Aramaic\_LANG\_VARIANT} Tables}\label{sec-lexicon-heb-lang}%
+\index{lexicon\_Hebrew\_LANG table|hyperit}\index{lexicon\_Aramaic\_LANG table|hyperit}%
+\index{lexicon\_Hebrew\_LANG\_VARIANT table|hyperit}\index{lexicon\_Aramaic\_LANG\_VARIANT table|hyperit}
 
 The system contains a number of tables with names such as \emph{lexicon\_Hebrew\_en} for English and
 \emph{lexicon\_Hebrew\_de} for German. They provide translations for the lexemes listed in the
 \emph{lexicon\_Hebrew} table. Similar tables, such as \emph{lexicon\_Aramaic\_en,} provide
-translations for the lexemes listed in the \emph{lexicon\_Aramaic} table.
+translations for the lexemes listed in the \emph{lexicon\_Aramaic} table. Additionally variant
+tables for each language may exist.
 
 The tables contain these fields:
 
@@ -5139,6 +5189,12 @@ lex\_id & Integer & The \emph{id} field of the entry in the \emph{lexicon\_Hebre
                     \emph{lexicon\_Aramaic} table for which the current entry provides a translation. \\
 gloss   & Text    & The translation of the lexeme into language \emph{LANG}. \\
 \end{my-longtabu}
+
+
+If a variant is not active (see Section \ref{sec-variants}), the system only consults the
+\emph{lexicon\_\ldots\_LANG} table. If a variant is active and a corresponding entry exists in the relevant
+\emph{lexicon\_\ldots\_LANG\_VARIANT} table, that entry will be used instead of the entry in the
+\emph{lexicon\_\ldots\_LANG} table.
 
 
 \subsection{The \emph{lexicon\_greek} Table}\label{sec-lexicon-greek}\index{lexicon\_greek table|hyperit}
@@ -5162,10 +5218,11 @@ firstverse          & Integer & \\
 \end{my-longtabu}
 
 
-\subsection{The \emph{lexicon\_greek\_LANG} Table}\label{sec-lexicon-greek-lang}\index{lexicon\_greek\_LANG table|hyperit}
+\subsection{The \emph{lexicon\_greek\_LANG} and \emph{lexicon\_greek\_LANG\_VARIANT }Tables}\label{sec-lexicon-greek-lang}\index{lexicon\_greek\_LANG table|hyperit}\index{lexicon\_greek\_LANG\_VARIANT table|hyperit}
 
 The system contains a number of tables with names such as \emph{lexicon\_greek\_en} for English.
-They provide translations for the lexemes listed in the \emph{lexicon\_greek} table.
+They provide translations for the lexemes listed in the \emph{lexicon\_greek} table. Additionally variant
+tables for each language may exist.
 
 The tables contain these fields:
 
@@ -5176,9 +5233,10 @@ lex\_id & Integer & The \emph{id} field of the entry in the \emph{lexicon\_greek
 gloss   & Text    & The translation of the lexeme into language \emph{LANG}. \\
 \end{my-longtabu}
 
-
-
-
+If a variant is not active (see Section \ref{sec-variants}), the system only consults the
+\emph{lexicon\_greek\_LANG} table. If a variant is active and a corresponding entry exists in the relevant
+\emph{lexicon\_greek\_LANG\_VARIANT} table, that entry will be used instead of the entry in the
+\emph{lexicon\_greek\_LANG} table.
 
 
 
@@ -5708,9 +5766,11 @@ $this->lang->load($filename, $language);
 
 \noindent
 the system will look in the table \emph{language\_\$language} in the user database (see Section
-\ref{sec-language-lang}). Here, it will search for all strings whose \emph{textgroup} field is the
-value specified in the \emph{\$filename} parameter. All these strings are loaded into memory, and
-can be indexed using the value of the \emph{symbolic\_name} field as \emph{\$string\_index}:
+\ref{sec-language-lang})\footnote{If a variant is active, the system will also look in the table
+  \emph{language\_\$language\_VARIANT}, where \emph{VARIANT} is the name of the
+  variant.}. Here, it will search for all strings whose \emph{textgroup} field is the value specified
+in the \emph{\$filename} parameter. All these strings are loaded into memory, and can be indexed
+using the value of the \emph{symbolic\_name} field as \emph{\$string\_index}:
 
 
 \begin{lstlisting}[language=PHP]
@@ -5761,7 +5821,9 @@ independent. \textbf{On the server} the \emph{propertiesName} key (page \pageref
 Database Specification File contains the name of the so-called \emph{Grammar Localization
   Structure}. To retrieve the structure, the system looks in the user database for a record in the
 \emph{db\_localize} table (see Section \ref{sec-db-localize}) whose \emph{db} field is the name of
-the Grammar Localization Structure, and whose \emph{lang} field is the requested target language.
+the Grammar Localization Structure, and whose \emph{lang} field is the requested target
+language.\footnote{If a variant is active, the system also looks in the table
+  \emph{db\_localize\_VARIANT}, where VARIANT is the name of the variant.}
 The \emph{json} field will then contain the Grammar Localization Structure.
 
 \textbf{On the client} the Grammar Localization Structure is available in a
@@ -6219,18 +6281,34 @@ thus:
 php index.php translate if_db2php %\textrm{\textit{language-code}}% %\textrm{\textit{destination-directory}}%
 \end{lstlisting}
 
-Here \emph{language-code} is, for example, ``en'' for English or ``comment'' to get the
-comment information (see Section \ref{sec-language-comment}). The exported files will be stored in a
-directory named
-\emph{destination-directory/language-code}. (The directory
-\emph{destination-directory} must exist, the directory \emph{destination-directory/language-code}
-need not exist.)
+\noindent
+or thus:
+
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php index.php translate if_db2php %\textrm{\textit{language-code}\_\textit{variant}}% %\textrm{\textit{destination-directory}}%
+\end{lstlisting}
+
+
+Here \emph{language-code} is, for example, ``en'' for English or ``comment'' to get the comment
+information (see Section \ref{sec-language-comment}). The optional \emph{variant} gives you a
+language variant (note that an underscore rather than a space separates the language code from the
+variant). The exported files will be stored in a directory named
+\emph{destination-directory/language-code}. (The directory \emph{destination-directory} must exist,
+the directory \emph{destination-directory/language-code} need not exist.)
 
 To import the user interface tables from textual files, execute this command from the shell command
 line on the server:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
 php index.php translate if_php2db %\textrm{\textit{language-code}}% %\textrm{\textit{source-directory}}%
+\end{lstlisting}
+
+
+\noindent
+or this command:
+
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php index.php translate if_php2db %\textrm{\textit{language-code}\_\textit{variant}}% %\textrm{\textit{source-directory}}%
 \end{lstlisting}
 
 The imported files will be loaded from a directory named \emph{source-directory}.
@@ -6259,25 +6337,40 @@ thus:
 php index.php translate gram_db2prop %\textrm{\textit{destination-directory}}%
 \end{lstlisting}
 
+\noindent
+or thus:
+
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php index.php translate gram_db2prop %\textrm{\textit{destination-directory}}% %\textrm{\textit{variant}}%
+\end{lstlisting}
+
 This command will store the grammar localization structures for all Emdros databases and all
 languages in files in the directory \emph{destination-directory} (which must exist). The data will
-be stored in ``pretty'' JSON format.
+be stored in ``pretty'' JSON format. If \emph{variant} is specified, data from that variant
+translation will be used.
 
 To import the grammar localization structures from textual files, place the JSON files in the directory
 \texttt{db/propterty\_files} under the Bible OL main directory. Then execute this command from the
 shell command line on the server:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
-php index.php translate gram_prop2db
+php index.php translate gram_prop2db %\textrm{\textit{source-directory}}%
 \end{lstlisting}
 
-This command will read the files from the \texttt{db/propterty\_files} directory and update the contents of
-the user database, where necessary. The command will print a list of tile files found plus
-information about whether the contents of the files caused the database to be updated.
+\noindent
+or this command:
 
-Note the difference in directories used in the export and import commands. For export, the
-destination directory must be specified on the command line. For import, the files are always read
-from the \texttt{db/propterty\_files} directory.
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php index.php translate gram_prop2db %\textrm{\textit{source-directory}}% %\textrm{\textit{variant}}%
+\end{lstlisting}
+
+This command will read the files from the \emph{source-directory} and update the contents of the
+user database, where necessary. The command will print a list of tile files found plus information
+about whether the contents of the files caused the database to be updated. If \emph{variant} is
+specified, then that variant will be updated.
+
+(In earlier versions of Bible OL, the \texttt{gram\_prop2db} command did not take a
+\emph{source-directory} parameter; instead the \texttt{db/propterty\_files} directory was always used.)
 
 \subsection{Lexicon}
 
@@ -6290,9 +6383,17 @@ From the shell command line on the server the contents of a lexicon can be expor
 php index.php translate download_lex %\textrm{\textit{source-language}}% %\textrm{\textit{target-language}}%
 \end{lstlisting}
 
+\noindent
+or thus:
+
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php index.php translate download_lex %\textrm{\textit{source-language}}% %\textrm{\textit{target-language}}% %\textrm{\textit{variant}}%
+\end{lstlisting}
+
 The \emph{source-language} must be either ``hebr'', ``aram'', or ``greek''. The
 \emph{destination-language} must be, for example, ``en'' for English. The lexicon will be written to
-the standard output as a comma-separated file, suitable for import into a spreadsheet program.
+the standard output as a comma-separated file, suitable for import into a spreadsheet program. If \emph{variant} is
+specified, data from that variant translation will be used.
 
 Note that a user with translator or administrator privileges can also download the lexicons from the
 Bible OL website by selecting the \emph{Administration > Download lexicon} menu.
@@ -6300,13 +6401,22 @@ Bible OL website by selecting the \emph{Administration > Download lexicon} menu.
 A lexicon can be imported from the shell command line on the server by executing this command:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
-php index.php translate import_lex %\textrm{\textit{source-language}}% %\textrm{\textit{target-language}}%  %\textrm{\textit{CSV-file}}%
+php index.php translate import_lex %\textrm{\textit{source-language}}% %\textrm{\textit{target-language}}% %\textrm{\textit{CSV-file}}%
 \end{lstlisting}
+
+\noindent
+or this command:
+
+\begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
+php index.php translate import_lex %\textrm{\textit{source-language}}% %\textrm{\textit{target-language}}% %\textrm{\textit{CSV-file}}% %\textrm{\textit{variant}}%
+\end{lstlisting}
+
 
 The \emph{source-language} and \emph{destination-language} are described above. The \emph{CSV-file}
 is the name of a comma-separated file containing the lexicon in the exact format generated by the export line
 above. This means that the imported CSV file must have the same number of fields and the same
-headings as the generated file.
+headings as the generated file.  If \emph{variant} is
+specified, then that variant will be updated.
 
 
 
