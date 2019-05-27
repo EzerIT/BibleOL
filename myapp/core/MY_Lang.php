@@ -126,13 +126,13 @@ class MY_Lang extends CI_Lang {
     }
     
     // Load from speicific language database without looking elsewhere. Merge into $lang
-    private function load_from_db_specific(string $langfile, string $idiom, bool $org_site, array &$lang) {
+    private function load_from_db_specific(string $langfile, string $idiom, bool $use_variant, array &$lang) {
         $CI =& get_instance();
 
-        if ($org_site) {
+        if ($use_variant) {
             $variant_lang_table = self::create_variant_lang_table($idiom); // Make sure table exists
             if (empty($variant_lang_table))
-                return; // We are running on master site
+                return; // We are running main variant
 
             $query = $CI->db->where('textgroup',$langfile)->get($variant_lang_table);
         }
@@ -164,10 +164,10 @@ class MY_Lang extends CI_Lang {
         if ($langfile!=='db') {
             // We cannot use a language database to handle database errors. Infinte recursion would occur.
             
-            // Read master site table
+            // Read main variant table
             $this->load_from_db_specific($langfile, $idiom, false, $lang);
 
-            // Read organizational site table
+            // Read variant table
             $this->load_from_db_specific($langfile, $idiom, true, $lang);
         }
 
@@ -223,17 +223,17 @@ class MY_Lang extends CI_Lang {
 
         $lang = array();
 
-        // Read English strings from master site
+        // Read English strings from main variant
         $this->load_from_db_specific($langfile, 'en', false, $lang);
         
-        // Read localized strings from master site
+        // Read localized strings from main variant
         if ($idiom!='en')
             $this->load_from_db_specific($langfile, $idiom, false, $lang);
 
-        // Read English strings from organizational site
+        // Read English strings from variant
         $this->load_from_db_specific($langfile, 'en', true, $lang);
         
-        // Read localized strings from organizational site
+        // Read localized strings from variant
         if ($idiom!='en')
             $this->load_from_db_specific($langfile, $idiom, true, $lang);
 
