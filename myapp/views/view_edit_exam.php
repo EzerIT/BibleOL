@@ -6,21 +6,27 @@ $xml = simplexml_load_file($full_name . "/config.xml") or die("error");
 $exercise_list = array();
 $feature_values = array();
 
+$datetime_format = "/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$/";
+
 if(isset($_POST["submit"])) {
 	foreach ($_POST as $key => $value){
-		$feature_values[] = $value;		 
+		if (preg_match($datetime_format, $value)){
+			$value = str_replace("T", " ", $value) . ":00";
+		}
+		$feature_values[] = $value;
+
 	}
-	
+
 	foreach ($xml->exercise as $x){
 		$array = json_decode(json_encode((array) $x), TRUE);
 		foreach ($array as $key => $value){
 			if($key != "exercisename"){
 				$removed = array_shift($feature_values);
-				$x->$key = $removed;	
+				$x->$key = $removed;
 			}
 		}
 	}
-	
+
 	$xml->asXML($full_name . "/config.xml");
 }
 
@@ -72,7 +78,7 @@ body {font-family: Arial;}
 }
 
 .tab {
-  
+
 }
 
 #Features {
@@ -104,9 +110,14 @@ body {font-family: Arial;}
 	     //print_r($array);
 	     ?>
 	     <?php foreach ($array as $key => $value): ?>
-	       <?php if($key != "exercisename"): ?>
+				 <?php if($key == "plan_start" or $key == "plan_end"): ?>
+				   <div id="feature">
+						 <input name="<?php echo $x->exercisename . $key; ?>" value="<?php echo substr($value, 0, 10) . "T" . substr($value, 11, 5); ?>" type="datetime-local">
+						 <?php echo $key ?>
+					 </div>
+	       <?php elseif($key != "exercisename"): ?>
 	         <div id="feature">
-              <input name="<?php echo $x->exercisename . $key; ?>" value="<?php echo $value ?>" min="0" step="1" type="number">
+              <input name="<?php echo $x->exercisename . $key; ?>" value="<?php echo $value; ?>" min="0" step="1" type="number">
               <?php echo $key; ?>
             </div>
           <?php endif; ?>
@@ -129,7 +140,7 @@ body {font-family: Arial;}
     	<a href="#tab_features"><?= $this->lang->line('features') ?></a>
     </li>
   </ul>
-   
+
   <div id="tab_description" class="tabcontent">
     <textarea id="txtdesc" style="width:100%; height:100px" wrap="hard"></textarea>
   </div>
@@ -141,7 +152,7 @@ body {font-family: Arial;}
 
 <div style="display:none" id="virtualkbcontainer">
   <div id="virtualkbid"></div>
-  <input id="firstinput" type="text"> 
+  <input id="firstinput" type="text">
 </div>
 
 
@@ -150,11 +161,11 @@ function openTab(evt, tabName){
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";  
+    tabcontent[i].style.display = "none";
   }
   tablinks = document.getElementsByClassName("tablinks");
   for (i = 0; i < tablinks.length; i++){
-    tablinks[i].className = tablinks[i].className.replace(" active", ""); 
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
   }
   document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " active";
@@ -187,7 +198,7 @@ function openTab(evt, tabName){
 <!-- Dialogs for this page follow -->
 
   <?php //*********************************************************************
-        // Quiz Filename dialog 
+        // Quiz Filename dialog
         //*********************************************************************
     ?>
   <div id="filename-dialog" class="modal fade">
@@ -217,7 +228,7 @@ function openTab(evt, tabName){
 
 
  <?php //*********************************************************************
-        // Confirm File Overwrite dialog 
+        // Confirm File Overwrite dialog
         //*********************************************************************
     ?>
 <div id="overwrite-dialog-confirm" class="modal fade">

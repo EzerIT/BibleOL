@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<exam>
+  <examname>test</examname>
+  <exercise>
+    <exercisename>ETCBC4/demo/make_suffix.3et</exercisename>
+    <numq>0</numq>
+    <time>0</time>
+    <plan_start>2023-07-23 00:00:00</plan_start>
+    <plan_end>2010-08-01 00:00:00</plan_end>
+    <weight>1</weight>
+    <order>1</order>
+  </exercise>
+  <exercise>
+    <exercisename>ETCBC4/demo/qal_imperfect.3et</exercisename>
+    <numq>0</numq>
+    <time>0</time>
+    <plan_start>2010-02-01 00:00:00</plan_start>
+    <plan_end>2010-09-01 00:00:00</plan_end>
+    <weight>1</weight>
+    <order>2</order>
+  </exercise>
+</exam>

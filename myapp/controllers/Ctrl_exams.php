@@ -1,4 +1,5 @@
 <?php
+
 class Ctrl_exams extends MY_Controller {
     public $loc; // Localization
 
@@ -143,6 +144,10 @@ class Ctrl_exams extends MY_Controller {
 				     $exercise_node->appendChild($numq_node);
 				     $time_node = $dom->createElement('time', '0');
 				     $exercise_node->appendChild($time_node);
+             $plan_start_node = $dom->createElement('plan_start', '2010-01-01 00:00:00');
+             $exercise_node->appendChild($plan_start_node);
+             $plan_end_node = $dom->createElement('plan_end', '2010-01-01 00:00:00');
+             $exercise_node->appendChild($plan_end_node);
 				     $weight_node = $dom->createElement('weight', '1');
 				     $exercise_node->appendChild($weight_node);
 				     $order_node = $dom->createElement('order', $order);
@@ -224,6 +229,7 @@ class Ctrl_exams extends MY_Controller {
 
     private function show_files_2() {
         $this->lang->load('owner', $this->language);
+        $this->lang->load('exams', $this->language);
 
         $dirlist = $this->mod_quizpath->dirlist(false);
 
