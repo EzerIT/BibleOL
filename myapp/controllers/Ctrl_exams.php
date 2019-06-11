@@ -125,8 +125,9 @@ class Ctrl_exams extends MY_Controller {
 	 		$root = $dom->createElement('exam');
 	 		$dom->appendChild($root);
 	 		$examname_node = $dom->createElement('examname', $examname);
-
       $root->appendChild($examname_node);
+      $teacher_id = $dom->createElement('teacher_id', $this->mod_users->my_id());
+      $root->appendChild($teacher_id);
 
 
 	 		// Add exercise tags to XML file
