@@ -11,6 +11,7 @@ $lang['home'] = "Home";
 $lang['login'] = "Login";
 $lang['logout'] = "Logout";
 $lang['manage_exercises'] = "Manage exercises";
+$lang['manage_exams'] = "Manage exams";
 $lang['manage_gloss_links'] = "Gloss links";
 $lang['my_data'] = "My Data";
 $lang['my_progress'] = "My performance";

@@ -1,14 +1,15 @@
 <?php
+
 class Ctrl_exams extends MY_Controller {
     public $loc; // Localization
 
     public function __construct() {
         parent::__construct();
-        
+
         $this->lang->load('exams', $this->language);
         $this->load->model('mod_quizpath');
         $this->load->helper('varset');
-        
+
     }
 
     public function index() {
@@ -16,7 +17,7 @@ class Ctrl_exams extends MY_Controller {
     //print_r($this->getDirContents(__DIR__."/../../quizzes"));
     //exit();
     }
-    
+
     public function build() {
         $exam = $_POST["exam"];
         $ename = $_POST["name"];
@@ -30,7 +31,7 @@ class Ctrl_exams extends MY_Controller {
         print($ename);
         exit();
     }
-    
+
     public function getDirFolders($dir, &$results = array()){
         $files = scandir($dir);
 
@@ -45,7 +46,7 @@ class Ctrl_exams extends MY_Controller {
 
         return $results;
     }
-    
+
     /**
      * First checks if the user is a teacher
      * Creates a new directory with the same name as the exam
@@ -55,38 +56,53 @@ class Ctrl_exams extends MY_Controller {
     	try {
             $this->mod_users->check_teacher();
 
-    		
-    		
+
+
             if (isset($_POST['create_exam'])) {
                 $create = trim($_POST['create_exam']);
 
                 if (preg_match('|[/?*;{}"\'\\\\]|',$create))
                     throw new DataException($this->lang->line('illegal_char_folder_name'));
 
-					 $exercise_lst = $_POST['exercise_list'];				
-					 
-					 // chmod 7-7 required					 
-                mkdir('/var/www/BibleOL/exam/'.$create);
-                
+					 $exercise_lst = $_POST['exercise_list'];
+
+           $base_pth = '/var/www/BibleOL/';
+
+           $exam_loc = $base_pth.'exam/'.$create;
+
+					 // chmod 7-7 required
+                mkdir($exam_loc);
+
 					 //echo '<span>alert('.$exercise_lst.')</span>';
-					 				 
+
 					 $ex_ar = explode(',', $exercise_lst);
-					 
-					 $base_pth = '/var/www/BibleOL/';					 
-					 $ex_pth = $base_pth . 'quizzes';             
-                
+
+
+					 $ex_pth = $base_pth . 'quizzes';
+
                 foreach ( $ex_ar as $key => $exrcs){
                 	 $exrcs = str_replace('"', '', $exrcs);
                 	 $org_pth = $ex_pth . "/" . $exrcs;
                 	 if(($exrcs) != 'undefined') {
-						 	 $new_pth = $base_pth . "exam/" . $create . "/" . basename($exrcs);
-						 	 copy($org_pth, $new_pth);          
-						 }                
+						 	 $new_pth = $exam_loc . "/" . basename($exrcs);
+						 	 copy($org_pth, $new_pth);
+						 }
                 }
-					 
-					 $this -> create_config_file($create, $ex_ar); 
-					 
-					 header("Location: http://127.0.0.1/exams/edit_exam?exam=$create");  
+
+					 $this -> create_config_file($create, $ex_ar);
+
+           $test_file = fopen("test.txt", "w") or die ("Can't open");
+           $user_id = intval($this->session->userdata('ol_user'));  // Sets $user_id to 0 if userdata('ol_user') is not set
+
+           $query = $this->db->where('id',$user_id)->get('user');
+   		     $q = $this->mod_users->check_teacher;
+
+           $txt = gettype($q);
+           #$txt = 1;
+           fwrite($test_file, $txt);
+           fclose($test_file);
+
+					 header("Location: /exams/edit_exam?exam=$create");
             }
 
         }
@@ -96,27 +112,31 @@ class Ctrl_exams extends MY_Controller {
     }
 
 	 // Create xml configuration file
-	 public function create_config_file($examname, array $exercises){		
-	 		
+	 public function create_config_file($examname, array $exercises){
+
 	 		// Set up XML file
 	 		$dom = new DOMDocument();
 	 		$dom->encoding = 'utf-8';
 	 		$dom->xmlVersion = '1.0';
 	 		$dom->formatOutput = true;
 	 		$dom->preserveWhiteSpace = false;
-	 		
+
 	 		// Add root tags to XML file
 	 		$root = $dom->createElement('exam');
 	 		$dom->appendChild($root);
 	 		$examname_node = $dom->createElement('examname', $examname);
-	 		$root->appendChild($examname_node);
-	 		
-	 		
+      $root->appendChild($examname_node);
+      $teacher_id = $dom->createElement('teacher_id', $this->mod_users->my_id());
+      $root->appendChild($teacher_id);
+      $description = $dom->createElement('description', 'Description');
+      $root->appendChild($description);
+
+
 	 		// Add exercise tags to XML file
 	 		// <exercise numq="10" time="0">exercisename.3et</exercise>
 	 		$order = 1;
 	 		foreach($exercises as $key => $value){
-	 			 if ($key != 0){			 
+	 			 if ($key != 0){
 	 			     $value = str_replace('"', '', $value);
 	 			     print($value);
 				     $exercise_node = $dom->createElement('exercise');
@@ -127,22 +147,26 @@ class Ctrl_exams extends MY_Controller {
 				     $exercise_node->appendChild($numq_node);
 				     $time_node = $dom->createElement('time', '0');
 				     $exercise_node->appendChild($time_node);
+             $plan_start_node = $dom->createElement('plan_start', '2010-01-01 00:00:00');
+             $exercise_node->appendChild($plan_start_node);
+             $plan_end_node = $dom->createElement('plan_end', '2010-01-01 00:00:00');
+             $exercise_node->appendChild($plan_end_node);
 				     $weight_node = $dom->createElement('weight', '1');
 				     $exercise_node->appendChild($weight_node);
 				     $order_node = $dom->createElement('order', $order);
 				     $exercise_node->appendChild($order_node);
-				     
+
 				     $order = $order + 1;
 				     /*
 				     $exercise_node->setAttributeNode(new DOMAttr('numq', '10'));
 				     $exercise_node->setAttributeNode(new DOMAttr('time', '0'));
 				     $exercise_node->setAttributeNode(new DOMAttr('weight', 1));
-					  */				 
+					  */
 				 }
 	 		}
-	 		
+
 	 		$dom->save('/var/www/BibleOL/exam/'.$examname.'/config.xml');
-			 
+
 	 }
 
     /**
@@ -154,24 +178,24 @@ class Ctrl_exams extends MY_Controller {
      */
     public function getDirFiles($dir){
 		$files = scandir($dir);
-		
-		$results = array();		
-		$results[] = realpath($dir);				
-		
+
+		$results = array();
+		$results[] = realpath($dir);
+
 		foreach($files as $key => $value){
 			$path = realpath($dir.DIRECTORY_SEPARATOR.$value);
 			if(substr(basename($path),0,1)=='.') continue;
  			if(!is_dir($path)){
 				$results[] = $path;
 			} else if($value != "." && $value != "..") {
-				$results[] = $this -> getDirFiles($path);			
-			}		
+				$results[] = $this -> getDirFiles($path);
+			}
 		}
-		
-		return $results;    
+
+		return $results;
     }
- 
-    
+
+
     public function getDirContents($dir, &$results = array()){
         $files = scandir($dir);
 
@@ -188,19 +212,19 @@ class Ctrl_exams extends MY_Controller {
 
         return $results;
     }
-    
-    
-    
-    
+
+
+
+
     //Get all elements of a folder only one level down
     public function getChildren($dir) {
     	$results = array();
     	$files = scandir($dir);
-    	
+
     	foreach($files as $key => $value){
-			$path = realpath();    	
+			$path = realpath();
 		}
-    	
+
     	return $results;
     }
 
@@ -208,6 +232,7 @@ class Ctrl_exams extends MY_Controller {
 
     private function show_files_2() {
         $this->lang->load('owner', $this->language);
+        $this->lang->load('exams', $this->language);
 
         $dirlist = $this->mod_quizpath->dirlist(false);
 
@@ -320,7 +345,7 @@ class Ctrl_exams extends MY_Controller {
                         if (isset($_POST['newowner']) && is_numeric($_POST['newowner']))
                             $this->mod_quizpath->chown_files($_POST['file'], intval($_POST['newowner']));
                         break;
-                        
+
                   case 'delete':
                         $this->mod_users->check_teacher();
                         $this->mod_quizpath->delete_files($_POST['file']);
@@ -387,7 +412,7 @@ class Ctrl_exams extends MY_Controller {
 
             if ($this->session->userdata('operation') === 'move')
                 $this->mod_source_quizpath->delete_files($this->session->userdata('files'));
-                
+
             $this->session->unset_userdata(array('files'=>'', 'operation'=>'', 'from_dir'=>''));
 
             $this->show_files_2();
@@ -466,7 +491,7 @@ class Ctrl_exams extends MY_Controller {
             $this->load->library('form_validation');
 
             $this->form_validation->set_rules('inclass[]', '', 'callback_always_true');  // Dummy rule. At least one rule is required
-            
+
             if ($this->form_validation->run()) {
                 $new_classes = $this->input->post('inclass');
                 if (!$new_classes) // post() returns false when nothing is selected...
@@ -480,13 +505,13 @@ class Ctrl_exams extends MY_Controller {
                 $this->load->view('view_top1', array('title' => $this->lang->line('edit_visibility')));
                 $this->load->view('view_top2');
                 $this->load->view('view_menu_bar', array('langselect' => true));
-                
+
                 $center_text = $this->load->view('view_edit_visibility',
                                                  array('dir' => $this->mod_quizpath->get_relative(),
                                                        'allclasses' => $all_classes,
                                                        'old_classes' => $old_classes),
                                                  true);
-             
+
                 $this->load->view('view_main_page', array('left_title' => $this->lang->line('control_visibility'),
                                                           'left' => sprintf($this->lang->line('visibility_folder_desc'),
                                                                             $this->mod_quizpath->get_relative()),
@@ -503,7 +528,7 @@ class Ctrl_exams extends MY_Controller {
     public function download_ex() {
         try {
             $this->mod_users->check_teacher();
-        
+
             if (!isset($_GET['dir']))
                 throw new DataException($this->lang->line('missing_folder_name'));
             if (!isset($_GET['file']))
@@ -530,7 +555,7 @@ class Ctrl_exams extends MY_Controller {
     public function rename_file() {
         try {
             $this->mod_users->check_teacher();
-        
+
             if (!isset($_POST['dir']))
                 throw new DataException($this->lang->line('missing_folder_name'));
             if (!isset($_POST['oldname']))
@@ -542,7 +567,7 @@ class Ctrl_exams extends MY_Controller {
 
             if (preg_match('|[/?*;{}"\'\\\\]|',$newname))
                 throw new DataException($this->lang->line('illegal_char_filename'));
-            
+
             $this->load->model('mod_quizpath');
             $this->mod_quizpath->init(rawurldecode($_POST['dir']), true, false);
             $owner = $this->mod_quizpath->get_excercise_owner($_POST['oldname'] . '.3et');
@@ -573,12 +598,12 @@ class Ctrl_exams extends MY_Controller {
             $this->load->view('view_top1', array('title' => $this->lang->line('file_mgmt')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
-                
+
             $center_text = $this->load->view('view_update_ownership',
                                              array('added' => $added,
                                                    'deleted' => $deleted),
                                              true);
-             
+
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('ownership_updated'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
@@ -587,14 +612,14 @@ class Ctrl_exams extends MY_Controller {
             $this->error_view($e->getMessage(), $this->lang->line('file_mgmt'));
         }
     }
-    
-    
+
+
     public function edit_exam() {
 			$this->mod_users->check_teacher();
-    	
+
          $this->load->model('mod_askemdros');
          $this->load->model('mod_localize');
-    	 	
+
     	 	$javascripts = array('jstree/jquery.jstree.js',
                                  'ckeditor/ckeditor.js',
                                  'ckeditor/adapters/jquery.js',
@@ -607,7 +632,7 @@ class Ctrl_exams extends MY_Controller {
 			$this->load->view('view_top2');
 			$this->load->view('view_menu_bar', array('langselect' => false));
 			$this->load->view('view_alert_dialog');
-			
+
 			$center_text = $this->load->view('view_edit_exam',
 														array('decoded_3et_json' => json_decode($this->mod_askemdros->decoded_3et),
 																'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
@@ -620,19 +645,10 @@ class Ctrl_exams extends MY_Controller {
 														true);
 			$this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_exam'),
 																	'left' => "TEST LEFT",
-																	
+
 																	'center' => $center_text));
 			$this->load->view('view_bottom');
-			   
+
     }
 
 }
-
-
-
-
-
-
-
-
-
