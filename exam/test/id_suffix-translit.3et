@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="3">
+  <desc><![CDATA[Identify personal suffixes]]></desc>
+  <database>ETCBC4</database>
+  <properties>ETCBC4-translit</properties>
+  <path>Genesis</path>
+  <path>Exodus</path>
+  <path>Leviticus</path>
+  <path>Numeri</path>
+  <path>Deuteronomium</path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="2">
+      <enumfeature version="1">
+        <name>suffix_person</name>
+        <comparator>differs</comparator>
+        <value>NA</value>
+        <value>unknown</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="3">
+    <show>visual</show>
+    <show>sp</show>
+    <request>suffix_gender</request>
+    <request>suffix_person</request>
+    <request>suffix_number</request>
+  </quizfeatures>
+</questiontemplate>

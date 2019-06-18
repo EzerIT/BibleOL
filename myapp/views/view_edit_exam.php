@@ -9,8 +9,11 @@ $feature_values = array();
 $datetime_format = "/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$/";
 
 if(isset($_POST["submit"])) {
+	echo var_dump($_POST);
 	foreach ($_POST as $key => $value){
+		# Check if the value is in the HTML datetime-local format.
 		if (preg_match($datetime_format, $value)){
+			# Change the value from datetime-local format to SQL datetime format.
 			$value = str_replace("T", " ", $value) . ":00";
 		}
 		$feature_values[] = $value;
@@ -97,11 +100,11 @@ body {font-family: Arial;}
 
 
 <div>
-  <form action="" method="post">
+  <form action="" method="post" id="edit_exam_form">
     <h3>Editing exam: <?php echo $exam; ?></h3>
     <br>
     <h5>Exam Description</h5>
-    <textarea id="txtdesc" style="width:100%; height:100px" wrap="hard">Hello</textarea>
+    <textarea id="txtdesc" style="width:100%; height:100px" wrap="hard" form="edit_exam_form"><?php echo $xml->description, PHP_EOL; ?></textarea>
 	 <?php foreach ($xml->exercise as $x): ?>
 	   <div id="exercise">
 	     <h5><?php echo $x->exercisename; ?></h5>
