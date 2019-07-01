@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{27 May 2019}
+\date{1 July 2019}
 
 \makeindex
 
@@ -749,6 +749,49 @@ which contains sample quiz templates, to \texttt{quizzes}.
 
 Make sure that the permissions on the \texttt{quizzes} directory and its contents is set to allow
 the web server to modify the files.
+
+\subsection{Step 10. Additional PHP Configuration}\index{PHP!Configuration}
+
+Unfortunately, the default PHP configuration on some Linux distributions has problems with login
+session timeouts. This affects the system session folder\index{PHP!system session folder} and the session garbage
+collection probability\index{PHP!garbage collection}.
+
+Depending on your Linux distribution, you may have to perform the following steps:
+
+The system session folder is probably \texttt{/var/lib/php/sessions}. This folder must be owned by
+the Apache web server (that is probably user \emph{www-data}). In order to fix this, issue the
+following commands:
+
+\begin{lstlisting}[language=bash]
+sudo chown www-data:www-data /var/lib/php/sessions
+ls -ld /var/lib/php/sessions
+\end{lstlisting}
+
+These commands should produce this output (the time stamp and file size may differ):
+
+\begin{lstlisting}
+drwx-wx-wt 2 www-data www-data 32768 jul  1 11:02 /var/lib/php/sessions
+\end{lstlisting}
+
+
+The garbage collection probability is controlled by the configuration variables
+\emph{session.gc\_probability} and \emph{session.gc\_divisor}. As superuser, you must edit the PHP
+configuration file \texttt{/etc/php/7.2/apache2/php.ini} (where 7.2 should be replaced by your PHP
+version number). In that file you must ensure that the configuration variables have these values:
+
+\begin{lstlisting}
+session.gc_probability = 1
+session.gc_divisor = 100
+\end{lstlisting}
+
+After making these changes, reload the Apache configuration; for example, thus:
+
+\begin{lstlisting}[language=bash]
+sudo service apache2 reload
+\end{lstlisting}
+
+
+
 
 %%%%%%%%%%%%%%%%%%%% Bible OL Development System Setup %%%%%%%%%%%%%%%%%%%%
 \section{Bible OL Development\index{development} System Setup}\label{sec-devel}
