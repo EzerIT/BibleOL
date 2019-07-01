@@ -37,6 +37,9 @@ class Suggest_answers {
                                                                      true);
         }
 
+        // The features have been HTML encoded, we need to undo that
+        $param1 = htmlspecialchars_decode($param1);
+
         $query = self::$database_handles[$database]->query(sprintf($sqlCommand,$param1));
         
         $results = array();
