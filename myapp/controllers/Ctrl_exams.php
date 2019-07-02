@@ -91,7 +91,6 @@ class Ctrl_exams extends MY_Controller {
 
 					 $this -> create_config_file($create, $ex_ar);
 
-           $test_file = fopen("test.txt", "w") or die ("Can't open");
            $user_id = intval($this->session->userdata('ol_user'));  // Sets $user_id to 0 if userdata('ol_user') is not set
 
            $query = $this->db->where('id',$user_id)->get('user');
@@ -102,7 +101,7 @@ class Ctrl_exams extends MY_Controller {
            fwrite($test_file, $txt);
            fclose($test_file);
 
-					 header("Location: /exams/edit_exam?exam=$create");
+					 redirect("/exams/edit_exam?exam=$create");
             }
 
         }
