@@ -25,6 +25,7 @@ $lang['account_you_created_message3'] = "Please visit %s, and log in;\n"
         . "If you did not create an account, you may ignore this message.\n";
 $lang['add_user'] = "Add new user";
 $lang['administrator'] = "Sysadmin";
+$lang['amharic'] = "Amharic";
 $lang['assign_to_class'] = "Assign to class";
 $lang['cannot_change'] = "(Cannot be changed)";
 $lang['cannot_delete_self'] = "You cannot delete yourself";

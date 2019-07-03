@@ -99,6 +99,8 @@
               <option value="es" <?= set_select('preflang', 'es', $curlang=='es') ?>><?= $this->lang->line('spanish') ?></option>
               <option value="zh-simp" <?= set_select('preflang', 'zh-simp', $curlang=='zh-simp') ?>><?= $this->lang->line('simp_chinese') ?></option>
               <option value="zh-trad" <?= set_select('preflang', 'zh-trad', $curlang=='zh-trad') ?>><?= $this->lang->line('trad_chinese') ?></option>
+              <option value="am" <?= set_select('preflang', 'am', $curlang=='am') ?>><?= $this->lang->line('amharic') ?></option>
+
             </select>
           </td>
           <td class="nolb"></td>

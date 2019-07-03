@@ -63,6 +63,7 @@ class MY_Controller extends CI_Controller {
           case 'fr':
           case 'zh-simp':
           case 'zh-trad':
+          case 'am':
                 $this->language_short = $this->language;
                 $this->language_short2 = $this->language;
                 break;

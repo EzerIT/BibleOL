@@ -27,6 +27,7 @@ $lang['account_you_created_message3'] = "Gå til %s, og log ind;\n"
         . "Hvis det ikke er dig der har oprettet en konto, kan du ignorere denne mail.\n\n";
 $lang['add_user'] = "Tilføj ny bruger";
 $lang['administrator'] = "Sysadmin";
+$lang['amharic'] = "Amharisk";
 $lang['assign_to_class'] = "Tildel til klasse";
 $lang['cannot_change'] = "(Kan ikke ændres)";
 $lang['cannot_delete_self'] = "Du kan ikke slette dig selv";

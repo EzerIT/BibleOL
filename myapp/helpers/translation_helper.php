@@ -15,6 +15,7 @@ class Language {
         'sw' => 'swahili',
         'zh-simp' => 'simp_chinese',
         'zh-trad' => 'trad_chinese',
+        'am' => 'amharic',
     );
 
     // NOTE: When new lexicon languages are added to $dst_lang_abbrev, they must also be added

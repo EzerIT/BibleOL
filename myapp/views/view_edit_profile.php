@@ -68,6 +68,7 @@
               <option value="es" <?= set_select('preflang', 'es', $user_info->preflang=='es') ?>><?= $this->lang->line('spanish') ?></option>
               <option value="zh-simp" <?= set_select('preflang', 'zh-simp', $user_info->preflang=='zh-simp') ?>><?= $this->lang->line('simp_chinese') ?></option>
               <option value="zh-trad" <?= set_select('preflang', 'zh-trad', $user_info->preflang=='zh-trad') ?>><?= $this->lang->line('trad_chinese') ?></option>
+              <option value="am" <?= set_select('preflang', 'am', $user_info->preflang=='am') ?>><?= $this->lang->line('amharic') ?></option>
             </select>
           </td>
           <td class="nolb"></td>

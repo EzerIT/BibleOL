@@ -122,6 +122,7 @@ $cols = $ix+1;
                                    'es'      => 'Español',
                                    'zh-simp' => '中文（简体）',
                                    'zh-trad' => '中文（繁體）',
+                                   'am'      => 'አማርኛ',
               ); ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle pt-3 pb-3 pl-3 pr-3" href="#" id="navbarDropdownLang" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?= site_url('images/icon20x24px-exported-transparent.png') ?>" alt=""> <?= $this->lang->line('language') ?></a>

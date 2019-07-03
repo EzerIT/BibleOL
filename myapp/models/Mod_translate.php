@@ -32,7 +32,9 @@ class Mod_translate extends CI_Model {
                                 'pt' => $this->lang->line('portuguese'),
                                 'es' => $this->lang->line('spanish'),
                                 'zh-simp' => $this->lang->line('simp_chinese'),
-                                'zh-trad' => $this->lang->line('trad_chinese'));
+                                'zh-trad' => $this->lang->line('trad_chinese'),
+                                'am' => $this->lang->line('amharic'),
+            );
 
         
         $this->load->helper(array('directory','translation'));
