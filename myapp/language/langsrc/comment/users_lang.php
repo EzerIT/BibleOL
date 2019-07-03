@@ -36,6 +36,10 @@ $comment['administrator'] = "";
 $format['administrator'] = "";
 $use_textarea['administrator'] = false;
 
+$comment['amharic'] = "";
+$format['amharic'] = "";
+$use_textarea['amharic'] = false;
+
 $comment['assign_to_class'] = "";
 $format['assign_to_class'] = "";
 $use_textarea['assign_to_class'] = false;
