@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{1 July 2019}
+\date{3 July 2019}
 
 \makeindex
 
@@ -650,7 +650,7 @@ the content of the file \texttt{ljsetup.sql}.
 Populate the database with the translations of the interface by issuing these commands:
 
 \begin{lstlisting}[language=bash]
-for i in comment da en es pt zh-simp zh-trad
+for i in comment am da de en es fr nl pt zh-simp zh-trad
 do
     echo Importing language files $i
     php index.php translate if_php2db $i myapp/language/langsrc/$i
@@ -6433,7 +6433,7 @@ or thus:
 php index.php translate download_lex %\textrm{\textit{source-language}}% %\textrm{\textit{target-language}}% %\textrm{\textit{variant}}%
 \end{lstlisting}
 
-The \emph{source-language} must be either ``hebr'', ``aram'', or ``greek''. The
+The \emph{source-language} must be either ``heb'', ``aram'', or ``greek''. The
 \emph{destination-language} must be, for example, ``en'' for English. The lexicon will be written to
 the standard output as a comma-separated file, suitable for import into a spreadsheet program. If \emph{variant} is
 specified, data from that variant translation will be used.
