@@ -206,14 +206,7 @@ span.verse {
     .wordgrammar& when (@chinese) {
         display: block;
         
-        // NOTE: You must add gloss languages with Latin script as they are added to the system
-        .english&,
-        .danish&,
-        .german&,
-        .dutch&,
-        .portuguese&,
-        .spanish&,
-        .swahili&,
+        .tenpoint&,
         .lexeme_occurrences&,
         .frequency_rank&,
         .strongs&
@@ -599,6 +592,18 @@ table.iconlist td {
 
 table.autowidth {
     width: auto !important;
+}
+
+table.embedded {
+    tr {
+        margin: 0;
+        padding: 0;
+        background-color: transparent !important;
+        td {
+            margin: 0;
+            padding: 0 2pt;
+        }
+    }
 }
 
 .bolicon {

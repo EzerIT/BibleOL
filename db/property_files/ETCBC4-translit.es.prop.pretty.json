@@ -447,8 +447,7 @@
         "word": {
             "form_in_text": "Forma en texto",
             "lexeme": "Lexema",
-            "morphology": "Morfología",
-            "glosses": "Glosses"
+            "morphology": "Morfología"
         }
     },
     "grammarfeature": {

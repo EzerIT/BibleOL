@@ -169,8 +169,7 @@
     "grammargroup": {
         "word": {
             "lexeme": "基本词形",
-            "morphology": "词形变化",
-            "glosses": "Glosses"
+            "morphology": "词形变化"
         }
     },
     "grammarmetafeature": {

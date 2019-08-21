@@ -415,4 +415,4 @@ function make_trans_line_header($editing, $label, $field, $get_parms, $add_text)
 <p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('submit_changes') ?>">
    <a class="btn btn-outline-dark revert-all" href="#"><?= $this->lang->line('revert_all') ?></a></p>
 
-<form>
+</form>

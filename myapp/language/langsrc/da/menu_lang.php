@@ -8,6 +8,7 @@ $lang['enroll_in_class'] = "Tilmeld/frameld klasse";
 $lang['exercises'] = "Øvelser";
 $lang['font_preferences'] = "Skrifttyper";
 $lang['home'] = "Hjem";
+$lang['list_translations'] = "Tilgængelige oversættelser";
 $lang['login'] = "Log ind";
 $lang['logout'] = "Log ud";
 $lang['manage_exercises'] = "Øvelseshåndtering";

@@ -343,7 +343,7 @@ class Mod_users extends CI_Model {
 			$this->me->oauth2_login = $authority;
 			$this->me->created_time = time();
 			$this->me->last_login = time();
-			$this->me->preflang = $this->language_short;
+			$this->me->preflang = $this->language;
 			$this->me->prefvariant = empty($_SESSION['variant']) ? 'none' :  $_SESSION['variant'];
 
             $query = $this->db->insert('user', $this->me);

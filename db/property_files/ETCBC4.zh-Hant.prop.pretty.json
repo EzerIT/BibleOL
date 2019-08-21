@@ -6,10 +6,7 @@
             "_objname": "詞",
             "lexeme_occurrences": "出現次數",
             "frequency_rank": "出現次數排名",
-            "hint": "Hint",
             "glossurl": "鏈結",
-            "g_lex_utf8": "Lexical stem",
-            "g_lex_cons_utf8": "Lexical stem (consonants only)",
             "g_nme_utf8": "名詞後綴",
             "g_nme_cons_utf8": "名詞後綴字母",
             "g_pfm_utf8": "前綴",
@@ -26,10 +23,8 @@
             "g_word_translit": " 經文詞語音譯",
             "g_word_cons_utf8": " 經文詞語字母",
             "g_word_nocant_utf8": " 經文詞語，無讀音符號",
-            "g_word_nostress_utf8": "Text (no stress marks)",
             "g_voc_lex_cons_utf8": " 基本詞形字母",
             "g_voc_lex_utf8": "基本詞形",
-            "g_voc_lex_utf8_variant": "基本詞形 (with variant)",
             "g_voc_lex_translit": " 基本詞形音譯",
             "language": "語言",
             "ls": "詞細類",
@@ -172,24 +167,21 @@
             "f": "#2 陰性",
             "m": "#1 陽性",
             "NA": "#3 無",
-            "unknown": "#4 無",
-            "absent": "#5 Absent"
+            "unknown": "#4 無"
         },
         "number_t": {
             "du": "#3 雙數",
             "NA": "#4 無",
             "pl": "#2 複數",
             "sg": "#1 單數",
-            "unknown": "#5 不明",
-            "absent": "#6 Absent"
+            "unknown": "#5 不明"
         },
         "person_t": {
             "p1": "#1 第一人稱",
             "NA": "#4 無",
             "p2": "#2 第二人稱",
             "p3": "#3 第三人稱",
-            "unknown": "#5 不明",
-            "absent": "#6 Absent"
+            "unknown": "#5 不明"
         },
         "state_t": {
             "a": "獨立形",
@@ -454,8 +446,7 @@
         "word": {
             "form_in_text": "經文詞語",
             "lexeme": "基本詞形",
-            "morphology": "詞形變化",
-            "glosses": "Glosses"
+            "morphology": "詞形變化"
         }
     },
     "grammarfeature": {

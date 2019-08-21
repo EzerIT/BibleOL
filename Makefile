@@ -32,8 +32,7 @@ clean: cleanugly
 	rm -f $(ALL_TARGETS)
 
 ALL_UGLY = db/ETCBC4.db.json       db/ETCBC4-translit.db.json  db/nestle1904.db.json \
-	   db/ETCBC4.typeinfo.json db/nestle1904.typeinfo.json \
-	   db/ETCBC4.glosslang.json db/nestle1904.glosslang.json
+	   db/ETCBC4.typeinfo.json db/nestle1904.typeinfo.json
 
 PHP = php
 

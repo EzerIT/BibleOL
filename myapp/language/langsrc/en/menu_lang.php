@@ -8,6 +8,7 @@ $lang['enroll_in_class'] = "Enroll/unenroll in class";
 $lang['exercises'] = "Exercises";
 $lang['font_preferences'] = "Font preferences";
 $lang['home'] = "Home";
+$lang['list_translations'] = "Available translations";
 $lang['login'] = "Login";
 $lang['logout'] = "Logout";
 $lang['manage_exercises'] = "Manage exercises";

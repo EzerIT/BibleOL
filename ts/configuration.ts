@@ -53,6 +53,7 @@ interface FeatureSetting {
     sql_command?             : string;
     sqlargs?                 : string[];
     multiple?                : boolean;
+    isGloss?                 : boolean;
 }
 
 interface UHTriple {

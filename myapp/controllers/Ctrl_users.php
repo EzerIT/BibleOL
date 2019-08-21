@@ -249,12 +249,13 @@ class Ctrl_users extends MY_Controller {
                 $this->load->view('view_top2');
                 $this->load->view('view_menu_bar', array('langselect' => true));
 
-                $center_text = $this->load->view('view_edit_user',array('userid' => -2,
+                $center_text = $this->load->view('view_edit_user',array('avail_if_trans' => get_if_translations(),
+                                                                        'userid' => -2,
                                                                         'user_info' => $user_info,
                                                                         'isadmin' => false,
                                                                         'isteacher' => false,
                                                                         'istranslator' => false,
-                                                                        'curlang' => $this->language_short,
+                                                                        'curlang' => $this->language,
                                                                         'curvariant' => empty($_SESSION['variant']) ? 'none' :  $_SESSION['variant']),
                                                  true);
 
@@ -329,7 +330,8 @@ class Ctrl_users extends MY_Controller {
                     $this->load->view('view_top2');
                     $this->load->view('view_menu_bar', array('langselect' => true));
 
-                    $center_text = $this->load->view('view_edit_user',array('userid' => $userid,
+                    $center_text = $this->load->view('view_edit_user',array('avail_if_trans' => get_if_translations(),
+                                                                            'userid' => $userid,
                                                                             'extras' => $extras,
                                                                             'user_info' => $user_info,
                                                                             'isadmin' => $this->mod_users->is_admin(),
@@ -418,7 +420,8 @@ class Ctrl_users extends MY_Controller {
                     $this->load->view('view_top2');
                     $this->load->view('view_menu_bar', array('langselect' => true));
 
-                    $center_text = $this->load->view('view_edit_user',array('userid' => $userid,
+                    $center_text = $this->load->view('view_edit_user',array('avail_if_trans' => get_if_translations(),
+                                                                            'userid' => $userid,
                                                                             'extras' => $extras,
                                                                             'user_info' => $user_info,
                                                                             'isadmin' => $this->mod_users->is_admin(),
@@ -471,7 +474,8 @@ class Ctrl_users extends MY_Controller {
                    $left_text = $this->load->view('view_oauth2_profile_left',
                                                   array('authority' => $user_info->oauth2_login),
                                                   true);
-                   $center_text = $this->load->view('view_oauth2_profile',array('user_info' => $user_info), true);
+                   $center_text = $this->load->view('view_oauth2_profile',array('avail_if_trans' => get_if_translations(),
+                                                                                'user_info' => $user_info), true);
 
                    $this->load->view('view_main_page', array('left_title' => $this->lang->line('this_your_profile'),
                                                              'left' => $left_text,
@@ -519,7 +523,8 @@ class Ctrl_users extends MY_Controller {
                    $this->load->view('view_confirm_dialog');
 
                    $left_text = $this->load->view('view_edit_profile_left', null, true);
-                   $center_text = $this->load->view('view_edit_profile', array('user_info' => $user_info), true);
+                   $center_text = $this->load->view('view_edit_profile', array('avail_if_trans' => get_if_translations(),
+                                                                               'user_info' => $user_info), true);
 
                    $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_user_profile'),
                                                              'left' => $left_text,

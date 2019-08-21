@@ -56,14 +56,13 @@ class Ctrl_urls extends MY_Controller {
             $language = isset($_GET['src_lang']) ? $_GET['src_lang'] : 'heb';
             $button_index = isset($_GET['buttonix']) ? intval($_GET['buttonix']) : 0;
 
+            $longlang = src_lang_short2long($language);
             switch ($language) {
               case 'heb':
-                    $longlang = 'Hebrew';
                     $buttons = $this->mod_urls->get_heb_buttons();
                     break;
 
               case 'aram':
-                    $longlang = 'Aramaic';
                     $buttons = $this->mod_urls->get_aram_buttons();
                     break;
 
@@ -114,8 +113,8 @@ class Ctrl_urls extends MY_Controller {
                 || !isset($_POST['id']) || !is_numeric($_POST['id'])
                 || !isset($_POST['requesturi'])
                 || !isset($_POST['scrolltop'])
-                || !is_numeric($_POST['scrolltop'])) { echo "<pre>";print_r($_POST);die;
-                throw new DataException($this->lang->line('bad_post_parameters'));}
+                || !is_numeric($_POST['scrolltop']))
+                throw new DataException($this->lang->line('bad_post_parameters'));
 
             if (intval($_POST['id'])==-1) {
                 // Create new link

@@ -47,7 +47,7 @@ class Mod_askemdros extends CI_Model {
         $this->setup_prop = $prop;
         $this->load->helper(array('xmlhandler','sheaf'));
         $this->load->library('db_config');
-        $this->db_config->init_config($db,$prop,$this->language_short);
+        $this->db_config->init_config($db,$prop,$this->language);
         $this->load->driver('mql',array('db' => $this->db_config->emdros_db,
                                         'driver' => $this->config->item('mql_driver')));
     }
@@ -396,7 +396,7 @@ class Mod_askemdros extends CI_Model {
             if (in_array($name, self::$remove_databases))
                 continue;
 
-            $this->db_config->init_config_dbf($dbf, $this->language_short);
+            $this->db_config->init_config_dbf($dbf, $this->language);
             $loc = json_decode($this->db_config->l10n_json);
             $db_books[] = array('name'=>$name,
                                 'loc_desc'=>$loc->dbdescription,

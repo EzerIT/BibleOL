@@ -59,6 +59,10 @@ require_once('myapp/libraries/include/dataexception.inc.php');
  */
 	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
+
+setlocale(LC_ALL,'C.UTF-8');  // Make sure UTF-8 encoding works
+
+
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING

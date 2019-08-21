@@ -8,7 +8,6 @@ class database_file {
     public $dbinfo;     ///< The name of the file containing database information (dbinfo) for the Emdros database
     public $propertiesName; 
     public $typeinfo;   ///< The name of the file containing type information for the Emdros database
-    public $glosslang;  ///< The name of the file containing gloss languages for the Emdros database
     public $bookorder;  ///< The order of the books in the Emdros database
     private $subsetOf;  ///< The name of an Emdros database, if any, that is a superset of this one
 
@@ -23,7 +22,6 @@ class database_file {
         $this->emdros_db = "db/$db";
         $this->dbinfo = "db/$pr.db.json";
         $this->typeinfo = "db/$db.typeinfo.json";
-        $this->glosslang = "db/$db.glosslang.json";
         $this->bookorder = "db/$db.bookorder";
     }
 
@@ -52,7 +50,9 @@ class Db_config {
 	public $typeinfo_json;      ///< A JSON string representing type information for the selected Emdros database
 	public $typeinfo;           ///< Type information for this Emdros database
 	public $emdros_db;          ///< The name of the Emdros database file!
-
+    private $src_lang;			///< Array of names of source language lexicons (Hebrew, Aramaic, greek)
+	private $glosslang;			///< Array of gloss languages
+    
     /// Utility function which checks if one string ends with another string.
     /// @param $haystack String in which to search.
     /// @param $needle String to search for.
@@ -189,7 +189,14 @@ class Db_config {
     /// @param $dbf A database_file object describing the select Emdros database.
     /// @param $language The selected localization language.
     public function init_config_dbf(database_file $dbf, string $language) {
-        $this->glosslang = json_decode($this->read_or_throw($dbf->glosslang));
+        if ($dbf->emdros_db=='db/ETCBC4') {
+            $this->src_lang = array('Hebrew','Aramaic');
+            $this->glosslang = get_heblex_translations();
+        }
+        elseif ($dbf->emdros_db=='db/nestle1904') {
+            $this->src_lang = array('greek');
+            $this->glosslang = get_greeklex_translations();
+        }
 
         $this->dbinfo_json = $this->read_or_throw($dbf->dbinfo);
         $this->dbinfo = json_decode($this->dbinfo_json);
@@ -198,6 +205,16 @@ class Db_config {
         $CI =& get_instance();
         $query = $CI->db->select('json')->where('db',$dbf->propertiesName)->where('lang',$language)->get('db_localize');
         $this->l10n_json = $query->row()->json;
+        if ($language!='en') {
+            // Replace unknown terms with those from English
+            $query = $CI->db->select('json')->where('db',$dbf->propertiesName)->where('lang','en')->get('db_localize');
+            $eng_l10n_json = $query->row()->json;
+
+            $l1 = json_decode($eng_l10n_json, true);
+            $l2 = json_decode($this->l10n_json, true);
+            $this->l10n_json = json_encode(array_replace_recursive($l1, $l2));
+        }
+
         $this->addgloss_l10n_json($language);
 
         // Add translations for current variant
@@ -228,24 +245,29 @@ class Db_config {
             $CI->load->helper('create_lexicon_helper');
 
             // Replace 'gloss' with 'english', 'german, etc.
-            foreach ($this->glosslang->to as $abb) {
+            foreach ($this->glosslang as $gl) {
                 if (!empty($_SESSION['variant'])) {
                     // Create variant lexicons, unless they already exist
-                    foreach ($this->glosslang->from as $src_abb)
-                        create_lexicon_table(Language::$src_lang_abbrev[$src_abb], $abb, $_SESSION['variant'], true);
+                    foreach ($this->src_lang as $src_l)
+                        create_lexicon_table($src_l, $gl->abb, $_SESSION['variant'], true);
                 }
             
-                $langname = Language::$dst_lang_abbrev[$abb];
+                $langname = $gl->internal;
                 $fsetting->$langname = clone $fsetting->gloss;
-                $fsetting->$langname->sql_command = str_replace('LANG',$abb,$fsetting->gloss->sql_command);
+                $fsetting->$langname->sql_command = str_replace('LANG',$gl->abb,$fsetting->gloss->sql_command);
 
                 if (!empty($_SESSION['variant']) && $fsetting->gloss->sql_command_variant)
                     $fsetting->$langname->sql_command_variant = str_replace(array('LANG','VARIANT'),
-                                                                            array($abb,$_SESSION['variant']),
+                                                                            array($gl->abb,$_SESSION['variant']),
                                                                             $fsetting->gloss->sql_command_variant);
                 else
                     $fsetting->$langname->sql_command_variant = null;
 
+                // The following is relevant only if the interface language is Chinese.
+                // Non-Chinese glosses must be displayed with a smaller fontsize
+                if ($gl->abb!='zh-Hans' && $gl->abb!='zh-Hant')
+                    $fsetting->$langname->fontsize = "tenpoint";
+                
                 $fsetting->$langname->isGloss = true;  // Extra feature
             }
             unset($fsetting->gloss);
@@ -256,10 +278,10 @@ class Db_config {
                 if ($sgo->objType===$this->dbinfo->objHasSurface) {
                     foreach ($sgo->items as $it) {
                         if ($it->mytype==='GrammarGroupGlosses') {
-                            foreach ($this->glosslang->to as $abb) {
+                            foreach ($this->glosslang as $gl) {
                                 $feat = new stdClass;
                                 $feat->mytype = 'GrammarFeature';
-                                $feat->name = Language::$dst_lang_abbrev[$abb];
+                                $feat->name = $gl->internal;
                                 $it->items[] = $feat;
                             }
                             $it->mytype = 'GrammarGroup';
@@ -278,8 +300,8 @@ class Db_config {
         
         $osetting = $typinf->obj2feat->{$this->dbinfo->objHasSurface};
 
-        foreach ($this->glosslang->to as $abb)
-            $osetting->{Language::$dst_lang_abbrev[$abb]} = 'string';
+        foreach ($this->glosslang as $gl)
+            $osetting->{$gl->internal} = 'string';
 
         $this->typeinfo_json = json_encode($typinf);
     }
@@ -293,8 +315,8 @@ class Db_config {
         
         $wsetting = $l10n->emdrosobject->{$this->dbinfo->objHasSurface};
 
-        foreach ($this->glosslang->to as $abb) {
-            $langname = Language::$dst_lang_abbrev[$abb];
+        foreach ($this->glosslang as $gl) {
+            $langname = $gl->internal;
             $wsetting->$langname = $CI->lang->line($langname);
         }
         

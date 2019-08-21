@@ -7,23 +7,23 @@ class Ctrl_lang extends MY_Controller {
     public function index() {
         if (isset($_GET['lang'])) {
             $newlang = $_GET['lang'];
-            switch ($newlang) {
-              case 'en':
-              case 'de':
-              case 'es':
-              case 'nl':
-              case 'pt':
-              case 'da':
-              case 'fr':
-              case 'zh-simp':
-              case 'zh-trad':
-              case 'am':
-                    $this->session->set_userdata('language', $newlang);
-                    break;
 
-              default:
-                    $this->error_view('Unknown language', 'Set language');
-                    return;
+            $this->load->helper('translation');
+            
+            $if_trans = get_if_translations();
+
+            $found = false;
+            foreach ($if_trans as $ift) {
+                if ($ift->abb==$newlang) {
+                    $this->session->set_userdata('language', $newlang);
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                $this->error_view('Unknown language', 'Set language');
+                return;
             }
         }
 

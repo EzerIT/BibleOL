@@ -195,13 +195,7 @@ span.verse {
 .wordgrammar.showit {
   display: block;
 }
-.english.wordgrammar.showit,
-.danish.wordgrammar.showit,
-.german.wordgrammar.showit,
-.dutch.wordgrammar.showit,
-.portuguese.wordgrammar.showit,
-.spanish.wordgrammar.showit,
-.swahili.wordgrammar.showit,
+.tenpoint.wordgrammar.showit,
 .lexeme_occurrences.wordgrammar.showit,
 .frequency_rank.wordgrammar.showit,
 .strongs.wordgrammar.showit {
@@ -513,6 +507,15 @@ table.iconlist td {
 }
 table.autowidth {
   width: auto !important;
+}
+table.embedded tr {
+  margin: 0;
+  padding: 0;
+  background-color: transparent !important;
+}
+table.embedded tr td {
+  margin: 0;
+  padding: 0 2pt;
 }
 .bolicon {
   font-weight: bold;

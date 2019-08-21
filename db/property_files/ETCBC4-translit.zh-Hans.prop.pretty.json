@@ -6,9 +6,7 @@
             "_objname": "词",
             "lexeme_occurrences": "出现次数",
             "frequency_rank": "出现次数排名",
-            "hint": "Hint",
             "glossurl": "链结",
-            "g_lex_translit": "Lexical stem",
             "g_nme_translit": "名词后缀",
             "g_pfm_translit": "前缀",
             "g_prs_translit": "代词后缀",
@@ -20,11 +18,9 @@
             "g_word_nopunct_translit": "经文词语（无标点）",
             "g_word_cons_utf8": "经文词语，只显示辅音",
             "g_word_nocant_utf8": "经文词语（无读音符号）",
-            "g_word_nostress_utf8": "Text (no stress marks)",
             "g_voc_lex_cons_utf8": "基本词形，只显示辅音",
             "g_voc_lex_utf8": "基本词形（希伯来文）",
             "g_voc_lex_translit": "基本词形",
-            "g_voc_lex_translit_variant": "基本词形 (with variant)",
             "language": "语言",
             "ls": "词细类",
             "vs": "语干",
@@ -165,24 +161,21 @@
             "f": "#2 阴性",
             "m": "#1 阳性",
             "NA": "#3 无",
-            "unknown": "#4 不明",
-            "absent": "#5 Absent"
+            "unknown": "#4 不明"
         },
         "number_t": {
             "du": "#3 双数",
             "NA": "#4 无",
             "pl": "#2 复数",
             "sg": "#1 单数",
-            "unknown": "#5 不明",
-            "absent": "#6 Absent"
+            "unknown": "#5 不明"
         },
         "person_t": {
             "p1": "#1 第一人称",
             "NA": "#4 无",
             "p2": "#2 第二人称",
             "p3": "#3 第三人称",
-            "unknown": "#5 不明",
-            "absent": "#6 Absent"
+            "unknown": "#5 不明"
         },
         "state_t": {
             "a": "独立形",
@@ -447,8 +440,7 @@
         "word": {
             "form_in_text": "经文词语",
             "lexeme": "基本词形",
-            "morphology": "词形变化",
-            "glosses": "Glosses"
+            "morphology": "词形变化"
         }
     },
     "grammarfeature": {

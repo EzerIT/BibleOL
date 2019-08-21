@@ -26,7 +26,7 @@
     }
 ?>
 <!DOCTYPE html>
-<html lang="<?= $this->language_short2 ?>">
+<html lang="<?= $this->language ?>">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?= $title ?></title>
@@ -37,7 +37,7 @@
     <?php
        make_css('bootstrap_local/css/bootstrap.min.css');
        make_css('jquery-ui-1.10.2.custom/css/sunny/jquery-ui-1.10.2.custom.min.css');
-       if ($this->language=='zh-simp' || $this->language=='zh-trad')
+       if ($this->language=='zh-Hans' || $this->language=='zh-Hant')
            make_css('styles/ol_zh.css');
        else
            make_css('styles/ol.css');

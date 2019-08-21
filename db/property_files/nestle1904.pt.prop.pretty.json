@@ -169,8 +169,7 @@
     "grammargroup": {
         "word": {
             "lexeme": "Lexema",
-            "morphology": "Morfologia",
-            "glosses": "Glosses"
+            "morphology": "Morfologia"
         }
     },
     "grammarmetafeature": {

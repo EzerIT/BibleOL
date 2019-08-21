@@ -32,6 +32,10 @@ $comment['home'] = "";
 $format['home'] = "";
 $use_textarea['home'] = false;
 
+$comment['list_translations'] = "";
+$format['list_translations'] = "";
+$use_textarea['list_translations'] = false;
+
 $comment['login'] = "";
 $format['login'] = "";
 $use_textarea['login'] = false;

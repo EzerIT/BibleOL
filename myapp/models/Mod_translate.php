@@ -8,7 +8,6 @@ class Mod_translate extends CI_Model {
     private $grammar_db;
     private $grammar_comment_full;
     
-    private $if_langs;
     private $lexicon_langs;
 
     private $dbs = array('ETCBC4',
@@ -24,35 +23,17 @@ class Mod_translate extends CI_Model {
         // Not running from command line. This means we are not doing a migration
         $this->lang->load('users', $this->language);
 
-        $this->if_langs = array('en' => $this->lang->line('english'),
-                                'da' => $this->lang->line('danish'),
-                                'de' => $this->lang->line('german'),
-                                'fr' => $this->lang->line('french'),
-                                'nl' => $this->lang->line('dutch'),
-                                'pt' => $this->lang->line('portuguese'),
-                                'es' => $this->lang->line('spanish'),
-                                'zh-simp' => $this->lang->line('simp_chinese'),
-                                'zh-trad' => $this->lang->line('trad_chinese'),
-                                'am' => $this->lang->line('amharic'),
-            );
-
-        
         $this->load->helper(array('directory','translation'));
 
-        $this->lexicon_langs = array();
-        $allf = directory_map('db',1);
-
-        foreach ($allf as $af) {
-            if (self::endswith($af, '.glosslang.json')) {
-                $glosslang = json_decode($this->read_or_throw("db/$af"));
-
-                foreach ($glosslang->from as $src_lang) {
-                    $this->lexicon_langs[$src_lang] = array();
-                    foreach ($glosslang->to as $dst_lang) {
-                        $this->lexicon_langs[$src_lang][$dst_lang] = $this->lang->line(Language::$dst_lang_abbrev[$dst_lang]);
-                    }
-                }
+        $this->lexicon_langs = array('heb'=>array(), 'aram'=>array(), 'greek'=>array());
+        $availtrans = get_available_translations();
+        foreach ($availtrans as $t) {
+            if ($t->heblex_enabled) {
+                $this->lexicon_langs['heb'][$t->abb] =
+                $this->lexicon_langs['aram'][$t->abb] = $this->lang->line($t->internal);
             }
+            if ($t->greeklex_enabled)
+                $this->lexicon_langs['greek'][$t->abb] = $this->lang->line($t->internal);
         }
     }
 
@@ -77,7 +58,13 @@ class Mod_translate extends CI_Model {
 
         
     public function get_all_if_languages() {
-        return $this->if_langs;
+        $ift = get_if_translations();
+        $result = array();
+
+        foreach ($ift as $l)
+            $result[$l->abb] = $this->lang->line($l->internal);
+        
+        return $result;
     }
 
     public function get_all_db() {
@@ -102,10 +89,25 @@ class Mod_translate extends CI_Model {
         return $query->result();
     }
 
-    // The language_comment table is the canonical list of symbolic_name values
-    public function count_if_lines(string $textgroup) {
-        $query = $this->db->select('count(*) as count')->where('textgroup',$textgroup)->get("language_comment");
+    public function count_if_lines(string $textgroup=null) {
+        // The language_comment table is the canonical list of symbolic_name values
+        if ($textgroup)
+            $query = $this->db->select('count(*) as count')->where('textgroup',$textgroup)->get("language_comment");
+        else
+            $query = $this->db->select('count(*) as count')->get("language_comment");
         return $query->row()->count;
+    }
+
+    public function count_if_translated(string $lang_abb) {
+        if (!$this->db->table_exists("language_{$lang_abb}"))
+            return 0;
+        
+        return $this->db
+            ->select("count(*) as count")
+            ->from('language_comment c')
+            ->join("language_{$lang_abb} e", "e.symbolic_name=c.symbolic_name AND e.textgroup=c.textgroup",'left')
+            ->where('e.text IS NOT NULL')
+            ->get()->row()->count;
     }
 
     public function get_textgroup_list() {
@@ -222,36 +224,41 @@ class Mod_translate extends CI_Model {
         return $res;
     }
 
-    private function recursive_count(array $a) {
+    public function count_grammar_lines(string $db) {
+        $query = $this->db->select('json')->where('db',$db)->where('lang','comment')->get('db_localize');
+        return self::recursive_count(json_decode($query->row()->json, true));
+    }
+
+    public function count_grammar_translated(string $db, string $lang) {
+        $query = $this->db->select('json')->where('db',$db)->where('lang',$lang)->get('db_localize');
+        if ($query->num_rows() == 0)
+            return 0;
+        return self::recursive_count_value_set(json_decode($query->row()->json, true));
+    }
+
+    
+    private static function recursive_count(array $a) {
         $count = 0;
         foreach ($a as $v) {
             if (is_array($v))
-                $count += $this->recursive_count($v);
+                $count += self::recursive_count($v);
             else
                 ++$count;
         }
         return $count;
     }
           
-    private function count_non_array(array $a) {
+    private static function recursive_count_value_set(array $a) {
         $count = 0;
         foreach ($a as $v) {
-            if (!is_array($v))
+            if (is_array($v))
+                $count += self::recursive_count_value_set($v);
+            elseif ($v || $v===0) // Don't count empty strings
                 ++$count;
         }
         return $count;
     }
           
-    
-    public function count_grammar_lines(string $grammargroup) {
-        if ($grammargroup=='info')
-            return $this->count_non_array($this->grammar_comment_full);
-        else {
-            list($l1, $l2) = explode('.', $grammargroup);
-            return $this->recursive_count($this->grammar_comment_full[$l1][$l2]);
-        }
-    }
-        
     private function get_l10n_and_build(string $lang, &$dst, string $variant=null) {
         $row = $this->db->select('json')->where('db',$this->grammar_db)->where('lang',$lang)
             ->get($variant ? "db_localize_$variant" : 'db_localize')
@@ -300,16 +307,6 @@ class Mod_translate extends CI_Model {
         // Sanity check
         $count = count($this->grammar_show_array);
 
-        if (empty($_SESSION['variant'])) {
-            if ($count != count($this->grammar_edit_array) ||
-                count(array_diff_key($this->grammar_edit_array,$this->grammar_show_array))!=0)
-                throw new DataException("Localization information for language $lang_edit is incompatible with language $lang_show");
-        }
-
-        if ($count != count($this->grammar_comment_array) ||
-            count(array_diff_key($this->grammar_show_array,$this->grammar_comment_array))!=0)
-            throw new DataException("Localization information for language $lang_show is incompatible with comments information");
-
         $res = array();
 
         foreach ($this->grammar_comment_array as $key => $comment) {
@@ -321,7 +318,7 @@ class Mod_translate extends CI_Model {
                                                                             // name is used as an attribute
                                                                             // in HTML and . is not allowed
                                                                             // there
-                $data->text_show = $this->grammar_show_array[$key];
+                $data->text_show = set_or_default($this->grammar_show_array[$key], '');
                 $data->text_edit = set_or_default($this->grammar_edit_array[$key], '');
                 $data->comment = $comment;
                 $res[] = $data;
@@ -389,6 +386,23 @@ class Mod_translate extends CI_Model {
         }
     }
 
+    public function count_lex_lines(string $src_lang) {
+        return $this->db->select('count(*) as count')->get("lexicon_{$src_lang}")->row()->count;
+    }
+
+    public function count_lex_translated(string $src_lang, string $dst_lang) {
+        if (!$this->db->table_exists("lexicon_{$src_lang}_{$dst_lang}"))
+            return 0;
+
+        return $this->db
+            ->select("count(*) as count")
+            ->from("lexicon_{$src_lang} l")
+            ->join("lexicon_{$src_lang}_{$dst_lang} e", "e.lex_id=l.id", 'left')
+            ->where('e.gloss!=""')
+            ->get()->row()->count;
+    }
+
+    
     public function get_glosses(string $src_lang, string $lang_edit, string $lang_show, string $from, string $to) {
         if (!empty($_SESSION['variant']))
             $lang_edit .= '_' . $_SESSION['variant'];  // Append variant to language abbreviation
@@ -396,7 +410,7 @@ class Mod_translate extends CI_Model {
         switch ($src_lang) {
           case 'heb':
           case 'aram':
-                $src_lexicon = $src_lang=='heb' ? 'Hebrew' : 'Aramaic';
+                $src_lexicon = src_lang_short2long($src_lang);
 
                 $query = $this->db->select('lex,vs,CONCAT(vocalized_lexeme_utf8," ",roman) lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
                     ->from("lexicon_{$src_lexicon} c")
@@ -424,22 +438,7 @@ class Mod_translate extends CI_Model {
     }
 
     public function update_glosses(string $src_lang, string $dst_lang, array $post) {
-        switch ($src_lang) {
-          case 'heb':
-                $table = "lexicon_Hebrew_{$dst_lang}";
-                break;
-
-          case 'aram':
-                $table = "lexicon_Aramaic_{$dst_lang}";
-                break;
-
-          case 'greek':
-                $table = "lexicon_greek_{$dst_lang}";
-                break;
-
-          default:
-                throw new DataException($this->lang->line('illegal_lang_code'));
-        }
+        $table = 'lexicon_' . src_lang_short2long($src_lang) . '_' . $dst_lang;
 
         if (!empty($_SESSION['variant']))
             $table2 = $table . '_' . $_SESSION['variant'];  // Append variant to language abbreviation
@@ -487,7 +486,7 @@ class Mod_translate extends CI_Model {
     public function get_localized_ETCBC4() {
         $this->load->library('db_config');
 
-        $this->db_config->init_config("ETCBC4","ETCBC4", $this->language_short, true);
+        $this->db_config->init_config("ETCBC4","ETCBC4", $this->language, true);
         $l10n = json_decode($this->db_config->l10n_json,true);
         return array($l10n['emdrostype']['verbal_stem_t'], $l10n['universe']['reference']);
     }
@@ -495,7 +494,7 @@ class Mod_translate extends CI_Model {
     public function get_localized_nestle1904() {
         $this->load->library('db_config');
 
-        $this->db_config->init_config("nestle1904","nestle1904", $this->language_short, true);
+        $this->db_config->init_config("nestle1904","nestle1904", $this->language, true);
         $l10n = json_decode($this->db_config->l10n_json,true);
         return array(array(), $l10n['universe']['reference']);
     }
@@ -508,7 +507,7 @@ class Mod_translate extends CI_Model {
         switch ($src_lang) {
           case 'heb':
           case 'aram':
-                $src_lexicon = $src_lang=='heb' ? 'Hebrew' : 'Aramaic';
+                $src_lexicon = src_lang_short2long($src_lang);
 
                 $query = $this->db->select('lex, tally, sortorder')
                     ->from("lexicon_{$src_lexicon}")
@@ -551,7 +550,7 @@ class Mod_translate extends CI_Model {
         switch ($src_lang) {
           case 'heb':
           case 'aram':
-                $src_lexicon = $src_lang=='heb' ? 'Hebrew' : 'Aramaic';
+                $src_lexicon = src_lang_short2long($src_lang);
 
                 $query = $this->db->select('COUNT(DISTINCT `lex`) c')
                     ->where('tally >',$this->min_tally)
@@ -617,12 +616,13 @@ class Mod_translate extends CI_Model {
         }
     }
 
-    // $src is the source directory where the php files are found.
-    // $short_langname may contain '_<variant>'.
-    public function if_php2db(string $short_langname, string $src) {
-        $this->load->helper('directory');
+    private function if_create_table(string $lang_abb, bool $drop) {
         $this->load->dbforge();
-        $this->dbforge->drop_table('language_'.$short_langname,true);
+        $table_name = "language_{$lang_abb}";
+
+        
+        if ($drop)
+            $this->dbforge->drop_table($table_name, true);
                 
         $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
                                         'textgroup' => array('type'=>'VARCHAR(25)'),
@@ -630,7 +630,16 @@ class Mod_translate extends CI_Model {
                                         'text' => array('type'=>'TEXT')));
         $this->dbforge->add_key('id', TRUE);
         $this->dbforge->add_key('textgroup');
-        $this->dbforge->create_table('language_'.$short_langname);
+        $this->dbforge->create_table($table_name,true); // CREATE TABLE ... IF NOT EXISTS
+    }
+
+    
+    // $src is the source directory where the php files are found.
+    // $short_langname may contain '_<variant>'.
+    public function if_php2db(string $short_langname, string $src) {
+        $this->load->helper('directory');
+
+        $this->if_create_table($short_langname,true);
 
         $d = directory_map($src, 1);
 
@@ -791,33 +800,32 @@ class Mod_translate extends CI_Model {
         // Creates $header_array as an array of arrays, where the first value is the Emdros name for
         // a verbal stem (or null), and the second value is the English heading for a column in the
         // CSV file
+        $src_language = src_lang_short2long($src_lang);
         switch ($src_lang) {
           case 'heb':
-                $src_language = 'Hebrew';
-          $header_array = array(array(null, 'Occurrences'),
-                                array(null, 'lex'),
-                                array(null, 'Lexeme'),
-                                array('NA', 'None'),
-                                array('qal', 'Qal'),
-                                array('nif', 'Nifal'),
-                                array('piel', 'Piel'),
-                                array('pual', 'Pual'),
-                                array('hit', 'Hitpael'),
-                                array('hif', 'Hifil'),
-                                array('hof', 'Hofal'),
-                                array('hsht', 'Hishtafal'),
-                                array('pasq', 'Passive Qal'),
-                                array('etpa', 'Etpaal'),
-                                array('nit', 'Nitpael'),
-                                array('hotp', 'Hotpaal'),
-                                array('tif', 'Tifal'),
-                                array('htpo', 'Hitpoal'),
-                                array('poal', 'Poal'),
-                                array('poel', 'Poel'));
+                $header_array = array(array(null, 'Occurrences'),
+                                      array(null, 'lex'),
+                                      array(null, 'Lexeme'),
+                                      array('NA', 'None'),
+                                      array('qal', 'Qal'),
+                                      array('nif', 'Nifal'),
+                                      array('piel', 'Piel'),
+                                      array('pual', 'Pual'),
+                                      array('hit', 'Hitpael'),
+                                      array('hif', 'Hifil'),
+                                      array('hof', 'Hofal'),
+                                      array('hsht', 'Hishtafal'),
+                                      array('pasq', 'Passive Qal'),
+                                      array('etpa', 'Etpaal'),
+                                      array('nit', 'Nitpael'),
+                                      array('hotp', 'Hotpaal'),
+                                      array('tif', 'Tifal'),
+                                      array('htpo', 'Hitpoal'),
+                                      array('poal', 'Poal'),
+                                      array('poel', 'Poel'));
                 break;
 
           case 'aram':
-                $src_language = 'Aramaic';
                 $header_array = array(array(null, 'Occurrences'),
                                       array(null, 'lex'),
                                       array(null, 'Lexeme'),
@@ -837,7 +845,6 @@ class Mod_translate extends CI_Model {
                 break;
 
           case 'greek':
-                $src_language = 'greek';
                 $header_array = array(array(null, 'Occurrences'),
                                       array(null, 'Lexeme'),
                                       array(null, "Strong's number"),
@@ -851,7 +858,12 @@ class Mod_translate extends CI_Model {
     }
     
     public function empty_lex(string $src_lang, string $dst_lang, string $variant) {
-        return $this->db->select('id')->get("lexicon_{$src_lang}_{$dst_lang}_{$variant}")->num_rows()==0;
+        $src_lexicon = src_lang_short2long($src_lang);
+
+        if (!$this->db->table_exists("lexicon_{$src_lexicon}_{$dst_lang}_{$variant}"))
+            return true;
+        
+        return $this->db->select('id')->get("lexicon_{$src_lexicon}_{$dst_lang}_{$variant}")->num_rows()==0;
     }
 
     public function download_lex(string $src_lang, string $dst_lang, string $variant=null) {
@@ -969,7 +981,7 @@ class Mod_translate extends CI_Model {
     }
 
     public function import_lex(string $src_lang, string $dst_lang, string $csv_file, string $variant=null) {
-        $this->load->helper('create_lexicon_helper');
+        $this->load->helper('create_lexicon');
 
         $src_language="";
         $header_array=array();
@@ -1044,5 +1056,75 @@ class Mod_translate extends CI_Model {
             $this->db->insert_batch($variant ? "lexicon_{$src_language}_{$dst_lang}_{$variant}"
                                              : "lexicon_{$src_language}_{$dst_lang}",
                                     $toinsert);
-    } 
+    }
+
+    public function modify_localization(bool $enable, string $loc_type, string $lang_abb) {
+        $query = $this->db
+            ->select('id')
+            ->where('abb',$lang_abb)
+            ->where("{$loc_type}_enabled", !$enable)
+            ->get('translation_languages');
+
+        if ($query->num_rows()==0) // Unexisting language og no change required
+            return;
+
+        $id = $query->row()->id;
+
+        if ($enable) {
+            // Create relevant tables
+            $this->load->helper('create_lexicon');
+
+            switch ($loc_type) {
+              case 'iface':
+                    $this->if_create_table($lang_abb,false);
+                    foreach ($this->dbs as $db) {
+                        if ($this->db->where('db',$db)->where('lang',$lang_abb)->get('db_localize')->num_rows()==0)
+                            $this->db->insert('db_localize',array('db' => $db,
+                                                                  'lang' => $lang_abb,
+                                                                  'json' => '{}'));
+                    }
+                    break;
+
+              case 'heblex':
+                    create_lexicon_table('Hebrew', $lang_abb, null, true);
+                    create_lexicon_table('Aramaic', $lang_abb, null, true);
+                    break;
+
+              case 'greeklex':
+                    create_lexicon_table('greek', $lang_abb, null, true);
+                    break;
+            }
+        }
+        
+        $query = $this->db
+            ->where('id',$id)
+            ->update('translation_languages',array("{$loc_type}_enabled" => $enable));
+    }
+
+    public function add_language(string $abbrev, string $internal_name, string $native_name) {
+        $avail_trans = get_instance()->db->get('translation_languages')->result();
+
+        foreach ($avail_trans as $at) {
+            if ($at->abb == $abbrev)
+                throw new DataException("Language code '$abbrev' already in use");
+            if ($at->internal == $internal_name)
+                throw new DataException("English name '" . ucfirst($internal_name) . "' already in use");
+            if ($at->native == $native_name)
+                throw new DataException("Native name '$native_name' already in use");
+        }
+        
+        $this->db->insert('translation_languages', array('abb'              => $abbrev,
+                                                         'internal'         => $internal_name,
+                                                         'native'           => $native_name,
+                                                         'iface_enabled'    => false,
+                                                         'heblex_enabled'   => false,
+                                                         'greeklex_enabled' => false));
+
+        if ($this->db->where('textgroup','users')->where('symbolic_name',$internal_name)->get('language_comment')->num_rows()==0)
+            $this->db->insert('language_comment', array('textgroup'     => 'users',
+                                                        'symbolic_name' => $internal_name,
+                                                        'comment'       => 'Name of language',
+                                                        'format'        => null,
+                                                        'use_textarea'  => false));
+    }
   }

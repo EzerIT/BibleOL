@@ -56,17 +56,12 @@
           <td class="norb">
             <select name="preflang">
               <option value="none" <?= set_select('preflang', 'none', $user_info->preflang=='none') ?>><?= $this->lang->line('no_language') ?></option>
-              <option value="en" <?= set_select('preflang', 'en', $user_info->preflang=='en') ?>><?= $this->lang->line('english') ?></option>
-              <option value="de" <?= set_select('preflang', 'de', $user_info->preflang=='de') ?>><?= $this->lang->line('german') ?></option>
-              <option value="da" <?= set_select('preflang', 'da', $user_info->preflang=='da') ?>><?= $this->lang->line('danish') ?></option>
-              <option value="fr" <?= set_select('preflang', 'fr', $user_info->preflang=='fr') ?>><?= $this->lang->line('french') ?></option>
-              <option value="nl" <?= set_select('preflang', 'nl', $user_info->preflang=='nl') ?>><?= $this->lang->line('dutch') ?></option>
-              <option value="pt" <?= set_select('preflang', 'pt', $user_info->preflang=='pt') ?>><?= $this->lang->line('portuguese') ?></option>
-              <option value="es" <?= set_select('preflang', 'es', $user_info->preflang=='es') ?>><?= $this->lang->line('spanish') ?></option>
-              <option value="zh-simp" <?= set_select('preflang', 'zh-simp', $user_info->preflang=='zh-simp') ?>><?= $this->lang->line('simp_chinese') ?></option>
-              <option value="zh-trad" <?= set_select('preflang', 'zh-trad', $user_info->preflang=='zh-trad') ?>><?= $this->lang->line('trad_chinese') ?></option>
-              <option value="am" <?= set_select('preflang', 'am', $user_info->preflang=='am') ?>><?= $this->lang->line('amharic') ?></option>
-            </select>
+
+              <?php foreach ($avail_if_trans as $ift): ?>
+                <option value="<?= $ift->abb ?>" <?= set_select('preflang', $ift->abb, $user_info->preflang==$ift->abb) ?>><?= $this->lang->line($ift->internal) ?></option>
+              <?php endforeach; ?>
+
+          </select>
           <td class="nolb"></td>
           <?php if (!empty($this->config->item('variants'))): ?>
             <tr>

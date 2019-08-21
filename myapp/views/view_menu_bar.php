@@ -56,6 +56,7 @@ if ($this->mod_users->is_logged_in()) {
             $content[$ix][] = make_anchor2('translate/translate_grammar', 'translate_grammar');
             $content[$ix][] = make_anchor2('translate/translate_lex', 'translate_lexicon');
             $content[$ix][] = make_anchor2('translate/select_download_lex', 'download_lexicon');
+            $content[$ix][] = make_anchor2('translate/list_translations', 'list_translations');
         }
         if ($this->mod_users->is_admin())
             $content[$ix][] = make_anchor2('urls', 'manage_gloss_links');
@@ -113,22 +114,14 @@ $cols = $ix+1;
         <?php endfor; ?>
          
         <?php if ($langselect): ?>
-          <?php $languages = array('da'      => 'Dansk',
-                                   'en'      => 'English',
-                                   'de'      => 'Deutsch',
-                                   'fr'      => 'Français',
-                                   'nl'      => 'Nederlands',
-                                   'pt'      => 'Português',
-                                   'es'      => 'Español',
-                                   'zh-simp' => '中文（简体）',
-                                   'zh-trad' => '中文（繁體）',
-                                   'am'      => 'አማርኛ',
-              ); ?>
+          <?php
+                usort($this->if_translations, function($a, $b) { return $a->native <=> $b->native; });
+          ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle pt-3 pb-3 pl-3 pr-3" href="#" id="navbarDropdownLang" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?= site_url('images/icon20x24px-exported-transparent.png') ?>" alt=""> <?= $this->lang->line('language') ?></a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownLang">
-              <?php foreach ($languages as $abb => $language): ?>
-                <a class="dropdown-item <?= $abb===$this->session->userdata('language') || (is_null($this->session->userdata('language')) && $abb=='en') ? 'active' : '' ?>" href="<?= site_url("/lang?lang=$abb") ?>"><?= $language ?></a>
+              <?php foreach ($this->if_translations as $lang): ?>
+                <a class="dropdown-item <?= $lang->abb===$this->language ? 'active' : '' ?>" href="<?= site_url("/lang?lang=$lang->abb") ?>"><?= $lang->native ?></a>
               <?php endforeach; ?>
             </div>
           </li>

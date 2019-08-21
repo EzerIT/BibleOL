@@ -90,16 +90,9 @@
           <td class="norb">
             <select name="preflang">
               <option value="none" <?= set_select('preflang', 'none', $curlang=='none') ?>><?= $this->lang->line('no_language') ?></option>
-              <option value="en" <?= set_select('preflang', 'en', $curlang=='en') ?>><?= $this->lang->line('english') ?></option>
-              <option value="de" <?= set_select('preflang', 'de', $curlang=='de') ?>><?= $this->lang->line('german') ?></option>
-              <option value="da" <?= set_select('preflang', 'da', $curlang=='da') ?>><?= $this->lang->line('danish') ?></option>
-              <option value="fr" <?= set_select('preflang', 'fr', $curlang=='fr') ?>><?= $this->lang->line('french') ?></option>
-              <option value="nl" <?= set_select('preflang', 'nl', $curlang=='nl') ?>><?= $this->lang->line('dutch') ?></option>
-              <option value="pt" <?= set_select('preflang', 'pt', $curlang=='pt') ?>><?= $this->lang->line('portuguese') ?></option>
-              <option value="es" <?= set_select('preflang', 'es', $curlang=='es') ?>><?= $this->lang->line('spanish') ?></option>
-              <option value="zh-simp" <?= set_select('preflang', 'zh-simp', $curlang=='zh-simp') ?>><?= $this->lang->line('simp_chinese') ?></option>
-              <option value="zh-trad" <?= set_select('preflang', 'zh-trad', $curlang=='zh-trad') ?>><?= $this->lang->line('trad_chinese') ?></option>
-              <option value="am" <?= set_select('preflang', 'am', $curlang=='am') ?>><?= $this->lang->line('amharic') ?></option>
+              <?php foreach ($avail_if_trans as $ift): ?>
+                <option value="<?= $ift->abb ?>" <?= set_select('preflang', $ift->abb, $curlang==$ift->abb) ?>><?= $this->lang->line($ift->internal) ?></option>
+              <?php endforeach; ?>
 
             </select>
           </td>

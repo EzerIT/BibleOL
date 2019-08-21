@@ -493,6 +493,15 @@ table.iconlist td {
 table.autowidth {
   width: auto !important;
 }
+table.embedded tr {
+  margin: 0;
+  padding: 0;
+  background-color: transparent !important;
+}
+table.embedded tr td {
+  margin: 0;
+  padding: 0 2pt;
+}
 .bolicon {
   font-weight: bold;
 }

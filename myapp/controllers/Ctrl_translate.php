@@ -15,6 +15,7 @@ class Ctrl_translate extends MY_Controller {
         $this->lang->load('translate', $this->language);
         $this->lang->load('urls', $this->language);
         $this->load->model('mod_translate');
+        $this->load->helper('translation');
     }
 
 	public function index() {
@@ -419,6 +420,7 @@ class Ctrl_translate extends MY_Controller {
             $lexicon_lang_list = $this->mod_translate->get_all_lexicon_langs();
 
             $all_lex = array();
+
             foreach ($lexicon_lang_list as $src_lang => $targets) {
                 foreach ($targets as $dst_lang => $dst_lang_name) {
                     $all_lex[] = array('from_name' => $this->lang->line('lang_'.$src_lang),
@@ -428,7 +430,7 @@ class Ctrl_translate extends MY_Controller {
 
                     if (!empty($this->config->item('variants')))
                         foreach ($this->config->item('variants') as $variant) {
-                            if (!$this->mod_translate->empty_lex(Language::$src_lang_abbrev[$src_lang], $dst_lang, $variant))
+                            if (!$this->mod_translate->empty_lex($src_lang, $dst_lang, $variant))
                                 $all_lex[] = array('from_name' => $this->lang->line('lang_'.$src_lang),
                                                    'to_name'   => $dst_lang_name,
                                                    'variant'   => $variant,
@@ -522,6 +524,110 @@ class Ctrl_translate extends MY_Controller {
         catch (DataException $e) {
             die($e->getMessage() . "\n");
         }
-
     }
+
+    public function list_translations()
+    {
+        try {
+            $this->mod_users->check_translator();
+
+            $avail_translations = get_available_translations();
+
+            usort($avail_translations, function($a, $b) { return $a->internal <=> $b->internal; });
+            
+            $trans_if_items = array();
+            $trans_hebgrammar_items = array();
+            $trans_hebtgrammar_items = array();
+            $trans_greekgrammar_items = array();
+            $trans_heblex_items = array();
+            $trans_aramlex_items = array();
+            $trans_greeklex_items = array();
+            foreach ($avail_translations as $t) {
+                $trans_if_items[$t->abb] = array($this->mod_translate->count_if_translated($t->abb),
+                                                 $this->mod_translate->count_if_lines(null));
+                $trans_hebgrammar_items[$t->abb] = array($this->mod_translate->count_grammar_translated('ETCBC4',$t->abb),
+                                                         $this->mod_translate->count_grammar_lines('ETCBC4'));
+                $trans_hebtgrammar_items[$t->abb] = array($this->mod_translate->count_grammar_translated('ETCBC4-translit',$t->abb),
+                                                          $this->mod_translate->count_grammar_lines('ETCBC4-translit'));
+                $trans_greekgrammar_items[$t->abb] = array($this->mod_translate->count_grammar_translated('nestle1904',$t->abb),
+                                                           $this->mod_translate->count_grammar_lines('nestle1904'));
+                $trans_heblex_items[$t->abb] = array($this->mod_translate->count_lex_translated('Hebrew',$t->abb),
+                                                     $this->mod_translate->count_lex_lines('Hebrew'));
+                $trans_aramlex_items[$t->abb] = array($this->mod_translate->count_lex_translated('Aramaic',$t->abb),
+                                                      $this->mod_translate->count_lex_lines('Aramaic'));
+                $trans_greeklex_items[$t->abb] = array($this->mod_translate->count_lex_translated('greek',$t->abb),
+                                                       $this->mod_translate->count_lex_lines('greek'));
+            }
+            
+            // VIEW:
+            $this->load->view('view_top1', array('title' => 'Available localizations'));
+            $this->load->view('view_top2');
+            $this->load->view('view_menu_bar', array('langselect' => true));
+            $center_text = $this->load->view('view_language_list',
+                                             array('avail_translations'       => $avail_translations,
+                                                   'trans_if_items'           => $trans_if_items,
+                                                   'trans_hebgrammar_items'   => $trans_hebgrammar_items,
+                                                   'trans_hebtgrammar_items'  => $trans_hebtgrammar_items,
+                                                   'trans_greekgrammar_items' => $trans_greekgrammar_items,
+                                                   'trans_heblex_items'       => $trans_heblex_items,
+                                                   'trans_aramlex_items'      => $trans_aramlex_items,
+                                                   'trans_greeklex_items'     => $trans_greeklex_items,
+                                                 ),
+                                             true);
+            $this->load->view('view_main_page', array('left_title' => 'Available Languages',
+                                                      'left' => '<p>Here you can enable or disable localizations, and you can add new localization languages.</p>',
+                                                      'center' => $center_text));
+            $this->load->view('view_bottom');
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), 'Available localizations');
+        }
+    }
+
+    public function modify_localization() {
+        try {
+            $this->mod_users->check_translator();
+
+            if ($this->uri->total_segments()!=5)
+                throw new DataException($this->lang->line('malformed_url'));
+
+            $enable = strtolower($this->uri->segment(3))=='enable';
+            $loc_type = strtolower($this->uri->segment(4)); // 'iface', 'heblex', or 'greeklex'
+            $lang_abb = strtolower($this->uri->segment(5));
+
+
+            if ($loc_type!='iface' && $loc_type!='heblex' && $loc_type!='greeklex')
+                throw new DataException($this->lang->line('malformed_url'));
+            
+            $this->mod_translate->modify_localization($enable,$loc_type,$lang_abb);
+
+            redirect(site_url("/translate/list_translations"));
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), 'Available localizations');
+        }
+    }
+
+    public function add_language() {
+        try {
+            $this->mod_users->check_translator();
+
+            if (!isset($_POST['internal-name'])
+                || !isset($_POST['native-name'])
+                || !isset($_POST['abbrev']))
+                throw new DataException($this->lang->line('bad_post_parameters'));
+            
+            $internal_name = str_replace(' ','_',strtolower(trim($_POST['internal-name'])));
+            $native_name = trim($_POST['native-name']);
+            $abbrev = trim($_POST['abbrev']);
+
+            $this->mod_translate->add_language($abbrev, $internal_name, $native_name);
+
+            redirect(site_url("/translate/list_translations"));
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), 'Create language');
+        }
+    }
+
   }
