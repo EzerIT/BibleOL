@@ -186,11 +186,8 @@
         },
         "verb_class_t": {
             "NA": "不适用",
-            "analog_i_nun": "#15 似一nun",
-            "analog_i_waw": "#16 似一waw",
             "four_consonants": "#17 四字",
             "geminate": "#14 二双",
-            "hjh_xjh": "#13 היה和חיה",
             "i_aleph": "#2 一aleph",
             "i_guttural": "#3 一喉",
             "i_nun": "#4 一nun",

@@ -200,11 +200,8 @@
         },
         "verb_class_t": {
             "NA": "N\/A",
-            "analog_i_nun": "#15 Analog I nun",
-            "analog_i_waw": "#16 Analog I waw",
             "four_consonants": "#17 Quatro Consoantes",
             "geminate": "#14 Geminado",
-            "hjh_xjh": "#13 HJH\/XJH",
             "i_aleph": "#2 I aleph",
             "i_guttural": "#3 I guttural",
             "i_nun": "#4 I nun",
