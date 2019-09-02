@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{3 July 2019}
+\date{2 September 2019}
 
 \makeindex
 
@@ -650,7 +650,7 @@ the content of the file \texttt{ljsetup.sql}.
 Populate the database with the translations of the interface by issuing these commands:
 
 \begin{lstlisting}[language=bash]
-for i in comment am da de en es fr nl pt zh-simp zh-trad
+for i in $(ls myapp/language/langsrc)
 do
     echo Importing language files $i
     php index.php translate if_php2db $i myapp/language/langsrc/$i
@@ -1708,7 +1708,7 @@ reformers wished to differentiate their system from the polytonic, the tonos on 
 sign: typically a dot or wedge: α\hspace{-0.5mm}̍\hspace{0.5mm}. However, the Greek government
 decreed in 1986 that the tonos shall be the acute. So you must now write ά instead of
 α\hspace{-0.5mm}̍\hspace{0.5mm}.\footnote{Source:
-  \url{http://www.opoudjis.net/unicode/unicode_gkbkgd.html}, accessed 27 May 2019.}
+  \url{http://www.opoudjis.net/unicode/unicode_gkbkgd.html}, accessed 2 September 2019.}
 
 This confusion has had an impact on the representation of the oxia and tonos accents in Unicode.
 Because of the decision from 1982, Unicode\index{Unicode} distinguishes between the oxia
@@ -4667,18 +4667,18 @@ The user database contains these tables:
 
 \begin{center}
 \begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l}
-alphabet              & language\_LANG                  & personal\_font      \\
-bible\_refs           & language\_LANG\_VARIANT         & sta\_displayfeature \\
-bible\_urls           & lexicon\_Aramaic                & sta\_question       \\
-class                 & lexicon\_Aramaic\_LANG          & sta\_quiz           \\
-classexercise         & lexicon\_Aramaic\_LANG\_VARIANT & sta\_quiztemplate   \\
-db\_localize          & lexicon\_greek                  & sta\_requestfeature \\
-db\_localize\_VARIANT & lexicon\_greek\_LANG            & sta\_universe       \\
-exercisedir           & lexicon\_greek\_LANG\_VARIANT   & user                \\
-exerciseowner         & lexicon\_Hebrew                 & userclass           \\
-font                  & lexicon\_Hebrew\_LANG           & userconfig          \\
-heb\_urls             & lexicon\_Hebrew\_LANG\_VARIANT  &                     \\
-language\_comment     & migrations                      &                     \\
+alphabet              & language\_LANG                  & personal\_font         \\
+bible\_refs           & language\_LANG\_VARIANT         & sta\_displayfeature    \\
+bible\_urls           & lexicon\_Aramaic                & sta\_question          \\
+class                 & lexicon\_Aramaic\_LANG          & sta\_quiz              \\
+classexercise         & lexicon\_Aramaic\_LANG\_VARIANT & sta\_quiztemplate      \\
+db\_localize          & lexicon\_greek                  & sta\_requestfeature    \\
+db\_localize\_VARIANT & lexicon\_greek\_LANG            & sta\_universe          \\
+exercisedir           & lexicon\_greek\_LANG\_VARIANT   & translation\_languages \\
+exerciseowner         & lexicon\_Hebrew                 & user                   \\
+font                  & lexicon\_Hebrew\_LANG           & userclass              \\
+heb\_urls             & lexicon\_Hebrew\_LANG\_VARIANT  & userconfig             \\
+language\_comment     & migrations                      &                        \\
 \end{tabu}
 \end{center}
 
@@ -5116,8 +5116,28 @@ version & Integer & Current system version number as used by CodeIgniter.\\
 
 \section{The Localization Tables}\label{sec-localization-tables}\index{localization}
 
-The tables with names starting with \emph{db\_localize}, \emph{language\_} or \emph{lexicon\_}
-contain information for the localization of text.
+The \emph{translation\_languages} table plus the tables with names starting with \emph{db\_localize},
+\emph{language\_} or \emph{lexicon\_} contain information for the localization of text.
+
+\subsection{The \emph{translation\_languages} Table}\label{sec-translation-languages}\index{translation\_languages table}
+
+The \emph{translation\_languages} table contains information about available translations of the
+user interface and the lexicons. It contains one entry per localization language.
+
+The table contains these fields:
+
+\begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
+  id     & Integer & Unique number identifying this entry.     \\
+  abb    & Text    & ISO~639-1 language code.                  \\
+  internal & Text & The internal name of the language. This is typically the uncapitalized english
+  name of the
+  language; for example, ``german'' for German.                  \\
+  native & Text & The name of the language in the language itself; for example, ``Deutsch'' for German. \\
+  iface\_enabled & Boolean & \emph{True} if a translation of the Bible OL user interface and the
+  grammar information exists in the localization language. \\
+  heblex\_enabled & Boolean & \emph{True} if a translation of the Hebrew and Aramaic lexicons exists in the localization language. \\
+  greeklex\_enabled & Boolean & \emph{True} if a translation of the Greek lexicons exists in the localization language. \\
+\end{my-longtabu}
 
 
 \subsection{The \emph{db\_localize} and \emph{db\_localize\_VARIANT} Tables}\label{sec-db-localize}\index{db\_localize table|hyperit}\index{db\_localize\_VARIANT table|hyperit}
@@ -5769,8 +5789,7 @@ The language specific strings are located in the directory \texttt{myapp/languag
 has a subdirectory for each supported language. The name of the subdirectory is the international
 two-letter abbreviation of the language as specified in the ISO~639-1 standard. For example, the
 Danish translation is stored in the subdirectory \texttt{da}, and the German translation is stored
-in the subdirectory \texttt{de}. The only exception is English which is stored in a subdirectory
-called \texttt{english} rather than \texttt{en}.
+in the subdirectory \texttt{de}.
 
 Accessing the translation of a string is a two-stage process. First, the relevant file must be loaded
 from \texttt{myapp/language}; this is done thus:
@@ -5820,8 +5839,9 @@ using the value of the \emph{symbolic\_name} field as \emph{\$string\_index}:
 $x = $this->lang->line($string_index);
 \end{lstlisting}
 
-If the relevant \emph{textgroup} is not found in the user database, the system reverts to the old
-mechanism.
+If the translation of a particular string is not found, the English translation is retrieved
+instead. If an English translation is not available, the system returns the string ``??xxx??'' with
+xxx replaced by the string index.
 
 
 
@@ -5866,8 +5886,11 @@ Database Specification File contains the name of the so-called \emph{Grammar Loc
 \emph{db\_localize} table (see Section \ref{sec-db-localize}) whose \emph{db} field is the name of
 the Grammar Localization Structure, and whose \emph{lang} field is the requested target
 language.\footnote{If a variant is active, the system also looks in the table
-  \emph{db\_localize\_VARIANT}, where VARIANT is the name of the variant.}
-The \emph{json} field will then contain the Grammar Localization Structure.
+  \emph{db\_localize\_VARIANT}, where VARIANT is the name of the variant. If the JSON structure of
+  the variant is not complete, the system fills the missing fields with the translations from the
+  main version.}
+The \emph{json} field will then contain the Grammar Localization Structure. (If the JSON structure
+is not complete, the system fills the missing fields with the English translations.)
 
 \textbf{On the client} the Grammar Localization Structure is available in a
 variable called \emph{l10n.}%
@@ -7185,6 +7208,9 @@ values of the enumeration type \emph{verb\_class\_t} whose values are:
 \item iii\_he
 \item regular
 \end{itemize}
+
+Although the values \emph{analog\_i\_nun}, \emph{analog\_i\_waw}, and \emph{hjh\_xjh} are values of
+the \emph{verb\_class\_t} type, they are not used by any verb in the database.
 
 \subsection{Features: number, distributional\_parent, functional\_parent, lexeme\_count}
 
