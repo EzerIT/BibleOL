@@ -99,7 +99,7 @@ class PanelQuestion {
     //
     constructor(qd : QuizData, dict : Dictionary) {
         this.qd = qd;
-        this.sentence = dict.sentenceSet;
+        this.sentence = dict.sentenceSetQuiz;
 
         ////////////////////////////////////////////////////////////////////
         // Calculate the Bible reference (the 'location') for this sentence.

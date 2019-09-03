@@ -675,6 +675,16 @@ function getSingleInteger(ms) {
     }
     throw 'MonadSet.ObjNotSingleMonad';
 }
+function containsMonad(ms, monad) {
+    for (var i in ms.segments) {
+        if (isNaN(+i))
+            continue;
+        var mp = ms.segments[+i];
+        if (monad >= mp.low && monad <= mp.high)
+            return true;
+    }
+    return false;
+}
 function getMonadArray(ms) {
     var res = [];
     for (var i in ms.segments) {
@@ -716,7 +726,7 @@ var DisplaySingleMonadObject = (function (_super) {
         _this.mix = 0;
         return _this;
     }
-    DisplaySingleMonadObject.prototype.generateHtml = function (qd, sentenceTextArr) {
+    DisplaySingleMonadObject.prototype.generateHtml = function (qd, sentenceTextArr, quizMonads) {
         var smo = this.displayedMo;
         var uhSize = smo.bcv.length;
         var chapter = null;
@@ -746,15 +756,18 @@ var DisplaySingleMonadObject = (function (_super) {
             }
         }
         var text;
-        if (qd && qd.monad2Id[this.monad]) {
+        if (qd && qd.monad2Id[this.monad] && containsMonad(quizMonads, this.monad)) {
             if (qd.quizFeatures.dontShow)
                 text = "(" + ++DisplaySingleMonadObject.itemIndex + ")";
             else
                 text = this.displayedMo.mo.features[configuration.surfaceFeature];
             text = "<em>" + text + "</em>";
         }
-        else
+        else {
             text = this.displayedMo.mo.features[configuration.surfaceFeature];
+            if (!containsMonad(quizMonads, this.monad))
+                text = "<span class=\"text-muted\">" + text + "</span>";
+        }
         var chapterstring = chapter == null ? '' : "<span class=\"chapter\">" + chapter + "</span>&#x200a;";
         var versestring = verse == null ? '' : "<span class=\"verse\">" + verse + "</span>";
         var refstring;
@@ -840,7 +853,7 @@ var DisplayMultipleMonadObject = (function (_super) {
         }
         return _this;
     }
-    DisplayMultipleMonadObject.prototype.generateHtml = function (qd, sentenceTextArr) {
+    DisplayMultipleMonadObject.prototype.generateHtml = function (qd, sentenceTextArr, quizMonads) {
         var spanclass = "lev" + this.level + " dontshowborder noseplin";
         if (this.hasPredecessor)
             spanclass += ' hasp';
@@ -887,7 +900,7 @@ var DisplayMultipleMonadObject = (function (_super) {
         for (var ch in this.children) {
             if (isNaN(+ch))
                 continue;
-            jq.append(this.children[ch].generateHtml(qd, sentenceTextArr));
+            jq.append(this.children[ch].generateHtml(qd, sentenceTextArr, quizMonads));
         }
         return jq;
     };
@@ -980,6 +993,7 @@ var Dictionary = (function () {
         this.singleMonads = [];
         this.dispMonadObjects = [];
         this.sentenceSet = dictif.sentenceSets[index];
+        this.sentenceSetQuiz = dictif.sentenceSetsQuiz[index];
         this.monadObjects1 = dictif.monadObjects[index];
         this.bookTitle = dictif.bookTitle;
         this.hideWord = (qd != null && qd.quizFeatures.dontShow);
@@ -1119,7 +1133,7 @@ var Dictionary = (function () {
     Dictionary.prototype.generateSentenceHtml = function (qd) {
         DisplaySingleMonadObject.itemIndex = 0;
         var sentenceTextArr = [''];
-        $('#textarea').append(this.dispMonadObjects[this.dispMonadObjects.length - 1][0].generateHtml(qd, sentenceTextArr));
+        $('#textarea').append(this.dispMonadObjects[this.dispMonadObjects.length - 1][0].generateHtml(qd, sentenceTextArr, this.sentenceSetQuiz));
         if (configuration.databaseName == 'ETCBC4') {
             var minindent_1;
             var maxindent_1;
@@ -1412,7 +1426,7 @@ var PanelQuestion = (function () {
         this.vAnswers = [];
         this.question_stat = new QuestionStatistics;
         this.qd = qd;
-        this.sentence = dict.sentenceSet;
+        this.sentence = dict.sentenceSetQuiz;
         var smo = dict.getSingleMonadObject(getFirst(this.sentence));
         var location_realname = '';
         this.location = smo.bcv_loc;

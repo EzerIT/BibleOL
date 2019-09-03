@@ -116,7 +116,7 @@ abstract class DisplayMonadObject {
     // Returns:
     //     A JQuery object containing the generated HTML.
     //
-    public abstract generateHtml(qd : QuizData, sentenceTextArr : string[]) : JQuery;
+    public abstract generateHtml(qd : QuizData, sentenceTextArr : string[], quizMonads: MonadSet) : JQuery;
 
 
     //------------------------------------------------------------------------------------------
@@ -176,7 +176,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
     //
     // See description under DisplayMonadObject.
     //
-    public generateHtml(qd : QuizData, sentenceTextArr : string[]) : JQuery {
+    public generateHtml(qd : QuizData, sentenceTextArr : string[], quizMonads: MonadSet) : JQuery {
         let smo     : SingleMonadObject = this.displayedMo as SingleMonadObject; // The SingleMonadObject being displayed by this DisplaySingleMonadObject
 
         let uhSize  : number = smo.bcv.length;  // The size of the hierarchy book/chapter/verse. This is currently always 3
@@ -215,7 +215,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         }
 
         let text : string; // The text to display for the current word
-        if (qd && qd.monad2Id[this.monad]) {
+        if (qd && qd.monad2Id[this.monad] && containsMonad(quizMonads,this.monad)) {
             // This is a quiz object
             if (qd.quizFeatures.dontShow)
                 text = `(${++DisplaySingleMonadObject.itemIndex})`;
@@ -223,8 +223,11 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
                 text = this.displayedMo.mo.features[configuration.surfaceFeature] ;
             text = `<em>${text}</em>`;
         }
-        else
+        else {
             text = this.displayedMo.mo.features[configuration.surfaceFeature];
+            if (!containsMonad(quizMonads,this.monad))
+                text = `<span class="text-muted">${text}</span>`;
+        }
 
         // Representation of chapter and verse number:
         let chapterstring : string = chapter==null ? '' : `<span class="chapter">${chapter}</span>&#x200a;`; // Currently not used
@@ -403,7 +406,7 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
     //
     // See description under DisplayMonadObject.
     //
-    public generateHtml(qd : QuizData, sentenceTextArr : string[]) : JQuery {
+    public generateHtml(qd : QuizData, sentenceTextArr : string[], quizMonads: MonadSet) : JQuery {
         let spanclass : string = `lev${this.level} dontshowborder noseplin`; // The class of the <span> element containing this object
         if (this.hasPredecessor)
             spanclass += ' hasp';
@@ -466,7 +469,7 @@ class DisplayMultipleMonadObject extends DisplayMonadObject {
         // Generate HTML for Emdros objects at lower levels
         for (let ch in this.children) {
             if (isNaN(+ch)) continue; // Not numeric
-            jq.append(this.children[ch].generateHtml(qd, sentenceTextArr));
+            jq.append(this.children[ch].generateHtml(qd, sentenceTextArr, quizMonads));
         }
 
         return jq;

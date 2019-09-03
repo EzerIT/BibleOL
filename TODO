@@ -1,0 +1,7 @@
+Alm tekst kan ikke vises.
+I dictionary.ts: TODO: What if not set?
+Sætning embedded i sætning i 1 Mos 3,3 (fx øvelse ETCBC4/demo/gender-translit.3et)
+Tjek at statistik opsamles korrekt, også når et quizobjekt optræder i en af de ekstra sætninger.
+Tilføj at lærer kan vælge om ekstra sætninger skal tilføjes.
+I Dictionary.php: Fjern NoConsolidate fra   $mset_union->addSet/*NoConsolidate*/($mset);
+Location på visse bibelsteder virker ikke (fx Lev 1,1-2)

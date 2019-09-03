@@ -24,6 +24,7 @@ require_once('include/monadobject.inc.php');
 class Dictionary {
     private $maxLevels;    ///< The number of levels.
     public $sentenceSets; ///< All the monads in this Dictionary object. Indexed by sentence set number.
+    public $sentenceSetsQuiz; ///< All the quiz-related monads in this Dictionary object. Indexed by sentence set number.
     private $singleMonads; ///< Maps a monad number to the SingleMonadObject for a particular word. (Type: Map<Integer, SingleMonadObject>)
     public $monadObjects; ///< A list of the MonadObject%s in sentence set at each level.
                            ///< $this->monadObjects[$x][$y][$z] is the $z'th monad at level $y in sentence set $x.
@@ -182,10 +183,12 @@ class Dictionary {
 
     /// Creates a Dictionary object. This constructor reads information from the relevant
     /// Emdros database and builds the text component hierarchy.
-    /// @param $params['mset'] The monads that describe the sentence.
+    /// @param $params['mset'] The monads that describe the text.
+    /// @param $params['mset_quiz'] The monads that describe the part of the text that contains question objects. (Only set in quizzes.)
     /// @param $params['inQuiz'] Is this part of a quiz (in which case there is only one top-level object)?
     function __construct(array $params) {
-        $msets = $params['msets'];
+        $msets = $params['msets'];  // Possibly includes surrounding sentences
+        $this->sentenceSetsQuiz = set_or_default($params['msets_quiz'], null);
         $inQuiz = $params['inQuiz'];
         $showIcons = $params['showIcons'];
 
@@ -245,7 +248,7 @@ class Dictionary {
 
         $mset_union = new OlMonadSet();
         foreach ($msets as $mset)
-            $mset_union->addSetNoConsolidate($mset);
+            $mset_union->addSet/*NoConsolidate*/($mset);
 
         $command = '';
         $indirect = array();

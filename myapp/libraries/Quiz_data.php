@@ -174,7 +174,13 @@ class Quiz_data {
 		
 		$this->nextCandidate = 0;
 	}
-	
+
+    private function fetchBookLimit(OlMonadSet $ms) {
+        $emdat = $this->CI->mql->exec("GET OBJECTS HAVING MONADS IN {$ms} [{$this->CI->db_config->dbinfo->universeHierarchy[0]->type}]");
+
+        return $emdat[0]->get_sheaf()->get_straws()[0]->get_matched_objects()[0]->get_monadset();
+    }
+    
 	public function getNextCandidate(int $request_number) {
         assert('isset($this->mainSheaf)');
 
@@ -190,18 +196,39 @@ class Quiz_data {
         // ********************************************************
 
         $msets = array();
+        $extended_msets = array();
         $command = '';
         for ($i=0; $i<$request_number; ++$i) {
             $ms = $this->mainSheaf->get_monadset();
-            $msets[] = $ms[$this->order[$this->nextCandidate++]];
+            $current_ms = $ms[$this->order[$this->nextCandidate++]];
+            $msets[] = clone $current_ms;
+
+            $booklimits = $this->fetchBookLimit($current_ms);
+            // We assume that all of $current_ms is withing the same book
+
+//			$befset = new OlMonadSet();
+			if ($current_ms->low()>$booklimits->low()) { // TODO: Check against start of book instead of against 1
+//				$befset->addOne($current_ms->low()-1,$current_ms->low()-1);
+				$befset = $current_ms->low()-1;
+				$emdat = $this->CI->mql->exec("GET OBJECTS HAVING MONADS IN {{$befset}} [{$this->CI->db_config->dbinfo->granularity}] GOqxqxqx");
+				$current_ms->addSet($emdat[0]->get_sheaf()->get_straws()[0]->get_matched_objects()[0]->get_monadset());
+			}
+
+//			$aftset = new OlMonadSet();
+			if ($current_ms->high()<$booklimits->high()) { // TODO: Check against end of book instead of against 99999999
+//				$aftset->addOne($current_ms->high()+1,$current_ms->high()+1);
+				$aftset = $current_ms->high()+1;
+				$emdat = $this->CI->mql->exec("GET OBJECTS HAVING MONADS IN {{$aftset}} [{$this->CI->db_config->dbinfo->granularity}] GOqxqxqx");
+				$current_ms->addSet($emdat[0]->get_sheaf()->get_straws()[0]->get_matched_objects()[0]->get_monadset());
+			}
+            $extended_msets[] = $current_ms;
         }
 
-        $this->CI->load->library('dictionary', array('msets' => $msets, 'inQuiz' => true, 'showIcons' => false));
+        $this->CI->load->library('dictionary', array('msets' => $extended_msets, 'msets_quiz' => $msets, 'inQuiz' => true, 'showIcons' => false));
 
         $mset_union = new OlMonadSet();
         foreach ($msets as $mset)
             $mset_union->addSetNoConsolidate($mset);
-
 
         // **************************************************************************
         // Populate the $this->monad2Id and $this->id2FeatValue with data from the quiz objects

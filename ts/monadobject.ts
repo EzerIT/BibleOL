@@ -119,7 +119,7 @@ function getFirst(ms : MonadSet) : number {
 // Returns:
 //     The only monad in the monad set
 //
-function getSingleInteger(ms : MonadSet) : number{
+function getSingleInteger(ms : MonadSet) : number {
     if (ms.segments.length===1) {
         let p : MonadPair = ms.segments[0];
         if (p.low === p.high)
@@ -127,6 +127,28 @@ function getSingleInteger(ms : MonadSet) : number{
     }
 
     throw 'MonadSet.ObjNotSingleMonad';
+}
+
+//****************************************************************************************************
+// containsMonad function
+//
+// Checks if a monad set contains a specific monad
+//
+// Parameter:
+//     ms: MonadSet to search.
+//     monad: Monad to look for.
+// Returns:
+//     True if the MonadSet contains the monad
+//
+function containsMonad(ms : MonadSet, monad : number) : boolean {
+    for (let i in ms.segments) {
+        if (isNaN(+i)) continue; // Not numeric
+
+        let mp : MonadPair = ms.segments[+i];
+        if (monad>=mp.low && monad<=mp.high)
+            return true;
+    }
+    return false;
 }
 
 
