@@ -40,7 +40,7 @@ abstract class MonadObject {
     /// Adds a child MonadObject.
     /// $param $child The child MonadObject
     public function add_child(MonadObject $child) {
-        assert('$child->parent===null'); // Ensures that the tree is properly constructed
+        assert($child->parent===null); // Ensures that the tree is properly constructed
 
         $this->children[] = $child;
         $this->children_idds[] = $child->get_id_d();

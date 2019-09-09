@@ -63,7 +63,7 @@ class Mql_native extends CI_Driver {
             // Quick harvest. This means storing the monadsets directly in the top OlSheaf object
             $crop = array(); // Vector<Sheaf>
             foreach ($this->mql_results as $mqr) {
-                assert('$mqr->isSheaf()');
+                assert($mqr->isSheaf());
 
                 $item = new TableOrSheaf();
 

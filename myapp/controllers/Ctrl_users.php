@@ -447,7 +447,7 @@ class Ctrl_users extends MY_Controller {
            $this->mod_users->check_logged_in();
 
            $user_info = $this->mod_users->get_me();
-           assert('!is_null($user_info)');
+           assert(!is_null($user_info));
 
            if (!empty($user_info->oauth2_login)) {
                // OAuth2-authorized user

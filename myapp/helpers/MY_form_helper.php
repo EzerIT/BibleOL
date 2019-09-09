@@ -16,6 +16,6 @@ function get_radio_setting(string $field, string $default_val)
     else
         $field_val = $OBJ->get_radio_setting($field, $default_val);
 
-    assert('!is_array($field_val)');
+    assert(!is_array($field_val));
     return $field_val;
 }

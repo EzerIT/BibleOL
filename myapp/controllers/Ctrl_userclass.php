@@ -157,7 +157,7 @@ class Ctrl_userclass extends MY_Controller {
 
     // $date is in the form YYYY-MM-DD
     private static function before_date($date) {
-        assert('$date[4]==="-" && $date[7]==="-"');
+        assert($date[4]==="-" && $date[7]==="-");
 
         $stringdate = substr($date,0,4) . substr($date,5,2) . substr($date,8,2);
         date_default_timezone_set('Europe/Copenhagen');
