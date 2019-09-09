@@ -26,6 +26,7 @@ class Dictionary {
     public $sentenceSets; ///< All the monads in this Dictionary object. Indexed by sentence set number.
     public $sentenceSetsQuiz; ///< All the quiz-related monads in this Dictionary object. Indexed by sentence set number.
     private $singleMonads; ///< Maps a monad number to the SingleMonadObject for a particular word. (Type: Map<Integer, SingleMonadObject>)
+    private $singleMonadsM; ///< For each question in a quiz, maps a monad number to the SingleMonadObject for a particular word. (Type: Map<Integer, SingleMonadObject>)
     public $monadObjects; ///< A list of the MonadObject%s in sentence set at each level.
                            ///< $this->monadObjects[$x][$y][$z] is the $z'th monad at level $y in sentence set $x.
     public $bookTitle;    ///< Book title
@@ -188,7 +189,7 @@ class Dictionary {
     /// @param $params['inQuiz'] Is this part of a quiz (in which case there is only one top-level object)?
     function __construct(array $params) {
         $msets = $params['msets'];  // Possibly includes surrounding sentences
-        $this->sentenceSetsQuiz = set_or_default($params['msets_quiz'], null);
+        $this->sentenceSetsQuiz = isset($params['msets_quiz']) ? $params['msets_quiz'] : null;
         $inQuiz = $params['inQuiz'];
         $showIcons = $params['showIcons'];
 
@@ -199,14 +200,12 @@ class Dictionary {
 
         $number_sets = count($msets);
 
-        //$this->inQuiz = $inQuiz;
-
         $this->maxLevels = count($dbinfo->sentencegrammar);
         ++$this->maxLevels; // We need to add an artificial top-level object (the patriarch)
 
         // If this is a text display, we must extend the msets to cover an entire sentence
 		if (!$inQuiz) {
-            assert("$number_sets==1");
+            assert($number_sets==1);
 
             $emdros_data = $CI->mql->exec("GET OBJECTS HAVING MONADS IN $msets[0] [" 
                                           . $dbinfo->sentencegrammar[$this->maxLevels-2]->objType
@@ -232,6 +231,9 @@ class Dictionary {
         $this->sentenceSets = $msets;
  
         $this->singleMonads = array();
+        $this->singleMonadsM = array();
+        for ($msetIndex=0; $msetIndex<$number_sets; ++$msetIndex)
+            $this->singleMonadsM[$msetIndex] = array();
         $this->monadObjects = array();
  
         for ($msetIndex=0; $msetIndex<$number_sets; ++$msetIndex) {
@@ -248,7 +250,7 @@ class Dictionary {
 
         $mset_union = new OlMonadSet();
         foreach ($msets as $mset)
-            $mset_union->addSet/*NoConsolidate*/($mset);
+            $mset_union->addSet($mset);
 
         $command = '';
         $indirect = array();
@@ -276,8 +278,9 @@ class Dictionary {
             }
         }
 
-        foreach ($dbinfo->universeHierarchy as $uht)
-            $command .= "GET OBJECTS HAVING MONADS IN $mset_union [$uht->type GET $uht->feat] GOqxqxqx\n";
+        if (!$inQuiz)
+            foreach ($dbinfo->universeHierarchy as $uht)
+                $command .= "GET OBJECTS HAVING MONADS IN $mset_union [$uht->type GET $uht->feat] GOqxqxqx\n";
 
         $emdros_data = $CI->mql->exec($command);
 
@@ -307,49 +310,81 @@ class Dictionary {
 			$this->addMonadObject($msetIndex, $this->maxLevels-1, $mo);
         }
  
-		
-		// Set book, chapter, and verse information on each SingleMonadObject
-		// TODO: We might use simpler code for the inQuiz case, because we only need the reference for the first word.
+		//*****************************************
+        // Add book, chapter, and verse information
 
         $uni_count = count($dbinfo->universeHierarchy);
-        for ($unix=0; $unix<$uni_count; ++$unix) {
-            $last_uni_level = $unix===$uni_count-1;
+        
+        if (!$inQuiz) {
+            // Set book, chapter, and verse information on each SingleMonadObject
+            
+            for ($unix=0; $unix<$uni_count; ++$unix) {
+                $last_uni_level = $unix===$uni_count-1;
 
-            $sh = $emdros_data[$mqlresult_index++]->get_sheaf();
-			assert($sh->number_of_straws()<=1);
+                $sh = $emdros_data[$mqlresult_index++]->get_sheaf();
+                assert($sh->number_of_straws()==1);
  
-			if ($sh->number_of_straws()==1) {
-				$lastSmo = null;
+                $lastSmo = null;
  
-				$str = $sh->get_first_straw();
+                $str = $sh->get_first_straw();
                 foreach ($str->get_matched_objects() as $mo) {
-					$featureValue = $mo->get_feature($dbinfo->universeHierarchy[$unix]->feat);
+                    $featureValue = $mo->get_feature($dbinfo->universeHierarchy[$unix]->feat);
                     if (is_numeric($featureValue))
                         $featureValue = intval($featureValue);
  
-					$newPoint = true; // Did we enter a new book, chapter, or verse?
+                    $newPoint = true; // Did we enter a new book, chapter, or verse?
                     foreach ($mo->get_monadset() as $monad) {
-						if (isset($this->singleMonads[$monad])) {
+                        if (isset($this->singleMonads[$monad])) {
                             $smo = $this->singleMonads[$monad];
-							$smo->add_bcv($featureValue);
-							$smo->add_sameAsPrev(!$newPoint);
-							if ($lastSmo!=null)
-								$lastSmo->add_sameAsNext(!$newPoint);
-							$lastSmo = $smo;
-							if ($this->bookTitle==null)
-								$this->bookTitle = $featureValue;  // This only makes sense for non-quiz
+                            $smo->add_bcv($featureValue);
+                            $smo->add_sameAsPrev(!$newPoint);
+                            if ($lastSmo!=null)
+                                $lastSmo->add_sameAsNext(!$newPoint);
+                            $lastSmo = $smo;
+                            if ($this->bookTitle==null)
+                                $this->bookTitle = $featureValue;  // This only makes sense for non-quiz
                             if ($showIcons && $last_uni_level && $newPoint) { 
                                 $smo->set_pics($CI->picdb->get_pics($smo->get_bcv()));
-								$smo->set_urls($CI->picdb->get_urls($smo->get_bcv()));
+                                $smo->set_urls($CI->picdb->get_urls($smo->get_bcv()));
                             }
-							$newPoint = false;
-						}
-					}
+                            $newPoint = false;
+                        }
+                    }
+                }
+                if ($lastSmo!=null)
+                    $lastSmo->add_sameAsNext(false);
+            }
+        }
+        else {
+            // Set book, chapter, and verse information on the first quiz object monad
+
+ 			$command = '';
+			foreach ($this->sentenceSetsQuiz as $question_monads)
+				foreach ($dbinfo->universeHierarchy as $uht)
+					$command .= "GET OBJECTS HAVING MONADS IN {{$question_monads->low()}} [$uht->type GET $uht->feat] GOqxqxqx\n";
+			$emdros_data = $CI->mql->exec($command);
+			$mqlresult_index = 0;
+
+            for ($msetIndex=0; $msetIndex<$number_sets; ++$msetIndex) {
+                $question_monads = $this->sentenceSetsQuiz[$msetIndex];
+
+				foreach ($dbinfo->universeHierarchy as $uht) {
+					$sh = $emdros_data[$mqlresult_index++]->get_sheaf();
+					assert($sh->number_of_straws()==1);
+ 
+					$str = $sh->get_first_straw();
+					assert($str->number_of_matched_objects()==1);
+ 
+					$featureValue = $str->get_first_matched_object()->get_feature($uht->feat);
+					if (is_numeric($featureValue))
+						$featureValue = intval($featureValue);
+ 
+					$smo = $this->singleMonadsM[$msetIndex][$question_monads->low()];
+                    $smo->add_bcv($featureValue);
+ 
 				}
-				if ($lastSmo!=null)
-					$lastSmo->add_sameAsNext(false);
 			}
-		}
+        }
  
 		$this->constructHierarchy();
     }
@@ -364,7 +399,11 @@ class Dictionary {
             // Add SingleMonadObject
             $thisMo = new SingleMonadObject($matob);
             $this->monadObjects[$msetIndex][0][] = $thisMo;
-            $this->singleMonads[$thisMo->get_mo()->get_monadset()->getSingleInteger()] = $thisMo;
+
+            $monad = $thisMo->get_mo()->get_monadset()->getSingleInteger();
+            $this->singleMonads[$monad] = $thisMo;
+            $this->singleMonadsM[$msetIndex][$monad] = $thisMo;
+            
         }
         else {
             // Add MultipleMonadObject

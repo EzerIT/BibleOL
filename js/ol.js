@@ -734,11 +734,11 @@ var DisplaySingleMonadObject = (function (_super) {
         var refs = null;
         var urls = null;
         if (uhSize != 0) {
-            if (uhSize != smo.sameAsPrev.length)
-                throw 'BAD2';
-            if (uhSize != smo.sameAsNext.length)
-                throw 'BAD3';
             if (!this.inQuiz) {
+                if (uhSize != smo.sameAsPrev.length)
+                    throw 'BAD2';
+                if (uhSize != smo.sameAsNext.length)
+                    throw 'BAD3';
                 document.title = l10n.universe['book'][smo.bcv[0]] + ' ' + smo.bcv[1];
                 $('#textcontainer h1').html(document.title);
                 for (var i = 0; i < uhSize; ++i) {
@@ -993,7 +993,7 @@ var Dictionary = (function () {
         this.singleMonads = [];
         this.dispMonadObjects = [];
         this.sentenceSet = dictif.sentenceSets[index];
-        this.sentenceSetQuiz = dictif.sentenceSetsQuiz[index];
+        this.sentenceSetQuiz = dictif.sentenceSetsQuiz == null ? null : dictif.sentenceSetsQuiz[index];
         this.monadObjects1 = dictif.monadObjects[index];
         this.bookTitle = dictif.bookTitle;
         this.hideWord = (qd != null && qd.quizFeatures.dontShow);

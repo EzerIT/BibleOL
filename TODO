@@ -1,7 +1,8 @@
 Alm tekst kan ikke vises.
-I dictionary.ts: TODO: What if not set?
-Sætning embedded i sætning i 1 Mos 3,3 (fx øvelse ETCBC4/demo/gender-translit.3et)
+I dictionary.ts: sentenceSets  vs sentenceSetsQuiz
+
 Tjek at statistik opsamles korrekt, også når et quizobjekt optræder i en af de ekstra sætninger.
-Tilføj at lærer kan vælge om ekstra sætninger skal tilføjes.
-I Dictionary.php: Fjern NoConsolidate fra   $mset_union->addSet/*NoConsolidate*/($mset);
-Location på visse bibelsteder virker ikke (fx Lev 1,1-2)
+Tilføj at lærer kan vælge hvor mange ekstra sætninger skal tilføjes.
+Aprøv øvelse med clause som question objects.
+Dictionary.php er noget rod.
+Hvis sentbefore==0 && sentafter==0 må indlejrede sætninger ikke medtages. (Eller skal de?): phrase.3et 1 Mos 3,3

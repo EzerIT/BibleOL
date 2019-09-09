@@ -188,12 +188,12 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         let urls : string[][] = null; // Any URLs associated with the current verse
 
         if (uhSize!=0) {
-            // Sanity check:
-            if (uhSize!=smo.sameAsPrev.length) throw 'BAD2';
-            if (uhSize!=smo.sameAsNext.length) throw 'BAD3';
-
             // If this is not an exercise, add book, chapter, and verse
             if (!this.inQuiz) {
+                // Sanity check:
+                if (uhSize!=smo.sameAsPrev.length) throw 'BAD2';
+                if (uhSize!=smo.sameAsNext.length) throw 'BAD3';
+
                 document.title = l10n.universe['book'][smo.bcv[0]] + ' ' + smo.bcv[1]; // Text in title bar
                 $('#textcontainer h1').html(document.title); // Text in page heading
 

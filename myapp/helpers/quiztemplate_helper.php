@@ -4,7 +4,7 @@ class Template extends XmlHandler {
     /************************************************************************************************
      * Class version for XML serialisation
      ************************************************************************************************/
-    const classVersion = 4; // Version 4: Accepts <maylocate> element
+    const classVersion = 5; // Version 5: Accepts <sentbefore> and <sentafter> element
 
 	/************************************************************************************************
 	 * Template data
@@ -18,6 +18,8 @@ class Template extends XmlHandler {
     public $quizObjectSelection;
     public $quizFeatures;
     public $maylocate = true;  // Default value for older versions of quiz templates
+    public $sentbefore = 0;  // Default value for older versions of quiz templates
+    public $sentafter = 0;  // Default value for older versions of quiz templates
 
 	/************************************************************************************************
 	 * XML writer interface
@@ -65,6 +67,8 @@ class Template extends XmlHandler {
         $res .= QuizFeatures::writeAsXml($quizdata->quizFeatures);
 
         $res .= sprintf("%2s<maylocate>%s</maylocate>\n", ' ', $quizdata->maylocate ? "true" : "false");
+        $res .= sprintf("%2s<sentbefore>%s</sentbefore>\n", ' ', $quizdata->sentbefore);
+        $res .= sprintf("%2s<sentafter>%s</sentafter>\n", ' ', $quizdata->sentafter);
 		$res .= sprintf("</questiontemplate>\n", ' ');
 
         return $res;
@@ -117,6 +121,16 @@ class Template extends XmlHandler {
                 $this->setthis_type = SetThisType::SET_BOOL;
                 break;
                 
+          case 'sentbefore':
+                $this->setthis = &$this->sentbefore;
+                $this->setthis_type = SetThisType::SET_NUM;
+                break;
+                
+          case 'sentafter':
+                $this->setthis = &$this->sentafter;
+                $this->setthis_type = SetThisType::SET_NUM;
+                break;
+                
           default:
                 PANIC(__FILE__,__LINE__);
                 break;
@@ -130,6 +144,8 @@ class Template extends XmlHandler {
           case 'database':
           case 'properties':
           case 'maylocate':
+          case 'sentbefore':
+          case 'sentafter':
                 // Ignore
                 break;
                 

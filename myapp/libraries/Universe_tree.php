@@ -28,7 +28,7 @@ class Node {
         }
         $this->attr = array('data-ref' => $ident,
                             'data-rangelow' => $ms->low(),
-							'data-rangehigh' => $ms->high(),
+							'data-rangehigh' => $ms->high1(),
                             'data-lev' => $hier_level);
         $this->ms = $ms;
         $this->ident = $ident;

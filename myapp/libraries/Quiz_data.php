@@ -98,6 +98,8 @@ class Quiz_data {
 	public $quizFeatures;
     public $desc;
     public $maylocate;
+    public $sentbefore;
+    public $sentafter;
 	
 	private $mainSheaf; // Contains all candidate sentences
 	private $order; // Vector<Integer>
@@ -171,6 +173,8 @@ class Quiz_data {
         $this->quizFeatures = new ExtendedQuizFeatures($params['show_features'],$params['request_features'],$params['dontshow_features'],$params['dontshow_objects'],$params['oType']);
         $this->desc = $params['desc'];
         $this->maylocate = $params['maylocate'];
+        $this->sentbefore = $params['sentbefore'];
+        $this->sentafter = $params['sentafter'];
 		
 		$this->nextCandidate = 0;
 	}
@@ -182,7 +186,7 @@ class Quiz_data {
     }
     
 	public function getNextCandidate(int $request_number) {
-        assert('isset($this->mainSheaf)');
+        assert(isset($this->mainSheaf));
 
         if ($request_number > $this->numberOfCandidates-$this->nextCandidate)
             $request_number = $this->numberOfCandidates-$this->nextCandidate;
@@ -204,24 +208,27 @@ class Quiz_data {
             $msets[] = clone $current_ms;
 
             $booklimits = $this->fetchBookLimit($current_ms);
-            // We assume that all of $current_ms is withing the same book
 
-//			$befset = new OlMonadSet();
-			if ($current_ms->low()>$booklimits->low()) { // TODO: Check against start of book instead of against 1
-//				$befset->addOne($current_ms->low()-1,$current_ms->low()-1);
-				$befset = $current_ms->low()-1;
+            $current_ms_low = $current_ms->low();
+            $current_ms_high = $current_ms->high2();
+            
+            // We reasonably assume that all of $current_ms is withing the same book
+            // Add sentences before relevant sentence
+			for ($sentcount=0; $sentcount<$this->sentbefore && $current_ms_low>$booklimits->low(); ++$sentcount) {
+				$befset = $current_ms_low-1;
 				$emdat = $this->CI->mql->exec("GET OBJECTS HAVING MONADS IN {{$befset}} [{$this->CI->db_config->dbinfo->granularity}] GOqxqxqx");
-				$current_ms->addSet($emdat[0]->get_sheaf()->get_straws()[0]->get_matched_objects()[0]->get_monadset());
+				$current_ms_low = $emdat[0]->get_sheaf()->get_straws()[0]->get_matched_objects()[0]->get_monadset()->low();
 			}
 
-//			$aftset = new OlMonadSet();
-			if ($current_ms->high()<$booklimits->high()) { // TODO: Check against end of book instead of against 99999999
-//				$aftset->addOne($current_ms->high()+1,$current_ms->high()+1);
-				$aftset = $current_ms->high()+1;
+            // Add sentences after relevant sentence
+			for ($sentcount=0; $sentcount<$this->sentafter && $current_ms_high<$booklimits->high2(); ++$sentcount) {
+				$aftset = $current_ms_high+1;
 				$emdat = $this->CI->mql->exec("GET OBJECTS HAVING MONADS IN {{$aftset}} [{$this->CI->db_config->dbinfo->granularity}] GOqxqxqx");
-				$current_ms->addSet($emdat[0]->get_sheaf()->get_straws()[0]->get_matched_objects()[0]->get_monadset());
+				$current_ms_high = $emdat[0]->get_sheaf()->get_straws()[0]->get_matched_objects()[0]->get_monadset()->high2();
 			}
-            $extended_msets[] = $current_ms;
+            $xset = new OlMonadSet;
+            $xset->addOne($current_ms_low, $current_ms_high);
+            $extended_msets[] = $xset;
         }
 
         $this->CI->load->library('dictionary', array('msets' => $extended_msets, 'msets_quiz' => $msets, 'inQuiz' => true, 'showIcons' => false));

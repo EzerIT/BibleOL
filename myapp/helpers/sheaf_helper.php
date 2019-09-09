@@ -115,16 +115,22 @@ class MonadPair {
 class OlMonadSet implements Iterator {
     public $segments = array(); ///< An array containing the MonadPair%s for this monad set
 
-    /// For single range monad sets, this function returns the low value of the range.
-    /// @return The low value of the single consitutent set of monads.
+    /// Fetches the low value of the monad set.
+    /// @return The low value of the set of monads.
     public function low() {
         return $this->segments[0]->low;
     }
 
     /// For single range monad sets, this function returns the high value of the range.
     /// @return The high value of the single consitutent set of monads.
-    public function high() {
+    public function high1() {
         return $this->segments[0]->high;
+    }
+
+    /// For multiple range monad sets, this function returns the high value of the monad.
+    /// @return The high value of the single consitutent set of monads.
+    public function high2() {
+        return $this->segments[count($this->segments)-1]->high;
     }
 
     /// A factory function that creates an OlMonadSet from a string representation of the set.
@@ -495,6 +501,13 @@ class OlMatchedObject {
 /// Represents a single straw harvested from an MQL request.
 class OlStraw {
     private $matched_objects = array(); ///< The OlMatchedObject%s that are part of this straw
+
+    /// Fetches the number of matched objects in this straw.
+    /// @return The number of OlMatchedObject%s in this straw.
+    public function number_of_matched_objects() {
+        return count($this->matched_objects);
+    }
+
 
     /// Adds a matched object to this straw.
     /// @param $mo The OlMatchedObject to add.
