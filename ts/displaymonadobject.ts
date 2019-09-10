@@ -215,18 +215,22 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         }
 
         let text : string; // The text to display for the current word
+        let textDisplayClass : string = ''; // HTML element class for text
         if (qd && qd.monad2Id[this.monad] && containsMonad(quizMonads,this.monad)) {
             // This is a quiz object
             if (qd.quizFeatures.dontShow)
                 text = `(${++DisplaySingleMonadObject.itemIndex})`;
             else
                 text = this.displayedMo.mo.features[configuration.surfaceFeature] ;
+            // <em>..</em> are added in order to mark the question object in statistics, but do not
+            // affect how the word is displayed. The display is controlled by the textDisplayClass class.
             text = `<em>${text}</em>`;
+            textDisplayClass = ' text-danger'; // (Red text) Indicates question object
         }
         else {
             text = this.displayedMo.mo.features[configuration.surfaceFeature];
             if (!containsMonad(quizMonads,this.monad))
-                text = `<span class="text-muted">${text}</span>`;
+                textDisplayClass = ' text-muted';
         }
 
         // Representation of chapter and verse number:
@@ -288,7 +292,6 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
                                   });
 
         let follow_space : string = '<span class="wordspace"> </span>'; // Enables line wrapping
-        let follow_class : string = ''; 
 
         if (charset.isHebrew) {
             let suffix = smo.mo.features[configuration.suffixFeature];
@@ -302,7 +305,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
                 // CSS class 'cont1' means "do not add word spacing".
                 // CSS class 'cont2' means "add a hyphen and word spacing".
                 // CSS class 'cont2x' means "add word spacing" (a hyphen/maqaf is already present).
-                follow_class = suffix==='' ? ' cont cont1' : ' contx cont1';
+                textDisplayClass += suffix==='' ? ' cont cont1' : ' contx cont1';
 
                 sentenceTextArr[0] += text;
             }
@@ -312,7 +315,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         else
             sentenceTextArr[0] += text + ' ';
             
-        return $(`<span class="textblock inline"><span class="textdisplay ${charset.foreignClass + follow_class}" data-idd="${smo.mo.id_d}">${versestring}${refstring}${urlstring}${text}</span>${grammar}</span>${follow_space}`);
+        return $(`<span class="textblock inline"><span class="textdisplay ${charset.foreignClass + textDisplayClass}" data-idd="${smo.mo.id_d}">${versestring}${refstring}${urlstring}${text}</span>${grammar}</span>${follow_space}`);
     }
 }
 

@@ -1,8 +1,1 @@
-Alm tekst kan ikke vises.
-I dictionary.ts: sentenceSets  vs sentenceSetsQuiz
-
-Tjek at statistik opsamles korrekt, også når et quizobjekt optræder i en af de ekstra sætninger.
-Tilføj at lærer kan vælge hvor mange ekstra sætninger skal tilføjes.
-Aprøv øvelse med clause som question objects.
 Dictionary.php er noget rod.
-Hvis sentbefore==0 && sentafter==0 må indlejrede sætninger ikke medtages. (Eller skal de?): phrase.3et 1 Mos 3,3

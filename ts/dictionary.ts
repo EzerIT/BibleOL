@@ -90,7 +90,7 @@ class Dictionary {
     constructor(dictif : DictionaryIf, index : number, qd : QuizData) {
         // Save local copy of relevant information
         this.sentenceSet = dictif.sentenceSets[index];
-        this.sentenceSetQuiz = dictif.sentenceSetsQuiz==null ? null : dictif.sentenceSetsQuiz[index];
+        this.sentenceSetQuiz = dictif.sentenceSetsQuiz==null ? this.sentenceSet : dictif.sentenceSetsQuiz[index];
         this.monadObjects1 = dictif.monadObjects[index];
         this.bookTitle = dictif.bookTitle;
         this.hideWord = (qd!=null && qd.quizFeatures.dontShow);

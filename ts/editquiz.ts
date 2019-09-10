@@ -68,6 +68,8 @@ declare let dir_name           : string;   // Name of exercise file directory
 //
 let VirtualKeyboard  : any;                          // Virtual keyboard
 let origMayLocate    : boolean;                      // Does the exercise original allow users to locate passages?
+let origSentBefore   : number;                       // Context sentences before question in original
+let origSentAfter    : number;                       // Context sentences after question in original
 let panelSent        : PanelTemplSentenceSelector;   // Sentence selection panel
 let panelSentUnit    : PanelTemplQuizObjectSelector; // Sentence unit selection panel
 let panelFeatures    : PanelTemplQuizFeatures;       // Features panel
@@ -98,6 +100,12 @@ function isDirty() : boolean {
         return true;
 
     if ($('#maylocate_cb').prop('checked')!=origMayLocate)
+        return true;
+    
+    if ($('#sentbefore').val()!=origSentBefore)
+        return true;
+    
+    if ($('#sentafter').val()!=origSentAfter)
         return true;
     
     for (let i=0; i<checked_passages.length; ++i)
@@ -257,6 +265,8 @@ function save_quiz2() : void {
     }
 
     decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
+    decoded_3et.sentbefore = $('#sentbefore').val();
+    decoded_3et.sentafter = $('#sentafter').val();
 
     decoded_3et.sentenceSelection   = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
@@ -453,6 +463,12 @@ setTimeout(function() {
 
     origMayLocate = decoded_3et.maylocate;
     $('#maylocate_cb').prop('checked', origMayLocate);
+
+    origSentBefore = decoded_3et.sentbefore;
+    $('#sentbefore').val(origSentBefore);
+
+    origSentAfter = decoded_3et.sentafter;
+    $('#sentafter').val(origSentAfter);
     
     panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
     panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'), panelFeatures);

@@ -756,17 +756,19 @@ var DisplaySingleMonadObject = (function (_super) {
             }
         }
         var text;
+        var textDisplayClass = '';
         if (qd && qd.monad2Id[this.monad] && containsMonad(quizMonads, this.monad)) {
             if (qd.quizFeatures.dontShow)
                 text = "(" + ++DisplaySingleMonadObject.itemIndex + ")";
             else
                 text = this.displayedMo.mo.features[configuration.surfaceFeature];
             text = "<em>" + text + "</em>";
+            textDisplayClass = ' text-danger';
         }
         else {
             text = this.displayedMo.mo.features[configuration.surfaceFeature];
             if (!containsMonad(quizMonads, this.monad))
-                text = "<span class=\"text-muted\">" + text + "</span>";
+                textDisplayClass = ' text-muted';
         }
         var chapterstring = chapter == null ? '' : "<span class=\"chapter\">" + chapter + "</span>&#x200a;";
         var versestring = verse == null ? '' : "<span class=\"verse\">" + verse + "</span>";
@@ -810,13 +812,12 @@ var DisplaySingleMonadObject = (function (_super) {
             }
         });
         var follow_space = '<span class="wordspace"> </span>';
-        var follow_class = '';
         if (charset.isHebrew) {
             var suffix = smo.mo.features[configuration.suffixFeature];
             text += suffix;
             if (suffix === '' || suffix === '-' || suffix === '\u05be') {
                 follow_space = '';
-                follow_class = suffix === '' ? ' cont cont1' : ' contx cont1';
+                textDisplayClass += suffix === '' ? ' cont cont1' : ' contx cont1';
                 sentenceTextArr[0] += text;
             }
             else
@@ -824,7 +825,7 @@ var DisplaySingleMonadObject = (function (_super) {
         }
         else
             sentenceTextArr[0] += text + ' ';
-        return $("<span class=\"textblock inline\"><span class=\"textdisplay " + (charset.foreignClass + follow_class) + "\" data-idd=\"" + smo.mo.id_d + "\">" + versestring + refstring + urlstring + text + "</span>" + grammar + "</span>" + follow_space);
+        return $("<span class=\"textblock inline\"><span class=\"textdisplay " + (charset.foreignClass + textDisplayClass) + "\" data-idd=\"" + smo.mo.id_d + "\">" + versestring + refstring + urlstring + text + "</span>" + grammar + "</span>" + follow_space);
     };
     return DisplaySingleMonadObject;
 }(DisplayMonadObject));
@@ -993,7 +994,7 @@ var Dictionary = (function () {
         this.singleMonads = [];
         this.dispMonadObjects = [];
         this.sentenceSet = dictif.sentenceSets[index];
-        this.sentenceSetQuiz = dictif.sentenceSetsQuiz == null ? null : dictif.sentenceSetsQuiz[index];
+        this.sentenceSetQuiz = dictif.sentenceSetsQuiz == null ? this.sentenceSet : dictif.sentenceSetsQuiz[index];
         this.monadObjects1 = dictif.monadObjects[index];
         this.bookTitle = dictif.bookTitle;
         this.hideWord = (qd != null && qd.quizFeatures.dontShow);

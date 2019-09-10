@@ -7,6 +7,7 @@ $lang['chapter_prompt'] = "Kapitel:";
 $lang['check_answer'] = "Tjek svar";
 $lang['clear_grammar'] = "Fjern grammatik";
 $lang['click_folder'] = "Klik på en mappe for at åbne den, eller vælg det antal spørgsmål du ønsker fra en given quiz, samt om du ønsker at bruge de forudvalgte bibelsteder, eller om du selv vil vælge bibelsteder.";
+$lang['context_sentences'] = "Antal sætninger i kontekst: ";
 $lang['corpus_copyright'] = "<h3>Ophavsret til ETCBC4-databasen:</h3><p>%s</p>\n"
         . "     <h3>Ophavsret til Nestle 1904-databasen:</h3><p>%s</p>";
 $lang['corpus_copyright_title'] = "Ophavsret";
@@ -63,6 +64,8 @@ $lang['select_quiz'] = "Vælg en quiz";
 $lang['select_text'] = "Vælg tekst";
 $lang['sentences'] = "Sætninger";
 $lang['sentence_units'] = "Sætningsenheder";
+$lang['sent_after'] = "Efter:";
+$lang['sent_before'] = "Før:";
 $lang['shebanq_query_id_prompt'] = "Forespørgsels-ID hos SHEBANQ:";
 $lang['shebanq_version_prompt'] = "SHEBANQ-databaseversion:";
 $lang['show_answer'] = "Vis svar";

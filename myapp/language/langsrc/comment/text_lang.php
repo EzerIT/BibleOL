@@ -28,6 +28,10 @@ $comment['click_folder'] = "";
 $format['click_folder'] = "";
 $use_textarea['click_folder'] = true;
 
+$comment['context_sentences'] = "";
+$format['context_sentences'] = "";
+$use_textarea['context_sentences'] = false;
+
 $comment['corpus_copyright'] = "HTML";
 $format['corpus_copyright'] = "keep_blanks";
 $use_textarea['corpus_copyright'] = true;
@@ -239,6 +243,14 @@ $use_textarea['sentences'] = false;
 $comment['sentence_units'] = "";
 $format['sentence_units'] = "";
 $use_textarea['sentence_units'] = false;
+
+$comment['sent_after'] = "";
+$format['sent_after'] = "";
+$use_textarea['sent_after'] = false;
+
+$comment['sent_before'] = "";
+$format['sent_before'] = "";
+$use_textarea['sent_before'] = false;
 
 $comment['shebanq_query_id_prompt'] = "";
 $format['shebanq_query_id_prompt'] = "";

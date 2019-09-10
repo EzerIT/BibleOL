@@ -7,6 +7,7 @@ $lang['chapter_prompt'] = "Chapter:";
 $lang['check_answer'] = "Check answer";
 $lang['clear_grammar'] = "Clear grammar";
 $lang['click_folder'] = "Click on a folder to open it, or select the number of questions you want from a particular quiz and whether you want to use the preset passage selection or specify your own passages.";
+$lang['context_sentences'] = "Number of context sentences:";
 $lang['corpus_copyright'] = "<h3>Copyright for the ETCBC4 database:</h3><p>%s</p>\n"
         . "     <h3>Copyright for the Nestle 1904 database:</h3><p>%s</p>";
 $lang['corpus_copyright_title'] = "Copyright";
@@ -63,6 +64,8 @@ $lang['select_quiz'] = "Select a Quiz";
 $lang['select_text'] = "Select text";
 $lang['sentences'] = "Sentences";
 $lang['sentence_units'] = "Sentence Units";
+$lang['sent_after'] = "After:";
+$lang['sent_before'] = "Before:";
 $lang['shebanq_query_id_prompt'] = "SHEBANQ query ID:";
 $lang['shebanq_version_prompt'] = "SHEBANQ database version:";
 $lang['show_answer'] = "Show answer";

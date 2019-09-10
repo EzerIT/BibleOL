@@ -15,6 +15,24 @@
     <div id="passagetree">
     </div>
     <div style="margin-top:10px"><input id="maylocate_cb" type="checkbox" name="maylocate" value="maylocate"> <?= $this->lang->line('may_locate') ?></div>
+    <div style="margin-top:10px">
+      <span><?= $this->lang->line('context_sentences') ?> <?= $this->lang->line('sent_before') ?>
+        <select id="sentbefore">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </span>
+      <span><?= $this->lang->line('sent_after') ?>
+        <select id="sentafter">
+          <option value="0">0</option>
+          <option value="1">1</option>
+        </select>
+      </span>
+    </div>
   </div>
   <div id="tab_sentences">
   </div>

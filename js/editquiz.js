@@ -2067,6 +2067,8 @@ var util;
 })(util || (util = {}));
 var VirtualKeyboard;
 var origMayLocate;
+var origSentBefore;
+var origSentAfter;
 var panelSent;
 var panelSentUnit;
 var panelFeatures;
@@ -2083,6 +2085,10 @@ function isDirty() {
     if (checked_passages.length !== initial_universe.length)
         return true;
     if ($('#maylocate_cb').prop('checked') != origMayLocate)
+        return true;
+    if ($('#sentbefore').val() != origSentBefore)
+        return true;
+    if ($('#sentafter').val() != origSentAfter)
         return true;
     for (var i = 0; i < checked_passages.length; ++i)
         if ($(checked_passages[i]).data('ref') !== initial_universe[i])
@@ -2160,6 +2166,8 @@ function save_quiz2() {
             decoded_3et.selectedPaths.push(r);
     }
     decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
+    decoded_3et.sentbefore = $('#sentbefore').val();
+    decoded_3et.sentafter = $('#sentafter').val();
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
@@ -2261,6 +2269,10 @@ setTimeout(function () {
     $('#quiz_tabs').tabs({ disabled: [3] });
     origMayLocate = decoded_3et.maylocate;
     $('#maylocate_cb').prop('checked', origMayLocate);
+    origSentBefore = decoded_3et.sentbefore;
+    $('#sentbefore').val(origSentBefore);
+    origSentAfter = decoded_3et.sentafter;
+    $('#sentafter').val(origSentAfter);
     panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
     panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'), panelFeatures);
     panelSent = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'), panelSentUnit, panelFeatures);
