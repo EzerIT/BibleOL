@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<exam>
+  <examname>te</examname>
+  <teacher_id>2</teacher_id>
+  <description>Description</description>
+  <exercise>
+    <exercisename>ETCBC4/demo/id_suffix.3et</exercisename>
+    <numq>8</numq>
+    <time>0</time>
+    <plan_start>2010-01-01 00:00:00</plan_start>
+    <plan_end>2010-01-01 00:00:00</plan_end>
+    <weight>1</weight>
+    <order>1</order>
+  </exercise>
+  <exercise>
+    <exercisename>ETCBC4/demo/number_state-translit.3et</exercisename>
+    <numq>0</numq>
+    <time>0</time>
+    <plan_start>2010-01-01 00:00:00</plan_start>
+    <plan_end>2010-01-01 00:00:00</plan_end>
+    <weight>1</weight>
+    <order>2</order>
+  </exercise>
+</exam>

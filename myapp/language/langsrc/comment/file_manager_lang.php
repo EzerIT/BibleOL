@@ -379,4 +379,3 @@ $use_textarea['visible_if_not_checked'] = false;
 $comment['visible_to_class'] = "";
 $format['visible_to_class'] = "";
 $use_textarea['visible_to_class'] = false;
-

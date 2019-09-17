@@ -6,7 +6,7 @@ class Ctrl_exams extends MY_Controller {
     public function __construct() {
         parent::__construct();
 
-        $this->lang->load('exams', $this->language);
+        $this->lang->load('file_manager', $this->language);
         $this->load->model('mod_quizpath');
         $this->load->helper('varset');
 
@@ -156,11 +156,6 @@ class Ctrl_exams extends MY_Controller {
 				     $exercise_node->appendChild($order_node);
 
 				     $order = $order + 1;
-				     /*
-				     $exercise_node->setAttributeNode(new DOMAttr('numq', '10'));
-				     $exercise_node->setAttributeNode(new DOMAttr('time', '0'));
-				     $exercise_node->setAttributeNode(new DOMAttr('weight', 1));
-					  */
 				 }
 	 		}
 
@@ -221,19 +216,19 @@ class Ctrl_exams extends MY_Controller {
     	$files = scandir($dir);
 
     	foreach($files as $key => $value){
-			$path = realpath();
-		}
+			     $path = realpath();
+		  }
 
     	return $results;
     }
 
 
 
-    private function show_files_2() {
+    public function new_exam() {
         $this->lang->load('owner', $this->language);
         $this->lang->load('exams', $this->language);
 
-        $dirlist = $this->mod_quizpath->dirlist(false);
+        //$dirlist = $this->mod_quizpath->dirlist(false);
 
         $this->load->model('mod_askemdros');
         $db_books = $this->mod_askemdros->db_and_books();
@@ -250,18 +245,22 @@ class Ctrl_exams extends MY_Controller {
         $this->load->view('view_confirm_dialog');
         $this->load->view('view_alert_dialog');
 
-        $center_text = $this->load->view('view_exams',
-                                         array('dirlist' => $dirlist,
+        // Load the main view file.
+        // This is the file that the users will mostly be interacting with.
+        // The array contains any variables that might be needed by the view file.
+        $center_text = $this->load->view('view_new_exam',
+                                         array(//'dirlist' => $dirlist,
                                                'examlist' => $this->getDirFolders(__DIR__."/../../exam"),
                                                'exerciselist' => $this->getDirContents(__DIR__."/../../quizzes"),
                                                'dir_files' => $this->getDirFiles(__DIR__."/../../quizzes"),
                                                //'show_contents' => $this->showContents('dir_files'),
-                                               'is_top' => $this->mod_quizpath->is_top(),
+                                               //'is_top' => $this->mod_quizpath->is_top(),
                                                'databases' => $db_books,
                                                'isadmin' => $this->mod_users->is_admin(),
                                                'teachers' => $teachers,
                                                'copy_or_move' => $this->session->userdata('operation')),
                                          true);
+
         $this->load->view('view_main_page', array('left_title' => $this->lang->line('exercise_file_mgmt'),
                                                   'left' => $this->lang->line('file_mgmt_description'),
                                                   'center' => $center_text));
@@ -274,12 +273,35 @@ class Ctrl_exams extends MY_Controller {
 
             $this->mod_quizpath->init(set_or_default($_GET['dir'], ''), true, false);
 
-            $this->show_files_2();
+            $this->manage_exams();
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('file_mgmt'));
         }
     }
+
+
+  public function manage_exams(){
+    $this->mod_users->check_teacher();
+
+    $this->load->view('view_top1', array('title' => $this->lang->line('file_mgmt')));
+    $this->load->view('view_top2');
+    $this->load->view('view_menu_bar', array('langselect' => true));
+    $this->load->view('view_confirm_dialog');
+    $this->load->view('view_alert_dialog');
+
+    $center_text = $this->load->view('view_manage_exams',
+                                        array(
+                                          'examlist' => $this->getDirFolders(__DIR__."/../../exam")
+                                        ),
+                                      true);
+
+    $this->load->view('view_main_page', array('left_title' => $this->lang->line('exam_mgmt'),
+                                              'left' => $this->lang->line('exam_mgmt_description'),
+                                              'center' => $center_text));
+    $this->load->view('view_bottom');
+  }
+
 
 	public function create_folder() {
         try {
@@ -296,7 +318,7 @@ class Ctrl_exams extends MY_Controller {
                 $this->mod_quizpath->mkdir($create);
             }
 
-            $this->show_files_2();
+            $this->new_exam();
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('create_folder'));
@@ -312,7 +334,7 @@ class Ctrl_exams extends MY_Controller {
             if (isset($_GET['delete']))
                 $this->mod_quizpath->rmdir($_GET['delete']);
 
-            $this->show_files_2();
+            $this->new_exam();
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('delete_folder'));
@@ -351,7 +373,7 @@ class Ctrl_exams extends MY_Controller {
                         break;
                 }
             }
-            $this->show_files_2();
+            $this->new_exam();
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('copy_or_delete_files'));
@@ -414,7 +436,7 @@ class Ctrl_exams extends MY_Controller {
 
             $this->session->unset_userdata(array('files'=>'', 'operation'=>'', 'from_dir'=>''));
 
-            $this->show_files_2();
+            $this->new_exam();
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('insert_files'));
@@ -633,13 +655,7 @@ class Ctrl_exams extends MY_Controller {
 			$this->load->view('view_alert_dialog');
 
 			$center_text = $this->load->view('view_edit_exam',
-														array('decoded_3et_json' => json_decode($this->mod_askemdros->decoded_3et),
-																'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
-																'l10n_json' => $this->mod_askemdros->l10n_json,
-																'l10n_js_json' => $this->mod_localize->get_json(),
-																'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
-																'universe' => json_encode($this->mod_askemdros->universe),
-																'dir' => dirname($_GET['exam']),
+														array(
 																'exam' => basename($_GET['exam'])),
 														true);
 			$this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_exam'),
