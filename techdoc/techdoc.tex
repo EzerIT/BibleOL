@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{2 September 2019}
+\date{10 October 2019}
 
 \makeindex
 
@@ -647,49 +647,13 @@ the content of the file \texttt{ljsetup.sql}.
 
 \subsubsection*{Substep 2}
 
-Populate the database with the translations of the interface by issuing these commands:
+Populate the database with the available translations by issuing this command:
 
 \begin{lstlisting}[language=bash]
-for i in $(ls myapp/language/langsrc)
-do
-    echo Importing language files $i
-    php index.php translate if_php2db $i myapp/language/langsrc/$i
-done
+./setup_lang
 \end{lstlisting}
 
-(On my computer, this takes less than 20 seconds.)
-
-\subsubsection*{Substep 3}
-
-Update the database with the translations of the grammar terms by issuing this command:
-
-\begin{lstlisting}[language=bash]
-php index.php translate gram_prop2db
-\end{lstlisting}
-
-The will output lines such as this:
-
-\begin{lstlisting}
-  Handling file nestle1904.comment.prop.pretty.json - unchanged
-\end{lstlisting}
-
-Some files may be marked ``unchanged'', others may be marked ``updated +++++''. Both are normal.
-
-\subsubsection*{Substep 4}
-
-Populate the database with Hebrew and Greek lexicons by issuing these commands:
-\begin{lstlisting}[language=bash]
-for i in lexicons/*.csv; do
-    j=${i/lexicons\//}
-    s=${j/_*.csv/}
-    j2=${j/*_/}
-    d=${j2/.csv/}
-    echo Source language: $s. Destination language: $d.
-    php index.php translate import_lex $s $d $i
- done
-\end{lstlisting}
-
-(On my computer, this takes about a minute.)
+(On my computer, this takes a couple of minutes.)
 
 
 \subsection{Step 7. Add Administrator\index{administrator}}
@@ -2884,6 +2848,12 @@ See Section \ref{feat-xml}.\\
 \xml{maylocate} & A Boolean value indicating if a Bible reference may be displayed when showing an
 exercise question. If this XML element is absent, it is assumed have the value \emph{true}.\\
 
+\xml{sentbefore} & An integer value indicating the number of context sentences to display before the
+question sentence. If this XML element is absent, it is assumed have the value \emph{0}.\\
+
+\xml{sentafter} & An integer value indicating the number of context sentences to display after the
+question sentence. If this XML element is absent, it is assumed have the value \emph{0}.\\
+
 \end{my-longtabu}
 
 %%%%%%%%%%%%%%%%%%%% sentenceselection %%%%%%%%%%%%%%%%%%%%
@@ -3931,12 +3901,14 @@ This is a simplified overview of the relevant TypeScript definitions in the clie
 
 \begin{lstlisting}[language=TypeScript]
 interface QuizData {
-    quizid : number;
+    quizid       : number;
     quizFeatures : ExtendedQuizFeatures;
-    desc : string;
-    maylocate : boolean;
-    monad2Id : number[];
-    id2FeatVal : string[][];
+    desc         : string;
+    maylocate    : boolean;
+    sentbefore   : number;
+    sentafter    : number;
+    monad2Id     : number[];
+    id2FeatVal   : string[][];
 }
 
 interface ExtendedQuizFeatures {%\index{ExtendedQuizFeatures TypeScript interface@\emph{ExtendedQuizFeatures} TypeScript interface}%
@@ -3958,6 +3930,8 @@ class Quiz_data {
     public $quizFeatures;     // An ExtendedQuizFeatures object
     public $desc;
     public $maylocate;
+    public $sentbefore;
+    public $sentafter;
     public $monad2Id;         // An array of integers
     public $id2FeatVal;       // An array of arrays of strings
 }
@@ -3992,6 +3966,12 @@ The fields of the \emph{QuizData} interface are:
 
   maylocate & A Boolean value indicating if the exercise may display a ``Locate'' checkbox to the user.\\
 
+  sentbefore & An integer value indicating the number of context sentences to display before the
+               question sentence.\\
+
+  sentafter & An integer value indicating the number of context sentences to display after the
+              question sentence.\\
+  
   monad2Id & An array that maps monads\index{monad} to the ID\_Ds\index{Emdros!ID\_D} of a quiz
              object\index{quiz object (a.k.a. sentence unit)}. If a quiz object covers more
              than one word, several entries in this array will have the same value. (Note that this
