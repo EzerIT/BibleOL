@@ -16,13 +16,13 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `pl_sta_grading`
+-- Table structure for table `bol_sta_grading`
 --
 
-DROP TABLE IF EXISTS `pl_sta_grading`;
+DROP TABLE IF EXISTS `bol_sta_grading`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pl_sta_grading` (
+CREATE TABLE `bol_sta_grading` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
   `start` int(11) NOT NULL,
@@ -32,13 +32,13 @@ CREATE TABLE `pl_sta_grading` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `pl_sta_grading_system`
+-- Table structure for table `bol_sta_grading_system`
 --
 
-DROP TABLE IF EXISTS `pl_sta_grading_system`;
+DROP TABLE IF EXISTS `bol_sta_grading_system`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pl_sta_grading_system` (
+CREATE TABLE `bol_sta_grading_system` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userclass` text,
   `answers` int(11) DEFAULT NULL,
@@ -54,13 +54,13 @@ CREATE TABLE `pl_sta_grading_system` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `pl_sta_gradingfeature`
+-- Table structure for table `bol_sta_gradingfeature`
 --
 
-DROP TABLE IF EXISTS `pl_sta_gradingfeature`;
+DROP TABLE IF EXISTS `bol_sta_gradingfeature`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pl_sta_gradingfeature` (
+CREATE TABLE `bol_sta_gradingfeature` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
   `start` int(11) NOT NULL,
@@ -71,13 +71,13 @@ CREATE TABLE `pl_sta_gradingfeature` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `pl_sta_gradingpath`
+-- Table structure for table `bol_sta_gradingpath`
 --
 
-DROP TABLE IF EXISTS `pl_sta_gradingpath`;
+DROP TABLE IF EXISTS `bol_sta_gradingpath`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pl_sta_gradingpath` (
+CREATE TABLE `bol_sta_gradingpath` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
   `start` int(11) NOT NULL,
