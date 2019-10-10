@@ -165,6 +165,23 @@ CREATE TABLE `bol_heb_urls` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `bol_language_en`
+--
+
+DROP TABLE IF EXISTS `bol_language_en`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bol_language_en` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `textgroup` varchar(25) NOT NULL,
+  `symbolic_name` tinytext NOT NULL,
+  `text` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `textgroup` (`textgroup`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `bol_personal_font`
 --
 
