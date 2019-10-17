@@ -1874,6 +1874,10 @@ var Quiz = (function () {
         monitorUser();
         if (this.currentPanelQuestion !== null)
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
+        else if (quizdata.fixedquestions > 0) {
+            $('button#finish').attr('disabled', 'disabled');
+            $('button#finishNoStats').attr('disabled', 'disabled');
+        }
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
             $('#virtualkbid').appendTo('#virtualkbcontainer');
             $('#textarea').empty();
@@ -1888,8 +1892,11 @@ var Quiz = (function () {
                 $('div#progressbar').progressbar({ value: this.currentDictIx + 1, max: dictionaries.sentenceSets.length });
             $('#progresstext').html((this.currentDictIx + 1) + '/' + dictionaries.sentenceSets.length);
             this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict);
-            if (this.currentDictIx + 1 === dictionaries.sentenceSets.length)
+            if (this.currentDictIx + 1 === dictionaries.sentenceSets.length) {
                 $('button#next_question').attr('disabled', 'disabled');
+                $('button#finish').removeAttr('disabled');
+                $('button#finishNoStats').removeAttr('disabled');
+            }
             if (quizdata.quizFeatures.useVirtualKeyboard &&
                 (charset.keyboardName === 'IL' || charset.keyboardName === 'GR')) {
                 VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);

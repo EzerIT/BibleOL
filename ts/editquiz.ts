@@ -66,17 +66,18 @@ declare let dir_name           : string;   // Name of exercise file directory
 //****************************************************************************************************
 // Other globale variables
 //
-let VirtualKeyboard  : any;                          // Virtual keyboard
-let origMayLocate    : boolean;                      // Does the exercise original allow users to locate passages?
-let origSentBefore   : number;                       // Context sentences before question in original
-let origSentAfter    : number;                       // Context sentences after question in original
-let panelSent        : PanelTemplSentenceSelector;   // Sentence selection panel
-let panelSentUnit    : PanelTemplQuizObjectSelector; // Sentence unit selection panel
-let panelFeatures    : PanelTemplQuizFeatures;       // Features panel
-let isSubmitting     : boolean = false;              // Are we in the process of sending an exercise to the server?
-let checked_passages : any[];                        // Selected Bible passages
-let ckeditor         : any;                          // Text editor
-let charset          : Charset;                      // Character set
+let VirtualKeyboard    : any;                          // Virtual keyboard
+let origMayLocate      : boolean;                      // Does the exercise original allow users to locate passages?
+let origSentBefore     : number;                       // Context sentences before question in original
+let origSentAfter      : number;                       // Context sentences after question in original
+let origFixedQuestions : number;                       // Fixed number of questions
+let panelSent          : PanelTemplSentenceSelector;   // Sentence selection panel
+let panelSentUnit      : PanelTemplQuizObjectSelector; // Sentence unit selection panel
+let panelFeatures      : PanelTemplQuizFeatures;       // Features panel
+let isSubmitting       : boolean = false;              // Are we in the process of sending an exercise to the server?
+let checked_passages   : any[];                        // Selected Bible passages
+let ckeditor           : any;                          // Text editor
+let charset            : Charset;                      // Character set
 
 
 //****************************************************************************************************
@@ -106,6 +107,9 @@ function isDirty() : boolean {
         return true;
     
     if ($('#sentafter').val()!=origSentAfter)
+        return true;
+
+    if ($('#fixedquestions').val()!=origFixedQuestions)
         return true;
     
     for (let i=0; i<checked_passages.length; ++i)
@@ -267,6 +271,9 @@ function save_quiz2() : void {
     decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
     decoded_3et.sentbefore = $('#sentbefore').val();
     decoded_3et.sentafter = $('#sentafter').val();
+    decoded_3et.fixedquestions = +$('#fixedquestions').val(); // Convert to number
+    if (!(decoded_3et.fixedquestions>0))
+        decoded_3et.fixedquestions = 0; // Non-positive or NaN
 
     decoded_3et.sentenceSelection   = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
@@ -398,6 +405,24 @@ function import_from_shebanq() : void {
     $('#import-shebanq-dialog').modal('show');
 }
 
+//------------------------------------------------------------------------------------------
+// numberInputModifiedListener method
+//
+// Called when the value in an integer input field changes.
+//
+// Parameter:
+//     e: The event that represents the input change.
+//
+function numberInputModifiedListener(e : JQueryEventObject) : void {
+    let s   : string = $(e.currentTarget).val() as string;
+
+    $('#' + e.data.err_id).html(''); // Clear error indication
+
+    if (s.length!==0 && s.match(/\D/g)!==null) // Check that input is an integer (Note: Rejects minus sign)
+        $('#' + e.data.err_id).html(localize('not_integer')); // Set error indication
+}
+
+
 //****************************************************************************************************
 // The main program
 // 
@@ -469,6 +494,14 @@ setTimeout(function() {
 
     origSentAfter = decoded_3et.sentafter;
     $('#sentafter').val(origSentAfter);
+    
+    origFixedQuestions = decoded_3et.fixedquestions;
+    $('#fixedquestions').val(origFixedQuestions);
+
+    // Monitor that #fixedquestions contains an integer
+    $('#fixedquestions').on('keyup', null,
+                            {err_id: "fqerror"}, // Event data
+                            numberInputModifiedListener);
     
     panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
     panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'), panelFeatures);

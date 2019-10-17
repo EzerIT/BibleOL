@@ -31,7 +31,7 @@
       <div style="overflow-x:auto; overflow-y:hidden">
         <table id="quiztab"></table>
       </div>
-      <p><span id="locate_choice"><input id="locate_cb" type="checkbox"><?= $this->lang->line('locate') ?> <span class="location"></span></span></p>
+      <p><span id="locate_choice"><input id="locate_cb" type="checkbox"> <?= $this->lang->line('locate') ?> <span class="location"></span></span></p>
       <?php /* <progress> works in most browsers, <div id="progressbar"> is for older browsers and uses JQuery UI*/ ?>
       <p class="inline"><?= $this->lang->line('progress') ?></p>
       <progress id="progress" value="0" max="1"></progress>

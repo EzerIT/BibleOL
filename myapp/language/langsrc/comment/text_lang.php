@@ -92,6 +92,10 @@ $comment['first_verse_prompt'] = "";
 $format['first_verse_prompt'] = "";
 $use_textarea['first_verse_prompt'] = false;
 
+$comment['fixed_questions'] = "";
+$format['fixed_questions'] = "";
+$use_textarea['fixed_questions'] = false;
+
 $comment['import_button'] = "";
 $format['import_button'] = "";
 $use_textarea['import_button'] = false;

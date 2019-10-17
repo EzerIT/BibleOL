@@ -13,17 +13,18 @@
 // documentation.
 //
 interface QuizData {
-    quizid       : number;
-    quizFeatures : ExtendedQuizFeatures;
-    desc         : string;
-    maylocate    : boolean;
-    sentbefore   : number;
-    sentafter    : number;
-    monad2Id     : number[];
-    id2FeatVal   : util.str2strArr[]; // The value is normally a string, but in the case of value
-                                      // suggestions for a multiple choice question the key ends in
-                                      // "!suggest!" and the value is an array of stings containing
-                                      // the suggestions
+    quizid         : number;
+    quizFeatures   : ExtendedQuizFeatures;
+    desc           : string;
+    maylocate      : boolean;
+    sentbefore     : number;
+    sentafter      : number;
+    fixedquestions : number;
+    monad2Id       : number[];
+    id2FeatVal     : util.str2strArr[]; // The value is normally a string, but in the case of value
+                                        // suggestions for a multiple choice question the key ends in
+                                        // "!suggest!" and the value is an array of stings containing
+                                        // the suggestions
 }
 
 interface ExtendedQuizFeatures {

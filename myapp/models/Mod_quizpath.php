@@ -66,6 +66,7 @@ class Mod_quizpath extends CI_Model {
     
     public function dirlist(bool $doing_test) {
         $this->load->helper('directory');
+        $this->load->helper(array('xmlhandler','quiztemplate'));
         $d = directory_map($this->canonical_absolute, 2); // A value of 2 allows us to recognize empty directories
 
         if ($d===false)
@@ -87,6 +88,15 @@ class Mod_quizpath extends CI_Model {
                     $f->filename = $doing_test ? str_replace('.3et','',$nam) : $nam;
                     $f->userid = null;
                     $files[] = $f;
+
+                    if ($doing_test) {
+                        $contents = @file_get_contents($this->canonical_absolute . "/" . $nam);
+                        if ($contents === false)
+                            throw new DataException(sprintf($this->lang->line('cannot_open_file'), $this->canonical_absolute . "/" . $nam));
+
+                        $decoded_3et = harvest($contents);
+                        $f->fixedquestions = set_or_default($decoded_3et->fixedquestions, 0);
+                    }
                 }
             }
 

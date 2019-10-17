@@ -2069,6 +2069,7 @@ var VirtualKeyboard;
 var origMayLocate;
 var origSentBefore;
 var origSentAfter;
+var origFixedQuestions;
 var panelSent;
 var panelSentUnit;
 var panelFeatures;
@@ -2089,6 +2090,8 @@ function isDirty() {
     if ($('#sentbefore').val() != origSentBefore)
         return true;
     if ($('#sentafter').val() != origSentAfter)
+        return true;
+    if ($('#fixedquestions').val() != origFixedQuestions)
         return true;
     for (var i = 0; i < checked_passages.length; ++i)
         if ($(checked_passages[i]).data('ref') !== initial_universe[i])
@@ -2168,6 +2171,9 @@ function save_quiz2() {
     decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
     decoded_3et.sentbefore = $('#sentbefore').val();
     decoded_3et.sentafter = $('#sentafter').val();
+    decoded_3et.fixedquestions = +$('#fixedquestions').val();
+    if (!(decoded_3et.fixedquestions > 0))
+        decoded_3et.fixedquestions = 0;
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
@@ -2232,6 +2238,12 @@ function import_from_shebanq() {
     });
     $('#import-shebanq-dialog').modal('show');
 }
+function numberInputModifiedListener(e) {
+    var s = $(e.currentTarget).val();
+    $('#' + e.data.err_id).html('');
+    if (s.length !== 0 && s.match(/\D/g) !== null)
+        $('#' + e.data.err_id).html(localize('not_integer'));
+}
 setTimeout(function () {
     for (var i in configuration.sentencegrammar) {
         if (isNaN(+i))
@@ -2273,6 +2285,9 @@ setTimeout(function () {
     $('#sentbefore').val(origSentBefore);
     origSentAfter = decoded_3et.sentafter;
     $('#sentafter').val(origSentAfter);
+    origFixedQuestions = decoded_3et.fixedquestions;
+    $('#fixedquestions').val(origFixedQuestions);
+    $('#fixedquestions').on('keyup', null, { err_id: "fqerror" }, numberInputModifiedListener);
     panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
     panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'), panelFeatures);
     panelSent = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'), panelSentUnit, panelFeatures);

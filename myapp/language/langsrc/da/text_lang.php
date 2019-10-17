@@ -24,6 +24,7 @@ $lang['finish'] = "BEDØM opgaven";
 $lang['finish_no_grading'] = "GEM resultat";
 $lang['first_verse'] = "Første vers";
 $lang['first_verse_prompt'] = "Første vers:";
+$lang['fixed_questions'] = "Fast antal sprøgsmål (sæt til 0 hvis den studerende skal vælge):";
 $lang['import_button'] = "Importér";
 $lang['import_from_shebanq'] = "Import fra SHEBANQ";
 $lang['last_verse'] = "Sidste vers:";

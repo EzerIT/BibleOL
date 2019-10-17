@@ -169,7 +169,7 @@ class Mod_askemdros extends CI_Model {
             $this->load->model('mod_statistics');
             $templid = $this->mod_statistics->newQuizTemplate($this->mod_users->my_id(), $filename, $this->contents, $this->decoded_3et->database,
                                                               $this->decoded_3et->properties, $this->decoded_3et->quizObjectSelection->object);
-            if (is_null($use_selection))
+            if (is_null($use_selection) || $this->decoded_3et->fixedquestions>0)
                 $quizid = $this->mod_statistics->startQuiz($this->mod_users->my_id(), $templid,
                                                            $this->decoded_3et->selectedPaths);
             else
@@ -180,13 +180,14 @@ class Mod_askemdros extends CI_Model {
             $quizid = -1;
 
         $this->load->library('quiz_data',array('quizid' => $quizid,
-                                               'universe' => self::parsePath($this->decoded_3et->selectedPaths, $use_selection),
+                                               'universe' => self::parsePath($this->decoded_3et->selectedPaths, $this->decoded_3et->fixedquestions>0 ? null : $use_selection),
                                                'senSelect' => $sentenceSelector,
                                                'qoSelect' => $qoSelector,
                                                'desc' => $this->decoded_3et->desc,
                                                'maylocate' => $this->decoded_3et->maylocate,
                                                'sentbefore' => $this->decoded_3et->sentbefore,
                                                'sentafter' => $this->decoded_3et->sentafter,
+                                               'fixedquestions' => $this->decoded_3et->fixedquestions,
                                                'show_features' => $this->decoded_3et->quizFeatures->showFeatures,
                                                'request_features' => $this->decoded_3et->quizFeatures->requestFeatures,
                                                'dontshow_features' => $this->decoded_3et->quizFeatures->dontShowFeatures,
@@ -288,7 +289,9 @@ class Mod_askemdros extends CI_Model {
                 $numCandidates = $this->quiz_data->getNumberOfCandidates();
             else
                 throw new DataException($this->lang->line('no_sentences_found'));
-            
+
+            if ($this->quiz_data->fixedquestions>0)
+                $number_of_quizzes = $this->quiz_data->fixedquestions;
             $this->dictionaries_json = json_encode($this->quiz_data->getNextCandidate($number_of_quizzes));
             $this->quiz_data_json = json_encode($this->quiz_data);
 
@@ -346,7 +349,8 @@ class Mod_askemdros extends CI_Model {
                            . '"quizFeatures":{"showFeatures":[],"requestFeatures":[],"dontShowFeatures":[],"dontShowObjects":[]},'
                            . '"maylocate":true,'
                            . '"sentbefore":0,'
-                           . '"sentafter":0'
+                           . '"sentafter":0,'
+                           . '"fixedquestions":0'
                            . '}',
                            $this->db_config->dbinfo->databaseName, $db, $this->db_config->dbinfo->objHasSurface);
         }

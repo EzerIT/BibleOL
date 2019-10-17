@@ -100,6 +100,7 @@ class Quiz_data {
     public $maylocate;
     public $sentbefore;
     public $sentafter;
+    public $fixedquestions;
 	
 	private $mainSheaf; // Contains all candidate sentences
 	private $order; // Vector<Integer>
@@ -175,7 +176,8 @@ class Quiz_data {
         $this->maylocate = $params['maylocate'];
         $this->sentbefore = $params['sentbefore'];
         $this->sentafter = $params['sentafter'];
-		
+        $this->fixedquestions = $params['fixedquestions'];
+        
 		$this->nextCandidate = 0;
 	}
 

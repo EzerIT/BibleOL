@@ -33,6 +33,9 @@
         </select>
       </span>
     </div>
+    <div style="margin-top:10px">
+      <span><?= $this->lang->line('fixed_questions') ?> <input id="fixedquestions" type="text" size="8"> <span id="fqerror"></span>
+    </div>
   </div>
   <div id="tab_sentences">
   </div>

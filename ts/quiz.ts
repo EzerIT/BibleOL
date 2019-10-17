@@ -98,6 +98,11 @@ class Quiz {
             // Update statistics.
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
 
+        else if (quizdata.fixedquestions>0) {
+            $('button#finish').attr('disabled', 'disabled');
+            $('button#finishNoStats').attr('disabled', 'disabled');
+        }
+
         // Sanity check: are there more questions?
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
             // We have another question
@@ -121,10 +126,13 @@ class Quiz {
             // Create a panel for the next question
             this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict);
             
-            if (this.currentDictIx+1 === dictionaries.sentenceSets.length)
+            if (this.currentDictIx+1 === dictionaries.sentenceSets.length) {
                 // This is the last question, disable the 'Next' button
                 $('button#next_question').attr('disabled', 'disabled');
-
+                $('button#finish').removeAttr('disabled');
+                $('button#finishNoStats').removeAttr('disabled');
+            }
+            
             if (quizdata.quizFeatures.useVirtualKeyboard &&
                 (charset.keyboardName==='IL' || charset.keyboardName==='GR')) {
                 VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);

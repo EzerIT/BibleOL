@@ -48,14 +48,20 @@
     <tr>
       <td><span class="fas fa-file" style="display:inline-block;"></span>&nbsp;<?= $f->filename ?></td>
       <td style="text-align: center;">
+      <?php if ($f->fixedquestions): ?>
+        <?= anchor(build_get('text/show_quiz',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => $f->fixedquestions)), $f->fixedquestions) ?>
+      <?php else: ?>
         <?= anchor(build_get('text/show_quiz',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 5)), '5') ?>&nbsp;&nbsp;&nbsp;
         <?= anchor(build_get('text/show_quiz',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 10)), '10') ?>&nbsp;&nbsp;&nbsp;
         <?= anchor(build_get('text/show_quiz',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 25)), '25') ?>
+      <?php endif; ?>
       </td>
       <td style="text-align: center;">
+      <?php if ($f->fixedquestions==0): ?>
         <?= anchor(build_get('text/show_quiz_univ',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 5)), '5') ?>&nbsp;&nbsp;&nbsp;
         <?= anchor(build_get('text/show_quiz_univ',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 10)), '10') ?>&nbsp;&nbsp;&nbsp;
         <?= anchor(build_get('text/show_quiz_univ',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 25)), '25') ?>
+      <?php endif; ?>
       </td>
     </tr>
   <?php endforeach; ?>
