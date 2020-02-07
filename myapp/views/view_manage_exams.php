@@ -54,23 +54,25 @@ function showContents($ar){
   # Table that will hold all the array elements.
   echo '<table style="width: 100%; background-color: #007bff; border-radius: 8px;">';
     # Iterate through the array starting with the second element.
-    for ($i = 1; $i < count($ar); $i++){
+    for ($i = 0; $i < count($ar); $i++){
       # Store the exam name only (not the whole path).
       $exname = str_replace("/var/www/BibleOL/exam/","",$ar[$i]);
-      # Each table row represents a different exam.
-      echo '<tr>';
-        # Table column that displays the exam names.
-        echo '<td style="padding: 8px; width: 75%; color: white;">';
-          echo $exname;
-        echo '</td>';
-        # Table column that stores the edit exam buttons for each
-        # exam.
-        echo '<td style="width: 25%;">';
-          echo '<a class="editButton" href="/exams/edit_exam?exam='.$exname.'">';
-            echo "Edit Exam";
-          echo '</a>';
-        echo '</td>';
-      echo '</tr>';
+      if ($exname != "README"){
+        # Each table row represents a different exam.
+        echo '<tr>';
+          # Table column that displays the exam names.
+          echo '<td style="padding: 8px; width: 75%; color: white;">';
+            echo $exname;
+          echo '</td>';
+          # Table column that stores the edit exam buttons for each
+          # exam.
+          echo '<td style="width: 25%;">';
+            echo '<a class="editButton" href="/exams/edit_exam?exam='.$exname.'">';
+              echo "Edit Exam";
+            echo '</a>';
+          echo '</td>';
+        echo '</tr>';
+      }
     }
 }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <questiontemplate version="3">
-  <desc><![CDATA[Qal imperfect verb forms]]></desc>
+  <desc><![CDATA[Declination of nouns with suffixes]]></desc>
   <database>ETCBC4</database>
-  <properties>ETCBC4-translit</properties>
+  <properties>ETCBC4</properties>
   <path>Genesis</path>
   <path>Exodus</path>
   <path>Leviticus</path>
@@ -12,22 +12,26 @@
     <questionobject>word</questionobject>
     <featurehandlers version="2">
       <enumfeature version="1">
-        <name>vt</name>
-        <comparator>equals</comparator>
-        <value>impf</value>
+        <name>suffix_gender</name>
+        <comparator>differs</comparator>
+        <value>NA</value>
+        <value>unknown</value>
       </enumfeature>
       <enumfeature version="1">
-        <name>vs</name>
+        <name>sp</name>
         <comparator>equals</comparator>
-        <value>qal</value>
+        <value>subs</value>
       </enumfeature>
     </featurehandlers>
     <useforquizobjects>true</useforquizobjects>
   </sentenceselection>
   <quizfeatures version="3">
-    <show>visual</show>
-    <request>gn</request>
-    <request>ps</request>
-    <request>nu</request>
+    <show>g_voc_lex_utf8</show>
+    <show>st</show>
+    <show>suffix_gender</show>
+    <show>suffix_person</show>
+    <show>suffix_number</show>
+    <show>nu</show>
+    <request>g_word_nocant_utf8</request>
   </quizfeatures>
 </questiontemplate>
