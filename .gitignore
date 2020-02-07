@@ -14,4 +14,5 @@ myapp/third_party/*
 dumpdb.sh
 loaddb.sh
 RGraph/big-libraries
+myapp/logs/
 exam
