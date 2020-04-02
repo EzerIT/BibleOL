@@ -1,1 +1,117 @@
-{}
+{
+    "grammarmetafeature": {
+        "word": {
+            "pgn": "መደብ ጾታ ቁጥር",
+            "suffix_pgn": "የመደብ ጾታ ቁጥር ቅጥያ"
+        }
+    },
+    "universe": {
+        "verse": {
+            "_label": "ቁጥር  %"
+        },
+        "chapter": {
+            "_label": "ምዕራፍ  %"
+        },
+        "reference": {
+            "_label": "%s %d:%d",
+            "Genesis": "ዘፍ",
+            "Exodus": "ዘጸ",
+            "Leviticus": "ዘሌ",
+            "Numeri": "ዘኁ",
+            "Deuteronomium": "ዘዳ",
+            "Josua": "ኢያ",
+            "Judices": "መሳ",
+            "Ruth": "ሩት",
+            "Samuel_I": "1ሳሙ",
+            "Samuel_II": "2ሳሙ",
+            "Reges_I": "1ነገ",
+            "Reges_II": "2ነገ",
+            "Chronica_I": "1ዜና",
+            "Chronica_II": "2ዜና",
+            "Esra": "ዕዝ",
+            "Nehemia": "ነህ",
+            "Esther": "አስ",
+            "Iob": "እዮ",
+            "Psalmi": "መዝ",
+            "Proverbia": "ምሳ",
+            "Ecclesiastes": "መክ",
+            "Canticum": "መኃልየ",
+            "Jesaia": "ኢሳ",
+            "Jeremia": "ኤር",
+            "Threni": "ሰቆ ኤር",
+            "Ezechiel": "ሕዝ",
+            "Daniel": "ዳነ",
+            "Hosea": "ሆሴ",
+            "Joel": "ኢዩ",
+            "Amos": "አሞ",
+            "Obadia": "አብ",
+            "Jona": "ዩና",
+            "Micha": "ሚክ",
+            "Nahum": "ናሆ",
+            "Habakuk": "ዕን",
+            "Zephania": "ሶፎ",
+            "Haggai": "ሐጌ",
+            "Sacharia": "ዘካ",
+            "Maleachi": "ሚል"
+        }
+    },
+    "grammarsubfeature": {
+        "word": {
+            "ps": {
+                "p1": "1",
+                "NA": "-",
+                "p2": "2",
+                "p3": "3",
+                "unknown": "?"
+            },
+            "gn": {
+                "f": "ሴ",
+                "m": "ወ",
+                "NA": "-",
+                "unknown": "?"
+            },
+            "nu": {
+                "du": "ሁለት",
+                "NA": "-",
+                "pl": "ብዙ",
+                "sg": "ነጠላ",
+                "unknown": "?"
+            },
+            "suffix_person": {
+                "p1": "1",
+                "NA": "-",
+                "p2": "2",
+                "p3": "3",
+                "unknown": "-",
+                "absent": "-"
+            },
+            "suffix_gender": {
+                "f": "ሴ",
+                "m": "ወ",
+                "NA": "-",
+                "unknown": "-",
+                "absent": "-"
+            },
+            "suffix_number": {
+                "NA": "-",
+                "pl": "ብዙ",
+                "sg": "ነጠላ",
+                "unknown": "-",
+                "absent": "-"
+            }
+        }
+    },
+    "grammarfeature": {
+        "word": {
+            "g_word_translit": "በቋንቋ ፊደል መጻፍ"
+        }
+    },
+    "grammargroup": {
+        "word": {
+            "form_in_text": "ቀርፅ ጽሑፍ",
+            "lexeme": "መድበለ ቃላት",
+            "morphology": "ስነ ልዩ ምዕላድ",
+            "glosses": "የቃላት ፍቺ"
+        }
+    }
+}

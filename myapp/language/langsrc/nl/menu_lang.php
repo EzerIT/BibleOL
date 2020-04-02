@@ -8,6 +8,7 @@ $lang['enroll_in_class'] = "Inschrijven/uitschrijven groepen";
 $lang['exercises'] = "Oefeningen";
 $lang['font_preferences'] = "Voorkeur lettertypen";
 $lang['home'] = "Home";
+$lang['list_translations'] = "Beschikbare vertalingen";
 $lang['login'] = "Inloggen";
 $lang['logout'] = "Uitloggen";
 $lang['manage_exercises'] = "Oefeningen beheren";
