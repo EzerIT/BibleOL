@@ -269,7 +269,7 @@ class Dictionary {
                 if ($subtype!=='')
                     $command .= "SELECT ALL OBJECTS IN $mset WHERE [$sg->objType "
                         . (empty($allFeat) ? '' : "GET $allFeat")
-                        . " [$subtype GET " . implode($subtypeAllFeat, ',') . "]"
+                        . " [$subtype GET " . implode(',',$subtypeAllFeat) . "]"
                         . "] GOqxqxqx\n";
                 else
                     $command .= "SELECT ALL OBJECTS IN $mset WHERE [$sg->objType "
