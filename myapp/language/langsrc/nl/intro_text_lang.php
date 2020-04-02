@@ -18,6 +18,7 @@ $lang['intro_right1'] = "<p>Sinds 2014 is Bible Online Learner deel van het <a h
 $lang['intro_right2'] = "<p>Bible Online Learner is gebaseerd op PLOTLearner, een PC programma dat ontwikkeld is als onderdeel van het\n"
         . "<a href=\"http://www.eplot.eu\" target=\"_blank\">EuroPLOT</a> project 2010-2013. De huidige website is het resultaat van verdere ontwikkeling door Ezer IT Consulting afzonderlijk van het EuroPLOT project. De website word momenteel onderhouden door <a href=\"http://3bmoodle.dk\" target=\"_blank\">3BM Bible Software and Multimedia</a>.</p>";
 $lang['intro_right3'] = "<p>De SHEBANQ website is ontwikkeld door prof. Wido van Peursen (VU) en Dirk Roorda (DANS).</p>";
+$lang['intro_right4'] = "<p>Het lexicon voor Swahili is ontwikkeld door Dr. David Instone-Brewer met de steun van de United Bible Societies. De toepassing in Bible Online Learner is op het ogenblik van experimentele aard.</p>";
 $lang['intro_right_head'] = "Bible Online Learner voor Free Global Learning";
 $lang['welcome'] = "Welkom bij Bible Online Learner";
 $lang['welcome2'] = "%s, welkom bij Bible Online Learner";

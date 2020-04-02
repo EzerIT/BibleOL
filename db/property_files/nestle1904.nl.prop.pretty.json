@@ -1,4 +1,270 @@
 {
     "dbdescription": "Grieks (Nestle 1904, NT)",
-    "dbcopyright": "Publiek domein."
+    "dbcopyright": "Publiek domein.",
+    "emdrosobject": {
+        "word": {
+            "_objname": "Woord",
+            "person": "Persoon",
+            "voice": "Diathese",
+            "tense": "Tempus",
+            "mood": "Modus",
+            "lemma": "Lemma",
+            "raw_lemma": "Lemma (kleine letters, zonder accenten)",
+            "normalized": "Genormaliseerd",
+            "raw_normalized": "Genormaliseerd (kleine letters, zonder accenten)",
+            "number": "Getal",
+            "possessor_number": "Getal",
+            "suffix": "Extra",
+            "surface": "Tekst",
+            "strongs": "Strong's nummer",
+            "strongs_unreliable": "Strong's onbetrouwbaar?",
+            "gender": "Geslacht",
+            "case": "Naamval",
+            "psp": "Woordsoort"
+        },
+        "clause1": {
+            "_objname": "Zinsniveau 1",
+            "typ": "Functie"
+        },
+        "clause1_abbrev": {
+            "_objname": "Zinsdeel 1"
+        },
+        "clause2": {
+            "_objname": "Zinsdeel 2",
+            "typ": "Functie"
+        },
+        "clause2_abbrev": {
+            "_objname": "Zinsdeel 2"
+        },
+        "sentence": {
+            "_objname": "Zin"
+        }
+    },
+    "emdrostype": {
+        "boolean_t": {
+            "false": "Nee",
+            "true": "Ja"
+        },
+        "tense_t": {
+            "pluperfect": "plusquamperfectum",
+            "imperfect": "imperfectum",
+            "second_future": "futurum exactum (II)",
+            "present": "praesens",
+            "aorist": "aoristus",
+            "second_aorist": "thematische aoristus (2)",
+            "second_pluperfect": "plusquamperfectum verba muta (2)",
+            "future": "futurum",
+            "second_perfect": "perfectum verba muta (2)",
+            "NA": "-",
+            "perfect": "perfectum"
+        },
+        "suffix_t": {
+            "crasis": "crasis",
+            "interrogative": "vraagwoord",
+            "comparative": "comparativus",
+            "negative": "ontkenning",
+            "NA": "-",
+            "superlative": "superlativum",
+            "attic": "Attisch",
+            "particle_attached": "met partikel eraan vast"
+        },
+        "mood_t": {
+            "optative": "optativus",
+            "participle": "participium",
+            "imperative": "imperativus",
+            "subjunctive": "coniunctivus",
+            "imperative_participle": "participium als imperativus gebruikt",
+            "indicative": "indicativus",
+            "infinitive": "infinitivus",
+            "NA": "-"
+        },
+        "case_t": {
+            "nominative": "nominativus (1e)",
+            "dative": "dativus (3e)",
+            "vocative": "vocativus (5e)",
+            "accusative": "accustivus (4e)",
+            "NA": "-",
+            "genitive": "genitivus (2e)"
+        },
+        "psp_t": {
+            "hebrew": "Hebreeuws",
+            "conjunction": "Voegwoord",
+            "reciprocal_pronoun": "Wederkerig voornaamwoord",
+            "letter_indeclinable": "Letter (onverbuigbaar)",
+            "cond": "Bepaling",
+            "particle": "Partikel",
+            "interjection": "Tussenwerpsel",
+            "adverb": "Bijwoord",
+            "verb": "Werkwoord",
+            "correlative_or_interrogative_pronoun": "Correlatief of vragend voornaamwoord",
+            "possessive_pronoun": "Bezittelijk voornaamwoord",
+            "personal_pronoun": "Persoonlijk voornaamwoord",
+            "aramaic": "Aramees",
+            "numeral_indeclinable": "Telwoord",
+            "reflexive_pronoun": "Wederkerend voornaamwoord",
+            "correlative_pronoun": "Correlatief voornaamwoord",
+            "noun_other_type_indeclinable": "Andersoortig naamwoord (onverbuigbaar)",
+            "adjective": "Bijvoeglijk naamwoord",
+            "demonstrative_pronoun": "Aanwijzend voornaamwoord",
+            "relative_pronoun": "Betrekkelijk voornaamwoord",
+            "preposition": "Voorzetsel",
+            "interrogative_pronoun": "Vragend voornaamwoord",
+            "article": "Lidwoord",
+            "proper_noun_indeclinable": "Eigennaam (onverbuigbaar)",
+            "noun": "Zelfstandig naamwoord",
+            "indefinite_pronoun": "Onbepaald voornaamwoord",
+            "NA": "-"
+        },
+        "number_t": {
+            "NA": "-",
+            "plural": "meervoud",
+            "singular": "enkelvoud"
+        },
+        "voice_t": {
+            "middle_or_passive": "medium of passief",
+            "passive": "passief",
+            "impersonal_active": "onpersoonlijk actief",
+            "active": "actief",
+            "passive_deponent": "passief deponens (DP)",
+            "NA": "-",
+            "middle_or_passive_deponent": "mediaal of passief deponens (DM\/DP)",
+            "middle_deponent": "mediaal deponens (DM)",
+            "middle": "medium"
+        },
+        "person_t": {
+            "second_person": "2e persoon",
+            "third_person": "3e persoon",
+            "first_person": "1e persoon",
+            "NA": "-"
+        },
+        "clause_type_t_abbrev": {
+            "ADV": "BW",
+            "IO": "MV",
+            "O": "LV",
+            "O2": "LV2",
+            "S": "OW",
+            "CL": "BP",
+            "P": "NW",
+            "V": "WW",
+            "VC": "KWW"
+        },
+        "clause_type_t": {
+            "ADV": "Bijwoordelijke bepaling",
+            "CL": "Bepaling",
+            "IO": "Meewerkend voorwerp",
+            "O": "Lijdend voorwerp",
+            "O2": "Tweede lijdend voorwerp",
+            "P": "Naamwoordelijk deel van het gezegde",
+            "S": "Onderwerp",
+            "V": "Werkwoordelijk gezegde",
+            "VC": "Koppelwerkwoord"
+        },
+        "gender_t": {
+            "neuter": "onzijdig",
+            "masculine": "mannelijk",
+            "feminine": "vrouwelijk",
+            "NA": "-"
+        }
+    },
+    "grammargroup": {
+        "word": {
+            "lexeme": "Lexeem",
+            "morphology": "Vormleer",
+            "glosses": "Glossen"
+        }
+    },
+    "grammarmetafeature": {
+        "word": {
+            "pgn": "Persoon, geslacht, getal"
+        }
+    },
+    "grammarsubfeature": {
+        "word": {
+            "person": {
+                "first_person": "1e&nbsp;",
+                "second_person": "2e&nbsp;",
+                "third_person": "3e&nbsp;",
+                "NA": "&nbsp;"
+            },
+            "gender": {
+                "feminine": "vro.&nbsp;",
+                "masculine": "man.&nbsp;",
+                "neuter": "onz.&nbsp;",
+                "NA": "&nbsp;"
+            },
+            "number": {
+                "plural": "mv.&nbsp;",
+                "singular": "ev.&nbsp;",
+                "NA": "&nbsp;"
+            }
+        }
+    },
+    "universe": {
+        "book": {
+            "_label": "%s",
+            "Matthew": "Matteüs",
+            "Mark": "Markus",
+            "Luke": "Lukas",
+            "John": "Johannes",
+            "Acts": "Handelingen",
+            "Romans": "Romeinen",
+            "I_Corinthians": "1 Korintiërs",
+            "II_Corinthians": "2 Kortintiërs",
+            "Galatians": "Galaten",
+            "Ephesians": "Ephesiërs",
+            "Philippians": "Philippenzen",
+            "Colossians": "Kolossenzen",
+            "I_Thessalonians": "1 Tessalonicenzen",
+            "II_Thessalonians": "2 Tessalonicenzen",
+            "I_Timothy": "1 Timoteüs",
+            "II_Timothy": "2 Timoteüs",
+            "Titus": "Titus",
+            "Philemon": "Filemon",
+            "Hebrews": "Hebreeën",
+            "James": "Jakobus",
+            "I_Peter": "1 Petrus",
+            "II_Peter": "2 Petrus",
+            "I_John": "1 Johannes",
+            "II_John": "2 Johannes",
+            "III_John": "3 Johannes",
+            "Jude": "Judas",
+            "Revelation": "Openbaring"
+        },
+        "chapter": {
+            "_label": "Hoofdstuk %s"
+        },
+        "verse": {
+            "_label": "Vers %s"
+        },
+        "reference": {
+            "_label": "%s %d:%d",
+            "Matthew": "Mat.",
+            "Mark": "Mar",
+            "Luke": "Luk",
+            "John": "Joh.",
+            "Acts": "Hand.",
+            "Romans": "Rom.",
+            "I_Corinthians": "1 Kor.",
+            "II_Corinthians": "2 Kor.",
+            "Galatians": "Gal.",
+            "Ephesians": "Ef.",
+            "Philippians": "Fil.",
+            "Colossians": "Kol.",
+            "I_Thessalonians": "1 Tes.",
+            "II_Thessalonians": "2 Tes.",
+            "I_Timothy": "1 Tim.",
+            "II_Timothy": "2 Tim.",
+            "Titus": "Tit.",
+            "Philemon": "Filem.",
+            "Hebrews": "Heb.",
+            "James": "Jak.",
+            "I_Peter": "1 Pet.",
+            "II_Peter": "2 Pet.",
+            "I_John": "1 Joh.",
+            "II_John": "2 Joh.",
+            "III_John": "3 Joh.",
+            "Jude": "Jud.",
+            "Revelation": "Op."
+        }
+    }
 }
