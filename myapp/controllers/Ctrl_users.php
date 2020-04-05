@@ -107,7 +107,7 @@ class Ctrl_users extends MY_Controller {
                     // Token successfully revoked
                     $this->delete_common();
                     break;
-                    
+
               default:
                     // Other error
                     throw new DataException($this->lang->line('google_no_valid_reply'));
@@ -116,13 +116,13 @@ class Ctrl_users extends MY_Controller {
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('users'));
         }
-    }            
-    
+    }
+
 
     public function delete_me_facebook() {
         try {
             $this->mod_users->check_logged_in_oauth2('facebook');
- 
+
             // Facebook does not allow revoking user permissions from the server
 
             $this->delete_common();
@@ -143,7 +143,7 @@ class Ctrl_users extends MY_Controller {
 
             $extras = "offset=$offset&orderby=$orderby&$sortorder";
 
-        
+
             if ($userid<=0)
                 throw new DataException($this->lang->line('illegal_user_id'));
 
@@ -196,7 +196,7 @@ class Ctrl_users extends MY_Controller {
             $this->form_validation->set_rules('family_name_first', '', '');
             $this->form_validation->set_rules('email', $this->lang->line('email'), 'trim|required|valid_email|strip_tags');
             $this->form_validation->set_rules('preflang', '', '');
-            
+
             if ($this->form_validation->run()) {
                 $user_info->first_name = $this->input->post('first_name');
                 $user_info->last_name = $this->input->post('last_name');
@@ -221,7 +221,7 @@ class Ctrl_users extends MY_Controller {
                 $this->lang->load_secondary('users',$user_info->preflang);
 
                 $this->email->from($this->config->item('mail_sender_address'), $this->config->item('mail_sender_name'));
-                $this->email->to($user_info->email); 
+                $this->email->to($user_info->email);
                 $this->email->subject($this->lang->line_secondary('account_created_subject'));
                 $this->email->message(sprintf($this->lang->line_secondary('account_you_created_message1'),
                                               make_full_name($user_info),
@@ -310,7 +310,7 @@ class Ctrl_users extends MY_Controller {
                         $user_info->isteacher = $this->input->post('isteacher')==='yes';
                     if ($this->mod_users->is_translator())
                         $user_info->istranslator = $this->input->post('istranslator')==='yes';
-                    
+
                     $user_info->preflang = $this->input->post('preflang');
 
                     $query = $this->mod_users->set_user($user_info, null);
@@ -388,7 +388,7 @@ class Ctrl_users extends MY_Controller {
                         $this->lang->load_secondary('users',$user_info->preflang);
 
                         $this->email->from($this->config->item('mail_sender_address'), $this->config->item('mail_sender_name'));
-                        $this->email->to($user_info->email); 
+                        $this->email->to($user_info->email);
                         $this->email->subject($this->lang->line_secondary('account_created_subject'));
                         $this->email->message(sprintf($this->lang->line_secondary('account_created_message1'),
                                                       make_full_name($user_info),
@@ -456,7 +456,7 @@ class Ctrl_users extends MY_Controller {
                    $this->load->view('view_top2');
                    $this->load->view('view_menu_bar', array('langselect' => true));
                    $this->load->view('view_confirm_dialog');
-            
+
                    $left_text = $this->load->view('view_oauth2_profile_left',
                                                   array('authority' => $user_info->oauth2_login),
                                                   true);
@@ -559,7 +559,7 @@ class Ctrl_users extends MY_Controller {
                                          // TODO: Should xss_clean be replaced by strip_tags or vice versa?
         $this->load->library('form_validation');
 
-        $this->form_validation->set_rules('username', $this->lang->line('user_name'), 'trim|xss_clean'); 
+        $this->form_validation->set_rules('username', $this->lang->line('user_name'), 'trim|xss_clean');
         $this->form_validation->set_rules('email', $this->lang->line('email_address'), 'trim|valid_email|callback_check_username_or_email|xss_clean');
 
         if ($this->form_validation->run()) {
@@ -584,7 +584,7 @@ class Ctrl_users extends MY_Controller {
             $this->lang->load_secondary('login',$this->user_found->preflang);
 
             $this->email->from($this->config->item('mail_sender_address'), $this->config->item('mail_sender_name'));
-            $this->email->to($this->user_found->email); 
+            $this->email->to($this->user_found->email);
             $this->email->subject($this->lang->line_secondary('forgotten_subject'));
             $this->email->message(sprintf($this->lang->line_secondary('forgotten_message'),
                                           make_full_name($this->user_found),
@@ -636,7 +636,7 @@ class Ctrl_users extends MY_Controller {
             $this->load->view('view_top1', array('title' => $this->lang->line('cannot_reset_password')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
-            
+
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('password_reset'),
                                                       'center' => '<h1>' . $this->lang->line('reset_link_bad') . '</h1>'));
             $this->load->view('view_bottom');
@@ -653,7 +653,7 @@ class Ctrl_users extends MY_Controller {
             $this->load->view('view_top1', array('title' => $this->lang->line_secondary('cannot_reset_password')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
-            
+
             $this->load->view('view_main_page', array('left_title' => $this->lang->line_secondary('password_reset'),
                                                       'center' => $this->lang->line_secondary('no_email')));
 
@@ -670,7 +670,7 @@ class Ctrl_users extends MY_Controller {
         $this->load->library('email');
 
         $this->email->from($this->config->item('mail_sender_address'), $this->config->item('mail_sender_name'));
-        $this->email->to($user_info->email); 
+        $this->email->to($user_info->email);
         $this->email->subject($this->lang->line_secondary('password_reset_subject'));
         $this->email->message(sprintf($this->lang->line_secondary('password_reset_message'),
                                       make_full_name($user_info),
@@ -682,7 +682,7 @@ class Ctrl_users extends MY_Controller {
         $this->load->view('view_top2');
         $this->load->view('view_menu_bar', array('langselect' => true));
         $this->load->view('view_main_page', array('left_title' => $this->lang->line_secondary('password_reset'),
-                                                  'center' => '<h1>' 
+                                                  'center' => '<h1>'
                                                               . sprintf($this->lang->line_secondary('password_reset_sent'), $user_info->email)
                                                               . '</h1>'));
         $this->load->view('view_bottom');
@@ -694,7 +694,7 @@ class Ctrl_users extends MY_Controller {
         $this->lang->load_secondary('users',$u->preflang);
 
         $this->email->from($this->config->item('mail_sender_address'), $this->config->item('mail_sender_name'));
-        $this->email->to($u->email); 
+        $this->email->to($u->email);
         $this->email->subject($this->lang->line_secondary('expiry_warning_subject'));
 
         $message = sprintf($this->lang->line_secondary($warning),
@@ -732,23 +732,23 @@ class Ctrl_users extends MY_Controller {
         $users_old_17months = $this->mod_users->old_inactive(2, 17*30*24*3600);  // 17 months - warning 2
         $users_old_9months = $this->mod_users->old_inactive(1, 9*30*24*3600);  // 9 months - warning 1
         $users_new_inactive = $this->mod_users->delete_new_inactive(48*3600);  // 48 hours
-         
+
         // Send mails:
         $this->load->library('email');
-         
+
         foreach ($users_old_17months as $u)
-            if (!empty($u->email)) 
+            if (!empty($u->email))
                 $this->warning_mail($u,'expiry_warning_2_message');
-         
+
         foreach ($users_old_9months as $u)
-            if (!empty($u->email)) 
+            if (!empty($u->email))
                 $this->warning_mail($u,'expiry_warning_1_message');
-         
+
         // VIEW:
         if (count($users_new_inactive)>0) {
             echo "New accounts deleted because of 48 hours of inactivity:\n";
             foreach ($users_new_inactive as $u) {
-                if (!empty($u->email)) 
+                if (!empty($u->email))
                     echo "    $u->username (" . make_full_name($u) . "- $u->email)\n";
                 else
                     echo "    $u->username (" . make_full_name($u) . " - NO EMAIL)\n";
@@ -759,29 +759,29 @@ class Ctrl_users extends MY_Controller {
         if (count($users_old_9months)>0) {
             echo "Old accounts warned because of 9 months of inactivity:\n";
             foreach ($users_old_9months as $u) {
-                if (!empty($u->email)) 
+                if (!empty($u->email))
                     echo "    $u->username (" . make_full_name($u) . " - $u->email)\n";
                 else
                     echo "    $u->username (" . make_full_name($u) . " - NO EMAIL)\n";
             }
             echo "\n";
         }
-         
+
         if (count($users_old_17months)>0) {
             echo "Old accounts warned because of 17 months of inactivity:\n";
             foreach ($users_old_17months as $u) {
-                if (!empty($u->email)) 
+                if (!empty($u->email))
                     echo "    $u->username (" . make_full_name($u) . " - $u->email)\n";
                 else
                     echo "    $u->username (" . make_full_name($u) . " - NO EMAIL)\n";
             }
             echo "\n";
         }
-         
+
         if (count($users_old_18months)>0) {
             echo "Old accounts deleted because of 18 months of inactivity:\n";
             foreach ($users_old_18months as $u) {
-                if (!empty($u->email)) 
+                if (!empty($u->email))
                     echo "    $u->username (" . make_full_name($u) . " - $u->email)\n";
                 else
                     echo "    $u->username (" . make_full_name($u) . " - NO EMAIL)\n";

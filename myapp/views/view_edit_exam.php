@@ -111,7 +111,7 @@ if(isset($_POST["submit"])) {
 
 #exercise {
 	margin-top: 20px;
-	border-bottom: solid 1px black;
+	border-top: dashed 1px #007bff;
 }
 </style>
 </head>
@@ -153,6 +153,8 @@ Display exam editing form.
 			?>
 		</div>
 
+		<br>
+
 		<div id="feature">
 			<?php
 			 	# Get current planned end.
@@ -165,6 +167,8 @@ Display exam editing form.
 				echo $this->lang->line('planned_end');
 			?>
 		</div>
+
+		<br>
 
 		<div id="feature">
 			<input name="exam_time" value="<?php echo $xml->time; ?>" type="number" min="0">
@@ -215,6 +219,7 @@ Display exam editing form.
 			</div>
 		<?php endforeach; ?>
 
+		<br>
 		<input type="submit" value="Save" name="submit" class="btn btn-primary">
 	</form>
 </div>

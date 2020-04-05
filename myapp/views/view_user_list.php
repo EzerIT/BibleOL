@@ -1,5 +1,5 @@
 <h1><?= sprintf($this->lang->line('number_of_users'), $user_count) ?></h1>
-<h2><?= sprintf($this->lang->line('showing_per_page'), $users_per_page) ?></h1>
+<h2><?= sprintf($this->lang->line('showing_per_page'), $users_per_page) ?></h2>
 <nav>
   <ul class="pagination">
     <?php for ($p=0; $p<$page_count; ++$p): ?>

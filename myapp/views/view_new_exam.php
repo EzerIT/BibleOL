@@ -4,8 +4,8 @@
 .ar_class, #selected_exercises{
 	padding: 8px;
 	border: 1px solid white;
-	background-color: #007bff;
-	color: white;
+	background-color: #d7ecff;
+	color: black;
 	border-radius: 8px;
 	border-style: none none solid;
 }
@@ -22,13 +22,13 @@
 }
 
 #wrap{
-	background-color: #007bff;
-	color: white;
+	background-color: #d7ecff;
+	color: black;
 }
 
 .add_btn:hover{
 	background-color: white;
-  color: #007bff;
+  color: #d7ecff;
 	border-radius: 2px;
 }
 
@@ -45,16 +45,31 @@
 #ar_class{
 	width: 100%;
 }
+
+#error_display{
+	color: red;
+	font-weight: bold;
+}
+
+.folder{
+	color: black;
+	background-color: blue;
+}
+
+.exercise {
+	color: black;
+	background-color: #d7ecff;
+}
 </style>
 
 
 <table class="type2 table table-condensed">
 
 <?php function showContents($ar) {
-    echo '<table style="width: 100%; border-collapse: separate; border-spacing: 0px; background-color: #007bff; border-radius: 8px;">';
+    echo '<table style="width: 100%; border-collapse: separate; border-spacing: 0px; background-color: #d7ecff; border-radius: 8px;">';
       foreach ($ar as $key => $d){
         if (is_array($d) && $d != '.' && $d != '..'){
-          echo '<tr>';
+          echo '<tr class="folder">';
             echo '<td class="ar_class" style="width: 100%" colspan=4>';
               echo '<button type="button" class="btn-link" style="text-decoration: none; border-radius: 8px;"data-parent="#wrap" data-toggle="collapse" data-target=".'.str_replace(".3et", "", basename($d[0])).'">'.basename($d[0]).'</button>';
               echo '<div id="wrap">';
@@ -66,7 +81,7 @@
           echo '</tr>';
         } elseif($key != 0 && !is_array($d)) {
           $ex_name = str_replace(".3et","",basename($d));
-          echo '<tr>';
+          echo '<tr class="exercise">';
             echo '<td id="exr_nm_id" style="width: 50%;">'.$ex_name.'</td>';
             echo '<td id="ownr_id">Owner info</td>';
             $nm_arg = "'".$ex_name."'";
@@ -90,8 +105,12 @@ showContents($dir_files);
 
 </table>
 
+
+<p id="error_display"></p>
+
+
 <div>
-  <a class="btn btn-primary" href="#" onclick="create_exam()"><?= $this->lang->line('create_exam_button') ?></a>
+  <a class="btn btn-primary" href="#" onclick="create_exam()"><?= $this->lang->line('create_exam') ?></a>
 </div>
 
 
@@ -150,8 +169,8 @@ showContents($dir_files);
 	function create_exam() {
 		var txt;
 
-		if (!exercise_list.length) {
-			alert("You must select at least one exercise to create an exam");
+		if (!exercise_list) {
+			document.getElementById("error_display").innerHTML = "You must select at least one exercise to create an exam.";
 			return;
 		}
 
@@ -170,7 +189,6 @@ showContents($dir_files);
         alert("Illegal character in the exam name.");
       }
       else {
-        alert("good");
         $("#mkexam-form").submit();
       }
     });

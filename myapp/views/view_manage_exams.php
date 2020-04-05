@@ -26,12 +26,57 @@ on the page.
 </style>
 
 
-<div>
-  <h1>
-    Manage exams
-  </h1>
+<h1><?= sprintf($this->lang->line('number_of_exams'), $exam_count) ?></h1>
+<h2><?= sprintf($this->lang->line('exams_per_page'), $exams_per_page) ?></h2>
+<nav>
+    <ul class="pagination">
+        <?php for ($p=0; $p<$page_count; ++$p): ?>
+            <li class="<?= $p==$offset ? 'active' : '' ?> page-item">
+                <a class="page-link" href="<?= site_url("exams?offset=$p&orderby=$orderby&$sortorder") ?>">
+                    <?= $p+1 ?>
+                </a>
+            </li>
+        <?php endfor; ?>
+    </ul>
+</nav>
+
+<?php
+    function make_exam_header($me, $label, $field, $sortorder, $orderby){
+      if ($orderby===$field) {
+          $link_sortorder = $sortorder == 'desc' ? 'asc' : 'desc';
+          $arrow = ' <span class="fas fa-caret-' . ($sortorder=='desc' ? 'down' : 'up') . '" aria-hidden="true">';
+      }
+      else {
+        $link_sortorder = 'asc';
+
+        // FIX ARROW
+        // NOT SORTING
+        $arrow = '';
+      }
+
+      return '<th style="white-space"><a href="' . site_url("exams?offset=0&orderby=$field&$link_sortorder") . '">' . $me->lang->line($label) . $arrow . "</a></th>\n";
+    }
+?>
+
+
+<div class="table-responsive">
+<table class="type2 table table-striped">
+    <tr>
+        <?= make_exam_header($this, 'exam_name', 'examname', $sortorder, $orderby) ?>
+        <?= make_exam_header($this, 'owner', 'ownerid', $sortorder, $orderby) ?>
+        <th><?= $this->lang->line('user_operations') ?></th>
+    </tr>
+    <?php foreach ($allexams as $exam): ?>
+        <tr>
+            <td class="leftalign"><?= $exam->exam_name ?></td>
+            <td class="leftalign"><?= $exam->ownerid ?></td>
+            <td class="leftalign">
+                <a class="badge badge-primary" href="/exams/edit_exam?exam=<?= $exam->exam_name ?>"><?= $this->lang->line('edit_exam') ?></a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>
 </div>
-<br>
 
 
 <!--
@@ -40,44 +85,3 @@ This button redirects to the exam creation page.
 <div>
   <a class="btn btn-primary" href="/exams/new_exam" onclick="create_new_exam()"><?= $this->lang->line('create_new_exam_button') ?></a>
 </div>
-
-
-<!--
-Display the table of exams.
--->
-<table class="type2 table table-condensed">
-<?php
-# This function takes in one array and then puts
-# each of the elements in a table except for the
-# first element which is skipped.
-function showContents($ar){
-  # Table that will hold all the array elements.
-  echo '<table style="width: 100%; background-color: #007bff; border-radius: 8px;">';
-    # Iterate through the array starting with the second element.
-    for ($i = 0; $i < count($ar); $i++){
-      # Store the exam name only (not the whole path).
-      $exname = str_replace("/var/www/BibleOL/exam/","",$ar[$i]);
-      if ($exname != "README"){
-        # Each table row represents a different exam.
-        echo '<tr>';
-          # Table column that displays the exam names.
-          echo '<td style="padding: 8px; width: 75%; color: white;">';
-            echo $exname;
-          echo '</td>';
-          # Table column that stores the edit exam buttons for each
-          # exam.
-          echo '<td style="width: 25%;">';
-            echo '<a class="editButton" href="/exams/edit_exam?exam='.$exname.'">';
-              echo "Edit Exam";
-            echo '</a>';
-          echo '</td>';
-        echo '</tr>';
-      }
-    }
-}
-
-# Call the showContents function in order
-# to display all the exams.
-showContents($examlist);
-?>
-</table>
