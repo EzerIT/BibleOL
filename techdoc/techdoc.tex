@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{12 November 2019}
+\date{15 April 2020}
 
 \makeindex
 
@@ -234,7 +234,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \maketitle
 
 \begin{center}
-Copyright © 2019 by Claus Tøndering, claus@ezer.dk
+Copyright © 2020 by Claus Tøndering, claus@ezer.dk
 
 \vspace{5mm}
 
@@ -264,7 +264,7 @@ server and developers who need to modify or expand the way Bible OL works.
 \section{License and Copyright}\index{license}\index{copyright}
 
 Except where otherwise noted, the Bible OL source code is distributed under an MIT
-License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2019 by Claus
+License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2020 by Claus
 Tøndering, claus@ezer.dk.
 
 The present document is made available under a Creative Commons Attribution 4.0 International
@@ -568,6 +568,8 @@ Copy the file \texttt{myapp/config/ol.php-dist} to \texttt{myapp/config/ol.php}\
 following lines in the copy:
 
 \begin{lstlisting}[language=PHP]
+$config['variants'] = array();
+
 $config['pw_salt'] = 'xxxxxxx';
 $config['mql_driver'] = 'native';
 $config['mail_sender_address'] = 'xxxxx@xxxxx.xx';
@@ -585,6 +587,11 @@ $config['facebook_client_secret'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 You should modify these values thus:
 
 \begin{my-longtabu}{>{\footnotesize\ttfamily}lX}{ \headii{\normalsize\textrm{Variable}}{Contents} }
+\$config['variants']\index{variants} & An array of strings. This array must contain the names of all the
+language variants (see Section \ref{sec-variants}) that Bible OL should provide. The variant names should
+consist of only letters and digits. (Note: Whenever this value is changed, Bible OL will be quite slow the
+first time a biblical text is displayed. This is because the system creates database tables for the added variants.)\\
+
 \$config['pw\_salt']\index{salt} & A random text string of, say, 6-8 characters. This is used to randomize the
   user passwords stored in the user database\index{user database}.\\
 
@@ -650,7 +657,7 @@ the content of the file \texttt{ljsetup.sql}.
 Populate the database with the available translations by issuing this command:
 
 \begin{lstlisting}[language=bash]
-./setup_lang
+./setup_lang.sh
 \end{lstlisting}
 
 (On my computer, this takes a couple of minutes.)
