@@ -512,7 +512,7 @@ class Ctrl_translate extends MY_Controller {
 
                 $src_lang = strtolower($this->uri->segment(3));
                 $dst_lang = strtolower($this->uri->segment(4));
-                $variant = strtolower($this->uri->segment(5)); // Will be "" if segment(5) does not exist
+                $variant = $this->uri->segment(5); // Will be "" if segment(5) does not exist
 
                 $result = $this->mod_translate->download_lex($src_lang, $dst_lang, $variant);
 
