@@ -457,6 +457,32 @@ class Ctrl_translate extends MY_Controller {
         }
     }
 
+    function download_lex_old()
+    {
+        // Download a lexicon in "old" format (that is, without transliterated lexemes)
+
+        if (!is_cli()) {
+            echo '<pre>This command can only be run from the command line</pre>';
+            die;
+        }
+        
+        if ($_SERVER['argc']!=5 && $_SERVER['argc']!=6)
+            die("Usage: php index.php translate download_lex_old <source language> <target language> [<variant>]\n");
+
+        $src_lang = strtolower($_SERVER['argv'][3]);
+        $dst_lang = strtolower($_SERVER['argv'][4]);
+        $variant = isset($_SERVER['argv'][5]) ? $_SERVER['argv'][5] : null;
+
+        try {
+            $result = $this->mod_translate->download_lex($src_lang, $dst_lang, $variant, true);
+        }
+        catch (DataException $e) {
+            die($e->getMessage() . "\n");
+        }
+
+        echo $result;
+    }
+
     function download_lex()
     {
         if (is_cli()) {

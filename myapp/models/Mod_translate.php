@@ -796,7 +796,7 @@ class Mod_translate extends CI_Model {
         }
     }
 
-    private function lex_common(string $src_lang, string &$src_language, array &$header_array) {
+    private function lex_common(string $src_lang, string &$src_language, array &$header_array, array &$header_array_old) {
         // Creates $header_array as an array of arrays, where the first value is the Emdros name for
         // a verbal stem (or null), and the second value is the English heading for a column in the
         // CSV file
@@ -804,6 +804,28 @@ class Mod_translate extends CI_Model {
         switch ($src_lang) {
           case 'heb':
                 $header_array = array(array(null, 'Occurrences'),
+                                      array(null, 'lex'),
+                                      array(null, 'Lexeme'),
+                                      array(null, 'Transliterated'),
+                                      array('NA', 'None'),
+                                      array('qal', 'Qal'),
+                                      array('nif', 'Nifal'),
+                                      array('piel', 'Piel'),
+                                      array('pual', 'Pual'),
+                                      array('hit', 'Hitpael'),
+                                      array('hif', 'Hifil'),
+                                      array('hof', 'Hofal'),
+                                      array('hsht', 'Hishtafal'),
+                                      array('pasq', 'Passive Qal'),
+                                      array('etpa', 'Etpaal'),
+                                      array('nit', 'Nitpael'),
+                                      array('hotp', 'Hotpaal'),
+                                      array('tif', 'Tifal'),
+                                      array('htpo', 'Hitpoal'),
+                                      array('poal', 'Poal'),
+                                      array('poel', 'Poel'));
+
+                $header_array_old = array(array(null, 'Occurrences'),
                                       array(null, 'lex'),
                                       array(null, 'Lexeme'),
                                       array('NA', 'None'),
@@ -829,6 +851,24 @@ class Mod_translate extends CI_Model {
                 $header_array = array(array(null, 'Occurrences'),
                                       array(null, 'lex'),
                                       array(null, 'Lexeme'),
+                                      array(null, 'Transliterated'),
+                                      array('NA', 'None'),
+                                      array('peal', 'Peal'),
+                                      array('peil', 'Peil'),
+                                      array('pael', 'Pael'),
+                                      array('haf', 'Hafel'),
+                                      array('afel', 'Afel'),
+                                      array('shaf', 'Shafel'),
+                                      array('hof', 'Hofal'),
+                                      array('htpe', 'Hitpeel'),
+                                      array('htpa', 'Hitpaal'),
+                                      array('hsht', 'Hishtafal'),
+                                      array('etpe', 'Etpeel'),
+                                      array('etpa', 'Etpaal'));
+
+                $header_array_old = array(array(null, 'Occurrences'),
+                                      array(null, 'lex'),
+                                      array(null, 'Lexeme'),
                                       array('NA', 'None'),
                                       array('peal', 'Peal'),
                                       array('peil', 'Peil'),
@@ -850,6 +890,7 @@ class Mod_translate extends CI_Model {
                                       array(null, "Strong's number"),
                                       array(null, "Strong's unreliable?"),
                                       array(null, 'Gloss'));
+                $header_array_old = array();
                 break;
 
           default:
@@ -866,20 +907,33 @@ class Mod_translate extends CI_Model {
         return $this->db->select('id')->get("lexicon_{$src_lexicon}_{$dst_lang}_{$variant}")->num_rows()==0;
     }
 
-    public function download_lex(string $src_lang, string $dst_lang, string $variant=null) {
+    public function download_lex(string $src_lang, string $dst_lang, string $variant=null, bool $old_format=false) {
         $src_language="";
         $header_array=array();
-        $this->lex_common($src_lang, $src_language, $header_array);
+        $header_array_old=array();
+        $this->lex_common($src_lang, $src_language, $header_array, $header_array_old);
 
         if (!array_key_exists($dst_lang, $this->lexicon_langs[$src_lang]))
             throw new DataException($this->lang->line('illegal_target_language'));
 
 
-        $result = '';
+        $result = "\xef\xbb\xbf"; // Byte Order Mark to indicate UTF-8 encoding //'';
         
         switch ($src_lang) {
           case 'heb':
           case 'aram':
+                if (!$old_format) {
+                    global $lex_translit;
+
+                    if ($src_lang==='heb')
+                        $this->load->helper('heb_trans');
+                    else
+                        $this->load->helper('aram_trans');
+                    $harray =& $header_array;
+                }
+                else
+                    $harray =& $header_array_old;
+
                 // Find names of used verbal stems
                 $query = $this->db->select('vs')->distinct()
                     ->where('vs <>','NA')
@@ -892,7 +946,7 @@ class Mod_translate extends CI_Model {
                     $stems[] = $row->vs;
 
                 $stem_sort_order = array();
-                foreach ($header_array as $h) {
+                foreach ($harray as $h) {
                     $result .= '"' . $h[1] . '",';
                     if (!is_null($h[0]))
                         $stem_sort_order[] = $h[0];
@@ -933,7 +987,8 @@ class Mod_translate extends CI_Model {
                     $result .=
                         $r['tally'] .
                         ',"' . $lex . '"' .
-                        ',"' . $r['lexeme'] . '"';
+                        ',"' . $r['lexeme'] . '"' .
+                        ($old_format ? '' : ',"' . $lex_translit[$lex] . '"');
                     
                     foreach ($stem_sort_order as $st) {
                         if (isset($r['glosses'][$st]))
@@ -985,7 +1040,8 @@ class Mod_translate extends CI_Model {
 
         $src_language="";
         $header_array=array();
-        $this->lex_common($src_lang, $src_language, $header_array);
+        $header_array_old=array();
+        $this->lex_common($src_lang, $src_language, $header_array, $header_array_old);
 
         if (!array_key_exists($dst_lang, $this->lexicon_langs[$src_lang]))
             throw new DataException($this->lang->line('illegal_target_language'));
@@ -994,18 +1050,28 @@ class Mod_translate extends CI_Model {
         if ($h===false)
             throw new DataException("Cannot open file '$csv_file'");
 
+        $bom = fread($h,3);
+        if ($bom!=="\xef\xbb\xbf")
+            fseek($h,0);
+
         $record = fgetcsv($h);
-        assert(count($record)==count($header_array),"Wrong number of fields in header");
+        if (count($record)==count($header_array))
+            $harray =& $header_array;
+        elseif (count($record)==count($header_array_old))
+            $harray =& $header_array_old;
+        else
+            die("Wrong number of fields in header");
+
         for ($i=0; $i<count($record); ++$i)
-            assert($record[$i]==$header_array[$i][1],"Illegal field '$record[$i]' in header");
+            assert($record[$i]==$harray[$i][1],"Illegal field '$record[$i]' in header");
 
         create_lexicon_table($src_language, $dst_lang, $variant);
         
         $toinsert = array();
 
-        $header_count = count($header_array);
+        $header_count = count($harray);
         for ($i=0; $i<$header_count; ++$i)
-            if (!is_null($header_array[$i][0])) {
+            if (!is_null($harray[$i][0])) {
                 $first_stem = $i;
                 break;
             }
@@ -1023,7 +1089,7 @@ class Mod_translate extends CI_Model {
                         $query = $this->db
                             ->select('id')
                             ->where('lex', $record[1])
-                            ->where('vs', $header_array[$hix][0])
+                            ->where('vs', $harray[$hix][0])
                             ->get("lexicon_{$src_language}");
 
                         $row = $query->row();
