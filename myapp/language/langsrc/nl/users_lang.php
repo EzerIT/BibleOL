@@ -5,32 +5,32 @@ $lang['account_created_message1'] = "Beste %s,\n"
         . "Je hebt nu een account voor de Bible Online Learner website.\n"
         . "\n"
         . "Je gebruikersnaam is: %s\n"
-        . "Je wachtwoord is: %s";
+        . "Je wachtwoord is: %s\n";
 $lang['account_created_message2'] = "Je hebt administrator privileges gekregen.";
-$lang['account_created_message2t'] = "Je hebt facilitator privileges gekregen.";
+$lang['account_created_message2t'] = "Je hebt facilitator privileges gekregen.\n";
 $lang['account_created_message3'] = "Bezoek %s, en log in;\n"
-        . "wijzig daarna je wachtwoord door te klikken op 'Profiel' in het 'Mijn data' menu.";
+        . "wijzig daarna je wachtwoord door te klikken op 'Profiel' in het 'Mijn data' menu.\n";
 $lang['account_created_subject'] = "Bible Online Learner account is aangemaakt";
 $lang['account_you_created_message1'] = "Beste %s,\n"
         . "\n"
         . "Je hebt nu een account voor de Bible Online Learner website.\n"
         . "\n"
         . "Je gebruikersnaam is: %s\n"
-        . "Je wachtwoord is: %s";
+        . "Je wachtwoord is: %s\n";
 $lang['account_you_created_message3'] = "Bezoek %s, en log in;\n"
         . "wijzig daarna je wachtwoord door te klikken op 'Profiel' in het 'Mijn data' menu.\n"
         . "\n"
         . "Wanneer je niet binnen 48 uur inlogt, wordt je account verwijderd.\n"
         . "\n"
-        . "Wanneer de géén account hebt aangemaakt, kun je dit bericht negeren.";
+        . "Wanneer de géén account hebt aangemaakt, kun je dit bericht negeren.\n";
 $lang['add_user'] = "Een nieuwe gebruiker toevoegen";
 $lang['administrator'] = "Sysadmin";
 $lang['amharic'] = "Amhaars";
 $lang['assign_to_class'] = "Inschrijven in groep";
 $lang['cannot_change'] = "(Kan niet worden gewijzigd)";
 $lang['cannot_delete_self'] = "Je kunt jezelf niet verwijderen";
-$lang['change_through_facebook'] = "Wanneer je je naam of email adres wilt wijzigen moet je dat ook doen voor je Facebook profiel.";
-$lang['change_through_google'] = "Wanneer je je naam of email adres wilt wijzigen moet je dat ook doen voor je Google profiel.";
+$lang['change_through_facebook'] = "Wanneer je je naam of email adres wilt wijzigen moet je dat ook doen voor je Facebook profiel.\n";
+$lang['change_through_google'] = "Wanneer je je naam of email adres wilt wijzigen moet je dat ook doen voor je Google profiel.\n";
 $lang['chinese_name_order'] = "Chinese naamvolgorde";
 $lang['click_to_delete_profile'] = "Klik op deze knop om je profiel te verwijderen:";
 $lang['configure_your_users'] = "Beheer je gebruikers";
