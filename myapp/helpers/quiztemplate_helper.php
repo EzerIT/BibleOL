@@ -25,13 +25,13 @@ class Template extends XmlHandler {
 	/************************************************************************************************
 	 * XML writer interface
 	 ************************************************************************************************/
-	static public function writeAsXml($quizdata, stdClass $dbInfo) {
+	static public function writeAsXml($quizdata, stdClass $dbInfo=null) {
 		$res = sprintf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		$res .= sprintf("<questiontemplate version=\"%d\">\n", self::classVersion);
 
 		$res .= sprintf("%2s<desc><![CDATA[%s]]></desc>\n", ' ', $quizdata->desc);
 
-		if ($dbInfo->subsetOf) {
+		if ($dbInfo && $dbInfo->subsetOf) {
 			// We found a subset; store information about superset database
 			$res .= sprintf("%2s<database>%s</database>\n", ' ', htmlspecialchars($dbInfo->subsetOf->name));
 			$res .= sprintf("%2s<properties>%s</properties>\n", ' ', htmlspecialchars($dbInfo->subsetOf->properties));

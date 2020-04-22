@@ -100,3 +100,13 @@ $lang['visibility_folder_desc'] = "Here you can select which classes can see the
 $lang['visible_all'] = "Check here if folder is visible to everybody:";
 $lang['visible_if_not_checked'] = "(If not checked, only the classes indicated in the table below can see the exercises in this folder.)";
 $lang['visible_to_class'] = "Visible to this class?";
+
+$lang['confirm_passage_insert'] = "Confirm passage insertion";
+$lang['copy_passages'] = "Copy passages";
+$lang['insert_passages'] = "Insert passages into marked files";
+$lang['insert_passages_from'] = "Overwrite marked files with passages from file '{0}'?";
+$lang['wrong_database'] = "The file '%s' does not use the database '%s'.";
+$lang['files_not_changed'] = "None of the files have been modified.";
+$lang['confirm_passage_insert'] = "Confirm passage insertion";
+$lang['passage_copy_error'] = "Passage copy error";
+$lang['passage_copy_ok'] = "Passages successfully copied";

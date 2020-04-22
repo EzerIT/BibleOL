@@ -125,7 +125,7 @@ class MY_Lang extends CI_Lang {
             return null;
     }
     
-    // Load from speicific language database without looking elsewhere. Merge into $lang
+    // Load from specific language database without looking elsewhere. Merge into $lang
     private function load_from_db_specific(string $langfile, string $idiom, bool $use_variant, array &$lang) {
         $CI =& get_instance();
 

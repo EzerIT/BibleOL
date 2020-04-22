@@ -31,3 +31,4 @@ $lang['this_is_top_folder'] = "Dette er øverste mappe";
 $lang['time_format'] = "H:i";
 $lang['variant'] = "Variant";
 $lang['yes'] = "Ja";
+$lang['server_error'] = "Serverfejl";

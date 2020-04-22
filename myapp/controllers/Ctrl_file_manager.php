@@ -137,6 +137,57 @@ class Ctrl_file_manager extends MY_Controller {
             $this->error_view($e->getMessage(), $this->lang->line('copy_or_delete_files'));
         }
     }
+//'"}}}}}}
+    public function passage_insert() {
+
+        try {
+            $this->mod_users->check_teacher();
+
+            $this->load->model('mod_askemdros');
+ 
+            $this->mod_quizpath->init($_POST['passage-source'], false, false);
+            $decoded_src = $this->mod_askemdros->decodeQuiz($this->mod_quizpath->get_absolute());
+        
+            $database = $decoded_src->database;
+            $selectedPaths = $decoded_src->selectedPaths;
+ 
+            // Check that all destination files use the correct text database and that the user has access to it
+            foreach ($_POST['file'] as $ix => $f) {
+                $modelname = 'mod_qp_' . $ix;
+                $this->load->model('mod_quizpath',$modelname);
+                $this->$modelname->init($_POST['dir'] . '/' . $f, false, false);
+                $decoded_dst[$ix] = $this->mod_askemdros->decodeQuiz($this->$modelname->get_absolute());
+ 
+                if ($decoded_dst[$ix]->database!=$database)
+                    throw new DataException(sprintf($this->lang->line('wrong_database'), $f, $database)
+                                            . "\n" .$this->lang->line('files_not_changed'));
+
+                if (!$this->mod_users->is_admin() && $this->$modelname->get_excercise_owner() != $this->mod_users->my_id())
+                    throw new DataException($this->lang->line('not_owner_all')
+                                            . "\n" . $this->lang->line('files_not_changed'));
+            }
+
+            $this->load->helper(array('file','quiztemplate'));
+
+            // Do the actual copying
+            foreach ($_POST['file'] as $ix => $f) {
+                $decoded_dst[$ix]->selectedPaths = $selectedPaths;
+
+                $modelname = 'mod_qp_' . $ix;
+
+                $res = Template::writeAsXml($decoded_dst[$ix]);
+
+                if (!write_file($this->$modelname->get_absolute(), $res))
+                    throw new DataException($this->lang->line('cannot_write_to_quiz_file'));
+            }
+            
+            echo json_encode(['status' => 'OK']);
+        }
+        catch (DataException $e) {
+            echo json_encode(['status' => 'error',
+                              'error_text' => $e->getMessage()]);
+        }
+    }
 
     public function insert_files() {
         try {

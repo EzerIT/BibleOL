@@ -124,3 +124,7 @@ $comment['yes'] = "";
 $format['yes'] = "";
 $use_textarea['yes'] = false;
 
+$comment['server_error'] = "";
+$format['server_error'] = "";
+$use_textarea['server_error'] = false;
+

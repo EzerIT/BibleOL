@@ -100,3 +100,14 @@ $lang['visibility_folder_desc'] = "Her kan du vælge hvilke klasser der kan se �
 $lang['visible_all'] = "Markér her hvis mappen skal kunne ses af alle:";
 $lang['visible_if_not_checked'] = "(Hvis feltet her ikke markeres, kan øvelserne i denne mappe kun ses af medlemmer af de angivne klasser.)";
 $lang['visible_to_class'] = "Synlig for denne klasse?";
+
+
+$lang['confirm_passage_insert'] = "Bekræft overskrivning af bibelsteder";
+$lang['copy_passages'] = "Kopiér bibelsteder";
+$lang['insert_passages'] = "Indsæt bibelsteder i markerede filer";
+$lang['insert_passages_from'] = "Overskriv markerede filer med bibelsteder fra filen '{0}'?";
+$lang['wrong_database'] = "Filen '%s' bruger ikke databasen '%s'.";
+$lang['files_not_changed'] = "Ingen af filerne er blevet ændret.";
+$lang['confirm_passage_insert'] = "Bekræft indsættelse af bibelsteder";
+$lang['passage_copy_error'] = "Fejl ved kopiering af bibelsteder";
+$lang['passage_copy_ok'] = "Bibelsteder kopieret";

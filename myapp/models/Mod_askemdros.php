@@ -216,6 +216,21 @@ class Mod_askemdros extends CI_Model {
         print $res;
     }
 
+    public function decodeQuiz(string $filename) {
+        $this->load->helper(array('file','xmlhandler','quiztemplate'));
+
+        if (!is_file($filename) || !is_readable($filename))
+            throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
+
+        $this->contents = file_get_contents($filename);
+
+        if ($this->contents === false)
+            throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
+
+        $this->decoded_3et = harvest($this->contents);
+        return $this->decoded_3et;
+    }
+    
     private function parseQuizBasic(string $filename) {
         $this->load->helper(array('file','xmlhandler','quiztemplate'));
 

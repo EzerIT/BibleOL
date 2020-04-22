@@ -31,3 +31,4 @@ $lang['this_is_top_folder'] = "This Is the Top Folder";
 $lang['time_format'] = "H:i";
 $lang['variant'] = "Variant";
 $lang['yes'] = "Yes";
+$lang['server_error'] = "Server error";

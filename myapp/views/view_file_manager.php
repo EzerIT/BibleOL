@@ -77,6 +77,7 @@
             <a class="badge badge-primary" href="<?= site_url(build_get('file_manager/download_ex', array('dir' => $dirlist['relativedir'], 'file' => $f->filename))) ?>"><?= $this->lang->line('download') ?></a>
             <a class="badge badge-primary" href="<?= site_url(build_get('text/edit_quiz',array('quiz' => $dirlist['relativedir'] . '/' . $f->filename))) ?>"><?= $this->lang->line('edit') ?></a>
             <a class="badge badge-primary" href="#" onclick="rename('<?= substr($f->filename,0,-4) ?>'); return false;"><?= $this->lang->line('rename') ?></a>
+            <a class="badge badge-primary passage_copied" href="#" onclick="copy_passages('<?= $dirlist['relativedir'] ?>', '<?= substr($f->filename,0,-4) ?>', this); return false;"><?= $this->lang->line('copy_passages') ?></a>
         </td>
       </tr>
     <?php endforeach; ?>
@@ -102,6 +103,7 @@
   <p>
     <a class="btn btn-primary" href="<?= site_url(build_get('file_manager/upload_files',array('dir' => $dirlist['relativedir']))) ?>"><?= $this->lang->line('upload_exercises_button') ?></a>
     <a class="btn btn-primary" href="#" onclick="create_exercise(); return false;"><?= $this->lang->line('create_exercise_button') ?></a>
+    <a class="btn btn-primary" id="passage-insert-confirm" onclick="passageInsertConfirm(); return false;" href="#"><?= $this->lang->line('insert_passages') ?></a>
   </p>
 
 
@@ -228,6 +230,7 @@
         $('#rename-error').hide();
         $('#rename-dialog').modal('show');
     }
+
   </script>
 
 
@@ -335,6 +338,7 @@
         $('#copy-dialog-warning-title').html('<?= $this->lang->line('move_files') ?>');
         $('#copy-dialog-warning').modal('show');
     }
+
   </script>
 
 
@@ -381,6 +385,109 @@
         $('#delete-dialog-confirm').modal('show');
     }
   </script>
+
+  <?php //*********************************************************************
+        // Passage Insert Warning dialog 
+        //*********************************************************************
+    ?>
+  <div id="passage-insert-dialog-confirm" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title"><?= $this->lang->line('confirm_passage_insert') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
+        </div>
+        <div class="modal-body">
+          <span class="fas fa-question-circle" style="float:left; margin:0 7px 20px 0;" aria-hidden="true"></span>
+          <span id="passage-insert-description"></span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="passage-insert-dialog-confirm-yes" class="btn btn-primary"><?= $this->lang->line('yes') ?></button>
+          <button type="button" id="passage-insert-dialog-confirm-no" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('no') ?></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(function() {
+        if (!sessionStorage.copy_passage_file)
+            $('#passage-insert-confirm').hide();
+
+        $('#passage-insert-dialog-confirm-yes').click(
+
+            // Called when the 'Yes' button in the passage insert dialog has been pressed
+            function() {
+                console.log($('input[name="file[]"]:checked'));
+                $.ajax({
+                    "url":"<?= site_url('file_manager/passage_insert') ?>",
+                    "method":"POST",
+                    "data":{ "dir": "<?= $dirlist['relativedir'] ?>",
+                             "file": $.map($('input[name="file[]"]:checked'),function (el) {return $(el).val();}), // An array of the names of all marked files
+                             "passage-source": sessionStorage.copy_passage_dir + "/" + sessionStorage.copy_passage_file + ".3et"
+                           }
+                }).done(function (data, textStatus, jqXHR) {
+                    var pdata = JSON.parse(data);
+                    if (pdata.status=='error')
+                        myalert_large("<?= $this->lang->line('passage_copy_error') ?>",pdata.error_text);
+                    else
+                        alert("<?= $this->lang->line('passage_copy_ok') ?>");
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    myalert("<?= $this->lang->line('server_error') ?>",errorThrown);
+                });
+                
+                $("#passage-insert-dialog-confirm").modal('hide');
+            }
+        );
+        
+        $('#passage-insert-dialog-confirm-no').click(
+
+            // Called when the 'No' button in the passage insert dialog has been pressed
+            function() {
+                $("#passage-insert-dialog-confirm").modal('hide');
+            }
+        );
+    });
+
+    // string.format function - replaces {0}, {1} etc. with parameter
+    String.prototype.format = function () {
+        var args = arguments;
+        return this.replace(/{(\d+)}/g, function (match, num) {
+            return typeof args[num] != 'undefined'
+                ? args[num]
+                : match;
+        });
+    };
+
+// Called when the 'Insert passages into marked files' button has been pressed
+    function passageInsertConfirm() {
+        if ($('input[name="file[]"]:checked').length===0) {
+            myalert('<?= $this->lang->line('file_selection') ?>','<?= $this->lang->line('no_files_selected') ?>');
+            return;
+        }
+        if (!sessionStorage.copy_passage_file) {
+            // Should never happen
+            return;
+        }
+        $('#passage-insert-description').text("<?= $this->lang->line('insert_passages_from') ?>".format(sessionStorage.copy_passage_dir + "/" + sessionStorage.copy_passage_file));
+
+        $('input[name="passage-source"]').val(sessionStorage.copy_passage_dir + "/" + sessionStorage.copy_passage_file + ".3et");
+          
+        $('#passage-insert-dialog-confirm').modal('show');
+    }
+
+    // Called when the 'Copy passages' button has been pressed
+    function copy_passages(dir, file, elem) {
+        $('#passage-insert-confirm').show();
+        sessionStorage.copy_passage_dir=dir;
+        sessionStorage.copy_passage_file=file;
+
+        $('.passage_copied').removeClass('badge-success').addClass('badge-primary'); // Unmark all 'Copy passages' buttons
+        $(elem).removeClass('badge-primary').addClass('badge-success'); // Mark the active 'Copy passages' button
+    }
+  </script>
+                                                                                                        
+
 
   <?php //*********************************************************************
         // Change Owner dialog

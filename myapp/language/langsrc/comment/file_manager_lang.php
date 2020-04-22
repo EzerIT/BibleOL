@@ -380,3 +380,39 @@ $comment['visible_to_class'] = "";
 $format['visible_to_class'] = "";
 $use_textarea['visible_to_class'] = false;
 
+$comment['confirm_passage_insert'] = "";
+$format['confirm_passage_insert'] = "";
+$use_textarea['confirm_passage_insert'] = false;
+
+$comment['copy_passages'] = "";
+$format['copy_passages'] = "";
+$use_textarea['copy_passages'] = false;
+
+$comment['insert_passages'] = "";
+$format['insert_passages'] = "";
+$use_textarea['insert_passages'] = false;
+
+$comment['insert_passages_from'] = "";
+$format['insert_passages_from'] = "";
+$use_textarea['insert_passages_from'] = false;
+
+$comment['wrong_database'] = "";
+$format['wrong_database'] = "";
+$use_textarea['wrong_database'] = false;
+
+$comment['files_not_changed'] = "";
+$format['files_not_changed'] = "";
+$use_textarea['files_not_changed'] = false;
+
+$comment['confirm_passage_insert'] = "";
+$format['confirm_passage_insert'] = "";
+$use_textarea['confirm_passage_insert'] = false;
+
+$comment['passage_copy_error'] = "";
+$format['passage_copy_error'] = "";
+$use_textarea['passage_copy_error'] = false;
+
+$comment['passage_copy_ok'] = "";
+$format['passage_copy_ok'] = "";
+$use_textarea['passage_copy_ok'] = false;
+
