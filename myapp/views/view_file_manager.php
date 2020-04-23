@@ -77,7 +77,7 @@
             <a class="badge badge-primary" href="<?= site_url(build_get('file_manager/download_ex', array('dir' => $dirlist['relativedir'], 'file' => $f->filename))) ?>"><?= $this->lang->line('download') ?></a>
             <a class="badge badge-primary" href="<?= site_url(build_get('text/edit_quiz',array('quiz' => $dirlist['relativedir'] . '/' . $f->filename))) ?>"><?= $this->lang->line('edit') ?></a>
             <a class="badge badge-primary" href="#" onclick="rename('<?= substr($f->filename,0,-4) ?>'); return false;"><?= $this->lang->line('rename') ?></a>
-            <a class="badge badge-primary passage_copied" href="#" onclick="copy_passages('<?= $dirlist['relativedir'] ?>', '<?= substr($f->filename,0,-4) ?>', this); return false;"><?= $this->lang->line('copy_passages') ?></a>
+            <a class="badge badge-primary passage_copied" href="#" data-filename="<?= substr($f->filename,0,-4) ?>" onclick="copy_passages(this); return false;"><?= $this->lang->line('copy_passages') ?></a>
         </td>
       </tr>
     <?php endforeach; ?>
@@ -220,8 +220,15 @@
                 $('#rename-error-text').text('<?= $this->lang->line('illegal_char_filename') ?>');
                 $('#rename-error').show();
             }
-            else
+            else {
+                if (sessionStorage.copy_passage_dir=="<?= $dirlist['relativedir'] ?>" &&
+                    sessionStorage.copy_passage_file==$('#rename-oldname').attr('value')) {
+                    // We're renaming the copy_passage source
+                    sessionStorage.removeItem("copy_passage_dir");
+                    sessionStorage.removeItem("copy_passage_file");
+                }
                 $('#rename-form').submit();
+            }
         });
     });
 
@@ -309,6 +316,18 @@
   <script>
     $(function() {
         $('#copy-dialog-warning-ok').click(function() {
+            if ($('input[name="operation"]').val()=='move' &&
+                sessionStorage.copy_passage_dir=="<?= $dirlist['relativedir'] ?>") {
+                // Check if we're moving the copy_passage source
+                $('input[name="file[]"]:checked').each(function (ix,el) {
+                    if ((sessionStorage.copy_passage_file+'.3et')==$(el).val()) {
+                        // We're renaming the copy_passage source
+                        sessionStorage.removeItem("copy_passage_dir");
+                        sessionStorage.removeItem("copy_passage_file");
+                    }
+                });
+            }
+
             $('#copy-delete-form').submit();
         });
         $('#copy-dialog-warning-cancel').click(function() {
@@ -368,6 +387,17 @@
   <script>
     $(function() {
         $('#delete-dialog-confirm-yes').click(function() {
+            if (sessionStorage.copy_passage_dir=="<?= $dirlist['relativedir'] ?>") {
+                // Check if we're deleting the copy_passage source
+                $('input[name="file[]"]:checked').each(function (ix,el) {
+                    if ((sessionStorage.copy_passage_file+'.3et')==$(el).val()) {
+                        // We're renaming the copy_passage source
+                        sessionStorage.removeItem("copy_passage_dir");
+                        sessionStorage.removeItem("copy_passage_file");
+                    }
+                });
+            }
+            
             $('#copy-delete-form').submit();
         });
         $('#delete-dialog-confirm-no').click(function() {
@@ -413,12 +443,14 @@
     $(function() {
         if (!sessionStorage.copy_passage_file)
             $('#passage-insert-confirm').hide();
+        else if (sessionStorage.copy_passage_dir=="<?= $dirlist['relativedir'] ?>")
+            $('[data-filename="' + sessionStorage.copy_passage_file + '"]').removeClass('badge-primary').addClass('badge-success'); // Mark the active 'Copy passages' button
 
+              
         $('#passage-insert-dialog-confirm-yes').click(
 
             // Called when the 'Yes' button in the passage insert dialog has been pressed
             function() {
-                console.log($('input[name="file[]"]:checked'));
                 $.ajax({
                     "url":"<?= site_url('file_manager/passage_insert') ?>",
                     "method":"POST",
@@ -459,7 +491,7 @@
         });
     };
 
-// Called when the 'Insert passages into marked files' button has been pressed
+    // Called when the 'Insert passages into marked files' button has been pressed
     function passageInsertConfirm() {
         if ($('input[name="file[]"]:checked').length===0) {
             myalert('<?= $this->lang->line('file_selection') ?>','<?= $this->lang->line('no_files_selected') ?>');
@@ -477,10 +509,10 @@
     }
 
     // Called when the 'Copy passages' button has been pressed
-    function copy_passages(dir, file, elem) {
+    function copy_passages(elem) {
         $('#passage-insert-confirm').show();
-        sessionStorage.copy_passage_dir=dir;
-        sessionStorage.copy_passage_file=file;
+        sessionStorage.copy_passage_dir = '<?= $dirlist['relativedir'] ?>';
+        sessionStorage.copy_passage_file = $(elem).attr('data-filename');
 
         $('.passage_copied').removeClass('badge-success').addClass('badge-primary'); // Unmark all 'Copy passages' buttons
         $(elem).removeClass('badge-primary').addClass('badge-success'); // Mark the active 'Copy passages' button
