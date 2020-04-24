@@ -100,6 +100,10 @@ $comment['OK_button'] = "";
 $format['OK_button'] = "";
 $use_textarea['OK_button'] = false;
 
+$comment['server_error'] = "";
+$format['server_error'] = "";
+$use_textarea['server_error'] = false;
+
 $comment['swipe'] = "";
 $format['swipe'] = "";
 $use_textarea['swipe'] = true;
@@ -116,6 +120,10 @@ $comment['time_format'] = "Format specification available at <a target=\"_blank\
 $format['time_format'] = "";
 $use_textarea['time_format'] = false;
 
+$comment['uncheck_all'] = "";
+$format['uncheck_all'] = "";
+$use_textarea['uncheck_all'] = false;
+
 $comment['variant'] = "";
 $format['variant'] = "";
 $use_textarea['variant'] = false;
@@ -124,10 +132,3 @@ $comment['yes'] = "";
 $format['yes'] = "";
 $use_textarea['yes'] = false;
 
-$comment['server_error'] = "";
-$format['server_error'] = "";
-$use_textarea['server_error'] = false;
-
-$comment['uncheck_all'] = "";
-$format['uncheck_all'] = "";
-$use_textarea['uncheck_all'] = false;

@@ -72,6 +72,10 @@ $comment['confirm_deletion'] = "";
 $format['confirm_deletion'] = "";
 $use_textarea['confirm_deletion'] = false;
 
+$comment['confirm_passage_insert'] = "";
+$format['confirm_passage_insert'] = "";
+$use_textarea['confirm_passage_insert'] = false;
+
 $comment['control_visibility'] = "";
 $format['control_visibility'] = "";
 $use_textarea['control_visibility'] = false;
@@ -87,6 +91,10 @@ $use_textarea['copy_marked'] = false;
 $comment['copy_or_delete_files'] = "Text in title bar";
 $format['copy_or_delete_files'] = "";
 $use_textarea['copy_or_delete_files'] = false;
+
+$comment['copy_passages'] = "";
+$format['copy_passages'] = "";
+$use_textarea['copy_passages'] = false;
 
 $comment['create_exercise_button'] = "";
 $format['create_exercise_button'] = "";
@@ -172,6 +180,10 @@ $comment['exercise_file_mgmt'] = "";
 $format['exercise_file_mgmt'] = "";
 $use_textarea['exercise_file_mgmt'] = false;
 
+$comment['files_not_changed'] = "";
+$format['files_not_changed'] = "";
+$use_textarea['files_not_changed'] = false;
+
 $comment['file_exists'] = "";
 $format['file_exists'] = "";
 $use_textarea['file_exists'] = false;
@@ -235,6 +247,14 @@ $use_textarea['insert_files'] = false;
 $comment['insert_moved_files'] = "";
 $format['insert_moved_files'] = "";
 $use_textarea['insert_moved_files'] = false;
+
+$comment['insert_passages'] = "";
+$format['insert_passages'] = "";
+$use_textarea['insert_passages'] = false;
+
+$comment['insert_passages_from'] = "";
+$format['insert_passages_from'] = "";
+$use_textarea['insert_passages_from'] = false;
 
 $comment['mark'] = "";
 $format['mark'] = "";
@@ -308,6 +328,14 @@ $comment['parent_folder'] = "";
 $format['parent_folder'] = "";
 $use_textarea['parent_folder'] = false;
 
+$comment['passage_copy_error'] = "";
+$format['passage_copy_error'] = "";
+$use_textarea['passage_copy_error'] = false;
+
+$comment['passage_copy_ok'] = "";
+$format['passage_copy_ok'] = "";
+$use_textarea['passage_copy_ok'] = false;
+
 $comment['rename'] = "";
 $format['rename'] = "";
 $use_textarea['rename'] = false;
@@ -380,39 +408,7 @@ $comment['visible_to_class'] = "";
 $format['visible_to_class'] = "";
 $use_textarea['visible_to_class'] = false;
 
-$comment['confirm_passage_insert'] = "";
-$format['confirm_passage_insert'] = "";
-$use_textarea['confirm_passage_insert'] = false;
-
-$comment['copy_passages'] = "";
-$format['copy_passages'] = "";
-$use_textarea['copy_passages'] = false;
-
-$comment['insert_passages'] = "";
-$format['insert_passages'] = "";
-$use_textarea['insert_passages'] = false;
-
-$comment['insert_passages_from'] = "";
-$format['insert_passages_from'] = "";
-$use_textarea['insert_passages_from'] = false;
-
 $comment['wrong_database'] = "";
 $format['wrong_database'] = "";
 $use_textarea['wrong_database'] = false;
-
-$comment['files_not_changed'] = "";
-$format['files_not_changed'] = "";
-$use_textarea['files_not_changed'] = false;
-
-$comment['confirm_passage_insert'] = "";
-$format['confirm_passage_insert'] = "";
-$use_textarea['confirm_passage_insert'] = false;
-
-$comment['passage_copy_error'] = "";
-$format['passage_copy_error'] = "";
-$use_textarea['passage_copy_error'] = false;
-
-$comment['passage_copy_ok'] = "";
-$format['passage_copy_ok'] = "";
-$use_textarea['passage_copy_ok'] = false;
 

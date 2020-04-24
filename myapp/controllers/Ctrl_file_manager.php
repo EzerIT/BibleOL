@@ -137,7 +137,7 @@ class Ctrl_file_manager extends MY_Controller {
             $this->error_view($e->getMessage(), $this->lang->line('copy_or_delete_files'));
         }
     }
-//'"}}}}}}
+
     public function passage_insert() {
 
         try {
@@ -162,7 +162,11 @@ class Ctrl_file_manager extends MY_Controller {
                     throw new DataException(sprintf($this->lang->line('wrong_database'), $f, $database)
                                             . "\n" .$this->lang->line('files_not_changed'));
 
-                if (!$this->mod_users->is_admin() && $this->$modelname->get_excercise_owner() != $this->mod_users->my_id())
+                // The user must be owner to overwrite. Not even administrators can overwrite
+                // files they don't own. (But they can delete them and change their ownership.)
+                // Rationale: Deletion and changing of ownership is a maintenance function, copying
+                // passages is an editing function.
+                if ($this->$modelname->get_excercise_owner() != $this->mod_users->my_id())
                     throw new DataException($this->lang->line('not_owner_all')
                                             . "\n" . $this->lang->line('files_not_changed'));
             }
