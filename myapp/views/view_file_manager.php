@@ -1,7 +1,7 @@
 <?php if (!$is_top): ?>
   <h1><?= sprintf($this->lang->line('this_is_folder'), rtrim($dirlist['relativedir'],'/')) ?></h1>
 
-  <p><a class="btn btn-primary" href="<?= site_url(build_get('file_manager/edit_visibility',array('dir' => $dirlist['relativedir']))) ?>"><?= $this->lang->line('edit_visibility_button') ?></a></p>
+  <p><a class="btn btn-primary" href="<?= site_url(build_get('file_manager/edit_visibility',array('dir' => $dirlist['relativedir']))) ?>"><span class="fas fa-eye"></span> <?= $this->lang->line('edit_visibility_button') ?></a></p>
 <?php else: ?>
   <h1><?= $this->lang->line('this_is_top_folder') ?></h1>
 <?php endif; ?>
@@ -46,7 +46,7 @@
 
 <?php endif; ?>
 
-  <p><a class="btn btn-primary" href="#" onclick="make_dir('<?= $dirlist['relativedir'] ?>'); return false;"><?= $this->lang->line('create_folder_button') ?></a></p>
+  <p><a class="btn btn-primary" href="#" onclick="make_dir('<?= $dirlist['relativedir'] ?>'); return false;"><span class="fas fa-folder-plus"></span> <?= $this->lang->line('create_folder_button') ?></a></p>
 
 
 <?php if (!empty($dirlist['files'])): ?>
@@ -84,26 +84,26 @@
     </table>
   </form>
   <p>
-    <a class="btn btn-primary" onclick="deleteConfirm(); return false;" href="#"><?= $this->lang->line('delete_marked') ?></a>
-    <a class="btn btn-primary" onclick="copyWarning(); return false;" href="#"><?= $this->lang->line('copy_marked') ?></a>
-    <a class="btn btn-primary" onclick="moveWarning(); return false;" href="#"><?= $this->lang->line('move_marked') ?></a>
+    <a class="btn btn-primary" onclick="deleteConfirm(); return false;" href="#"><span class="fas fa-trash-alt"></span> <?= $this->lang->line('delete_marked') ?></a>
+    <a class="btn btn-primary" onclick="copyWarning(); return false;" href="#"><span class="fas fa-copy"></span> <?= $this->lang->line('copy_marked') ?></a>
+    <a class="btn btn-primary" onclick="moveWarning(); return false;" href="#"><span class="fas fa-cut"></span> <?= $this->lang->line('move_marked') ?></a>
     <?php if ($isadmin): ?>
-      <a class="btn btn-primary" onclick="changeOwner(); return false;" href="#"><?= $this->lang->line('change_owner_files') ?></a>
+      <a class="btn btn-primary" onclick="changeOwner(); return false;" href="#"><span class="fas fa-user"></span> <?= $this->lang->line('change_owner_files') ?></a>
     <?php endif; ?>
   </p>
 <?php endif; ?>
 
 <?php if ($copy_or_move): ?>
   <p>
-  <a class="btn btn-primary" href="<?= site_url(build_get('file_manager/insert_files',array('dir' => $dirlist['relativedir']))) ?>"><?= $copy_or_move==='move' ? $this->lang->line('insert_moved_files') : $this->lang->line('insert_copied_files') ?></a>
-    <a class="btn btn-primary" href="<?= site_url(build_get('file_manager/cancel_copy',array('dir' => $dirlist['relativedir']))) ?>"><?= $copy_or_move==='move' ? $this->lang->line('cancel_move') : $this->lang->line('cancel_copy')?></a>
+  <a class="btn btn-primary" href="<?= site_url(build_get('file_manager/insert_files',array('dir' => $dirlist['relativedir']))) ?>"><span class="fas fa-file-import"></span> <?= $copy_or_move==='move' ? $this->lang->line('insert_moved_files') : $this->lang->line('insert_copied_files') ?></a>
+    <a class="btn btn-primary" href="<?= site_url(build_get('file_manager/cancel_copy',array('dir' => $dirlist['relativedir']))) ?>"><span class="fas fa-ban"></span> <?= $copy_or_move==='move' ? $this->lang->line('cancel_move') : $this->lang->line('cancel_copy')?></a>
   </p>
 <?php endif; ?>
 
   <p>
-    <a class="btn btn-primary" href="<?= site_url(build_get('file_manager/upload_files',array('dir' => $dirlist['relativedir']))) ?>"><?= $this->lang->line('upload_exercises_button') ?></a>
-    <a class="btn btn-primary" href="#" onclick="create_exercise(); return false;"><?= $this->lang->line('create_exercise_button') ?></a>
-    <a class="btn btn-primary" id="passage-insert-confirm" onclick="passageInsertConfirm(); return false;" href="#"><?= $this->lang->line('insert_passages') ?></a>
+    <a class="btn btn-primary" href="<?= site_url(build_get('file_manager/upload_files',array('dir' => $dirlist['relativedir']))) ?>"><span class="fas fa-file-upload"></span> <?= $this->lang->line('upload_exercises_button') ?></a>
+    <a class="btn btn-primary" href="#" onclick="create_exercise(); return false;"><span class="fas fa-plus-circle"></span> <?= $this->lang->line('create_exercise_button') ?></a>
+    <a class="btn btn-primary" id="passage-insert-confirm" onclick="passageInsertConfirm(); return false;" href="#"><span class="far fa-clone"></span> <?= $this->lang->line('insert_passages') ?></a>
   </p>
 
 

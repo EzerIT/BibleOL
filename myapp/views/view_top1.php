@@ -32,7 +32,7 @@
     <title><?= $title ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/1e0c94ff04.js" crossorigin="anonymous"></script>                   
 
     <?php
        make_css('bootstrap_local/css/bootstrap.min.css');
