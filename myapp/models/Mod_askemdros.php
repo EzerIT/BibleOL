@@ -227,22 +227,11 @@ class Mod_askemdros extends CI_Model {
         if ($this->contents === false)
             throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
 
-        $this->decoded_3et = harvest($this->contents);
-        return $this->decoded_3et;
+        return harvest($this->contents);
     }
     
     private function parseQuizBasic(string $filename) {
-        $this->load->helper(array('file','xmlhandler','quiztemplate'));
-
-        if (!is_file($filename) || !is_readable($filename))
-            throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
-
-        $this->contents = file_get_contents($filename);
-
-        if ($this->contents === false)
-            throw new DataException(sprintf($this->lang->line('cannot_open_file'), $filename));
-
-        $this->decoded_3et = harvest($this->contents);
+        $this->decoded_3et = $this->decodeQuiz($filename);
 
         $this->setup($this->decoded_3et->database,$this->decoded_3et->properties);
 
