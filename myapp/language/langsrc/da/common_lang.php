@@ -32,3 +32,4 @@ $lang['time_format'] = "H:i";
 $lang['variant'] = "Variant";
 $lang['yes'] = "Ja";
 $lang['server_error'] = "Serverfejl";
+$lang['uncheck_all'] = "Afmarkér alle";

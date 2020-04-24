@@ -128,3 +128,6 @@ $comment['server_error'] = "";
 $format['server_error'] = "";
 $use_textarea['server_error'] = false;
 
+$comment['uncheck_all'] = "";
+$format['uncheck_all'] = "";
+$use_textarea['uncheck_all'] = false;

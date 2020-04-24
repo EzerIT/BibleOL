@@ -57,7 +57,7 @@
     <input type="hidden" name="newowner" value="">
     <table class="type2 table table-striped table-sm">
       <tr>
-        <th><?= $this->lang->line('mark') ?></th>
+        <th><?= $this->lang->line('mark') ?><br><a class="badge badge-primary" href="#" onclick="uncheckAll(); return false;"><?= $this->lang->line('uncheck_all') ?></a></th>
         <th><?= $this->lang->line('name') ?></th>
         <th><?= $this->lang->line('owner_name') ?></th>
         <th><?= $this->lang->line('operations') ?></th>
@@ -107,6 +107,12 @@
   </p>
 
 
+  <script>
+    function uncheckAll() {
+        $('input[name="file[]"]:checked').prop('checked',false);   
+    }
+  </script>
+      
 
   <!-- Dialogs for this page follow -->
 
