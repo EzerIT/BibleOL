@@ -1,8 +1,8 @@
 <?php
 function stripSortIndex(string $s) {
     return (strlen($s)>0 && substr($s,0,1)==='#')
-              ? substr(strstr($s," "),1)
-              : $s;
+         ? substr(strstr($s," "),1)
+         : $s;
 }
 
 
@@ -281,30 +281,30 @@ class Ctrl_translate extends MY_Controller {
                 throw new DataException('Uknown destination language');
 
             switch ($src_lang) {
-              case 'heb':
+                case 'heb':
                     $buttons = $this->mod_urls->get_heb_buttons_long();
                     list($stems,$books) = $this->mod_translate->get_localized_ETCBC4();
                     break;
 
-              case 'aram':
+                case 'aram':
                     $buttons = $this->mod_urls->get_aram_buttons_long();
                     list($stems,$books) = $this->mod_translate->get_localized_ETCBC4();
                     break;
 
-              case 'greek':
+                case 'greek':
                     $buttons = $this->mod_urls->get_greek_buttons_long();
                     list($stems,$books) = $this->mod_translate->get_localized_nestle1904();
                     break;
 
-              default:
+                default:
                     throw new DataException($this->lang->line('illegal_lang_code'));
             }
 
             $words = $button_index<0
-                ? $this->mod_translate->get_frequent_glosses($src_lang,$lang_edit,$lang_show,
-                                                             (-1-$button_index)*$this->gloss_count,$this->gloss_count)
-                : $this->mod_translate->get_glosses($src_lang,$lang_edit,$lang_show,
-                                                    $buttons[$button_index][1],$buttons[$button_index][2]);
+                   ? $this->mod_translate->get_frequent_glosses($src_lang,$lang_edit,$lang_show,
+                                                                (-1-$button_index)*$this->gloss_count,$this->gloss_count)
+                   : $this->mod_translate->get_glosses($src_lang,$lang_edit,$lang_show,
+                                                       $buttons[$button_index][1],$buttons[$button_index][2]);
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_lex')));
@@ -323,7 +323,7 @@ class Ctrl_translate extends MY_Controller {
                                                    'editing'     => 'lexicon',
                                                    'get_parms'   => $get_parms),
                                              true)
-                . $this->load->view('view_translate',
+                         . $this->load->view('view_translate',
                                              array('editing'   => 'lexicon',
                                                    'get_parms' => $get_parms,
                                                    'lang_list' => $dst_langs,
@@ -372,19 +372,41 @@ class Ctrl_translate extends MY_Controller {
         $this->mod_translate->if_db2php($_SERVER['argv'][3],$_SERVER['argv'][4]);
     }
 
+
+    private static function if_php2db_usage() {
+		die("Usage: php index.php translate if_php2db [-i] <language code>[_variant] <source directory>\n");
+    }
+    
     function if_php2db() {
         if (!is_cli()) {
             echo '<pre>This command can only be run from the command line</pre>';
             die;
         }
 
-		if ($_SERVER['argc']!=5)
-			die("Usage: php index.php translate if_php2db <language code>[_variant] <source directory>\n");
+		if ($_SERVER['argc']<5)
+            self::if_php2db_usage();
 
-        if ($_SERVER['argv'][3] == 'comment')
-            $this->mod_translate->if_phpcomment2db($_SERVER['argv'][4]);
+        $incr = $_SERVER['argv'][3]=='-i';
+
+        if ($incr) {
+		    if ($_SERVER['argc']!=6)
+                self::if_php2db_usage();
+
+            $language_code = $_SERVER['argv'][4];
+            $src_dir = $_SERVER['argv'][5];
+        }
+        else {
+		    if ($_SERVER['argc']!=5)
+                self::if_php2db_usage();
+
+            $language_code = $_SERVER['argv'][3];
+            $src_dir = $_SERVER['argv'][4];
+        }
+
+        if ($language_code == 'comment')
+            $this->mod_translate->if_phpcomment2db($src_dir, $incr);
         else
-            $this->mod_translate->if_php2db($_SERVER['argv'][3],$_SERVER['argv'][4]);
+            $this->mod_translate->if_php2db($language_code, $src_dir, $incr);
     }
 
     function gram_db2prop() {
@@ -505,7 +527,7 @@ class Ctrl_translate extends MY_Controller {
         else {
             try {
                 $this->mod_users->check_translator();
-            
+                
                 if ($this->uri->total_segments()!=4 && $this->uri->total_segments()!=5) {
                     throw new DataException($this->lang->line('malformed_url'));
                 }
@@ -598,7 +620,7 @@ class Ctrl_translate extends MY_Controller {
                                                    'trans_heblex_items'       => $trans_heblex_items,
                                                    'trans_aramlex_items'      => $trans_aramlex_items,
                                                    'trans_greeklex_items'     => $trans_greeklex_items,
-                                                 ),
+                                             ),
                                              true);
             $this->load->view('view_main_page', array('left_title' => 'Available Languages',
                                                       'left' => '<p>Here you can enable or disable localizations, and you can add new localization languages.</p>',
@@ -641,7 +663,7 @@ class Ctrl_translate extends MY_Controller {
             if (!isset($_POST['internal-name'])
                 || !isset($_POST['native-name'])
                 || !isset($_POST['abbrev']))
-                throw new DataException($this->lang->line('bad_post_parameters'));
+            throw new DataException($this->lang->line('bad_post_parameters'));
             
             $internal_name = str_replace(' ','_',strtolower(trim($_POST['internal-name'])));
             $native_name = trim($_POST['native-name']);
@@ -656,4 +678,4 @@ class Ctrl_translate extends MY_Controller {
         }
     }
 
-  }
+}

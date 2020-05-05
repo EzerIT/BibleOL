@@ -636,10 +636,12 @@ class Mod_translate extends CI_Model {
     
     // $src is the source directory where the php files are found.
     // $short_langname may contain '_<variant>'.
-    public function if_php2db(string $short_langname, string $src) {
+    public function if_php2db(string $short_langname, string $src, bool $incr) {
+        $table_name = "language_{$short_langname}";
+
         $this->load->helper('directory');
 
-        $this->if_create_table($short_langname,true);
+        $this->if_create_table($short_langname,!$incr);
 
         $d = directory_map($src, 1);
 
@@ -658,6 +660,13 @@ class Mod_translate extends CI_Model {
             foreach ($comment_query->result() as $row)
                 $format[$row->symbolic_name] = is_null($row->format) ? "" : $row->format;
             
+            $validate_text = array();
+            if ($incr) {
+                $validate_query = $this->db->where('textgroup',$short_file)->get($table_name);
+                foreach ($validate_query->result() as $row)
+                    $validate_text[$row->symbolic_name] = $row->text;
+            }
+
             $toinsert = array();
             $toinsertcomment = array();
                 
@@ -665,36 +674,48 @@ class Mod_translate extends CI_Model {
             include($src.DIRECTORY_SEPARATOR.$file);
                 
             foreach ($lang as $key => $text) {
-                if (!isset($format[$key])) {
-                    echo "Key $key missing from textgroup $short_file in comment table -- I will add it\n";
-                    $toinsertcomment[] = array('textgroup' => $short_file,
-                                               'symbolic_name' => $key,
-                                               'comment' => null,
-                                               'format' => null,
-                                               'use_textarea' => 0);
-                    $format[$key] = '';
+                if (isset($validate_text[$key])) {
+                    // Key is already in database and we are doing an incremental update
+
+                    if ($validate_text[$key]!=$text)
+                        echo "WARNING: For key='$key', PHP file contains '$text', but the database contains '$validate_text[$key]'\n";
                 }
+                else {
+                    // Insert key and text into database
+
+                    if (!isset($format[$key])) {
+                        echo "Key $key missing from textgroup $short_file in comment table -- I will add it\n";
+                        $toinsertcomment[] = array('textgroup' => $short_file,
+                                                   'symbolic_name' => $key,
+                                                   'comment' => null,
+                                                   'format' => null,
+                                                   'use_textarea' => 0);
+                        $format[$key] = '';
+                    }
                     
-                if ($format[$key]!='keep_blanks')
-                    $text = preg_replace('/\s+/',' ',$text); // Remove extraneous whitespace
+                    if ($format[$key]!='keep_blanks')
+                        $text = preg_replace('/\s+/',' ',$text); // Remove extraneous whitespace
                     
-                $toinsert[] = array('textgroup' => $short_file,
-                                    'symbolic_name' => $key,
-                                    'text' => $text);
+                    $toinsert[] = array('textgroup' => $short_file,
+                                        'symbolic_name' => $key,
+                                        'text' => $text);
+                }
             }
 
             if (!empty($toinsert))
-                $this->db->insert_batch('language_'.$short_langname, $toinsert);
+                $this->db->insert_batch($table_name, $toinsert);
 
             if (!empty($toinsertcomment)) 
                 $this->db->insert_batch('language_comment', $toinsertcomment);
         }
     }
 
-    public function if_phpcomment2db(string $src) {
+    public function if_phpcomment2db(string $src, bool $incr) {
         $this->load->helper('directory');
         $this->load->dbforge();
-        $this->dbforge->drop_table('language_comment',true);
+        
+        if (!$incr)
+            $this->dbforge->drop_table('language_comment',true);
                 
         $this->dbforge->add_field(array('id' => array('type' => 'INT', 'auto_increment' => true),
                                         'textgroup' => array('type'=>'TINYTEXT'),
@@ -703,12 +724,13 @@ class Mod_translate extends CI_Model {
                                                            'null' => true,
                                                            'default' => null),
                                         'format' => array('type'=>'TINYTEXT',
-                                                           'null' => true,
-                                                           'default' => null),
+                                                          'null' => true,
+                                                          'default' => null),
                                         'use_textarea' => array('type' => 'TINYINT(1)')
                                       ));
         $this->dbforge->add_key('id', TRUE);
-        $this->dbforge->create_table('language_comment');
+        $this->dbforge->create_table('language_comment',true); // CREATE TABLE ... IF NOT EXISTS
+
 
         $d = directory_map($src, 1);
 
@@ -722,6 +744,21 @@ class Mod_translate extends CI_Model {
             if ($short_file=='db' || $short_file=='email')
                 continue;
 
+
+            $validate_comment = array();
+            $validate_format = array();
+            $validate_use_textarea = array();
+
+            if ($incr) {
+                // Read old contents of table
+                $validate_query = $this->db->where('textgroup',$short_file)->get('language_comment');
+                foreach ($validate_query->result() as $row) {
+                    $validate_comment[$row->symbolic_name] = is_null($row->comment) ? "" : $row->comment;
+                    $validate_format[$row->symbolic_name] = is_null($row->format) ? "" : $row->format;
+                    $validate_use_textarea[$row->symbolic_name] = is_null($row->use_textarea) ? "" : $row->use_textarea;
+                }
+            }
+
             $toinsert = array();
                 
             $comment = array();
@@ -730,14 +767,35 @@ class Mod_translate extends CI_Model {
             include($src.DIRECTORY_SEPARATOR.$file);
                 
             foreach ($comment as $key => $text) {
-                $toinsert[] = array('textgroup' => $short_file,
-                                    'symbolic_name' => $key,
-                                    'comment' => empty($comment[$key]) ? null : $comment[$key],
-                                    'format' => empty($format[$key]) ? null : $format[$key],
-                                    'use_textarea' => $use_textarea[$key]);
+                if (isset($validate_comment[$key])) {
+                    // Key is already in database and we are doing an incremental update
+
+                    if ($validate_comment[$key]!=$text)
+                        echo "WARNING: For key='$key', PHP file contains comment '$text', but the database contains comment '$validate_comment[$key]'\n";
+
+                    if ($validate_format[$key]!=$format[$key])
+                        echo "WARNING: For key='$key', PHP file contains format '$format[$key]', but the database contains comment '$validate_format[$key]'\n";
+
+                    if ($validate_use_textarea[$key]!=$use_textarea[$key])
+                        echo "WARNING: For key='$key', PHP file contains use_textarea="
+                           . ($use_textarea[$key] ? 'true' : 'false')
+                           . ', but the database contains use_textarea='
+                           . ($validate_use_textarea[$key] ? 'true' : 'false')
+                           . "\n";
+                }
+                else {
+                    // Insert key and text into database
+
+                    $toinsert[] = array('textgroup' => $short_file,
+                                        'symbolic_name' => $key,
+                                        'comment' => empty($comment[$key]) ? null : $comment[$key],
+                                        'format' => empty($format[$key]) ? null : $format[$key],
+                                        'use_textarea' => $use_textarea[$key]);
+                }
             }
 
-            $this->db->insert_batch('language_comment', $toinsert);
+            if (!empty($toinsert))
+                $this->db->insert_batch('language_comment', $toinsert);
         }
     }
         
