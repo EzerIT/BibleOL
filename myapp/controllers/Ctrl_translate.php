@@ -372,41 +372,22 @@ class Ctrl_translate extends MY_Controller {
         $this->mod_translate->if_db2php($_SERVER['argv'][3],$_SERVER['argv'][4]);
     }
 
-
-    private static function if_php2db_usage() {
-		die("Usage: php index.php translate if_php2db [-i] <language code>[_variant] <source directory>\n");
-    }
-    
     function if_php2db() {
         if (!is_cli()) {
             echo '<pre>This command can only be run from the command line</pre>';
             die;
         }
 
-		if ($_SERVER['argc']<5)
-            self::if_php2db_usage();
+        $incr = isset($_SERVER['argv'][3]) ? $_SERVER['argv'][3]=='-i' : false;
+        $lc_ix = $incr ? 4 : 3;
 
-        $incr = $_SERVER['argv'][3]=='-i';
+		if ($_SERVER['argc']!=$lc_ix+2)
+		    die("Usage: php index.php translate if_php2db [-i] <language code>[_variant] <source directory>\n");
 
-        if ($incr) {
-		    if ($_SERVER['argc']!=6)
-                self::if_php2db_usage();
-
-            $language_code = $_SERVER['argv'][4];
-            $src_dir = $_SERVER['argv'][5];
-        }
-        else {
-		    if ($_SERVER['argc']!=5)
-                self::if_php2db_usage();
-
-            $language_code = $_SERVER['argv'][3];
-            $src_dir = $_SERVER['argv'][4];
-        }
-
-        if ($language_code == 'comment')
-            $this->mod_translate->if_phpcomment2db($src_dir, $incr);
+        if ($_SERVER['argv'][$lc_ix] == 'comment')
+            $this->mod_translate->if_phpcomment2db($_SERVER['argv'][$lc_ix+1], $incr);
         else
-            $this->mod_translate->if_php2db($language_code, $src_dir, $incr);
+            $this->mod_translate->if_php2db($_SERVER['argv'][$lc_ix], $_SERVER['argv'][$lc_ix+1], $incr);
     }
 
     function gram_db2prop() {

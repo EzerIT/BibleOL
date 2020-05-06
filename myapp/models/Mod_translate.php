@@ -678,7 +678,7 @@ class Mod_translate extends CI_Model {
                     // Key is already in database and we are doing an incremental update
 
                     if ($validate_text[$key]!=$text)
-                        echo "WARNING: For key='$key', PHP file contains '$text', but the database contains '$validate_text[$key]'\n";
+                        echo "WARNING: File '$file': For key='$key', PHP file contains '$text', but the database contains '$validate_text[$key]'\n";
                 }
                 else {
                     // Insert key and text into database
@@ -771,13 +771,13 @@ class Mod_translate extends CI_Model {
                     // Key is already in database and we are doing an incremental update
 
                     if ($validate_comment[$key]!=$text)
-                        echo "WARNING: For key='$key', PHP file contains comment '$text', but the database contains comment '$validate_comment[$key]'\n";
+                        echo "WARNING: File '$file': For key='$key', PHP file contains comment '$text', but the database contains comment '$validate_comment[$key]'\n";
 
                     if ($validate_format[$key]!=$format[$key])
-                        echo "WARNING: For key='$key', PHP file contains format '$format[$key]', but the database contains comment '$validate_format[$key]'\n";
+                        echo "WARNING: File '$file': For key='$key', PHP file contains format '$format[$key]', but the database contains comment '$validate_format[$key]'\n";
 
                     if ($validate_use_textarea[$key]!=$use_textarea[$key])
-                        echo "WARNING: For key='$key', PHP file contains use_textarea="
+                        echo "WARNING: File '$file': For key='$key', PHP file contains use_textarea="
                            . ($use_textarea[$key] ? 'true' : 'false')
                            . ', but the database contains use_textarea='
                            . ($validate_use_textarea[$key] ? 'true' : 'false')
