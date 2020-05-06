@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{15 April 2020}
+\date{6 May 2020}
 
 \makeindex
 
@@ -265,7 +265,7 @@ server and developers who need to modify or expand the way Bible OL works.
 
 Except where otherwise noted, the Bible OL source code is distributed under an MIT
 License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2020 by Claus
-Tøndering, claus@ezer.dk.
+Tøndering, claus@ezer.dk and its other authors.
 
 The present document is made available under a Creative Commons Attribution 4.0 International
 License\footnote{\url{http://creativecommons.org/licenses/by/4.0/}}.
@@ -6353,7 +6353,7 @@ To import the user interface tables from textual files, execute this command fro
 line on the server:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
-php index.php translate if_php2db %\textrm{\textit{language-code}}% %\textrm{\textit{source-directory}}%
+php index.php translate if_php2db [-i] %\textrm{\textit{language-code}}% %\textrm{\textit{source-directory}}%
 \end{lstlisting}
 
 
@@ -6361,10 +6361,15 @@ php index.php translate if_php2db %\textrm{\textit{language-code}}% %\textrm{\te
 or this command:
 
 \begin{lstlisting}[language=bash,basicstyle={\ttfamily}]
-php index.php translate if_php2db %\textrm{\textit{language-code}\_\textit{variant}}% %\textrm{\textit{source-directory}}%
+php index.php translate if_php2db [-i] %\textrm{\textit{language-code}\_\textit{variant}}% %\textrm{\textit{source-directory}}%
 \end{lstlisting}
 
 The imported files will be loaded from a directory named \emph{source-directory}.
+
+If the optional parameter \texttt{-i} is absent, all translation strings in the database are
+replaced by the translations found in the source directory. If the parameter \texttt{-i} is present,
+only translations that are not already in the database are added; in this case the command will warn
+about translations that differ in the database and the source directory.
 
 Note the difference in directory naming in the export and import commands. The language code is
 appended to the directory name on export, but not on import. To export the English
