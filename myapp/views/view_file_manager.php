@@ -109,7 +109,7 @@
   <!-- Dialogs for this page follow -->
 
   <?php //*********************************************************************
-        // Make Directory dialog 
+        // Make Directory dialog
         //*********************************************************************
     ?>
   <div id="mkdir-dialog" class="modal fade">
@@ -170,7 +170,7 @@
 
 
   <?php //*********************************************************************
-        // Rename dialog 
+        // Rename dialog
         //*********************************************************************
     ?>
   <div id="rename-dialog" class="modal fade">
@@ -233,7 +233,7 @@
 
 
   <?php //*********************************************************************
-        // Create Quiz dialog 
+        // Create Quiz dialog
         //*********************************************************************
     ?>
   <div id="newquiz-dialog" class="modal fade">
@@ -281,7 +281,7 @@
 
 
   <?php //*********************************************************************
-        // Copy/Move Warning dialog 
+        // Copy/Move Warning dialog
         //*********************************************************************
     ?>
   <div id="copy-dialog-warning" class="modal fade">
@@ -422,7 +422,7 @@
                 $('#chown-error-text').text('<?= $this->lang->line('no_user_selected') ?>');
                 $('#chown-error').show();
                 return false;
-            }    
+            }
             $('input[name="newowner"]').val(userid);
             $('#copy-delete-form').submit();
         });
@@ -461,4 +461,3 @@
         });
     });
   </script>
-

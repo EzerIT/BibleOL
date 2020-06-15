@@ -1,39 +1,35 @@
 <h1>Please choose from all current exercises</h1>
 
 <style>
-.ar_class, #selected_exercises{
-	padding: 8px;
-	border: 1px solid white;
-	background-color: #d7ecff;
+.ar_class{
+	padding: 2px;
+	background-color: white;
 	color: black;
-	border-radius: 8px;
-	border-style: none none solid;
+	border-left: 2px solid #d7ecff;
 }
 
 .btn-link{
-	color: white;
 	font-weight: bold;
+	cursor: pointer;
 }
 
 #selected_exercises{
 	list-style-type: none;
-	width: 70%;
-	margin: 5px;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+li{
+	padding: 0px;
 }
 
 #wrap{
-	background-color: #d7ecff;
+	background-color: white;
 	color: black;
 }
 
-.add_btn:hover{
-	background-color: white;
-  color: #d7ecff;
-	border-radius: 2px;
-}
-
-.add_btn{
-	justify-content: center;
+#add_btn{
 	cursor: pointer;
 }
 
@@ -58,15 +54,14 @@
 
 .exercise {
 	color: black;
-	background-color: #d7ecff;
 }
 </style>
 
 
-<table class="type2 table table-condensed">
+<div class="table-responsive">
 
 <?php function showContents($ar) {
-    echo '<table style="width: 100%; border-collapse: separate; border-spacing: 0px; background-color: #d7ecff; border-radius: 8px;">';
+    echo '<table class="type2 table table-striped" style="width: 100%; border-collapse: separate; border-spacing: 0px; border-radius: 8px;">';
       foreach ($ar as $key => $d){
         if (is_array($d) && $d != '.' && $d != '..'){
           echo '<tr class="folder">';
@@ -87,7 +82,7 @@
             $nm_arg = "'".$ex_name."'";
             $pth_arg = "'".str_replace("/var/www/BibleOL/quizzes/","",$d)."'";
             $hi = "'hi'";
-            echo '<td><span id="add_btn_id" class="add_btn" onclick="addExercise('.$nm_arg.','.$pth_arg.')">Add</span></td>';
+            echo '<td><span class="badge badge-primary" id="add_btn" onclick="addExercise('.$nm_arg.','.$pth_arg.')">Add</span></td>';
           echo '</tr>';
         }
       }

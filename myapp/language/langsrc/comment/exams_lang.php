@@ -12,6 +12,10 @@ $comment['create_new_exam_button'] = "";
 $format['create_new_exam_button'] = "";
 $use_textarea['create_new_exam_button'] = false;
 
+$comment['delete_exam'] = "";
+$format['delete_exam'] = "";
+$use_textarea['delete_exam'] = false;
+
 $comment['edit_exam'] = "";
 $format['edit_exam'] = "";
 $use_textarea['edit_exam'] = false;
@@ -51,6 +55,10 @@ $use_textarea['planned_end'] = false;
 $comment['planned_start'] = "";
 $format['planned_start'] = "";
 $use_textarea['planned_start'] = false;
+
+$comment['take_exam'] = "";
+$format['take_exam'] = "";
+$use_textarea['take_exam'] = "";
 
 $comment['time'] = "";
 $format['time'] = "";

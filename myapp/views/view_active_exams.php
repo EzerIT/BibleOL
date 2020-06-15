@@ -69,11 +69,9 @@ on the page.
     <?php foreach ($allexams as $exam): ?>
         <tr>
             <td class="leftalign"><?= $exam->exam_name ?></td>
-            <td class="leftalign"><?= $this->mod_users->user_full_name($exam->ownerid) ?></td>
+            <td class="leftalign"><?= $exam->ownerid ?></td>
             <td class="leftalign">
                 <a class="badge badge-primary" href="/exams/edit_exam?exam=<?= $exam->exam_name ?>"><?= $this->lang->line('edit_exam') ?></a>
-                <a class="badge badge-primary" href="/exams/take_exam"><?= $this->lang->line('take_exam') ?></a>
-                <a class="badge badge-danger" href="#" onclick="dltexam('<?= $exam->exam_name ?>');"><?= $this->lang->line('delete_exam') ?></a>
             </td>
         </tr>
     <?php endforeach; ?>
@@ -85,57 +83,5 @@ on the page.
 This button redirects to the exam creation page.
 -->
 <div>
-  <a class="btn btn-primary" href="/exams/new_exam"><?= $this->lang->line('create_new_exam_button') ?></a>
+  <a class="btn btn-primary" href="/exams/new_exam" onclick="create_new_exam()"><?= $this->lang->line('create_new_exam_button') ?></a>
 </div>
-
-
-<!-- Delete Exam Modal -->
-<div class="modal fade" id="delete-exam-dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header justify-content-between">
-        <div><h4 class="modal-title"><?= $this->lang->line('delete_exam') ?></h4></div>
-        <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</div></button>
-      </div>
-      <div class="modal-body">
-        <div class="alert alert-danger" id="delete-error" role="alert">
-          <span class="fas fa-exclamation-circle" aria-hidden="true"></span>
-          <span id="delete-error-text"></span>
-        </div>
-
-        <p>
-          The following exam will be deleted:
-        </p>
-
-        <p id="delete-exam">
-        </p>
-
-
-        <form id="delete-form" action="<?= site_url('exams/delete_exam') ?>" method="post">
-          <input type="hidden" name="exname" id="delete-examname">
-        </form>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="delete-dialog-ok" class="btn btn-primary">Delete</button>
-        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<script>
-  function dltexam(examname) {
-    $('#delete-examname').attr('value', examname);
-    document.getElementById('delete-exam').innerHTML = examname;
-    $('#delete-error').hide();
-    $("#delete-exam-dialog").modal("show");
-  }
-
-  $(function() {
-    $('#delete-dialog-ok').click(function() {
-      $('#delete-form').submit();
-    })
-  })
-</script>
