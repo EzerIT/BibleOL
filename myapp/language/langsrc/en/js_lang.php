@@ -4,6 +4,7 @@ $lang['1st_choice'] = "1st choice";
 $lang['2nd_choice'] = "2nd choice";
 $lang['3rd_choice'] = "3rd choice";
 $lang['4th_choice'] = "4th choice";
+$lang['add_entry_button'] = "Add line";
 $lang['badname'] = "Illegal character in filename";
 $lang['cancel_button'] = "Cancel";
 $lang['clear_all'] = "Clear all";

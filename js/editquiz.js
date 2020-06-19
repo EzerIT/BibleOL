@@ -347,7 +347,7 @@ var StringFeatureHandler = (function (_super) {
         return _this;
     }
     StringFeatureHandler.prototype.normalize = function () {
-        while (this.values.length < 10)
+        if (this.values.length < 1)
             this.values.push(null);
     };
     StringFeatureHandler.prototype.setValue = function (index, val) {
@@ -878,6 +878,35 @@ var PanelTemplMql = (function () {
         this.groups[key].append(group2);
         this.handlers.push(ifh);
     };
+    PanelTemplMql.prototype.addOneStringValue = function (key, group2, sfh, isForeign, i) {
+        var _this = this;
+        if (i == -1) {
+            i = sfh.values.length;
+            sfh.values.push(null);
+        }
+        var jtf = isForeign
+            ? $("<input class=\"" + charset.foreignClass + "\" type=\"text\" size=\"20\" id=\"" + this.name_prefix + "_" + key + "_input" + (+i + 1) + "\">")
+            : $('<input type="text" size="20">');
+        if (sfh.values[i])
+            jtf.val(sfh.values[i]);
+        var kbdRowId;
+        if (isForeign) {
+            kbdRowId = this.name_prefix + "_" + key + "_row" + (+i + 1);
+            jtf.on('focus', null, { kbdRowId: kbdRowId, sfh: sfh, i: i }, function (e) {
+                $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
+                VirtualKeyboard.attachInput(e.currentTarget);
+                _this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i);
+            });
+        }
+        jtf.on('keyup', null, { sfh: sfh, i: i }, $.proxy(this.stringTextModifiedListener, this));
+        var row = $('<tr></tr>');
+        var cell = $('<td></td>');
+        cell.append(jtf);
+        row.append(cell);
+        group2.append(row);
+        if (isForeign)
+            group2.append("<tr><td id=\"" + kbdRowId + "\" style=\"text-align:right;\"></td></tr>");
+    };
     PanelTemplMql.prototype.generateStringPanel = function (key, fhs, isForeign) {
         var _this = this;
         var sfh = (fhs && fhs[key]) ? fhs[key] : new StringFeatureHandler(key);
@@ -911,31 +940,15 @@ var PanelTemplMql = (function () {
         });
         var group2 = $('<table></table>');
         for (var i = 0; i < sfh.values.length; ++i) {
-            var jtf = isForeign
-                ? $("<input class=\"" + charset.foreignClass + "\" type=\"text\" size=\"20\" id=\"" + this.name_prefix + "_" + key + "_input" + (+i + 1) + "\">")
-                : $('<input type="text" size="20">');
-            if (sfh.values[i])
-                jtf.val(sfh.values[i]);
-            var kbdRowId = void 0;
-            if (isForeign) {
-                kbdRowId = this.name_prefix + "_" + key + "_row" + (+i + 1);
-                jtf.on('focus', null, { kbdRowId: kbdRowId, sfh: sfh, i: i }, function (e) {
-                    $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
-                    VirtualKeyboard.attachInput(e.currentTarget);
-                    _this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i);
-                });
-            }
-            jtf.on('keyup', null, { sfh: sfh, i: i }, $.proxy(this.stringTextModifiedListener, this));
-            var row = $('<tr></tr>');
-            var cell = $('<td></td>');
-            cell.append(jtf);
-            row.append(cell);
-            group2.append(row);
-            if (isForeign)
-                group2.append("<tr><td id=\"" + kbdRowId + "\" style=\"text-align:right;\"></td></tr>");
+            this.addOneStringValue(key, group2, sfh, isForeign, i);
         }
         this.groups[key].append(group2);
         this.handlers.push(sfh);
+        var addEntry = $('<button type="button">' + localize('add_entry_button') + '</button>');
+        this.groups[key].append(addEntry);
+        addEntry.click(function () {
+            _this.addOneStringValue(key, group2, sfh, isForeign, -1);
+        });
     };
     PanelTemplMql.prototype.generateQerePanel = function (key, fhs) {
         var _this = this;

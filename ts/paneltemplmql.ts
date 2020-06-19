@@ -114,10 +114,10 @@ class StringFeatureHandler extends FeatureHandler {
     //------------------------------------------------------------------------------------------
     // normalize method
     //
-    // Ensures that the values array has 10 elements by adding null values when necessary.
+    // Ensures that the values array has at least one element
     //
     public normalize() : void {
-        while (this.values.length<10)
+        if (this.values.length<1)
             this.values.push(null);
     }
 
@@ -1266,6 +1266,52 @@ abstract class PanelTemplMql {
         this.handlers.push(ifh);
     }
 
+
+    private addOneStringValue(key : string, group2 : JQuery, sfh : StringFeatureHandler, isForeign : boolean, i : number) : void {
+        if (i==-1) { // we're adding a new row
+            i  = sfh.values.length;
+            sfh.values.push(null);
+        }
+
+        let jtf : JQuery =
+            isForeign
+            ? $(`<input class="${charset.foreignClass}" type="text" size="20" id="${this.name_prefix}_${key}_input${+i+1}">`)
+            : $('<input type="text" size="20">');
+
+        if (sfh.values[i])
+            jtf.val(sfh.values[i]);
+
+        let kbdRowId : string; // ID of row containing virtual keyboard
+        if (isForeign) {
+            kbdRowId = `${this.name_prefix}_${key}_row${+i+1}`;
+
+            // Move virtual keyboard when an input field gets focus
+            jtf.on('focus', null,
+                   {kbdRowId : kbdRowId, sfh: sfh, i: i}, // Event data
+                   (e : JQueryEventObject) => {
+                       $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
+                       VirtualKeyboard.attachInput(e.currentTarget);
+
+                       // Monitor changes to the input field
+                       this.monitorChange(<JQuery<HTMLElement>>$(e.currentTarget), e.data.sfh, e.data.i);
+                   });
+        }
+
+        // Set handler for direct field changes
+        jtf.on('keyup', null,
+               {sfh: sfh, i: i}, // Event data
+               $.proxy(this.stringTextModifiedListener,this));
+
+        let row  : JQuery = $('<tr></tr>');
+        let cell : JQuery = $('<td></td>');
+        cell.append(jtf);
+        row.append(cell);
+        group2.append(row);
+
+        if (isForeign)
+            group2.append(`<tr><td id="${kbdRowId}" style="text-align:right;"></td></tr>`);
+    }
+    
     //------------------------------------------------------------------------------------------
     // generateStringPanel method
     //
@@ -1329,46 +1375,21 @@ abstract class PanelTemplMql {
         let group2 : JQuery = $('<table></table>');
 
         for (let i=0; i<sfh.values.length; ++i) {
-            let jtf : JQuery =
-                isForeign
-                ? $(`<input class="${charset.foreignClass}" type="text" size="20" id="${this.name_prefix}_${key}_input${+i+1}">`)
-                : $('<input type="text" size="20">');
-
-            if (sfh.values[i])
-                jtf.val(sfh.values[i]);
-
-            let kbdRowId : string; // ID of row containing virtual keyboard
-            if (isForeign) {
-                kbdRowId = `${this.name_prefix}_${key}_row${+i+1}`;
-
-                // Move virtual keyboard when an input field gets focus
-                jtf.on('focus', null,
-                       {kbdRowId : kbdRowId, sfh: sfh, i: i}, // Event data
-                       (e : JQueryEventObject) => {
-                           $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
-                           VirtualKeyboard.attachInput(e.currentTarget);
-
-                           // Monitor changes to the input field
-                           this.monitorChange(<JQuery<HTMLElement>>$(e.currentTarget), e.data.sfh, e.data.i);
-                       });
-            }
-
-            // Set handler for direct field changes
-            jtf.on('keyup', null,
-                   {sfh: sfh, i: i}, // Event data
-                   $.proxy(this.stringTextModifiedListener,this));
-
-            let row  : JQuery = $('<tr></tr>');
-            let cell : JQuery = $('<td></td>');
-            cell.append(jtf);
-            row.append(cell);
-            group2.append(row);
-
-            if (isForeign)
-                group2.append(`<tr><td id="${kbdRowId}" style="text-align:right;"></td></tr>`);
+            this.addOneStringValue(key, group2, sfh, isForeign, i);
         }
         this.groups[key].append(group2);
         this.handlers.push(sfh);
+
+
+        ////////////////////////////////////////////////////////////
+        // The 'Add entry' button
+        let addEntry = $('<button type="button">' + localize('add_entry_button') + '</button>');
+        this.groups[key].append(addEntry);
+        
+        addEntry.click(() => {
+            this.addOneStringValue(key, group2, sfh, isForeign, -1);
+        });
+
     }
 
     //------------------------------------------------------------------------------------------

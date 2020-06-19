@@ -16,6 +16,10 @@ $comment['4th_choice'] = "";
 $format['4th_choice'] = "";
 $use_textarea['4th_choice'] = false;
 
+$comment['add_entry_button'] = "";
+$format['add_entry_button'] = "";
+$use_textarea['add_entry_button'] = false;
+
 $comment['badname'] = "";
 $format['badname'] = "";
 $use_textarea['badname'] = false;
