@@ -406,7 +406,17 @@ class Ctrl_exams extends MY_Controller
     public function delete_exam(){
         $this->mod_users->check_teacher();
 
+        $exname = $_POST["exname"];
 
+        # Remove exam folder.
+        $expath = '/var/www/BibleOL/exam/'.$exname;
+        array_map('unlink', glob("$expath/*.*"));
+        rmdir($expath);
+
+        # Remove exam from database.
+        $this->db->delete('bol_exam', array('exam_name' => $exname));
+
+        redirect("/exams");
     }
 
 
