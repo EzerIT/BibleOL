@@ -131,12 +131,6 @@ class Ctrl_exams extends MY_Controller
         $root->appendChild($teacher_id);
         $description = $dom->createElement('description', 'Description');
         $root->appendChild($description);
-        $plan_start_node = $dom->createElement('plan_start', $now);
-        $root->appendChild($plan_start_node);
-        $plan_end_node = $dom->createElement('plan_end', $now);
-        $root->appendChild($plan_end_node);
-        $time_node = $dom->createElement('time', '0');
-        $root->appendChild($time_node);
 
 
         // Add exercise tags to XML file
@@ -412,7 +406,7 @@ class Ctrl_exams extends MY_Controller
     public function delete_exam(){
         $this->mod_users->check_teacher();
 
-        
+
     }
 
 
