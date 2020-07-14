@@ -353,55 +353,6 @@ class Ctrl_exams extends MY_Controller
     }
 
 
-    public function active_exams()
-    {
-      $this->mod_users->check_teacher();
-
-      $exams_per_page = $this->config->item('exams_per_page');
-      $exam_count = $this->mod_exams->count_exams();
-      $page_count = intval(ceil($exam_count/$exams_per_page));
-
-      $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
-      if ($offset>=$page_count)
-          $offset = $page_count-1;
-      if ($offset<0)
-          $offset = 0;
-
-      if (isset($_GET['orderby']) && in_array($_GET['orderby'],
-                                              array('exam_name', 'owner'), true))
-          $orderby = $_GET['orderby'];
-      else
-          $orderby = 'exam_name';
-
-      $sortorder = isset($_GET['desc']) ? 'desc' : 'asc';
-
-      $allexams = $this->mod_exams->get_all_exams_part($exams_per_page,$offset*$exams_per_page,$orderby,$sortorder);
-
-      $this->load->view('view_top1', array('title' => $this->lang->line('exam_mgmt')));
-      $this->load->view('view_top2');
-      $this->load->view('view_menu_bar', array('langselect' => true));
-      $this->load->view('view_confirm_dialog');
-      $this->load->view('view_alert_dialog');
-
-      $center_text = $this->load->view('view_manage_exams',
-                                        array(
-                                        'allexams' => $allexams,
-                                        'exam_count' => $exam_count,
-                                        'exams_per_page' => $exams_per_page,
-                                        'offset' => $offset,
-                                        'orderby' => $orderby,
-                                        'page_count' => $page_count,
-                                        'sortorder' => $sortorder
-                                      ),
-                                      true
-      );
-
-      $this->load->view('view_main_page', array('left_title' => $this->lang->line('exam_mgmt'),
-                                            'left' => $this->lang->line('exam_mgmt_description'),
-                                            'center' => $center_text));
-      $this->load->view('view_bottom');
-    }
-
     // DELETE EXISTING EXAM
     public function delete_exam(){
         $this->mod_users->check_teacher();
@@ -457,7 +408,7 @@ class Ctrl_exams extends MY_Controller
     }
 
 
-    public function take_exam()
+    public function active_exams()
     {
         $this->load->model('mod_askemdros');
 

@@ -72,7 +72,7 @@ on the page.
             <td class="leftalign"><?= $this->mod_users->user_full_name($exam->ownerid) ?></td>
             <td class="leftalign">
                 <a class="badge badge-primary" href="/exams/edit_exam?exam=<?= $exam->exam_name ?>"><?= $this->lang->line('edit_exam') ?></a>
-                <a class="badge badge-primary" href="/exams/take_exam"><?= $this->lang->line('take_exam') ?></a>
+                <a class="badge badge-primary" href="/exams/active_exams"><?= $this->lang->line('take_exam') ?></a>
                 <a class="badge badge-danger" href="#" onclick="dltexam('<?= $exam->exam_name ?>');"><?= $this->lang->line('delete_exam') ?></a>
             </td>
         </tr>
@@ -89,13 +89,60 @@ This button redirects to the exam creation page.
 </div>
 
 
+<!-- Take Exam Modal -->
+<div class="modal fade" id="take-exam-dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header justify-content-between">
+        <div><h4 class="modal-title"><?= $this->lang->line('take_exam') ?></h4></div>
+        <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger" id="take-error" role="alert">
+          <span class="fas fa-exclamation-circle" aria-hidden="true"></span>
+          <span id="take-error-text"></span>
+        </div>
+
+        <p>
+          Take exam dialog.
+        </p>
+
+        <form id="take-form" action="<?= site_url('exams/take_exam') ?>" method="post">
+          <p>Start date</p>
+          <input type="date" name="start_date">
+          <br>
+          <p>Start time</p>
+          <input type="time" name="start_time">
+          <br>
+          <br>
+          <p>End date</p>
+          <input type="date" name="end_date">
+          <br>
+          <p>End time</p>
+          <br>
+          <input type="time" name="end_time">
+          <br>
+          <br>
+          <p>Duration</p>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="take-dialog-ok" class="btn btn-primary"><?= $this->lang->line('OK_button') ?></button>
+        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- Delete Exam Modal -->
 <div class="modal fade" id="delete-exam-dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header justify-content-between">
         <div><h4 class="modal-title"><?= $this->lang->line('delete_exam') ?></h4></div>
-        <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</div></button>
+        <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
       </div>
       <div class="modal-body">
         <div class="alert alert-danger" id="delete-error" role="alert">
