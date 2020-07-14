@@ -72,7 +72,7 @@ on the page.
             <td class="leftalign"><?= $this->mod_users->user_full_name($exam->ownerid) ?></td>
             <td class="leftalign">
                 <a class="badge badge-primary" href="/exams/edit_exam?exam=<?= $exam->exam_name ?>"><?= $this->lang->line('edit_exam') ?></a>
-                <a class="badge badge-primary" href="/exams/active_exams"><?= $this->lang->line('take_exam') ?></a>
+                <a class="badge badge-primary" href="#" onclick="tkexam('<?= $exam->exam_name ?>');"><?= $this->lang->line('take_exam') ?></a>
                 <a class="badge badge-danger" href="#" onclick="dltexam('<?= $exam->exam_name ?>');"><?= $this->lang->line('delete_exam') ?></a>
             </td>
         </tr>
@@ -108,19 +108,14 @@ This button redirects to the exam creation page.
         </p>
 
         <form id="take-form" action="<?= site_url('exams/take_exam') ?>" method="post">
-          <p>Start date</p>
-          <input type="date" name="start_date">
+          <?= $this->lang->line('start_date') ?>: <input type="date" name="start_date">
           <br>
-          <p>Start time</p>
-          <input type="time" name="start_time">
+          <?= $this->lang->line('start_time') ?>: <input type="time" name="start_time">
           <br>
           <br>
-          <p>End date</p>
-          <input type="date" name="end_date">
+          <?= $this->lang->line('end_date') ?>: <input type="date" name="end_date">
           <br>
-          <p>End time</p>
-          <br>
-          <input type="time" name="end_time">
+          <?= $this->lang->line('end_time') ?>: <input type="time" name="end_time">
           <br>
           <br>
           <p>Duration</p>
@@ -134,6 +129,20 @@ This button redirects to the exam creation page.
     </div>
   </div>
 </div>
+
+
+<script>
+  function tkexam(examname) {
+    $('#take-error').hide();
+    $("#take-exam-dialog").modal("show");
+  }
+
+  $(function() {
+    $('#take-dialog-ok').click(function() {
+      $('#take-form').submit();
+    })
+  })
+</script>
 
 
 <!-- Delete Exam Modal -->

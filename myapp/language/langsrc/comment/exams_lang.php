@@ -24,6 +24,14 @@ $comment['edit_exam_description'] = "";
 $format['edit_exam_description'] = "";
 $use_textarea['edit_exam_description'] = false;
 
+$comment['end_date'] = "";
+$format['end_date'] = "";
+$use_textarea['end_date'] = false;
+
+$comment['end_time'] = "";
+$format['end_time'] = "";
+$use_textarea['end_time'] = false;
+
 $comment['exam_mgmt'] = "";
 $format['exam_mgmt'] = "";
 $use_textarea['exam_mgmt'] = false;
@@ -55,6 +63,14 @@ $use_textarea['planned_end'] = false;
 $comment['planned_start'] = "";
 $format['planned_start'] = "";
 $use_textarea['planned_start'] = false;
+
+$comment['start_date'] = "";
+$format['start_date'] = "";
+$use_textarea['start_date'] = false;
+
+$comment['start_time'] = "";
+$format['start_time'] = "";
+$use_textarea['start_time'] = false;
 
 $comment['take_exam'] = "";
 $format['take_exam'] = "";
