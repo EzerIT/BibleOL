@@ -46,6 +46,7 @@ if(isset($_POST["submit"])) {
 
 	# Rewrite the config file with the updated version.
 	$xml->asXML($full_name . "/config.xml");
+	
 	$data = array(
 		'exam_name' => $xml->examname,
 		'ownerid' => $xml->teacher_id,

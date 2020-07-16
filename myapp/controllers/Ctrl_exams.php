@@ -50,65 +50,6 @@ class Ctrl_exams extends MY_Controller
         return $results;
     }
 
-    /**
-     * First checks if the user is a teacher
-     * Creates a new directory with the same name as the exam
-     * Copies exercises that are currently in exercise_list to the new directory
-     */
-    public function create_exam()
-    {
-        try {
-            $this->mod_users->check_teacher();
-
-
-
-            if (isset($_POST['create_exam'])) {
-                $create = trim($_POST['create_exam']);
-
-                if (preg_match('|[/?*;{}"\'\\\\]|', $create)) {
-                    throw new DataException($this->lang->line('illegal_char_folder_name'));
-                }
-
-                $exercise_lst = $_POST['exercise_list'];
-
-                $base_pth = '/var/www/BibleOL/';
-
-                $exam_loc = $base_pth.'exam/'.$create;
-
-                // chmod 7-7 required
-                mkdir($exam_loc);
-
-                $ex_ar = explode(',', $exercise_lst);
-
-
-                $ex_pth = $base_pth . 'quizzes';
-
-                foreach ($ex_ar as $key => $exrcs) {
-                    $exrcs = str_replace('"', '', $exrcs);
-                    $org_pth = $ex_pth . "/" . $exrcs;
-                    if (($exrcs) != 'undefined') {
-                        $new_pth = $exam_loc . "/" . basename($exrcs);
-                        copy($org_pth, $new_pth);
-                    }
-                }
-
-                $this -> create_config_file($create, $ex_ar);
-
-                $user_id = intval($this->session->userdata('ol_user'));  // Sets $user_id to 0 if userdata('ol_user') is not set
-
-                $query = $this->db->where('id', $user_id)->get('user');
-                $q = $this->mod_users->check_teacher;
-
-                $txt = gettype($q);
-                fwrite($test_file, $txt);
-                fclose($test_file);
-
-                redirect("/exams/edit_exam?exam=$create");
-            }
-        } catch (DataException $e) {
-            $this->error_view($e->getMessage(), $this->lang->line('illegal_char_folder_name'));
-        }
-    }
 
     // Create xml configuration file
     public function create_config_file($examname, array $exercises)
@@ -156,7 +97,70 @@ class Ctrl_exams extends MY_Controller
         }
 
         $dom->save('/var/www/BibleOL/exam/'.$examname.'/config.xml');
+        return $dom->saveXML();
     }
+
+
+    /**
+     * First checks if the user is a teacher
+     * Creates a new directory with the same name as the exam
+     * Copies exercises that are currently in exercise_list to the new directory
+     */
+    public function create_exam()
+    {
+        try {
+            $this->mod_users->check_teacher();
+
+            if (isset($_POST['create_exam'])) {
+                $create = trim($_POST['create_exam']);
+
+                if (preg_match('|[/?*;{}"\'\\\\]|', $create)) {
+                    throw new DataException($this->lang->line('illegal_char_folder_name'));
+                }
+
+                $exercise_lst = $_POST['exercise_list'];
+
+                $base_pth = '/var/www/BibleOL/';
+
+                $exam_loc = $base_pth.'exam/'.$create;
+
+                // chmod 7-7 required
+                mkdir($exam_loc);
+
+                $ex_ar = explode(',', $exercise_lst);
+
+
+                $ex_pth = $base_pth . 'quizzes';
+
+                foreach ($ex_ar as $key => $exrcs) {
+                    $exrcs = str_replace('"', '', $exrcs);
+                    $org_pth = $ex_pth . "/" . $exrcs;
+                    if (($exrcs) != 'undefined') {
+                        $new_pth = $exam_loc . "/" . basename($exrcs);
+                        copy($org_pth, $new_pth);
+                    }
+                }
+
+                $this->create_config_file($create, $ex_ar);
+
+                $xml = simplexml_load_file($exam_loc . "/config.xml") or die("error");
+
+              	$data = array(
+              		'exam_name' => $create,
+              		'ownerid' => $this->mod_users->my_id(),
+              		'pathname' => 'exam/' . $create,
+              		'examcode' => $xml->asXML(),
+              		'examcodehash' => hash("md5", $xml)
+              	);
+                $this->db->insert('bol_exam', $data);
+
+                redirect("/exams/edit_exam?exam=$create");
+            }
+        } catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('illegal_char_folder_name'));
+        }
+    }
+
 
     /**
      * Stores all elements of a directory in an array
