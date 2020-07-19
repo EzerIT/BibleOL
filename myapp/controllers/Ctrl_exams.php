@@ -9,6 +9,7 @@ class Ctrl_exams extends MY_Controller
         parent::__construct();
 
         $this->lang->load('exams', $this->language);
+        $this->load->model('mod_classes');
         $this->load->model('mod_exams');
         $this->load->model('mod_quizpath');
         $this->load->helper('varset');
@@ -34,20 +35,44 @@ class Ctrl_exams extends MY_Controller
         exit();
     }
 
-    public function getDirFolders($dir, &$results = array())
+
+    public function active_exams()
     {
-        $files = scandir($dir);
+      try {
+        $this->mod_users->check_teacher();
 
-        foreach ($files as $key => $value) {
-            $path = realpath($dir.DIRECTORY_SEPARATOR.$value);
-            if (!is_dir($path)) {
-                $results[] = $path;
-            } elseif ($value != "." && $value != "..") {
-                $results[] = $path;
-            }
-        }
+        $this->load->model('mod_askemdros');
 
-        return $results;
+        $javascripts = array('jstree/jquery.jstree.js',
+                          'ckeditor/ckeditor.js',
+                          'ckeditor/adapters/jquery.js',
+                          'js/editquiz.js');
+
+        $this->load->view('view_top1', array('title' => $this->lang->line('take_exam'),
+                                                            'css_list' => array('styles/jstree.css'),
+                                                            'js_list' => $javascripts));
+        $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => false));
+        $this->load->view('view_alert_dialog');
+
+        // Main view of the page.
+        $center_text = $this->load->view(
+            'view_active_exams',
+            array(
+
+            ),
+            true
+        );
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line('take_exam'),
+            'left' => $this->lang->line('take_exam_description'),
+            'center' => $center_text
+        ));
+
+        $this->load->view('view_bottom');
+      } catch (DataException $e) {
+        $this->error_view($e->getMessage(), $this->lang->line('exam_mgmt'));
+      }
     }
 
 
@@ -162,6 +187,100 @@ class Ctrl_exams extends MY_Controller
     }
 
 
+    // DELETE EXISTING EXAM
+    public function delete_exam(){
+        $this->mod_users->check_teacher();
+
+        $exname = $_POST["exname"];
+
+        # Remove exam folder.
+        $expath = '/var/www/BibleOL/exam/'.$exname;
+        array_map('unlink', glob("$expath/*.*"));
+        rmdir($expath);
+
+        # Remove exam from database.
+        $this->db->delete('bol_exam', array('exam_name' => $exname));
+
+        redirect("/exams");
+    }
+
+
+    // EDIT EXISTING EXAM
+    // Also used in exam creation.
+    public function edit_exam()
+    {
+      try {
+        $this->mod_users->check_teacher();
+
+        $this->load->model('mod_askemdros');
+        $this->load->model('mod_localize');
+
+        $javascripts = array('jstree/jquery.jstree.js',
+                                 'ckeditor/ckeditor.js',
+                                 'ckeditor/adapters/jquery.js',
+                                 'js/editquiz.js');
+        // View
+        $this->load->view('view_top1', array('title' => $this->lang->line('edit_exam'),
+                                                             'css_list' => array('styles/jstree.css'),
+                                                             'js_list' => $javascripts));
+        $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => false));
+        $this->load->view('view_alert_dialog');
+
+        // Main view of the page.
+        $center_text = $this->load->view(
+                'view_edit_exam',
+                array(
+                                                                'exam' => basename($_GET['exam'])),
+                true
+            );
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_exam'),
+                                                                    'left' => $this->lang->line('edit_exam_description'),
+
+                                                                    'center' => $center_text));
+        $this->load->view('view_bottom');
+      } catch (DataException $e) {
+        $this->error_view($e->getMessage(), $this->lang->line('exam_mgmt'));
+      }
+    }
+
+
+    //Get all elements of a folder only one level down
+    public function getChildren($dir)
+    {
+        $results = array();
+        $files = scandir($dir);
+
+        foreach ($files as $key => $value) {
+            $path = realpath();
+        }
+
+        return $results;
+    }
+
+
+    public function getDirContents($dir, &$results = array())
+    {
+        $files = scandir($dir);
+
+        foreach ($files as $key => $value) {
+            $path = realpath($dir.DIRECTORY_SEPARATOR.$value);
+            if (substr(basename($path), 0, 1)=='.') {
+                continue;
+            }
+            if (!is_dir($path)) {
+                $results[] = $path;
+            } elseif ($value != "." && $value != "..") {
+                $this -> getDirContents($path, $results);
+                $results[] = $path;
+            }
+        }
+
+        return $results;
+    }
+
+
     /**
      * Stores all elements of a directory in an array
      * First element of all arrays is always the name of the directory itself
@@ -192,37 +311,17 @@ class Ctrl_exams extends MY_Controller
     }
 
 
-    public function getDirContents($dir, &$results = array())
+    public function getDirFolders($dir, &$results = array())
     {
         $files = scandir($dir);
 
         foreach ($files as $key => $value) {
             $path = realpath($dir.DIRECTORY_SEPARATOR.$value);
-            if (substr(basename($path), 0, 1)=='.') {
-                continue;
-            }
             if (!is_dir($path)) {
                 $results[] = $path;
             } elseif ($value != "." && $value != "..") {
-                $this -> getDirContents($path, $results);
                 $results[] = $path;
             }
-        }
-
-        return $results;
-    }
-
-
-
-
-    //Get all elements of a folder only one level down
-    public function getChildren($dir)
-    {
-        $results = array();
-        $files = scandir($dir);
-
-        foreach ($files as $key => $value) {
-            $path = realpath();
         }
 
         return $results;
@@ -245,9 +344,64 @@ class Ctrl_exams extends MY_Controller
     }
 
 
+    public function manage_exams()
+    {
+        $this->mod_users->check_teacher();
+
+        $exams_per_page = $this->config->item('exams_per_page');
+        $exam_count = $this->mod_exams->count_exams();
+        $page_count = intval(ceil($exam_count/$exams_per_page));
+
+        $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+        if ($offset>=$page_count)
+            $offset = $page_count-1;
+        if ($offset<0)
+            $offset = 0;
+
+        if (isset($_GET['orderby']) && in_array($_GET['orderby'],
+                                                array('exam_name', 'owner'), true))
+            $orderby = $_GET['orderby'];
+        else
+            $orderby = 'exam_name';
+
+        $sortorder = isset($_GET['desc']) ? 'desc' : 'asc';
+
+        $allexams = $this->mod_exams->get_all_exams_part($exams_per_page,$offset*$exams_per_page,$orderby,$sortorder);
+        $name_owned_classes = $this->mod_classes->get_named_classes_owned(false);
+
+        $this->load->view('view_top1', array('title' => $this->lang->line('exam_mgmt')));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => true));
+        $this->load->view('view_confirm_dialog');
+        $this->load->view('view_alert_dialog');
+
+        $center_text = $this->load->view('view_manage_exams',
+                                          array(
+                                          'allexams' => $allexams,
+                                          'exam_count' => $exam_count,
+                                          'exams_per_page' => $exams_per_page,
+                                          'n_o_c' => $name_owned_classes,
+                                          'offset' => $offset,
+                                          'orderby' => $orderby,
+                                          'page_count' => $page_count,
+                                          'sortorder' => $sortorder
+                                        ),
+                                        true
+        );
+
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line('exam_mgmt'),
+                                              'left' => $this->lang->line('exam_mgmt_description'),
+                                              'center' => $center_text));
+        $this->load->view('view_bottom');
+    }
+
+
     // CREATE A NEW EXAM
     public function new_exam()
     {
+      try {
+        $this->mod_users->check_teacher();
+
         $this->lang->load('owner', $this->language);
         $this->lang->load('exams', $this->language);
 
@@ -291,7 +445,56 @@ class Ctrl_exams extends MY_Controller
                                                   'left' => $this->lang->line('create_exam_description'),
                                                   'center' => $center_text));
         $this->load->view('view_bottom');
+      } catch (DataException $e) {
+        $this->error_view($e->getMessage(), $this->lang->line('exam_mgmt'));
+      }
     }
+
+
+    // Process take exam form when submitted on
+    // manage_exams page.
+    public function take_exam()
+    {
+      try {
+        $this->mod_users->check_teacher();
+
+        echo "Redirecting...";
+        var_dump($_GET);
+
+        $exam_name = $_GET["exname"];
+        // Get class id from class name.
+        $class_name = $_GET["class_select"];
+        $query = $this->db->get_where('class', array('classname' => $class_name));
+        $class_id = $query->row()->id;
+        $exam_start_date = $_GET["start_date"];
+        $exam_end_date = $_GET["end_date"];
+        $exam_length = $_GET["duration"];
+        $exam_start_time = $_GET["start_time"];
+        $exam_end_time = $_GET["end_time"];
+
+        $data = array(
+          'exam_name' => $exam_name,
+          'class_id' => $class_id,
+          'exam_start_date' => $exam_start_date,
+          'exam_end_date' => $exam_end_date,
+          'exam_length' => $exam_length,
+          'exam_start_time' => $exam_start_time,
+          'exam_end_time' => $exam_end_time
+        );
+
+
+
+        $this->db->insert('exam_active', $data);
+
+        redirect("/exams/active_exams");
+
+
+      } catch (DataException $e) {
+        $this->error_view($e->getMessage(), $this->lang->line('exam_mgmt'));
+      }
+
+    }
+
 
     public function show_files()
     {
@@ -307,141 +510,4 @@ class Ctrl_exams extends MY_Controller
     }
 
 
-    public function manage_exams()
-    {
-        $this->mod_users->check_teacher();
-
-        $exams_per_page = $this->config->item('exams_per_page');
-        $exam_count = $this->mod_exams->count_exams();
-        $page_count = intval(ceil($exam_count/$exams_per_page));
-
-        $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
-        if ($offset>=$page_count)
-            $offset = $page_count-1;
-        if ($offset<0)
-            $offset = 0;
-
-        if (isset($_GET['orderby']) && in_array($_GET['orderby'],
-                                                array('exam_name', 'owner'), true))
-            $orderby = $_GET['orderby'];
-        else
-            $orderby = 'exam_name';
-
-        $sortorder = isset($_GET['desc']) ? 'desc' : 'asc';
-
-        $allexams = $this->mod_exams->get_all_exams_part($exams_per_page,$offset*$exams_per_page,$orderby,$sortorder);
-
-        $this->load->view('view_top1', array('title' => $this->lang->line('exam_mgmt')));
-        $this->load->view('view_top2');
-        $this->load->view('view_menu_bar', array('langselect' => true));
-        $this->load->view('view_confirm_dialog');
-        $this->load->view('view_alert_dialog');
-
-        $center_text = $this->load->view('view_manage_exams',
-                                          array(
-                                          'allexams' => $allexams,
-                                          'exam_count' => $exam_count,
-                                          'exams_per_page' => $exams_per_page,
-                                          'offset' => $offset,
-                                          'orderby' => $orderby,
-                                          'page_count' => $page_count,
-                                          'sortorder' => $sortorder
-                                        ),
-                                        true
-        );
-
-        $this->load->view('view_main_page', array('left_title' => $this->lang->line('exam_mgmt'),
-                                              'left' => $this->lang->line('exam_mgmt_description'),
-                                              'center' => $center_text));
-        $this->load->view('view_bottom');
-    }
-
-
-    // DELETE EXISTING EXAM
-    public function delete_exam(){
-        $this->mod_users->check_teacher();
-
-        $exname = $_POST["exname"];
-
-        # Remove exam folder.
-        $expath = '/var/www/BibleOL/exam/'.$exname;
-        array_map('unlink', glob("$expath/*.*"));
-        rmdir($expath);
-
-        # Remove exam from database.
-        $this->db->delete('bol_exam', array('exam_name' => $exname));
-
-        redirect("/exams");
-    }
-
-
-    // EDIT EXISTING EXAM
-    // Also used in exam creation.
-    public function edit_exam()
-    {
-        $this->mod_users->check_teacher();
-
-        $this->load->model('mod_askemdros');
-        $this->load->model('mod_localize');
-
-        $javascripts = array('jstree/jquery.jstree.js',
-                                 'ckeditor/ckeditor.js',
-                                 'ckeditor/adapters/jquery.js',
-                                 'js/editquiz.js');
-        // View
-        $this->load->view('view_top1', array('title' => $this->lang->line('edit_exam'),
-                                                             'css_list' => array('styles/jstree.css'),
-                                                             'js_list' => $javascripts));
-        $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
-        $this->load->view('view_top2');
-        $this->load->view('view_menu_bar', array('langselect' => false));
-        $this->load->view('view_alert_dialog');
-
-        // Main view of the page.
-        $center_text = $this->load->view(
-                'view_edit_exam',
-                array(
-                                                                'exam' => basename($_GET['exam'])),
-                true
-            );
-        $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_exam'),
-                                                                    'left' => $this->lang->line('edit_exam_description'),
-
-                                                                    'center' => $center_text));
-        $this->load->view('view_bottom');
-    }
-
-
-    public function active_exams()
-    {
-        $this->load->model('mod_askemdros');
-
-        $javascripts = array('jstree/jquery.jstree.js',
-                          'ckeditor/ckeditor.js',
-                          'ckeditor/adapters/jquery.js',
-                          'js/editquiz.js');
-
-        $this->load->view('view_top1', array('title' => $this->lang->line('take_exam'),
-                                                            'css_list' => array('styles/jstree.css'),
-                                                            'js_list' => $javascripts));
-        $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
-        $this->load->view('view_top2');
-        $this->load->view('view_menu_bar', array('langselect' => false));
-        $this->load->view('view_alert_dialog');
-
-        // Main view of the page.
-        $center_text = $this->load->view(
-            'view_active_exams',
-            array(
-
-            ),
-            true
-        );
-        $this->load->view('view_main_page', array('left_title' => $this->lang->line('take_exam'),
-            'left' => $this->lang->line('take_exam_description'),
-            'center' => $center_text
-        ));
-
-        $this->load->view('view_bottom');
-    }
 }

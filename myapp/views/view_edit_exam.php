@@ -18,6 +18,9 @@ $datetime_format = "/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$/";
 # Execute once form has been submitted.
 # In this case it would be when the changes
 # are saved.
+# NEED FIX
+# This section should be taken care of in
+# a separate file (exams/save_exam.php).
 if(isset($_POST["submit"])) {
 	# Store all exam feature values in an array.
 	foreach($_POST as $key => $value){
@@ -46,7 +49,7 @@ if(isset($_POST["submit"])) {
 
 	# Rewrite the config file with the updated version.
 	$xml->asXML($full_name . "/config.xml");
-	
+
 	$data = array(
 		'exam_name' => $xml->examname,
 		'ownerid' => $xml->teacher_id,

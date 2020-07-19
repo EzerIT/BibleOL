@@ -104,11 +104,15 @@ This button redirects to the exam creation page.
           <p id="take-error-text"></p>
         </div>
 
-        <p>
-          Take exam dialog.
-        </p>
-
-        <form id="take-form" action="<?= site_url('exams/active_exams') ?>" method="get">
+        <form id="take-form" action="<?= site_url('exams/take_exam') ?>" method="get">
+          <input type="hidden" name="exname" id="take-examname">
+          <?= $this->lang->line('class') ?>: <select id="class_select" name="class_select">
+            <?php foreach ($n_o_c as $owned_class): ?>
+              <option><?= $owned_class->classname ?></option>
+            <?php endforeach; ?>
+          </select>
+          <br>
+          <br>
           <?= $this->lang->line('start_date') ?>: <input type="date" id="date1" name="start_date" required>
           <br>
           <?= $this->lang->line('start_time') ?>: <input type="time" id="time1" name="start_time" required>
@@ -135,20 +139,23 @@ This button redirects to the exam creation page.
 <script>
   function tkexam(examname) {
     $('#take-error').hide();
+    $('#take-examname').attr('value', examname);
     let tomo = new Date();
     tomo.setDate(tomo.getDate() + 1);
     document.getElementById('date1').valueAsDate = tomo;
     document.getElementById('time1').defaultValue = "18:00";
     document.getElementById('date2').valueAsDate = tomo;
     document.getElementById('time2').defaultValue = "20:00";
-    document.getElementById('duration').placeholder = 90;
+    document.getElementById('duration').defaultValue = 90;
+    document.getElementById('duration').min = 0;
     $("#take-exam-dialog").modal("show");
   }
 
   $(function() {
 
     $('#take-dialog-ok').click(function() {
-      if (document.getElementById('duration').value){
+      let duration_value = document.getElementById('duration').value;
+      if (duration_value && duration_value >= 0){
         $('#take-form').submit();
       }
     })
