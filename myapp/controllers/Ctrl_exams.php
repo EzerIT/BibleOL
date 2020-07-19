@@ -431,7 +431,7 @@ class Ctrl_exams extends MY_Controller
 
         // Main view of the page.
         $center_text = $this->load->view(
-            'view_take_exam',
+            'view_active_exams',
             array(
 
             ),

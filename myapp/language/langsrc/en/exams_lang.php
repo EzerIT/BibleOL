@@ -4,6 +4,7 @@ $lang['create_exam'] = 'Create Exam';
 $lang['create_exam_description'] = 'Here you can select which exercises you want to include in the new exam.';
 $lang['create_new_exam_button'] = 'Create New Exam';
 $lang['delete_exam'] = 'Delete Exam';
+$lang['duration'] = 'Duration (minutes)';
 $lang['edit_exam'] = 'Edit Exam';
 $lang['edit_exam_description'] = 'Here you can set the parameters for each exercise.';
 $lang['end_date'] = 'End date';

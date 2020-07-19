@@ -16,6 +16,10 @@ $comment['delete_exam'] = "";
 $format['delete_exam'] = "";
 $use_textarea['delete_exam'] = false;
 
+$comment['duration'] = "";
+$format['duration'] = "";
+$use_textarea['duration'] = false;
+
 $comment['edit_exam'] = "";
 $format['edit_exam'] = "";
 $use_textarea['edit_exam'] = false;

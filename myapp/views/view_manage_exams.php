@@ -60,6 +60,7 @@ on the page.
 
 
 <div class="table-responsive">
+  <p id="test"></p>
 <table class="type2 table table-striped">
     <tr>
         <?= make_exam_header($this, 'exam_name', 'examname', $sortorder, $orderby) ?>
@@ -100,25 +101,25 @@ This button redirects to the exam creation page.
       <div class="modal-body">
         <div class="alert alert-danger" id="take-error" role="alert">
           <span class="fas fa-exclamation-circle" aria-hidden="true"></span>
-          <span id="take-error-text"></span>
+          <p id="take-error-text"></p>
         </div>
 
         <p>
           Take exam dialog.
         </p>
 
-        <form id="take-form" action="<?= site_url('exams/take_exam') ?>" method="post">
-          <?= $this->lang->line('start_date') ?>: <input type="date" name="start_date">
+        <form id="take-form" action="<?= site_url('exams/active_exams') ?>" method="get">
+          <?= $this->lang->line('start_date') ?>: <input type="date" id="date1" name="start_date" required>
           <br>
-          <?= $this->lang->line('start_time') ?>: <input type="time" name="start_time">
-          <br>
-          <br>
-          <?= $this->lang->line('end_date') ?>: <input type="date" name="end_date">
-          <br>
-          <?= $this->lang->line('end_time') ?>: <input type="time" name="end_time">
+          <?= $this->lang->line('start_time') ?>: <input type="time" id="time1" name="start_time" required>
           <br>
           <br>
-          <p>Duration</p>
+          <?= $this->lang->line('end_date') ?>: <input type="date" id="date2" name="end_date" required>
+          <br>
+          <?= $this->lang->line('end_time') ?>: <input type="time" id="time2" name="end_time" required>
+          <br>
+          <br>
+          <?= $this->lang->line('duration') ?>: <input type="number" id="duration" name="duration" required>
         </form>
 
       </div>
@@ -134,12 +135,22 @@ This button redirects to the exam creation page.
 <script>
   function tkexam(examname) {
     $('#take-error').hide();
+    let tomo = new Date();
+    tomo.setDate(tomo.getDate() + 1);
+    document.getElementById('date1').valueAsDate = tomo;
+    document.getElementById('time1').defaultValue = "18:00";
+    document.getElementById('date2').valueAsDate = tomo;
+    document.getElementById('time2').defaultValue = "20:00";
+    document.getElementById('duration').placeholder = 90;
     $("#take-exam-dialog").modal("show");
   }
 
   $(function() {
+
     $('#take-dialog-ok').click(function() {
-      $('#take-form').submit();
+      if (document.getElementById('duration').value){
+        $('#take-form').submit();
+      }
     })
   })
 </script>
