@@ -1,10 +1,17 @@
+<?php
+foreach ($active_exams_list as $active_exam) {
+  var_dump($active_exam);
+  echo "<br>";
+}
+?>
+
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="active-tab" data-toggle="tab" href="#active_exams" role="tab" aria-controls="home" aria-selected="true">
       Active
     </a>
   </li>
-<!--  <li class="nav-item">
+  <li class="nav-item">
     <a class="nav-link" id="future-tab" data-toggle="tab" href="#future_exams" role="tab" aria-controls="profile" aria-selected="false">
       Future
     </a>
@@ -13,7 +20,7 @@
     <a class="nav-link" id="past-tab" data-toggle="tab" href="#past_exams" role="tab" aria-controls="contact" aria-selected="false">
       Past
     </a>
-  </li> -->
+  </li>
 </ul>
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="active_exams" role="tabpanel" aria-labelledby="home-tab">

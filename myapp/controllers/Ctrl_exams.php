@@ -43,6 +43,23 @@ class Ctrl_exams extends MY_Controller
 
         $this->load->model('mod_askemdros');
 
+        /* PUT IN A MODEL
+         * NEED TO CREATE Mod_exams_active
+         */
+        $teacher_id = $this->mod_users->my_id();
+        $active_exams_list = array();
+        // Get all classes teacher is owner of.
+        $class_query = $this->db->get_where('class', array('ownerid' => $teacher_id))->result();
+        foreach ($class_query as $class_row){
+          $class_id = $class_row->id;
+          $active_exam_query = $this->db->get_where('exam_active', array('class_id' => $class_id))->result();
+          foreach ($active_exam_query as $exam_row) {
+            array_push($active_exams_list, $exam_row);
+          }
+        }
+
+
+
         $javascripts = array('jstree/jquery.jstree.js',
                           'ckeditor/ckeditor.js',
                           'ckeditor/adapters/jquery.js',
@@ -60,7 +77,7 @@ class Ctrl_exams extends MY_Controller
         $center_text = $this->load->view(
             'view_active_exams',
             array(
-
+              'active_exams_list' => $active_exams_list,
             ),
             true
         );
