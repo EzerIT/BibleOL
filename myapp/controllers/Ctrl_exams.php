@@ -39,23 +39,56 @@ class Ctrl_exams extends MY_Controller
     public function active_exams()
     {
       try {
-        $this->mod_users->check_teacher();
+        $this->mod_users->is_logged_in();
 
         $this->load->model('mod_askemdros');
+
+        $exams_per_page = $this->config->item('exams_per_page');
+        $exam_count = $this->mod_exams->count_exams();
+        $page_count = intval(ceil($exam_count/$exams_per_page));
+
+        $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+        if ($offset>=$page_count)
+            $offset = $page_count-1;
+        if ($offset<0)
+            $offset = 0;
+
+        if (isset($_GET['orderby']) && in_array($_GET['orderby'],
+                                                array('exam_name', 'owner'), true))
+            $orderby = $_GET['orderby'];
+        else
+            $orderby = 'exam_name';
+
+        $sortorder = isset($_GET['desc']) ? 'desc' : 'asc';
+
 
         /* PUT IN A MODEL
          * NEED TO CREATE Mod_exams_active
          */
-        $teacher_id = $this->mod_users->my_id();
         $active_exams_list = array();
-        // Get all classes teacher is owner of.
-        $class_query = $this->db->get_where('class', array('ownerid' => $teacher_id))->result();
-        foreach ($class_query as $class_row){
-          $class_id = $class_row->id;
-          $active_exam_query = $this->db->get_where('exam_active', array('class_id' => $class_id))->result();
-          foreach ($active_exam_query as $exam_row) {
-            array_push($active_exams_list, $exam_row);
+        $future_exams_list = array();
+
+        if ($this->mod_users->is_teacher()){
+          $teacher_id = $this->mod_users->my_id();
+          // Get all classes teacher is owner of.
+          $class_query = $this->db->get_where('class', array('ownerid' => $teacher_id))->result();
+          foreach ($class_query as $class_row){
+            $class_id = $class_row->id;
+            $active_exam_query = $this->db->get_where('exam_active', array('class_id' => $class_id))->result();
+            foreach ($active_exam_query as $exam_row) {
+              if ($exam_row->exam_end_date > date('Y-m-d') ||
+                  ($exam_row->exam_end_date == date('Y-m-d') && $exam_row->exam_end_time > date('G:i'))){
+                if ($exam_row->exam_start_date < date('Y-m-d') ||
+                    ($exam_row->exam_start_date == date('Y-m-d') && $exam_row->exam_start_time <= date('G:i'))){
+                  array_push($active_exams_list, $exam_row);
+                } else {
+                  array_push($future_exams_list, $exam_row);
+                }
+              }
+            }
           }
+        } else {
+
         }
 
 
@@ -78,6 +111,11 @@ class Ctrl_exams extends MY_Controller
             'view_active_exams',
             array(
               'active_exams_list' => $active_exams_list,
+              'future_exams_list' => $future_exams_list,
+              'offset' => $offset,
+              'orderby' => $orderby,
+              'page_count' => $page_count,
+              'sortorder' => $sortorder,
             ),
             true
         );

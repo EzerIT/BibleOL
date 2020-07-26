@@ -1,10 +1,3 @@
-<?php
-foreach ($active_exams_list as $active_exam) {
-  var_dump($active_exam);
-  echo "<br>";
-}
-?>
-
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="active-tab" data-toggle="tab" href="#active_exams" role="tab" aria-controls="home" aria-selected="true">
@@ -22,17 +15,52 @@ foreach ($active_exams_list as $active_exam) {
     </a>
   </li>
 </ul>
+
+
+
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="active_exams" role="tabpanel" aria-labelledby="home-tab">
-    <p>
-      List of active exams.
-    </p>
+    <div class="table-responsive">
+      <table class="type2 table table-striped">
+        <tr>
+          <th>Class</th>
+          <th>Exam Name</th>
+          <th>End Date</th>
+          <th>End Time</th>
+        </tr>
+        <?php foreach ($active_exams_list as $exam): ?>
+          <tr>
+            <td class="leftalign"><?= $exam->class_id ?></td>
+            <td class="leftalign"><?= $exam->exam_name ?></td>
+            <td class="leftalign"><?= $exam->exam_end_date ?></td>
+            <td class="leftalign"><?= $exam->exam_end_time ?></td>
+          </tr>
+        <?php endforeach; ?>
+      </table>
+    </div>
   </div>
+
   <div class="tab-pane fade" id="future_exams" role="tabpanel" aria-labelledby="profile-tab">
-    <p>
-      List of future exams.
-    </p>
+    <div class="table-responsive">
+      <table class="type2 table table-striped">
+        <tr>
+          <th><?= $this->lang->line('class_name') ?></th>
+          <th><?= $this->lang->line('exam_name') ?></th>
+          <th><?= $this->lang->line('start_date') ?></th>
+          <th><?= $this->lang->line('start_time') ?></th>
+        </tr>
+        <?php foreach ($future_exams_list as $exam): ?>
+          <tr>
+            <td class="leftalign"><?= $exam->class_id ?></td>
+            <td class="leftalign"><?= $exam->exam_name ?></td>
+            <td class="leftalign"><?= $exam->exam_start_date ?></td>
+            <td class="leftalign"><?= $exam->exam_start_time ?></td>
+          </tr>
+        <?php endforeach; ?>
+      </table>
+    </div>
   </div>
+
   <div class="tab-pane fade" id="past_exams" role="tabpanel" aria-labelledby="contact-tab">
     <p>
       List of past exams.

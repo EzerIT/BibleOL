@@ -1,8 +1,12 @@
 <?php
 
+$comment['class_name'] = "";
+$format['class_name'] = "";
+$use_textarea['class_name'] = false;
+
 $comment['create_exam'] = "";
 $format['create_exam'] = "";
-$use_textarea['create_exam'] = "";
+$use_textarea['create_exam'] = false;
 
 $comment['create_exam_description'] = "";
 $format['create_exam_description'] = "";

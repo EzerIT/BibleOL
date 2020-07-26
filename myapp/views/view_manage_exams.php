@@ -60,25 +60,24 @@ on the page.
 
 
 <div class="table-responsive">
-  <p id="test"></p>
-<table class="type2 table table-striped">
-    <tr>
-        <?= make_exam_header($this, 'exam_name', 'examname', $sortorder, $orderby) ?>
-        <?= make_exam_header($this, 'owner', 'ownerid', $sortorder, $orderby) ?>
-        <th><?= $this->lang->line('user_operations') ?></th>
-    </tr>
-    <?php foreach ($allexams as $exam): ?>
-        <tr>
-            <td class="leftalign"><?= $exam->exam_name ?></td>
-            <td class="leftalign"><?= $this->mod_users->user_full_name($exam->ownerid) ?></td>
-            <td class="leftalign">
-                <a class="badge badge-primary" href="/exams/edit_exam?exam=<?= $exam->exam_name ?>"><?= $this->lang->line('edit_exam') ?></a>
-                <a class="badge badge-primary" href="#" onclick="tkexam('<?= $exam->exam_name ?>');"><?= $this->lang->line('take_exam') ?></a>
-                <a class="badge badge-danger" href="#" onclick="dltexam('<?= $exam->exam_name ?>');"><?= $this->lang->line('delete_exam') ?></a>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-</table>
+  <table class="type2 table table-striped">
+      <tr>
+          <?= make_exam_header($this, 'exam_name', 'examname', $sortorder, $orderby) ?>
+          <?= make_exam_header($this, 'owner', 'ownerid', $sortorder, $orderby) ?>
+          <th><?= $this->lang->line('user_operations') ?></th>
+      </tr>
+      <?php foreach ($allexams as $exam): ?>
+          <tr>
+              <td class="leftalign"><?= $exam->exam_name ?></td>
+              <td class="leftalign"><?= $this->mod_users->user_full_name($exam->ownerid) ?></td>
+              <td class="leftalign">
+                  <a class="badge badge-primary" href="/exams/edit_exam?exam=<?= $exam->exam_name ?>"><?= $this->lang->line('edit_exam') ?></a>
+                  <a class="badge badge-primary" href="#" onclick="tkexam('<?= $exam->exam_name ?>');"><?= $this->lang->line('take_exam') ?></a>
+                  <a class="badge badge-danger" href="#" onclick="dltexam('<?= $exam->exam_name ?>');"><?= $this->lang->line('delete_exam') ?></a>
+              </td>
+          </tr>
+      <?php endforeach; ?>
+  </table>
 </div>
 
 
