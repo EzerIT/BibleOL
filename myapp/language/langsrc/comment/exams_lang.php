@@ -1,5 +1,9 @@
 <?php
 
+$comment['active_exams'] = "";
+$format['active_exams'] = "";
+$use_textarea['active_exams'] = false;
+
 $comment['class_name'] = "";
 $format['class_name'] = "";
 $use_textarea['class_name'] = false;

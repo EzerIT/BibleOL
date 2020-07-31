@@ -1,5 +1,6 @@
 <?php
 
+$lang['active_exams'] = 'Active Exams';
 $lang['class_name'] = 'Class name';
 $lang['create_exam'] = 'Create Exam';
 $lang['create_exam_description'] = 'Here you can select which exercises you want to include in the new exam.';

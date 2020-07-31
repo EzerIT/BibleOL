@@ -23,10 +23,12 @@
     <div class="table-responsive">
       <table class="type2 table table-striped">
         <tr>
-          <th>Class</th>
-          <th>Exam Name</th>
-          <th>End Date</th>
-          <th>End Time</th>
+          <th><?= $this->lang->line('class_name') ?></th>
+          <th><?= $this->lang->line('exam_name') ?></th>
+          <th><?= $this->lang->line('end_date') ?></th>
+          <th><?= $this->lang->line('end_time') ?></th>
+          <th><?= $this->lang->line('duration') ?></th>
+          <th><?= $this->lang->line('user_operations') ?></th>
         </tr>
         <?php foreach ($active_exams_list as $exam): ?>
           <tr>
@@ -34,6 +36,10 @@
             <td class="leftalign"><?= $exam->exam_name ?></td>
             <td class="leftalign"><?= $exam->exam_end_date ?></td>
             <td class="leftalign"><?= $exam->exam_end_time ?></td>
+            <td class="leftalign"><?= $exam->exam_length ?></td>
+            <td class="leftalign">
+              <a class="badge badge-primary" href="#"></a>
+            </td>
           </tr>
         <?php endforeach; ?>
       </table>
@@ -48,6 +54,8 @@
           <th><?= $this->lang->line('exam_name') ?></th>
           <th><?= $this->lang->line('start_date') ?></th>
           <th><?= $this->lang->line('start_time') ?></th>
+          <th><?= $this->lang->line('duration') ?></th>
+          <th><?= $this->lang->line('user_operations') ?></th>
         </tr>
         <?php foreach ($future_exams_list as $exam): ?>
           <tr>
@@ -55,6 +63,10 @@
             <td class="leftalign"><?= $exam->exam_name ?></td>
             <td class="leftalign"><?= $exam->exam_start_date ?></td>
             <td class="leftalign"><?= $exam->exam_start_time ?></td>
+            <td class="leftalign"><?= $exam->exam_length ?></td>
+            <td class="leftalign">
+              <a class="badge badge-primary" href="#">Hi</a>
+            </td>
           </tr>
         <?php endforeach; ?>
       </table>

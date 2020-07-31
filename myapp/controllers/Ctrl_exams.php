@@ -12,6 +12,7 @@ class Ctrl_exams extends MY_Controller
         $this->load->model('mod_classes');
         $this->load->model('mod_exams');
         $this->load->model('mod_quizpath');
+        $this->load->model('mod_userclass');
         $this->load->helper('varset');
     }
 
@@ -39,7 +40,7 @@ class Ctrl_exams extends MY_Controller
     public function active_exams()
     {
       try {
-        $this->mod_users->is_logged_in();
+        if (!($this->mod_users->is_logged_in())) throw new DataException($this->lang->line('must_be_logged_in'));
 
         $this->load->model('mod_askemdros');
 
@@ -67,29 +68,30 @@ class Ctrl_exams extends MY_Controller
          */
         $active_exams_list = array();
         $future_exams_list = array();
+        $user_id = $this->mod_users->my_id();
 
-        if ($this->mod_users->is_teacher()){
-          $teacher_id = $this->mod_users->my_id();
-          // Get all classes teacher is owner of.
-          $class_query = $this->db->get_where('class', array('ownerid' => $teacher_id))->result();
-          foreach ($class_query as $class_row){
-            $class_id = $class_row->id;
-            $active_exam_query = $this->db->get_where('exam_active', array('class_id' => $class_id))->result();
-            foreach ($active_exam_query as $exam_row) {
-              if ($exam_row->exam_end_date > date('Y-m-d') ||
-                  ($exam_row->exam_end_date == date('Y-m-d') && $exam_row->exam_end_time > date('G:i'))){
-                if ($exam_row->exam_start_date < date('Y-m-d') ||
-                    ($exam_row->exam_start_date == date('Y-m-d') && $exam_row->exam_start_time <= date('G:i'))){
-                  array_push($active_exams_list, $exam_row);
-                } else {
-                  array_push($future_exams_list, $exam_row);
-                }
+        # Get classes user is part of.
+        if ($this->mod_users->is_teacher())
+          $owned_classes = $this->mod_classes->get_classes_owned();
+        else
+          $owned_classes = $this->mod_userclass->get_classes_for_user($user_id);
+
+        foreach ($owned_classes as $class_id){
+          //$class_id = $class_row->id;
+          $active_exam_query = $this->db->get_where('exam_active', array('class_id' => $class_id))->result();
+          foreach ($active_exam_query as $exam_row) {
+            if ($exam_row->exam_end_date > date('Y-m-d') ||
+                ($exam_row->exam_end_date == date('Y-m-d') && $exam_row->exam_end_time > date('G:i'))){
+              if ($exam_row->exam_start_date < date('Y-m-d') ||
+                  ($exam_row->exam_start_date == date('Y-m-d') && $exam_row->exam_start_time <= date('G:i'))){
+                array_push($active_exams_list, $exam_row);
+              } else {
+                array_push($future_exams_list, $exam_row);
               }
             }
           }
-        } else {
-
         }
+
 
 
 
@@ -98,7 +100,7 @@ class Ctrl_exams extends MY_Controller
                           'ckeditor/adapters/jquery.js',
                           'js/editquiz.js');
 
-        $this->load->view('view_top1', array('title' => $this->lang->line('take_exam'),
+        $this->load->view('view_top1', array('title' => $this->lang->line('active_exams'),
                                                             'css_list' => array('styles/jstree.css'),
                                                             'js_list' => $javascripts));
         $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
@@ -119,7 +121,7 @@ class Ctrl_exams extends MY_Controller
             ),
             true
         );
-        $this->load->view('view_main_page', array('left_title' => $this->lang->line('take_exam'),
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line('active_exams'),
             'left' => $this->lang->line('take_exam_description'),
             'center' => $center_text
         ));
