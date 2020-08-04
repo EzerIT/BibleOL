@@ -1,7 +1,11 @@
 <?php
 
-if (version_compare(PHP_VERSION, '7.0', '>='))
-    require_once('/usr/local/lib/emdros/EmdrosPHP7.php');
+if (version_compare(PHP_VERSION, '7.0', '>=')) {
+    if (file_exists('/usr/local/lib/x86_64-linux-gnu/emdros/EmdrosPHP7.php'))
+        require_once('/usr/local/lib/x86_64-linux-gnu/emdros/EmdrosPHP7.php');
+    else
+        require_once('/usr/local/lib/emdros/EmdrosPHP7.php');
+}
 else
     require_once('/usr/local/lib/emdros/EmdrosPHP.php');
 
