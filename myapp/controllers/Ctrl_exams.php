@@ -68,6 +68,7 @@ class Ctrl_exams extends MY_Controller
          */
         $active_exams_list = array();
         $future_exams_list = array();
+        $past_exams_list = array();
         $user_id = $this->mod_users->my_id();
 
         # Get classes user is part of.
@@ -88,6 +89,8 @@ class Ctrl_exams extends MY_Controller
               } else {
                 array_push($future_exams_list, $exam_row);
               }
+            } else {
+              array_push($past_exams_list, $exam_row);
             }
           }
         }
@@ -117,12 +120,13 @@ class Ctrl_exams extends MY_Controller
               'offset' => $offset,
               'orderby' => $orderby,
               'page_count' => $page_count,
+              'past_exams_list' => $past_exams_list,
               'sortorder' => $sortorder,
             ),
             true
         );
         $this->load->view('view_main_page', array('left_title' => $this->lang->line('active_exams'),
-            'left' => $this->lang->line('take_exam_description'),
+            'left' => $this->lang->line('active_exams_description'),
             'center' => $center_text
         ));
 
@@ -241,6 +245,51 @@ class Ctrl_exams extends MY_Controller
         } catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('illegal_char_folder_name'));
         }
+    }
+
+
+    // Process take exam form when submitted on
+    // manage_exams page.
+    public function create_exam_instance()
+    {
+      try {
+        $this->mod_users->check_teacher();
+
+        echo "Redirecting...";
+        var_dump($_GET);
+
+        $exam_name = $_GET["exname"];
+        // Get class id from class name.
+        $class_name = $_GET["class_select"];
+        $query = $this->db->get_where('class', array('classname' => $class_name));
+        $class_id = $query->row()->id;
+        $exam_start_date = $_GET["start_date"];
+        $exam_end_date = $_GET["end_date"];
+        $exam_length = $_GET["duration"];
+        $exam_start_time = $_GET["start_time"];
+        $exam_end_time = $_GET["end_time"];
+
+        $data = array(
+          'exam_name' => $exam_name,
+          'class_id' => $class_id,
+          'exam_start_date' => $exam_start_date,
+          'exam_end_date' => $exam_end_date,
+          'exam_length' => $exam_length,
+          'exam_start_time' => $exam_start_time,
+          'exam_end_time' => $exam_end_time
+        );
+
+
+
+        $this->db->insert('exam_active', $data);
+
+        redirect("/exams/active_exams");
+
+
+      } catch (DataException $e) {
+        $this->error_view($e->getMessage(), $this->lang->line('exam_mgmt'));
+      }
+
     }
 
 
@@ -508,48 +557,51 @@ class Ctrl_exams extends MY_Controller
     }
 
 
-    // Process take exam form when submitted on
-    // manage_exams page.
-    public function take_exam()
-    {
+    public function take_exam(){
       try {
-        $this->mod_users->check_teacher();
+        $this->mod_users->is_logged_in();
 
-        echo "Redirecting...";
-        var_dump($_GET);
+        $query = $this->db->get_where('bol_exam', array('exam_name' => $_GET['exam']));
+        $examcode = $query->row()->examcode;
+        $xml = simplexml_load_string($examcode);
+        $exercises = array();
+        foreach ($xml->exercise as $exercise) {
+          array_push($exercises, $exercise->exercisename);
+        }
 
-        $exam_name = $_GET["exname"];
-        // Get class id from class name.
-        $class_name = $_GET["class_select"];
-        $query = $this->db->get_where('class', array('classname' => $class_name));
-        $class_id = $query->row()->id;
-        $exam_start_date = $_GET["start_date"];
-        $exam_end_date = $_GET["end_date"];
-        $exam_length = $_GET["duration"];
-        $exam_start_time = $_GET["start_time"];
-        $exam_end_time = $_GET["end_time"];
+        $this->load->model('mod_quizpath');
+        $this->load->model('mod_askemdros');
+        //$this->mod_quizpath->init()
 
-        $data = array(
-          'exam_name' => $exam_name,
-          'class_id' => $class_id,
-          'exam_start_date' => $exam_start_date,
-          'exam_end_date' => $exam_end_date,
-          'exam_length' => $exam_length,
-          'exam_start_time' => $exam_start_time,
-          'exam_end_time' => $exam_end_time
+        $this->load->view('view_top1', array('title' => $this->lang->line('take_exam')));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => true));
+        $this->load->view('view_confirm_dialog');
+        $this->load->view('view_alert_dialog');
+
+
+        $center_text = $this->load->view(
+          'view_take_exam',
+          array(
+            'xml' => $xml,
+            'exercises' => $exercises,
+          ),
+          true
         );
 
+        $this->load->view(
+          'view_main_page',
+          array(
+            'left_title' => $this->lang->line('take_exam'),
+            'left' => $this->lang->line('take_exam_description'),
+            'center' => $center_text
+          )
+        );
 
-
-        $this->db->insert('exam_active', $data);
-
-        redirect("/exams/active_exams");
-
-
+        $this->load->view('view_bottom');
       } catch (DataException $e) {
         $this->error_view($e->getMessage(), $this->lang->line('exam_mgmt'));
       }
-
     }
 
 

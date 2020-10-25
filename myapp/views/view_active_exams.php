@@ -38,7 +38,7 @@
             <td class="leftalign"><?= $exam->exam_end_time ?></td>
             <td class="leftalign"><?= $exam->exam_length ?></td>
             <td class="leftalign">
-              <a class="badge badge-primary" href="#"></a>
+              <a class="badge badge-primary" href="/exams/take_exam?exam=<?= $exam->exam_name ?>">Take Exam</a>
             </td>
           </tr>
         <?php endforeach; ?>
@@ -74,8 +74,29 @@
   </div>
 
   <div class="tab-pane fade" id="past_exams" role="tabpanel" aria-labelledby="contact-tab">
-    <p>
-      List of past exams.
-    </p>
+    <div class="table-responsive">
+      <table class="type2 table table-striped">
+        <tr>
+          <th><?= $this->lang->line('class_name') ?></th>
+          <th><?= $this->lang->line('exam_name') ?></th>
+          <th><?= $this->lang->line('start_date') ?></th>
+          <th><?= $this->lang->line('start_time') ?></th>
+          <th><?= $this->lang->line('duration') ?></th>
+          <th><?= $this->lang->line('user_operations') ?></th>
+        </tr>
+        <?php foreach ($past_exams_list as $exam): ?>
+          <tr>
+            <td class="leftalign"><?= $exam->class_id ?></td>
+            <td class="leftalign"><?= $exam->exam_name ?></td>
+            <td class="leftalign"><?= $exam->exam_start_date ?></td>
+            <td class="leftalign"><?= $exam->exam_start_time ?></td>
+            <td class="leftalign"><?= $exam->exam_length ?></td>
+            <td class="leftalign">
+              <a class="badge badge-primary" href="#">Hi</a>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      </table>
+    </div>
   </div>
 </div>

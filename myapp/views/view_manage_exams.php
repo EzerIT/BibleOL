@@ -72,7 +72,7 @@ on the page.
               <td class="leftalign"><?= $this->mod_users->user_full_name($exam->ownerid) ?></td>
               <td class="leftalign">
                   <a class="badge badge-primary" href="/exams/edit_exam?exam=<?= $exam->exam_name ?>"><?= $this->lang->line('edit_exam') ?></a>
-                  <a class="badge badge-primary" href="#" onclick="tkexam('<?= $exam->exam_name ?>');"><?= $this->lang->line('take_exam') ?></a>
+                  <a class="badge badge-primary" href="#" onclick="cr_exam_inst('<?= $exam->exam_name ?>');"><?= $this->lang->line('create_exam_instance') ?></a>
                   <a class="badge badge-danger" href="#" onclick="dltexam('<?= $exam->exam_name ?>');"><?= $this->lang->line('delete_exam') ?></a>
               </td>
           </tr>
@@ -90,21 +90,21 @@ This button redirects to the exam creation page.
 
 
 <!-- Take Exam Modal -->
-<div class="modal fade" id="take-exam-dialog">
+<div class="modal fade" id="create-exam-instance-dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header justify-content-between">
-        <div><h4 class="modal-title"><?= $this->lang->line('take_exam') ?></h4></div>
+        <div><h4 class="modal-title"><?= $this->lang->line('create_exam_instance') ?></h4></div>
         <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
       </div>
       <div class="modal-body">
-        <div class="alert alert-danger" id="take-error" role="alert">
+        <div class="alert alert-danger" id="create-instance-error" role="alert">
           <span class="fas fa-exclamation-circle" aria-hidden="true"></span>
-          <p id="take-error-text"></p>
+          <p id="create-instance-error-text"></p>
         </div>
 
-        <form id="take-form" action="<?= site_url('exams/take_exam') ?>" method="get">
-          <input type="hidden" name="exname" id="take-examname">
+        <form id="create-instance-form" action="<?= site_url('exams/create_exam_instance') ?>" method="get">
+          <input type="hidden" name="exname" id="create-instance-examname">
           <?= $this->lang->line('class') ?>: <select id="class_select" name="class_select">
             <?php foreach ($n_o_c as $owned_class): ?>
               <option><?= $owned_class->classname ?></option>
@@ -127,7 +127,7 @@ This button redirects to the exam creation page.
 
       </div>
       <div class="modal-footer">
-        <button type="button" id="take-dialog-ok" class="btn btn-primary"><?= $this->lang->line('OK_button') ?></button>
+        <button type="button" id="create-instance-dialog-ok" class="btn btn-primary"><?= $this->lang->line('OK_button') ?></button>
         <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancel</button>
       </div>
     </div>
@@ -136,9 +136,9 @@ This button redirects to the exam creation page.
 
 
 <script>
-  function tkexam(examname) {
-    $('#take-error').hide();
-    $('#take-examname').attr('value', examname);
+  function cr_exam_inst(examname) {
+    $('#create-instance-error').hide();
+    $('#create-instance-examname').attr('value', examname);
     let tomo = new Date();
     tomo.setDate(tomo.getDate() + 1);
     document.getElementById('date1').valueAsDate = tomo;
@@ -147,15 +147,15 @@ This button redirects to the exam creation page.
     document.getElementById('time2').defaultValue = "20:00";
     document.getElementById('duration').defaultValue = 90;
     document.getElementById('duration').min = 0;
-    $("#take-exam-dialog").modal("show");
+    $("#create-exam-instance-dialog").modal("show");
   }
 
   $(function() {
 
-    $('#take-dialog-ok').click(function() {
+    $('#create-instance-dialog-ok').click(function() {
       let duration_value = document.getElementById('duration').value;
       if (duration_value && duration_value >= 0){
-        $('#take-form').submit();
+        $('#create-instance-form').submit();
       }
     })
   })
