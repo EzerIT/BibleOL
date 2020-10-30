@@ -32,6 +32,16 @@
         "word": {
             "mayselect": true,
             "featuresetting": {
+                "lexeme_occurrences": {
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
+                    "isRange": true
+                },
+                "frequency_rank": {
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
+                    "isRange": true
+                },
                 "surface": {
                     "hideWord": true,
                     "foreignText": true
@@ -141,6 +151,15 @@
                             "mytype": "GrammarFeature",
                             "name": "strongs_unreliable"
                         },
+                        {
+                            "mytype": "GrammarFeature",
+                            "name": "lexeme_occurrences"
+                        },
+                        {
+                            "mytype": "GrammarFeature",
+                            "name": "frequency_rank"
+                        },
+
                         {
                             "mytype": "GrammarFeature",
                             "name": "psp"

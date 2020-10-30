@@ -4,6 +4,8 @@
     "emdrosobject": {
         "word": {
             "_objname": "词",
+            "lexeme_occurrences": "出现次数",
+            "frequency_rank": "出现次数排名",
             "person": "人称",
             "voice": "语态",
             "tense": "时态",

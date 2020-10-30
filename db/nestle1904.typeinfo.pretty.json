@@ -12,6 +12,8 @@
         "word": {
             "strongs": "integer",
             "self": "id_d",
+            "lexeme_occurrences": "integer",
+            "frequency_rank": "integer",
             "form_tag": "string",
             "functional_tag": "string",
             "ref": "string",

@@ -4,6 +4,8 @@
     "emdrosobject": {
         "word": {
             "_objname": "Ord",
+            "lexeme_occurrences": "Forekomster",
+            "frequency_rank": "Hyppighedsrang",
             "person": "Person",
             "voice": "Diatese",
             "tense": "Tid",

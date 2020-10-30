@@ -4,6 +4,8 @@
     "emdrosobject": {
         "word": {
             "_objname": "Word",
+            "lexeme_occurrences": "Occurrences",
+            "frequency_rank": "Frequency rank",
             "person": "Person",
             "voice": "Voice",
             "tense": "Tense",
