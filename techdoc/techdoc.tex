@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{6 May 2020}
+\date{30 October 2020}
 
 \makeindex
 
@@ -1912,24 +1912,22 @@ The Database Specification File is a JSON file containing the following key/valu
   \index{passages!hierarchy}
   A typical value is\label{universe-hierarchy}
 
-  {\ttfamily
-    \begin{tabular}{lll}
-      \multicolumn{3}{l}{"universeHierarchy": [}\\
-         & \{ &                      \\
-         &    &  "type": "book",     \\
-         &    &  "feat": "book"      \\
-         & \},&                      \\
-         & \{ &                      \\
-         &    &  "type": "chapter",  \\
-         &    &  "feat": "chapter"   \\
-         & \},&                      \\
-         & \{ &                      \\
-         &    &  "type": "verse",    \\
-         &    &  "feat": "verse"     \\
-         & \} &                      \\
-      ]  &    &                      \\
-    \end{tabular}
-  }
+\begin{verbatim}
+      "universeHierarchy": [
+         {
+            "type": "book",
+            "feat": "book"
+         },
+         {
+            "type": "chapter",
+            "feat": "chapter"
+         },
+         {
+            "type": "verse",
+            "feat": "verse"
+         }
+      ]
+\end{verbatim}
 
   This means that the top reference level is found in the \emph{book}\index{book} feature of Emdros
   objects of type \emph{book}, the second reference level is found in the
@@ -7412,6 +7410,15 @@ parentheses. For example (from \bibleref{Matthew}{6}{18}):
 \begin{center}
   \includegraphics[width=0.4\textwidth]{unreliable.png}
 \end{center}
+
+\subsection{Features: lexeme\_occurrences and frequency\_rank}
+
+The database contains information about the frequency of various lexemes\index{lexeme}. The feature
+\emph{lexeme\_occurrences} is an integer feature containing the number of times this lexeme
+occurs in the New Testament. The feature \emph{frequency\_rank} is an integer feature containing the
+rank of each lexeme: The most frequent lexeme has rank 1, the second most frequent lexeme has rank
+2, etc.
+
 
 \subsection{Feature: psp}
 
