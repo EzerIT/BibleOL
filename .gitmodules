@@ -1,5 +1,8 @@
 [submodule "ckeditor"]
 	path = ckeditor
+	url = https://github.com/ckeditor/ckeditor4
+[submodule "ckeditor_old"]
+	path = ckeditor_old
 	url = https://github.com/EzerIT/ckeditor-releases
 [submodule "zocial"]
 	path = zocial
