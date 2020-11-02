@@ -1235,11 +1235,9 @@ var ComponentWithYesNo = (function () {
         this.noneIcon = $("<img src=\"" + site_url + "/images/none.png\" alt=\"None\">");
     }
     ComponentWithYesNo.prototype.getJQuery = function () {
-        var spn = $('<span style="white-space:nowrap;"></span>').append([this.yesIcon, this.noIcon, this.noneIcon, this.elem]);
-        var td = $('<td></td>');
-        td.append(spn);
+        var spn = $('<td class="combobox"></td>').append([this.yesIcon, this.noIcon, this.noneIcon, this.elem]);
         this.setNone();
-        return td;
+        return spn;
     };
     ComponentWithYesNo.prototype.monitorChange = function (elem) {
         clearInterval(ComponentWithYesNo.intervalHandler);
@@ -1282,10 +1280,18 @@ var ComponentWithYesNo = (function () {
         if (ComponentWithYesNo.lastMonitored === this.elem.data('kbid'))
             ComponentWithYesNo.monitorOrigVal = this.elem.val();
         if (yes) {
+            $(this.elem).css({
+                "background-color": "rgba(67, 176, 42, 0.1)",
+                "border": "solid 2px rgba(67, 176, 42, 1.0)"
+            });
             this.yesIcon.show();
             this.noIcon.hide();
         }
         else {
+            $(this.elem).css({
+                "background-color": "rgba(195, 92, 244, 0.1)",
+                "border": "solid 2px rgba(195, 92, 244, 1.0)"
+            });
             this.yesIcon.hide();
             this.noIcon.show();
         }

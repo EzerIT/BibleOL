@@ -1,6 +1,9 @@
 // -*- js -*-
 // Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
 
+// 2 Nov 2020
+// Changes by Ernst Boogert (Booge IT) in getJQuery() method
+
 // Contains code for handling components with an icon indicating answer correctness.
 
 
@@ -77,13 +80,10 @@ class ComponentWithYesNo {
     //     The complete HTML for the component.
     //
     public getJQuery() : JQuery {
-        let spn = $('<span style="white-space:nowrap;"></span>').append([this.yesIcon,this.noIcon,this.noneIcon,this.elem]);
-        let td = $('<td></td>');
-        td.append(spn);
-
+        let spn = $('<td class="combobox"></td>').append([this.yesIcon,this.noIcon,this.noneIcon,this.elem]);
         this.setNone();
 
-        return td;
+        return spn;
     }
 
 
@@ -153,7 +153,7 @@ class ComponentWithYesNo {
     // Returns the component displayed with this object.
     //
     public getComp() : JQuery {
-        if (this.elemType===COMPONENT_TYPE.comboBox2)
+        if (this.elemType === COMPONENT_TYPE.comboBox2)
             return $(this.elem.children()[0]); // A comboBox2 is a <div> containing a <select>. We return the <select>.
         else
             return this.elem;
@@ -181,10 +181,18 @@ class ComponentWithYesNo {
             ComponentWithYesNo.monitorOrigVal = this.elem.val() as string; // Lest the polling detects the change and removes the yes/no mark
 
         if (yes) {
+            $(this.elem).css({
+                "background-color": "rgba(67, 176, 42, 0.1)",
+                "border": "solid 2px rgba(67, 176, 42, 1.0)",
+            }) 
             this.yesIcon.show();
             this.noIcon.hide();
         }
         else {
+            $(this.elem).css({
+                "background-color": "rgba(195, 92, 244, 0.1)",
+                "border": "solid 2px rgba(195, 92, 244, 1.0)",
+            })
             this.yesIcon.hide();
             this.noIcon.show();
         }
