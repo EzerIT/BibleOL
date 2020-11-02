@@ -290,7 +290,7 @@ class Dictionary {
             let [contents, heading] : [string, string] = this.toolTipFunc(event.currentTarget, false);
             $('#grammar-info-label').html(heading);
             $('#grammar-info-body').html(contents);
-            $('#grammar-info-dialog').modal('show');
+            ($('#grammar-info-dialog') as any).modal('show');
         });
     }
 
