@@ -12,6 +12,7 @@ html {
 }
 body {
   overflow: scroll;
+  font-family: "titillium";
 }
 h1 {
   font-weight: normal;
