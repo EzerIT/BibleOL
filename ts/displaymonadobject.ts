@@ -195,7 +195,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
                 if (uhSize!=smo.sameAsNext.length) throw 'BAD3';
 
                 document.title = l10n.universe['book'][smo.bcv[0]] + ' ' + smo.bcv[1]; // Text in title bar
-                $('#textcontainer h1').html(document.title); // Text in page heading
+                $('#tabs-background h2').html(document.title); // Text in page heading: Change 2 Nov 2020 by Ernst Boogert
 
                 for (let i : number = 0; i<uhSize; ++i) {
                     if (!smo.sameAsPrev[i]) {
@@ -275,12 +275,14 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
                                           // For ETCBC4, show only the first gloss
                                           // For nestle1904 with Swahili, show only the first gloss
                                           
-                                          if ((configuration.databaseName=="ETCBC4" && fs.isGloss)
-                                              || (configuration.databaseName=="nestle1904" && featName=="swahili")) {
-                                              featValLoc = featValLoc.replace(/(&[gl]t);/,'$1Q')  // Remove ';' from "&gt;" and "&lt;" 
-                                                                     .replace(/([^,;(]+).*/,'$1') // Remove everything after ',' or ';' or '('
-                                                                     .replace(/(&[gl]t)Q/,'$1;'); // Reinsert ';' in "&gt;" and "&lt;" 
-                                          }
+                                        // Change Ernst Boogert: show all glosses      
+                                              
+                                        //   if ((configuration.databaseName=="ETCBC4" && fs.isGloss)
+                                        //       || (configuration.databaseName=="nestle1904" && featName=="swahili")) {
+                                        //       featValLoc = featValLoc.replace(/(&[gl]t);/,'$1Q')  // Remove ';' from "&gt;" and "&lt;" 
+                                        //                              .replace(/([^,;(]+).*/,'$1') // Remove everything after ',' or ';' or '('
+                                        //                              .replace(/(&[gl]t)Q/,'$1;'); // Reinsert ';' in "&gt;" and "&lt;" 
+                                        //   }
 
                                           grammar += `<span class="wordgrammar dontshowit ${featName} ${wordclass}">${featValLoc}</span>`;
                                           break;
