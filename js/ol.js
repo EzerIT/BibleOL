@@ -1315,14 +1315,23 @@ var Answer = (function () {
     Answer.prototype.showIt = function () {
         switch (this.cType) {
             case COMPONENT_TYPE.textField:
-            case COMPONENT_TYPE.textFieldWithVirtKeyboard:
-                $(this.c).val(this.answerString);
+            case COMPONENT_TYPE.textFieldWithVirtKeyboard: {
+                $(this.c).find('input').val(this.answerString);
                 break;
+            }
             case COMPONENT_TYPE.comboBox1:
-            case COMPONENT_TYPE.comboBox2:
-                $(this.c).val(this.answerSws.getInternal()).prop('selected', true);
+            case COMPONENT_TYPE.comboBox2: {
+                var correctAnswer_1 = this['answerSws']['internal'];
+                var radios = $(this.c).find('input');
+                radios.each(function () {
+                    var value = $(this).attr('value');
+                    if (value === correctAnswer_1) {
+                        $(this).prop('checked', true);
+                    }
+                });
                 break;
-            case COMPONENT_TYPE.checkBoxes:
+            }
+            case COMPONENT_TYPE.checkBoxes: {
                 var inputs = $(this.c).find('input');
                 var xthis_1 = this;
                 inputs.each(function () {
@@ -1330,6 +1339,7 @@ var Answer = (function () {
                     $(this).prop('checked', xthis_1.answerArray.indexOf(value) != -1);
                 });
                 break;
+            }
         }
     };
     Answer.prototype.checkIt = function (fromShowIt) {
@@ -1369,9 +1379,9 @@ var Answer = (function () {
                     break;
                 case COMPONENT_TYPE.comboBox1:
                 case COMPONENT_TYPE.comboBox2:
-                    var selectedOption = $(this.c).find(":selected");
-                    if (selectedOption.attr('value') !== 'NoValueGiven') {
-                        var userAnswerSws = $(this.c).find(":selected").data('sws');
+                    var selectedOption = $(this.c).find("input:checked");
+                    if (selectedOption.attr('value') != null) {
+                        var userAnswerSws = $(this.c).find("input:checked").parent().data('sws');
                         isCorrect_1 = userAnswerSws === this.answerSws;
                         userAnswer_1 = userAnswerSws.getInternal();
                     }

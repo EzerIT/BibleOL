@@ -55,31 +55,44 @@ class Answer {
     //
     // Displays the correct answer.
     //
-    public showIt() : void {
+    public showIt(): void {
         switch (this.cType) {
-        case COMPONENT_TYPE.textField:
-        case COMPONENT_TYPE.textFieldWithVirtKeyboard:
-            // Show the correct string
-            $(this.c).val(this.answerString);
-            break;
+            case COMPONENT_TYPE.textField:
+            case COMPONENT_TYPE.textFieldWithVirtKeyboard: {
+                $(this.c).find('input').val(this.answerString);
+                break;
+            }
             
-        case COMPONENT_TYPE.comboBox1:
-        case COMPONENT_TYPE.comboBox2:
-            // Select the correct option
-            $(this.c).val(this.answerSws.getInternal()).prop('selected', true);
-            break;
+            case COMPONENT_TYPE.comboBox1:
+            case COMPONENT_TYPE.comboBox2: {
+                // Define the correct answer
+                let correctAnswer: string = this['answerSws']['internal'];
+                let radios: JQuery = $(this.c).find('input');
+                    
+                radios.each(
+                    function () {
+                        let value: string = $(this).attr('value');
+                        if (value === correctAnswer) {
+                            $(this).prop('checked', true);
+                        
+                        }
+                    }
+                )
+                break;
+            }
 
-        case COMPONENT_TYPE.checkBoxes:
-            // Mark the correct items
-            let inputs : JQuery = $(this.c).find('input');
-            let xthis : Answer = this;
-            inputs.each(
-                function() {
-                    let value : string = $(this).attr('value');
-                    $(this).prop('checked',xthis.answerArray.indexOf(value)!=-1);
-                }
-            );
-            break;
+            case COMPONENT_TYPE.checkBoxes: {
+                // Mark the correct items
+                let inputs: JQuery = $(this.c).find('input');
+                let xthis: Answer = this;
+                inputs.each(
+                    function () {
+                        let value: string = $(this).attr('value');
+                        $(this).prop('checked', xthis.answerArray.indexOf(value) != -1);
+                    }
+                );
+                break;
+            }
         }
     }
 
@@ -152,9 +165,9 @@ class Answer {
                 // This is necessary in order to produce language indenpendent statistics. However,
                 // this will not work correctly if there are duplicate values in the localized names.
 
-                let selectedOption : JQuery = $(this.c).find(":selected");
-                if (selectedOption.attr('value')!=='NoValueGiven') {
-                    let userAnswerSws : StringWithSort = $(this.c).find(":selected").data('sws');
+                let selectedOption: JQuery = $(this.c).find("input:checked");
+                if (selectedOption.attr('value') != null) {
+                    let userAnswerSws: StringWithSort = $(this.c).find("input:checked").parent().data('sws');
 
                     isCorrect = userAnswerSws===this.answerSws;
                     userAnswer = userAnswerSws.getInternal();
