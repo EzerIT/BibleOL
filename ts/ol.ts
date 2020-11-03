@@ -28,7 +28,7 @@ let supportsProgress   : boolean; // Does the browser support <progress>?
 let charset            : Charset; // Current character set
 let inQuiz             : boolean; // Are we displaying a quiz?
 let quiz               : Quiz;    // Current quiz
-let accordion_width    : number;  // Width of the grammar selector accordions
+let accordion_width    : string;  // Width of the grammar selector accordions
 let indentation_width  : number;  // Width of indentation of ETCBC4 clause atoms
 
 

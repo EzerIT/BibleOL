@@ -378,7 +378,7 @@ class LimitDialog {
 
         $('#feature-limit-body').empty().append(setclear).append(table);
         $('#feature-limit-dialog-save').off('click').on('click', () => this.saveButtonAction() );
-        $('#feature-limit-dialog').modal('show');
+        ($('#feature-limit-dialog') as any).modal('show');
     }
 
 
@@ -404,7 +404,7 @@ class LimitDialog {
 
         this.callback(hideFeatures);
         
-        $('#feature-limit-dialog').modal('hide');
+        ($('#feature-limit-dialog') as any).modal('hide');
     }
 }
 

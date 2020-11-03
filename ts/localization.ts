@@ -209,3 +209,18 @@ function getFeatureValueOtherFormat(otype : string, featureName : string, value 
 
     return '?';
 }
+
+
+//*************************************************************************************
+// getHtmlAttribFriendlyName function
+//
+//     Replaces spaces by underscores to be used as HTML attributes
+//
+// Param:
+//     str: string to be webkitConvertPointFromPageToNode
+// Returns:
+//     str in which spaces are replaced by underscores
+
+function getHtmlAttribFriendlyName(str: string): string {
+    return str.split(' ').join('_');
+}

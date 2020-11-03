@@ -308,6 +308,9 @@ function getFeatureValueOtherFormat(otype, featureName, value) {
             return table[ix].text;
     return '?';
 }
+function getHtmlAttribFriendlyName(str) {
+    return str.split(' ').join('_');
+}
 function localize(s) {
     var str = l10n_js[s];
     return str === undefined ? '??' + s + '??' : str;

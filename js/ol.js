@@ -393,6 +393,8 @@ function getSentenceGrammarFor(oType) {
 var GrammarSelectionBox = (function () {
     function GrammarSelectionBox() {
         this.checkboxes = '';
+        this.subgroupgrammartabs = '';
+        this.subgroupgrammardivs = '';
         this.addBr = new util.AddBetween('<br>');
         this.borderBoxes = [];
         this.separateLinesBoxes = [];
@@ -401,8 +403,8 @@ var GrammarSelectionBox = (function () {
         $(".showborder.lev" + level).each(function (index) {
             $(this).css('width', 'auto');
             var w = $(this).find('> .gram').width();
-            if ($(this).width() < w)
-                $(this).width(w);
+            if ($(this).width() < w + 10)
+                $(this).width(w + 10);
         });
     };
     GrammarSelectionBox.prototype.generatorCallback = function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
@@ -410,54 +412,74 @@ var GrammarSelectionBox = (function () {
             case WHAT.groupstart:
                 if (!this.hasSeenGrammarGroup) {
                     this.hasSeenGrammarGroup = true;
-                    this.checkboxes += '<div class="subgrammargroup">';
+                    this.subgroupgrammartabs += "<div id=\"subgrammargroup\"><ul>";
                 }
-                this.checkboxes += "<div class=\"grammargroup\"><h2>" + featNameLoc + "</h2><div>";
-                this.addBr.reset();
+                this.subgroupgrammartabs += "<li><a class=\"subgrammargroup\" href=\"#" + getHtmlAttribFriendlyName(featNameLoc) + "\"><h3>" + featNameLoc + "</h3></a></li>";
+                this.subgroupgrammardivs += "<div id=\"" + getHtmlAttribFriendlyName(featNameLoc) + "\">";
+                this.subgroupgrammardivs += "<div id=\"grammarbuttongroup\">";
                 break;
             case WHAT.groupend:
-                this.checkboxes += '</div></div>';
+                this.subgroupgrammardivs += '</div></div>';
                 break;
             case WHAT.feature:
             case WHAT.metafeature:
                 var disabled = mayShowFeature(objType, origObjType, featName, sgiObj) ? '' : 'disabled';
-                this.checkboxes += this.addBr.getStr() + "<input id=\"" + objType + "_" + featName + "_cb\" type=\"checkbox\" " + disabled + ">" + featNameLoc;
+                if (this.hasSeenGrammarGroup) {
+                    this.subgroupgrammardivs += "<div class=\"selectbutton\"><input id=\"" + objType + "_" + featName + "_cb\" type=\"checkbox\" " + disabled + "><label for=\"" + objType + "_" + featName + "_cb\">" + featNameLoc + "</label></div>";
+                }
+                else {
+                    this.checkboxes += "<div class=\"selectbutton\"><input id=\"" + objType + "_" + featName + "_cb\" type=\"checkbox\" " + disabled + "><label for=\"" + objType + "_" + featName + "_cb\">" + featNameLoc + "</label></div>";
+                }
                 break;
         }
     };
     GrammarSelectionBox.prototype.makeInitCheckBoxForObj = function (level) {
         if (level == 0) {
             if (charset.isHebrew) {
-                return this.addBr.getStr()
-                    + ("<input id=\"ws_cb\" type=\"checkbox\">" + localize('word_spacing') + "</span>");
+                return "<div class=\"selectbutton\"><input id=\"ws_cb\" type=\"checkbox\">" +
+                    ("<label for=\"ws_cb\">" + localize('word_spacing') + "</label></div>");
             }
             else
                 return '';
         }
         else {
-            return this.addBr.getStr()
-                + ("<input id=\"lev" + level + "_seplin_cb\" type=\"checkbox\">" + localize('separate_lines') + "</span>")
-                + '<br>'
-                + ("<input id=\"lev" + level + "_sb_cb\" type=\"checkbox\">" + localize('show_border') + "</span>");
+            return "<div class=\"selectbutton\"><input id=\"lev" + level + "_seplin_cb\" type=\"checkbox\">" +
+                ("<label for=\"lev" + level + "_seplin_cb\">" + localize('separate_lines') + "</label></div>") +
+                ("<div class=\"selectbutton\"><input id=\"lev" + level + "_sb_cb\" type=\"checkbox\">") +
+                ("<label for=\"lev" + level + "_sb_cb\">" + localize('show_border') + "</label></div>");
         }
     };
     GrammarSelectionBox.prototype.generateHtml = function () {
         var _this = this;
+        this.checkboxes += "<ul>";
         for (var level in configuration.sentencegrammar) {
             var leveli = +level;
             if (isNaN(leveli))
                 continue;
             var objType = configuration.sentencegrammar[leveli].objType;
-            this.addBr.reset();
-            this.checkboxes += "<div class=\"objectlevel\"><h1>" + getObjectFriendlyName(objType) + "</h1><div>";
+            this.checkboxes += "<li><a class=\"gramtabs\" href=\"#" + getHtmlAttribFriendlyName(getObjectFriendlyName(objType)) + "\"><h3>" + getObjectFriendlyName(objType) + "</h3></a></li>";
+        }
+        this.checkboxes += "</ul>";
+        for (var level in configuration.sentencegrammar) {
+            var leveli = +level;
+            if (isNaN(leveli))
+                continue;
+            var objType = configuration.sentencegrammar[leveli].objType;
+            this.checkboxes += "<div id=\"" + getHtmlAttribFriendlyName(getObjectFriendlyName(objType)) + "\">";
+            this.checkboxes += "<div class=\"objectlevel\">";
+            this.checkboxes += "<div id=\"grammarbuttongroup\">";
             this.checkboxes += this.makeInitCheckBoxForObj(leveli);
             this.hasSeenGrammarGroup = false;
             configuration.sentencegrammar[leveli]
                 .walkFeatureNames(objType, function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) { return _this.generatorCallback(whattype, objType, origObjType, featName, featNameLoc, sgiObj); });
             if (this.hasSeenGrammarGroup)
                 this.checkboxes += '</div>';
+            this.checkboxes += this.subgroupgrammartabs + '</ul>' + this.subgroupgrammardivs + '</div>';
+            this.subgroupgrammartabs = '';
+            this.subgroupgrammardivs = '';
             this.checkboxes += '</div></div>';
         }
+        this.checkboxes += "<p><a class=\"btn btn-clear\" id=\"cleargrammar\" href=\"#myview\">" + localize('clear_grammar') + "</a></p>";
         return this.checkboxes;
     };
     GrammarSelectionBox.prototype.setHandlerCallback = function (whattype, objType, featName, featNameLoc, leveli) {
@@ -601,24 +623,22 @@ var GrammarSelectionBox = (function () {
         }
     };
     GrammarSelectionBox.buildGrammarAccordion = function () {
-        var acc1 = $('#gramselect').accordion({ heightStyle: 'content', collapsible: true, header: 'h1' });
-        var acc2 = $('.subgrammargroup').accordion({ heightStyle: 'content', collapsible: true, header: 'h2' });
-        var max_width = 0;
-        for (var j = 0; j < acc2.find('h2').length; ++j) {
-            acc2.accordion('option', 'active', j);
-            if (acc2.width() > max_width)
-                max_width = acc2.width();
-        }
-        acc2.accordion('option', 'active', false);
-        acc2.width(max_width * 1.05);
-        max_width = 0;
-        for (var j = 0; j < acc1.find('h1').length; ++j) {
-            acc1.accordion('option', 'active', j);
-            if (acc1.width() > max_width)
-                max_width = acc1.width();
-        }
-        acc1.accordion('option', 'active', false);
-        acc1.width(max_width);
+        var tabs1 = $('#myview').tabs({
+            heightStyle: 'content',
+            collapsible: true
+        });
+        var tabs2 = $('#gramtabs').tabs({
+            heightStyle: 'content',
+            collapsible: true
+        });
+        var tabs3 = $('#subgrammargroup').tabs({
+            heightStyle: 'content',
+            collapsible: true
+        });
+        var max_width = 'auto';
+        tabs1.tabs('option', 'active', false);
+        tabs2.tabs('option', 'active', false);
+        tabs3.tabs('option', 'active', false);
         return max_width;
     };
     return GrammarSelectionBox;
@@ -953,6 +973,9 @@ function getFeatureValueOtherFormat(otype, featureName, value) {
         if (table[ix].first <= value && table[ix].last >= value)
             return table[ix].text;
     return '?';
+}
+function getHtmlAttribFriendlyName(str) {
+    return str.split(' ').join('_');
 }
 function localize(s) {
     var str = l10n_js[s];

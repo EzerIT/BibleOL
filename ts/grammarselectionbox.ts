@@ -1,6 +1,8 @@
 // -*- js -*-
 // Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
 
+// Many changes by Ernst Boogert on 3 Nov 2020 to create new fancy look of the grammar selection box.
+
 
 //****************************************************************************************************
 // About the IDs of HTML elements in the grammar selection box:
@@ -31,6 +33,8 @@
 class GrammarSelectionBox {
     private hasSeenGrammarGroup : boolean;       // True if the generatorCallBack() method has seen a grammar group.
     private checkboxes          : string = '';   // Holds the generated HTML
+    private subgroupgrammartabs : string = '';   // Holds temporary HTML for grammar subgroup tabs
+    private subgroupgrammardivs : string = '';   // Holds temporary HTML for grammar subgroup divs
     private addBr = new util.AddBetween('<br>'); // AddBetween object to insert <br>
 
     private borderBoxes         : util.BorderFollowerBox[] = [];        // Handles checkbox for "show borders"
@@ -51,8 +55,8 @@ class GrammarSelectionBox {
             $(this).css('width','auto'); // Give div natural width
 
             let w = $(this).find('> .gram').width();
-            if ($(this).width()<w)
-                $(this).width(w); // Set width of div to width of information
+            if ($(this).width() < w + 10) // +10 is to creats some extra space
+                $(this).width(w + 10); // Set width of div to width of information
         });
     }
 
@@ -72,34 +76,40 @@ class GrammarSelectionBox {
     //    featNameLoc: Localized feature name.
     //    sgiObj: The current SentenceGrammarItem object (always 'this').
     //
-    private generatorCallback(whattype    : WHAT,
-                              objType     : string,
-                              origObjType : string,
-                              featName    : string,
-                              featNameLoc : string,
-                              sgiObj      : SentenceGrammarItem) : void {
-                                  switch (whattype) {
-                                  case WHAT.groupstart:
-                                      if (!this.hasSeenGrammarGroup) {
-                                          this.hasSeenGrammarGroup = true;
-                                          this.checkboxes += '<div class="subgrammargroup">';
-                                      }
-                                      this.checkboxes += `<div class="grammargroup"><h2>${featNameLoc}</h2><div>`;
-                                      this.addBr.reset();
-                                      break;
-                                      
-                                  case WHAT.groupend:
-                                      this.checkboxes += '</div></div>';
-                                      break;
-                                      
-                                  case WHAT.feature:
-                                  case WHAT.metafeature:
-                                      let disabled : string = mayShowFeature(objType, origObjType, featName, sgiObj) ? '' : 'disabled';
-
-                                      this.checkboxes += `${this.addBr.getStr()}<input id="${objType}_${featName}_cb" type="checkbox" ${disabled}>${featNameLoc}`;
-                                      break;
-                                  }
-                              }
+    private generatorCallback(
+        whattype    : WHAT,
+        objType     : string,
+        origObjType : string,
+        featName    : string,
+        featNameLoc : string,
+        sgiObj      : SentenceGrammarItem) : void {
+            switch (whattype) {
+                case WHAT.groupstart:
+                    if (!this.hasSeenGrammarGroup) {
+                        this.hasSeenGrammarGroup = true;
+                        this.subgroupgrammartabs += `<div id="subgrammargroup"><ul>`;
+                    }
+                    this.subgroupgrammartabs += `<li><a class="subgrammargroup" href="#${getHtmlAttribFriendlyName(featNameLoc)}"><h3>${featNameLoc}</h3></a></li>`;
+                    this.subgroupgrammardivs += `<div id="${getHtmlAttribFriendlyName(featNameLoc)}">`
+                    this.subgroupgrammardivs += `<div id="grammarbuttongroup">`
+                    break;
+                                          
+                case WHAT.groupend:
+                    this.subgroupgrammardivs += '</div></div>';
+                    break;
+                                          
+                case WHAT.feature:
+                case WHAT.metafeature:
+                    let disabled: string = mayShowFeature(objType, origObjType, featName, sgiObj) ? '' : 'disabled';
+                                          
+                    if (this.hasSeenGrammarGroup) {
+                        this.subgroupgrammardivs += `<div class="selectbutton"><input id="${objType}_${featName}_cb" type="checkbox" ${disabled}><label for="${objType}_${featName}_cb">${featNameLoc}</label></div>`;
+                    } else {
+                        this.checkboxes += `<div class="selectbutton"><input id="${objType}_${featName}_cb" type="checkbox" ${disabled}><label for="${objType}_${featName}_cb">${featNameLoc}</label></div>`;
+                    }
+                    break;
+            }
+        }
 
     //------------------------------------------------------------------------------------------
     // makeInitCheckBoxForObj method
@@ -114,22 +124,21 @@ class GrammarSelectionBox {
     // Returns HTML for creating a checkbox.
     //
     private makeInitCheckBoxForObj(level : number) : string {
-        if (level==0) {
+        if (level == 0) {
             // Object is word
             if (charset.isHebrew) {
-                return this.addBr.getStr()
-                    + `<input id="ws_cb" type="checkbox">${localize('word_spacing')}</span>`;
+                return `<div class="selectbutton"><input id="ws_cb" type="checkbox">` +
+                    `<label for="ws_cb">${localize('word_spacing')}</label></div>`;
             }
             else
                 return '';
         }
         else {
             // Object is phrase, clause etc.
-            
-            return this.addBr.getStr()
-                + `<input id="lev${level}_seplin_cb" type="checkbox">${localize('separate_lines')}</span>`
-                + '<br>'
-                + `<input id="lev${level}_sb_cb" type="checkbox">${localize('show_border')}</span>`;
+            return `<div class="selectbutton"><input id="lev${level}_seplin_cb" type="checkbox">` +
+                `<label for="lev${level}_seplin_cb">${localize('separate_lines')}</label></div>` +
+                `<div class="selectbutton"><input id="lev${level}_sb_cb" type="checkbox">` +
+                `<label for="lev${level}_sb_cb">${localize('show_border')}</label></div>`;
         }
     }
 
@@ -142,17 +151,29 @@ class GrammarSelectionBox {
     // Returns:
     //     HTML code.
     //
-    public generateHtml() : string {
+    public generateHtml(): string {
         // Loop through 'word', 'phrase', 'clause', 'sentence' or the like
+        this.checkboxes += `<ul>`;
+
         for (let level in configuration.sentencegrammar) {
-            let leveli : number = +level;
+            let leveli: number = +level;
             if (isNaN(leveli)) continue; // Not numeric
 
-            let objType : string = configuration.sentencegrammar[leveli].objType; // objType is 'word', 'phrase' etc.
+            let objType: string = configuration.sentencegrammar[leveli].objType; // objType is 'word', 'phrase' etc.
 
-            this.addBr.reset();
+            this.checkboxes += `<li><a class="gramtabs" href="#${getHtmlAttribFriendlyName(getObjectFriendlyName(objType))}"><h3>${getObjectFriendlyName(objType)}</h3></a></li>`;
+        }
+        this.checkboxes += `</ul>`;
+             
+        for (let level in configuration.sentencegrammar) {
+            let leveli: number = +level;
+            if (isNaN(leveli)) continue; // Not numeric
 
-            this.checkboxes += `<div class="objectlevel"><h1>${getObjectFriendlyName(objType)}</h1><div>`;
+            let objType: string = configuration.sentencegrammar[leveli].objType; // objType is 'word', 'phrase' etc.
+            
+            this.checkboxes += `<div id="${getHtmlAttribFriendlyName(getObjectFriendlyName(objType))}">`
+            this.checkboxes += `<div class="objectlevel">`;
+            this.checkboxes += `<div id="grammarbuttongroup">`;
             this.checkboxes += this.makeInitCheckBoxForObj(leveli);
 
             /// TO DO: This only works if the grammargroups are not intermixed with grammarfeatures.
@@ -160,24 +181,28 @@ class GrammarSelectionBox {
             this.hasSeenGrammarGroup = false;
             
             configuration.sentencegrammar[leveli]
-                .walkFeatureNames(objType, (whattype    : WHAT,
-                                            objType     : string,
-                                            origObjType : string,
-                                            featName    : string,
-                                            featNameLoc : string,
-                                            sgiObj      : SentenceGrammarItem) => this.generatorCallback(whattype,
-                                                                                                         objType,
-                                                                                                         origObjType,
-                                                                                                         featName,
-                                                                                                         featNameLoc,
-                                                                                                         sgiObj));
+                .walkFeatureNames(objType, (whattype: WHAT,
+                    objType: string,
+                    origObjType: string,
+                    featName: string,
+                    featNameLoc: string,
+                    sgiObj: SentenceGrammarItem) => this.generatorCallback(whattype,
+                                                                           objType,
+                                                                           origObjType,
+                                                                           featName,
+                                                                           featNameLoc,
+                                                                           sgiObj));
 
             if (this.hasSeenGrammarGroup)
-                this.checkboxes += '</div>';
+                // End the tablist and the divs and append them to this.checkboxes
+                this.checkboxes += '</div>'
+            this.checkboxes += this.subgroupgrammartabs + '</ul>' + this.subgroupgrammardivs + '</div>';
+            this.subgroupgrammartabs = '';
+            this.subgroupgrammardivs = '';
 
-            this.checkboxes += '</div></div>'
+            this.checkboxes += '</div></div>';
         }
-
+        this.checkboxes += `<p><a class="btn btn-clear" id="cleargrammar" href="#myview">${localize('clear_grammar')}</a></p>`;
         return this.checkboxes;
     }
 
@@ -410,29 +435,29 @@ class GrammarSelectionBox {
     // Returns:
     //     The width of the accordion
     //
-    public static buildGrammarAccordion() : number {
-        let acc1 : JQuery = $('#gramselect').accordion({heightStyle: 'content', collapsible: true, header: 'h1'});
-        let acc2 : JQuery = $('.subgrammargroup').accordion({heightStyle: 'content', collapsible: true, header: 'h2'});
+    public static buildGrammarAccordion(): string {
 
-        /// @todo Does this work if there are multiple '.subgrammargroup' divs?
-        let max_width  = 0;
-        for (let j=0; j<acc2.find('h2').length; ++j) {
-            acc2.accordion('option','active',j);
-            if (acc2.width() > max_width)
-                max_width = acc2.width();
-        }
-        acc2.accordion('option','active',false); // No active item 
-        acc2.width(max_width*1.05);  // I don't know why I have to add 5% here
+        let tabs1: JQuery = $('#myview').tabs({
+            heightStyle: 'content',
+            collapsible: true,
+        });
 
-        max_width = 0;
-        for (let j=0; j<acc1.find('h1').length; ++j) {
-            acc1.accordion('option','active',j);
-            if (acc1.width() > max_width)
-                max_width = acc1.width();
-        }
-        acc1.accordion('option','active',false);
-        acc1.width(max_width);
+        let tabs2: JQuery = $('#gramtabs').tabs({
+            heightStyle: 'content',
+            collapsible: true,
+        });
+
+        let tabs3: JQuery = $('#subgrammargroup').tabs({
+            heightStyle: 'content',
+            collapsible: true,
+        });
         
+        let max_width = 'auto';
+
+        tabs1.tabs('option', 'active', false);
+        tabs2.tabs('option', 'active', false);
+        tabs3.tabs('option', 'active', false);
+
         return max_width;
     }
 }
