@@ -1,6 +1,3 @@
-[submodule "ckeditor_old"]
-	path = ckeditor_old
-	url = https://github.com/EzerIT/ckeditor-releases
 [submodule "zocial"]
 	path = zocial
 	url = https://github.com/EzerIT/css-social-buttons
