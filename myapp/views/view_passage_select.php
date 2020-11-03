@@ -31,4 +31,4 @@
 <div id="passagetree">
 </div>
 
-<p><a class="btn btn-primary" href="#" onclick="getchk(); return false;"><?= $this->lang->line('start_quiz') ?></a></p>
+<p><a class="btn btn-outline-dark" href="#" onclick="getchk(); return false;"><?= $this->lang->line('start_quiz') ?></a></p>

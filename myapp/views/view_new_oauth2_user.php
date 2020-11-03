@@ -34,7 +34,7 @@
       <input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('yes') ?>" />
       <?= anchor(build_get('oauth2/accept_policy_no', array('acceptance_code' => $acceptance_code)),
                  $this->lang->line('no'),
-                 array('class' => 'btn btn-primary')) ?>
+                 array('class' => 'btn btn-outline-dark')) ?>
     </form>
   </div>
 </div>

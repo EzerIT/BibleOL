@@ -1,8 +1,4 @@
 <div class="col-lg-3">
-  <div class="grammarselector" id="gramselect"></div>
-  <?php if (!$is_quiz): ?>
-    <p><a class="btn btn-primary" id="cleargrammar" href="#"><?= $this->lang->line('clear_grammar') ?></a></p>
-  <?php endif; ?>
 </div>
 
 <div class="col-lg-6 col-md-8">
@@ -16,36 +12,51 @@
   <div class="textcontainer-background" id="textcontainer">
 
     <?php if ($is_quiz): ?>
-      <div id="quizdesc"></div>
+      <div id="quizdesc" class="cke_editable cke_editable_themed cke_contents_ltr cke_show_borders"></div>
     <?php else: ?>
-      <?php if ($shebanq_link): ?>
-        <div style="float:right;"><a href="<?= $shebanq_link ?>" title="Find chapter at SHEBANQ" target="shebanq"><img src="<?= site_url('/images/shebanq_logo32.png') ?>" alt=""></a></div>
-      <?php endif; ?>
       <h1></h1>
     <?php endif; ?>
    
-    <div id="textarea"></div>
-   
+    <div id="greyspace"></div>
+    <div id="myview">
+      <ul><li><a class="myview" href="#gramtabs"><h2>MyView</h2></a></li></ul>
+      <div id="tabs-background">
+        <?php if ($is_quiz): ?>
+          <h2><input id="locate_cb" type="checkbox" checked="checked" style="opacity: 0;"><span class="location"></span></span></h2>
+        <?php endif; ?>
+        <?php if (!$is_quiz): ?>
+            <h2></h2>
+        <?php endif; ?>
+      </div>
+      <div class="grammarborder">
+        <div id="gramtabs"></div>
+      </div>
+    </div>
+
+    <div id="textarea">
+    <?php if ($shebanq_link): ?>
+        <div style="float:right;"><a href="<?= $shebanq_link ?>" title="Find chapter at SHEBANQ" target="shebanq"><img src="<?= site_url('/images/shebanq_logo32.png') ?>" alt=""></a></div>
+      <?php endif; ?>
+    </div>
+          
     <?php if ($is_quiz): ?>
-      <div id="virtualkbcontainer"><div id="virtualkbid"></div></div>
-      <div style="overflow-x:auto; overflow-y:hidden">
-        <table id="quiztab"></table>
+      <!-- Progress bar
+       <progress> works in most browsers, <div id="progressbar"> is for older browsers and uses JQuery UI*/ -->
+      <!-- <p class="inline"><?= $this->lang->line('progress') ?></p> -->
+      <div id="progressbarfield">
+        <progress id="progress" value="0" max="1"></progress>
+        <div id="progressbar"></div>
       </div>
-      <p><span id="locate_choice"><input id="locate_cb" type="checkbox"> <?= $this->lang->line('locate') ?> <span class="location"></span></span></p>
-      <?php /* <progress> works in most browsers, <div id="progressbar"> is for older browsers and uses JQuery UI*/ ?>
-      <p class="inline"><?= $this->lang->line('progress') ?></p>
-      <progress id="progress" value="0" max="1"></progress>
-      <div id="progressbar"></div>
-      <p id="progresstext" class="inline"></p>
-      <div id="buttonlist1">
-        <button id="check_answer" type="button"><?= $this->lang->line('check_answer') ?></button>
-        <button id="show_answer" type="button"><?= $this->lang->line('show_answer') ?></button>
-      </div>
+
+      <!-- Virtual keyboard -->
+      <!-- <div id="virtualkbcontainer"><div id="virtualkbid"></div></div> -->
+      <div id="quizcontainer"></div>
       <div id="buttonlist2">
-        <button id="next_question" type="button"><?= $this->lang->line('next') ?></button>
-        <button id="finish" type="button"><?= $this->lang->line('finish') ?></button>
-        <button id="finishNoStats" type="button"><?= $this->lang->line('finish_no_grading') ?></button>
+          <button id="next_question" class="btn btn-quiz" type="button"><?= $this->lang->line('next') ?></button>
+          <button id="finish" class="btn btn-quiz" type="button"><?= $this->lang->line('finish') ?></button>
+          <button id="finishNoStats" class="btn btn-quiz" type="button"><?= $this->lang->line('finish_no_grading') ?></button>
       </div>
+      
     <?php endif; ?>
    
     <p><button id="togglemql"><?= $this->lang->line('toggle_mql') ?></button></p>
