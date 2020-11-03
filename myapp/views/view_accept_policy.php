@@ -17,7 +17,7 @@
       <input type="hidden" name="acceptance_code" value="<?= $acceptance_code ?>" />
       <input type="hidden" name="policy_lang" value="<?= $policy_lang ?>" />
       <input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('yes') ?>" />
-      <?= anchor('login/accept_policy_no', $this->lang->line('no'), array('class' => 'btn btn-primary')) ?>
+      <?= anchor('login/accept_policy_no', $this->lang->line('no'), array('class' => 'btn btn-outline-dark')) ?>
     </form>
   </div>
 </div>
