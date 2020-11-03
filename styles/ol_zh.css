@@ -25,6 +25,11 @@ div.dropdown-menu .dropdown-item.active {
   font-weight: bold;
   border-radius: 0;
 }
+a.nav-link {
+  font-size: 11pt;
+  text-transform: uppercase;
+  color: #43B02A !important;
+}
 ul.navtabs a {
   margin-bottom: -1px !important;
 }
