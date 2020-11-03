@@ -2211,7 +2211,6 @@ var Quiz = (function () {
         this.currentDictIx = -1;
         this.currentPanelQuestion = null;
         this.quiz_statistics = new QuizStatistics(qid);
-        $('#quiztab').append('<tr id="quiztabhead"></tr>');
         $('button#next_question').click(function () { return _this.nextQuestion(); });
         $('button#finish').click(function () { return _this.finishQuiz(true); });
         $('button#finishNoStats').click(function () { return _this.finishQuiz(false); });
@@ -2257,10 +2256,9 @@ var Quiz = (function () {
             $('button#finishNoStats').attr('disabled', 'disabled');
         }
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
-            $('#virtualkbid').appendTo('#virtualkbcontainer');
             $('#textarea').empty();
-            $('#quiztab').empty();
-            $('#quiztab').append('<tr id="quiztabhead"></tr>');
+            $('#quizcontainer').empty();
+            $('.quizcard').empty();
             var currentDict = new Dictionary(dictionaries, this.currentDictIx, quizdata);
             $('#quizdesc').html(quizdata.desc);
             $('#quizdesc').find('a').attr('target', '_blank');
@@ -2275,16 +2273,14 @@ var Quiz = (function () {
                 $('button#finish').removeAttr('disabled');
                 $('button#finishNoStats').removeAttr('disabled');
             }
-            if (quizdata.quizFeatures.useVirtualKeyboard &&
-                (charset.keyboardName === 'IL' || charset.keyboardName === 'GR')) {
-                VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
-                VirtualKeyboard.toggle('firstinput', 'virtualkbid');
-            }
+            $('html, body').animate({
+                scrollTop: $('#myview').offset().top - 5
+            }, 50);
         }
         else
             alert('No more questions');
         util.FollowerBox.resetCheckboxCounters();
-        $('.grammarselector input:enabled:checked').trigger('change');
+        $('.selectbutton input:enabled:checked').trigger('change');
     };
     Quiz.prototype.finishQuiz = function (gradingFlag) {
         if (quizdata.quizid == -1)

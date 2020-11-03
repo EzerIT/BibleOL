@@ -31,7 +31,7 @@ class Quiz {
     constructor(qid : number) {
         this.quiz_statistics = new QuizStatistics(qid);
 
-        $('#quiztab').append('<tr id="quiztabhead"></tr>');
+        // $('#quiztab').append('<tr id="quiztabhead"></tr>');
 
         // Set up handlers for the buttons
         $('button#next_question').click(() => this.nextQuestion());
@@ -107,10 +107,10 @@ class Quiz {
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
             // We have another question
             
-            $('#virtualkbid').appendTo('#virtualkbcontainer'); // Move the keyboard back to its initial position
+            // $('#virtualkbid').appendTo('#virtualkbcontainer'); // Move the keyboard back to its initial position
             $('#textarea').empty();
-            $('#quiztab').empty();
-            $('#quiztab').append('<tr id="quiztabhead"></tr>');
+            $('#quizcontainer').empty();
+            $('.quizcard').empty();
      
             // Get text for next question
             let currentDict : Dictionary = new Dictionary(dictionaries,this.currentDictIx,quizdata);
@@ -133,17 +133,23 @@ class Quiz {
                 $('button#finishNoStats').removeAttr('disabled');
             }
             
-            if (quizdata.quizFeatures.useVirtualKeyboard &&
-                (charset.keyboardName==='IL' || charset.keyboardName==='GR')) {
-                VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
-                VirtualKeyboard.toggle('firstinput','virtualkbid');
-            }
+            // DISABLED virtual keyboard!
+            // if (quizdata.quizFeatures.useVirtualKeyboard &&
+            //     (charset.keyboardName==='IL' || charset.keyboardName==='GR')) {
+            //     VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
+            //     VirtualKeyboard.toggle('firstinput','virtualkbid');
+            // }
+
+            // Move to top of the question
+            $('html, body').animate({
+                scrollTop: $('#myview').offset().top - 5 // -5 to add take 5 additional px above myview
+            }, 50);
         }
         else
             alert('No more questions');
 
         util.FollowerBox.resetCheckboxCounters(); // Reset counters in preparation for the following trigger() call
-        $('.grammarselector input:enabled:checked').trigger('change'); // Make sure grammar is displayed for relevant checkboxes
+        $('.selectbutton input:enabled:checked').trigger('change'); // Make sure grammar is displayed for relevant checkboxes
     }
 
     //------------------------------------------------------------------------------------------
