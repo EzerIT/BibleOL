@@ -73,6 +73,10 @@ a.nav-link {
     font-size: 11pt;
     text-transform: uppercase;
     color: @dadelgreen !important;
+    &:hover {
+        font-weight: bold;
+    }
+
 }
 
 // End navbar
@@ -688,7 +692,17 @@ div#greyspace {
     height: 15px;
 }
 
-// div#quizdesc {
+// div#quizdesc 
+
+#cke_1_top, #cke_1_bottom {
+    background-color: white;
+    border-top-color: white;
+    border-bottom-color: @dadelgreydark
+}
+#cke_txtdesc {
+    border-color: @dadelgreydark;
+}
+
 .cke_editable.cke_editable_themed.cke_contents_ltr.cke_show_borders {
     border: 1px solid @dadelgreydark;
     padding-top: 10px;

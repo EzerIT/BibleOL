@@ -30,6 +30,9 @@ a.nav-link {
   text-transform: uppercase;
   color: #43B02A !important;
 }
+a.nav-link:hover {
+  font-weight: bold;
+}
 ul.navtabs a {
   margin-bottom: -1px !important;
 }
@@ -551,6 +554,15 @@ table.enroll td {
 div#greyspace {
   background-color: #f2f2f2;
   height: 15px;
+}
+#cke_1_top,
+#cke_1_bottom {
+  background-color: white;
+  border-top-color: white;
+  border-bottom-color: #adadad;
+}
+#cke_txtdesc {
+  border-color: #adadad;
 }
 .cke_editable.cke_editable_themed.cke_contents_ltr.cke_show_borders {
   border: 1px solid #adadad;
