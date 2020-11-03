@@ -2010,8 +2010,8 @@ var PanelQuestion = (function () {
         }
         var quizCard = $('.quizcard');
         quizCard.append('<div class="buttonlist1">'
-            + "<button class=\"btn btn-quiz\" id=\"check_answer\" type=\"button\">Check answer</button>"
-            + "<button class=\"btn btn-quiz\" id=\"show_answer\" type=\"button\">Show answer</button>"
+            + ("<button class=\"btn btn-quiz\" id=\"check_answer\" type=\"button\">" + localize('check_answer') + "</button>")
+            + ("<button class=\"btn btn-quiz\" id=\"show_answer\" type=\"button\">" + localize('show_answer') + "</button>")
             + '</div>');
         if (quizCardNum > 1) {
             quizContainer.prepend('<div class="prev-next-btn prev" id="prevsubquiz" style="visibility:hidden;">&#10094;</div>');
