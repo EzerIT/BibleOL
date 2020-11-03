@@ -1459,6 +1459,7 @@ var PanelQuestion = (function () {
         var _this = this;
         this.vAnswers = [];
         this.question_stat = new QuestionStatistics;
+        this.subQuizIndex = 0;
         this.qd = qd;
         this.sentence = dict.sentenceSetQuiz;
         var smo = dict.getSingleMonadObject(getFirst(this.sentence));
@@ -1496,39 +1497,53 @@ var PanelQuestion = (function () {
         var showFeatures = qd.quizFeatures.showFeatures;
         var requestFeatures = qd.quizFeatures.requestFeatures;
         var oType = qd.quizFeatures.objectType;
-        this.question_stat.text = dict.generateSentenceHtml(qd);
-        this.question_stat.location = location_realname;
-        var colcount = 0;
-        if (dontShow) {
-            $('#quiztabhead').append('<th>' + localize('item_number') + '</th>');
-            this.question_stat.show_feat.names.push('item_number');
-            ++colcount;
-        }
-        for (var sfi in showFeatures) {
-            if (isNaN(+sfi))
-                continue;
-            $('#quiztabhead').append('<th>' + getFeatureFriendlyName(oType, showFeatures[sfi]) + '</th>');
-            this.question_stat.show_feat.names.push(showFeatures[sfi]);
-            ++colcount;
-        }
-        for (var sfi in requestFeatures) {
-            if (isNaN(+sfi))
-                continue;
-            $('#quiztabhead').append('<th>' + getFeatureFriendlyName(oType, requestFeatures[sfi].name) + '</th>');
-            this.question_stat.req_feat.names.push(requestFeatures[sfi].name);
-            ++colcount;
-        }
         var featuresHere = typeinfo.obj2feat[oType];
         var qoFeatures = this.buildQuizObjectFeatureList();
         var hasForeignInput = false;
         var firstInput = 'id="firstinput"';
+        var quizItemID = 0;
+        this.question_stat.text = dict.generateSentenceHtml(qd);
+        this.question_stat.location = location_realname;
+        var questionheaders = [];
+        var headInd = 0;
+        if (dontShow) {
+            questionheaders.push('<th>' + localize('item_number') + '</th>');
+            this.question_stat.show_feat.names.push('item_number');
+        }
+        for (var sfi in showFeatures) {
+            if (isNaN(+sfi))
+                continue;
+            questionheaders.push('<th>' + getFeatureFriendlyName(oType, showFeatures[sfi]) + '</th>');
+            this.question_stat.show_feat.names.push(showFeatures[sfi]);
+        }
+        for (var sfi in requestFeatures) {
+            if (isNaN(+sfi))
+                continue;
+            questionheaders.push('<th>' + getFeatureFriendlyName(oType, requestFeatures[sfi].name) + '</th>');
+            this.question_stat.req_feat.names.push(requestFeatures[sfi].name);
+        }
+        var headLen = questionheaders.length;
+        var quizCardNum = 0;
+        var quizActive = true;
+        var quizContainer = $('div#quizcontainer');
         for (var qoid in qoFeatures) {
             if (isNaN(+qoid))
                 continue;
-            var currentRow = $('<tr></tr>');
+            ++quizCardNum;
+            if (quizActive === true) {
+                quizContainer.append("<div class=\"quizcard\" style=\"display:block;\"><table class=\"quiztab" + qoid + "\"></table></div>");
+                quizActive = false;
+            }
+            else {
+                quizContainer.append("<div class=\"quizcard\" style=\"display:none;\"><table class=\"quiztab" + qoid + "\"></table></div>");
+            }
+            var quizTab = $("table.quiztab" + qoid);
             var fvals = qoFeatures[+qoid];
             if (dontShow) {
-                currentRow.append('<td>' + (+qoid + 1) + '</td>');
+                quizTab.append('<tr>' + questionheaders[(headInd % headLen + headLen) % headLen]
+                    + '<td>' + (+qoid + 1)
+                    + '</td></tr>');
+                ++headInd;
                 this.question_stat.show_feat.values.push("" + (+qoid + 1));
             }
             for (var sfi in showFeatures) {
@@ -1569,10 +1584,18 @@ var PanelQuestion = (function () {
                 }
                 if (val == null)
                     alert('Unexpected val==null in panelquestion.ts');
-                if (featType === 'string' || featType == 'ascii')
-                    currentRow.append("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + (val === '' ? '-' : val) + "</td>");
-                else
-                    currentRow.append("<td>" + val + "</td>");
+                if (featType === 'string' || featType == 'ascii') {
+                    quizTab.append('<tr>'
+                        + questionheaders[(headInd % headLen + headLen) % headLen]
+                        + ("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + (val === '' ? '-' : val) + "</td></tr>"));
+                    ++headInd;
+                }
+                else {
+                    quizTab.append('<tr>'
+                        + questionheaders[(headInd % headLen + headLen) % headLen]
+                        + ("<td>" + val + "</td></tr>"));
+                    ++headInd;
+                }
             }
             var _loop_2 = function (rfi) {
                 if (isNaN(+rfi))
@@ -1584,6 +1607,7 @@ var PanelQuestion = (function () {
                 var featType = featuresHere[rf];
                 var featset = getFeatureSetting(oType, rf);
                 var v = null;
+                ++quizItemID;
                 if (correctAnswer == null)
                     alert('Unexpected correctAnswer==null in panelquestion.ts');
                 if (correctAnswer === '')
@@ -1595,52 +1619,289 @@ var PanelQuestion = (function () {
                 if (featset.alternateshowrequestDb != null && usedropdown) {
                     var suggestions = fvals[rf + '!suggest!'];
                     if (suggestions == null)
-                        v = $("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + correctAnswer + "</td>");
+                        v = $('<tr>'
+                            + +questionheaders[(headInd % headLen + headLen) % headLen]
+                            + ("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + correctAnswer + "</td>")
+                            + '</tr>');
                     else {
-                        var mc_div = $('<div class="styled-select"></div>');
-                        var mc_select_1 = $("<select class=\"" + PanelQuestion.charclass(featset) + "\" style=\"direction:ltr\">");
-                        mc_div.append(mc_select_1);
+                        var quiz_div_1 = $('<div class="quizitem"></div>');
                         var optArray = [];
-                        var cwyn = new ComponentWithYesNo(mc_div, COMPONENT_TYPE.comboBox2);
+                        var cwyn = new ComponentWithYesNo(quiz_div_1, COMPONENT_TYPE.comboBox2);
                         cwyn.addChangeListener();
-                        mc_select_1.append('<option value="NoValueGiven"></option>');
                         for (var valix in suggestions) {
                             if (isNaN(+valix))
                                 continue;
                             var s = suggestions[+valix];
                             var item = new StringWithSort(s, s);
-                            var option = $("<option value=\"" + s + "\" class=\"" + PanelQuestion.charclass(featset) + "\">" + s + "</option>");
+                            var option = $('<div class="selectbutton">'
+                                + ("<input type =\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
+                                + ("<label for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
+                                + '</div>');
                             option.data('sws', item);
                             optArray.push(option);
                             if (s === correctAnswer)
                                 this_2.vAnswers.push(new Answer(cwyn, item, s, null));
                         }
                         optArray.sort(function (a, b) { return StringWithSort.compare(a.data('sws'), b.data('sws')); });
-                        $.each(optArray, function (ix, o) { return mc_select_1.append(o); });
+                        $.each(optArray, function (ix, o) { return quiz_div_1.append(o); });
                         v = cwyn.getJQuery();
                     }
                 }
                 else if (featType === 'string' || featType === 'ascii') {
                     var cwyn = void 0;
-                    if (featset.foreignText || featset.transliteratedText) {
-                        var vf = $("<input " + firstInput + " data-kbid=\"" + PanelQuestion.kbid++ + "\" type=\"text\" size=\"20\""
-                            + (" class=\"" + PanelQuestion.charclass(featset) + "\"")
-                            + (" onfocus=\"$('#virtualkbid').appendTo('#row" + (+qoid + 1) + "');VirtualKeyboard.attachInput(this)\">"));
-                        firstInput = '';
-                        hasForeignInput = true;
-                        cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textFieldWithVirtKeyboard);
-                    }
-                    else {
-                        var vf = $('<input type="text" size="20">');
-                        cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
-                    }
-                    cwyn.addKeypressListener();
-                    v = cwyn.getJQuery();
                     var trimmedAnswer = correctAnswer.trim()
                         .replace(/&lt;/g, '<')
                         .replace(/&gt;/g, '>')
                         .replace(/&quot;/g, '"')
                         .replace(/&amp;/g, '&');
+                    if (featset.foreignText || featset.transliteratedText) {
+                        var answerArray = trimmedAnswer.split("");
+                        var answerLetters_1 = [];
+                        var additionalCons = [];
+                        var additionalVowels = [];
+                        var answerLettersRandom = void 0;
+                        var showLetters_1 = [];
+                        $.each(answerArray, function (i, el) {
+                            if ($.inArray(el, answerLetters_1) === -1)
+                                answerLetters_1.push(el);
+                        });
+                        var shinDot = false;
+                        var sinDot = false;
+                        for (var i = 0; i < answerLetters_1.length; i++) {
+                            if (answerLetters_1[i] === 'ש') {
+                                answerLetters_1.splice(i, 1);
+                                break;
+                            }
+                        }
+                        for (var i = 0; i < answerLetters_1.length; i++) {
+                            if (answerLetters_1[i] === '\u05C1') {
+                                answerLetters_1.splice(i, 1);
+                                shinDot = true;
+                                break;
+                            }
+                        }
+                        for (var i = 0; i < answerLetters_1.length; i++) {
+                            if (answerLetters_1[i] === '\u05C2') {
+                                answerLetters_1.splice(i, 1);
+                                sinDot = true;
+                                break;
+                            }
+                        }
+                        if (shinDot === true) {
+                            answerLetters_1.push('ש' + '\u05C1');
+                        }
+                        if (sinDot === true) {
+                            answerLetters_1.push('ש' + '\u05C2');
+                        }
+                        for (var index = 0; index < answerLetters_1.length; index++) {
+                            var l = answerLetters_1[index];
+                            switch (l) {
+                                case 'א':
+                                    additionalCons.push('ע');
+                                    break;
+                                case 'ב':
+                                    additionalCons.push('כ');
+                                    break;
+                                case 'ד':
+                                    additionalCons.push('ר');
+                                    additionalCons.push('ה');
+                                    break;
+                                case 'ח':
+                                    additionalCons.push('ה');
+                                    additionalCons.push('ת');
+                                    break;
+                                case 'ט':
+                                    additionalCons.push('ת');
+                                    break;
+                                case 'ו':
+                                    additionalCons.push('י');
+                                    additionalCons.push('ז');
+                                    break;
+                                case 'י':
+                                    additionalCons.push('ו');
+                                    break;
+                                case 'ק':
+                                    additionalCons.push('כ');
+                                    break;
+                                case 'כ':
+                                    additionalCons.push('ק');
+                                    additionalCons.push('ב');
+                                    break;
+                                case 'ר':
+                                    additionalCons.push('ד');
+                                    additionalCons.push('ה');
+                                    break;
+                                case 'ת':
+                                    additionalCons.push('ט');
+                                    additionalCons.push('ע');
+                                    break;
+                                case 'ך':
+                                    additionalCons.push('כ');
+                                    additionalCons.push('ו');
+                                    additionalVowels.push('\u05B9');
+                                    break;
+                                case 'ף':
+                                    additionalCons.push('פ');
+                                    additionalCons.push('ך');
+                                    break;
+                                case 'ץ':
+                                    additionalCons.push('צ');
+                                    break;
+                                case 'ם':
+                                    additionalCons.push('מ');
+                                    additionalCons.push('ן');
+                                    break;
+                                case 'ן':
+                                    additionalCons.push('נ');
+                                    additionalCons.push('ם');
+                                    break;
+                                case '\u05B8':
+                                    additionalVowels.push('\u05B8');
+                                    additionalVowels.push('\u05B3');
+                                    break;
+                                case '\u05B3':
+                                    additionalVowels.push('\u05B0');
+                                    additionalVowels.push('\u05B8');
+                                    break;
+                                case '\u05B7':
+                                    additionalVowels.push('\u05B8');
+                                    additionalVowels.push('\u05B2');
+                                    break;
+                                case '\u05B2':
+                                    additionalVowels.push('\u05B0');
+                                    additionalVowels.push('\u05B7');
+                                    break;
+                                case '\u05B0':
+                                    additionalVowels.push('\u05B2');
+                                    additionalVowels.push('\u05B1');
+                                    additionalVowels.push('\u05B3');
+                                    break;
+                                case '\u05B5':
+                                    additionalVowels.push('\u05B6');
+                                    break;
+                                case '\u05B6':
+                                    additionalVowels.push('\u05B5');
+                                    additionalVowels.push('\u05B1');
+                                    break;
+                                case '\u05B6':
+                                    additionalVowels.push('\u05B0');
+                                    additionalVowels.push('\u05B6');
+                                    break;
+                                case '\u05B9':
+                                    additionalVowels.push('\u05BB');
+                                    break;
+                                case '\u05BB':
+                                    additionalVowels.push('\u05B9');
+                                    break;
+                                case 'β':
+                                    additionalCons.push('δ');
+                                    break;
+                                case 'γ':
+                                    additionalCons.push('κ');
+                                    break;
+                                case 'δ':
+                                    additionalCons.push('β');
+                                    break;
+                                case 'ζ':
+                                    additionalCons.push('ξ');
+                                    break;
+                                case 'θ':
+                                    additionalCons.push('τ');
+                                    break;
+                                case 'κ':
+                                    additionalCons.push('γ');
+                                    break;
+                                case 'λ':
+                                    additionalCons.push('μ');
+                                    break;
+                                case 'μ':
+                                    additionalCons.push('ν');
+                                    break;
+                                case 'ν':
+                                    additionalCons.push('μ');
+                                    break;
+                                case 'ξ':
+                                    additionalCons.push('ζ');
+                                    break;
+                                case 'π':
+                                    additionalCons.push('ψ');
+                                    break;
+                                case 'ρ':
+                                    additionalCons.push('λ');
+                                    break;
+                                case 'σ':
+                                    additionalCons.push('ς');
+                                    break;
+                                case 'ς':
+                                    additionalCons.push('σ');
+                                    break;
+                                case 'τ':
+                                    additionalCons.push('θ');
+                                    break;
+                                case 'φ':
+                                    additionalCons.push('θ');
+                                    break;
+                                case 'χ':
+                                    break;
+                                case 'ψ':
+                                    additionalCons.push('π');
+                                    break;
+                                case 'α':
+                                    additionalVowels.push('η');
+                                    additionalVowels.push('ε');
+                                    break;
+                                case 'ε':
+                                    additionalVowels.push('ι');
+                                    break;
+                                case 'η':
+                                    additionalVowels.push('ε');
+                                    break;
+                                case 'ι':
+                                    additionalVowels.push('ε');
+                                    break;
+                                case 'υ':
+                                    additionalVowels.push('η');
+                                    break;
+                                case 'ο':
+                                    additionalVowels.push('η');
+                                    additionalVowels.push('ω');
+                                    break;
+                                case 'ω':
+                                    additionalVowels.push('ο');
+                                    break;
+                            }
+                        }
+                        additionalCons = additionalCons.sort(function () {
+                            return .5 - Math.random();
+                        });
+                        additionalVowels = additionalVowels.sort(function () {
+                            return .5 - Math.random();
+                        });
+                        answerLettersRandom = answerLetters_1.concat(additionalCons.slice(0, 3))
+                            .concat(additionalVowels.slice(0, 3));
+                        $.each(answerLettersRandom, function (i, el) {
+                            if ($.inArray(el, showLetters_1) === -1)
+                                showLetters_1.push(el);
+                        });
+                        showLetters_1.sort();
+                        var vf_1 = $("<div class=\"inputquizitem\"><input " + firstInput + " data-kbid=\"" + PanelQuestion.kbid++ + "\" type=\"text\""
+                            + (" class=\"" + PanelQuestion.charclass(featset) + "\"></div>"));
+                        vf_1.append("<div class=\"letterinput\"><div class=\"selectbutton delbutton\" id=\"delinputchar\"><label for=\"delinputchar\">del</label></div></div>");
+                        showLetters_1.forEach(function (letter) {
+                            vf_1.find('.letterinput').append("<div class=\"selectbutton inputbutton\" id=\"inputchar\"><label for=\"inputchar\" class=\"" + PanelQuestion.charclass(featset) + "\">" + letter + "</label></div>");
+                        });
+                        firstInput = '';
+                        hasForeignInput = true;
+                        cwyn = new ComponentWithYesNo(vf_1, COMPONENT_TYPE.textField);
+                        cwyn.addKeypressListener();
+                        v = cwyn.getJQuery();
+                    }
+                    else {
+                        var vf = $('<div class="inputquizitem"><input type="text"></div>');
+                        cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
+                        cwyn.addKeypressListener();
+                        v = cwyn.getJQuery();
+                    }
                     this_2.vAnswers.push(new Answer(cwyn, null, trimmedAnswer, featset.matchregexp));
                 }
                 else if (featType === 'integer') {
@@ -1665,12 +1926,14 @@ var PanelQuestion = (function () {
                         for (var c = 0; c < 3; c++) {
                             var ix = r + c * numberOfRows;
                             if (ix < numberOfItems)
-                                row.append('<td style="text-align:left">'
+                                row.append(questionheaders[(headInd % headLen + headLen) % headLen]
+                                    + '<td style="text-align:left">'
                                     + ("<input type=\"checkbox\" value=\"" + swsValues[ix].getInternal() + "\">")
                                     + swsValues[ix].getString()
                                     + '</td>');
                             else
-                                row.append('<td></td>');
+                                row.append(questionheaders[(headInd % headLen + headLen) % headLen]
+                                    + '<td></td>');
                         }
                         selections.append(row);
                     }
@@ -1681,14 +1944,16 @@ var PanelQuestion = (function () {
                 }
                 else {
                     var values = typeinfo.enum2values[featType];
-                    if (values == null)
-                        v = $('<td>QuestionPanel.UnknType</td>');
+                    if (values == null) {
+                        v.append('<tr>'
+                            + questionheaders[(headInd % headLen + headLen) % headLen]
+                            + '<td>QuestionPanel.UnknType</td></tr>');
+                    }
                     else {
-                        var mc_select_2 = $('<select></select>');
+                        var quiz_div_2 = $('<div class="quizitem"></div>');
                         var optArray = [];
-                        var cwyn = new ComponentWithYesNo(mc_select_2, COMPONENT_TYPE.comboBox1);
+                        var cwyn = new ComponentWithYesNo(quiz_div_2, COMPONENT_TYPE.comboBox1);
                         cwyn.addChangeListener();
-                        mc_select_2.append('<option value="NoValueGiven"></option>');
                         var correctAnswerFriendly = getFeatureValueFriendlyName(featType, correctAnswer, false, false);
                         var hasAddedOther = false;
                         var correctIsOther = featset.otherValues && featset.otherValues.indexOf(correctAnswer) !== -1 ||
@@ -1704,7 +1969,10 @@ var PanelQuestion = (function () {
                                 if (!hasAddedOther) {
                                     hasAddedOther = true;
                                     var item = new StringWithSort('#1000 ' + localize('other_value'), 'othervalue');
-                                    var option = $("<option value=\"" + item.getInternal() + "\">" + item.getString() + "</option>");
+                                    var option = $('<div class="selectbutton">'
+                                        + ("<input type =\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
+                                        + ("<label for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
+                                        + '</div>');
                                     option.data('sws', item);
                                     optArray.push(option);
                                     if (correctIsOther)
@@ -1714,7 +1982,10 @@ var PanelQuestion = (function () {
                             else {
                                 var sFriendly = getFeatureValueFriendlyName(featType, s, false, false);
                                 var item = new StringWithSort(sFriendly, s);
-                                var option = $("<option value=\"" + item.getInternal() + "\">" + item.getString() + "</option>");
+                                var option = $('<div class="selectbutton">'
+                                    + ("<input type =\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
+                                    + ("<label for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
+                                    + '</div>');
                                 option.data('sws', item);
                                 optArray.push(option);
                                 if (sFriendly === correctAnswerFriendly)
@@ -1722,20 +1993,53 @@ var PanelQuestion = (function () {
                             }
                         }
                         optArray.sort(function (a, b) { return StringWithSort.compare(a.data('sws'), b.data('sws')); });
-                        $.each(optArray, function (ix, o) { return mc_select_2.append(o); });
+                        $.each(optArray, function (ix, o) { return quiz_div_2.append(o); });
                         v = cwyn.getJQuery();
                     }
                 }
-                currentRow.append(v);
+                var quizRow = $('<tr></tr>');
+                quizRow.append(questionheaders[(headInd % headLen + headLen) % headLen]);
+                quizRow.append(v);
+                quizTab.append(quizRow);
+                ++headInd;
             };
             var this_2 = this;
             for (var rfi in requestFeatures) {
                 _loop_2(rfi);
             }
-            $('#quiztab').append(currentRow);
-            if (hasForeignInput)
-                $('#quiztab').append("<tr><td colspan=\"" + colcount + "\" id=\"row" + (+qoid + 1) + "\" style=\"text-align:right;\"></td></tr>");
         }
+        var quizCard = $('.quizcard');
+        quizCard.append('<div class="buttonlist1">'
+            + "<button class=\"btn btn-quiz\" id=\"check_answer\" type=\"button\">Check answer</button>"
+            + "<button class=\"btn btn-quiz\" id=\"show_answer\" type=\"button\">Show answer</button>"
+            + '</div>');
+        if (quizCardNum > 1) {
+            quizContainer.prepend('<div class="prev-next-btn prev" id="prevsubquiz" style="visibility:hidden;">&#10094;</div>');
+            quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
+        }
+        '<div class="selectbutton inputbutton" id="inputchar"><label for="inputchar">${letter}</label></div>';
+        $('div#inputchar').click(function () {
+            var letter = String($(this).find('label').text());
+            $(this)
+                .parent().siblings('input')
+                .val($(this).parent().siblings('input').val() + letter);
+            return false;
+        });
+        $('div#delinputchar').click(function () {
+            var value = String($(this).parent().siblings('input').val());
+            $(this)
+                .parent().siblings('input')
+                .val(value.slice(0, -1));
+            return false;
+        });
+        $('#prevsubquiz').off('click');
+        $('#prevsubquiz').on('click', function () {
+            _this.prevNextSubQuestion(-1);
+        });
+        $('#nextsubquiz').off('click');
+        $('#nextsubquiz').on('click', function () {
+            _this.prevNextSubQuestion(1);
+        });
         $('button#check_answer').off('click');
         $('button#check_answer').on('click', function () {
             for (var ai in _this.vAnswers) {
@@ -1744,6 +2048,9 @@ var PanelQuestion = (function () {
                 var a = _this.vAnswers[+ai];
                 a.checkIt(false);
             }
+            $('html, body').animate({
+                scrollTop: $('#myview').offset().top - 5
+            }, 50);
         });
         $('button#show_answer').off('click');
         $('button#show_answer').on('click', function () {
@@ -1754,6 +2061,9 @@ var PanelQuestion = (function () {
                 a.showIt();
                 a.checkIt(true);
             }
+            $('html, body').animate({
+                scrollTop: $('#myview').offset().top - 5
+            }, 50);
         });
         this.question_stat.start_time = Math.round((new Date()).getTime() / 1000);
     }
@@ -1786,6 +2096,41 @@ var PanelQuestion = (function () {
             }
         }
         return qoFeatures;
+    };
+    PanelQuestion.prototype.prevNextSubQuestion = function (n) {
+        this.subQuizIndex += n;
+        var i;
+        var slides = $('#quizcontainer').find('.quizcard');
+        if (this.subQuizIndex < 1) {
+            $('#prevsubquiz').css({ "visibility": "hidden" });
+        }
+        ;
+        if (this.subQuizIndex > 0) {
+            $('#prevsubquiz').css({ "visibility": "visible" });
+        }
+        if (this.subQuizIndex < slides.length - 1) {
+            $('#nextsubquiz').css({ "visibility": "visible" });
+        }
+        ;
+        if (this.subQuizIndex === slides.length - 1) {
+            $('#nextsubquiz').css({ "visibility": "hidden" });
+        }
+        ;
+        for (i = 0; i < slides.length; i++) {
+            if (i === this.subQuizIndex) {
+                slides.slice(i).css({ "display": "block" });
+            }
+            else {
+                slides.slice(i).css({ "display": "none" });
+            }
+        }
+        $('html, body').animate({
+            scrollTop: $('#myview').offset().top - 5
+        }, 50);
+    };
+    PanelQuestion.prototype.delLastCharInput = function (fieldJQuery) {
+        var $value = fieldJQuery.find('input');
+        $value.val('test');
     };
     PanelQuestion.kbid = 1;
     return PanelQuestion;
