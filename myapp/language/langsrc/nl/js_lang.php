@@ -8,6 +8,7 @@ $lang['badname'] = "Ongeldig karakter in bestandsnaam";
 $lang['cancel_button'] = "Annuleren";
 $lang['clear_all'] = "Verwijder alles";
 $lang['clear_button'] = "Leegmaken";
+$lang['clear_grammar'] = "Verwijder grammatica";
 $lang['click_for_document'] = "Klik voor het document";
 $lang['click_for_picture'] = "Klik voor de afbeelding";
 $lang['click_for_pictures'] = "Klik voor de afbeeldingen";

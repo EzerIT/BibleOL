@@ -9,6 +9,7 @@ $lang['badname'] = "Illegal character in filename";
 $lang['cancel_button'] = "Cancel";
 $lang['clear_all'] = "Clear all";
 $lang['clear_button'] = "Clear";
+$lang['clear_grammar'] = "Clear grammar";
 $lang['click_for_document'] = "Click for document";
 $lang['click_for_picture'] = "Click for picture";
 $lang['click_for_pictures'] = "Click for pictures";
