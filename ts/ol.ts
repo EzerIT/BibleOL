@@ -36,7 +36,7 @@ let indentation_width  : number;  // Width of indentation of ETCBC4 clause atoms
 // Main code executed when the page has been loaded.
 
 $(function() {
-    inQuiz = $('#quiztab').length>0;
+    inQuiz = $('#quizcontainer').length>0;
 
     // Does the browser support <progress>?
     // (Use two statements because jquery.d.ts does not recognize .max)
@@ -60,7 +60,7 @@ $(function() {
 
     // Create HTML the grammar selection box
     let generateCheckboxes = new GrammarSelectionBox();
-    $('#gramselect').append(generateCheckboxes.generateHtml());
+    $('#gramtabs').append(generateCheckboxes.generateHtml());
     generateCheckboxes.setHandlers();
     GrammarSelectionBox.clearBoxes(false);
 

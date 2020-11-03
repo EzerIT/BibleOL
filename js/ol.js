@@ -1999,7 +1999,7 @@ var quiz;
 var accordion_width;
 var indentation_width;
 $(function () {
-    inQuiz = $('#quiztab').length > 0;
+    inQuiz = $('#quizcontainer').length > 0;
     var x = document.createElement('progress');
     supportsProgress = x.max != undefined;
     configuration.maxLevels = configuration.sentencegrammar.length + 1;
@@ -2011,7 +2011,7 @@ $(function () {
         addMethodsSgi(configuration.sentencegrammar[+i], configuration.sentencegrammar[+i].objType);
     }
     var generateCheckboxes = new GrammarSelectionBox();
-    $('#gramselect').append(generateCheckboxes.generateHtml());
+    $('#gramtabs').append(generateCheckboxes.generateHtml());
     generateCheckboxes.setHandlers();
     GrammarSelectionBox.clearBoxes(false);
     accordion_width = GrammarSelectionBox.buildGrammarAccordion();
