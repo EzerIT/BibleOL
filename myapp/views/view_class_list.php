@@ -36,7 +36,7 @@
     </tr>
   <?php endforeach; ?>
 </table>
-<p><a class="btn btn-primary" href="<?= site_url("classes/edit_one_class?classid=-1") ?>"><?= $this->lang->line('add_class') ?></a></p>
+<p><a class="btn btn-outline-dark" href="<?= site_url("classes/edit_one_class?classid=-1") ?>"><?= $this->lang->line('add_class') ?></a></p>
 
 
   <?php //*********************************************************************
