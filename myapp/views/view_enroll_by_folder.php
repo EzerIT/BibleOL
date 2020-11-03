@@ -17,7 +17,7 @@ else {
                                                          'dir' => $dir,
                                                          'curdir' => $curdir)),
                    $this->lang->line('enroll'),
-                   array('class' => 'btn btn-primary')),
+                   array('class' => 'btn btn-outline-dark')),
             "</td>\n";
         echo "</tr>\n";
     }

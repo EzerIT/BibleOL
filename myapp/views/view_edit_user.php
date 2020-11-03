@@ -195,7 +195,7 @@
           <div class="card-body">
             <input type="hidden" name="policy_lang" value="<?= $policy_lang ?>" />
             <p><input class="btn btn-primary" type="button" onclick="$('#thisform').submit()" name="emulsubmit" value="<?= $this->lang->line('yes') ?>">
-              <a class="btn btn-primary" href="<?= site_url('/') ?>"><?= $this->lang->line('no') ?></a></p>
+              <a class="btn btn-outline-dark" href="<?= site_url('/') ?>"><?= $this->lang->line('no') ?></a></p>
           </div>
         </div>
       <?php else: ?>

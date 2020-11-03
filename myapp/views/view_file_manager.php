@@ -1,7 +1,7 @@
 <?php if (!$is_top): ?>
   <h1><?= sprintf($this->lang->line('this_is_folder'), rtrim($dirlist['relativedir'],'/')) ?></h1>
 
-  <p><a class="btn btn-primary" href="<?= site_url(build_get('file_manager/edit_visibility',array('dir' => $dirlist['relativedir']))) ?>"><span class="fas fa-eye"></span> <?= $this->lang->line('edit_visibility_button') ?></a></p>
+  <p><a class="btn btn-outline-dark" href="<?= site_url(build_get('file_manager/edit_visibility',array('dir' => $dirlist['relativedir']))) ?>"><span class="fas fa-eye"></span> <?= $this->lang->line('edit_visibility_button') ?></a></p>
 <?php else: ?>
   <h1><?= $this->lang->line('this_is_top_folder') ?></h1>
 <?php endif; ?>
@@ -84,11 +84,11 @@
     </table>
   </form>
   <p>
-    <a class="btn btn-primary" onclick="deleteConfirm(); return false;" href="#"><span class="fas fa-trash-alt"></span> <?= $this->lang->line('delete_marked') ?></a>
-    <a class="btn btn-primary" onclick="copyWarning(); return false;" href="#"><span class="fas fa-copy"></span> <?= $this->lang->line('copy_marked') ?></a>
-    <a class="btn btn-primary" onclick="moveWarning(); return false;" href="#"><span class="fas fa-cut"></span> <?= $this->lang->line('move_marked') ?></a>
+    <a class="btn btn-outline-dark" onclick="deleteConfirm(); return false;" href="#"><span class="fas fa-trash-alt"></span> <?= $this->lang->line('delete_marked') ?></a>
+    <a class="btn btn-outline-dark" onclick="copyWarning(); return false;" href="#"><span class="fas fa-copy"></span> <?= $this->lang->line('copy_marked') ?></a>
+    <a class="btn btn-outline-dark" onclick="moveWarning(); return false;" href="#"><span class="fas fa-cut"></span> <?= $this->lang->line('move_marked') ?></a>
     <?php if ($isadmin): ?>
-      <a class="btn btn-primary" onclick="changeOwner(); return false;" href="#"><span class="fas fa-user"></span> <?= $this->lang->line('change_owner_files') ?></a>
+      <a class="btn btn-outline-dark" onclick="changeOwner(); return false;" href="#"><span class="fas fa-user"></span> <?= $this->lang->line('change_owner_files') ?></a>
     <?php endif; ?>
   </p>
 <?php endif; ?>
@@ -96,7 +96,7 @@
 <?php if ($copy_or_move): ?>
   <p>
   <a class="btn btn-primary" href="<?= site_url(build_get('file_manager/insert_files',array('dir' => $dirlist['relativedir']))) ?>"><span class="fas fa-file-import"></span> <?= $copy_or_move==='move' ? $this->lang->line('insert_moved_files') : $this->lang->line('insert_copied_files') ?></a>
-    <a class="btn btn-primary" href="<?= site_url(build_get('file_manager/cancel_copy',array('dir' => $dirlist['relativedir']))) ?>"><span class="fas fa-ban"></span> <?= $copy_or_move==='move' ? $this->lang->line('cancel_move') : $this->lang->line('cancel_copy')?></a>
+    <a class="btn btn-outline-dark" href="<?= site_url(build_get('file_manager/cancel_copy',array('dir' => $dirlist['relativedir']))) ?>"><span class="fas fa-ban"></span> <?= $copy_or_move==='move' ? $this->lang->line('cancel_move') : $this->lang->line('cancel_copy')?></a>
   </p>
 <?php endif; ?>
 
