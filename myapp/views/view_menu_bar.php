@@ -90,7 +90,7 @@ $cols = $ix+1;
   <div class="divnavbar">
     <a class="navbar-brand d-block d-lg-none" href="<?= site_url('/') ?>">Bible Online Learner</a>
     <button class="navbar-toggler mt-1 mb-1" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+      <span class="navbar-toggler-icon"><img alt="" src="/images/dadel/menutoggler.png" style="max-width: 100%; height: 25px;"></span>
     </button>
     <div class="collapse navbar-collapse" id="mainMenu">
         <span class="navbar-text pr-3"><a class="navbar-brand d-none d-lg-inline" href="<?= site_url('/') ?>">Bible Online Learner</a></span>
