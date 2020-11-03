@@ -952,8 +952,8 @@ class PanelQuestion {
 
         // Add check and show buttons
         quizCard.append('<div class="buttonlist1">'
-            + `<button class="btn btn-quiz" id="check_answer" type="button">Check answer</button>`
-            + `<button class="btn btn-quiz" id="show_answer" type="button">Show answer</button>`
+            + `<button class="btn btn-quiz" id="check_answer" type="button">${localize('check_answer')}</button>`
+            + `<button class="btn btn-quiz" id="show_answer" type="button">${localize('show_answer')}</button>`
             + '</div>');
 
         // Add prev and next buttons to slide through multiple subquizzes
