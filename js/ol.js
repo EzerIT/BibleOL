@@ -1380,7 +1380,7 @@ var Answer = (function () {
             switch (this.cType) {
                 case COMPONENT_TYPE.textField:
                 case COMPONENT_TYPE.textFieldWithVirtKeyboard:
-                    userAnswer_1 = $(this.c).val().trim()
+                    userAnswer_1 = $(this.c).find('input').val().trim()
                         .replace(/\u03ac/g, '\u1f71')
                         .replace(/\u03ad/g, '\u1f73')
                         .replace(/\u03ae/g, '\u1f75')
@@ -2130,10 +2130,6 @@ var PanelQuestion = (function () {
         $('html, body').animate({
             scrollTop: $('#myview').offset().top - 5
         }, 50);
-    };
-    PanelQuestion.prototype.delLastCharInput = function (fieldJQuery) {
-        var $value = fieldJQuery.find('input');
-        $value.val('test');
     };
     PanelQuestion.kbid = 1;
     return PanelQuestion;

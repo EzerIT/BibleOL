@@ -20,7 +20,7 @@ class PanelQuestion {
     private question_stat : QuestionStatistics = new QuestionStatistics; // Answer statistics
     private static kbid   : number = 1;    // Input field identification for virtual keyboard
     private gradingFlag	  : boolean;	   // May the statistics be used for grading the student?
-    private subQuizIndex  : number = 0;    // Used to togge subquestions
+    private subQuizIndex  : number = 0;    // Used to toggle subquestions
     private subQuizMax    : number;        // Used to define max number of subquestions
 
     //------------------------------------------------------------------------------------------
@@ -93,10 +93,15 @@ class PanelQuestion {
     }
     
 
+    //------------------------------------------------------------------------------------------
+    // prevNextSubQuestion method
+    //
+    // Method used to toggle subquestions in a quiz.
+    //
     private prevNextSubQuestion(n: number): void {
 
         if (this.subQuizIndex + n >= 0 && this.subQuizIndex + n < this.subQuizMax) {
-            this.subQuizIndex += n;
+            this.subQuizIndex += n; // If the proposed move (n; usually 1 or -1) is within the boundaries, proceed...
         }
         let i: number;
         let slides: JQuery = $('#quizcontainer').find('.quizcard');
@@ -106,17 +111,18 @@ class PanelQuestion {
         };
 
         if (this.subQuizIndex > 0) {
-            $('#prevsubquiz').css({ "visibility": "visible" });
+            $('#prevsubquiz').css({ "visibility": "visible" }); // show button if the index is 1 or higher
         }
 
         if (this.subQuizIndex < slides.length - 1) {
-            $('#nextsubquiz').css({"visibility": "visible"}) // hide button if the quizcard is the last
+            $('#nextsubquiz').css({"visibility": "visible"}) // show button if the quizcard is the second last 
         }; 
 
         if (this.subQuizIndex === slides.length - 1) {
             $('#nextsubquiz').css({"visibility": "hidden"}) // hide button if the quizcard is the last
         }; 
 
+        // Show the quizcard change
         for (i = 0; i < slides.length; i++) { 
             if (i === this.subQuizIndex) {
                 slides.slice(i).css({ "display": "block" });
@@ -124,17 +130,10 @@ class PanelQuestion {
                 slides.slice(i).css({ "display": "none" });
             }
         }
-        // Scroll to myview
+        // Scroll to myview 
         $('html, body').animate({
             scrollTop: $('#myview').offset().top - 5
           }, 50);
-    }
-
-    // Functions used for inputfield manupilation //
-    ////////////////////////////////////////////////        
-    private delLastCharInput(fieldJQuery: JQuery): void {
-        let $value: JQuery = fieldJQuery.find('input');
-        $value.val('test');
     }
 
 
@@ -174,6 +173,7 @@ class PanelQuestion {
             }
         }
 
+        // Location functionality: used by locate button in quiz
         if (this.qd.maylocate) {
             $('input#locate_cb').on('click',null,this.location,function(e) {
                 if ($(this).prop('checked'))
@@ -975,11 +975,11 @@ class PanelQuestion {
 
         $('div#inputchar').click(function () {
             let letter: string = String($(this).find('label').text());
-            $(this)          // the delinputchar button
+            $(this)
                   .parent().siblings('input')  // get the input field
                   .val($(this).parent().siblings('input').val() + letter);  // add letter
         
-            return false;    // disable default link action (otherwise # adds to url)
+            return false;    // disable default link action (otherwise # added to url)
         });
 
 
@@ -989,7 +989,7 @@ class PanelQuestion {
                   .parent().siblings('input')    // get the input field
                   .val(value.slice(0, -1));  // clear its value
         
-            return false;    // disable default link action (otherwise # adds to url)
+            return false;    // disable default link action (otherwise # added to url)
         });
     
 

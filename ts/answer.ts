@@ -131,7 +131,7 @@ class Answer {
                 // TODO: Normalize Unicode characters (relevant only in Greek)
 
                 // Fix Greek accents (see "A Note on Greek Accents in Unicode" in the technical documentation)
-                userAnswer = ($(this.c).val() as string).trim()
+                userAnswer = ($(this.c).find('input').val() as string).trim()
                   //.replace(/\u003b/g, '\u037e')  // SEMICOLON -> GREEK QUESTION MARK
                   //.replace(/\u00b7/g, '\u0387')  // MIDDLE DOT -> GREEK ANO TELEIA
                     .replace(/\u03ac/g, '\u1f71')  // GREEK SMALL LETTER ALPHA WITH TONOS -> OXIA
