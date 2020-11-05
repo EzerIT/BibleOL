@@ -84,7 +84,7 @@ $(function() {
         // Generate the text to display
         let currentDict : Dictionary = new Dictionary(dictionaries,0,null);
         currentDict.generateSentenceHtml(null);
-        $('.grammarselector input:enabled:checked').trigger('change'); // Make sure the relevant features are displayed
+        $('#gramtabs input:enabled:checked').trigger('change'); // Make sure the relevant features are displayed
     }
 });
 

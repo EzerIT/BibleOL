@@ -87,11 +87,12 @@ class GrammarSelectionBox {
                 case WHAT.groupstart:
                     if (!this.hasSeenGrammarGroup) {
                         this.hasSeenGrammarGroup = true;
-                        this.subgroupgrammartabs += `<div id="subgrammargroup"><ul>`;
+                        this.subgroupgrammartabs += `<div id="grammargroup"><ul>`;
                     }
-                    this.subgroupgrammartabs += `<li><a class="subgrammargroup" href="#${getHtmlAttribFriendlyName(featName)}"><h3>${featNameLoc}</h3></a></li>`;
+                    this.subgroupgrammartabs += `<li><a class="grammargroup" href="#${getHtmlAttribFriendlyName(featName)}"><h3>${featNameLoc}</h3></a></li>`;
                     this.subgroupgrammardivs += `<div id="${getHtmlAttribFriendlyName(featName)}">`
                     this.subgroupgrammardivs += `<div id="grammarbuttongroup">`
+                    this.addBr.reset();
                     break;
                                           
                 case WHAT.groupend:
@@ -447,7 +448,7 @@ class GrammarSelectionBox {
             collapsible: true,
         });
 
-        let tabs3: JQuery = $('#subgrammargroup').tabs({
+        let tabs3: JQuery = $('#grammargroup').tabs({
             heightStyle: 'content',
             collapsible: true,
         });

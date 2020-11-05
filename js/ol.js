@@ -412,11 +412,12 @@ var GrammarSelectionBox = (function () {
             case WHAT.groupstart:
                 if (!this.hasSeenGrammarGroup) {
                     this.hasSeenGrammarGroup = true;
-                    this.subgroupgrammartabs += "<div id=\"subgrammargroup\"><ul>";
+                    this.subgroupgrammartabs += "<div id=\"grammargroup\"><ul>";
                 }
-                this.subgroupgrammartabs += "<li><a class=\"subgrammargroup\" href=\"#" + getHtmlAttribFriendlyName(featName) + "\"><h3>" + featNameLoc + "</h3></a></li>";
+                this.subgroupgrammartabs += "<li><a class=\"grammargroup\" href=\"#" + getHtmlAttribFriendlyName(featName) + "\"><h3>" + featNameLoc + "</h3></a></li>";
                 this.subgroupgrammardivs += "<div id=\"" + getHtmlAttribFriendlyName(featName) + "\">";
                 this.subgroupgrammardivs += "<div id=\"grammarbuttongroup\">";
+                this.addBr.reset();
                 break;
             case WHAT.groupend:
                 this.subgroupgrammardivs += '</div></div>';
@@ -631,7 +632,7 @@ var GrammarSelectionBox = (function () {
             heightStyle: 'content',
             collapsible: true
         });
-        var tabs3 = $('#subgrammargroup').tabs({
+        var tabs3 = $('#grammargroup').tabs({
             heightStyle: 'content',
             collapsible: true
         });
@@ -2367,6 +2368,6 @@ $(function () {
         $('#cleargrammar').on('click', function () { GrammarSelectionBox.clearBoxes(true); });
         var currentDict = new Dictionary(dictionaries, 0, null);
         currentDict.generateSentenceHtml(null);
-        $('.grammarselector input:enabled:checked').trigger('change');
+        $('#gramtabs input:enabled:checked').trigger('change');
     }
 });
