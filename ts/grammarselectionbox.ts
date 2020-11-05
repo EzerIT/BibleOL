@@ -89,8 +89,8 @@ class GrammarSelectionBox {
                         this.hasSeenGrammarGroup = true;
                         this.subgroupgrammartabs += `<div id="subgrammargroup"><ul>`;
                     }
-                    this.subgroupgrammartabs += `<li><a class="subgrammargroup" href="#${getHtmlAttribFriendlyName(featNameLoc)}"><h3>${featNameLoc}</h3></a></li>`;
-                    this.subgroupgrammardivs += `<div id="${getHtmlAttribFriendlyName(featNameLoc)}">`
+                    this.subgroupgrammartabs += `<li><a class="subgrammargroup" href="#${getHtmlAttribFriendlyName(featName)}"><h3>${featNameLoc}</h3></a></li>`;
+                    this.subgroupgrammardivs += `<div id="${getHtmlAttribFriendlyName(featName)}">`
                     this.subgroupgrammardivs += `<div id="grammarbuttongroup">`
                     break;
                                           
@@ -161,7 +161,7 @@ class GrammarSelectionBox {
 
             let objType: string = configuration.sentencegrammar[leveli].objType; // objType is 'word', 'phrase' etc.
 
-            this.checkboxes += `<li><a class="gramtabs" href="#${getHtmlAttribFriendlyName(getObjectFriendlyName(objType))}"><h3>${getObjectFriendlyName(objType)}</h3></a></li>`;
+            this.checkboxes += `<li><a class="gramtabs" href="#${getHtmlAttribFriendlyName(objType)}"><h3>${getObjectFriendlyName(objType)}</h3></a></li>`;
         }
         this.checkboxes += `</ul>`;
              
@@ -171,7 +171,7 @@ class GrammarSelectionBox {
 
             let objType: string = configuration.sentencegrammar[leveli].objType; // objType is 'word', 'phrase' etc.
             
-            this.checkboxes += `<div id="${getHtmlAttribFriendlyName(getObjectFriendlyName(objType))}">`
+            this.checkboxes += `<div id="${getHtmlAttribFriendlyName(objType)}">`
             this.checkboxes += `<div class="objectlevel">`;
             this.checkboxes += `<div id="grammarbuttongroup">`;
             this.checkboxes += this.makeInitCheckBoxForObj(leveli);
