@@ -23,8 +23,8 @@
       <div id="tabs-background">
         <?php if ($is_quiz): ?>
           <h2><div class="selectbutton">
-            <label style="font-size:14pt; font-weight:normal; text-transform:capitalize;">Locate <input id="locate_cb" type="checkbox" checked="checked">
-            <span class="location" style="font-weight:bold; text-transform:uppercase;"></span></label>
+            <label style="font-size:14pt; font-weight:normal; text-transform:capitalize;">Locate<input id="locate_cb" type="checkbox" checked="checked">
+            <span class="location" style="font-weight:bold; text-transform:uppercase;"> </span></label>
           </div></h2>
         <?php endif; ?>
         <?php if (!$is_quiz): ?>
