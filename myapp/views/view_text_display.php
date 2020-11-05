@@ -22,7 +22,10 @@
       <ul><li><a class="myview" href="#gramtabs"><h2>MyView</h2></a></li></ul>
       <div id="tabs-background">
         <?php if ($is_quiz): ?>
-          <h2><input id="locate_cb" type="checkbox" checked="checked" style="opacity: 0;"><span class="location"></span></span></h2>
+          <h2><div class="selectbutton">
+            <label style="font-size:14pt; font-weight:normal; text-transform:capitalize;">Locate <input id="locate_cb" type="checkbox" checked="checked">
+            <span class="location" style="font-weight:bold; text-transform:uppercase;"></span></label>
+          </div></h2>
         <?php endif; ?>
         <?php if (!$is_quiz): ?>
             <h2></h2>
