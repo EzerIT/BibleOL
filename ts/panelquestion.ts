@@ -21,6 +21,7 @@ class PanelQuestion {
     private static kbid   : number = 1;    // Input field identification for virtual keyboard
     private gradingFlag	  : boolean;	   // May the statistics be used for grading the student?
     private subQuizIndex  : number = 0;    // Used to togge subquestions
+    private subQuizMax    : number;        // Used to define max number of subquestions
 
     //------------------------------------------------------------------------------------------
     // charclass static method
@@ -94,8 +95,9 @@ class PanelQuestion {
 
     private prevNextSubQuestion(n: number): void {
 
-
-        this.subQuizIndex += n;
+        if (this.subQuizIndex + n >= 0 && this.subQuizIndex + n < this.subQuizMax) {
+            this.subQuizIndex += n;
+        }
         let i: number;
         let slides: JQuery = $('#quizcontainer').find('.quizcard');
         
@@ -247,15 +249,17 @@ class PanelQuestion {
         // Now, the array questionheaders contains a list of <th>...</th> elements to be put before 
         // each question on the question cards
         let headLen: number = questionheaders.length;
-        let quizCardNum: number = 0; // Count number of quizcards to define the appearance of toggle buttons
+        let quizCardNum: number = qoFeatures.length; // Count number of quizcards to define the appearance of toggle buttons
         let quizActive: boolean = true;
         let quizContainer: JQuery = $('div#quizcontainer');
+
+        this.subQuizMax = quizCardNum;
 
         ///////////////////////////////////////
         // Loop through all the quiz objects //
         for (let qoid in qoFeatures) {
             if (isNaN(+qoid)) continue; // Not numeric
-            ++quizCardNum;
+            // ++quizCardNum;
             // quizContainer.append(`<div class="quizcard"><table class="quiztab${qoid}"></table></div>`);
             if (quizActive === true) {
                 quizContainer.append(`<div class="quizcard" style="display:block;"><table class="quiztab${qoid}"></table></div>`);
@@ -947,6 +951,9 @@ class PanelQuestion {
            
 
         }
+
+        this.subQuizMax = quizCardNum
+
         // Make buttons "Check answer" and "Show answer"
         let quizCard: JQuery = $('.quizcard');
 

@@ -1523,13 +1523,13 @@ var PanelQuestion = (function () {
             this.question_stat.req_feat.names.push(requestFeatures[sfi].name);
         }
         var headLen = questionheaders.length;
-        var quizCardNum = 0;
+        var quizCardNum = qoFeatures.length;
         var quizActive = true;
         var quizContainer = $('div#quizcontainer');
+        this.subQuizMax = quizCardNum;
         for (var qoid in qoFeatures) {
             if (isNaN(+qoid))
                 continue;
-            ++quizCardNum;
             if (quizActive === true) {
                 quizContainer.append("<div class=\"quizcard\" style=\"display:block;\"><table class=\"quiztab" + qoid + "\"></table></div>");
                 quizActive = false;
@@ -2008,6 +2008,7 @@ var PanelQuestion = (function () {
                 _loop_2(rfi);
             }
         }
+        this.subQuizMax = quizCardNum;
         var quizCard = $('.quizcard');
         quizCard.append('<div class="buttonlist1">'
             + ("<button class=\"btn btn-quiz\" id=\"check_answer\" type=\"button\">" + localize('check_answer') + "</button>")
@@ -2098,7 +2099,9 @@ var PanelQuestion = (function () {
         return qoFeatures;
     };
     PanelQuestion.prototype.prevNextSubQuestion = function (n) {
-        this.subQuizIndex += n;
+        if (this.subQuizIndex + n >= 0 && this.subQuizIndex + n < this.subQuizMax) {
+            this.subQuizIndex += n;
+        }
         var i;
         var slides = $('#quizcontainer').find('.quizcard');
         if (this.subQuizIndex < 1) {
