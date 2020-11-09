@@ -31,12 +31,10 @@ class Quiz {
     constructor(qid : number) {
         this.quiz_statistics = new QuizStatistics(qid);
 
-        // $('#quiztab').append('<tr id="quiztabhead"></tr>');
-
         // Set up handlers for the buttons
-        $('button#next_question').click(() => this.nextQuestion());
-        $('button#finish')       .click(() => this.finishQuiz(true));
-        $('button#finishNoStats').click(() => this.finishQuiz(false));
+        $('button#next_question').on('click', () => this.nextQuestion());
+        $('button#finish').on('click', () => this.finishQuiz(true));
+        $('button#finishNoStats').on('click', () => this.finishQuiz(false));
     }
 
     //------------------------------------------------------------------------------------------
@@ -48,6 +46,12 @@ class Quiz {
     public nextQuestion() : void {
         const timeBeforeHbOpen  : number = 600000; // Time before heartbeat dialog is shown to user
         const timeBeforeHbClose : number = 28000;  // Time before heartbeat dialog is automatically closed
+
+        // Move to top of the question
+        $('html, body').animate({
+            scrollTop: $('#myview').offset().top - 5 // -5 to add take 5 additional px above myview
+        }, 50);
+
 
         //--------------------------------------------------------------------------------
         // monitorUser function
@@ -140,16 +144,13 @@ class Quiz {
             //     VirtualKeyboard.toggle('firstinput','virtualkbid');
             // }
 
-            // Move to top of the question
-            $('html, body').animate({
-                scrollTop: $('#myview').offset().top - 5 // -5 to add take 5 additional px above myview
-            }, 50);
+            
         }
         else
             alert('No more questions');
 
         util.FollowerBox.resetCheckboxCounters(); // Reset counters in preparation for the following trigger() call
-        $('.selectbutton input:enabled:checked').trigger('change'); // Make sure grammar is displayed for relevant checkboxes
+        $('#grammarbuttongroup input:enabled:checked').trigger('change'); // Make sure grammar is displayed for relevant checkboxes
     }
 
     //------------------------------------------------------------------------------------------

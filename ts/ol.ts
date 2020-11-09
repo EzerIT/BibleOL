@@ -66,8 +66,9 @@ $(function() {
 
     accordion_width = GrammarSelectionBox.buildGrammarAccordion();
 
-    
     if (inQuiz) {
+        $('#cleargrammar').on('click', () => { GrammarSelectionBox.clearBoxes(true); });
+
         if (supportsProgress)
             $('div#progressbar').hide();
         else
@@ -76,6 +77,8 @@ $(function() {
         // Run the exercise
         quiz = new Quiz(quizdata.quizid);
         quiz.nextQuestion();
+        
+        $('#gramtabs .selectbutton input:enabled:checked').trigger('change'); // Make sure the relevant features are displayed
     }
     else {
         // Display text
@@ -84,7 +87,7 @@ $(function() {
         // Generate the text to display
         let currentDict : Dictionary = new Dictionary(dictionaries,0,null);
         currentDict.generateSentenceHtml(null);
-        $('#gramtabs input:enabled:checked').trigger('change'); // Make sure the relevant features are displayed
+        $('#gramtabs .selectbutton input:enabled:checked').trigger('change'); // Make sure the relevant features are displayed
     }
 });
 

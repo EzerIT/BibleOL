@@ -480,7 +480,7 @@ var GrammarSelectionBox = (function () {
             this.subgroupgrammardivs = '';
             this.checkboxes += '</div></div>';
         }
-        this.checkboxes += "<p><a class=\"btn btn-clear\" id=\"cleargrammar\" href=\"#myview\">" + localize('clear_grammar') + "</a></p>";
+        this.checkboxes += "<button class=\"btn btn-clear\" id=\"cleargrammar\">" + localize('clear_grammar') + "</button>";
         return this.checkboxes;
     };
     GrammarSelectionBox.prototype.setHandlerCallback = function (whattype, objType, featName, featNameLoc, leveli) {
@@ -604,7 +604,9 @@ var GrammarSelectionBox = (function () {
         }
     };
     GrammarSelectionBox.clearBoxes = function (force) {
-        $('input[type="checkbox"]').prop('checked', false);
+        $('html, body').animate({
+            scrollTop: $('#myview').offset().top - 5
+        }, 50);
         if (!inQuiz) {
             if (force) {
                 for (var i in sessionStorage) {
@@ -619,6 +621,17 @@ var GrammarSelectionBox = (function () {
                 for (var i in sessionStorage) {
                     if (sessionStorage[i] == configuration.propertiesName)
                         $('#' + i).prop('checked', true);
+                }
+            }
+        }
+        else {
+            if (force) {
+                var IDs_1 = [];
+                $('#grammarbuttongroup .selectbutton input:checked').each(function () { IDs_1.push($(this).attr('id')); });
+                for (var i in IDs_1) {
+                    console.log(IDs_1[i]);
+                    $('#' + IDs_1[i]).prop('checked', false);
+                    $('#' + IDs_1[i]).trigger('change');
                 }
             }
         }
@@ -2211,14 +2224,17 @@ var Quiz = (function () {
         this.currentDictIx = -1;
         this.currentPanelQuestion = null;
         this.quiz_statistics = new QuizStatistics(qid);
-        $('button#next_question').click(function () { return _this.nextQuestion(); });
-        $('button#finish').click(function () { return _this.finishQuiz(true); });
-        $('button#finishNoStats').click(function () { return _this.finishQuiz(false); });
+        $('button#next_question').on('click', function () { return _this.nextQuestion(); });
+        $('button#finish').on('click', function () { return _this.finishQuiz(true); });
+        $('button#finishNoStats').on('click', function () { return _this.finishQuiz(false); });
     }
     Quiz.prototype.nextQuestion = function () {
         var _this = this;
         var timeBeforeHbOpen = 600000;
         var timeBeforeHbClose = 28000;
+        $('html, body').animate({
+            scrollTop: $('#myview').offset().top - 5
+        }, 50);
         var monitorUser = function () {
             window.clearTimeout(_this.tHbOpen);
             window.clearTimeout(_this.tHbClose);
@@ -2273,14 +2289,11 @@ var Quiz = (function () {
                 $('button#finish').removeAttr('disabled');
                 $('button#finishNoStats').removeAttr('disabled');
             }
-            $('html, body').animate({
-                scrollTop: $('#myview').offset().top - 5
-            }, 50);
         }
         else
             alert('No more questions');
         util.FollowerBox.resetCheckboxCounters();
-        $('.selectbutton input:enabled:checked').trigger('change');
+        $('#grammarbuttongroup input:enabled:checked').trigger('change');
     };
     Quiz.prototype.finishQuiz = function (gradingFlag) {
         if (quizdata.quizid == -1)
@@ -2357,17 +2370,19 @@ $(function () {
     GrammarSelectionBox.clearBoxes(false);
     accordion_width = GrammarSelectionBox.buildGrammarAccordion();
     if (inQuiz) {
+        $('#cleargrammar').on('click', function () { GrammarSelectionBox.clearBoxes(true); });
         if (supportsProgress)
             $('div#progressbar').hide();
         else
             $('progress#progress').hide();
         quiz = new Quiz(quizdata.quizid);
         quiz.nextQuestion();
+        $('#gramtabs .selectbutton input:enabled:checked').trigger('change');
     }
     else {
         $('#cleargrammar').on('click', function () { GrammarSelectionBox.clearBoxes(true); });
         var currentDict = new Dictionary(dictionaries, 0, null);
         currentDict.generateSentenceHtml(null);
-        $('#gramtabs input:enabled:checked').trigger('change');
+        $('#gramtabs .selectbutton input:enabled:checked').trigger('change');
     }
 });

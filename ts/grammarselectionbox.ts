@@ -203,7 +203,8 @@ class GrammarSelectionBox {
 
             this.checkboxes += '</div></div>';
         }
-        this.checkboxes += `<p><a class="btn btn-clear" id="cleargrammar" href="#myview">${localize('clear_grammar')}</a></p>`;
+        // this.checkboxes += `<p><button class="btn btn-clear" id="cleargrammar">${localize('clear_grammar')}</button></p>`;
+        this.checkboxes += `<button class="btn btn-clear" id="cleargrammar">${localize('clear_grammar')}</button>`;
         return this.checkboxes;
     }
 
@@ -405,7 +406,10 @@ class GrammarSelectionBox {
     //            True means uncheck all checkboxes.
     //
     public static clearBoxes(force : boolean) {
-        $('input[type="checkbox"]').prop('checked',false); // Uncheck all checkboxes
+        // $('input[type="checkbox"]').prop('checked',false); // Uncheck all checkboxes
+        $('html, body').animate({
+            scrollTop: $('#myview').offset().top - 5 // -5 to add take 5 additional px above myview
+        }, 50);
 
         if (!inQuiz) {
             if (force) {
@@ -423,6 +427,18 @@ class GrammarSelectionBox {
                 for (let i in sessionStorage) {
                     if (sessionStorage[i]==configuration.propertiesName)
                         $('#' + i).prop('checked',true);
+                }
+            }
+        }
+        else {
+            // Force removal of grammar items in Quiz, without saving to session
+            if (force) {
+                let IDs: any[] = []
+                $('#grammarbuttongroup .selectbutton input:checked').each(function () { IDs.push($(this).attr('id')); });    
+                for (let i in IDs) {
+                    console.log(IDs[i]);
+                        $('#' + IDs[i]).prop('checked',false);
+                        $('#' + IDs[i]).trigger('change');
                 }
             }
         }
