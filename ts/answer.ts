@@ -44,9 +44,13 @@ class Answer {
         this.answerString = answerString;
         this.matchRegexp  = matchRegexp;
 
-        if (this.cType==COMPONENT_TYPE.checkBoxes) {
-            let aString : string = answerString.substr(1,answerString.length-2); // Remove surrounding '(' and ')'
-            this.answerArray = aString.split(',');
+        if (this.cType == COMPONENT_TYPE.checkBoxes) {
+            if (this.answerString[0] == "(") {
+                let aString : string = answerString.substr(1,answerString.length-2); // Remove surrounding '(' and ')'
+                this.answerArray = aString.split(',');
+            } else {
+                this.answerArray = new Array(this.answerString);
+            }
         }
     }
 
@@ -74,7 +78,6 @@ class Answer {
                         let value: string = $(this).attr('value');
                         if (value === correctAnswer) {
                             $(this).prop('checked', true);
-                        
                         }
                     }
                 )
@@ -85,9 +88,11 @@ class Answer {
                 // Mark the correct items
                 let inputs: JQuery = $(this.c).find('input');
                 let xthis: Answer = this;
+                console.log(xthis.answerArray);
                 inputs.each(
                     function () {
                         let value: string = $(this).attr('value');
+                        console.log(xthis.answerArray.indexOf(value));
                         $(this).prop('checked', xthis.answerArray.indexOf(value) != -1);
                     }
                 );

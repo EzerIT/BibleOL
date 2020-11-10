@@ -1313,7 +1313,7 @@ var ComponentWithYesNo = (function () {
         if (yes) {
             $(this.elem).css({
                 "background-color": "rgba(67, 176, 42, 0.1)",
-                "border": "solid 2px rgba(67, 176, 42, 1.0)"
+                "outline": "solid 2px rgba(67, 176, 42, 1.0)"
             });
             this.yesIcon.show();
             this.noIcon.hide();
@@ -1321,7 +1321,7 @@ var ComponentWithYesNo = (function () {
         else {
             $(this.elem).css({
                 "background-color": "rgba(195, 92, 244, 0.1)",
-                "border": "solid 2px rgba(195, 92, 244, 1.0)"
+                "outline": "solid 2px rgba(195, 92, 244, 1.0)"
             });
             this.yesIcon.hide();
             this.noIcon.show();
@@ -1332,6 +1332,10 @@ var ComponentWithYesNo = (function () {
         this.yesIcon.hide();
         this.noIcon.hide();
         this.noneIcon.show();
+        this.elem.css({
+            "background-color": "",
+            "outline": ""
+        });
     };
     return ComponentWithYesNo;
 }());
@@ -1345,8 +1349,13 @@ var Answer = (function () {
         this.answerString = answerString;
         this.matchRegexp = matchRegexp;
         if (this.cType == COMPONENT_TYPE.checkBoxes) {
-            var aString = answerString.substr(1, answerString.length - 2);
-            this.answerArray = aString.split(',');
+            if (this.answerString[0] == "(") {
+                var aString = answerString.substr(1, answerString.length - 2);
+                this.answerArray = aString.split(',');
+            }
+            else {
+                this.answerArray = new Array(this.answerString);
+            }
         }
     }
     Answer.prototype.showIt = function () {
@@ -1371,8 +1380,10 @@ var Answer = (function () {
             case COMPONENT_TYPE.checkBoxes: {
                 var inputs = $(this.c).find('input');
                 var xthis_1 = this;
+                console.log(xthis_1.answerArray);
                 inputs.each(function () {
                     var value = $(this).attr('value');
+                    console.log(xthis_1.answerArray.indexOf(value));
                     $(this).prop('checked', xthis_1.answerArray.indexOf(value) != -1);
                 });
                 break;
@@ -1640,15 +1651,15 @@ var PanelQuestion = (function () {
                     else {
                         var quiz_div_1 = $('<div class="quizitem"></div>');
                         var optArray = [];
-                        var cwyn = new ComponentWithYesNo(quiz_div_1, COMPONENT_TYPE.comboBox2);
+                        var cwyn = new ComponentWithYesNo(quiz_div_1, COMPONENT_TYPE.checkBoxes);
                         cwyn.addChangeListener();
                         for (var valix in suggestions) {
                             if (isNaN(+valix))
                                 continue;
                             var s = suggestions[+valix];
                             var item = new StringWithSort(s, s);
-                            var option = $('<div class="selectbutton">'
-                                + ("<input type =\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
+                            var option = $('<div class="selectbutton multiple_choice">'
+                                + ("<input type =\"checkbox\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
                                 + ("<label for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
                                 + '</div>');
                             option.data('sws', item);

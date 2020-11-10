@@ -134,7 +134,7 @@ class ComponentWithYesNo {
     //------------------------------------------------------------------------------------------
     // addKeypressListener method
     //
-    // Listen for input events. When an input field is changed, clear the icon.
+    // Listen for input events. When an input field is changed, clear the icon and the background color.
     //
     public addKeypressListener() : void {
         this.elem.on('input', (e1 : JQueryEventObject) => this.setNone());
@@ -183,7 +183,7 @@ class ComponentWithYesNo {
         if (yes) {
             $(this.elem).css({
                 "background-color": "rgba(67, 176, 42, 0.1)",
-                "border": "solid 2px rgba(67, 176, 42, 1.0)",
+                "outline": "solid 2px rgba(67, 176, 42, 1.0)",
             }) 
             this.yesIcon.show();
             this.noIcon.hide();
@@ -191,7 +191,7 @@ class ComponentWithYesNo {
         else {
             $(this.elem).css({
                 "background-color": "rgba(195, 92, 244, 0.1)",
-                "border": "solid 2px rgba(195, 92, 244, 1.0)",
+                "outline": "solid 2px rgba(195, 92, 244, 1.0)",
             })
             this.yesIcon.hide();
             this.noIcon.show();
@@ -208,5 +208,9 @@ class ComponentWithYesNo {
         this.yesIcon.hide();
         this.noIcon.hide();
         this.noneIcon.show();
+        this.elem.css({
+            "background-color": "",
+            "outline": "",
+        });
     }
 }

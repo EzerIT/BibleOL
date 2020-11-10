@@ -1,6 +1,8 @@
 // -*- js -*-
 // Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
 
+// This code as been extensively modified by Ernst Boogert in November 2020
+
 // This code handles displaying a single question of an exercise.
 
 /// <reference path="componentwithyesno.ts" />
@@ -259,8 +261,7 @@ class PanelQuestion {
         // Loop through all the quiz objects //
         for (let qoid in qoFeatures) {
             if (isNaN(+qoid)) continue; // Not numeric
-            // ++quizCardNum;
-            // quizContainer.append(`<div class="quizcard"><table class="quiztab${qoid}"></table></div>`);
+
             if (quizActive === true) {
                 quizContainer.append(`<div class="quizcard" style="display:block;"><table class="quiztab${qoid}"></table></div>`);
                 quizActive = false;
@@ -385,6 +386,9 @@ class PanelQuestion {
                             + '</tr>');
                     else {
                         // Create this HTML structure in the variable v:            From these variables
+
+
+                        // Create this HTML structure in the variable v:            From these variables
                         // <span ...>                                                cwyn
                         //   <img ...>                                               cwyn
                         //   <img ...>                                               cwyn
@@ -399,18 +403,10 @@ class PanelQuestion {
                         //   </div>                                                  mc_div
                         // </span>                                                   cwyn
                         
-                        let quiz_div : JQuery = $('<div class="quizitem"></div>'); // Used to ancor the radio buttons and to add additional data
-
-                        // // direction:ltr forces left alignment of options (though not on Firefox)
-                        // let mc_select : JQuery = $(`<select class="${PanelQuestion.charclass(featset)}" style="direction:ltr">`);
-
-                        // mc_div.append(mc_select);
-
-                        let optArray : JQuery[]           = []; // All the multiple choice options
-                        let cwyn     : ComponentWithYesNo = new ComponentWithYesNo(quiz_div ,COMPONENT_TYPE.comboBox2); // Result indicator
+                        let quiz_div : JQuery             = $('<div class="quizitem"></div>'); // Used to ancor the checkbox buttons and to add additional data
+                        let optArray : JQuery[]           = [];                                // All the multiple choice options
+                        let cwyn     : ComponentWithYesNo = new ComponentWithYesNo(quiz_div, COMPONENT_TYPE.checkBoxes); // Result indicator
                         cwyn.addChangeListener();
-
-                        // mc_select.append('<option value="NoValueGiven"></option>'); // Empty default choice
                         
                         for (let valix in suggestions) {
                             if (isNaN(+valix)) continue; // Not numeric
@@ -421,8 +417,8 @@ class PanelQuestion {
                             
                             let s      : string         = suggestions[+valix];     // Current suggestion
                             let item   : StringWithSort = new StringWithSort(s,s); // StringWithSort holding the current suggestion
-                            let option: JQuery = $('<div class="selectbutton">'
-                                + `<input type ="radio" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
+                            let option : JQuery         = $('<div class="selectbutton multiple_choice">'
+                                + `<input type ="checkbox" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
                                 + `<label for="${item.getInternal()}_${quizItemID}">${item.getString()}</label>`
                                 + '</div>');
 
@@ -433,7 +429,8 @@ class PanelQuestion {
                         }
 
                         // Sort the options alphabetically
-                        optArray.sort((a : JQuery, b : JQuery) => StringWithSort.compare(a.data('sws'),b.data('sws')));
+                        optArray.sort((a: JQuery, b: JQuery) => StringWithSort.compare(a.data('sws'), b.data('sws')));
+                        
 
                         // Append optArray to quiz_div
                         $.each(optArray, (ix : number, o : JQuery) => quiz_div.append(o));
