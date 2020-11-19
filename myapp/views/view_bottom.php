@@ -5,8 +5,31 @@
         <div class="d-none d-lg-block d-xl-none">LG</div>
         <div class="d-none d-xl-block">XL</div>
     -->
-      </div><!--End of container-fluid-->
-    </div><!--End of row-->
+      
+      </div><!--ends container-fluid box-->
+      <footer>
+        <div class="row">
+          <div class="col-md-4 footer footer-column">
+            <h2>About BibleOL</h2>
+            <p>BibleOL is an online learning platform for training the Biblical languages Hebrew and Greek. It utilizes top-notch language databases to provide students the best learning experience.</p>
+            <p>Enjoy!</p>
+            <a href="/privacy">| Privacy Policy |</a>
+          </div>
+          <div class="col-md-4 footer footer-column">
+            <h2>Follow BibleOL</h2>
+            <img src="/images/dadel/facebook.png" style="height: 35px;">
+            <a class="social" href="">Join our language community</a>
+          </div>
+          <div class="col-md-4 footer footer-column">
+            <p></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="footer footer-bottom">
+            <p>&copy; Copyright 2020</p>
+          </div>
+        </div>
+      </footer>    
   </body>
 </html>
-         
+

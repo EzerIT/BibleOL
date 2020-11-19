@@ -15,6 +15,9 @@
 // Thus we avoid browser problems.
 
 
+
+///////////
+// COLORS
 @dadelblue: #002A3A;
 @dadellightblue: lighten(@dadelblue, 85%);
 @dadelgreen: #43B02A;
@@ -25,25 +28,170 @@
 @dadelgreydark: darken(lightgrey, 15%);
 @dadelgreyultradark: darken(@dadelgrey, 50%);
 @dadelgreylight: lighten(lightgrey, 7%);
-
 @backgroundwhite: white;
 
-// Define button length for grammar selection menu
-@buttonlength: 12em;
+//END colors
+//////////////
+
+
+
+///////////////////
+// GENERAL MARKUP
+.rtl { direction: rtl; text-align: right;}
+.ltr { direction: ltr;}
+
+html, body {
+    background-color: @dadelgrey;
+    font-family: 'titillium', 'opensans', Arial, sans-serif;
+    font-size: if((@chinese),14pt,12pt);
+    font-weight: normal;
+    color: @dadelblue;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow: scroll; // Make sure scroll bar is always present (if not, popops may cause confusion)
+}
+
+p {
+    font-size: 12pt;
+}
+
+ul li {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+h1 {
+    font-weight: if((@chinese),normal,bold);
+}
+
+th when (@chinese) {
+    font-weight: normal;
+}
+
+b when (@chinese) {
+    font-weight: normal;
+}
+
+strong when (@chinese) {
+    font-weight: normal;
+}
+
+cite {
+    font-style: normal;
+    em {
+        font-style: italic;
+    }
+}
+
+// END general markup
+///////////////////////
+
+
+///////////////////
+// NAVIGATION BAR
 
 .navbar {
     border-bottom: solid 1px @dadelgreydark;
+    margin-bottom: 0 !important;
 }
 
 .nav-tabs {
     border: 0px;
 }
 
+// END navigation bar
+///////////////////////
+
+
+
+////////////////
+// MAIN FIELDS
+
+.container-fluid {
+    padding: 0;
+    background-color: @dadelgrey;
+    flex: 1;
+    // position: relative;
+    margin: 0;
+}
+
+.row {
+    padding: 0;
+    border: 0;
+    margin: 0;
+    &#landing-row {
+        background-color: @backgroundwhite;
+    }
+    // background-color: @dadelgrey;
+}
+
+// PANELS
+#landing-row {
+    #landingpanel {
+        padding: 0 !important;
+        #landingtext {
+            position: absolute;
+            color: white;
+            left: 7%;
+            right: 17%;
+            top: 12%;
+            h1 {
+                font-size: if((@chinese), 3.0vw, 2.8vw);
+                color: white;
+                padding-bottom: 2%;
+                font-weight: normal;
+                text-transform: uppercase;
+            }
+            h2 {
+                font-size: if((@chinese),22pt,18pt);
+            }
+            p {
+                font-size: 1.25vw !important;
+            }
+        }
+    }
+    #loginpanel {
+        padding-top: 50px;
+        padding-bottom: 100px;
+        h1 {
+            padding: 20px;
+            font-size: 20pt;
+            text-transform: uppercase;
+            font-weight: normal;
+        }
+        form {
+            padding-left: 20px;
+        }
+    }
+}
+
+
+// Sidepanel
+.sidepanel {
+    // margin: 1vw;
+    padding: 1vw;
+}
+
+// centerpanel
 #centerpanel {
+    // margin: 1vw;
+    padding: 1vw;
     .nav-tabs {
         border: 0px;
     }
 }
+
+.centerblock {
+    margin-top: 10px;
+}
+
+// END main fields
+////////////////////
 
 // Navbar
 
@@ -110,54 +258,7 @@ ul.navtabs {
 }
 
 
-.rtl { direction: rtl; text-align: right;}
-.ltr { direction: ltr;}
 
-html {
-    background-color: @backgroundwhite;
-    font-size: if((@chinese),12pt,10pt);
-    font-family: 'titillium', 'opensans' Arial, sans-serif;
-    scroll-behavior: smooth;
-}
-
-body {
-    background-color: @dadelgrey;
-    font-size: if((@chinese),12pt,10pt);
-    font-family: 'titillium', 'opensans', Arial, sans-serif;
-    font-style: @dadelblue;
-    font-weight: normal;
-    color: @dadelblue;
-    overflow: scroll; // Make sure scroll bar is always present (if not, popops may cause confusion)
-}
-
-ul li {
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-h1 {
-    font-weight: if((@chinese),normal,bold);
-    color: @dadelblue;
-}
-
-th when (@chinese) {
-    font-weight: normal;
-}
-
-b when (@chinese) {
-    font-weight: normal;
-}
-
-strong when (@chinese) {
-    font-weight: normal;
-}
-
-cite {
-    font-style: normal;
-    em {
-        font-style: italic;
-    }
-}
 
 
 .heb-default {
@@ -601,6 +702,7 @@ div.selectbutton input[type="checkbox"]:checked {
         background-color: @backgroundwhite;
         color: @dadelblue;
     }
+    width: 0px;
 }
 div.selectbutton input[type="radio"]:checked {
     + label {
@@ -608,6 +710,7 @@ div.selectbutton input[type="radio"]:checked {
         background-color: @dadelgrey;
         color: @dadelblue;
     }
+    width: 0px;
 }
 
 div#textinput {
@@ -625,8 +728,8 @@ div#textinput {
 
 //End grammar info selector
 
+
 div.grammardisplay {
-    // border-radius: 6px;
     &.ui-widget-content {
         background: white;
         border: solid 1px @dadelgreydark;
@@ -891,6 +994,11 @@ div.quizcard {
             white-space:normal;
             padding-top: 4px;
             padding-bottom: 4px;
+            img {
+                width: 20px;
+                height: 20px;
+                padding-right: 5px;
+            }
             // padding-left: 1vw;
             // padding-right: 1vw;
         }
@@ -937,7 +1045,7 @@ div.quizitem {
             text-align: center;
             font-weight: normal;
             font-size: 18pt;
-         }
+        }
     }
 }
 
@@ -1066,18 +1174,11 @@ img {
     border-style: none;
 }
 
-div.centerblock {
-    h1 {
-        margin-top: 0;
-        font-size: if((@chinese),19pt,16pt);
-    }
-    h2 {
-        font-size: if((@chinese),17pt,14pt);
-    }
-}
 
 #logincenter,#errorcenter {
     max-width: 300px;
+    margin-top: 20px;
+    margin-bottom: 25px;
 }
 
 #rejectcenter {
@@ -1587,9 +1688,78 @@ div.quizeditor {
     }
 }
 
+footer {
+    // flex-shrink: 0;
+    margin-top: auto;
+}
 
-    // border-top-left-radius: 0 !important;
-    // border-top-right-radius: 0 !important;
-    // border-bottom-left-radius: 0 !important;
-    // border-bottom-right-radius: 0 !important;
+div.footer {
+    background-color: @dadelblue;
+    width: 100%;
+    
+    padding-top: 50px;
+    padding-bottom: 50px;
+    h2 {
+        color: white;
+        padding-bottom: 10px;
+    }
+    p {
+        color: white;
+        font-size: 15px;
+    }
+    a {
+        color: @dadelgreen;
+        font-size: 15px;
+        font-weight: bold;
+        &.social {
+            padding-left: 10px;
+        }
+    }
+    &.footer-column {
+        padding-left: 10%;
+        padding-right: 1%;
+        padding-top: 40px;
+        padding-bottom: 25px;
+    }
+    &.footer-bottom {
+        float: left;
+        width: 100%;
+        height: min(100px);
+        padding-left: 10%;
+        padding-right: 10%;
+        padding-top: 25px;
+        
+        // padding-bottom: 50px;
+    }
+}
 
+img.graphic-element {
+    width: 100%;
+    min-width: 10%;
+}
+
+img.logo {
+    
+}
+
+
+
+footer {
+    .row {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+} 
+
+.logointro, .logopanel {
+    padding: 4vw !important;
+    background-color: white;
+    margin: auto;
+    .col-md-3 {
+        padding: 2vw;
+        width: min(50);
+    }
+    h2 {
+        margin: auto;
+    }
+}

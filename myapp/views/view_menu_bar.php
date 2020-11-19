@@ -148,4 +148,4 @@ $cols = $ix+1;
 </nav>
 
 <div class="container-fluid">
-  <div class="row">
+  <!-- <div class="row"> -->
