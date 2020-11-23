@@ -1,4 +1,607 @@
 {
     "dbdescription": "Hebreeuws (ETCBC4, OT)",
-    "dbcopyright": "Deze database is Copyright © 2015 by Eep Talstra Center for Bible and Computer.<br><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\"><\/a><br>Dit werk is gelicenseerd onder een <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (De database zelf kan worden gevonden via de volgende persistent link: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)"
+    "dbcopyright": "Deze database is Copyright \u00a9 2015 by Eep Talstra Center for Bible and Computer.<br><a target=\"_blank\" rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\"><img alt=\"Creative Commons License\" src=\"https://i.creativecommons.org/l/by-nc/4.0/88x31.png\"></a><br>Dit werk is gelicenseerd onder een <a target=\"_blank\" rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\">Creative Commons Attribution-NonCommercial 4.0 International License</a>. (De database zelf kan worden gevonden via de volgende persistent link: <a href=\"http://www.persistent-identifier.nl/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71</a>.)",
+    "emdrosobject": {
+        "word": {
+            "_objname": "Woord",
+            "lexeme_occurrences": "Voorkomen lexeem",
+            "frequency_rank": "Frequentie",
+            "hint": "Hint",
+            "glossurl": "Link",
+            "g_lex_utf8": "Stam lexeem",
+            "g_lex_cons_utf8": "Stam lexeem (alleen consonanten)",
+            "g_nme_utf8": "Nominale uitgang",
+            "g_nme_cons_utf8": "Nominale uitgang (alleen consonanten)",
+            "g_pfm_utf8": "Preformatief",
+            "g_pfm_cons_utf8": "Preformatief (alleen consonanten)",
+            "g_prs_utf8": "Pronominaal suffix",
+            "g_prs_cons_utf8": "Pronominaal suffix (alleen consonanten)",
+            "g_uvf_utf8": "Univalent final",
+            "g_uvf_cons_utf8": "Univalent final (alleen consonanten)",
+            "g_vbe_utf8": "Werkwoordelijke uitgang",
+            "g_vbe_cons_utf8": "Werkwoordelijke uitgang (alleen consonanten)",
+            "g_vbs_utf8": "Wortel",
+            "g_vbs_cons_utf8": "Wortel (alleen consonanten)",
+            "g_word_utf8": "Tekst",
+            "g_word_translit": "Tekst (getranslitereerd)",
+            "g_word_cons_utf8": "Tekst (alleen consonanten)",
+            "g_word_nocant_utf8": "Tekst (zonder zangtekens)",
+            "g_word_nostress_utf8": "Tekst (zonder accenten)",
+            "g_voc_lex_cons_utf8": "Lexeem (alleen consonanten)",
+            "g_voc_lex_utf8": "Lexeem",
+            "g_voc_lex_utf8_variant": "Lexeem (met variant)",
+            "g_voc_lex_translit": "Lexeem (getranslitereerd)",
+            "language": "Taal",
+            "ls": "Woordsoort",
+            "vs": "Stam",
+            "vt": "Tijd",
+            "ps": "Persoon",
+            "nu": "Getal",
+            "gn": "Geslacht",
+            "st": "Status",
+            "pdp": "Woordfunctie",
+            "sp": "Woordsoort",
+            "suffix_gender": "Geslacht suffix",
+            "suffix_number": "Getal suffix",
+            "suffix_person": "Persoon suffix",
+            "verb_class": "Werkwoordsgroep",
+            "qere_utf8": "Qere",
+            "qere_translit": "Qere (getranslitereerd)"
+        },
+        "phrase_atom": {
+            "_objname": "Opeenvolgende woordgroep",
+            "det": "Bepaling",
+            "rela": "Relatie",
+            "typ": "Type"
+        },
+        "subphrase": {
+            "_objname": "Deel van woordgroep",
+            "rela": "Relatie"
+        },
+        "phrase": {
+            "_objname": "Woordgroep",
+            "det": "Bepaling",
+            "typ": "Type",
+            "rela": "Relatie",
+            "function": "Functie"
+        },
+        "clause_atom": {
+            "_objname": "Opeenvolgend zinsdeel",
+            "tab": "Inspringing",
+            "code_TYPE_text": "Linking",
+            "code_TYPE_text_VALUES": [
+                {
+                    "first": 0,
+                    "last": 0,
+                    "text": "Geen relatie"
+                },
+                {
+                    "first": 10,
+                    "last": 16,
+                    "text": "Relatief"
+                },
+                {
+                    "first": 50,
+                    "last": 74,
+                    "text": "Infinitivus Constructus"
+                },
+                {
+                    "first": 100,
+                    "last": 167,
+                    "text": "Geen conjunctie"
+                },
+                {
+                    "first": 200,
+                    "last": 201,
+                    "text": "Parallel"
+                },
+                {
+                    "first": 300,
+                    "last": 367,
+                    "text": "Conjunctie adverbiaal"
+                },
+                {
+                    "first": 400,
+                    "last": 967,
+                    "text": "Conjunctie"
+                },
+                {
+                    "first": 999,
+                    "last": 999,
+                    "text": "Directe rede"
+                }
+            ],
+            "code": "Syntactische code",
+            "typ": "Type"
+        },
+        "clause": {
+            "_objname": "Zin",
+            "domain": "Domein",
+            "txt": "Tekst type",
+            "typ": "Type",
+            "kind": "Soort",
+            "rela": "Relatie"
+        },
+        "sentence": {
+            "_objname": "Samengestelde zin"
+        }
+    },
+    "emdrostype": {
+        "boolean": {
+            "false": "Fout",
+            "true": "Goed"
+        },
+        "language_t": {
+            "Aramaic": "Aramees",
+            "Hebrew": "Hebreeuws"
+        },
+        "lexical_set_t": {
+            "none": "Geen",
+            "afad": "anaforisch bijwoord",
+            "card": "hoofdtelwoord",
+            "cjad": "voegwoordelijk bijwoord",
+            "focp": "focuspartikel",
+            "gntl": "gentilicium",
+            "mult": "veelheidsnaamwoord",
+            "nmcp": "koppelnaamwoord",
+            "nmdi": "distributief",
+            "ordn": "rangtelwoord",
+            "padv": "bijwoordelijk gebruikt zelfstandig naamwoord",
+            "ppre": "als voorzetsel gebruikt zelfstandig naamwoord",
+            "ques": "vraagpartikel",
+            "quot": "verbum dicendi",
+            "vbcp": "koppelwerkwoord"
+        },
+        "part_of_speech_t": {
+            "art": "lidwoord",
+            "verb": "werkwoord",
+            "subs": "zelfstandig naamwoord",
+            "nmpr": "eigennaam",
+            "advb": "bijwoord",
+            "prep": "voorzetsel",
+            "conj": "voegwoord",
+            "prps": "persoonlijk voornaamwoord",
+            "prde": "aanwijzend voornaamwoord",
+            "prin": "vragend voornaamwoord",
+            "intj": "tussenwerpsel",
+            "nega": "partikel van ontkenning",
+            "inrg": "vraagpartikel",
+            "adjv": "bijvoeglijk naamwoord"
+        },
+        "gender_t": {
+            "f": "#2 femininum",
+            "m": "#1 masculinum",
+            "NA": "#3 None",
+            "unknown": "#4 Unknown",
+            "absent": "#5 Absent"
+        },
+        "number_t": {
+            "du": "#3 dualis",
+            "NA": "#4 None",
+            "pl": "#2 pluralis",
+            "sg": "#1 singularis",
+            "unknown": "#5 Unknown",
+            "absent": "#6 Absent"
+        },
+        "person_t": {
+            "p1": "#1 1e persoon",
+            "NA": "#4 None",
+            "p2": "#2 2e persoon",
+            "p3": "#3 3e persoon",
+            "unknown": "#5 Unknown",
+            "absent": "#6 Absent"
+        },
+        "state_t": {
+            "a": "status absolutus",
+            "c": "status constructus",
+            "e": "status emphaticus",
+            "NA": "None",
+            "unknown": "Unknown"
+        },
+        "verb_class_t": {
+            "NA": "N/A",
+            "four_consonants": "vier consonanten",
+            "geminate": "Ayin-'ayin",
+            "i_aleph": "Pe-alef",
+            "i_guttural": "Verbum primae gutturalis",
+            "i_nun": "Pe-nun",
+            "i_waw": "Pe-waw",
+            "i_yod": "Pe-yod",
+            "ii_guttural": "Verbum mediae gutturalis",
+            "ii_waw": "Ayin-waw",
+            "ii_yod": "Ayin-yod",
+            "iii_aleph": "Lamed-'alef",
+            "iii_guttural": "Verbum tertiae gutturalis",
+            "iii_he": "Lamed-he",
+            "regular": "Sterk werkwoord"
+        },
+        "phrase_determination_t": {
+            "NA": "N/A",
+            "det": "Bepaald",
+            "und": "Onbepaald"
+        },
+        "verbal_stem_t": {
+            "NA": "None",
+            "qal": "#1 Qal",
+            "hif": "#6 Hif'il",
+            "piel": "#3 Pi'el",
+            "nif": "#2 Nif'al",
+            "pual": "#4 Pu'al",
+            "hof": "#7 Hof'al",
+            "hit": "Hitpa'el",
+            "afel": "Af'el",
+            "etpa": "Etpa'al",
+            "etpe": "Etpe'el",
+            "haf": "Haf'el",
+            "hsht": "Hi\u0161taf'al",
+            "htpa": "#5 Hitpa'al",
+            "htpe": "Hitpe'el",
+            "hotp": "Hotpa'al",
+            "nit": "Nitpa'el",
+            "pael": "Pa'el",
+            "peal": "Pe'al",
+            "peil": "Pe'il",
+            "shaf": "\u0160af'el",
+            "tif": "Tif'al",
+            "pasq": "passivum van de Qal",
+            "htpo": "Hitpo'el",
+            "poal": "Po'al",
+            "poel": "Po'el"
+        },
+        "verbal_tense_t": {
+            "NA": "None",
+            "impf": "imperfectum",
+            "impv": "imperatief",
+            "infa": "infinitivus absolutus",
+            "infc": "infinitivus constructus",
+            "perf": "perfectum",
+            "ptca": "participium activum",
+            "ptcp": "participium passivum",
+            "wayq": "imperfectum consecutivum",
+            "weyq": "waw-copulativum + ipf.",
+            "coho": "cohortatief",
+            "emim": "verlengde imperatief",
+            "juss": "jussief"
+        },
+        "phrase_type_t": {
+            "AdjP": "bijvoeglijke bepaling",
+            "AdvP": "bijwoordelijke bepaling",
+            "CP": "voegwoordgroep",
+            "DPrP": "demonstratiefgroep",
+            "IPrP": "vragend voornaamwoordgroep",
+            "InjP": "tussenwerpselgroep",
+            "InrP": "vraagwoordgroep",
+            "NP": "nominale woordgroep",
+            "NegP": "ontkenning",
+            "PP": "prepositiegroep",
+            "PPrP": "persoonlijk voornaamwoordgroep",
+            "PrNP": "eigennaamgroep",
+            "VP": "verbale woordgroep"
+        },
+        "phrase_function_t": {
+            "Adju": "toevoeging",
+            "Cmpl": "complement",
+            "Conj": "voegwoord",
+            "EPPr": "enclitisch persoonlijk voornaamwoord",
+            "ExsS": "aanwezigheidspartikel met subjectsuffix",
+            "Exst": "aanwezigheidspartikel",
+            "Frnt": "vooraan buiten de zin gehaald element",
+            "IntS": "tussenwerpsel met subjectsuffix",
+            "Intj": "tussenwerpsel",
+            "Loca": "tijdsbepaling",
+            "ModS": "bepalend woord met subjectsuffix",
+            "Modi": "bijwoordelijke bepaling bij het predicaat",
+            "NCoS": "ontkennend koppelnaamwoord met subjectsuffix",
+            "NCop": "ontkennend koppelnaamwoord",
+            "Nega": "partikel van ontkenning",
+            "Objc": "lijdend voorwerp",
+            "PrAd": "bepaling van gesteldheid",
+            "PrcS": "gezegde met subjectsuffix",
+            "PreC": "gezegde",
+            "PreO": "werkwoord met objectsuffix",
+            "PreS": "werkwoord met subjectsuffix",
+            "Pred": "verbaal deel van het gezegde",
+            "PtcO": "participium met objectsuffix",
+            "Ques": "vraag",
+            "Rela": "betrekkelijk voornaamwoord",
+            "Subj": "subject",
+            "Supp": "dativus ethicus",
+            "Time": "tijdsbepaling",
+            "Unkn": "Unkn",
+            "Voct": "vocatief"
+        },
+        "phrase_atom_relation_t": {
+            "NA": "None",
+            "Appo": "appositie",
+            "Link": "voegwoord",
+            "Para": "nevenschikking",
+            "Sfxs": "voorzetselgroep terugverwijzend naar een suffix",
+            "Spec": "voorzetselgroep"
+        },
+        "phrase_relation_t": {
+            "NA": "None",
+            "PrAd": "bepaling van gesteldheid",
+            "Resu": "resumptie"
+        },
+        "subphrase_relation_t": {
+            "NA": "None",
+            "adj": "bijstelling door een zelfstandig naamwoord",
+            "atr": "attribuut",
+            "dem": "demonstratief",
+            "mod": "bijwoord",
+            "par": "nevenschikking",
+            "rec": "nomen rectum"
+        },
+        "clause_type_t": {
+            "AjCl": "zin met adjectief als predicaat",
+            "CPen": "extrapositie",
+            "Ellp": "ellipsis",
+            "InfA": "infinitivus absolutuszin",
+            "InfC": "infinitivus constructuszin",
+            "MSyn": "macrosyntactisch teken",
+            "NmCl": "nominale zin",
+            "Ptcp": "participale zin",
+            "Reop": "resumptie",
+            "Unkn": "Unkn",
+            "Voct": "vocatieve groep",
+            "WIm0": "subjectloze we + imp.-zin",
+            "WImX": "we + imp. + subject-zin",
+            "WQt0": "subjectloze we + pf.-zin",
+            "WQtX": "we + pf. + subject-zin",
+            "WXIm": "we + subject + imp.-zin",
+            "WXQt": "we + subject + pf.-zin",
+            "WXYq": "we + subject + ipf.-zin",
+            "WYq0": "subjectloze we + ipf.-zin",
+            "WYqX": "we + ipf. + subject-zin",
+            "Way0": "subjectloze ipf. cons.-zin",
+            "WayX": "ipf. cons + subject-zin",
+            "WxI0": "subjectloze we + x + imp.-zin",
+            "WxIX": "we + x + imp. + subject-zin",
+            "WxQ0": "subjectloze we + x + pf.-zin",
+            "WxQX": "we + x + pf. + subject-zin",
+            "WxY0": "subjectloze we + x + ipf.-zin",
+            "WxYX": "we + x + ipf. + subject-zin",
+            "XImp": "subject + imp.-zin",
+            "XPos": "extrapositie zonder resumptie",
+            "XQtl": "subject + pf.-zin",
+            "XYqt": "subject + ipf.-zin",
+            "ZIm0": "subjectloze imp.-zin",
+            "ZImX": "imp. + subject-zin",
+            "ZQt0": "subjectloze pf.-zin",
+            "ZQtX": "pf. + subject-zin",
+            "ZYq0": "subjectloze ipf.-zin",
+            "ZYqX": "ipf. + subject-zin",
+            "xIm0": "subjectloze x + imp.-zin",
+            "xImX": "x + imp. + subject-zin",
+            "xQt0": "subjectloze x + pf.-zin",
+            "xQtX": "x + pf. + subject-zin",
+            "xYq0": "subjectloze x + ipf.-zin",
+            "xYqX": "x + ipf. + subject-zin"
+        },
+        "clause_atom_type_t": {
+            "AjCl": "zin met adjectief als predicaat",
+            "CPen": "extrapositie",
+            "Defc": "onvolledig opeenvolgend deel van een zin",
+            "Ellp": "ellipsis",
+            "InfA": "infinitivus absolutuszin",
+            "InfC": "infinitivus constructuszin",
+            "MSyn": "macrosyntactisch teken",
+            "NmCl": "nominale zin",
+            "Ptcp": "participale zin",
+            "Reop": "resumptie",
+            "Unkn": "Unkn",
+            "Voct": "vocatieve groep",
+            "WIm0": "subjectloze we + imp.-zin",
+            "WImX": "we + imp. + subject-zin",
+            "WQt0": "subjectloze we + pf.-zin",
+            "WQtX": "we + pf. + subject-zin",
+            "WXIm": "we + subject + imp.-zin",
+            "WXQt": "we + subject + pf.-zin",
+            "WXYq": "we + subject + ipf.-zin",
+            "WYq0": "subjectloze we + ipf.-zin",
+            "WYqX": "we + ipf. + subject-zin",
+            "Way0": "subjectloze ipf. cons.-zin",
+            "WayX": "ipf. cons + subject-zin",
+            "WxI0": "subjectloze we + x + imp.-zin",
+            "WxIX": "we + x + imp. + subject-zin",
+            "WxQ0": "subjectloze we + x + pf.-zin",
+            "WxQX": "we + x + pf. + subject-zin",
+            "WxY0": "subjectloze we + x + ipf.-zin",
+            "WxYX": "we + x + ipf. + subject-zin",
+            "XImp": "subject + imp.-zin",
+            "XPos": "extrapositie zonder resumptie",
+            "XQtl": "subject + pf.-zin",
+            "XYqt": "subject + ipf.-zin",
+            "ZIm0": "subjectloze imp.-zin",
+            "ZImX": "imp. + subject-zin",
+            "ZQt0": "subjectloze pf.-zin",
+            "ZQtX": "pf. + subject-zin",
+            "ZYq0": "subjectloze ipf.-zin",
+            "ZYqX": "ipf. + subject-zin",
+            "xIm0": "subjectloze x + imp.-zin",
+            "xImX": "x + imp. + subject-zin",
+            "xQt0": "subjectloze x + pf.-zin",
+            "xQtX": "x + pf. + subject-zin",
+            "xYq0": "subjectloze x + ipf.-zin",
+            "xYqX": "x + ipf. + subject-zin"
+        },
+        "clause_kind_t": {
+            "unknown": "Unknown",
+            "NC": "nominale zin",
+            "VC": "verbale zin",
+            "WP": "predicaatloze zin"
+        },
+        "clause_constituent_relation_t": {
+            "NA": "None",
+            "Adju": "bijwoordelijke zin",
+            "Attr": "bijvoeglijke zin",
+            "Cmpl": "complementzin",
+            "ReVo": "terugverwijzing naar een vocatief",
+            "Coor": "nevengeschikte zin",
+            "Objc": "zin als object",
+            "PrAd": "zin als bepaling van gesteldheid",
+            "PreC": "zin als naamwoordelijk deel van het gezegde",
+            "Resu": "resumptieve zin",
+            "RgRc": "status constructus-verbinding",
+            "Spec": "bijvoeglijke bepalingzin",
+            "Subj": "bijzin als subject"
+        }
+    },
+    "grammargroup": {
+        "word": {
+            "form_in_text": "Verschijningsvorm",
+            "lexeme": "Lexeem",
+            "morphology": "Morfologie",
+            "glosses": "Glossen"
+        }
+    },
+    "grammarfeature": {
+        "word": {
+            "g_word_translit": "Transliteratie"
+        }
+    },
+    "grammarmetafeature": {
+        "word": {
+            "pgn": "Persoon, geslacht, getal",
+            "suffix_pgn": "Suffix: Persoon, geslacht, getal"
+        }
+    },
+    "grammarsubfeature": {
+        "word": {
+            "ps": {
+                "p1": "1",
+                "NA": "-",
+                "p2": "2",
+                "p3": "3",
+                "unknown": "?"
+            },
+            "gn": {
+                "f": "F",
+                "m": "M",
+                "NA": "-",
+                "unknown": "?"
+            },
+            "nu": {
+                "du": "Du",
+                "NA": "-",
+                "pl": "Pl",
+                "sg": "Sg",
+                "unknown": "?"
+            },
+            "suffix_person": {
+                "p1": "1",
+                "NA": "-",
+                "p2": "2",
+                "p3": "3",
+                "unknown": "-",
+                "absent": "-"
+            },
+            "suffix_gender": {
+                "f": "F",
+                "m": "M",
+                "NA": "-",
+                "unknown": "-",
+                "absent": "-"
+            },
+            "suffix_number": {
+                "NA": "-",
+                "pl": "Pl",
+                "sg": "Sg",
+                "unknown": "-",
+                "absent": "-"
+            }
+        }
+    },
+    "universe": {
+        "book": {
+            "_label": "%s",
+            "Genesis": "Genesis",
+            "Exodus": "Exodus",
+            "Leviticus": "Leviticus",
+            "Numeri": "Numeri",
+            "Deuteronomium": "Deuteronomium",
+            "Josua": "Jozua",
+            "Judices": "Rechters",
+            "Ruth": "Ruth",
+            "Samuel_I": "1 Samu\u00ebl",
+            "Samuel_II": "2 Samu\u00ebl",
+            "Reges_I": "1 Koningen",
+            "Reges_II": "2 Koningen",
+            "Chronica_I": "1 Kronieken",
+            "Chronica_II": "2 Kronieken",
+            "Esra": "Ezra",
+            "Nehemia": "Nehemia",
+            "Esther": "Ester",
+            "Iob": "Job",
+            "Psalmi": "Psalmen",
+            "Proverbia": "Spreuken",
+            "Ecclesiastes": "Prediker",
+            "Canticum": "Hooglied",
+            "Jesaia": "Jesaja",
+            "Jeremia": "Jeremia",
+            "Threni": "Klaagliederen",
+            "Ezechiel": "Ezechi\u00ebl",
+            "Daniel": "Dani\u00ebl",
+            "Hosea": "Hosea",
+            "Joel": "Jo\u00ebl",
+            "Amos": "Amos",
+            "Obadia": "Obadja",
+            "Jona": "Jona",
+            "Micha": "Micha",
+            "Nahum": "Nahum",
+            "Habakuk": "Habakuk",
+            "Zephania": "Sefanja",
+            "Haggai": "Haggai",
+            "Sacharia": "Zacharia",
+            "Maleachi": "Maleachi"
+        },
+        "chapter": {
+            "_label": "Hoofdstuk %s"
+        },
+        "verse": {
+            "_label": "Vers %s"
+        },
+        "reference": {
+            "_label": "%s %d:%d",
+            "Genesis": "Gen",
+            "Exodus": "Ex",
+            "Leviticus": "Lev",
+            "Numeri": "Num",
+            "Deuteronomium": "Deut",
+            "Josua": "Joz",
+            "Judices": "Recht",
+            "Ruth": "Ruth",
+            "Samuel_I": "1 Sam",
+            "Samuel_II": "2 Sam",
+            "Reges_I": "1 Kon",
+            "Reges_II": "2 Kon",
+            "Chronica_I": "1 Kron",
+            "Chronica_II": "2 Kron",
+            "Esra": "Ezra",
+            "Nehemia": "Neh",
+            "Esther": "Est",
+            "Iob": "Job",
+            "Psalmi": "Ps",
+            "Proverbia": "Spr",
+            "Ecclesiastes": "Pred",
+            "Canticum": "Hoogl",
+            "Jesaia": "Jes",
+            "Jeremia": "Jer",
+            "Threni": "Klaagl",
+            "Ezechiel": "Eze",
+            "Daniel": "Dan",
+            "Hosea": "Hos",
+            "Joel": "Jo\u00ebl",
+            "Amos": "Am",
+            "Obadia": "Obad",
+            "Jona": "Jon",
+            "Micha": "Mich",
+            "Nahum": "Nah",
+            "Habakuk": "Hab",
+            "Zephania": "Sef",
+            "Haggai": "Hag",
+            "Sacharia": "Zach",
+            "Maleachi": "Mal"
+        }
+    }
 }
