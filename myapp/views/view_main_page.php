@@ -5,12 +5,12 @@ function show_intro(&$center, &$landingpage) {
   if (!isset($landingpage))
       return;
 
-    echo <<<EOD
+?>
     <div class="row" id="landing-row">
       <div class="col-md-8" id="landingpanel">
         <img class="graphic-element" src="/images/dadel/DaDEL_ID_graphic_element_RGB.png">
         <div id="landingtext">
-          $center
+          <?= $center ?>
         </div>
       </div>
       <div class="col-md-4" id="loginpanel">
@@ -29,8 +29,7 @@ function show_intro(&$center, &$landingpage) {
           <button class="btn btn-outline-dark">Try an exercise</button>
         </form>
         </form>
-
-    EOD;
+<?php
 }
 
 /* Optionally shows a panel title and text */
