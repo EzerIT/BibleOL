@@ -1565,7 +1565,7 @@ var PanelQuestion = (function () {
                         v = $("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + correctAnswer + "</td>");
                     else {
                         var mc_div = $('<div class="styled-select"></div>');
-                        var mc_select_1 = $("<select class=\"" + PanelQuestion.charclass(featset) + "\" style=\"direction:ltr\">");
+                        var mc_select_1 = $("<select class=\"" + PanelQuestion.charclass(featset) + "\" style=\"direction:ltr;text-align:left\">");
                         mc_div.append(mc_select_1);
                         var optArray = [];
                         var cwyn = new ComponentWithYesNo(mc_div, COMPONENT_TYPE.comboBox2);

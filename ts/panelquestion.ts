@@ -311,7 +311,8 @@ class PanelQuestion {
                         let mc_div : JQuery = $('<div class="styled-select"></div>');
 
                         // direction:ltr forces left alignment of options (though not on Firefox)
-                        let mc_select : JQuery = $(`<select class="${PanelQuestion.charclass(featset)}" style="direction:ltr">`);
+                        // text-align:left forces left alignment of options on Firefox (but not on Chrome)
+                        let mc_select : JQuery = $(`<select class="${PanelQuestion.charclass(featset)}" style="direction:ltr;text-align:left">`);
 
                         mc_div.append(mc_select);
 
