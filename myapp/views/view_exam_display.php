@@ -1,5 +1,6 @@
 <div id="quiz_id" style="display: none;"><?= $quizid ?></div>
 <div id="exam_id" style="display: none;"><?= $examid ?></div>
+<div id="exercise_lst" style="display: none;"><?= $exercise_lst ?></div>
 <div class="col-lg-3">
   <div class="grammarselector" id="gramselect"></div>
   <?php if (!$is_quiz): ?>

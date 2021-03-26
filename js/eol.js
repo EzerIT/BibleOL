@@ -1892,10 +1892,13 @@ var Quiz = (function () {
                     .addClass('alert alert-danger')
                     .html("<h1>" + localize('error_response') + "</h1><p>" + errorThrow + "</p>");
             });
-            $.get(site_url + 'statistics/update_exam_quiz_stat?examid=' + $('#exam_id').html() + '&quizid=' + $('quiz_id'), this.quiz_statistics)
+            $.get(site_url + 'statistics/update_exam_quiz_stat?examid=' + $('#exam_id').html() + '&quizid=' + $('quiz_id') + '&exercise_lst=' + $('#exercise_lst'), this.quiz_statistics)
                 .done(function () {
-                  if($('#exercise_lst'))
-                    return window.location.replace(site_url + 'exams/active_exams');
+                  if($('#exercise_lst')){
+                    var exercise_lst = $('#exercise_lst').html().split("~");
+                    var next_quiz = exercise_lst.shift();
+                    return window.location.replace(site_url + 'exams/show_quiz?quiz=' + next_quiz + '&count=10&examid=' + $('#exam_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
+                  }
                 })
                 .fail(function (jqXHR, textStatus, errorThrow) {
                 $('#textcontainer')

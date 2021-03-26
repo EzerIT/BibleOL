@@ -566,6 +566,7 @@ class Ctrl_exams extends MY_Controller
         $examcode = $row->examcode;
         $exam_id = $row->id;
         $xml = simplexml_load_string($examcode);
+
         $exercises = array();
         foreach ($xml->exercise as $exercise) {
           array_push($exercises, $exercise->exercisename);
@@ -637,11 +638,11 @@ class Ctrl_exams extends MY_Controller
           else
               $number_of_quizzes = intval($_GET['count']);
 
-          $this->show_quiz_common($_GET['quiz'], $number_of_quizzes, $_GET['examid']);
+          $this->show_quiz_common($_GET['quiz'], $number_of_quizzes, $_GET['examid'], $_GET['exercise_lst']);
       }
 
     // Common code for show_quiz() and show_quiz_sel()
-  private function show_quiz_common(string $quiz, int $number_of_quizzes, int $examid, array $universe = null) {
+  private function show_quiz_common(string $quiz, int $number_of_quizzes, int $examid, string $exercise_lst, array $universe = null) {
         try {
             // MODEL:
             $this->load->model('mod_quizpath');
@@ -675,6 +676,7 @@ class Ctrl_exams extends MY_Controller
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_exam_display', array('quizid' => $this->quiz_data->quizid,
                                                          'examid' => $examid,
+                                                         'exercise_lst' => $exercise_lst,
                                                          'is_quiz' => true,
                                                          'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
                                                          'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
