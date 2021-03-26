@@ -351,6 +351,10 @@ class Ctrl_exams extends MY_Controller
       }
     }
 
+    public function exam_done() {
+      $this->load->view('view_exam_done');
+    }
+
 
     //Get all elements of a folder only one level down
     public function getChildren($dir)

@@ -1894,10 +1894,13 @@ var Quiz = (function () {
             });
             $.get(site_url + 'statistics/update_exam_quiz_stat?examid=' + $('#exam_id').html() + '&quizid=' + $('quiz_id') + '&exercise_lst=' + $('#exercise_lst'), this.quiz_statistics)
                 .done(function () {
-                  if($('#exercise_lst')){
+                  if($('#exercise_lst').html()){
                     var exercise_lst = $('#exercise_lst').html().split("~");
                     var next_quiz = exercise_lst.shift();
                     return window.location.replace(site_url + 'exams/show_quiz?quiz=' + next_quiz + '&count=10&examid=' + $('#exam_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
+                  }
+                  else {
+                    return window.location.replace(site_url + 'exams/exam_done');
                   }
                 })
                 .fail(function (jqXHR, textStatus, errorThrow) {
