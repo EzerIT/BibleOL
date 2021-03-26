@@ -1,4 +1,5 @@
-
+<div id="quiz_id" style="display: none;"><?= $quizid ?></div>
+<div id="exam_id" style="display: none;"><?= $examid ?></div>
 <div class="col-lg-3">
   <div class="grammarselector" id="gramselect"></div>
   <?php if (!$is_quiz): ?>
@@ -38,14 +39,9 @@
       <progress id="progress" value="0" max="1"></progress>
       <div id="progressbar"></div>
       <p id="progresstext" class="inline"></p>
-      <div id="buttonlist1">
-        <button id="check_answer" type="button"><?= $this->lang->line('check_answer') ?></button>
-        <button id="show_answer" type="button"><?= $this->lang->line('show_answer') ?></button>
-      </div>
       <div id="buttonlist2">
         <button id="next_question" type="button"><?= $this->lang->line('next') ?></button>
         <button id="finish" type="button"><?= $this->lang->line('finish') ?></button>
-        <button id="finishNoStats" type="button"><?= $this->lang->line('finish_no_grading') ?></button>
       </div>
     <?php endif; ?>
 

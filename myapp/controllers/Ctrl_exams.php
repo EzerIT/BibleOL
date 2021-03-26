@@ -562,7 +562,9 @@ class Ctrl_exams extends MY_Controller
         $this->mod_users->is_logged_in();
 
         $query = $this->db->get_where('bol_exam', array('exam_name' => $_GET['exam']));
-        $examcode = $query->row()->examcode;
+        $row = $query->row();
+        $examcode = $row->examcode;
+        $exam_id = $row->id;
         $xml = simplexml_load_string($examcode);
         $exercises = array();
         foreach ($xml->exercise as $exercise) {
@@ -571,6 +573,7 @@ class Ctrl_exams extends MY_Controller
 
         $this->load->model('mod_quizpath');
         $this->load->model('mod_askemdros');
+        //$quiz_data_help = $this->mod_askemdros->quiz_data;
         //$this->mod_quizpath->init()
 
         $this->load->view('view_top1', array('title' => $this->lang->line('take_exam')));
@@ -579,11 +582,12 @@ class Ctrl_exams extends MY_Controller
         $this->load->view('view_confirm_dialog');
         $this->load->view('view_alert_dialog');
 
-
         $center_text = $this->load->view(
           'view_take_exam',
           array(
+            //'quiz_data_help' => $quiz_data_help,
             'xml' => $xml,
+            'exam_id' => $exam_id,
             'exercises' => $exercises,
           ),
           true
@@ -604,6 +608,10 @@ class Ctrl_exams extends MY_Controller
       }
     }
 
+    public function add_quiz_results(){
+
+    }
+
 
     public function show_files()
     {
@@ -618,5 +626,74 @@ class Ctrl_exams extends MY_Controller
         }
     }
 
+    public function show_quiz() {
+          if (!isset($_GET['quiz'])) {
+              $this->select_quiz();
+              return;
+          }
+
+          if (!isset($_GET['count']) || !is_numeric($_GET['count']))
+              $number_of_quizzes = 5;
+          else
+              $number_of_quizzes = intval($_GET['count']);
+
+          $this->show_quiz_common($_GET['quiz'], $number_of_quizzes, $_GET['examid']);
+      }
+
+    // Common code for show_quiz() and show_quiz_sel()
+  private function show_quiz_common(string $quiz, int $number_of_quizzes, int $examid, array $universe = null) {
+        try {
+            // MODEL:
+            $this->load->model('mod_quizpath');
+            $this->load->model('mod_askemdros');
+            $this->mod_quizpath->init($quiz, false, true);
+
+            $this->mod_askemdros->show_quiz($number_of_quizzes, $universe);
+            $quiz_data_help = $this->mod_askemdros->quiz_data;
+            $this->load->model('mod_localize');
+
+            // VIEW:
+            $javascripts = array('js/eol.js');
+            if ($this->quiz_data->quizFeatures->useVirtualKeyboard) {
+                switch ($this->db_config->dbinfo->charSet) {
+                  case 'hebrew':
+                        $javascripts[] = 'virtualkeyboard/vk_loader.js?vk_layout=IL%20Biblical%20Hebrew%20(SIL)&amp;vk_skin=goldie';
+                        break;
+
+                  case 'greek':
+                        $javascripts[] = 'virtualkeyboard/vk_loader.js?vk_layout=GR%20Greek%20Polytonic&amp;vk_skin=goldie';
+                        break;
+
+                  case 'transliterated_hebrew':
+                        // Nothing for now
+                        break;
+                }
+            }
+            $this->load->view('view_top1', array('title' => $this->lang->line('quiz'),
+                                                 'css_list' => array('styles/selectbox.css'),
+                                                 'js_list' => $javascripts));
+            $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
+            $this->load->view('view_exam_display', array('quizid' => $this->quiz_data->quizid,
+                                                         'examid' => $examid,
+                                                         'is_quiz' => true,
+                                                         'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
+                                                         'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
+                                                         'quizData_json' => $this->mod_askemdros->quiz_data_json,
+                                                         'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
+                                                         'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
+                                                         'l10n_json' => $this->mod_askemdros->l10n_json,
+                                                         'l10n_js_json' => $this->mod_localize->get_json(),
+                                                         'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
+                                                         'is_logged_in' => $this->mod_users->is_logged_in()));
+            $this->load->view('view_bottom');
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('quiz'));
+        }
+    }
+
+    function submit_exam_quiz() {
+
+    }
 
 }

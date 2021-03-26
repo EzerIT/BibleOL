@@ -43,7 +43,7 @@ class Ctrl_statistics extends MY_Controller {
                 }
             }
 
-            
+
             $this->load->view('view_top1', array('title' => $this->lang->line('statistics_title')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
@@ -54,7 +54,7 @@ class Ctrl_statistics extends MY_Controller {
                                                       'left' => $left_text,
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
-            
+
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('statistics_title'));
@@ -64,6 +64,15 @@ class Ctrl_statistics extends MY_Controller {
 
     public function update_stat() {
         $this->mod_statistics->endQuiz();
+    }
+
+    public function update_exam_quiz_stat() {
+      $data = array(
+        'userid' => $this->mod_users->my_id(),
+        'examid' => $this->input->get('examid'),
+        'quizid' => $this->input->get('quizid'),
+      );
+      $this->db->insert('bol_exam_results', $data);
     }
 
     public function student_time() {
@@ -111,7 +120,7 @@ class Ctrl_statistics extends MY_Controller {
             $myclassids = $this->mod_userclass->get_classes_for_user($userid);
             $myclasses = $this->mod_classes->get_classes_by_ids($myclassids);
 
-            
+
             // $classid==0 means ignore class information
 
             if ($classid>0) {
@@ -124,7 +133,7 @@ class Ctrl_statistics extends MY_Controller {
                 $templates = $this->mod_statistics->get_templates_for_students(array($userid));
 
             $temp_id2path = $this->mod_statistics->get_pathnames_for_templids($templates);
-                
+
             if (!empty($templates))
                 $durations = $this->mod_statistics->get_quizzes_duration($templates,
                                                                          $this->statistics_timeperiod->start_timestamp(),
@@ -154,9 +163,9 @@ class Ctrl_statistics extends MY_Controller {
                 else
                     $totaltemp[$templname] += $hours;
             }
-            
+
             $user_full_name = $this->mod_users->user_full_name($userid);
-            
+
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('student_graphs_title'),
                                                  'js_list' => array('RGraph/libraries/RGraph.common.core.js',
@@ -169,7 +178,7 @@ class Ctrl_statistics extends MY_Controller {
                                                                     'js/graphing.js')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
-            
+
             $center_text = $this->load->view('view_progress_student_time', array('classid' => $classid,
                                                                                  'classlist' => $myclasses,
                                                                                  'userid' => $userid,
@@ -180,7 +189,7 @@ class Ctrl_statistics extends MY_Controller {
                                                                                  'totaltemp' => $totaltemp), true);
 
 
-            
+
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_period_heading'),
                                                       'left' => $this->lang->line('time_period_description')
                                                                 . $this->lang->line('student_time_description'),
@@ -191,7 +200,7 @@ class Ctrl_statistics extends MY_Controller {
             $this->error_view($e->getMessage(), $this->lang->line('student_graphs_title'));
         }
     }
-        
+
 
     public function student_exercise() {
 //        $this->db->set_dbprefix('bol_');
@@ -199,7 +208,7 @@ class Ctrl_statistics extends MY_Controller {
 		$this->load->model('mod_users');
 		$this->load->model('mod_statistics');
         $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
- 
+
 		try {
             $this->load->helper('form');
             $this->load->library('form_validation');
@@ -222,7 +231,7 @@ class Ctrl_statistics extends MY_Controller {
                 $userid = (int)$userid;
 
             $may_see_nongraded = $this->mod_statistics->may_see_nongraded($userid, $templ);
-            
+
 			if ($this->form_validation->run()) {
                 $this->statistics_timeperiod->ok_dates();
 
@@ -230,7 +239,7 @@ class Ctrl_statistics extends MY_Controller {
                     throw new DataException($this->lang->line('illegal_user_id'));
 
                 $see_nongraded = $nongraded && $may_see_nongraded;
-                
+
                 $templs = $this->mod_statistics->get_templids_for_pathname_and_user($templ, $userid);
 
                 $resscore = $this->mod_statistics->get_score_by_date_user_templ($userid,
@@ -239,7 +248,7 @@ class Ctrl_statistics extends MY_Controller {
                                                                                 $this->statistics_timeperiod->end_timestamp(),
                                                                                 $see_nongraded);
 
-                
+
                 $resfeat = $this->mod_statistics->get_features_by_date_user_templ($userid,
                                                                                   $templs,
                                                                                   $this->statistics_timeperiod->start_timestamp(),
@@ -270,7 +279,7 @@ class Ctrl_statistics extends MY_Controller {
             }
 
             $user_full_name = $this->mod_users->user_full_name($userid);
-            
+
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('exercise_graphs_title'),
                                                  'js_list' => array('RGraph/libraries/RGraph.common.core.js',
@@ -284,7 +293,7 @@ class Ctrl_statistics extends MY_Controller {
 
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
-            
+
             $center_text = $this->load->view('view_progress_student_exercises', array('resscore' => $resscore,
                                                                                       'resfeat' => $resfeat,
                                                                                       'featloc' => $featloc,
@@ -318,15 +327,15 @@ class Ctrl_statistics extends MY_Controller {
             $this->mod_users->check_teacher();
 
 //            $this->db->set_dbprefix('bol_');
-            
+
             $classes = $this->mod_classes->get_named_classes_owned(false);
 //            $classes = $this->mod_classes->get_named_classes_owned(!false);
-            
+
             $this->load->view('view_top1', array('title' => $this->lang->line('teacher_graphs_title')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
-            
-            $center_text = $this->load->view('view_progress_teacher_classes', array('classes' => $classes), true); 
+
+            $center_text = $this->load->view('view_progress_teacher_classes', array('classes' => $classes), true);
 
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_class_heading'),
                                                       'left' => $this->lang->line('select_class_description'),
@@ -360,14 +369,14 @@ class Ctrl_statistics extends MY_Controller {
 //			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
 			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
 				throw new DataException($this->lang->line('illegal_class_id'));
-            
+
             $this->statistics_timeperiod->set_validation_rules();
 
 			if ($this->form_validation->run()) {
                 $this->statistics_timeperiod->ok_dates();
 
                 $status = 1; // 1 = OK
-                
+
                 $students = $this->mod_userclass->get_named_users_in_class($classid);
                 if (empty($students))
                     throw new DataException('No students in class');
@@ -390,7 +399,7 @@ class Ctrl_statistics extends MY_Controller {
                     $real_students[$d->userid] = true;
                 ksort($real_students);
                 $number_students = count($real_students);
-            
+
                 // $dur[123456][55] will be the duration for user 55 in the week starting at UNIX time 123456
                 // $total[123456]  will be the total duration for all users in the week starting at UNIX time 123456
                 $dur = array();
@@ -404,7 +413,7 @@ class Ctrl_statistics extends MY_Controller {
                     foreach ($real_students as $st => $ignore)
                         $dur[$w][$st] = 0;
                 }
-                
+
                 foreach ($durations as $d) {
                     $hours = $d->duration / 3600;
                     $w = $this->statistics_timeperiod->last_monday((int)$d->start);
@@ -419,11 +428,11 @@ class Ctrl_statistics extends MY_Controller {
 			}
             else {
                 $this->statistics_timeperiod->default_dates();
-                
+
                 $real_students = null;
                 $dur = null;
                 $total = null;
-                
+
                 $status = 2; // 2 = Bad
             }
 
@@ -457,7 +466,7 @@ class Ctrl_statistics extends MY_Controller {
                 $main_params['extraleft'] = $this->load->view('view_progress_teacher_legend', array(), true);
                 $main_params['extraleft_title'] = $this->lang->line('students');
             }
-                
+
             $this->load->view('view_main_page', $main_params);
             $this->load->view('view_bottom');
         }
@@ -465,7 +474,7 @@ class Ctrl_statistics extends MY_Controller {
             $this->error_view($e->getMessage(), $this->lang->line('student_graphs_title'));
         }
     }
-    
+
     public function teacher_exercises() {
     	$this->load->model('mod_users');
     	$this->load->model('mod_classes');
@@ -497,7 +506,7 @@ class Ctrl_statistics extends MY_Controller {
             $this->form_validation->set_rules('nongraded', '', 'callback_always_true');  // Dummy rule. At least one rule is required
 
             $nongraded = $this->input->get('nongraded')=='on';
-            
+
 			if ($this->form_validation->run()) {
                 $this->statistics_timeperiod->ok_dates();
 
@@ -552,7 +561,7 @@ class Ctrl_statistics extends MY_Controller {
                     }
                     else
                         $featloc = null;
-                    
+
                     // Get student names
                     foreach ($real_students as $uid => &$v)
                         $v = make_full_name($this->mod_users->get_user_by_id($uid)) . ($v ? ' *' : '');
@@ -585,7 +594,7 @@ class Ctrl_statistics extends MY_Controller {
 
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
-            
+
             $center_text = $this->load->view('view_progress_teacher_exercises', array('classid' => $classid,
                                                                                       'classname' => $class->classname,
                                                                                       'students' => $real_students,
@@ -605,14 +614,14 @@ class Ctrl_statistics extends MY_Controller {
                                  'left' => $this->lang->line('time_period_description')
                                  . $this->lang->line('student_exercise_description'),
                                  'center' => $center_text);
-            
+
             if ($status==1) {
                 $main_params['extraleft'] = $this->load->view('view_progress_teacher_legend',
                                                               array('nongraded' => $nongraded),
                                                               true);
                 $main_params['extraleft_title'] = $this->lang->line('students');
             }
-            
+
             $this->load->view('view_main_page', $main_params);
             $this->load->view('view_bottom');
         }
@@ -620,5 +629,5 @@ class Ctrl_statistics extends MY_Controller {
             $this->error_view($e->getMessage(), $this->lang->line('exercise_graphs_title'));
         }
     }
-    
+
 }
