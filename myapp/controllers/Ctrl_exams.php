@@ -310,6 +310,18 @@ class Ctrl_exams extends MY_Controller
         redirect("/exams");
     }
 
+    // DELETE EXISTING EXAM INSTANCE
+    public function delete_exam_instance(){
+        $this->mod_users->check_teacher();
+
+        $exid = $_POST["exid"];
+
+        # Remove exam from database.
+        $this->db->delete('bol_exam_active', array('id' => $exid));
+
+        redirect("/exams/active_exams");
+    }
+
 
     // EDIT EXISTING EXAM
     // Also used in exam creation.

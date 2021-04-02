@@ -5,3 +5,5 @@
 <p>
   Hit the submit button to exit.
 </p>
+
+<a href="/exams/active_exams">Submit</a>
