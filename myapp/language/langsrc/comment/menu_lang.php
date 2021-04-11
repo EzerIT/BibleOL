@@ -20,6 +20,10 @@ $comment['enroll_in_class'] = "";
 $format['enroll_in_class'] = "";
 $use_textarea['enroll_in_class'] = false;
 
+$comment['exams'] = "";
+$format['exams'] = "";
+$use_textarea['exams'] = false;
+
 $comment['exercises'] = "";
 $format['exercises'] = "";
 $use_textarea['exercises'] = false;

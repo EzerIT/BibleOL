@@ -4,6 +4,10 @@ $comment['active_exams'] = "";
 $format['active_exams'] = "";
 $use_textarea['active_exams'] = false;
 
+$comment['active_exams_description'] = "";
+$format['active_exams_description'] = "";
+$use_textarea['active_exams_description'] = false;
+
 $comment['class_name'] = "";
 $format['class_name'] = "";
 $use_textarea['class_name'] = false;
@@ -23,6 +27,10 @@ $use_textarea['create_new_exam_button'] = false;
 $comment['delete_exam'] = "";
 $format['delete_exam'] = "";
 $use_textarea['delete_exam'] = false;
+
+$comment['delete_exam_instance'] = "";
+$format['delete_exam_instance'] = "";
+$use_textarea['delete_exam_instance'] = false;
 
 $comment['duration'] = "";
 $format['duration'] = "";

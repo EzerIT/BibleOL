@@ -1,11 +1,13 @@
 <?php
 
 $lang['active_exams'] = 'Active Exams';
+$lang['active_exams_description'] = 'Active exams description.';
 $lang['class_name'] = 'Class name';
 $lang['create_exam'] = 'Create Exam';
 $lang['create_exam_description'] = 'Here you can select which exercises you want to include in the new exam.';
 $lang['create_new_exam_button'] = 'Create New Exam';
 $lang['delete_exam'] = 'Delete Exam';
+$lang['delete_exam_instance'] = 'Delete Exam Instance';
 $lang['duration'] = 'Duration (minutes)';
 $lang['edit_exam'] = 'Edit Exam';
 $lang['edit_exam_description'] = 'Here you can set the parameters for each exercise.';

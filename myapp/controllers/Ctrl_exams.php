@@ -583,10 +583,29 @@ class Ctrl_exams extends MY_Controller
         $exam_id = $row->id;
         $xml = simplexml_load_string($examcode);
 
+        $exercise_parameters = array();
+
+        // $newdata = array(
+        //   'xml' => $xml
+        // );
+
         $exercises = array();
         foreach ($xml->exercise as $exercise) {
-          array_push($exercises, $exercise->exercisename);
+          $name = $exercise->exercisename;
+          $name = trim($name);
+          array_push($exercises, $name);
+            $exercise_parameters[$name] = array();
+          $array = json_decode(json_encode((array) $exercise), TRUE);
+          # Iterate through the features of the exercise.
+      		foreach ($array as $key => $value){
+      		# If the current feature is not exercisename.
+      		  if($key != "exercisename"){
+      				$exercise_parameters[$name][$key] = $value;
+      		 	}
+      		}
         }
+
+        $this->session->set_userdata('exam_parameters', $exercise_parameters);
 
         $this->load->model('mod_quizpath');
         $this->load->model('mod_askemdros');
@@ -606,6 +625,7 @@ class Ctrl_exams extends MY_Controller
             'xml' => $xml,
             'exam_id' => $exam_id,
             'exercises' => $exercises,
+            'exercise_parameters' => $exercise_parameters,
           ),
           true
         );
@@ -649,12 +669,20 @@ class Ctrl_exams extends MY_Controller
               return;
           }
 
-          if (!isset($_GET['count']) || !is_numeric($_GET['count']))
-              $number_of_quizzes = 5;
-          else
-              $number_of_quizzes = intval($_GET['count']);
+          $quiz = $_GET['quiz'];
+          $exam_parameters = $_SESSION['exam_parameters'];
+          $numq = $exam_parameters[$quiz]['numq'];
 
-          $this->show_quiz_common($_GET['quiz'], $number_of_quizzes, $_GET['examid'], $_GET['exercise_lst']);
+          // if (!isset($_GET['count']) || !is_numeric($_GET['count']))
+          //     $number_of_quizzes = 5;
+          // else
+          //     $number_of_quizzes = intval($_GET['count']);
+
+          if ($numq <= 0){
+            $numq = 10;
+          }
+
+          $this->show_quiz_common($_GET['quiz'], $numq, $_GET['examid'], $_GET['exercise_lst']);
       }
 
     // Common code for show_quiz() and show_quiz_sel()
