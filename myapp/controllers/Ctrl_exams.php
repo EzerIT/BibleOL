@@ -81,10 +81,8 @@ class Ctrl_exams extends MY_Controller
           //$class_id = $class_row->id;
           $active_exam_query = $this->db->get_where('exam_active', array('class_id' => $class_id))->result();
           foreach ($active_exam_query as $exam_row) {
-            if ($exam_row->exam_end_date > date('Y-m-d') ||
-                ($exam_row->exam_end_date == date('Y-m-d') && $exam_row->exam_end_time > date('G:i'))){
-              if ($exam_row->exam_start_date < date('Y-m-d') ||
-                  ($exam_row->exam_start_date == date('Y-m-d') && $exam_row->exam_start_time <= date('G:i'))){
+            if ($exam_row->exam_end_time > time()){
+              if ($exam_row->exam_start_time <= time()){
                 array_push($active_exams_list, $exam_row);
               } else {
                 array_push($future_exams_list, $exam_row);
@@ -256,13 +254,14 @@ class Ctrl_exams extends MY_Controller
         $this->mod_users->check_teacher();
 
         echo "Redirecting...";
-        var_dump($_GET);
 
         $exam_name = $_GET["exname"];
+        $exam_id = $_GET["exid"];
         // Get class id from class name.
         $class_name = $_GET["class_select"];
         $query = $this->db->get_where('class', array('classname' => $class_name));
         $class_id = $query->row()->id;
+        $exam_timezone_offset = $_GET["timezone_offset"];
         $exam_start_date = $_GET["start_date"];
         $exam_end_date = $_GET["end_date"];
         $exam_length = $_GET["duration"];
@@ -272,11 +271,10 @@ class Ctrl_exams extends MY_Controller
         $data = array(
           'exam_name' => $exam_name,
           'class_id' => $class_id,
-          'exam_start_date' => $exam_start_date,
-          'exam_end_date' => $exam_end_date,
+          'exam_start_time' => strtotime("$exam_start_date $exam_start_time"),
+          'exam_end_time' => strtotime("$exam_end_date $exam_end_time"),
           'exam_length' => $exam_length,
-          'exam_start_time' => $exam_start_time,
-          'exam_end_time' => $exam_end_time
+          'exam_id' => $exam_id,
         );
 
 
@@ -577,6 +575,8 @@ class Ctrl_exams extends MY_Controller
       try {
         $this->mod_users->is_logged_in();
 
+
+
         $query = $this->db->get_where('bol_exam', array('exam_name' => $_GET['exam']));
         $row = $query->row();
         $examcode = $row->examcode;
@@ -622,10 +622,10 @@ class Ctrl_exams extends MY_Controller
           'view_take_exam',
           array(
             //'quiz_data_help' => $quiz_data_help,
-            'xml' => $xml,
             'exam_id' => $exam_id,
             'exercises' => $exercises,
             'exercise_parameters' => $exercise_parameters,
+            'xml' => $xml,
           ),
           true
         );

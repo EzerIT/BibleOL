@@ -72,7 +72,7 @@ on the page.
               <td class="leftalign"><?= $this->mod_users->user_full_name($exam->ownerid) ?></td>
               <td class="leftalign">
                   <a class="badge badge-primary" href="/exams/edit_exam?exam=<?= $exam->exam_name ?>"><?= $this->lang->line('edit_exam') ?></a>
-                  <a class="badge badge-primary" href="#" onclick="cr_exam_inst('<?= $exam->exam_name ?>');"><?= $this->lang->line('create_exam_instance') ?></a>
+                  <a class="badge badge-primary" href="#" onclick="cr_exam_inst('<?= $exam->exam_name ?>', <?= $exam->id ?>);"><?= $this->lang->line('create_exam_instance') ?></a>
                   <a class="badge badge-danger" href="#" onclick="dltexam('<?= $exam->exam_name ?>');"><?= $this->lang->line('delete_exam') ?></a>
               </td>
           </tr>
@@ -105,12 +105,41 @@ This button redirects to the exam creation page.
 
         <form id="create-instance-form" action="<?= site_url('exams/create_exam_instance') ?>" method="get">
           <input type="hidden" name="exname" id="create-instance-examname">
+          <input type="hidden" name="exid" id="create-instance-examid">
           <?= $this->lang->line('class') ?>: <select id="class_select" name="class_select">
             <?php foreach ($n_o_c as $owned_class): ?>
               <option><?= $owned_class->classname ?></option>
             <?php endforeach; ?>
           </select>
           <br>
+          <br>
+          <?= $this->lang->line('timezone') ?>: <select name="timezone_offset" id="timezone-offset" class="span5" required>
+            <option value="-12">GMT -12:00</option>
+            <option value="-11">GMT -11:00</option>
+            <option value="-10">GMT -10:00</option>
+            <option value="-9">GMT -9:00</option>
+            <option value="-8">GMT -8:00</option>
+            <option value="-7">GMT -7:00</option>
+            <option value="-6">GMT -6:00</option>
+            <option value="-5">GMT -5:00</option>
+            <option value="-4">GMT -4:00</option>
+            <option value="-3">GMT -3:00</option>
+            <option value="-2">GMT -2:00</option>
+            <option value="-1">GMT -1:00</option>
+            <option value="0">GMT</option>
+            <option value="1">GMT +1:00</option>
+            <option value="2">GMT +2:00</option>
+            <option value="3">GMT +3:00</option>
+            <option value="4">GMT +4:00</option>
+            <option value="5">GMT +5:00</option>
+            <option value="6">GMT +6:00</option>
+            <option value="7">GMT +7:00</option>
+            <option value="8">GMT +8:00</option>
+            <option value="9">GMT +9:00</option>
+            <option value="10">GMT +10:00</option>
+            <option value="11">GMT +11:00</option>
+            <option value="12">GMT +12:00</option>
+          </select>
           <br>
           <?= $this->lang->line('start_date') ?>: <input type="date" id="date1" name="start_date" required>
           <br>
@@ -136,9 +165,10 @@ This button redirects to the exam creation page.
 
 
 <script>
-  function cr_exam_inst(examname) {
+  function cr_exam_inst(examname, examid) {
     $('#create-instance-error').hide();
     $('#create-instance-examname').attr('value', examname);
+    $('#create-instance-examid').attr('value', examid);
     let tomo = new Date();
     tomo.setDate(tomo.getDate() + 1);
     document.getElementById('date1').valueAsDate = tomo;
