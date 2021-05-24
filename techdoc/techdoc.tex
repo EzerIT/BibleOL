@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{6 May 2020}
+\date{24 May 2021}
 
 \makeindex
 
@@ -234,7 +234,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \maketitle
 
 \begin{center}
-Copyright © 2020 by Claus Tøndering, claus@ezer.dk
+Copyright © 2021 by Claus Tøndering, claus@ezer.dk
 
 \vspace{5mm}
 
@@ -264,7 +264,7 @@ server and developers who need to modify or expand the way Bible OL works.
 \section{License and Copyright}\index{license}\index{copyright}
 
 Except where otherwise noted, the Bible OL source code is distributed under an MIT
-License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2020 by Claus
+License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2021 by Claus
 Tøndering, claus@ezer.dk and its other authors.
 
 The present document is made available under a Creative Commons Attribution 4.0 International
@@ -791,13 +791,13 @@ instructions how to do it here.
 The following should be installed:
 
 \begin{itemize}
-\item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.11.0.
-\item PHP\index{PHP}. I use version 7.1.
+\item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.31.1.
+\item PHP\index{PHP}. I use version 7.4.
 \item nodejs\index{nodejs} (JavaScript runtime, used for compiling TypeScript and Less). I use version
-  4.2.6.
-\item npm\index{npm} (package manager for nodejs). I use version 3.5.2.
+  10.19.0.
+\item npm\index{npm} (package manager for nodejs). I use version 6.14.4.
   This package may not strictly be required, but it is useful for installing nodejs modules.
-\item git\index{Git}. I use version 2.7.4.
+\item git\index{Git}. I use version 2.25.1.
 \end{itemize}
 
 All of this can be installed on an Ubuntu system using the usual \emph{apt-get} installation
@@ -888,7 +888,7 @@ computer. Alternatively, the ``-g'' option and the ``sudo'' can be omitted, whic
 \emph{lessc} only for the local user; but in that case the \emph{lessc} command must be executed using
 the pathname \mbox{\emph{\textasciitilde/node\_modules/.bin/lessc}}.
  
-I use version 3.0.1 of \emph{lessc}.
+I use version 3.11.3 of \emph{lessc}.
 
 \subsection{Installing Tsc\index{tsc!installation}\index{TypeScript!compiler|see {tsc}}}\label{sec-installing-tsc}\label{sec-install-end}
  
@@ -901,7 +901,7 @@ The \emph{tsc} command can be installed using these shell commands:
  
 \begin{lstlisting}[language=bash]
 sudo npm install -g typescript
-npm install @types/bootstrap @types/jquery @types/jqueryui
+npm install @types/bootstrap@4.5.0 @types/jquery @types/jqueryui
 \end{lstlisting}
 
 The ``-g'' option means the software is installed globally and can be used by all users of the
@@ -911,7 +911,7 @@ the pathname \mbox{\emph{\textasciitilde/node\_modules/.bin/tsc}}.
 
 Note that there is no ``sudo'' and no ``-g'' option on the second ``npm'' command.
 
-I use version 3.2.2 of \emph{tsc}.
+I use version 3.9.6 of \emph{tsc}.
 
 Note: If you are building an older version of Bible OL (that is, on in which the file
 \mbox{\emph{ts/jquery/jquery.d.ts}} exists), you must not install the modules \emph{@types/bootstrap,
@@ -1911,26 +1911,22 @@ The Database Specification File is a JSON file containing the following key/valu
   For the Bible, this hierarchy is book/chapter/verse.%
   \index{passages!hierarchy}
   A typical value is\label{universe-hierarchy}
-
-  {\ttfamily
-    \begin{tabular}{lll}
-      \multicolumn{3}{l}{"universeHierarchy": [}\\
-         & \{ &                      \\
-         &    &  "type": "book",     \\
-         &    &  "feat": "book"      \\
-         & \},&                      \\
-         & \{ &                      \\
-         &    &  "type": "chapter",  \\
-         &    &  "feat": "chapter"   \\
-         & \},&                      \\
-         & \{ &                      \\
-         &    &  "type": "verse",    \\
-         &    &  "feat": "verse"     \\
-         & \} &                      \\
-      ]  &    &                      \\
-    \end{tabular}
-  }
-
+  \begin{verbatim}
+  "universeHierarchy": [
+          {
+              "type": "book",
+              "feat": "book"
+          },
+          {
+              "type": "chapter",
+              "feat": "chapter"
+          },
+          {
+              "type": "verse",
+              "feat": "verse"
+          }
+      ]
+  \end{verbatim}
   This means that the top reference level is found in the \emph{book}\index{book} feature of Emdros
   objects of type \emph{book}, the second reference level is found in the
   \emph{chapter}\index{chapter} feature of Emdros objects of type \emph{chapter}, and the third
