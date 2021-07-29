@@ -110,3 +110,4 @@
                 });
         });
 </script>
+</div><!-- end of div class="row" -->
