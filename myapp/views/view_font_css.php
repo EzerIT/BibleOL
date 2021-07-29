@@ -15,7 +15,7 @@ function heightsize($fs) {
 
 ?>
 
-<style type="text/css">
+<style>
 <?php foreach ($fonts as $f): ?>
     .<?= $f->name ?> {
         font-family: <?= $f->font_family ?> !important;
@@ -79,7 +79,7 @@ function heightsize($fs) {
 
     div.styled-select,
     div.styled-select select {
-      height : <?= heightsize($f->feature_size * 1.5) ?>
+      <?= heightsize($f->feature_size * 1.5) ?>
     }
 
 <?php endforeach; ?>
