@@ -164,6 +164,7 @@ class Answer {
 
             case COMPONENT_TYPE.comboBox1:
             case COMPONENT_TYPE.comboBox2:
+                console.log('comboBox',this.c);
                 // Check if the user selected the correct option
                 
                 // Note: At this point we use the intenal (language independent) name for the value.
@@ -180,7 +181,7 @@ class Answer {
                 break;
 
             case COMPONENT_TYPE.checkBoxes:
-                // Check if the user has marked the correct checkboxes
+               // Check if the user has marked the correct checkboxes
                 
                 let inputs : JQuery = $(this.c).find('input');
                 let xthis : Answer = this;

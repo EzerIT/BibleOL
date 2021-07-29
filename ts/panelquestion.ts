@@ -386,9 +386,6 @@ class PanelQuestion {
                             + '</tr>');
                     else {
                         // Create this HTML structure in the variable v:            From these variables
-
-
-                        // Create this HTML structure in the variable v:            From these variables
                         // <span ...>                                                cwyn
                         //   <img ...>                                               cwyn
                         //   <img ...>                                               cwyn
@@ -405,7 +402,7 @@ class PanelQuestion {
                         
                         let quiz_div : JQuery             = $('<div class="quizitem"></div>'); // Used to ancor the checkbox buttons and to add additional data
                         let optArray : JQuery[]           = [];                                // All the multiple choice options
-                        let cwyn     : ComponentWithYesNo = new ComponentWithYesNo(quiz_div, COMPONENT_TYPE.checkBoxes); // Result indicator
+                        let cwyn     : ComponentWithYesNo = new ComponentWithYesNo(quiz_div, COMPONENT_TYPE.comboBox2); // Result indicator
                         cwyn.addChangeListener();
                         
                         for (let valix in suggestions) {
@@ -418,7 +415,7 @@ class PanelQuestion {
                             let s      : string         = suggestions[+valix];     // Current suggestion
                             let item   : StringWithSort = new StringWithSort(s,s); // StringWithSort holding the current suggestion
                             let option : JQuery         = $('<div class="selectbutton multiple_choice">'
-                                + `<input type ="checkbox" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
+                                + `<input type="radio" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
                                 + `<label for="${item.getInternal()}_${quizItemID}">${item.getString()}</label>`
                                 + '</div>');
 
@@ -802,6 +799,7 @@ class PanelQuestion {
 
 
                     let selections : JQuery = $('<table class="list-of"></table>');
+                    selections.append('<tr><td colspan="3">Select one or more:</td></tr>'); // TODO: Localize
 
                     // Arrange in three columns
                     let numberOfItems : number = swsValues.length;                // Number of values
@@ -812,14 +810,13 @@ class PanelQuestion {
                         for (let c=0; c<3; c++) {
                             let ix = r+c*numberOfRows;
                             if (ix<numberOfItems)
-                                row.append(questionheaders[(headInd % headLen + headLen) % headLen]
-                                        + '<td style="text-align:left">'
-                                        + `<input type="checkbox" value="${swsValues[ix].getInternal()}">`
-                                        + swsValues[ix].getString()
-                                        + '</td>');
+                                row.append('<td style="text-align:left"><div class="selectbutton">'
+                                           + `<input type="checkbox" id="${swsValues[ix].getInternal()}_${quizItemID}" value="${swsValues[ix].getInternal()}">`
+                                           + `<label for="${swsValues[ix].getInternal()}_${quizItemID}">${swsValues[ix].getString()}</label>`
+
+                                        + '</div></td>');
                             else
-                                row.append(questionheaders[(headInd % headLen + headLen) % headLen]
-                                           + '<td></td>');
+                                row.append('<td></td>');
                         }
                         selections.append(row);
                     }
@@ -865,9 +862,6 @@ class PanelQuestion {
 
                         cwyn.addChangeListener();
 
-                        // mc_select.append('<option value="NoValueGiven"></option>'); // Empty default choice
-
-
                         let correctAnswerFriendly : string =          // Localized correct answer:
                                                     getFeatureValueFriendlyName(featType, correctAnswer, false, false);
                         let hasAddedOther         : boolean =         // Have we added an 'Other value' to the list of values?
@@ -899,7 +893,7 @@ class PanelQuestion {
                                     
 
                                     let option: JQuery = $('<div class="selectbutton">'
-                                        + `<input type ="radio" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
+                                        + `<input type="radio" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
                                         + `<label for="${item.getInternal()}_${quizItemID}">${item.getString()}</label>`
                                         + '</div>');
                                     
@@ -913,7 +907,7 @@ class PanelQuestion {
                                 let sFriendly : string         = getFeatureValueFriendlyName(featType, s, false, false); // Localized value of s
                                 let item      : StringWithSort = new StringWithSort(sFriendly,s); // StringWithSort holding the value s
                                 let option    : JQuery = $('<div class="selectbutton">'
-                                                        + `<input type ="radio" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
+                                                        + `<input type="radio" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
                                                         + `<label for="${item.getInternal()}_${quizItemID}">${item.getString()}</label>`
                                                         + '</div>');
                                 
@@ -935,7 +929,7 @@ class PanelQuestion {
                         v = cwyn.getJQuery();
                     
                     }       
- 
+                    
                 }
 
                 let quizRow: JQuery = $('<tr></tr>');
@@ -964,12 +958,8 @@ class PanelQuestion {
         if (quizCardNum > 1) {
             quizContainer.prepend('<div class="prev-next-btn prev" id="prevsubquiz" style="visibility:hidden;">&#10094;</div>');
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');    
-            // quizContainer.prepend('<div class="prev-next-btn"><a class="prev" onclick="plusSubQuiz(-1)">&#10094;</a></div>');
-            // quizContainer.append('<div class="prev-next-btn"><a class="next" onclick="plusSubQuiz(1)">&#10095;</a></div>'); 
         }
         
-        '<div class="selectbutton inputbutton" id="inputchar"><label for="inputchar">${letter}</label></div>'
-
         $('div#inputchar').click(function () {
             let letter: string = String($(this).find('label').text());
             $(this)

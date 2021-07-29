@@ -199,13 +199,13 @@ function save_quiz() : void {
                     switch (data.trim()) {
                     case 'OK':
                         // Everthing is find
-                        ($('#filename-dialog') as any).modal('hide');
+                        $('#filename-dialog').modal('hide');
                         save_quiz2(); // Proceed to phase 2
                         break;
                         
                     case 'EXISTS':
                         // The file already exists
-                        ($('#filename-dialog') as any).modal('hide');
+                        $('#filename-dialog').modal('hide');
                         check_overwrite(); // Check if it is OK to overwrite it
                         break;
                         
@@ -228,7 +228,7 @@ function save_quiz() : void {
     });
 
     // Show the filename dialog
-    ($('#filename-dialog') as any).modal('show');
+    $('#filename-dialog').modal('show');
 }
 
 //****************************************************************************************************
@@ -242,11 +242,11 @@ function check_overwrite() : void {
     $('#overwrite-yesbutton').on('click',() => {
         // The user clicked the 'Yes' button
         save_quiz2(); // Proceed to phase 2 of the file saving
-        ($('#overwrite-dialog-confirm') as any).modal('hide');
+        $('#overwrite-dialog-confirm').modal('hide');
     });
 
     // Show the overwrite dialog
-    ($('#overwrite-dialog-confirm') as any).modal('show');
+    $('#overwrite-dialog-confirm').modal('show');
 }
 
 //****************************************************************************************************
@@ -310,7 +310,7 @@ function shebanq_to_qo(qo : string, mql : string) : void {
         $('#qo-nobutton').hide();
         $('#qo-okbutton').show();
 
-        ($('#qo-dialog-confirm') as any).modal('show');
+        $('#qo-dialog-confirm').modal('show');
     }
     else {
         // Decode the MQL string
@@ -338,14 +338,14 @@ function shebanq_to_qo(qo : string, mql : string) : void {
         $('#qo-yesbutton').off('click');
         $('#qo-yesbutton').on('click',() => {
             // The user selected to use the data for sentence unit selection
-            ($('#qo-dialog-confirm') as any).modal('hide');
+            $('#qo-dialog-confirm').modal('hide');
             panelSentUnit.setOtype(qo);
             panelSentUnit.setUsemql();
             panelSentUnit.setMql(mql);
         });
 
         // Ask if user wants to use the data for sentence unit selection
-        ($('#qo-dialog-confirm') as any).modal('show');
+        $('#qo-dialog-confirm').modal('show');
     }
 }
 
@@ -386,7 +386,7 @@ function import_from_shebanq() : void {
                 console.log(result);
                 if (result.error===null) {
                     panelSent.setMql(result.sentence_mql); // Use sentence_mql for sentence selection
-                    ($('#import-shebanq-dialog') as any).modal('hide');
+                    $('#import-shebanq-dialog').modal('hide');
                     shebanq_to_qo(result.sentence_unit, result.sentence_unit_mql); // Optionally set sentence unit selection
                 }
                 else {
@@ -402,7 +402,7 @@ function import_from_shebanq() : void {
     });
 
 
-    ($('#import-shebanq-dialog') as any).modal('show');
+    $('#import-shebanq-dialog').modal('show');
 }
 
 //------------------------------------------------------------------------------------------

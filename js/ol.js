@@ -2,7 +2,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -1299,10 +1299,7 @@ var ComponentWithYesNo = (function () {
         }
     };
     ComponentWithYesNo.prototype.getComp = function () {
-        if (this.elemType === COMPONENT_TYPE.comboBox2)
-            return $(this.elem.children()[0]);
-        else
-            return this.elem;
+        return this.elem;
     };
     ComponentWithYesNo.prototype.getCompType = function () {
         return this.elemType;
@@ -1427,6 +1424,7 @@ var Answer = (function () {
                     break;
                 case COMPONENT_TYPE.comboBox1:
                 case COMPONENT_TYPE.comboBox2:
+                    console.log('comboBox', this.c);
                     var selectedOption = $(this.c).find("input:checked");
                     if (selectedOption.attr('value') != null) {
                         var userAnswerSws = $(this.c).find("input:checked").parent().data('sws');
@@ -1651,7 +1649,7 @@ var PanelQuestion = (function () {
                     else {
                         var quiz_div_1 = $('<div class="quizitem"></div>');
                         var optArray = [];
-                        var cwyn = new ComponentWithYesNo(quiz_div_1, COMPONENT_TYPE.checkBoxes);
+                        var cwyn = new ComponentWithYesNo(quiz_div_1, COMPONENT_TYPE.comboBox2);
                         cwyn.addChangeListener();
                         for (var valix in suggestions) {
                             if (isNaN(+valix))
@@ -1659,7 +1657,7 @@ var PanelQuestion = (function () {
                             var s = suggestions[+valix];
                             var item = new StringWithSort(s, s);
                             var option = $('<div class="selectbutton multiple_choice">'
-                                + ("<input type =\"checkbox\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
+                                + ("<input type=\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
                                 + ("<label for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
                                 + '</div>');
                             option.data('sws', item);
@@ -1944,6 +1942,7 @@ var PanelQuestion = (function () {
                         swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false, false), values[i]));
                     swsValues.sort(function (a, b) { return StringWithSort.compare(a, b); });
                     var selections = $('<table class="list-of"></table>');
+                    selections.append('<tr><td colspan="3">Select one or more:</td></tr>');
                     var numberOfItems = swsValues.length;
                     var numberOfRows = Math.floor((numberOfItems + 2) / 3);
                     for (var r = 0; r < numberOfRows; ++r) {
@@ -1951,14 +1950,12 @@ var PanelQuestion = (function () {
                         for (var c = 0; c < 3; c++) {
                             var ix = r + c * numberOfRows;
                             if (ix < numberOfItems)
-                                row.append(questionheaders[(headInd % headLen + headLen) % headLen]
-                                    + '<td style="text-align:left">'
-                                    + ("<input type=\"checkbox\" value=\"" + swsValues[ix].getInternal() + "\">")
-                                    + swsValues[ix].getString()
-                                    + '</td>');
+                                row.append('<td style="text-align:left"><div class="selectbutton">'
+                                    + ("<input type=\"checkbox\" id=\"" + swsValues[ix].getInternal() + "_" + quizItemID + "\" value=\"" + swsValues[ix].getInternal() + "\">")
+                                    + ("<label for=\"" + swsValues[ix].getInternal() + "_" + quizItemID + "\">" + swsValues[ix].getString() + "</label>")
+                                    + '</div></td>');
                             else
-                                row.append(questionheaders[(headInd % headLen + headLen) % headLen]
-                                    + '<td></td>');
+                                row.append('<td></td>');
                         }
                         selections.append(row);
                     }
@@ -1995,7 +1992,7 @@ var PanelQuestion = (function () {
                                     hasAddedOther = true;
                                     var item = new StringWithSort('#1000 ' + localize('other_value'), 'othervalue');
                                     var option = $('<div class="selectbutton">'
-                                        + ("<input type =\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
+                                        + ("<input type=\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
                                         + ("<label for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
                                         + '</div>');
                                     option.data('sws', item);
@@ -2008,7 +2005,7 @@ var PanelQuestion = (function () {
                                 var sFriendly = getFeatureValueFriendlyName(featType, s, false, false);
                                 var item = new StringWithSort(sFriendly, s);
                                 var option = $('<div class="selectbutton">'
-                                    + ("<input type =\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
+                                    + ("<input type=\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
                                     + ("<label for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
                                     + '</div>');
                                 option.data('sws', item);
@@ -2043,7 +2040,6 @@ var PanelQuestion = (function () {
             quizContainer.prepend('<div class="prev-next-btn prev" id="prevsubquiz" style="visibility:hidden;">&#10094;</div>');
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
         }
-        '<div class="selectbutton inputbutton" id="inputchar"><label for="inputchar">${letter}</label></div>';
         $('div#inputchar').click(function () {
             var letter = String($(this).find('label').text());
             $(this)

@@ -699,7 +699,7 @@ div.selectbutton input[type="checkbox"]:focus, div.selectbutton input[type="radi
 div.selectbutton input[type="checkbox"]:checked {
     + label {
         border-color: @dadelblue;
-        background-color: @backgroundwhite;
+        background-color: lightgrey;
         color: @dadelblue;
     }
     width: 0px;
@@ -707,7 +707,7 @@ div.selectbutton input[type="checkbox"]:checked {
 div.selectbutton input[type="radio"]:checked {
     + label {
         border-color: @dadelblue;
-        background-color: @dadelgrey;
+        background-color: lightgrey;
         color: @dadelblue;
     }
     width: 0px;
@@ -973,7 +973,7 @@ div.quizcard {
         }
         td {
             font-size: 12pt;
-            display: block;
+            //display: block;    // Why this? It breaks list-of handing CT 2021-07-29
             text-align: center;
             padding-top: 2px;
             padding-bottom: 3px;

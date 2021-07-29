@@ -153,9 +153,9 @@ class ComponentWithYesNo {
     // Returns the component displayed with this object.
     //
     public getComp() : JQuery {
-        if (this.elemType === COMPONENT_TYPE.comboBox2)
-            return $(this.elem.children()[0]); // A comboBox2 is a <div> containing a <select>. We return the <select>.
-        else
+//        if (this.elemType === COMPONENT_TYPE.comboBox2)
+//            return $(this.elem.children()[0]); // A comboBox2 is a <div> containing a <select>. We return the <select>.
+//        else
             return this.elem;
     }
 
