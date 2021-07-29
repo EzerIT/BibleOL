@@ -5,8 +5,8 @@
         <div class="d-none d-lg-block d-xl-none">LG</div>
         <div class="d-none d-xl-block">XL</div>
     -->
-      </div><!--End of container-fluid-->
-    </div><!--End of row-->
+      </div><!--End of row-->
+    </div><!--End of container-fluid-->
   </body>
 </html>
          
