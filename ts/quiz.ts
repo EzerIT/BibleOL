@@ -136,15 +136,6 @@ class Quiz {
                 $('button#finish').removeAttr('disabled');
                 $('button#finishNoStats').removeAttr('disabled');
             }
-            
-            // DISABLED virtual keyboard!
-            // if (quizdata.quizFeatures.useVirtualKeyboard &&
-            //     (charset.keyboardName==='IL' || charset.keyboardName==='GR')) {
-            //     VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
-            //     VirtualKeyboard.toggle('firstinput','virtualkbid');
-            // }
-
-            
         }
         else
             alert('No more questions');

@@ -20,7 +20,7 @@ class PanelQuestion {
     private location      : string;        // The current location (localized)
     private vAnswers      : Answer[] = []; // The correct answer for each question item
     private question_stat : QuestionStatistics = new QuestionStatistics; // Answer statistics
-    private static kbid   : number = 1;    // Input field identification for virtual keyboard
+    private static kbid   : number = 1;    // Input field identification for keyboard
     private gradingFlag	  : boolean;	   // May the statistics be used for grading the student?
     private subQuizIndex  : number = 0;    // Used to toggle subquestions
     private subQuizMax    : number;        // Used to define max number of subquestions
@@ -196,7 +196,7 @@ class PanelQuestion {
         // Generate table of question items
         
         // Cache a few variables for easy access
-        let dontShow        : boolean  = qd.quizFeatures.dontShow;
+        let dontShow        : boolean  = qd.quizFeatures.dontShow;   // Display (number) instead of text of the quizobject
         let showFeatures    : string[] = qd.quizFeatures.showFeatures;
         let requestFeatures : {name : string; usedropdown : boolean; hideFeatures : string[];}[]
                                        = qd.quizFeatures.requestFeatures;
@@ -206,7 +206,6 @@ class PanelQuestion {
         let featuresHere    : FeatureMap        = typeinfo.obj2feat[oType];          // Maps feature name => feature type
         let qoFeatures      : util.str2strArr[] = this.buildQuizObjectFeatureList(); // Feature/value pairs for each question object
         let hasForeignInput : boolean           = false;                             // Do we need a virtual keyboard?
-        let firstInput      : string            = 'id="firstinput"';                 // ID of <input> to receive virtual keyboard focus
         let quizItemID      : number            = 0;                                 // Counts quizitems to be used to group radio buttons together (see name attribute)
 
         
@@ -219,9 +218,7 @@ class PanelQuestion {
         /////////////////////////////////////////////////
         let questionheaders: string[] = []; // Initialize empty array for questionheaders
                                             // For each question card, the headers are pulled out from this list
-        let headInd    : number = 0;        // Header index is used to loop over the questionheaders by using
-                                            // questionheaders[(headInd % headLen + headLen) % headLen];
-                                            // The length of questionheaders depends and will be calculated later on
+        let headInd : number = 0;           // Header index is the index into questionheaders
         
         /////////////////////////////
         // Define question headers //
@@ -251,39 +248,69 @@ class PanelQuestion {
         // Now, the array questionheaders contains a list of <th>...</th> elements to be put before 
         // each question on the question cards
         let headLen: number = questionheaders.length;
+        console.log(qoFeatures);
         let quizCardNum: number = qoFeatures.length; // Count number of quizcards to define the appearance of toggle buttons
-        let quizActive: boolean = true;
         let quizContainer: JQuery = $('div#quizcontainer');
 
         this.subQuizMax = quizCardNum;
+
+
+        // The <div class="quizcontainer">...</div> will be created with this contents:
+        //
+        // <div class="quizcontainer">
+        //     <div class="prev-next-btn prev" id="prevsubquiz">❮</div>      -- Button to previous quiz object
+        //
+        //     <div class="quizcard" style="display:block">                  -- One for each quiz object, but only the first one will be visible
+        //         <table class="quiztab">...</table>
+        //     <div>
+        //
+        //     <div class="quizcard" style="display:none">
+        //         <table class="quiztab">...</table>
+        //     <div>
+        //
+        //     <div class="quizcard" style="display:none">
+        //         <table class="quiztab">...</table>
+        //     <div>
+        //
+        //     ...
+        //
+        //     <div class="prev-next-btn next" id="nextsubquiz">❯</div>       -- Button to next quiz object
+        // </div>
 
         ///////////////////////////////////////
         // Loop through all the quiz objects //
         for (let qoid in qoFeatures) {
             if (isNaN(+qoid)) continue; // Not numeric
 
-            if (quizActive === true) {
-                quizContainer.append(`<div class="quizcard" style="display:block;"><table class="quiztab${qoid}"></table></div>`);
-                quizActive = false;
-            } else {
-                quizContainer.append(`<div class="quizcard" style="display:none;"><table class="quiztab${qoid}"></table></div>`);
-            }
-            
-            let quizTab: JQuery = $(`table.quiztab${qoid}`);
+            if (headInd>=headLen)
+                headInd -= headLen; // Normalize headInd to lie in the range 0..headLen.
+
+            let quizCard : JQuery = +qoid===0
+                                        ? $('<div class="quizcard" style="display:block"></div>')
+                                        : $('<div class="quizcard" style="display:none"></div>');
+            let quizTab : JQuery = $('<table class="quiztab"></table>');
+
+            quizCard.append(quizTab);
+            quizContainer.append(quizCard);
+
             let fvals: util.str2strArr = qoFeatures[+qoid]; // Feature/value pairs for current quiz object
             
-            //////////////////////////////////////////////////////////////////////////////////////////////
-            // Loop through all headers in question headers and append them one by one to each question //
 
-            // Features that are marked by 'dontShow'
+            ///////////////////////////////////
+            // Loop through display features
+            //
+            // For each display feature, the following will be added to <table class="quiztab">...</table>:
+            // <tr>
+            //     <th>Feature name</th>    -- Taken from questionheaders[headInd]
+            //     <td>Feature value</td>
+            // </tr>
+
+            // Extra "display feature" for quiz objects that are marked by 'dontShow'
             if (dontShow) {
-                quizTab.append('<tr>' + questionheaders[(headInd % headLen + headLen) % headLen]
-                    + '<td>' + (+qoid + 1)
-                    + '</td></tr>');
+                quizTab.append(`<tr>${questionheaders[headInd]}<td>${+qoid + 1}</td></tr>`);
                 ++headInd;
                 this.question_stat.show_feat.values.push("" + (+qoid + 1));  // Save feature value for statistics
             }
-            // Loop through display features
             for (let sfi in showFeatures) {
                 if (isNaN(+sfi)) continue; // Not numeric
 
@@ -333,21 +360,28 @@ class PanelQuestion {
                     alert('Unexpected val==null in panelquestion.ts');
                 
                 if (featType === 'string' || featType == 'ascii') {
-                    quizTab.append('<tr>'
-                        + questionheaders[(headInd % headLen + headLen) % headLen]
+                    quizTab.append(`<tr>${questionheaders[headInd]}`
                         + `<td class="${PanelQuestion.charclass(featset)}">${val === '' ? '-' : val}</td></tr>`);
                     ++headInd;
                 }
                 else {
-                    quizTab.append('<tr>'
-                        + questionheaders[(headInd % headLen + headLen) % headLen]
-                        + `<td>${val}</td></tr>`);
+                    quizTab.append(`<tr>${questionheaders[headInd]}<td>${val}</td></tr>`);
                     ++headInd;
                 }
             }
-                
+
             ///////////////////////////////////
-            // Loop through request features //
+            // Loop through request features 
+            //
+            // For each request feature, the following will be added to <table class="quiztab">...</table>:
+            // <tr>
+            //     <th>Feature name</th>       -- Taken from questionheaders[headInd]
+            //     <td class="qbox">...</td>   -- The user's answer is chosen here.
+            // </tr>
+            //
+            // Note: The variable v, introduced below, will eventually hold the string
+            // <td class="qbox">...</td> with the appropriate contents.
+
             for (let rfi in requestFeatures) {
                 if (isNaN(+rfi)) continue; // Not numeric
 
@@ -379,26 +413,32 @@ class PanelQuestion {
                     // Multiple choice question item
                     let suggestions : string[] = fvals[rf + '!suggest!'] as string[]; // Values to choose between
 
-                    if (suggestions==null) // No suggestions, just display the answer
-                        v = $('<tr>'
-                            +  + questionheaders[(headInd % headLen + headLen) % headLen]
-                            + `<td class="${PanelQuestion.charclass(featset)}">${correctAnswer}</td>`
-                            + '</tr>');
+                    if (suggestions==null) // No suggestions, just display the answer as if it were a display feature
+                        v = $(`<td class="${PanelQuestion.charclass(featset)}">${correctAnswer}</td></tr>`);
                     else {
-                        // Create this HTML structure in the variable v:            From these variables
-                        // <span ...>                                                cwyn
-                        //   <img ...>                                               cwyn
-                        //   <img ...>                                               cwyn
-                        //   <img ...>                                               cwyn
-                        //   <div class="styled-select">                             mc_div
-                        //     <select class="..." style="direction:ltr">            mc_select
-                        //       <option value="NoValueGiven"></option>              
-                        //       <option value="VAL1" class="...">VAL1</option>      optArray[0]
-                        //       <option value="VAL2" class="...">VAL2</option>      optArray[1]
-                        //       ...                                                 
-                        //     </select>                                             mc_select
-                        //   </div>                                                  mc_div
-                        // </span>                                                   cwyn
+                        // Create this HTML structure in the variable v:                    From these variables
+                        // <td class="qbox">                                                       cwyn
+                        //   <img ...>                                                             cwyn
+                        //   <img ...>                                                             cwyn
+                        //   <img ...>                                                             cwyn
+                        //   <div class="quizitem">                                                quiz_div
+                        //
+                        //     <div class="selectbutton multiple_choice">                          optArray[0]
+                        //       <input type="radio" id="VAL1_N" name="quizitem_N" value="VAL1">   optArray[0]
+                        //       <label class="hebrew" for="VAL1_N">VAL1</label>                   optArray[0]
+                        //     </div>                                                              optArray[0]
+                        //
+                        //     <div class="selectbutton multiple_choice">                          optArray[1]
+                        //       <input type="radio" id="VAL2_N" name="quizitem_N" value="VAL2">   optArray[1]
+                        //       <label class="hebrew" for="VAL2_N">VAL2</label>                   optArray[1]
+                        //     </div>                                                              optArray[1]
+                        //
+                        //     ...
+                        //
+                        //   </div>                                                                quiz_div
+                        // </td>                                                                   cwyn
+                        //
+                        // In the items above, the letter N is the value of the quizItemID variable
                         
                         let quiz_div : JQuery             = $('<div class="quizitem"></div>'); // Used to ancor the checkbox buttons and to add additional data
                         let optArray : JQuery[]           = [];                                // All the multiple choice options
@@ -416,7 +456,7 @@ class PanelQuestion {
                             let item   : StringWithSort = new StringWithSort(s,s); // StringWithSort holding the current suggestion
                             let option : JQuery         = $('<div class="selectbutton multiple_choice">'
                                 + `<input type="radio" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
-                                + `<label for="${item.getInternal()}_${quizItemID}">${item.getString()}</label>`
+                                + `<label class="hebrew" for="${item.getInternal()}_${quizItemID}">${item.getString()}</label>`
                                 + '</div>');
 
                             option.data('sws',item); // Associate the answer string with the <option> element
@@ -438,13 +478,21 @@ class PanelQuestion {
 
                 // In case a text input is requested
                 else if (featType==='string' || featType==='ascii') {
+
                     // Create this HTML structure in the variable v:      From these variables
-                    // <span ...>                                          cwyn
+                    // <td class="qbox">                                   cwyn
                     //   <img ...>                                         cwyn
                     //   <img ...>                                         cwyn
                     //   <img ...>                                         cwyn
-                    //   <input type="text" ...>                           vf
-                    // </span>                                             cwyn
+                    //   <div class="inputquizitem">                       vf
+                    //     <input data-kbid="N" type="text">               vf
+                    //     <div class="letterinput">                       vf
+                    //     <div class="selectbutton delbutton">            vf
+                    //     <div class="selectbutton inputbutton">          vf
+                    //     <div class="selectbutton inputbutton">          vf
+                    //     ...                                             vf
+                    //   <div>                                             vf
+                    // </td>                                               cwyn
                     
                     
                     let cwyn: ComponentWithYesNo;
@@ -464,12 +512,12 @@ class PanelQuestion {
                         let showLetters           : string[] = [];                      // Unique letters that are finally shown
                         
                         // Push unique letters to answerLetters
-                        $.each(answerArray, function(i, el){
+                        $.each(answerArray, (i: number, el: string) => {
                             if($.inArray(el, answerLetters) === -1) answerLetters.push(el);
                         });
 
-                        ////////////////////////
-                        // Check for shin-sin //
+                        /////////////////////////////////
+                        // Find shin-sin and remove it //
                         let shinDot: boolean = false;
                         let sinDot: boolean = false;
                         for (let i = 0; i < answerLetters.length; i++) {
@@ -493,11 +541,11 @@ class PanelQuestion {
                             }
                         }
                             
-                        // push combined letter if shinDot or sinDot === true
-                        if (shinDot === true) {
+                        // push combined letter if shinDot or sinDot are set
+                        if (shinDot) {
                             answerLetters.push('ש' + '\u05C1');
                         }
-                        if (sinDot === true) {
+                        if (sinDot) {
                             answerLetters.push('ש' + '\u05C2');
                         }
 
@@ -694,11 +742,11 @@ class PanelQuestion {
                         }
 
                         // Randomize additional Consonants
-                        additionalCons = additionalCons.sort(function() {
+                        additionalCons = additionalCons.sort( () => {
                             return .5 - Math.random();
                           });
                         // Randomize additional Vowels
-                        additionalVowels = additionalVowels.sort(function() {
+                        additionalVowels = additionalVowels.sort( () => {
                             return .5 - Math.random();
                           });
 
@@ -707,33 +755,37 @@ class PanelQuestion {
                         answerLettersRandom = answerLetters.concat(additionalCons.slice(0, 3))
                             .concat(additionalVowels.slice(0, 3));
                         
-                        // Make all letters unique and safe them in showLetters
-                        $.each(answerLettersRandom, function(i, el){
+                        // Make all letters unique and save them in showLetters
+                        $.each(answerLettersRandom, (i: number, el: string) => {
                                 if($.inArray(el, showLetters) === -1) showLetters.push(el);
                         });
                         
                         // Sort letters alphabetically
                         showLetters.sort();
                         
-                        let vf : JQuery =        // A text <input> element with an associated virtual keyboard
-                            $(`<div class="inputquizitem"><input ${firstInput} data-kbid="${PanelQuestion.kbid++}" type="text"`
+                        let vf : JQuery = $(`<div class="inputquizitem"><input data-kbid="${PanelQuestion.kbid++}" type="text"`
                                 + ` class="${PanelQuestion.charclass(featset)}"></div>`);
-                        
-                        // Set del button to remove letters from input field
-                        vf.append(`<div class="letterinput"><div class="selectbutton delbutton" id="delinputchar"><label for="delinputchar">del</label></div></div>`);
 
+                        // Create letterinput and set del button to remove letters from input field
+                        let letterinput : JQuery = $('<div class="letterinput"></div>');
+                        
+                        vf.append(letterinput);
+
+                        if (charset.isRtl)
+                            letterinput.append('<div class="delbutton">&rarr;</div>');
+                        else
+                            letterinput.append('<div class="delbutton">&larr;</div>');
+                        
                         // Set randomized letter buttons to be inputted in the input field
-                        showLetters.forEach(letter => {
-                            vf.find('.letterinput').append(`<div class="selectbutton inputbutton" id="inputchar"><label for="inputchar" class="${PanelQuestion.charclass(featset)}">${letter}</label></div>`);
+                        showLetters.forEach((letter: string, i: number) => {
+                            letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}">${letter}</div>`);
                         });
 
         
-                        firstInput = '';
                         hasForeignInput = true;
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
                         cwyn.addKeypressListener();
                         v = cwyn.getJQuery();
-
                     }
                     else {                   
                         let vf : JQuery = $('<div class="inputquizitem"><input type="text"></div>');
@@ -748,12 +800,12 @@ class PanelQuestion {
                 // In case a number is requested
                 else if (featType === 'integer') {
                     // Create this HTML structure in the variable v:      From these variables
-                    // <span ...>                                          cwyn
+                    // <td class="qbox">                                   cwyn
                     //   <img ...>                                         cwyn
                     //   <img ...>                                         cwyn
                     //   <img ...>                                         cwyn
                     //   <input type="number" ...>                         intf
-                    // </span>                                             cwyn
+                    // </td>                                               cwyn
                         
                     let intf : JQuery = $('<input type="number">');
                     let cwyn : ComponentWithYesNo = new ComponentWithYesNo(intf,COMPONENT_TYPE.textField);
@@ -761,7 +813,7 @@ class PanelQuestion {
                     v = cwyn.getJQuery();
                     this.vAnswers.push(new Answer(cwyn,null,correctAnswer,null));
                 }
-                    
+
                 // Checkboxes
                 else if (featType.substr(0,8)==='list of ') {
                     let subFeatType : string   = featType.substr(8);                // Remove "list of "
@@ -777,7 +829,7 @@ class PanelQuestion {
                     
 
                     // Create this HTML structure in the variable v:      From these variables
-                    // <span ...>                                          cwyn
+                    // <td class="qbox">                                   cwyn
                     //   <img ...>                                         cwyn
                     //   <img ...>                                         cwyn
                     //   <img ...>                                         cwyn
@@ -795,7 +847,7 @@ class PanelQuestion {
                     //     </tr>                                           row
                     //     ...
                     //   </table>                                          table
-                    // </span>                                             cwyn
+                    // </td>                                               cwyn
 
 
                     let selections : JQuery = $('<table class="list-of"></table>');
@@ -834,27 +886,35 @@ class PanelQuestion {
 
                     if (values == null) {
                         v.append('<tr>'
-                            + questionheaders[(headInd % headLen + headLen) % headLen]
+                            + questionheaders[headInd]
                             + '<td>QuestionPanel.UnknType</td></tr>');
                     }
                     else {
                         // This will be a multiple choice question
 
-                        // Create this HTML structure in the variable v:          From these variables
-                        // <span ...>                                              cwyn
-                        //   <img ...>                                             cwyn
-                        //   <img ...>                                             cwyn
-                        //   <img ...>                                             cwyn
-                        //   <select class="..." style="direction:ltr">            mc_select
-                        //     <option value="NoValueGiven"></option>
-                        //     <option value="VAL1" class="...">VAL1</option>      optArray[0]
-                        //     <option value="VAL2" class="...">VAL2</option>      optArray[1]
+                        // Create this HTML structure in the variable v:                    From these variables
+                        // <td class="qbox">                                                       cwyn
+                        //   <img ...>                                                             cwyn
+                        //   <img ...>                                                             cwyn
+                        //   <img ...>                                                             cwyn
+                        //   <div class="quizitem">                                                quiz_div
+                        //
+                        //     <div class="selectbutton multiple_choice">                          optArray[0]
+                        //       <input type="radio" id="VAL1_N" name="quizitem_N" value="VAL1">   optArray[0]
+                        //       <label for="VAL1_N">VAL1</label>                                  optArray[0]
+                        //     </div>                                                              optArray[0]
+                        //
+                        //     <div class="selectbutton multiple_choice">                          optArray[1]
+                        //       <input type="radio" id="VAL2_N" name="quizitem_N" value="VAL2">   optArray[1]
+                        //       <label for="VAL2_N">VAL2</label>                                  optArray[1]
+                        //     </div>                                                              optArray[1]
+                        //
                         //     ...
-                        //   </select>                                             mc_select
-                        // </span>                                                 cwyn
-
-                        // <input type="radio" id="male" name="gender" value="male">
-                        // <label for= "male" > Male < /label>
+                        //
+                        //   </div>                                                                quiz_div
+                        // </td>                                                                   cwyn
+                        //
+                        // In the items above, the letter N is the value of the quizItemID variable
                             
                         let quiz_div : JQuery   = $('<div class="quizitem"></div>');
                         let optArray  : JQuery[] = []; // All the multiple choice options
@@ -933,12 +993,12 @@ class PanelQuestion {
                 }
 
                 let quizRow: JQuery = $('<tr></tr>');
-                quizRow.append(questionheaders[(headInd % headLen + headLen) % headLen]);
+                quizRow.append(questionheaders[headInd]);
                 quizRow.append(v);
                 quizTab.append(quizRow);
                 
                 ++headInd;
-            }      
+            }
            
 
         }
@@ -960,8 +1020,8 @@ class PanelQuestion {
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');    
         }
         
-        $('div#inputchar').click(function () {
-            let letter: string = String($(this).find('label').text());
+        $('div.inputbutton').click(function () {
+            let letter: string = String($(this).text());
             $(this)
                   .parent().siblings('input')  // get the input field
                   .val($(this).parent().siblings('input').val() + letter);  // add letter
@@ -970,9 +1030,9 @@ class PanelQuestion {
         });
 
 
-        $('div#delinputchar').click(function () {
+        $('div.delbutton').click(function () {
             let value: string = String($(this).parent().siblings('input').val());
-            $(this)          // the delinputchar button
+            $(this)          // the delete button
                   .parent().siblings('input')    // get the input field
                   .val(value.slice(0, -1));  // clear its value
         

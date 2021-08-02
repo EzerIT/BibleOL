@@ -80,7 +80,7 @@ class ComponentWithYesNo {
     //     The complete HTML for the component.
     //
     public getJQuery() : JQuery {
-        let spn = $('<td class="combobox"></td>').append([this.yesIcon,this.noIcon,this.noneIcon,this.elem]);
+        let spn = $('<td class="qbox"></td>').append([this.yesIcon,this.noIcon,this.noneIcon,this.elem]);
         this.setNone();
 
         return spn;
