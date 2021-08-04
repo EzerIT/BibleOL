@@ -88,11 +88,9 @@ class Answer {
                 // Mark the correct items
                 let inputs: JQuery = $(this.c).find('input');
                 let xthis: Answer = this;
-                console.log(xthis.answerArray);
                 inputs.each(
                     function () {
                         let value: string = $(this).attr('value');
-                        console.log(xthis.answerArray.indexOf(value));
                         $(this).prop('checked', xthis.answerArray.indexOf(value) != -1);
                     }
                 );
@@ -164,7 +162,6 @@ class Answer {
 
             case COMPONENT_TYPE.comboBox1:
             case COMPONENT_TYPE.comboBox2:
-                console.log('comboBox',this.c);
                 // Check if the user selected the correct option
                 
                 // Note: At this point we use the intenal (language independent) name for the value.
@@ -199,8 +196,10 @@ class Answer {
                     }
                 );
 
-                // Strip final comma from userAnswer and enclose in parentheses
-                userAnswer = '(' + userAnswer.substr(0,userAnswer.length-1) + ')';
+                if (userAnswer!=='') {
+                    // Strip final comma from userAnswer and enclose in parentheses
+                    userAnswer = '(' + userAnswer.substr(0,userAnswer.length-1) + ')';
+                }
                 break;
             }
             

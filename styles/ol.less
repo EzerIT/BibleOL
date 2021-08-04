@@ -24,6 +24,7 @@
 @dadellightgreen: lighten(@dadelgreen, 50%);
 @dadelpink: #C35CF4;
 @dadellightpink: lighten(@dadelpink, 30%);
+@dadellightgrey: #D3D3D3;
 @dadelgrey: lighten(lightgrey, 12%);
 @dadelgreydark: darken(lightgrey, 15%);
 @dadelgreyultradark: darken(@dadelgrey, 50%);
@@ -58,11 +59,6 @@ body {
 
 p {
     font-size: 12pt;
-}
-
-ul li {
-    padding: 0 !important;
-    margin: 0 !important;
 }
 
 h1 {
@@ -116,7 +112,6 @@ cite {
     padding: 0;
     background-color: @dadelgrey;
     flex: 1;
-    // position: relative;
     margin: 0;
 }
 
@@ -127,7 +122,6 @@ cite {
     &#landing-row {
         background-color: @backgroundwhite;
     }
-    // background-color: @dadelgrey;
 }
 
 // PANELS
@@ -173,13 +167,11 @@ cite {
 
 // Sidepanel
 .sidepanel {
-    // margin: 1vw;
     padding: 1vw;
 }
 
 // centerpanel
 #centerpanel {
-    // margin: 1vw;
     padding: 1vw;
     .nav-tabs {
         border: 0px;
@@ -230,37 +222,6 @@ a.nav-link {
 // End navbar
 
 
-ul.navtabs {
-    a {
-    // color: @dadelgreen !important;
-        margin-bottom: -1px !important;
-        &.nav-item {
-            text-transform: uppercase;
-            font-size: 12pt;
-        }
-        &.nav-link {
-            color: @dadelgreen !important;
-            text-transform: uppercase;
-            // font-size: 12pt;
-        }
-        &:hover {
-            font-weight: bold;
-            background-color: @dadelgrey;
-            border: solid 1px @dadelgreydark !important;
-            border-radius: 0 !important;
-        }
-        &.active {
-            border: solid 1px @dadelgreydark !important;
-            border-radius: 0 !important;
-            font-weight: bold;
-        }
-    }
-}
-
-
-
-
-
 .heb-default {
     font-family: "Ezra SIL Webfont";
     font-size: 100%;
@@ -302,34 +263,24 @@ div.hr-replacement {  // Because Bootstrap messes with <hr>
     // padding: 5px;
     margin-left: 0px;
     margin-right: 0px;
-    &.hebrew {
-        line-height: 45px;
-    }
-    &.greek {
-        line-height: 35px;
-    }
     vertical-align: bottom;
     text-align: center;
-    .rtl & { margin-left: 0; margin-right: 0; }
-    .ltr & { margin-left: 0; margin-right: 0; }
-//     .rtl & { margin-left: 0.5em; margin-right: 0; }
-//     .ltr & { margin-left: 0; margin-right: 0.5em; }
+//    .rtl & { margin-left: 0; margin-right: 0; }
+//    .ltr & { margin-left: 0; margin-right: 0; }
+     .rtl & { margin-left: 0.5em; margin-right: 0; }
+     .ltr & { margin-left: 0; margin-right: 0.5em; }
 }
 
 .textblock {
     display: inline;
     vertical-align: text-top;
     text-align: center;
-    margin-top: 0px !important;
-    margin-bottom: 7px !important;
-    margin-right: 0px !important;
-    margin-left: 0px !important;
+    margin-top: 8px;
     &.inline { 
         display: inline;
     }
     &.inlineblock { 
         display: inline-block; 
-        max-width: 120px;
     }
 }
 
@@ -396,7 +347,7 @@ span.verse {
 }
 
 .indentation {
-    font-family: 'titillium', courier, monospace;
+    font-family: courier, monospace;
 }
 
 #testwidth
@@ -415,7 +366,6 @@ span.verse {
 
 .wordspace {
     display: inline-block; /* Allows line breaks at this point */
-    width: 0.75em;
 }
 
 .dontshowit {
@@ -478,6 +428,7 @@ span.verse {
     text-indent: 0;
 }
 
+///CT ???
 div.col-lg-6.col-md-8 {
     padding-left: 8px;
     padding-right: 8px;
@@ -495,9 +446,6 @@ div.grammarborder {
     // margin-top: -2px;
 }
 
-div.grammarinnerborder {
-    background: @dadelgrey;
-}
 
 div#gramtabs {
     display: block;
@@ -699,7 +647,7 @@ div.selectbutton input[type="checkbox"]:focus, div.selectbutton input[type="radi
 div.selectbutton input[type="checkbox"]:checked {
     + label {
         border-color: @dadelblue;
-        background-color: lightgrey;
+        background-color: @dadellightgrey;
         color: @dadelblue;
     }
     width: 0px;
@@ -707,7 +655,7 @@ div.selectbutton input[type="checkbox"]:checked {
 div.selectbutton input[type="radio"]:checked {
     + label {
         border-color: @dadelblue;
-        background-color: lightgrey;
+        background-color: @dadellightgrey;
         color: @dadelblue;
     }
     width: 0px;
@@ -1487,6 +1435,7 @@ label {
    font-weight: normal !important;
 }
     
+/// FRA HER
 
 
 // Changes to bootstrap
@@ -1767,3 +1716,4 @@ footer {
         margin: auto;
     }
 }
+/// TIL HER

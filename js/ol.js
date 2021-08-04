@@ -629,7 +629,6 @@ var GrammarSelectionBox = (function () {
                 var IDs_1 = [];
                 $('#grammarbuttongroup .selectbutton input:checked').each(function () { IDs_1.push($(this).attr('id')); });
                 for (var i in IDs_1) {
-                    console.log(IDs_1[i]);
                     $('#' + IDs_1[i]).prop('checked', false);
                     $('#' + IDs_1[i]).trigger('change');
                 }
@@ -1266,7 +1265,7 @@ var ComponentWithYesNo = (function () {
         this.noneIcon = $("<img src=\"" + site_url + "/images/none.png\" alt=\"None\">");
     }
     ComponentWithYesNo.prototype.getJQuery = function () {
-        var spn = $('<td class="combobox"></td>').append([this.yesIcon, this.noIcon, this.noneIcon, this.elem]);
+        var spn = $('<td class="qbox"></td>').append([this.yesIcon, this.noIcon, this.noneIcon, this.elem]);
         this.setNone();
         return spn;
     };
@@ -1377,10 +1376,8 @@ var Answer = (function () {
             case COMPONENT_TYPE.checkBoxes: {
                 var inputs = $(this.c).find('input');
                 var xthis_1 = this;
-                console.log(xthis_1.answerArray);
                 inputs.each(function () {
                     var value = $(this).attr('value');
-                    console.log(xthis_1.answerArray.indexOf(value));
                     $(this).prop('checked', xthis_1.answerArray.indexOf(value) != -1);
                 });
                 break;
@@ -1424,7 +1421,6 @@ var Answer = (function () {
                     break;
                 case COMPONENT_TYPE.comboBox1:
                 case COMPONENT_TYPE.comboBox2:
-                    console.log('comboBox', this.c);
                     var selectedOption = $(this.c).find("input:checked");
                     if (selectedOption.attr('value') != null) {
                         var userAnswerSws = $(this.c).find("input:checked").parent().data('sws');
@@ -1446,7 +1442,9 @@ var Answer = (function () {
                         else
                             isCorrect_1 = isCorrect_1 && xthis_2.answerArray.indexOf(value) == -1;
                     });
-                    userAnswer_1 = '(' + userAnswer_1.substr(0, userAnswer_1.length - 1) + ')';
+                    if (userAnswer_1 !== '') {
+                        userAnswer_1 = '(' + userAnswer_1.substr(0, userAnswer_1.length - 1) + ')';
+                    }
                     break;
             }
             if (userAnswer_1 && !this.hasAnswered) {
@@ -1523,7 +1521,6 @@ var PanelQuestion = (function () {
         var featuresHere = typeinfo.obj2feat[oType];
         var qoFeatures = this.buildQuizObjectFeatureList();
         var hasForeignInput = false;
-        var firstInput = 'id="firstinput"';
         var quizItemID = 0;
         this.question_stat.text = dict.generateSentenceHtml(qd);
         this.question_stat.location = location_realname;
@@ -1547,25 +1544,22 @@ var PanelQuestion = (function () {
         }
         var headLen = questionheaders.length;
         var quizCardNum = qoFeatures.length;
-        var quizActive = true;
         var quizContainer = $('div#quizcontainer');
         this.subQuizMax = quizCardNum;
         for (var qoid in qoFeatures) {
             if (isNaN(+qoid))
                 continue;
-            if (quizActive === true) {
-                quizContainer.append("<div class=\"quizcard\" style=\"display:block;\"><table class=\"quiztab" + qoid + "\"></table></div>");
-                quizActive = false;
-            }
-            else {
-                quizContainer.append("<div class=\"quizcard\" style=\"display:none;\"><table class=\"quiztab" + qoid + "\"></table></div>");
-            }
-            var quizTab = $("table.quiztab" + qoid);
+            if (headInd >= headLen)
+                headInd -= headLen;
+            var quizCard_1 = +qoid === 0
+                ? $('<div class="quizcard" style="display:block"></div>')
+                : $('<div class="quizcard" style="display:none"></div>');
+            var quizTab = $('<table class="quiztab"></table>');
+            quizCard_1.append(quizTab);
+            quizContainer.append(quizCard_1);
             var fvals = qoFeatures[+qoid];
             if (dontShow) {
-                quizTab.append('<tr>' + questionheaders[(headInd % headLen + headLen) % headLen]
-                    + '<td>' + (+qoid + 1)
-                    + '</td></tr>');
+                quizTab.append("<tr>" + questionheaders[headInd] + "<td>" + (+qoid + 1) + "</td></tr>");
                 ++headInd;
                 this.question_stat.show_feat.values.push("" + (+qoid + 1));
             }
@@ -1608,15 +1602,12 @@ var PanelQuestion = (function () {
                 if (val == null)
                     alert('Unexpected val==null in panelquestion.ts');
                 if (featType === 'string' || featType == 'ascii') {
-                    quizTab.append('<tr>'
-                        + questionheaders[(headInd % headLen + headLen) % headLen]
+                    quizTab.append("<tr>" + questionheaders[headInd]
                         + ("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + (val === '' ? '-' : val) + "</td></tr>"));
                     ++headInd;
                 }
                 else {
-                    quizTab.append('<tr>'
-                        + questionheaders[(headInd % headLen + headLen) % headLen]
-                        + ("<td>" + val + "</td></tr>"));
+                    quizTab.append("<tr>" + questionheaders[headInd] + "<td>" + val + "</td></tr>");
                     ++headInd;
                 }
             }
@@ -1642,10 +1633,7 @@ var PanelQuestion = (function () {
                 if (featset.alternateshowrequestDb != null && usedropdown) {
                     var suggestions = fvals[rf + '!suggest!'];
                     if (suggestions == null)
-                        v = $('<tr>'
-                            + +questionheaders[(headInd % headLen + headLen) % headLen]
-                            + ("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + correctAnswer + "</td>")
-                            + '</tr>');
+                        v = $("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + correctAnswer + "</td></tr>");
                     else {
                         var quiz_div_1 = $('<div class="quizitem"></div>');
                         var optArray = [];
@@ -1658,7 +1646,7 @@ var PanelQuestion = (function () {
                             var item = new StringWithSort(s, s);
                             var option = $('<div class="selectbutton multiple_choice">'
                                 + ("<input type=\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
-                                + ("<label for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
+                                + ("<label class=\"hebrew\" for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
                                 + '</div>');
                             option.data('sws', item);
                             optArray.push(option);
@@ -1710,10 +1698,10 @@ var PanelQuestion = (function () {
                                 break;
                             }
                         }
-                        if (shinDot === true) {
+                        if (shinDot) {
                             answerLetters_1.push('ש' + '\u05C1');
                         }
-                        if (sinDot === true) {
+                        if (sinDot) {
                             answerLetters_1.push('ש' + '\u05C2');
                         }
                         for (var index = 0; index < answerLetters_1.length; index++) {
@@ -1907,15 +1895,19 @@ var PanelQuestion = (function () {
                                 showLetters_1.push(el);
                         });
                         showLetters_1.sort();
-                        var vf_1 = $("<div class=\"inputquizitem\"><input " + firstInput + " data-kbid=\"" + PanelQuestion.kbid++ + "\" type=\"text\""
+                        var vf = $("<div class=\"inputquizitem\"><input data-kbid=\"" + PanelQuestion.kbid++ + "\" type=\"text\""
                             + (" class=\"" + PanelQuestion.charclass(featset) + "\"></div>"));
-                        vf_1.append("<div class=\"letterinput\"><div class=\"selectbutton delbutton\" id=\"delinputchar\"><label for=\"delinputchar\">del</label></div></div>");
-                        showLetters_1.forEach(function (letter) {
-                            vf_1.find('.letterinput').append("<div class=\"selectbutton inputbutton\" id=\"inputchar\"><label for=\"inputchar\" class=\"" + PanelQuestion.charclass(featset) + "\">" + letter + "</label></div>");
+                        var letterinput_1 = $('<div class="letterinput"></div>');
+                        vf.append(letterinput_1);
+                        if (charset.isRtl)
+                            letterinput_1.append('<div class="delbutton">&rarr;</div>');
+                        else
+                            letterinput_1.append('<div class="delbutton">&larr;</div>');
+                        showLetters_1.forEach(function (letter, i) {
+                            letterinput_1.append("<div class=\"inputbutton " + PanelQuestion.charclass(featset) + "\">" + letter + "</div>");
                         });
-                        firstInput = '';
                         hasForeignInput = true;
-                        cwyn = new ComponentWithYesNo(vf_1, COMPONENT_TYPE.textField);
+                        cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
                         cwyn.addKeypressListener();
                         v = cwyn.getJQuery();
                     }
@@ -1941,8 +1933,9 @@ var PanelQuestion = (function () {
                     for (var i = 0, len = values.length; i < len; ++i)
                         swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false, false), values[i]));
                     swsValues.sort(function (a, b) { return StringWithSort.compare(a, b); });
+                    swsValues.push(new StringWithSort("<i>" + localize('none_of_these') + "</i>", 'none_of_these'));
                     var selections = $('<table class="list-of"></table>');
-                    selections.append('<tr><td colspan="3">Select one or more:</td></tr>');
+                    selections.append("<tr><td colspan=\"3\">" + localize('select_1_or_more') + "</td></tr>");
                     var numberOfItems = swsValues.length;
                     var numberOfRows = Math.floor((numberOfItems + 2) / 3);
                     for (var r = 0; r < numberOfRows; ++r) {
@@ -1962,13 +1955,15 @@ var PanelQuestion = (function () {
                     var cwyn = new ComponentWithYesNo(selections, COMPONENT_TYPE.checkBoxes);
                     cwyn.addChangeListener();
                     v = cwyn.getJQuery();
+                    if (correctAnswer === '()')
+                        correctAnswer = '(none_of_these)';
                     this_2.vAnswers.push(new Answer(cwyn, null, correctAnswer, null));
                 }
                 else {
                     var values = typeinfo.enum2values[featType];
                     if (values == null) {
                         v.append('<tr>'
-                            + questionheaders[(headInd % headLen + headLen) % headLen]
+                            + questionheaders[headInd]
                             + '<td>QuestionPanel.UnknType</td></tr>');
                     }
                     else {
@@ -2020,7 +2015,7 @@ var PanelQuestion = (function () {
                     }
                 }
                 var quizRow = $('<tr></tr>');
-                quizRow.append(questionheaders[(headInd % headLen + headLen) % headLen]);
+                quizRow.append(questionheaders[headInd]);
                 quizRow.append(v);
                 quizTab.append(quizRow);
                 ++headInd;
@@ -2040,14 +2035,14 @@ var PanelQuestion = (function () {
             quizContainer.prepend('<div class="prev-next-btn prev" id="prevsubquiz" style="visibility:hidden;">&#10094;</div>');
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
         }
-        $('div#inputchar').click(function () {
-            var letter = String($(this).find('label').text());
+        $('div.inputbutton').click(function () {
+            var letter = String($(this).text());
             $(this)
                 .parent().siblings('input')
                 .val($(this).parent().siblings('input').val() + letter);
             return false;
         });
-        $('div#delinputchar').click(function () {
+        $('div.delbutton').click(function () {
             var value = String($(this).parent().siblings('input').val());
             $(this)
                 .parent().siblings('input')

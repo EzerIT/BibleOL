@@ -2236,7 +2236,6 @@ function import_from_shebanq() {
             .done(function (data, textStatus, jqXHR) {
             $('.ui-dialog *').css('cursor', 'auto');
             var result = JSON.parse(data);
-            console.log(result);
             if (result.error === null) {
                 panelSent.setMql(result.sentence_mql);
                 $('#import-shebanq-dialog').modal('hide');
@@ -2247,7 +2246,6 @@ function import_from_shebanq() {
             }
         })
             .fail(function (jqXHR, textStatus, errorThrown) {
-            console.log('prop');
             $('.ui-dialog *').css('cursor', 'auto');
             show_error('#import-shebanq-error', localize('error_response') + " " + errorThrown);
         });

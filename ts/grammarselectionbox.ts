@@ -436,7 +436,6 @@ class GrammarSelectionBox {
                 let IDs: any[] = []
                 $('#grammarbuttongroup .selectbutton input:checked').each(function () { IDs.push($(this).attr('id')); });    
                 for (let i in IDs) {
-                    console.log(IDs[i]);
                         $('#' + IDs[i]).prop('checked',false);
                         $('#' + IDs[i]).trigger('change');
                 }

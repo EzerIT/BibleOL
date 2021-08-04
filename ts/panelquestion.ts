@@ -248,7 +248,6 @@ class PanelQuestion {
         // Now, the array questionheaders contains a list of <th>...</th> elements to be put before 
         // each question on the question cards
         let headLen: number = questionheaders.length;
-        console.log(qoFeatures);
         let quizCardNum: number = qoFeatures.length; // Count number of quizcards to define the appearance of toggle buttons
         let quizContainer: JQuery = $('div#quizcontainer');
 
@@ -487,11 +486,12 @@ class PanelQuestion {
                     //   <div class="inputquizitem">                       vf
                     //     <input data-kbid="N" type="text">               vf
                     //     <div class="letterinput">                       vf
-                    //     <div class="selectbutton delbutton">            vf
-                    //     <div class="selectbutton inputbutton">          vf
-                    //     <div class="selectbutton inputbutton">          vf
-                    //     ...                                             vf
-                    //   <div>                                             vf
+                    //       <div class="delbutton">←</div>                vf
+                    //       <div class="inputbutton">A</div>              vf
+                    //       <div class="inputbutton">B</div>              vf
+                    //       ...                                           vf
+                    //     </div>                                          vf
+                    //   </div>                                            vf
                     // </td>                                               cwyn
                     
                     
@@ -826,32 +826,42 @@ class PanelQuestion {
 
                     // Sort the values using the optional sorting index in the value strings
                     swsValues.sort((a : StringWithSort, b : StringWithSort) => StringWithSort.compare(a,b));
+
+                    // Add "None of these" as a final option
+                    swsValues.push(new StringWithSort(`<i>${localize('none_of_these')}</i>`, 'none_of_these'));
                     
 
-                    // Create this HTML structure in the variable v:      From these variables
-                    // <td class="qbox">                                   cwyn
-                    //   <img ...>                                         cwyn
-                    //   <img ...>                                         cwyn
-                    //   <img ...>                                         cwyn
-                    //   <table class="list-of">                           selections
-                    //     <tr>                                            row
+                    // Create this HTML structure in the variable v:                  From these variables
+                    // <td class="qbox">                                               cwyn
+                    //   <img ...>                                                     cwyn
+                    //   <img ...>                                                     cwyn
+                    //   <img ...>                                                     cwyn
+                    //   <table class="list-of">                                       selections
+                    //     <tr><td colspan="3">Select one or more:</td></tr>
+                    //     <tr>                                                        row
                     //       <td style="text-align:left">
-                    //         <input type="checkbox"...>VAL1
+                    //         <div class="selectbutton">
+                    //           <input type="checkbox"...><label for=...>VAL1</label>
+                    //         </div>
                     //       </td>
                     //       <td style="text-align:left">
-                    //         <input type="checkbox"...>VAL2
+                    //         <div class="selectbutton">
+                    //           <input type="checkbox"...><label for=...>VAL2</label>
+                    //         </div>
                     //       </td>
                     //       <td style="text-align:left">
-                    //         <input type="checkbox"...>VAL3
+                    //         <div class="selectbutton">
+                    //           <input type="checkbox"...><label for=...>VAL3</label>
+                    //         </div>
                     //       </td>
-                    //     </tr>                                           row
+                    //     </tr>                                                       row
                     //     ...
-                    //   </table>                                          table
-                    // </td>                                               cwyn
+                    //   </table>                                                      table
+                    // </td>                                                           cwyn
 
 
                     let selections : JQuery = $('<table class="list-of"></table>');
-                    selections.append('<tr><td colspan="3">Select one or more:</td></tr>'); // TODO: Localize
+                    selections.append(`<tr><td colspan="3">${localize('select_1_or_more')}</td></tr>`); // TODO: Localize
 
                     // Arrange in three columns
                     let numberOfItems : number = swsValues.length;                // Number of values
@@ -865,8 +875,7 @@ class PanelQuestion {
                                 row.append('<td style="text-align:left"><div class="selectbutton">'
                                            + `<input type="checkbox" id="${swsValues[ix].getInternal()}_${quizItemID}" value="${swsValues[ix].getInternal()}">`
                                            + `<label for="${swsValues[ix].getInternal()}_${quizItemID}">${swsValues[ix].getString()}</label>`
-
-                                        + '</div></td>');
+                                           + '</div></td>');
                             else
                                 row.append('<td></td>');
                         }
@@ -876,10 +885,12 @@ class PanelQuestion {
                     let cwyn : ComponentWithYesNo = new ComponentWithYesNo(selections,COMPONENT_TYPE.checkBoxes);
                     cwyn.addChangeListener();
                     v = cwyn.getJQuery();
+                    if (correctAnswer==='()')
+                        correctAnswer = '(none_of_these)';
                     this.vAnswers.push(new Answer(cwyn,null,correctAnswer,null));
                 }
                 
-                // One option from a dropdown list is requested
+                // One option from a multiple choice list is requested
                 else {
                     // This is an enumeration feature type, get the collection of possible values
                     let values: string[] = typeinfo.enum2values[featType]; // Possible Emdros feature values
