@@ -40,41 +40,28 @@ function show_buttons(string $head,
         <h5 class="card-header bg-info text-light"><?= $head ?></h5>
         <div class="card-body">
             <h2><?= $CI->lang->line('by_frequency') ?></h2>
-            <table>
-                <?php $ix = 0; ?>
-                <?php for ($r=0; $r<ceil($number_freq_buttons / BUTTONS_PER_LINE); ++$r): ?>
-                    <tr>
-                        <?php for ($c=0; $c<BUTTONS_PER_LINE; ++$c): ?>
-                            <td>
-                                <?php if ($ix<$number_freq_buttons): ?>
-                                    <a style="width:100%" href="<?= build_url2(array('buttonix'=>-$ix-1) + $get_parms) ?>"
-                                       class="btn <?= button_type(-$ix-1, $get_parms['buttonix']) ?>"><?= sprintf("%d-%d",$gloss_count*$ix+1,min($number_glosses,$gloss_count*($ix+1))) ?></a>
-                                <?php endif; ?>
-                            </td>
-                            <?php ++$ix; ?>
-                        <?php endfor; ?>
-                    </tr>
+            <div style="display:flex;flex-flow:row wrap">
+                <?php for ($ix=0; $ix<$number_freq_buttons; ++$ix): ?>
+                    <div style="flex-basis:7.5em">
+                        <a style="width:100%" href="<?= build_url2(array('buttonix'=>-$ix-1) + $get_parms) ?>"
+                           class="btn <?= button_type(-$ix-1, $get_parms['buttonix']) ?>"><?= sprintf("%d-%d",$gloss_count*$ix+1,min($number_glosses,$gloss_count*($ix+1))) ?></a>
+                    </div>
                 <?php endfor; ?>
-            </table>
+            </div>
             <p>&nbsp;</p>
             <h2><?= $CI->lang->line('alphabetically') ?></h2>
-            <table class="<?= $style ?>">
-                <?php for ($r=0; $r<ceil(count($button_array) / BUTTONS_PER_LINE); ++$r): ?>
-                    <tr>
-                        <?php for ($c=0; $c<BUTTONS_PER_LINE; ++$c): ?>
-                            <?php $ix = $right_to_left ? $r*BUTTONS_PER_LINE+(BUTTONS_PER_LINE-$c-1) : $r*BUTTONS_PER_LINE+$c ?>
-                            <td>
-                                <?php if ($ix<count($button_array)): ?>
-                                    <a style="width:100%" href="<?= build_url2(array('buttonix'=>$ix) + $get_parms) ?>"
-                                       class="btn <?= button_type($ix, $get_parms['buttonix']) ?>">
-                                        <?= $button_array[$ix][0] ?>
-                                    </a>
-                                <?php endif; ?>
-                            </td>
-                        <?php endfor; ?>
-                    </tr>
+            <div class="<?= $style ?>" style="display:flex;
+                        <?= $right_to_left ? 'flex-flow:row-reverse wrap'
+                                           : 'flex-flow:row wrap'?>">
+                <?php for ($ix=0; $ix<count($button_array); ++$ix): ?>
+                    <div style="flex-basis:7.5em">
+                        <a style="width:100%" href="<?= build_url2(array('buttonix'=>$ix) + $get_parms) ?>"
+                           class="btn <?= button_type($ix, $get_parms['buttonix']) ?>">
+                            <?= $button_array[$ix][0] ?>
+                        </a>
+                    </div>
                 <?php endfor; ?>
-            </table>
+            </div>
         </div><!--card-body-->
     </div><!--card-->
 <?php
