@@ -176,7 +176,6 @@ div.hr-replacement {
 }
 .textblock.inlineblock {
   display: inline-block;
-  max-width: 120px;
 }
 .leftalign {
   text-align: left !important;
@@ -334,9 +333,6 @@ div.grammargroup {
 }
 div.grammarborder {
   border: solid 1px #adadad;
-}
-div.grammarinnerborder {
-  background: #f2f2f2;
 }
 div#gramtabs {
   display: block;
@@ -1117,8 +1113,6 @@ label {
   margin: 0px;
 }
 .btn {
-  padding-left: 3rem;
-  padding-right: 3rem;
   margin-left: 7px;
   margin-top: 5px;
   margin-bottom: 5px;
