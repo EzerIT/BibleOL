@@ -1638,6 +1638,7 @@ var PanelQuestion = (function () {
                         var quiz_div_1 = $('<div class="quizitem"></div>');
                         var optArray = [];
                         var cwyn = new ComponentWithYesNo(quiz_div_1, COMPONENT_TYPE.comboBox2);
+                        var charSetClass = configuration.charSet == 'transliterated_hebrew' ? 'hebrew_translit' : configuration.charSet;
                         cwyn.addChangeListener();
                         for (var valix in suggestions) {
                             if (isNaN(+valix))
@@ -1646,7 +1647,7 @@ var PanelQuestion = (function () {
                             var item = new StringWithSort(s, s);
                             var option = $('<div class="selectbutton multiple_choice">'
                                 + ("<input type=\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
-                                + ("<label class=\"hebrew\" for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
+                                + ("<label class=\"" + charSetClass + "\" for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
                                 + '</div>');
                             option.data('sws', item);
                             optArray.push(option);

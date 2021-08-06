@@ -424,12 +424,12 @@ class PanelQuestion {
                         //
                         //     <div class="selectbutton multiple_choice">                          optArray[0]
                         //       <input type="radio" id="VAL1_N" name="quizitem_N" value="VAL1">   optArray[0]
-                        //       <label class="hebrew" for="VAL1_N">VAL1</label>                   optArray[0]
+                        //       <label class="CHARSET" for="VAL1_N">VAL1</label>                  optArray[0]
                         //     </div>                                                              optArray[0]
                         //
                         //     <div class="selectbutton multiple_choice">                          optArray[1]
                         //       <input type="radio" id="VAL2_N" name="quizitem_N" value="VAL2">   optArray[1]
-                        //       <label class="hebrew" for="VAL2_N">VAL2</label>                   optArray[1]
+                        //       <label class="CHARSET" for="VAL2_N">VAL2</label>                  optArray[1]
                         //     </div>                                                              optArray[1]
                         //
                         //     ...
@@ -442,6 +442,8 @@ class PanelQuestion {
                         let quiz_div : JQuery             = $('<div class="quizitem"></div>'); // Used to ancor the checkbox buttons and to add additional data
                         let optArray : JQuery[]           = [];                                // All the multiple choice options
                         let cwyn     : ComponentWithYesNo = new ComponentWithYesNo(quiz_div, COMPONENT_TYPE.comboBox2); // Result indicator
+                        let charSetClass : string         = configuration.charSet=='transliterated_hebrew' ? 'hebrew_translit' : configuration.charSet;
+                        
                         cwyn.addChangeListener();
                         
                         for (let valix in suggestions) {
@@ -455,7 +457,7 @@ class PanelQuestion {
                             let item   : StringWithSort = new StringWithSort(s,s); // StringWithSort holding the current suggestion
                             let option : JQuery         = $('<div class="selectbutton multiple_choice">'
                                 + `<input type="radio" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
-                                + `<label class="hebrew" for="${item.getInternal()}_${quizItemID}">${item.getString()}</label>`
+                                + `<label class="${charSetClass}" for="${item.getInternal()}_${quizItemID}">${item.getString()}</label>`
                                 + '</div>');
 
                             option.data('sws',item); // Associate the answer string with the <option> element
