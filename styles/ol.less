@@ -223,9 +223,13 @@ a.nav-link {
 
 
 .heb-default {
-    font-family: "Ezra SIL Webfont";
-    font-size: 100%;
-    color: @dadelblue;
+    font-family: "Ezra SIL Webfont" !important;
+    font-size: 120% !important;
+}
+
+.greek-default {
+    font-family: "Gentium Plus Webfont" !important;
+    font-size: 120% !important;
 }
 
 div.hr-replacement {  // Because Bootstrap messes with <hr>
@@ -1460,6 +1464,17 @@ label {
     margin: 0px;
 }
 
+.gloss-wrapper {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.gloss-wrapitem {
+    flex-basis: 7.5em;
+    margin: 1px;
+}
+
+
 // Markup buttons
 
 .btn when (@chinese) {
@@ -1507,6 +1522,19 @@ label {
         }
     }
 
+    &.btn-gloss-selector {
+        margin: 0;
+        border: solid 2px @dadelgreen;
+        color: @dadelgreen;
+        background-color: white;
+    }
+    &.btn-gloss-selector-active {
+        margin: 0;
+        border: solid 2px @dadelgreen;
+        color: white;
+        background-color: @dadelgreen;
+    }
+    
     &.btn-quiz {
         border: solid 1px @dadelgreen;
         border-radius: 0;

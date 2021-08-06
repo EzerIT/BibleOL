@@ -525,7 +525,7 @@ class Mod_translate extends CI_Model {
                     ->from("lexicon_{$src_lexicon} c")
                     ->join("lexicon_{$src_lexicon}_{$lang_show} s", 's.lex_id=c.id','left')
                     ->join("lexicon_{$src_lexicon}_{$lang_edit} e", 'e.lex_id=c.id','left')
-                    ->where("c.lex in (" . implode($relevant_lex, ',') . ")")
+                    ->where("c.lex in (" . implode(',', $relevant_lex) . ")")
                     ->order_by('tally DESC, sortorder ASC')
                     ->get();
 

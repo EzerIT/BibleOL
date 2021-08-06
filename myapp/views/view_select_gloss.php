@@ -6,7 +6,7 @@ global $editing_glob;
 $editing_glob = $editing;
 
 function button_type(int $index, int $button_index=null) {
-    return $index===$button_index ? "btn-info" : "btn-outline-dark";
+    return $index===$button_index ? "btn-gloss-selector-active" : "btn-gloss-selector";
 }
 
 
@@ -40,9 +40,9 @@ function show_buttons(string $head,
         <h5 class="card-header bg-info text-light"><?= $head ?></h5>
         <div class="card-body">
             <h2><?= $CI->lang->line('by_frequency') ?></h2>
-            <div style="display:flex;flex-flow:row wrap">
+            <div class="gloss-wrapper ltr">
                 <?php for ($ix=0; $ix<$number_freq_buttons; ++$ix): ?>
-                    <div style="flex-basis:7.5em">
+                    <div class="gloss-wrapitem">
                         <a style="width:100%" href="<?= build_url2(array('buttonix'=>-$ix-1) + $get_parms) ?>"
                            class="btn <?= button_type(-$ix-1, $get_parms['buttonix']) ?>"><?= sprintf("%d-%d",$gloss_count*$ix+1,min($number_glosses,$gloss_count*($ix+1))) ?></a>
                     </div>
@@ -50,13 +50,11 @@ function show_buttons(string $head,
             </div>
             <p>&nbsp;</p>
             <h2><?= $CI->lang->line('alphabetically') ?></h2>
-            <div class="<?= $style ?>" style="display:flex;
-                        <?= $right_to_left ? 'flex-flow:row-reverse wrap'
-                                           : 'flex-flow:row wrap'?>">
+            <div class="gloss-wrapper <?= $right_to_left ? 'rtl' : 'ltr'?>">
                 <?php for ($ix=0; $ix<count($button_array); ++$ix): ?>
-                    <div style="flex-basis:7.5em">
+                    <div class="gloss-wrapitem">
                         <a style="width:100%" href="<?= build_url2(array('buttonix'=>$ix) + $get_parms) ?>"
-                           class="btn <?= button_type($ix, $get_parms['buttonix']) ?>">
+                           class="btn <?= button_type($ix, $get_parms['buttonix']) ?> <?= $style ?>">
                             <?= $button_array[$ix][0] ?>
                         </a>
                     </div>

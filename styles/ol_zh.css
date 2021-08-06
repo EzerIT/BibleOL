@@ -137,9 +137,12 @@ a.nav-link:hover {
   font-weight: bold;
 }
 .heb-default {
-  font-family: "Ezra SIL Webfont";
-  font-size: 100%;
-  color: #002A3A;
+  font-family: "Ezra SIL Webfont" !important;
+  font-size: 120% !important;
+}
+.greek-default {
+  font-family: "Gentium Plus Webfont" !important;
+  font-size: 120% !important;
 }
 div.hr-replacement {
   background-color: #adadad;
@@ -1134,6 +1137,14 @@ label {
   border: #002A3A 1px;
   margin: 0px;
 }
+.gloss-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+}
+.gloss-wrapitem {
+  flex-basis: 7.5em;
+  margin: 1px;
+}
 .btn {
   font-size: 17px;
 }
@@ -1176,6 +1187,18 @@ label {
   color: white !important;
   border: solid 2px #43B02A !important;
   border-radius: 20px;
+}
+.btn.btn-gloss-selector {
+  margin: 0;
+  border: solid 2px #43B02A;
+  color: #43B02A;
+  background-color: white;
+}
+.btn.btn-gloss-selector-active {
+  margin: 0;
+  border: solid 2px #43B02A;
+  color: white;
+  background-color: #43B02A;
 }
 .btn.btn-quiz {
   border: solid 1px #43B02A;
