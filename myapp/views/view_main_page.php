@@ -30,7 +30,7 @@ function show_intro(&$center, &$landingpage) {
         </form>
         </form>
 
-    EOD;
+EOD;
 }
 
 /* Optionally shows a panel title and text */
