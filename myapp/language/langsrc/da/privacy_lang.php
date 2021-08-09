@@ -65,7 +65,7 @@ $lang['privacy_text'] = "(da)<h1>Privatlivspolitik</h1>\n"
         . "<h2>Kontakt</h2>\n"
         . "\n"
         . "<p>Har du spørgsmål eller ønsker i forbindelse med denne\n"
-        . "privatlivspolitik, kan du kontakte DBI på <a href=\"mailto:dbi@dbi.edu\">dbi@dbi.edu</a>.</p>\n"
+        . "privatlivspolitik, kan du kontakte <a href=\"mailto:nwn@dbi.edu\">Nicolai Winther-Nielsen</a>.</p>.\n"
         . "\n"
         . "<h2>Hvordan ændrer du dine oplysninger?</h2>\n"
         . "\n"
@@ -100,8 +100,7 @@ $lang['privacy_text'] = "(da)<h1>Privatlivspolitik</h1>\n"
         . "øvelsesresultater vi har registreret.</p>\n"
         . "\n"
         . "<p>Hvis du ønsker en komplet elektronisk fortegnelse over alle dine\n"
-        . "data, kan du kontakte DBI på <a href=\"mailto:dbi@dbi.edu\">dbi@dbi.edu</a>.</p>\n"
-        . "\n"
+        . "data, kan du kontakte <a href=\"mailto:nwn@dbi.edu\">Nicolai Winther-Nielsen</a>.</p>.\n"
         . "<h2>Datatab</h2>\n"
         . "\n"
         . "<p>Vi gør vort bedste for at sikre at dine oplysninger ikke går tabt\n"
@@ -126,4 +125,4 @@ $lang['privacy_text'] = "(da)<h1>Privatlivspolitik</h1>\n"
         . "privatlivsregler der gælder for disse andre websteder.</p>\n\n";
 $lang['you_rejected_header'] = "Du afviste privatlivspolitikken";
 $lang['you_rejected_oauth2_text'] = "Du valgte at afvise vores privatlivspolitik. Det betyder at du ikke kan få en konto på Bible Online Learner.";
-$lang['you_rejected_text'] = "Du valgte at afvise vores privatlivspolitik. Det betyder at du ikke kan benytte en konto på Bible Online Learner. Hvis du ønsker at vi nedlægger din konto, bedes du kontakte en af systemadministratorerne, fx på dbi@dbi.edu. Din konto vil automatisk blive slettet hvis du ikke benytter den i 18 måneder.";
+$lang['you_rejected_text'] = "Du valgte at afvise vores privatlivspolitik. Det betyder at du ikke kan benytte en konto på Bible Online Learner. Hvis du ønsker at vi nedlægger din konto, bedes du kontakte DBI på <a href=\"mailto:dbi@dbi.edu\">dbi@dbi.edu</a>.</p>. Din konto vil automatisk blive slettet hvis du ikke benytter den i 18 måneder.";
