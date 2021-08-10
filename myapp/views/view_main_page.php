@@ -28,13 +28,17 @@ function show_intro(&$center, &$landingpage) {
         <form action="/text/select_quiz">
           <button class="btn btn-outline-dark">Try an exercise</button>
         </form>
-        </form>
+      </div>
+    </div>
 
 EOD;
 }
 
 /* Optionally shows a panel title and text */
 function show_panel(&$title, &$text, $extraclass='') {
+    if (!isset($title))
+        return;
+
     echo "  <div class=\"card mb-3\">\n";
     echo "    <h5 class=\"card-header bg-primary text-light\">$title</h5>\n";
     echo "    <div class=\"card-body $extraclass\">$text</div>\n";
@@ -43,8 +47,6 @@ function show_panel(&$title, &$text, $extraclass='') {
 
 /* Shows a panel title and optionally a text */
 function show_panel2(&$title, &$text) {
-    if (!isset($title))
-        return;
     echo "<div class=\"card mb-3\">\n";
     echo "  <h5 class=\"card-header bg-primary text-light\">$title</h5>\n";
     if (isset($text))
@@ -59,7 +61,7 @@ function logos() {
     echo "  </div>";
     echo "  <div class=\"row logopanel\">";
     echo "    <div class=\"col-md-3\">";
-    echo "      <a class=\"navbar-link\" href=\"http://www.ezer.dk\" target=\"_blank\"><img class=\"logo\" src=\"images/logos/ezer_web_trans_lille.png\" style=\"width: 140px; allign: center;\"></a></div>";
+    echo "      <a class=\"navbar-link\" href=\"http://www.ezer.dk\" target=\"_blank\"><img class=\"logo\" src=\"images/logos/ezer_web_trans_lille.png\" style=\"width: 140px; text-align: center;\"></a></div>";
     echo "    <div class=\"col-md-3\">";
     echo "      <a class=\"navbar-link\" href=\"http://vu.nl\" target=\"_blank\"><img class=\"logo\" src=\"images/logos/vu.png\" style=\"width: 260px\"></a></div>";
     echo "    <div class=\"col-md-3\">";

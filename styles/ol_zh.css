@@ -122,11 +122,11 @@ div.dropdown-menu .dropdown-item {
 div.dropdown-menu .dropdown-item:hover {
   font-weight: bold;
   background-color: #f2f2f2;
-  border: 0 !important;
 }
 div.dropdown-menu .dropdown-item.active {
   font-weight: bold;
-  border-radius: 0;
+  background-color: #43B02A;
+  color: white;
 }
 a.nav-link {
   font-size: 11pt;
