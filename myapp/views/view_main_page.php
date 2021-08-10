@@ -35,9 +35,6 @@ EOD;
 
 /* Optionally shows a panel title and text */
 function show_panel(&$title, &$text, $extraclass='') {
-    if (!isset($title))
-        return;
-
     echo "  <div class=\"card mb-3\">\n";
     echo "    <h5 class=\"card-header bg-primary text-light\">$title</h5>\n";
     echo "    <div class=\"card-body $extraclass\">$text</div>\n";
@@ -52,7 +49,7 @@ function show_panel2(&$title, &$text) {
     echo "  <h5 class=\"card-header bg-primary text-light\">$title</h5>\n";
     if (isset($text))
         echo "  <div class=\"card-body\">$text</div>\n";
-    // echo "</div>\n";
+    echo "</div>\n";
 }
 
 /* Shows logos */
@@ -87,15 +84,14 @@ function logos() {
 
 
 <?php
-      if (isset($left_title))
+      if (isset($left_title)) {
           echo "<div class=\"col-md-3 sidepanel\" id=\"leftpanel\">";
           show_panel2($left_title, $left);
-          echo "</div>";
 
-      if (isset($extraleft_title))
-        echo "<div class=\"col-md-3 sidepanel\" id=\"leftpanel\">";
           show_panel($extraleft_title, $extraleft, 'student-legend');
+
           echo "</div>";
+      }
   ?>
 
 

@@ -30,11 +30,9 @@
 @dadelgreyultradark: darken(@dadelgrey, 50%);
 @dadelgreylight: lighten(lightgrey, 7%);
 @backgroundwhite: white;
-
+@selectedselectbutton: darken(silver,5%);
 //END colors
 //////////////
-
-
 
 ///////////////////
 // GENERAL MARKUP
@@ -651,7 +649,7 @@ div.selectbutton input[type="checkbox"]:focus, div.selectbutton input[type="radi
 div.selectbutton input[type="checkbox"]:checked {
     + label {
         border-color: @dadelblue;
-        background-color: @dadellightgrey;
+        background-color: @selectedselectbutton;
         color: @dadelblue;
     }
     width: 0px;
@@ -659,7 +657,7 @@ div.selectbutton input[type="checkbox"]:checked {
 div.selectbutton input[type="radio"]:checked {
     + label {
         border-color: @dadelblue;
-        background-color: @dadellightgrey;
+        background-color: @selectedselectbutton;
         color: @dadelblue;
     }
     width: 0px;

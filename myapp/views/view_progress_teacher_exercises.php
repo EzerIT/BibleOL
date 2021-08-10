@@ -61,7 +61,7 @@
       <div>
         <span style="font-weight:bold"><?= $this->lang->line('exercise_prompt') ?></span>
         <select name="exercise">
-          <option value="" <?= set_select('exercise', '', true) ?>></option>
+          <option value="" <?= set_select('exercise', '', true) ?>>&nbsp;</option>
           <?php foreach($exercise_list as $ex): ?>
             <?php $ex2 = htmlspecialchars($ex); ?>
             <option value="<?= $ex2 ?>" <?= set_select('exercise', $ex) ?>><?= $ex2 ?></option>

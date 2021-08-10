@@ -517,7 +517,7 @@ div.selectbutton input[type="checkbox"]:checked {
 }
 div.selectbutton input[type="checkbox"]:checked + label {
   border-color: #002A3A;
-  background-color: #D3D3D3;
+  background-color: #b3b3b3;
   color: #002A3A;
 }
 div.selectbutton input[type="radio"]:checked {
@@ -525,7 +525,7 @@ div.selectbutton input[type="radio"]:checked {
 }
 div.selectbutton input[type="radio"]:checked + label {
   border-color: #002A3A;
-  background-color: #D3D3D3;
+  background-color: #b3b3b3;
   color: #002A3A;
 }
 div#textinput {
