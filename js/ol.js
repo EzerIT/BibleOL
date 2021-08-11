@@ -2307,7 +2307,6 @@ var Quiz = (function () {
             else
                 this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
             this.quiz_statistics.grading = gradingFlag;
-            $('.grammarselector').empty();
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
             $.post(site_url + 'statistics/update_stat', this.quiz_statistics)
                 .done(function () { return window.location.replace(site_url + 'text/select_quiz'); })

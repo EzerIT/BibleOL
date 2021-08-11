@@ -338,18 +338,7 @@ div.grammarborder {
   border: solid 1px #adadad;
 }
 div#gramtabs {
-  display: block;
-  float: none !important;
-  text-align: left;
   border: solid 1em white;
-  border-radius: 0;
-  margin: 0 !important;
-}
-div.grammarselector {
-  font-size: 8pt;
-  display: block;
-  margin-bottom: -1px;
-  border-radius: 0px;
 }
 div#myview {
   background: #f2f2f2;

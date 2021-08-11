@@ -164,7 +164,6 @@ class Quiz {
 
             this.quiz_statistics.grading = gradingFlag;
 
-            $('.grammarselector').empty();
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
             
             // Send statistics to server
