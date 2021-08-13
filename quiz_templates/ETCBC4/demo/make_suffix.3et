@@ -26,7 +26,7 @@
     <useforquizobjects>true</useforquizobjects>
   </sentenceselection>
   <quizfeatures version="3">
-    <show>g_voc_lex_utf8</show>
+    <show>g_voc_lex_utf8_variant</show>
     <show>st</show>
     <show>suffix_gender</show>
     <show>suffix_person</show>

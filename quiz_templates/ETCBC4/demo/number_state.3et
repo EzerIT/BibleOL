@@ -25,8 +25,7 @@
       <enumfeature version="1">
         <name>suffix_gender</name>
         <comparator>equals</comparator>
-        <value>NA</value>
-        <value>unknown</value>
+        <value>absent</value>
       </enumfeature>
     </featurehandlers>
     <useforquizobjects>false</useforquizobjects>
@@ -42,13 +41,12 @@
       <enumfeature version="1">
         <name>suffix_gender</name>
         <comparator>equals</comparator>
-        <value>NA</value>
-        <value>unknown</value>
+        <value>absent</value>
       </enumfeature>
     </featurehandlers>
   </quizobjectselection>
   <quizfeatures version="3">
-    <show>g_voc_lex_utf8</show>
+    <show>g_voc_lex_utf8_variant</show>
     <show>nu</show>
     <show>gn</show>
     <show>st</show>
