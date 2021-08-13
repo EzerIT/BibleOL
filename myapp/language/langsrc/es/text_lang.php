@@ -4,8 +4,6 @@ $lang['book_prompt'] = "Libro:";
 $lang['cannot_write_to_quiz_file'] = "No se puede escribir en el archivo de examen";
 $lang['chapter'] = "Capítulo";
 $lang['chapter_prompt'] = "Capítulo:";
-$lang['check_answer'] = "Comprobar respuesta";
-$lang['clear_grammar'] = "Limpiar gramática";
 $lang['click_folder'] = "Haga click en una carpeta para abrirla, o selecciona el número de preguntas que quieres de un examen particular y si quieres usar la selección de pasaje actual o específica tus propios pasajes.";
 $lang['corpus_copyright'] = "<h3>Derecho de Autor para la Base de Datos ETCBC4:</h3><p>%s</p>\n"
         . "     <h3>Derecho de Autor para la Base de Datos Nestle 1904:</h3><p>%s</p>";
@@ -62,7 +60,6 @@ $lang['sentences'] = "Oraciones";
 $lang['sentence_units'] = "Unidades de oraciones";
 $lang['shebanq_query_id_prompt'] = "Identificación de búsqueda SHEBANQ:";
 $lang['shebanq_version_prompt'] = "Versión de base de datos SHEBANQ:";
-$lang['show_answer'] = "Mostrar respuesta";
 $lang['show_link_icons_prompt'] = "Mostrar iconos de enlace:";
 $lang['show_quiz_passages'] = "Mostrar pasajes del examen";
 $lang['show_text'] = "Mostrar texto";

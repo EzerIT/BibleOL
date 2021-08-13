@@ -1,6 +1,6 @@
 {
     "dbdescription": "Hebreeuws (ETCBC4, OT)",
-    "dbcopyright": "Deze database is Copyright \u00a9 2015 by Eep Talstra Center for Bible and Computer.<br><a target=\"_blank\" rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\"><img alt=\"Creative Commons License\" src=\"https://i.creativecommons.org/l/by-nc/4.0/88x31.png\"></a><br>Dit werk is gelicenseerd onder een <a target=\"_blank\" rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\">Creative Commons Attribution-NonCommercial 4.0 International License</a>. (De database zelf kan worden gevonden via de volgende persistent link: <a href=\"http://www.persistent-identifier.nl/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71</a>.)",
+    "dbcopyright": "Deze database is Copyright © 2015 by Eep Talstra Center for Bible and Computer.<br><a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\"><img alt=\"Creative Commons License\" src=\"https:\/\/i.creativecommons.org\/l\/by-nc\/4.0\/88x31.png\"><\/a><br>Dit werk is gelicenseerd onder een <a target=\"_blank\" rel=\"license\" href=\"http:\/\/creativecommons.org\/licenses\/by-nc\/4.0\/\">Creative Commons Attribution-NonCommercial 4.0 International License<\/a>. (De database zelf kan worden gevonden via de volgende persistent link: <a href=\"http:\/\/www.persistent-identifier.nl\/?identifier=urn:nbn:nl:ui:13-048i-71\" target=\"_blank\">urn:nbn:nl:ui:13-048i-71<\/a>.)",
     "emdrosobject": {
         "word": {
             "_objname": "Woord",
@@ -199,7 +199,7 @@
             "unknown": "Unknown"
         },
         "verb_class_t": {
-            "NA": "N/A",
+            "NA": "N\/A",
             "four_consonants": "vier consonanten",
             "geminate": "Ayin-'ayin",
             "i_aleph": "Pe-alef",
@@ -216,7 +216,7 @@
             "regular": "Sterk werkwoord"
         },
         "phrase_determination_t": {
-            "NA": "N/A",
+            "NA": "N\/A",
             "det": "Bepaald",
             "und": "Onbepaald"
         },
@@ -233,7 +233,7 @@
             "etpa": "Etpa'al",
             "etpe": "Etpe'el",
             "haf": "Haf'el",
-            "hsht": "Hi\u0161taf'al",
+            "hsht": "Hištaf'al",
             "htpa": "#5 Hitpa'al",
             "htpe": "Hitpe'el",
             "hotp": "Hotpa'al",
@@ -241,7 +241,7 @@
             "pael": "Pa'el",
             "peal": "Pe'al",
             "peil": "Pe'il",
-            "shaf": "\u0160af'el",
+            "shaf": "Šaf'el",
             "tif": "Tif'al",
             "pasq": "passivum van de Qal",
             "htpo": "Hitpo'el",
@@ -523,8 +523,8 @@
             "Josua": "Jozua",
             "Judices": "Rechters",
             "Ruth": "Ruth",
-            "Samuel_I": "1 Samu\u00ebl",
-            "Samuel_II": "2 Samu\u00ebl",
+            "Samuel_I": "1 Samuël",
+            "Samuel_II": "2 Samuël",
             "Reges_I": "1 Koningen",
             "Reges_II": "2 Koningen",
             "Chronica_I": "1 Kronieken",
@@ -540,10 +540,10 @@
             "Jesaia": "Jesaja",
             "Jeremia": "Jeremia",
             "Threni": "Klaagliederen",
-            "Ezechiel": "Ezechi\u00ebl",
-            "Daniel": "Dani\u00ebl",
+            "Ezechiel": "Ezechiël",
+            "Daniel": "Daniël",
             "Hosea": "Hosea",
-            "Joel": "Jo\u00ebl",
+            "Joel": "Joël",
             "Amos": "Amos",
             "Obadia": "Obadja",
             "Jona": "Jona",
@@ -591,7 +591,7 @@
             "Ezechiel": "Eze",
             "Daniel": "Dan",
             "Hosea": "Hos",
-            "Joel": "Jo\u00ebl",
+            "Joel": "Joël",
             "Amos": "Am",
             "Obadia": "Obad",
             "Jona": "Jon",

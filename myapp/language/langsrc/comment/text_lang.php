@@ -16,14 +16,6 @@ $comment['chapter_prompt'] = "";
 $format['chapter_prompt'] = "";
 $use_textarea['chapter_prompt'] = false;
 
-$comment['check_answer'] = "";
-$format['check_answer'] = "";
-$use_textarea['check_answer'] = false;
-
-$comment['clear_grammar'] = "";
-$format['clear_grammar'] = "";
-$use_textarea['clear_grammar'] = false;
-
 $comment['click_folder'] = "";
 $format['click_folder'] = "";
 $use_textarea['click_folder'] = true;
@@ -263,10 +255,6 @@ $use_textarea['shebanq_query_id_prompt'] = false;
 $comment['shebanq_version_prompt'] = "";
 $format['shebanq_version_prompt'] = "";
 $use_textarea['shebanq_version_prompt'] = false;
-
-$comment['show_answer'] = "";
-$format['show_answer'] = "";
-$use_textarea['show_answer'] = false;
 
 $comment['show_link_icons_prompt'] = "";
 $format['show_link_icons_prompt'] = "";

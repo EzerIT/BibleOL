@@ -28,6 +28,10 @@ $comment['cancel_button'] = "";
 $format['cancel_button'] = "";
 $use_textarea['cancel_button'] = false;
 
+$comment['check_answer'] = "";
+$format['check_answer'] = "";
+$use_textarea['check_answer'] = false;
+
 $comment['clear_all'] = "";
 $format['clear_all'] = "";
 $use_textarea['clear_all'] = false;
@@ -39,6 +43,10 @@ $use_textarea['clear_button'] = false;
 $comment['click_for_document'] = "";
 $format['click_for_document'] = "";
 $use_textarea['click_for_document'] = false;
+
+$comment['clear_grammar'] = "";
+$format['clear_grammar'] = "";
+$use_textarea['clear_grammar'] = false;
 
 $comment['click_for_picture'] = "";
 $format['click_for_picture'] = "";
@@ -215,6 +223,10 @@ $use_textarea['set_hebrew'] = false;
 $comment['show'] = "";
 $format['show'] = "";
 $use_textarea['show'] = false;
+
+$comment['show_answer'] = "";
+$format['show_answer'] = "";
+$use_textarea['show_answer'] = false;
 
 $comment['show_border'] = "";
 $format['show_border'] = "";

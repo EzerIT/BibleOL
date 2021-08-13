@@ -4,8 +4,6 @@ $lang['book_prompt'] = "書卷：";
 $lang['cannot_write_to_quiz_file'] = "無法寫入到練習檔案";
 $lang['chapter'] = "章";
 $lang['chapter_prompt'] = "章：";
-$lang['check_answer'] = "檢查答案";
-$lang['clear_grammar'] = "清除所有選擇";
 $lang['click_folder'] = "請點選資料夾來打開。然後您可以選擇做哪個練習，做其中多少條題目。練習題目的來源，您可以選用預設的經文，或自選經文。";
 $lang['corpus_copyright'] = "<h3>ETCBC4資料庫的版權屬於：</h3><p>%s</p>\n"
         . "     <h3>Nestle 1904資料庫的版權屬於：</h3><p>%s</p>";
@@ -63,7 +61,6 @@ $lang['sentences'] = "句子";
 $lang['sentence_units'] = "句子成分";
 $lang['shebanq_query_id_prompt'] = "SHEBANQ搜尋的ID：";
 $lang['shebanq_version_prompt'] = "SHEBANQ資料庫版本編號：";
-$lang['show_answer'] = "顯示答案";
 $lang['show_link_icons_prompt'] = "顯示鏈結圖示：";
 $lang['show_quiz_passages'] = "顯示練習所用的經文";
 $lang['show_text'] = "顯示經文";

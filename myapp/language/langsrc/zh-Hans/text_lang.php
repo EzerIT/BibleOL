@@ -4,8 +4,6 @@ $lang['book_prompt'] = "书卷：";
 $lang['cannot_write_to_quiz_file'] = "无法写入到练习档案";
 $lang['chapter'] = "章";
 $lang['chapter_prompt'] = "章：";
-$lang['check_answer'] = "检查答案";
-$lang['clear_grammar'] = "清除所有选择";
 $lang['click_folder'] = "请点选资料夹来打开。然后您可以选择做哪个练习，做其中多少条题目。练习题目的来源，您可以选用预设的经文，或自选经文。";
 $lang['corpus_copyright'] = "<h3>ETCBC4资料库的版权属于：</h3><p>%s</p>\n"
         . "     <h3>Nestle 1904资料库的版权属于：</h3><p>%s</p>";
@@ -63,7 +61,6 @@ $lang['sentences'] = "句子";
 $lang['sentence_units'] = "句子成分";
 $lang['shebanq_query_id_prompt'] = "SHEBANQ搜寻的ID：";
 $lang['shebanq_version_prompt'] = "SHEBANQ资料库版本编号：";
-$lang['show_answer'] = "显示答案";
 $lang['show_link_icons_prompt'] = "显示链结图示：";
 $lang['show_quiz_passages'] = "显示练习所用的经文";
 $lang['show_text'] = "显示经文";
