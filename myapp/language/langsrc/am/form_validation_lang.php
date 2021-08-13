@@ -1,0 +1,31 @@
+<?php
+
+$lang['form_validation_alpha'] = " የ <i>{መሰክ}</i> መሰኩ የፊደለ ገበታ ባህሪያን በቻ ይይል።ለ። ";
+$lang['form_validation_alpha_dash'] = " የ <i>{መሰክ}</i>መስኩ የፊደል ገበታ ቁጥር ባህርያቶችን፣ ከስር የተሰመሩ መስመሮችንና ጭረትን ብቻ ይይዛል።";
+$lang['form_validation_alpha_numeric'] = "የ <i>{መስኩ}</i>መስኩ የፊደል ገበታ ቁጥር ባህርያቶችን ብቻ ይይዛል።";
+$lang['form_validation_alpha_numeric_spaces'] = "የ <i>{መሰክ}</i>መስኩ የገበታ ቁጥር ባህርያቶችንና ቦታ ብቻ ይይዛል።";
+$lang['form_validation_decimal'] = "የ <i>{መሰኩ}</i> መስኩ ክፍልፋይ ቁጥሮችን የግድ መያዝ አለበት። ";
+$lang['form_validation_differs'] = "የ <i>{መሰኩ}</i>መሰኩ ከወሰን መስክ የግድ መለየት አለበት።";
+$lang['form_validation_error_message_not_set'] = "  የመስኩ ሰም ከስህተት መልእከት ጋር ተደራሽና ተዛማጅ  መሆነ አለቻለም። <i>{field}</i>";
+$lang['form_validation_exact_length'] = "የ <i>{መስኩ}</i> መስኩ በትክክል  የወሰን ባህርያት ርዝማኔ ያዝ አለበት";
+$lang['form_validation_greater_than'] = "የ<i>{መስኩ}</i> የመስኩ ቁጥር የግድ ከወሰኑ መበለጥ አለበት። ";
+$lang['form_validation_greater_than_equal_to'] = "የ <i>{መስኩ}</i> የመስኩ ቁጥር የግድ ከወሰኑ መበለጥ ወይም እኩል መሆን አለበት። ";
+$lang['form_validation_integer'] = "የ <i>{መስኩ}</i> መስኩ የግድ መሉ ቁጥሮችን መያዝ አለበት።";
+$lang['form_validation_in_list'] = "የ <i>{መስኩ}</i>  መስኩ የግድ አንድ ወሰን መሆን አለበት።";
+$lang['form_validation_isset'] = "የ <i>{መስኩ}</i> መሰኩ የግድ ዋጋ ሊኖረወ ይገባለ።";
+$lang['form_validation_is_natural'] = "የ <i>{መስኩ}</i> መስኩ የግድ ቁጥሮች መኖር አለበት።";
+$lang['form_validation_is_natural_no_zero'] = "የ <i>{መስኩ}</i> መስኩ የግድ ከዜሮ  የሚበልጡ ቁጥሮችን ብቻ መያዝ አለበት።";
+$lang['form_validation_is_numeric'] = "የ <i>{መስኩ}</i> መስኩ የግድ ቁጠራዊ ባህርያትን ብቻ መያዝ አለበት።";
+$lang['form_validation_is_unique'] = "የ <i>{መስኩ}</i> መስኩ የተለየ ዋጋ ሊኖረውይገባል።";
+$lang['form_validation_less_than'] = "የ <i>{መስኩ}</i> መስኩ የግድ ከወሰኑ ቁጥር ያነሰ መሆን አለበት።።";
+$lang['form_validation_less_than_equal_to'] = "የ <i>{መስኩ}</i> መስኩ የግድ ከወሰኑ ማነስ ወይም አኩለ መሆን አለበት።";
+$lang['form_validation_matches'] = "የ <i>{መስኩ}</i> መስኩ  ከወሰኑ መስክ ጋር አቻ መሆን የለበትም። <i>{ወሰን}</i>";
+$lang['form_validation_max_length'] = "የ<i>{መስኩ}</i> መስኩ ከወሰኑ ርዝመት ባህርያት መብለጥ የለበትም።";
+$lang['form_validation_min_length'] = "የ<i>{መስኩ}</i> መስኩ የግድ ከወሰኑ ቁመት ባህርያት የግድ መሆን አለበት።";
+$lang['form_validation_numeric'] = "የ<i>{መስኩ}</i> መስኩ ቁጥሮችነ ብቻ መያዝ አለበት።";
+$lang['form_validation_regex_match'] = "የ<i>{መስኩ}</i> መስኩ በትክክለኛው አቀማመጥ አይደለም።";
+$lang['form_validation_required'] = "የ<i>{መስኩ}</i> መስኩ የግድ ያስፈልጋል።";
+$lang['form_validation_valid_email'] = "የ<i>{መስኩ}</i> መስኩ ትክክለኛ ኢሜለ አድራሻ ብቻ መያዝ አለበት።";
+$lang['form_validation_valid_emails'] = "የ<i>{መስኩ}</i> መስኩ ሁሉንም ትክክለኛ የኢሜል አድራሻ ብቻ መያዝ አለበት።";
+$lang['form_validation_valid_ip'] = "የ<i>{መስኩ}</i> መስኩ የግድ ትክክለኛ መነሻ ነጥብ ሊኖረው የገባል።";
+$lang['form_validation_valid_url'] = "የ<i>{መስኩ}</i> መስኩ የግድ ትክክለኛ አለማቀፋዊ መረጃ ጠቃሚ መያዝ አለበትም። ";
