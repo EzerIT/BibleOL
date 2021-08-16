@@ -1,39 +1,5 @@
 <?php /* Assumption isset($right_title) implies isset($left_title) */
 
-/* Show intro only if landingpage */
-function show_intro(&$center, &$landingpage) {
-  if (!isset($landingpage))
-      return;
-
-    echo <<<EOD
-    <div class="row" id="landing-row">
-      <div class="col-md-8" id="landingpanel">
-        <img class="graphic-element" src="/images/dadel/DaDEL_ID_graphic_element_RGB.png">
-        <div id="landingtext">
-          $center
-        </div>
-      </div>
-      <div class="col-md-4" id="loginpanel">
-        <h1>Press the button to login</h1>
-        <form action="/login">
-          <button class="btn btn-primary">Login</button>
-        </form>
-        <h1>No login...?</h1>
-        <form action="/users/sign_up">
-          <button class="btn btn-outline-dark">Sign up for free</button>
-        </form>
-        <form action="/text/select_text">
-          <button class="btn btn-outline-dark">Start text reading</button>
-        </form>
-        <form action="/text/select_quiz">
-          <button class="btn btn-outline-dark">Try an exercise</button>
-        </form>
-      </div>
-    </div>
-
-EOD;
-}
-
 /* Optionally shows a panel title and text */
 function show_panel(&$title, &$text, $extraclass='') {
     if (!isset($title))
@@ -74,15 +40,47 @@ function logos() {
 ?>
 
 
+<?php if (isset($landingpage)): ?>
+    <div class="row" id="landing-row">
+        <div class="col-md-8" id="landingpanel">
+            <img class="graphic-element" src="/images/dadel/DaDEL_ID_graphic_element_RGB.png">
+            <div id="landingtext">
+                <?= $center ?>
+            </div>
+        </div>
+        <div class="col-md-4" id="loginpanel">
 
-<?php 
-  show_intro($center, $landingpage);
-?>
+            <?php if (!isset($logged_in_name)): ?>
+                <h1><?= $this->lang->line('press_login_button') ?></h1>
+                <form action="/login">
+                    <button class="btn btn-primary"><?= $this->lang->line('login') ?></button>
+                </form>
+                <h1><?= $this->lang->line('no_login') ?></h1>
+                <form action="/users/sign_up">
+                    <button class="btn btn-outline-dark"><?= $this->lang->line('sign_up') ?></button>
+                </form>
+            <?php else: ?>
+                <h1><?= sprintf($this->lang->line('welcome2'),$logged_in_name) ?></h1>
+            <?php endif; ?>
 
-<?php if (!isset($landingpage)): ?>
-  <div class="row">
+            <form action="/text/select_text">
+                <button class="btn btn-outline-dark"><?= $this->lang->line('start_text_reading') ?></button>
+            </form>
+            <form action="/text/select_quiz">
+                <button class="btn btn-outline-dark"><?= $this->lang->line('try_an_exercise') ?></button>
+            </form>
+
+            <?php if (isset($logged_in_name)): ?>
+                <form action="/login">
+                    <button class="btn btn-primary"><?= $this->lang->line('logout') ?></button>
+                </form>
+            <?php endif; ?>
+
+        </div>
+    </div>
+<?php else: ?>
+    <div class="row">
 <?php endif; ?>
-
 
 
 <?php

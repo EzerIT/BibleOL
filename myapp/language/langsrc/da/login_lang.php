@@ -26,6 +26,7 @@ $lang['no_email'] = "<h1>Du har ikke nogen email-adresse</h1>\n"
         . "     <p>Din email-adresse står ikke i brugerlisten. Derfor kan vi ikke sende dig en email med\n"
         . "     oplysninger om adgangskoden. Kontakt venligst din systemadministrator, som kan sætte\n"
         . "     en adgangskode op for dig.</p>";
+$lang['no_login'] = "Ikke bruger...?";
 $lang['or'] = "eller";
 $lang['password'] = "Adgangskode";
 $lang['password_reset'] = "Dan ny adgangskode";
@@ -38,6 +39,7 @@ $lang['password_reset_message'] = "Kære %s,\n"
 $lang['password_reset_sent'] = "En email med dit brugernavn og en ny adgangskode er blevet sendt til %s";
 $lang['password_reset_subject'] = "Din adgangskode til Bible Online Learner er blevet ændret";
 $lang['please_log_in'] = "Log ind";
+$lang['press_login_button'] = "Tryk på knappen for at logge ind";
 $lang['reset_link_bad'] = "Linket til dannelse af ny adgangskode eksisterer ikke eller er udløbet";
 $lang['several_accounts'] = "Din email-adresee er knyttet til flere brugerkonti. Angiv et af disse navne: %s";
 $lang['sign_in_facebook'] = "Log ind med Facebook";

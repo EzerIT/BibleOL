@@ -40,13 +40,13 @@ $comment['clear_button'] = "";
 $format['clear_button'] = "";
 $use_textarea['clear_button'] = false;
 
-$comment['click_for_document'] = "";
-$format['click_for_document'] = "";
-$use_textarea['click_for_document'] = false;
-
 $comment['clear_grammar'] = "";
 $format['clear_grammar'] = "";
 $use_textarea['clear_grammar'] = false;
+
+$comment['click_for_document'] = "";
+$format['click_for_document'] = "";
+$use_textarea['click_for_document'] = false;
 
 $comment['click_for_picture'] = "";
 $format['click_for_picture'] = "";
@@ -140,6 +140,10 @@ $comment['no'] = "";
 $format['no'] = "";
 $use_textarea['no'] = false;
 
+$comment['none_of_these'] = "";
+$format['none_of_these'] = "";
+$use_textarea['none_of_these'] = false;
+
 $comment['not_integer'] = "";
 $format['not_integer'] = "";
 $use_textarea['not_integer'] = false;
@@ -191,6 +195,10 @@ $use_textarea['request'] = false;
 $comment['save'] = "";
 $format['save'] = "";
 $use_textarea['save'] = false;
+
+$comment['select_1_or_more'] = "";
+$format['select_1_or_more'] = "";
+$use_textarea['select_1_or_more'] = false;
 
 $comment['sending_statistics'] = "";
 $format['sending_statistics'] = "";

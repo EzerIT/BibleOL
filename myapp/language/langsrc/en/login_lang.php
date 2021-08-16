@@ -25,6 +25,7 @@ $lang['new_google_user'] = "New Google User";
 $lang['no_email'] = "<h1>You do not have an e-mail address</h1>\n"
         . "    <p>Your e-mail address is not found in the user list. Therefore we cannot send you an e-mail with\n"
         . "    password information. Please contact your system administrator, who can set up a new password for you.</p>";
+$lang['no_login'] = "No login...?";
 $lang['or'] = "or";
 $lang['password'] = "Password";
 $lang['password_reset'] = "Password Reset";
@@ -37,6 +38,7 @@ $lang['password_reset_message'] = "Dear %s,\n"
 $lang['password_reset_sent'] = "An email containing your user name and new password has been sent to %s";
 $lang['password_reset_subject'] = "Your Bible Online Learner password has been changed";
 $lang['please_log_in'] = "Please Log In";
+$lang['press_login_button'] = "Press the button to login";
 $lang['reset_link_bad'] = "The password reset link does not exist or has expired";
 $lang['several_accounts'] = "Your email address is associated with several user accounts. Specify one of these user names: %s";
 $lang['sign_in_facebook'] = "Sign in with Facebook";

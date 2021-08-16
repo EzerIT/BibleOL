@@ -5,13 +5,14 @@ class Ctrl_main_page extends MY_Controller {
     }
 
 	public function index() {
+        $this->lang->load('login', $this->language);
+        
         if ($this->mod_users->is_logged_in_noaccept()) {
             if (isset($_SESSION['new_oauth2'])) {
                 $authority = $_SESSION['new_oauth2'];
 
                 $this->load->helper('form');
                 $this->load->helper('myurl');
-                $this->lang->load('login', $this->language);
                 $this->lang->load('privacy', $this->language);
 
                 $acceptance_code = $this->mod_users->generate_acceptance_code();
@@ -56,13 +57,12 @@ class Ctrl_main_page extends MY_Controller {
         }
         else {
             $this->load->model('mod_intro_text');
-            // $data['left_title'] = $this->mod_intro_text->left_text_title();
-            // $data['left'] = $this->mod_intro_text->left_text();
+            $this->lang->load('text', $this->language);
             $data['center'] = $this->mod_intro_text->center_text();
             $data['landingpage'] = true;
-            // $data['right_title'] = $this->mod_intro_text->right_text_title();
-            // $data['right'] = $this->mod_intro_text->right_text();
             $data['logos'] = true;
+            if ($this->mod_users->is_logged_in())
+                $data['logged_in_name'] = $this->mod_users->my_name();
         
             $this->load->view('view_top1', array('title'=>'Bible Online Learner'));
             $this->load->view('view_top2');

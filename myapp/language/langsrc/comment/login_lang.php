@@ -72,6 +72,10 @@ $comment['no_email'] = "HTML";
 $format['no_email'] = "keep_blanks";
 $use_textarea['no_email'] = true;
 
+$comment['no_login'] = "";
+$format['no_login'] = "";
+$use_textarea['no_login'] = false;
+
 $comment['or'] = "";
 $format['or'] = "";
 $use_textarea['or'] = false;
@@ -99,6 +103,10 @@ $use_textarea['password_reset_subject'] = false;
 $comment['please_log_in'] = "";
 $format['please_log_in'] = "";
 $use_textarea['please_log_in'] = false;
+
+$comment['press_login_button'] = "";
+$format['press_login_button'] = "";
+$use_textarea['press_login_button'] = false;
 
 $comment['reset_link_bad'] = "";
 $format['reset_link_bad'] = "";

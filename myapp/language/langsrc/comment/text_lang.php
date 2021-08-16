@@ -284,9 +284,17 @@ $comment['start_quiz'] = "";
 $format['start_quiz'] = "";
 $use_textarea['start_quiz'] = false;
 
+$comment['start_text_reading'] = "";
+$format['start_text_reading'] = "";
+$use_textarea['start_text_reading'] = false;
+
 $comment['toggle_mql'] = "";
 $format['toggle_mql'] = "";
 $use_textarea['toggle_mql'] = false;
+
+$comment['try_an_exercise'] = "";
+$format['try_an_exercise'] = "";
+$use_textarea['try_an_exercise'] = false;
 
 $comment['using_database'] = "";
 $format['using_database'] = "";
