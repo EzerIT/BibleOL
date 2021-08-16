@@ -34,6 +34,7 @@ $lang['missing_database_name'] = "Missing database name";
 $lang['mql_compiler_error_colon'] = "MQL compiler error:";
 $lang['mql_database_error_colon'] = "MQL database error:";
 $lang['mql_sentence_unit'] = "MQL for Sentence Unit";
+$lang['my_view'] = "MyView";
 $lang['next'] = "Next";
 $lang['not_logged_in'] = "You are not logged in. Statistics about your quizzes will not be recorded.";
 $lang['no_direct_url'] = "Do not access this URL directly.";

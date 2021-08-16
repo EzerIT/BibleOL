@@ -132,6 +132,10 @@ $comment['mql_sentence_unit'] = "Title in dialog box";
 $format['mql_sentence_unit'] = "";
 $use_textarea['mql_sentence_unit'] = false;
 
+$comment['my_view'] = "";
+$format['my_view'] = "";
+$use_textarea['my_view'] = false;
+
 $comment['next'] = "";
 $format['next'] = "";
 $use_textarea['next'] = false;

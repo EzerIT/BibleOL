@@ -20,7 +20,7 @@
    
     <div id="greyspace"></div>
     <div id="myview">
-      <ul><li><a class="myview" href="#gramtabs"><h2>MyView</h2></a></li></ul>
+      <ul><li><a class="myview" href="#gramtabs"><h2><?= $this->lang->line('my_view') ?></h2></a></li></ul>
       <div id="tabs-background">
         <?php if ($is_quiz): ?>
           <div class="selectbutton">

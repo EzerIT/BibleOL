@@ -34,6 +34,7 @@ $lang['missing_database_name'] = "Databases navn ikke angivet";
 $lang['mql_compiler_error_colon'] = "MQL-oversætterfejl:";
 $lang['mql_database_error_colon'] = "MQL-databasefejl:";
 $lang['mql_sentence_unit'] = "MQL for sætningsenhed";
+$lang['my_view'] = "MitValg";
 $lang['next'] = "Næste";
 $lang['not_logged_in'] = "Du er ikke logget ind. Der bliver derfor ikke indsamlet statistik om dine øvelser.";
 $lang['no_direct_url'] = "Du må ikke benytte denne URL direkte.";
