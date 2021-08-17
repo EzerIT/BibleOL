@@ -880,12 +880,16 @@ div.logo {
 img {
   border-style: none;
 }
-#logincenter,
+#logincenter {
+  margin-top: 20px;
+}
 #errorcenter {
   margin-top: 20px;
   margin-bottom: 25px;
+  max-width: 300px;
 }
-#errorcenter {
+#logincenterextra {
+  margin-top: 0;
   max-width: 300px;
 }
 #rejectcenter {
