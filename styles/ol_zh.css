@@ -891,9 +891,11 @@ img {
 }
 #logincenter,
 #errorcenter {
-  max-width: 300px;
   margin-top: 20px;
   margin-bottom: 25px;
+}
+#errorcenter {
+  max-width: 300px;
 }
 #rejectcenter {
   max-width: 600px;

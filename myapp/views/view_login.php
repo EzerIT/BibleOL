@@ -1,5 +1,6 @@
 <?php $valerr = validation_errors('<p class="alert alert-danger">','</p>'); ?>
 
+<div class="row">
 
 <div class="mx-auto" id="logincenter">
   <div class="card mt-3">
@@ -40,4 +41,6 @@
     <?php endif; ?>
     <p class="text-justify"><?= $this->lang->line('warn_multiple_login') ?></p>
   <?php endif; ?>
+</div>
+
 </div>
