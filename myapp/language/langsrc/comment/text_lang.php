@@ -48,6 +48,10 @@ $comment['display'] = "Button text";
 $format['display'] = "";
 $use_textarea['display'] = false;
 
+$comment['done_practicing'] = "";
+$format['done_practicing'] = "";
+$use_textarea['done_practicing'] = false;
+
 $comment['edit_quiz'] = "Text in title bar";
 $format['edit_quiz'] = "";
 $use_textarea['edit_quiz'] = false;
@@ -87,6 +91,10 @@ $use_textarea['first_verse_prompt'] = false;
 $comment['fixed_questions'] = "";
 $format['fixed_questions'] = "";
 $use_textarea['fixed_questions'] = false;
+
+$comment['go_on'] = "";
+$format['go_on'] = "";
+$use_textarea['go_on'] = false;
 
 $comment['import_button'] = "";
 $format['import_button'] = "";
@@ -287,6 +295,10 @@ $use_textarea['start_quiz'] = false;
 $comment['start_text_reading'] = "";
 $format['start_text_reading'] = "";
 $use_textarea['start_text_reading'] = false;
+
+$comment['stop_practicing'] = "";
+$format['stop_practicing'] = "";
+$use_textarea['stop_practicing'] = false;
 
 $comment['toggle_mql'] = "";
 $format['toggle_mql'] = "";

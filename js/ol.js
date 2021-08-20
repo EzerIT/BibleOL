@@ -2238,35 +2238,22 @@ var Quiz = (function () {
         $('html, body').animate({
             scrollTop: $('#myview').offset().top - 5
         }, 50);
+        var heartbeatDialog = $('#heartbeat-dialog');
         var monitorUser = function () {
             window.clearTimeout(_this.tHbOpen);
             window.clearTimeout(_this.tHbClose);
             _this.tHbOpen = window.setTimeout(function () {
-                heartbeatDialog.dialog('open');
+                heartbeatDialog.modal('show');
                 _this.tHbClose = window.setTimeout(function () {
-                    heartbeatDialog.dialog('close');
+                    heartbeatDialog.modal('hide');
                     $('#next_question').fadeOut();
                 }, timeBeforeHbClose);
             }, timeBeforeHbOpen);
-            var heartbeatDialog = $('<div></div>')
-                .html(localize('done_practicing'))
-                .dialog({
-                autoOpen: false,
-                title: localize('stop_practicing'),
-                resizable: true,
-                show: 'fade',
-                hide: 'explode',
-                height: 140,
-                modal: true,
-                buttons: [{
-                        text: localize('go_on'),
-                        click: function () {
-                            heartbeatDialog.dialog('close');
-                            window.setTimeout(monitorUser, 0);
-                        }
-                    }]
-            });
         };
+        $('#heartbeat-dialog-go-on').on('click', function (event) {
+            heartbeatDialog.modal('hide');
+            window.setTimeout(monitorUser, 0);
+        });
         monitorUser();
         if (this.currentPanelQuestion !== null)
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());

@@ -64,10 +64,6 @@ $comment['click_for_web_site'] = "";
 $format['click_for_web_site'] = "";
 $use_textarea['click_for_web_site'] = false;
 
-$comment['done_practicing'] = "";
-$format['done_practicing'] = "";
-$use_textarea['done_practicing'] = false;
-
 $comment['dont_care'] = "";
 $format['dont_care'] = "";
 $use_textarea['dont_care'] = false;
@@ -95,10 +91,6 @@ $use_textarea['feature_specification'] = false;
 $comment['friendly_featsel_prompt'] = "";
 $format['friendly_featsel_prompt'] = "";
 $use_textarea['friendly_featsel_prompt'] = false;
-
-$comment['go_on'] = "";
-$format['go_on'] = "";
-$use_textarea['go_on'] = false;
 
 $comment['high_value_prompt'] = "";
 $format['high_value_prompt'] = "";
@@ -243,10 +235,6 @@ $use_textarea['show_border'] = false;
 $comment['show_qere'] = "";
 $format['show_qere'] = "";
 $use_textarea['show_qere'] = false;
-
-$comment['stop_practicing'] = "";
-$format['stop_practicing'] = "";
-$use_textarea['stop_practicing'] = false;
 
 $comment['unlimited'] = "";
 $format['unlimited'] = "";

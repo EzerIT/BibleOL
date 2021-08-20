@@ -14,7 +14,6 @@ $lang['click_for_picture'] = "ስእልን ለማግኘት ንካ";
 $lang['click_for_pictures'] = "ስእሎችን ለማግኘት ንካ";
 $lang['click_for_video'] = "ቭድዮን ለካማግኘት ንካ";
 $lang['click_for_web_site'] = "ድህረ ገፅን ለማግኘት ንካ";
-$lang['done_practicing'] = "መለማመዣውን ሰርተሀል?";
 $lang['dont_care'] = "አታንከባከብ";
 $lang['dont_show'] = "አታሳይ";
 $lang['error_response'] = "ከመስመሩ ስህተት መጠ";

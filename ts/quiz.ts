@@ -44,8 +44,8 @@ class Quiz {
     // Replaces the current quiz question with the next one, if any.
     //
     public nextQuestion() : void {
-        const timeBeforeHbOpen  : number = 600000; // Time before heartbeat dialog is shown to user
-        const timeBeforeHbClose : number = 28000;  // Time before heartbeat dialog is automatically closed
+        const timeBeforeHbOpen  : number = 600000; // (600 seconds) Time before heartbeat dialog is shown to user
+        const timeBeforeHbClose : number = 28000;  // (28 seconds) Time before heartbeat dialog is automatically closed
 
         // Move to top of the question
         $('html, body').animate({
@@ -58,6 +58,9 @@ class Quiz {
         //
         // Sets up timeout mechanism to monitor student activity.
         //
+
+        let heartbeatDialog = $('#heartbeat-dialog');
+
         let monitorUser = () => {
             // Reset timers from previous question
             window.clearTimeout(this.tHbOpen);
@@ -65,37 +68,22 @@ class Quiz {
             
             // After 10 minutes, show the heartbeatDialog
             this.tHbOpen = window.setTimeout(() => {
-                heartbeatDialog.dialog('open');
+                heartbeatDialog.modal('show');
 
                 // After 28 seconds close the heartbeatDialog and remove the 'Next question' button
                 this.tHbClose = window.setTimeout(() => {
-                    heartbeatDialog.dialog('close');
+                    heartbeatDialog.modal('hide');
                     $('#next_question').fadeOut();
                 }, timeBeforeHbClose);
                 
             }, timeBeforeHbOpen);
-
-            let heartbeatDialog = $('<div></div>')
-                .html(localize('done_practicing'))
-                .dialog({
-                    autoOpen: false,
-                    title: localize('stop_practicing'),
-                    resizable: true,
-                    show: 'fade',
-                    hide: 'explode',
-                    height:140,
-                    modal: true,
-                    buttons:[{
-                        text: localize('go_on'),
-                        click: () => {
-                            // The user clicked 'Go on' - restart the timeout mechanism
-                            heartbeatDialog.dialog('close');
-                            window.setTimeout(monitorUser, 0); // Rerun monitorUser asynchroneously
-                        } 
-                    }]
-                });
         }
-    
+
+        $('#heartbeat-dialog-go-on').on('click', (event : any) => {
+            heartbeatDialog.modal('hide');
+            window.setTimeout(monitorUser, 0); // Rerun monitorUser() asynchroneously
+        });
+
         monitorUser();
 
         if (this.currentPanelQuestion!==null)
