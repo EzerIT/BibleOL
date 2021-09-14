@@ -15,15 +15,16 @@
 // This class represents a single question (with multiple question items) of an exercise.
 //
 class PanelQuestion {
-    private qd            : QuizData;      // The information required to generate the exercise
-    private sentence      : MonadSet;      // The monads containing the question text in the Emdros database
-    private location      : string;        // The current location (localized)
-    private vAnswers      : Answer[] = []; // The correct answer for each question item
-    private question_stat : QuestionStatistics = new QuestionStatistics; // Answer statistics
-    private static kbid   : number = 1;    // Input field identification for keyboard
-    private gradingFlag	  : boolean;	   // May the statistics be used for grading the student?
-    private subQuizIndex  : number = 0;    // Used to toggle subquestions
-    private subQuizMax    : number;        // Used to define max number of subquestions
+    private qd             : QuizData;      // The information required to generate the exercise
+    private sentence       : MonadSet;      // The monads containing the question text in the Emdros database
+    private location       : string;        // The current location (localized)
+    private vAnswers       : Answer[] = []; // The correct answer for each question item
+    private answersPerCard : number[] = []; // answersPerCard[n] is the first available index in vAnswers after question object number n
+    private question_stat  : QuestionStatistics = new QuestionStatistics; // Answer statistics
+    private static kbid    : number = 1;    // Input field identification for keyboard
+    private gradingFlag	   : boolean;	   // May the statistics be used for grading the student?
+    private subQuizIndex   : number = 0;    // Used to toggle subquestions
+    private subQuizMax     : number;        // Used to define max number of subquestions
 
     //------------------------------------------------------------------------------------------
     // charclass static method
@@ -101,7 +102,6 @@ class PanelQuestion {
     // Method used to toggle subquestions in a quiz.
     //
     private prevNextSubQuestion(n: number): void {
-
         if (this.subQuizIndex + n >= 0 && this.subQuizIndex + n < this.subQuizMax) {
             this.subQuizIndex += n; // If the proposed move (n; usually 1 or -1) is within the boundaries, proceed...
         }
@@ -991,7 +991,6 @@ class PanelQuestion {
                             }
                             
                         }
-                        // ++quizItemID // Update quizItemID for the next grouping of radio buttons
 
                         // Sort the options using the optional sorting index in the value strings
                         optArray.sort((a : JQuery, b : JQuery) => StringWithSort.compare(a.data('sws'),b.data('sws')));
@@ -1001,7 +1000,7 @@ class PanelQuestion {
                         
                         v = cwyn.getJQuery();
                     
-                    }       
+                    }
                     
                 }
 
@@ -1012,8 +1011,8 @@ class PanelQuestion {
                 
                 ++headInd;
             }
-           
 
+            this.answersPerCard.push(this.vAnswers.length);
         }
 
         this.subQuizMax = quizCardNum
@@ -1066,14 +1065,14 @@ class PanelQuestion {
                                 });
 
         
-	    // Add "Check answer" button handler
+	// Add "Check answer" button handler
         $('button#check_answer').off('click'); // Remove old handler
         $('button#check_answer').on('click',
                                     () => {
-                                        for (let ai in this.vAnswers) {
-                                            if (isNaN(+ai)) continue; // Not numeric
-
-                                            let a: Answer = this.vAnswers[+ai];
+                                        let firstAns : number = this.subQuizIndex==0 ? 0 : this.answersPerCard[this.subQuizIndex-1];
+                                        let lastAns  : number = this.answersPerCard[this.subQuizIndex];
+                                        for (let aix=firstAns; aix<lastAns; ++aix) {
+                                            let a: Answer = this.vAnswers[aix];
                                             a.checkIt(false);
                                         }
 
@@ -1088,10 +1087,10 @@ class PanelQuestion {
         $('button#show_answer').off('click'); // Remove old handler
         $('button#show_answer').on('click',
                                 () => {
-                                    for (let ai in this.vAnswers) {
-                                        if (isNaN(+ai)) continue; // Not numeric
-
-                                        let a: Answer = this.vAnswers[+ai];
+                                    let firstAns : number = this.subQuizIndex==0 ? 0 : this.answersPerCard[this.subQuizIndex-1];
+                                    let lastAns  : number = this.answersPerCard[this.subQuizIndex];
+                                    for (let aix=firstAns; aix<lastAns; ++aix) {
+                                        let a: Answer = this.vAnswers[+aix];
                                         a.showIt();
                                         a.checkIt(true);
                                     }

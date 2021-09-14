@@ -1479,6 +1479,7 @@ var PanelQuestion = (function () {
     function PanelQuestion(qd, dict) {
         var _this = this;
         this.vAnswers = [];
+        this.answersPerCard = [];
         this.question_stat = new QuestionStatistics;
         this.subQuizIndex = 0;
         this.qd = qd;
@@ -2025,6 +2026,7 @@ var PanelQuestion = (function () {
             for (var rfi in requestFeatures) {
                 _loop_2(rfi);
             }
+            this.answersPerCard.push(this.vAnswers.length);
         }
         this.subQuizMax = quizCardNum;
         var quizCard = $('.quizcard');
@@ -2060,10 +2062,10 @@ var PanelQuestion = (function () {
         });
         $('button#check_answer').off('click');
         $('button#check_answer').on('click', function () {
-            for (var ai in _this.vAnswers) {
-                if (isNaN(+ai))
-                    continue;
-                var a = _this.vAnswers[+ai];
+            var firstAns = _this.subQuizIndex == 0 ? 0 : _this.answersPerCard[_this.subQuizIndex - 1];
+            var lastAns = _this.answersPerCard[_this.subQuizIndex];
+            for (var aix = firstAns; aix < lastAns; ++aix) {
+                var a = _this.vAnswers[aix];
                 a.checkIt(false);
             }
             $('html, body').animate({
@@ -2072,10 +2074,10 @@ var PanelQuestion = (function () {
         });
         $('button#show_answer').off('click');
         $('button#show_answer').on('click', function () {
-            for (var ai in _this.vAnswers) {
-                if (isNaN(+ai))
-                    continue;
-                var a = _this.vAnswers[+ai];
+            var firstAns = _this.subQuizIndex == 0 ? 0 : _this.answersPerCard[_this.subQuizIndex - 1];
+            var lastAns = _this.answersPerCard[_this.subQuizIndex];
+            for (var aix = firstAns; aix < lastAns; ++aix) {
+                var a = _this.vAnswers[+aix];
                 a.showIt();
                 a.checkIt(true);
             }
