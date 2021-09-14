@@ -831,6 +831,12 @@ var DisplaySingleMonadObject = (function (_super) {
                         wordclass = 'tenpoint ltr';
                     else
                         wordclass = 'ltr';
+                    if ((configuration.databaseName == "ETCBC4" && fs.isGloss)
+                        || (configuration.databaseName == "nestle1904" && featName == "swahili")) {
+                        featValLoc = featValLoc.replace(/(&[gl]t);/, '$1Q')
+                            .replace(/([^,;(]+).*/, '$1')
+                            .replace(/(&[gl]t)Q/, '$1;');
+                    }
                     grammar += "<span class=\"wordgrammar dontshowit " + featName + " " + wordclass + "\">" + featValLoc + "</span>";
                     break;
                 case WHAT.metafeature:
