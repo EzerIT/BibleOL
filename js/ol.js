@@ -1750,6 +1750,12 @@ var PanelQuestion = (function () {
                                     additionalCons.push('ד');
                                     additionalCons.push('ה');
                                     break;
+                                case 'ש' + '\u05C1':
+                                    additionalCons.push('ש' + '\u05C2');
+                                    break;
+                                case 'ש' + '\u05C2':
+                                    additionalCons.push('ש' + '\u05C1');
+                                    break;
                                 case 'ת':
                                     additionalCons.push('ט');
                                     additionalCons.push('ע');

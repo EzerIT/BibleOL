@@ -592,6 +592,12 @@ class PanelQuestion {
                                     additionalCons.push('ד');   // push dalet
                                     additionalCons.push('ה');   // push he
                                     break;
+                                case 'ש' + '\u05C1':                     // if shin
+                                    additionalCons.push('ש' + '\u05C2'); // push sin
+                                    break;
+                                case 'ש' + '\u05C2':                     // if sin
+                                    additionalCons.push('ש' + '\u05C1'); // push shin
+                                    break;
                                 case 'ת':                       // if tav
                                     additionalCons.push('ט');   // push tet
                                     additionalCons.push('ע');   // push ayin
@@ -753,7 +759,6 @@ class PanelQuestion {
                           });
 
                         // Push max 2 Consonants and max 3 Vowels to answerLetters
-                        // Make them all unique
                         answerLettersRandom = answerLetters.concat(additionalCons.slice(0, 3))
                             .concat(additionalVowels.slice(0, 3));
                         
