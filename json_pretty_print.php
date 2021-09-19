@@ -15,7 +15,7 @@ mb_internal_encoding('UTF-8');
 
 
 if (($_SERVER['argc']!==2 && $_SERVER['argc']!==3) || ($_SERVER['argv'][1]!=='-p' && $_SERVER['argv'][1]!=='-u')) {
-    print "Usage: php (-p|-u) json_pretty_print.php [<input file>]\n";
+    print "Usage: php json_pretty_print.php (-p|-u) [<input file>]\n";
     print "       -p for pretty\n";
     print "       -u for ugly\n";
     die;
