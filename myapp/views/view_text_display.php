@@ -23,8 +23,8 @@
       <ul><li><a class="myview" href="#gramtabs"><h2><?= $this->lang->line('my_view') ?></h2></a></li></ul>
       <div id="tabs-background">
         <?php if ($is_quiz): ?>
-          <div class="selectbutton">
-            <label style="font-size:14pt; font-weight:normal; text-transform:capitalize;"><?= $this->lang->line('locate') ?><input id="locate_cb" type="checkbox" checked="checked">
+            <div class="selectbutton" id="locate_choice">
+            <label style="font-size:14pt; font-weight:normal; text-transform:capitalize;"><?= $this->lang->line('locate') ?><input id="locate_cb" type="checkbox">
             <span class="location" style="font-weight:bold; text-transform:uppercase;"></span></label>
           </div>
         <?php endif; ?>

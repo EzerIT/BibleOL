@@ -31,7 +31,7 @@ $lang['last_verse'] = "Sidste vers:";
 $lang['last_verse_prompt'] = "Sidste vers:";
 $lang['locate'] = "Bibelsted:";
 $lang['make_a_selection'] = "Vælg:";
-$lang['may_locate'] = "Vis afkrydsningsfeltet »Bibelsted« i øvelsen";
+$lang['may_locate'] = "Vis valget »Bibelsted« i øvelsen";
 $lang['missing_database_name'] = "Databases navn ikke angivet";
 $lang['mql_compiler_error_colon'] = "MQL-oversætterfejl:";
 $lang['mql_database_error_colon'] = "MQL-databasefejl:";
@@ -57,7 +57,7 @@ $lang['select_a_passage'] = "<p>Her kan du vælge hvilken bibeltekst der skal vi
         . "     <p>Hvis du udelader »Første vers«, vil et helt kapitel blive vist.</p>\n"
         . "     <p>Hvis du udelader »Sidste vers«, vil kun ét vers blive vist.</p>";
 $lang['select_a_passage_title'] = "Vælg en tekst der skal vises";
-$lang['select_exercise'] = "Vælg en øvlse";
+$lang['select_exercise'] = "Vælg en øvelse";
 $lang['select_folder'] = "Vælg en mappe";
 $lang['select_number_own'] = "Vælg antal spørgsmål og<br>specificér dine egne bibelsteder";
 $lang['select_number_preset'] = "Vælg antal spørgsmål med<br>forudvalgte bibelsteder";
