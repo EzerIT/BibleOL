@@ -70,7 +70,7 @@ cite em {
   color: white;
   left: 7%;
   right: 17%;
-  top: 12%;
+  top: 5%;
 }
 #landing-row #landingpanel #landingtext h1 {
   font-size: 3vw;
@@ -1342,9 +1342,14 @@ footer .row {
   padding: 0 !important;
   margin: 0 !important;
 }
+.logointro {
+  padding: 4vw !important;
+}
+.logopanel {
+  padding: 2vw 4vw !important;
+}
 .logointro,
 .logopanel {
-  padding: 4vw !important;
   background-color: white;
   margin: auto;
 }
