@@ -20,6 +20,10 @@ $comment['enroll_in_class'] = "";
 $format['enroll_in_class'] = "";
 $use_textarea['enroll_in_class'] = false;
 
+$comment['exams'] = "";
+$format['exams'] = "";
+$use_textarea['exams'] = false;
+
 $comment['exercises'] = "";
 $format['exercises'] = "";
 $use_textarea['exercises'] = false;
@@ -47,6 +51,10 @@ $use_textarea['logout'] = false;
 $comment['manage_exercises'] = "";
 $format['manage_exercises'] = "";
 $use_textarea['manage_exercises'] = false;
+
+$comment['manage_exams'] = "";
+$format['manage_exams'] = "";
+$use_textarea['manage_exams'] = false;
 
 $comment['manage_gloss_links'] = "";
 $format['manage_gloss_links'] = "";
@@ -99,4 +107,3 @@ $use_textarea['users'] = false;
 $comment['user_access'] = "";
 $format['user_access'] = "";
 $use_textarea['user_access'] = false;
-

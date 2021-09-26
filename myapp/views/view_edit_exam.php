@@ -124,25 +124,19 @@ Display exam editing form.
 					# Store the exercise in the form of an associative array.
 					$array = json_decode(json_encode((array) $x), TRUE);
 				?>
-				<?php
-				 	# Iterate through the exercise features.
-					foreach ($array as $key => $value):
-				?>
-					<?php
-						# Check that the current feature is not exercisename.
-						if($key != "exercisename"):
-							# Set the name of the input field to [exercisename][featurename].
-							# For example, if the current exercise is testex
-							# and the current feature is numq the field name
-							# would be testexnumq.
-					?>
-						<div id="feature">
-							<br>
-							<input name="<?php echo $x->exercisename . $key; ?>" value="<?php echo $value; ?>" min="0" step="1" type="number">
-							<?php echo $key; ?>
-						</div>
-					<?php endif; ?>
-				<?php endforeach; ?>
+
+				<div id="feature">
+					<br>
+					<input name="<?= $x->exercisename . 'numq'; ?>" value="<?= $x->numq ?>" min="0" step="1" type="number">
+					Number of questions
+				</div>
+
+				<div id="feature">
+					<br>
+					<input name="<?= $x->exercisename . 'weight'; ?>" value="<?= $x->weight ?>" min="0" step="1" type="number">
+					Weight
+				</div>
+
 			</div>
 		<?php endforeach; ?>
 
