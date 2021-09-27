@@ -641,15 +641,10 @@ UNLOCK TABLES;
 
 -- Andrews University Changes by Mabio for the phase one of Exam Mode
 LOCK TABLES `bol_sta_quiz` WRITE;
-ALTER TABLE `BibleOL`.`bol_sta_quiz` 
+ALTER TABLE `bol_sta_quiz`
 ADD COLUMN `tot_questions` VARCHAR(45) NOT NULL DEFAULT 0 COMMENT 'Numer of questions actualy answered by the user'  AFTER `grading`;
 UNLOCK TABLES;
 
-Adrian Negrea
-	
-4:03 PM (55 minutes ago)
-	
-to me
 CREATE TABLE `bol_exam` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Exam ID\n',
   `exam_name` varchar(45) NOT NULL,
@@ -698,5 +693,3 @@ CREATE TABLE `bol_exam_status` (
   `deadline` int(11) NOT NULL COMMENT 'Time that the exam will not be accessible anymore.\nThis will equal either the end time of the exam or the start_time + duration, whichever happens first.',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
-
-
