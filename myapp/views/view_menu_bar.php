@@ -25,8 +25,6 @@ if (!$this->mod_users->is_logged_in_noaccept()) {
 
 if ($this->mod_users->is_logged_in()) {
     // Logged in
-    $content[$ix][] = make_anchor2('exams/active_exams', 'exams');
-    
     $ix = count($head);
     $head[] = $this->lang->line('my_data');
     //$content[$ix][] = make_anchor2('statistics', 'statistics');
@@ -37,6 +35,10 @@ if ($this->mod_users->is_logged_in()) {
 
     if ($this->mod_users->is_teacher())
         $content[$ix][] = make_anchor2('statistics/teacher_progress', 'students_progress');
+
+    if ($this->mod_users->is_teacher()) {
+      $content[$ix][] = make_anchor2('grades/teacher_grades', 'grades_quizzes');
+    }
 
     if ($this->config->item('lj_enabled')) {
         $this->load->helper('lj_menu_helper');

@@ -70,13 +70,13 @@ class Mod_statistics extends CI_Model {
                                             'valid' => true));
 
         $quizid =  $this->db->insert_id();
- 
+
         $data = array();
         foreach ($universeStrings as $uniItem)
             $data[] = array('quizid' => $quizid,
                             'userid' => $userid,
                             'component' => $uniItem);
-        
+
         $this->db->insert_batch('sta_universe',$data);
 
         return $quizid;
@@ -86,7 +86,7 @@ class Mod_statistics extends CI_Model {
     public function endQuiz() {
         $this->load->database();
 
-        $this->input->post(NULL, true); // returns all POST items with XSS filter 
+        $this->input->post(NULL, true); // returns all POST items with XSS filter
 
         $quizid = $this->input->post('quizid');
         if ($quizid===false) {
@@ -105,7 +105,7 @@ class Mod_statistics extends CI_Model {
             error_log("CT Num rows: $num_rows"); // TODO: ?
             return; // Problems with the database
         }
-    
+
         $row = $query->row();
         $time = $row->start;
 
@@ -121,7 +121,7 @@ class Mod_statistics extends CI_Model {
                                                     'userid' => $this->mod_users->my_id()));
 
             $questid =  $this->db->insert_id();
-            
+
 
             // Update show feature information
             $show_feat = $question['show_feat'];
@@ -176,9 +176,10 @@ class Mod_statistics extends CI_Model {
             }
         }
 
-        // Set end time and grading for quiz
+        // Set end time and grading for quiz (MRCN: and the total number of questions)
         $query = $this->db->where('id',$quizid)->update('sta_quiz',array('end' => $time,
-                                                                         'grading' => $this->input->post('grading')=='true' ? 1 : 0));
+                                                                         'grading' => $this->input->post('grading')=='true' ? 1 : 0,
+                                                                         'tot_questions' => $this->input->post('question_count') ));
     }
 
     // Get all templates with finished quizzes for user $user_id
@@ -229,12 +230,12 @@ class Mod_statistics extends CI_Model {
 
         return $query->row();
     }
-    
+
     // Get all templates relating to $classid with finished quizzes for users in $userids
     public function get_templates_for_class_and_students(int $classid, array $userids) {
         if (empty($userids))
             return array();
-        
+
         // Find all pathids relating to $classid
         $query = $this->db
             ->select('pathname')
@@ -314,7 +315,7 @@ class Mod_statistics extends CI_Model {
             ->get();
 
         $classes = array();
-        
+
         foreach ($query->result() as $row)
             $classes[] = $row->classid;
 
@@ -330,12 +331,12 @@ class Mod_statistics extends CI_Model {
         $classes = $this->get_classes_for_pathname($exercise);
         return $this->mod_userclass->gave_access($student, $classes);
     }
-        
-    
+
+
     public function get_pathnames_for_templids(array $templids) {
         if (empty($templids))
             return array();
-        
+
         $query = $this->db
             ->select('id,pathname')
             ->where_in('id',$templids)
@@ -363,7 +364,7 @@ class Mod_statistics extends CI_Model {
         return $ids;
     }
 
-    
+
     // Find all user IDs and template IDs that match the specified exercise pathname
     // The result is sorted by user ID
     public function get_users_and_templ(string $path) {
@@ -388,7 +389,7 @@ class Mod_statistics extends CI_Model {
     public function get_score_by_date_user_templ(int $uid,array $templids,int $period_start,int $period_end, bool $nongraded) {
         if (empty($templids))
             return array();
-        
+
         // Get results per quiz
         $query = $this->db
             ->from('sta_quiz q')
@@ -426,14 +427,14 @@ class Mod_statistics extends CI_Model {
             $v['percentage'] = 100*$v['correct'] / $v['count'];
             $v['featpermin'] = 60*$v['count'] / $v['duration'];
         }
-            
+
         return $perdate;
     }
-    
+
     public function get_features_by_date_user_templ(int $uid,array $templids,int $period_start,int $period_end, bool $nongraded) {
         if (empty($templids))
             return array();
-        
+
         $query = $this->db
             ->from('sta_quiz q')
             ->select('rf.name rfname,sum(`rf`.`correct`)/count(*)*100 `pct`')
@@ -455,11 +456,11 @@ class Mod_statistics extends CI_Model {
 
         return $query->result();
     }
-    
+
     public function get_quizzes_duration(array $templids, int $start, int $end) {
         if (empty($templids))
             return array();
-        
+
         $query = $this->db
             ->select('`userid`, `templid`, `start`, `end`-`start` `duration`', false)
             ->where_in('templid',$templids)
@@ -471,7 +472,7 @@ class Mod_statistics extends CI_Model {
         return $query->result();
     }
 
-    
+
     /** Removes the content from the database.
      */
     public function purge(int $userid) {
