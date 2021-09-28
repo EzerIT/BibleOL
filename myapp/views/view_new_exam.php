@@ -62,8 +62,8 @@ li{
 <div class="table-responsive">
 
 <?php
-//var_dump($dir_files);
-function showContents($ar) {
+var_dump($owners_list);
+function showContents($ar, $owners_list) {
     echo '<table class="type2 table table-striped" style="width: 100%; border-collapse: separate; border-spacing: 0px; border-radius: 8px;">';
       foreach ($ar as $key => $d){
         if (is_array($d) && $d != '.' && $d != '..'){
@@ -72,7 +72,7 @@ function showContents($ar) {
               echo '<button type="button" class="btn-link" style="text-decoration: none; border-radius: 8px;"data-parent="#wrap" data-toggle="collapse" data-target=".'.str_replace(".3et", "", basename($d[0])).'">'.basename($d[0]).'</button>';
               echo '<div id="wrap">';
                 echo '<div class="'.str_replace(".3et", "", basename($d[0])).' collapse">';
-                  showContents($d);
+                  showContents($d, $owners_list);
                 echo '</div>';
               echo '</div>';
             echo '</td>';
@@ -81,10 +81,11 @@ function showContents($ar) {
           $ex_name = str_replace(".3et","",basename($d));
           echo '<tr class="exercise">';
             echo '<td id="exr_nm_id" style="width: 50%;">'.$ex_name.'</td>';
-            echo '<td id="ownr_id">' . "Owner info" . '</td>';
-            $nm_arg = "'".$ex_name."'";
-            $pth_arg = "'".str_replace("/var/www/BibleOL/quizzes/","",$d)."'";
-            $hi = "'hi'";
+
+						$nm_arg = "'".$ex_name."'";
+						$pth_arg = "'".str_replace("/var/www/BibleOL/quizzes/","",$d)."'";
+            echo '<td id="ownr_id">' . $owners_list[trim($pth_arg, "'")] . '</td>';
+
             echo '<td><span class="badge badge-primary" id="add_btn" onclick="addExercise('.$nm_arg.','.$pth_arg.')">Add</span></td>';
           echo '</tr>';
         }
@@ -93,7 +94,7 @@ function showContents($ar) {
 
  }
 
-showContents($dir_files);
+showContents($dir_files, $owners_list);
 ?>
 
 <!-- Displays the exercises that have been selected for exam creation -->

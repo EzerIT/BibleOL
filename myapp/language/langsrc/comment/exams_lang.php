@@ -120,6 +120,10 @@ $comment['take_exam'] = "";
 $format['take_exam'] = "";
 $use_textarea['take_exam'] = "";
 
+$comment['take_exam_description'] = "";
+$format['take_exam_description'] = "";
+$use_textarea['take_exam_description'] = "";
+
 $comment['time'] = "";
 $format['time'] = "";
 $use_textarea['time'] = false;

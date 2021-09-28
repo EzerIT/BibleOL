@@ -181,7 +181,7 @@ class Ctrl_exams extends MY_Controller
             }
         }
 
-        $dom->save('/var/www/BibleOL/exam/'.$examname.'/config.xml');
+        $dom->save(__DIR__.'/../../exam/'.$examname.'/config.xml');
         return $dom->saveXML();
     }
 
@@ -539,6 +539,24 @@ class Ctrl_exams extends MY_Controller
             $teachers = array();
         }
 
+        $owners_list = array();
+        $owners = array();
+        $basepath = realpath(__DIR__.DIRECTORY_SEPARATOR."/../../quizzes");
+        foreach ($this->getDirContents(__DIR__."/../../quizzes") as $exercise_long_path) {
+          $exercise = ltrim(str_replace($basepath, "", $exercise_long_path), '/');
+          $owner_id = $this->mod_quizpath->get_excercise_owner($exercise);
+          $owner_name = '';
+          if (array_key_exists($owner_id, $owners)) {
+            $owner_name = $owners[$owner_id];
+          }
+          elseif ($owner_id != 0) {
+            $owner = $this->mod_users->get_user_by_id($owner_id);
+            $owner_name = $owner->first_name . " " . $owner->last_name;
+            $owners[$owner_id] = $owner_name;
+          }
+          $owners_list[$exercise] = $owner_name;
+        }
+
         // VIEW:
         $this->load->view('view_top1', array('title' => $this->lang->line('create_exam')));
         $this->load->view('view_top2');
@@ -552,7 +570,7 @@ class Ctrl_exams extends MY_Controller
         $center_text = $this->load->view(
             'view_new_exam',
             array(//'dirlist' => $dirlist,
-                                               'examlist' => $this->getDirFolders(__DIR__."/../../exam"),
+                                               'owners_list' => $owners_list,
                                                'exerciselist' => $this->getDirContents(__DIR__."/../../quizzes"),
                                                'dir_files' => $this->getDirFiles(__DIR__."/../../quizzes"),
                                                //'show_contents' => $this->showContents('dir_files'),

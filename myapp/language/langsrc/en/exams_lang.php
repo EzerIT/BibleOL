@@ -1,8 +1,8 @@
 <?php
 
 $lang['active_exams'] = 'Active Exams';
-$lang['active_exams_description'] = 'Active exams description.';
-$lang['choose_exercises_in_order'] = 'Exercises will remain in the order in which they are selected.';
+$lang['active_exams_description'] = 'List of exams that are available.';
+$lang['choose_exercises_in_order'] = 'Exercises will appear in the order in which they are selected.';
 $lang['class_name'] = 'Class name';
 $lang['create_exam'] = 'Create Exam';
 $lang['create_exam_description'] = 'Here you can select which exercises you want to include in the new exam.';
@@ -26,9 +26,10 @@ $lang['number_of_exams'] = 'Number of exams: %s';
 $lang['owner'] = 'Owner';
 $lang['planned_start'] = 'Planned start';
 $lang['planned_end'] = 'Planned end';
-$lang['please_choose_exercises'] = 'Please choose from all current exercises';
+$lang['please_choose_exercises'] = 'Please choose exercises';
 $lang['start_date'] = 'Start date';
 $lang['start_time'] = 'Start time';
 $lang['take_exam'] = 'Take Exam';
+$lang['take_exam_description'] = 'If you leave/refresh the exam page, you will not lose the progress from exam parts that you have finished. When resuming your exam, you will start over with the last part of your work.';
 $lang['time'] = 'Time (minutes)';
 $lang['user_operations'] = 'Operations';
