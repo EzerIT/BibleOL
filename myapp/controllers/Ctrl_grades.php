@@ -430,7 +430,7 @@ class Ctrl_grades extends MY_Controller {
                     if (!empty($resfeatall)) {
                         // We assume that the underlying database information never changed
                         $dbnames = $this->mod_grades->get_templ_db($templs);
-                        $this->db_config->init_config($dbnames->dbname,$dbnames->dbpropname, $this->language_short);
+                        $this->db_config->init_config($dbnames->dbname,$dbnames->dbpropname, $this->language);
                         $l10n = json_decode($this->db_config->l10n_json);
                         $featloc = $l10n->emdrosobject->{$dbnames->qoname}; // We only need localization of feature names
                     }
