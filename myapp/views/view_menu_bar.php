@@ -25,6 +25,8 @@ if (!$this->mod_users->is_logged_in_noaccept()) {
 
 if ($this->mod_users->is_logged_in()) {
     // Logged in
+    $content[$ix][] = make_anchor2('exams/active_exams', 'exams');
+
     $ix = count($head);
     $head[] = $this->lang->line('my_data');
     //$content[$ix][] = make_anchor2('statistics', 'statistics');
