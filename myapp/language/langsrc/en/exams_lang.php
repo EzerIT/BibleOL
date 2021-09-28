@@ -2,6 +2,7 @@
 
 $lang['active_exams'] = 'Active Exams';
 $lang['active_exams_description'] = 'Active exams description.';
+$lang['choose_exercises_in_order'] = 'Exercises will remain in the order in which they are selected.';
 $lang['class_name'] = 'Class name';
 $lang['create_exam'] = 'Create Exam';
 $lang['create_exam_description'] = 'Here you can select which exercises you want to include in the new exam.';
@@ -25,6 +26,7 @@ $lang['number_of_exams'] = 'Number of exams: %s';
 $lang['owner'] = 'Owner';
 $lang['planned_start'] = 'Planned start';
 $lang['planned_end'] = 'Planned end';
+$lang['please_choose_exercises'] = 'Please choose from all current exercises';
 $lang['start_date'] = 'Start date';
 $lang['start_time'] = 'Start time';
 $lang['take_exam'] = 'Take Exam';

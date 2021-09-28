@@ -1,4 +1,5 @@
-<h1>Please choose from all current exercises</h1>
+<h1><?= $this->lang->line('please_choose_exercises') ?></h1>
+<h3><?= $this->lang->line('choose_exercises_in_order') ?></h3>
 
 <style>
 .ar_class{
@@ -60,7 +61,9 @@ li{
 
 <div class="table-responsive">
 
-<?php function showContents($ar) {
+<?php
+//var_dump($dir_files);
+function showContents($ar) {
     echo '<table class="type2 table table-striped" style="width: 100%; border-collapse: separate; border-spacing: 0px; border-radius: 8px;">';
       foreach ($ar as $key => $d){
         if (is_array($d) && $d != '.' && $d != '..'){
@@ -78,7 +81,7 @@ li{
           $ex_name = str_replace(".3et","",basename($d));
           echo '<tr class="exercise">';
             echo '<td id="exr_nm_id" style="width: 50%;">'.$ex_name.'</td>';
-            echo '<td id="ownr_id">Owner info</td>';
+            echo '<td id="ownr_id">' . "Owner info" . '</td>';
             $nm_arg = "'".$ex_name."'";
             $pth_arg = "'".str_replace("/var/www/BibleOL/quizzes/","",$d)."'";
             $hi = "'hi'";

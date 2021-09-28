@@ -8,6 +8,10 @@ $comment['active_exams_description'] = "";
 $format['active_exams_description'] = "";
 $use_textarea['active_exams_description'] = false;
 
+$comment['choose_exercises_in_order'] = "";
+$format['choose_exercises_in_order'] = "";
+$use_textarea['choose_exercises_in_order'] = false;
+
 $comment['class_name'] = "";
 $format['class_name'] = "";
 $use_textarea['class_name'] = false;
@@ -99,6 +103,10 @@ $use_textarea['planned_end'] = false;
 $comment['planned_start'] = "";
 $format['planned_start'] = "";
 $use_textarea['planned_start'] = false;
+
+$comment['please_choose_exercises'] = "";
+$format['please_choose_exercises'] = "";
+$use_textarea['please_choose_exercises'] = false;
 
 $comment['start_date'] = "";
 $format['start_date'] = "";

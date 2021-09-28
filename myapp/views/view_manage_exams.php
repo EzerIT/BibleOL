@@ -142,7 +142,7 @@ This button redirects to the exam creation page.
     $('#create-instance-error').hide();
     $('#create-instance-examname').attr('value', examname);
     $('#create-instance-examid').attr('value', examid);
-    document.getElementById('instance_name').placeholder = examname;
+    $('#instance_name').attr('value', examname);
     let tomo = new Date();
     tomo.setDate(tomo.getDate() + 1);
     document.getElementById('date1').valueAsDate = tomo;
@@ -158,7 +158,15 @@ This button redirects to the exam creation page.
 
     $('#create-instance-dialog-ok').click(function() {
       let duration_value = document.getElementById('duration').value;
-      if (duration_value && duration_value >= 0){
+      if (!duration_value || duration_value < 0){
+        document.getElementById('create-instance-error-text').innerText = "Invalid duration";
+        $('#create-instance-error').show();
+      }
+      else if (document.getElementById('instance_name').value.length == 0){
+        document.getElementById('create-instance-error-text').innerText = "Invalid Name";
+        $('#create-instance-error').show();
+      }
+      else{
         $('#create-instance-form').submit();
       }
     })

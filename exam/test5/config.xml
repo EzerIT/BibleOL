@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<exam>
+  <examname>test5</examname>
+  <teacher_id>1</teacher_id>
+  <description>Description</description>
+  <exercise>
+    <exercisename>ETCBC4/demo/id_suffix-translit.3et</exercisename>
+    <numq>4</numq>
+    <weight>4</weight>
+    <order>10</order>
+  </exercise>
+  <exercise>
+    <exercisename>ETCBC4/demo/gender-translit.3et</exercisename>
+    <numq>1</numq>
+    <weight>Save</weight>
+    <order></order>
+  </exercise>
+</exam>

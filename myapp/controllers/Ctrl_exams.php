@@ -170,7 +170,7 @@ class Ctrl_exams extends MY_Controller
                 $root->appendChild($exercise_node);
                 $exercise_name = $dom->createElement('exercisename', $value);
                 $exercise_node->appendChild($exercise_name);
-                $numq_node = $dom->createElement('numq', '0');
+                $numq_node = $dom->createElement('numq', '10');
                 $exercise_node->appendChild($numq_node);
                 $weight_node = $dom->createElement('weight', '1');
                 $exercise_node->appendChild($weight_node);

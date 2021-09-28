@@ -127,13 +127,13 @@ Display exam editing form.
 
 				<div id="feature">
 					<br>
-					<input name="<?= $x->exercisename . 'numq'; ?>" value="<?= $x->numq ?>" min="0" step="1" type="number">
+					<input name="<?= $x->exercisename . 'numq'; ?>" value="<?= $x->numq ?>" min="1" step="1" type="number">
 					Number of questions
 				</div>
 
 				<div id="feature">
 					<br>
-					<input name="<?= $x->exercisename . 'weight'; ?>" value="<?= $x->weight ?>" min="0" step="1" type="number">
+					<input name="<?= $x->exercisename . 'weight'; ?>" value="<?= $x->weight ?>" min="1" step="1" type="number">
 					Weight
 				</div>
 
