@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="6">
+  <desc><![CDATA[<p>This is a syntax test.</p>
+]]></desc>
+  <database>ETCBC4</database>
+  <properties>ETCBC4</properties>
+  <path>Genesis</path>
+  <sentenceselection version="1">
+    <questionobject>phrase</questionobject>
+    <featurehandlers version="3">
+      <enumfeature version="1">
+        <name>function</name>
+        <comparator>equals</comparator>
+        <value>Pred</value>
+        <value>PreC</value>
+        <value>Subj</value>
+        <value>Cmpl</value>
+        <value>Objc</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="4">
+    <show>visual</show>
+    <request>function</request>
+  </quizfeatures>
+  <maylocate>false</maylocate>
+  <sentbefore>0</sentbefore>
+  <sentafter>0</sentafter>
+  <fixedquestions>0</fixedquestions>
+</questiontemplate>

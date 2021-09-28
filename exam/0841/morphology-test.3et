@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="6">
+  <desc><![CDATA[<p>This is a morphology exercise.</p>
+]]></desc>
+  <database>ETCBC4</database>
+  <properties>ETCBC4</properties>
+  <path>Genesis</path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="3">
+      <enumfeature version="1">
+        <name>sp</name>
+        <comparator>equals</comparator>
+        <value>verb</value>
+      </enumfeature>
+      <enumfeature version="1">
+        <name>suffix_person</name>
+        <comparator>equals</comparator>
+        <value>absent</value>
+      </enumfeature>
+      <enumlistfeature version="1">
+        <name>verb_class</name>
+        <listvalues version="1">
+          <yes>regular</yes>
+        </listvalues>
+      </enumlistfeature>
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="4">
+    <show>visual</show>
+    <request>vt</request>
+    <request>ps</request>
+    <request>gn</request>
+    <request>nu</request>
+  </quizfeatures>
+  <maylocate>false</maylocate>
+  <sentbefore>0</sentbefore>
+  <sentafter>0</sentafter>
+  <fixedquestions>0</fixedquestions>
+</questiontemplate>

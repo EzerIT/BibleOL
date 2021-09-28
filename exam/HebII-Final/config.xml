@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<exam>
+  <examname>HebII-Final</examname>
+  <teacher_id>1</teacher_id>
+  <description>Description</description>
+  <exercise>
+    <exercisename>Exercises-for-Exams/vocabtest.3et</exercisename>
+    <numq>2</numq>
+    <weight>1</weight>
+    <order>2</order>
+  </exercise>
+  <exercise>
+    <exercisename>Exercises-for-Exams/syntaxtest.3et</exercisename>
+    <numq>1</numq>
+    <weight>2</weight>
+    <order>1</order>
+  </exercise>
+  <exercise>
+    <exercisename>Exercises-for-Exams/morphology test.3et</exercisename>
+    <numq>Save</numq>
+    <weight></weight>
+    <order></order>
+  </exercise>
+</exam>

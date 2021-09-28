@@ -3,6 +3,7 @@
 $config['variants'] = array();
 
 $config['users_per_page'] = 30;
+$config['exams_per_page'] = 30;
 $config['lines_per_page'] = 20;
 $config['pw_salt'] = 'xxxxxxx';
 $config['mql_driver'] = 'native';
