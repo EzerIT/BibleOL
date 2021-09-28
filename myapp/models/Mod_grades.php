@@ -3,9 +3,9 @@
 /* Copyright 2017 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk */
 
 /**
- * This is a collection of functions to manipulate the statistics database.
+ * This is a collection of functions to manipulate the statistics/grades database. By Mabio Coelho (mabioc@andrews.edu)
  */
-class Mod_statistics extends CI_Model {
+class Mod_grades extends CI_Model {
 
     public static $sign_extend;
     private $quizzespath;
@@ -386,17 +386,27 @@ class Mod_statistics extends CI_Model {
     }
 
     // Gets data grouped by day. The index will be noon on the relevant day
-    public function get_score_by_date_user_templ(int $uid,array $templids,int $period_start,int $period_end, bool $nongraded) {
+    public function get_score_by_date_user_templ(int $uid,array $templids,int $period_start,int $period_end, bool $nongraded, $calculate_percentages = false) {
         if (empty($templids))
             return array();
 
         // Get results per quiz
-        $query = $this->db
-            ->from('sta_quiz q')
-            ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,count(*) `cnt`',false)
-            ->join('sta_question quest','quizid=q.id')
-            ->join('sta_requestfeature rf','quest.id=rf.questid')
-            ->where('rf.userid',$uid);
+        if ($calculate_percentages) {
+          $query = $this->db
+          ->from('sta_quiz q')
+          //
+          ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
+          ->join('sta_question quest','quizid=q.id')
+          ->join('sta_requestfeature rf','quest.id=rf.questid')
+          ->where('rf.userid',$uid);
+        } else {
+          $query = $this->db
+          ->from('sta_quiz q')
+          ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
+          ->join('sta_question quest','quizid=q.id')
+          ->join('sta_requestfeature rf','quest.id=rf.questid')
+          ->where('rf.userid',$uid);
+        }
 
         if (!$nongraded)
             $query = $query->where('(grading is null OR grading=1)');
@@ -407,12 +417,25 @@ class Mod_statistics extends CI_Model {
             ->where('q.start <=',$period_end)
             ->where('end IS NOT NULL')
             ->where('valid',1)
-            ->group_by('q.id')
-            ->get();
+            ->group_by('q.id');
+            // TODO: MRCN
+            if ($calculate_percentages) {
+              $query = $query->order_by('perc desc');
+            }
+            /////////////////////////////
+            $query = $query->get();
 
         // Consolidate by date
         $perdate = array();
+        // TODO: MRCN
+        // TODO:  Fix this later: hack to get just the fhighest counted.
+        $int_counter=0;
         foreach ($query->result() as $row) {
+          // TODO: MRCN part of the // HACK: Get just the first/highest result
+            if ($int_counter>0 && $calculate_percentages) {
+              break;
+            }
+
             $day = Statistics_timeperiod::round_to_noon((int)$row->start);
             if (!isset($perdate[$day]))
                 $perdate[$day] = array('duration' => 0,
@@ -421,6 +444,8 @@ class Mod_statistics extends CI_Model {
             $perdate[$day]['duration'] += $row->duration;
             $perdate[$day]['correct'] += $row->correct;
             $perdate[$day]['count'] += $row->cnt;
+            // TODO: MRCN part of the // HACK:
+            $int_counter +=1;
         }
 
         foreach ($perdate as $k => &$v) {
@@ -431,7 +456,79 @@ class Mod_statistics extends CI_Model {
         return $perdate;
     }
 
-    public function get_features_by_date_user_templ(int $uid,array $templids,int $period_start,int $period_end, bool $nongraded) {
+    // Gets data grouped by user each item). The index will be noon on the relevant day
+    public function get_score_by_user_templ(int $uid,array $templids,int $period_start,int $period_end, bool $nongraded, $calculate_percentages = false) {
+        if (empty($templids))
+            return array();
+
+        // Get results per quiz
+        if ($calculate_percentages) {
+          $query = $this->db
+          ->from('sta_quiz q')
+          //
+          ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
+          ->join('sta_question quest','quizid=q.id')
+          ->join('sta_requestfeature rf','quest.id=rf.questid')
+          ->where('rf.userid',$uid);
+        } else {
+          $query = $this->db
+          ->from('sta_quiz q')
+          ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
+          ->join('sta_question quest','quizid=q.id')
+          ->join('sta_requestfeature rf','quest.id=rf.questid')
+          ->where('rf.userid',$uid);
+        }
+
+        if (!$nongraded)
+            $query = $query->where('(grading is null OR grading=1)');
+
+        $query = $query
+            ->where_in('q.templid',$templids)
+            ->where('q.start >=',$period_start)
+            ->where('q.start <=',$period_end)
+            ->where('end IS NOT NULL')
+            ->where('valid',1)
+            ->group_by('q.id');
+            // TODO: MRCN
+            if ($calculate_percentages) {
+              $query = $query->order_by('perc desc');
+            }
+            /////////////////////////////
+            $query = $query->get();
+
+        // Consolidate by date
+        $perdate = array();
+        // TODO: MRCN
+        // TODO:  Fix this later: hack to get just the fhighest counted.
+        $int_counter=0;
+        foreach ($query->result() as $row) {
+          // // TODO: MRCN part of the // HACK: Get just the first/highest result
+          //   if ($int_counter>0 && $calculate_percentages) {
+          //     break;
+          //   }
+
+            $day = Statistics_timeperiod::round_to_noon((int)$row->start);
+            $day = $row->start;
+            if (!isset($perdate[$day]))
+                $perdate[$day] = array('duration' => 0,
+                                             'correct' => 0,
+                                             'count' => 0);
+            $perdate[$day]['duration'] += $row->duration;
+            $perdate[$day]['correct'] += $row->correct;
+            $perdate[$day]['count'] += $row->cnt;
+            // // TODO: MRCN part of the // HACK:
+            // $int_counter +=1;
+        }
+
+        foreach ($perdate as $k => &$v) {
+            $v['percentage'] = 100*$v['correct'] / $v['count'];
+            $v['featpermin'] = 60*$v['count'] / $v['duration'];
+        }
+
+        return $perdate;
+    }
+
+    public function get_features_by_date_user_templ(int $uid,array $templids,int $period_start,int $period_end, bool $nongraded, bool $highest_score_first = false) {
         if (empty($templids))
             return array();
 
@@ -445,14 +542,28 @@ class Mod_statistics extends CI_Model {
         if (!$nongraded)
             $query = $query->where('(grading is null OR grading=1)');
 
-        $query = $query
-            ->where_in('q.templid',$templids)
-            ->where('q.start >=',$period_start)
-            ->where('q.start <=',$period_end)
-            ->where('end IS NOT NULL')
-            ->where('valid',1)
-            ->group_by('rfname')
-            ->get();
+        if (!$highest_score_first) {
+          $query = $query
+                ->where_in('q.templid',$templids)
+                ->where('q.start >=',$period_start)
+                ->where('q.start <=',$period_end)
+                ->where('end IS NOT NULL')
+                ->where('valid',1)
+                ->group_by('rfname')
+                ->get();
+        } else {
+          // MRCN
+          $query = $query
+                  ->where_in('q.templid',$templids)
+                  ->where('q.start >=',$period_start)
+                  ->where('q.start <=',$period_end)
+                  ->where('end IS NOT NULL')
+                  ->where('valid',1)
+                  ->group_by('rfname')
+                  // ->group_by('q.id, rfname')
+                  ->order_by('pct desc')
+                  ->get();
+        }
 
         return $query->result();
     }
@@ -478,5 +589,4 @@ class Mod_statistics extends CI_Model {
     public function purge(int $userid) {
         $this->db->where('userid',$userid)->where('valid',1)->update('sta_quiz',array('valid' => 0));
     }
-
 }
