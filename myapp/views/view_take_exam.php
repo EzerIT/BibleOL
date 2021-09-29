@@ -5,7 +5,7 @@
 </div>
 
 <div>
-<object id="quiz_frame" data="/exams/show_quiz?quiz=<?= str_replace("/", "%2F", array_shift($exercises)) ?>&examid=<?= $exam_id ?>&exercise_lst=<?= str_replace("/", "%2F", implode("~",$exercises)) ?>" width="100%" height="auto" onLoad="get_id()">
+<object id="quiz_frame" data="/exams/show_quiz?quiz=<?= str_replace("/", "%2F", array_shift($exercises)) ?>&examid=<?= $exam_id ?>&exercise_lst=<?= str_replace("/", "%2F", implode("~",$exercises)) ?>" width="100%" height="auto" onLoad="loaded()">
 </object>
 </div>
 
@@ -26,8 +26,11 @@ setInterval(function(){
 1000
 );
 
-function get_id(){
+function loaded(){
   var frame = document.getElementById("quiz_frame");
+  if (frame.data == "exams/exam_done") {
+    document.getElementById('timer').style.display = 'none';
+  }
   frame.style.height = frame.contentWindow.document.body.scrollHeight + 'px';
   var quizid = document.getElementById("quiz_frame").contentWindow.document.getElementById("quiz_id").innerHTML;
   document.getElementById("quiz_frame").contentWindow.document.getElementById("finish").addEventListener("click", function() {
