@@ -78,9 +78,6 @@ class Ctrl_exams extends MY_Controller
           }
         }
 
-
-
-
         $javascripts = array('jstree/jquery.jstree.js',
                           'ckeditor/ckeditor.js',
                           'ckeditor/adapters/jquery.js',

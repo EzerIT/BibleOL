@@ -2296,7 +2296,7 @@ var Quiz = (function () {
     };
     Quiz.prototype.finishQuiz = function (gradingFlag) {
         if (quizdata.quizid == -1)
-            window.location.replace(site_url + 'text/select_quiz');
+            window.location.replace(site_url + 'exam/active_exams');
         else {
             if (this.currentPanelQuestion === null)
                 alert('System error: No current question panel');
