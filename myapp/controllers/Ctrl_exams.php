@@ -206,7 +206,7 @@ class Ctrl_exams extends MY_Controller
                 $exercise_lst = $_POST['exercise_list'];
 
                 // $base_pth = '/var/www/BibleOL';
-                $base_pth = __DIR__."/../../";
+                // $base_pth = __DIR__."/../../";
 
                 // $exam_loc = $base_pth.'exam/'.$create;
 

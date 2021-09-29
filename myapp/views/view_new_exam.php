@@ -68,21 +68,21 @@ function showContents($ar, $owners_list) {
         if (is_array($d) && $d != '.' && $d != '..'){
           echo '<tr class="folder">';
             echo '<td class="ar_class" style="width: 100%" colspan=4>';
-              echo '<button type="button" class="btn-link" style="text-decoration: none; border-radius: 8px;"data-parent="#wrap" data-toggle="collapse" data-target=".'.str_replace(".3et", "", basename($d[0])).'">'.basename($d[0]).'</button>';
+              echo '<button type="button" class="btn-link" style="text-decoration: none; border-radius: 8px;"data-parent="#wrap" data-toggle="collapse" data-target=".'.str_replace(" ", "___", basename($d[0])).'">'.basename($d[0]).'</button>';
               echo '<div id="wrap">';
-                echo '<div class="'.str_replace(".3et", "", basename($d[0])).' collapse">';
+                echo '<div class="'.str_replace(" ", "___", basename($d[0])).' collapse">';
                   showContents($d, $owners_list);
                 echo '</div>';
               echo '</div>';
             echo '</td>';
           echo '</tr>';
         } elseif($key != 0 && !is_array($d)) {
-          $ex_name = str_replace(".3et","",basename($d));
+          $ex_name = basename($d, ".3et");
           echo '<tr class="exercise">';
             echo '<td id="exr_nm_id" style="width: 50%;">'.$ex_name.'</td>';
 
 						$nm_arg = "'".$ex_name."'";
-						$pth_arg = "'".str_replace("/var/www/BibleOL/quizzes/","",$d)."'";
+						$pth_arg = "'".str_replace(realpath(__DIR__.DIRECTORY_SEPARATOR."/../../quizzes/")."/","",$d)."'";
             echo '<td id="ownr_id">' . $owners_list[trim($pth_arg, "'")] . '</td>';
 
             echo '<td><span class="badge badge-primary" id="add_btn" onclick="addExercise('.$nm_arg.','.$pth_arg.')">Add</span></td>';
