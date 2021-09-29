@@ -2214,6 +2214,7 @@ var QuizStatistics = (function () {
     function QuizStatistics(quizid) {
         this.quizid = quizid;
         this.questions = [];
+        this.question_count = Object.keys(quizdata.monad2Id).length;
     }
     return QuizStatistics;
 }());
