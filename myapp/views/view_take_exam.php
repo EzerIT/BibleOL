@@ -16,8 +16,13 @@
 var deadline = <?= $deadline ?>;
 setInterval(function(){
     var frame = document.getElementById('quiz_frame');
-    if (frame.contentWindow.document.getElementById('done') !== null) {
-      document.getElementById('timer').style.display = 'none';
+    try {
+      if (frame.contentWindow.document.getElementById('done') !== null) {
+        document.getElementById('timer').style.display = 'none';
+      }
+    }
+    catch(e) {
+
     }
     timeLeft= deadline - new Date().getTime() / 1000;
     if (timeLeft < 0) {
