@@ -21,20 +21,20 @@ class Ctrl_exams extends MY_Controller
         $this->show_files();
     }
 
-    public function build()
-    {
-        $exam = $_POST["exam"];
-        $ename = $_POST["name"];
-        $path = __DIR__."/../../exam/" . $ename;
-        if (!file_exists($path)) {
-            mkdir($path);
-        }
-        foreach ($exam as $url) {
-            copy($url, $path . "/" . basename($url));
-        }
-        print($ename);
-        exit();
-    }
+    // public function build()
+    // {
+    //     $exam = $_POST["exam"];
+    //     $ename = $_POST["name"];
+    //     $path = __DIR__."/../../exam/" . $ename;
+    //     if (!file_exists($path)) {
+    //         mkdir($path);
+    //     }
+    //     foreach ($exam as $url) {
+    //         copy($url, $path . "/" . basename($url));
+    //     }
+    //     print($ename);
+    //     exit();
+    // }
 
 
     public function active_exams()
@@ -161,7 +161,7 @@ class Ctrl_exams extends MY_Controller
 
         // Add exercise tags to XML file
         // <exercise numq="10" time="0">exercisename.3et</exercise>
-        $order = 1;
+        // $order = 1;
         foreach ($exercises as $key => $value) {
             if ($key != 0) {
                 $value = str_replace('"', '', $value);
@@ -174,14 +174,14 @@ class Ctrl_exams extends MY_Controller
                 $exercise_node->appendChild($numq_node);
                 $weight_node = $dom->createElement('weight', '1');
                 $exercise_node->appendChild($weight_node);
-                $order_node = $dom->createElement('order', $order);
-                $exercise_node->appendChild($order_node);
-
-                $order = $order + 1;
+                // $order_node = $dom->createElement('order', $order);
+                // $exercise_node->appendChild($order_node);
+                //
+                // $order = $order + 1;
             }
         }
 
-        $dom->save(__DIR__.'/../../exam/'.$examname.'/config.xml');
+        // $dom->save(__DIR__.'/../../exam/'.$examname.'/config.xml');
         return $dom->saveXML();
     }
 
@@ -205,41 +205,43 @@ class Ctrl_exams extends MY_Controller
 
                 $exercise_lst = $_POST['exercise_list'];
 
-                $base_pth = '/var/www/BibleOL/';
+                // $base_pth = '/var/www/BibleOL';
+                $base_pth = __DIR__."/../../";
 
-                $exam_loc = $base_pth.'exam/'.$create;
+                // $exam_loc = $base_pth.'exam/'.$create;
 
                 // chmod 7-7 required
-                mkdir($exam_loc);
+                // mkdir($exam_loc);
 
                 $ex_ar = explode(',', $exercise_lst);
 
 
-                $ex_pth = $base_pth . 'quizzes';
+                // $ex_pth = $base_pth . 'quizzes';
+                //
+                // foreach ($ex_ar as $key => $exrcs) {
+                //     $exrcs = str_replace('"', '', $exrcs);
+                //     $org_pth = $ex_pth . "/" . $exrcs;
+                //     if (($exrcs) != 'undefined') {
+                //         $new_pth = $exam_loc . "/" . basename($exrcs);
+                //         copy($org_pth, $new_pth);
+                //     }
+                // }
 
-                foreach ($ex_ar as $key => $exrcs) {
-                    $exrcs = str_replace('"', '', $exrcs);
-                    $org_pth = $ex_pth . "/" . $exrcs;
-                    if (($exrcs) != 'undefined') {
-                        $new_pth = $exam_loc . "/" . basename($exrcs);
-                        copy($org_pth, $new_pth);
-                    }
-                }
+                $xml = simplexml_load_string($this->create_config_file($create, $ex_ar));
 
-                $this->create_config_file($create, $ex_ar);
-
-                $xml = simplexml_load_file($exam_loc . "/config.xml") or die("error");
+                // $xml = simplexml_load_file($exam_loc . "/config.xml") or die("error");
 
               	$data = array(
               		'exam_name' => $create,
               		'ownerid' => $this->mod_users->my_id(),
-              		'pathname' => 'exam/' . $create,
+              		// 'pathname' => 'exam/' . $create,
               		'examcode' => $xml->asXML(),
               		'examcodehash' => hash("md5", $xml)
               	);
                 $this->db->insert('bol_exam', $data);
+                $insert_id = $this->db->insert_id();
 
-                redirect("/exams/edit_exam?exam=$create");
+                redirect("/exams/edit_exam?exam=$insert_id");
             }
         } catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('illegal_char_folder_name'));
@@ -259,9 +261,10 @@ class Ctrl_exams extends MY_Controller
         $exam_name = $_GET["exname"];
         $exam_id = $_GET["exid"];
         // Get class id from class name.
-        $class_name = $_GET["class_select"];
-        $query = $this->db->get_where('class', array('classname' => $class_name));
-        $class_id = $query->row()->id;
+        // $class_name = $_GET["class_select"];
+        // $query = $this->db->get_where('class', array('classname' => $class_name));
+        // $class_id = $query->row()->id;
+        $class_id = $_GET["class_select"];
         $instance_name = $_GET["instance_name"];
         $exam_start_date = $_GET["start_date"];
         $exam_end_date = $_GET["end_date"];
@@ -269,11 +272,17 @@ class Ctrl_exams extends MY_Controller
         $exam_start_time = $_GET["start_time"];
         $exam_end_time = $_GET["end_time"];
 
+        $exam_start = strtotime("$exam_start_date $exam_start_time");
+        $exam_end = strtotime("$exam_end_date $exam_end_time");
+        if ($exam_start > $exam_end) {
+          $exam_start = strtotime("now");
+        }
+
         $data = array(
           'exam_name' => $exam_name,
           'class_id' => $class_id,
-          'exam_start_time' => strtotime("$exam_start_date $exam_start_time"),
-          'exam_end_time' => strtotime("$exam_end_date $exam_end_time"),
+          'exam_start_time' => $exam_start,
+          'exam_end_time' => $exam_end,
           'exam_length' => $exam_length,
           'exam_id' => $exam_id,
           'instance_name' => $instance_name
@@ -297,15 +306,15 @@ class Ctrl_exams extends MY_Controller
     public function delete_exam(){
         $this->mod_users->check_teacher();
 
-        $exname = $_POST["exname"];
+        $exid = $_POST["exid"];
 
         # Remove exam folder.
-        $expath = '/var/www/BibleOL/exam/'.$exname;
-        array_map('unlink', glob("$expath/*.*"));
-        rmdir($expath);
+        // $expath = '/var/www/BibleOL/exam/'.$exname;
+        // array_map('unlink', glob("$expath/*.*"));
+        // rmdir($expath);
 
         # Remove exam from database.
-        $this->db->delete('bol_exam', array('exam_name' => $exname));
+        $this->db->delete('bol_exam', array('id' => $exid));
 
         redirect("/exams");
     }
@@ -350,7 +359,9 @@ class Ctrl_exams extends MY_Controller
         $center_text = $this->load->view(
                 'view_edit_exam',
                 array(
-                                                                'exam' => basename($_GET['exam'])),
+                                                                'exam' => $_GET['exam'],
+                                                                'xml' => simplexml_load_string($this->mod_exams->get_exam_by_id($_GET['exam'])->examcode)
+                ),
                 true
             );
         $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_exam'),
@@ -450,20 +461,20 @@ class Ctrl_exams extends MY_Controller
     }
 
     // Return array with all the exams from ./exam
-    private function getExams()
-    {
-        $exams = $this->getDirFolders(__DIR__."/../../exam");
-        $result = array();
-
-        foreach ($exams as $exam) {
-            $exam = str_replace("/var/www/BibleOL/exam/", "", $exam);
-            if ($exam != 'README') {
-                array_push($result, $exam);
-            }
-        }
-
-        return $result;
-    }
+    // private function getExams()
+    // {
+    //     $exams = $this->getDirFolders(__DIR__."/../../exam");
+    //     $result = array();
+    //
+    //     foreach ($exams as $exam) {
+    //         $exam = str_replace("/var/www/BibleOL/exam/", "", $exam);
+    //         if ($exam != 'README') {
+    //             array_push($result, $exam);
+    //         }
+    //     }
+    //
+    //     return $result;
+    // }
 
 
     public function manage_exams()
@@ -698,6 +709,81 @@ class Ctrl_exams extends MY_Controller
       } catch (DataException $e) {
         $this->error_view($e->getMessage(), $this->lang->line('exam_mgmt'));
       }
+    }
+
+    public function save_exam() {
+      var_dump($_POST);
+      # Declare the array that will store the
+      # names of the exercises that make up this exam.
+      $exercise_list = array();
+      # Declare the array that will store the
+      # values of the different features for
+      # the exam.
+      $feature_values = array();
+
+      // # Store the proper format for HTML datetime-local.
+      // $datetime_format = "/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$/";
+
+      # Execute once form has been submitted.
+      # In this case it would be when the changes
+      # are saved.
+      # NEED FIX
+      # This section should be taken care of in
+      # a separate file (exams/save_exam.php).
+      // if(isset($_POST["submit"])) {
+      	# Store all exam feature values in an array.
+      	foreach($_POST as $key => $value){
+      		$feature_values[] = $value;
+      	}
+
+        # Exam id
+        $examid = array_shift($feature_values);
+
+        $xml = simplexml_load_string($this->mod_exams->get_exam_by_id($examid)->examcode);
+
+      	# Store description.
+      	$xml->description = trim(array_shift($feature_values));
+
+      	# Iterate through the exercises in the exam.
+      	foreach ($xml->exercise as $x){
+      		# Store the exercise in the form of an associative array.
+      		$array = json_decode(json_encode((array) $x), TRUE);
+      		# Iterate through the features of the exercise.
+      		foreach ($array as $key => $value){
+      			# If the current feature is not exercisename.
+      			if($key != "exercisename"){
+      				# then remove the next feature value in the array
+      				# and store it.
+      				$removed = array_shift($feature_values);
+      				# Assign the stored feature value to the current feature.
+              echo $x . " " . $key . " " . $removed;
+      				$x->$key = $removed;
+      			}
+      		}
+      	}
+
+      	# Rewrite the config file with the updated version.
+      	// $xml->asXML($full_name . "/config.xml");
+
+      	$data = array(
+      		'exam_name' => $xml->examname,
+      		'ownerid' => $xml->teacher_id,
+      		// 'pathname' => 'exam/' . $xml->examname,
+      		'examcode' => $xml->asXML(),
+      		'examcodehash' => hash("md5", $xml)
+      	);
+
+      	// $query = $this->db->query('SELECT exam_name FROM bol_exam WHERE id="'.$_GET['exam'].'"');
+      	// if ($query->result()){
+      		$this->db->set($data);
+      		$this->db->where('id', $examid);
+      		$this->db->update('bol_exam');
+      	// }
+      	// else {
+      	// 	$this->db->insert('bol_exam', $data);
+      	// }
+
+      	redirect("/exams");
     }
 
     public function show_files()

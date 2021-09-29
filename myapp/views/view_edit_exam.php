@@ -1,8 +1,8 @@
 <?php
-# Store the path to the active exam.
-$full_name = "/var/www/BibleOL/exam/" . $exam;
+// # Store the path to the active exam.
+// $full_name = "/var/www/BibleOL/exam/" . $exam;
 # Load the config file into a variable.
-$xml = simplexml_load_file($full_name . "/config.xml") or die("error");
+// $xml = simplexml_load_file($full_name . "/config.xml") or die("error");
 
 # Declare the array that will store the
 # names of the exercises that make up this exam.
@@ -12,8 +12,8 @@ $exercise_list = array();
 # the exam.
 $feature_values = array();
 
-# Store the proper format for HTML datetime-local.
-$datetime_format = "/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$/";
+// # Store the proper format for HTML datetime-local.
+// $datetime_format = "/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$/";
 
 # Execute once form has been submitted.
 # In this case it would be when the changes
@@ -90,14 +90,16 @@ if(isset($_POST["submit"])) {
 Display exam editing form.
 -->
 <div>
-	<form action="" method="post" id="edit_exam_form">
+	<form action="/exams/save_exam" method="post" id="edit_exam_form">
 		<h3>Editing exam:
 			<?php
 				# Display exam name.
-				echo $exam;
+				echo $xml->examname;
 				#print_r($xml);
 			?>
 		</h3>
+
+		<input name="id" value="<?= $exam ?>" type="hidden">
 
 		<br>
 

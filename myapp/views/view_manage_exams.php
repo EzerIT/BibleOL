@@ -70,9 +70,9 @@ on the page.
               <td class="leftalign"><?= $exam->exam_name ?></td>
               <td class="leftalign"><?= $this->mod_users->user_full_name($exam->ownerid) ?></td>
               <td class="leftalign">
-                  <a class="badge badge-primary" href="/exams/edit_exam?exam=<?= $exam->exam_name ?>"><?= $this->lang->line('edit_exam') ?></a>
+                  <a class="badge badge-primary" href="/exams/edit_exam?exam=<?= $exam->id ?>"><?= $this->lang->line('edit_exam') ?></a>
                   <a class="badge badge-primary" href="#" onclick="cr_exam_inst('<?= $exam->exam_name ?>', <?= $exam->id ?>);"><?= $this->lang->line('create_exam_instance') ?></a>
-                  <a class="badge badge-danger" href="#" onclick="dltexam('<?= $exam->exam_name ?>');"><?= $this->lang->line('delete_exam') ?></a>
+                  <a class="badge badge-danger" href="#" onclick="dltexam('<?= $exam->id ?>', '<?= $exam->exam_name ?>');"><?= $this->lang->line('delete_exam') ?></a>
               </td>
           </tr>
       <?php endforeach; ?>
@@ -106,7 +106,7 @@ This button redirects to the exam creation page.
           <input type="hidden" name="exid" id="create-instance-examid">
           <?= $this->lang->line('class') ?>: <select id="class_select" name="class_select">
             <?php foreach ($n_o_c as $owned_class): ?>
-              <option><?= $owned_class->classname ?></option>
+              <option value="<?= $owned_class->id ?>"><?= $owned_class->classname ?></option>
             <?php endforeach; ?>
           </select>
           <br>
@@ -124,7 +124,7 @@ This button redirects to the exam creation page.
           <?= $this->lang->line('end_time') ?>: <input type="time" id="time2" name="end_time" required>
           <br>
           <br>
-          <?= $this->lang->line('duration') ?>: <input type="number" id="duration" name="duration" required>
+          <?= $this->lang->line('duration') ?>: <input type="number" id="duration" name="duration" min="1" step="1" required>
         </form>
 
       </div>
@@ -158,13 +158,18 @@ This button redirects to the exam creation page.
 
     $('#create-instance-dialog-ok').click(function() {
       let duration_value = document.getElementById('duration').value;
-      if (!duration_value || duration_value < 0){
-        document.getElementById('create-instance-error-text').innerText = "Invalid duration";
-        $('#create-instance-error').show();
+      let class_selected = document.getElementById('class_select').value;
+      let cr_inst_err_txt = document.getElementById('create-instance-error-text');
+      cr_inst_err_txt.innerText = "Creating instance...";
+      $('#create-instance-error').show();
+      if (!duration_value || duration_value < 1){
+        cr_inst_err_txt.innerText = "Invalid duration";
+      }
+      else if (!class_selected || class_selected <= 0) {
+        cr_inst_err_txt.innerText = "Invalid class";
       }
       else if (document.getElementById('instance_name').value.length == 0){
-        document.getElementById('create-instance-error-text').innerText = "Invalid Name";
-        $('#create-instance-error').show();
+        cr_inst_err_txt.innerText = "Invalid Name";
       }
       else{
         $('#create-instance-form').submit();
@@ -197,7 +202,7 @@ This button redirects to the exam creation page.
 
 
         <form id="delete-form" action="<?= site_url('exams/delete_exam') ?>" method="post">
-          <input type="hidden" name="exname" id="delete-examname">
+          <input type="hidden" name="exid" id="delete-examid">
         </form>
 
       </div>
@@ -211,8 +216,8 @@ This button redirects to the exam creation page.
 
 
 <script>
-  function dltexam(examname) {
-    $('#delete-examname').attr('value', examname);
+  function dltexam(examid, examname) {
+    $('#delete-examid').attr('value', examid);
     document.getElementById('delete-exam').innerHTML = examname;
     $('#delete-error').hide();
     $("#delete-exam-dialog").modal("show");

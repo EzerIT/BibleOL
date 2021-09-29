@@ -649,7 +649,6 @@ CREATE TABLE `bol_exam` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Exam ID\n',
   `exam_name` varchar(45) NOT NULL,
   `ownerid` int(11) NOT NULL COMMENT 'ID of the owner of the exercise (from the Users table)',
-  `pathname` tinytext NOT NULL COMMENT 'pathname of the Exam Directory\n',
   `examcode` text COMMENT 'The actual XML text of the Exam template. Going forward, we may create more columns to capture elemnts of the XML code that need to be used all the time to make decoding the XML text unnecessary in most cases.\n',
   `examcodehash` mediumtext NOT NULL COMMENT 'A hash value of the examcode field. It can be used to speed up the comparison of the examcode field from different entries in this table: If the examcodehash values are different, then the examcode values will also be different.\n',
   PRIMARY KEY (`id`),

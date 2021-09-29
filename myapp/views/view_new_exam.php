@@ -62,7 +62,6 @@ li{
 <div class="table-responsive">
 
 <?php
-var_dump($owners_list);
 function showContents($ar, $owners_list) {
     echo '<table class="type2 table table-striped" style="width: 100%; border-collapse: separate; border-spacing: 0px; border-radius: 8px;">';
       foreach ($ar as $key => $d){
