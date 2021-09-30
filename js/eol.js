@@ -2,12 +2,10 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -833,12 +831,6 @@ var DisplaySingleMonadObject = (function (_super) {
                         wordclass = 'tenpoint ltr';
                     else
                         wordclass = 'ltr';
-                    if ((configuration.databaseName == "ETCBC4" && fs.isGloss)
-                        || (configuration.databaseName == "nestle1904" && featName == "swahili")) {
-                        featValLoc = featValLoc.replace(/(&[gl]t);/, '$1Q')
-                            .replace(/([^,;(]+).*/, '$1')
-                            .replace(/(&[gl]t)Q/, '$1;');
-                    }
                     grammar += "<span class=\"wordgrammar dontshowit " + featName + " " + wordclass + "\">" + featValLoc + "</span>";
                     break;
                 case WHAT.metafeature:
@@ -1487,7 +1479,6 @@ var PanelQuestion = (function () {
     function PanelQuestion(qd, dict) {
         var _this = this;
         this.vAnswers = [];
-        this.answersPerCard = [];
         this.question_stat = new QuestionStatistics;
         this.subQuizIndex = 0;
         this.qd = qd;
@@ -1751,12 +1742,6 @@ var PanelQuestion = (function () {
                                 case 'ר':
                                     additionalCons.push('ד');
                                     additionalCons.push('ה');
-                                    break;
-                                case 'ש' + '\u05C1':
-                                    additionalCons.push('ש' + '\u05C2');
-                                    break;
-                                case 'ש' + '\u05C2':
-                                    additionalCons.push('ש' + '\u05C1');
                                     break;
                                 case 'ת':
                                     additionalCons.push('ט');
@@ -2040,16 +2025,11 @@ var PanelQuestion = (function () {
             for (var rfi in requestFeatures) {
                 _loop_2(rfi);
             }
-            this.answersPerCard.push(this.vAnswers.length);
         }
         this.subQuizMax = quizCardNum;
         var quizCard = $('.quizcard');
-        quizCard.append('<div class="buttonlist1">'
-            + ("<button class=\"btn btn-quiz\" id=\"check_answer\" type=\"button\">" + localize('check_answer') + "</button>")
-            + ("<button class=\"btn btn-quiz\" id=\"show_answer\" type=\"button\">" + localize('show_answer') + "</button>")
-            + '</div>');
         if (quizCardNum > 1) {
-            quizContainer.prepend('<div class="prev-next-btn prev" id="prevsubquiz" style="visibility:hidden;">&#10094;</div>');
+            quizContainer.prepend('<div class="prev-next-btn prev" id="prevsubquiz">&#10094;</div>');
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
         }
         $('div.inputbutton').click(function () {
@@ -2076,10 +2056,10 @@ var PanelQuestion = (function () {
         });
         $('button#check_answer').off('click');
         $('button#check_answer').on('click', function () {
-            var firstAns = _this.subQuizIndex == 0 ? 0 : _this.answersPerCard[_this.subQuizIndex - 1];
-            var lastAns = _this.answersPerCard[_this.subQuizIndex];
-            for (var aix = firstAns; aix < lastAns; ++aix) {
-                var a = _this.vAnswers[aix];
+            for (var ai in _this.vAnswers) {
+                if (isNaN(+ai))
+                    continue;
+                var a = _this.vAnswers[+ai];
                 a.checkIt(false);
             }
             $('html, body').animate({
@@ -2088,10 +2068,10 @@ var PanelQuestion = (function () {
         });
         $('button#show_answer').off('click');
         $('button#show_answer').on('click', function () {
-            var firstAns = _this.subQuizIndex == 0 ? 0 : _this.answersPerCard[_this.subQuizIndex - 1];
-            var lastAns = _this.answersPerCard[_this.subQuizIndex];
-            for (var aix = firstAns; aix < lastAns; ++aix) {
-                var a = _this.vAnswers[+aix];
+            for (var ai in _this.vAnswers) {
+                if (isNaN(+ai))
+                    continue;
+                var a = _this.vAnswers[+ai];
                 a.showIt();
                 a.checkIt(true);
             }
@@ -2255,22 +2235,35 @@ var Quiz = (function () {
         $('html, body').animate({
             scrollTop: $('#myview').offset().top - 5
         }, 50);
-        var heartbeatDialog = $('#heartbeat-dialog');
         var monitorUser = function () {
             window.clearTimeout(_this.tHbOpen);
             window.clearTimeout(_this.tHbClose);
             _this.tHbOpen = window.setTimeout(function () {
-                heartbeatDialog.modal('show');
+                heartbeatDialog.dialog('open');
                 _this.tHbClose = window.setTimeout(function () {
-                    heartbeatDialog.modal('hide');
+                    heartbeatDialog.dialog('close');
                     $('#next_question').fadeOut();
                 }, timeBeforeHbClose);
             }, timeBeforeHbOpen);
+            var heartbeatDialog = $('<div></div>')
+                .html(localize('done_practicing'))
+                .dialog({
+                autoOpen: false,
+                title: localize('stop_practicing'),
+                resizable: true,
+                show: 'fade',
+                hide: 'explode',
+                height: 140,
+                modal: true,
+                buttons: [{
+                        text: localize('go_on'),
+                        click: function () {
+                            heartbeatDialog.dialog('close');
+                            window.setTimeout(monitorUser, 0);
+                        }
+                    }]
+            });
         };
-        $('#heartbeat-dialog-go-on').on('click', function (event) {
-            heartbeatDialog.modal('hide');
-            window.setTimeout(monitorUser, 0);
-        });
         monitorUser();
         if (this.currentPanelQuestion !== null)
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
@@ -2304,7 +2297,7 @@ var Quiz = (function () {
     };
     Quiz.prototype.finishQuiz = function (gradingFlag) {
         if (quizdata.quizid == -1)
-            window.location.replace(site_url + 'text/select_quiz');
+            window.location.replace(site_url + 'exam/active_exams');
         else {
             if (this.currentPanelQuestion === null)
                 alert('System error: No current question panel');
@@ -2313,13 +2306,29 @@ var Quiz = (function () {
             this.quiz_statistics.grading = gradingFlag;
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
             $.post(site_url + 'statistics/update_stat', this.quiz_statistics)
-                .done(function () { return window.location.replace(site_url + 'text/select_quiz'); })
                 .fail(function (jqXHR, textStatus, errorThrow) {
                 $('#textcontainer')
                     .removeClass('textcontainer-background')
                     .addClass('alert alert-danger')
                     .html("<h1>" + localize('error_response') + "</h1><p>" + errorThrow + "</p>");
             });
+            $.get(site_url + 'statistics/update_exam_quiz_stat?examid=' + $('#exam_id').html() + '&quizid=' + $('#quiz_id').html() + '&exercise_lst=' + $('#exercise_lst').html())
+               .done(function () {
+                 if($('#exercise_lst').html()){
+                   var exercise_lst = $('#exercise_lst').html().split("~");
+                   var next_quiz = exercise_lst.shift();
+                   return window.location.replace(site_url + 'exams/show_quiz?quiz=' + next_quiz + '&count=10&examid=' + $('#exam_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
+                 }
+                 else {
+                   return window.location.replace(site_url + 'exams/exam_done');
+                 }
+               })
+               .fail(function (jqXHR, textStatus, errorThrow) {
+               $('#textcontainer')
+                   .removeClass('textcontainer-background')
+                   .addClass('alert alert-danger')
+                   .html("<h1>" + localize('error_response') + "</h1><p>" + errorThrow + "</p>");
+           });
         }
     };
     return Quiz;

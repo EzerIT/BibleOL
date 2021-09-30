@@ -638,3 +638,57 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2019-10-10  9:39:13
+
+-- Andrews University Changes by Mabio for the phase one of Exam Mode
+LOCK TABLES `bol_sta_quiz` WRITE;
+ALTER TABLE `bol_sta_quiz`
+ADD COLUMN `tot_questions` VARCHAR(45) NOT NULL DEFAULT 0 COMMENT 'Numer of questions actualy answered by the user'  AFTER `grading`;
+UNLOCK TABLES;
+
+CREATE TABLE `bol_exam` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Exam ID\n',
+  `exam_name` varchar(45) NOT NULL,
+  `ownerid` int(11) NOT NULL COMMENT 'ID of the owner of the exercise (from the Users table)',
+  `examcode` text COMMENT 'The actual XML text of the Exam template. Going forward, we may create more columns to capture elemnts of the XML code that need to be used all the time to make decoding the XML text unnecessary in most cases.\n',
+  `examcodehash` mediumtext NOT NULL COMMENT 'A hash value of the examcode field. It can be used to speed up the comparison of the examcode field from different entries in this table: If the examcodehash values are different, then the examcode values will also be different.\n',
+  PRIMARY KEY (`id`),
+  KEY `fk_bol_exam_1_idx` (`ownerid`),
+  CONSTRAINT `fk_bol_exam_1` FOREIGN KEY (`ownerid`) REFERENCES `bol_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1 COMMENT='Each entry on this table defines a new exam to be performed.';
+
+CREATE TABLE `bol_exam_active` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `exam_name` varchar(45) NOT NULL,
+  `class_id` varchar(45) NOT NULL,
+  `exam_start_time` int(11) NOT NULL,
+  `exam_end_time` int(11) NOT NULL,
+  `exam_length` int(11) DEFAULT NULL,
+  `exam_id` int(11) DEFAULT NULL,
+  `instance_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `bol_exam_finished` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `activeexamid` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `bol_exam_results` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) DEFAULT NULL,
+  `activeexamid` int(11) DEFAULT NULL,
+  `quizid` int(11) DEFAULT NULL,
+  `quiztemplid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `bol_exam_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `activeexamid` int(11) NOT NULL,
+  `start_time` int(11) NOT NULL,
+  `deadline` int(11) NOT NULL COMMENT 'Time that the exam will not be accessible anymore.\nThis will equal either the end time of the exam or the start_time + duration, whichever happens first.',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
