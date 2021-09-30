@@ -117,6 +117,7 @@
 <?php if ($status!=2): ?>
   <h1><?= sprintf($this->lang->line('stat_for_class'), htmlspecialchars($classname)) ?></h1>
   <h2><?= sprintf($this->lang->line('statistics_for_exercise'),htmlspecialchars($quiz)) ?></h2>
+  <BR>
 
   <?php if ($status==0): ?>
 
@@ -211,7 +212,9 @@
           <a id="show1" class="badge badge-primary" style="display:none" href="#"><?= $this->lang->line('show_table') ?></a>
           <a id="hide1" class="badge badge-primary" href="#"><?= $this->lang->line('hide_table') ?></a>
     </p>
+    <BR>
     <div class="table-responsive" id="table1" style="display:block">
+      <h2><?= sprintf($this->lang->line('grades_for_exercise'),htmlspecialchars($quiz)) ?></h2>
       <table class="type2 table table-striped autowidth">
         <caption><?= $this->lang->line('grds_exercise_by_student_caption') ?></caption>
         <tr>
