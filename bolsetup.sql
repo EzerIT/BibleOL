@@ -642,7 +642,7 @@ UNLOCK TABLES;
 -- Andrews University Changes by Mabio for the phase one of Exam Mode
 LOCK TABLES `bol_sta_quiz` WRITE;
 ALTER TABLE `bol_sta_quiz`
-ADD COLUMN `tot_questions` VARCHAR(45) NOT NULL DEFAULT 0 COMMENT 'Numer of questions actualy answered by the user'  AFTER `grading`;
+ADD COLUMN `tot_questions` int NOT NULL DEFAULT 0 COMMENT 'Numer of questions actualy answered by the user'  AFTER `grading`;
 UNLOCK TABLES;
 
 CREATE TABLE `bol_exam` (
@@ -659,7 +659,7 @@ CREATE TABLE `bol_exam` (
 CREATE TABLE `bol_exam_active` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `exam_name` varchar(45) NOT NULL,
-  `class_id` varchar(45) NOT NULL,
+  `class_id` int NOT NULL,
   `exam_start_time` int(11) NOT NULL,
   `exam_end_time` int(11) NOT NULL,
   `exam_length` int(11) DEFAULT NULL,
