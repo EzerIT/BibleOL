@@ -189,7 +189,7 @@ class Ctrl_exams extends MY_Controller
               		'examcode' => $xml->asXML(),
               		'examcodehash' => hash("md5", $xml)
               	);
-                $this->db->insert('bol_exam', $data);
+                $this->db->insert('exam', $data);
                 $insert_id = $this->db->insert_id();
 
                 redirect("/exams/edit_exam?exam=$insert_id");
@@ -256,7 +256,7 @@ class Ctrl_exams extends MY_Controller
         $exid = $_POST["exid"];
 
         # Remove exam from database.
-        $this->db->delete('bol_exam', array('id' => $exid));
+        $this->db->delete('exam', array('id' => $exid));
 
         redirect("/exams");
     }
@@ -268,7 +268,7 @@ class Ctrl_exams extends MY_Controller
         $exid = $_POST["exid"];
 
         # Remove exam from database.
-        $this->db->delete('bol_exam_active', array('id' => $exid));
+        $this->db->delete('exam_active', array('id' => $exid));
 
         redirect("/exams/active_exams");
     }
@@ -542,7 +542,7 @@ class Ctrl_exams extends MY_Controller
           $deadline = $now + ($active_exam->exam_length * 60);
         }
 
-        $query_status = $this->db->get_where('bol_exam_status', array('userid' => $user_id, 'activeexamid' => $_GET['exam']));
+        $query_status = $this->db->get_where('exam_status', array('userid' => $user_id, 'activeexamid' => $_GET['exam']));
         $status_row = $query_status->row();
         if ($status_row) {
           $deadline = $status_row->deadline;
@@ -554,7 +554,7 @@ class Ctrl_exams extends MY_Controller
             'start_time' => $now,
             'deadline' => $deadline
           );
-          $this->db->insert('bol_exam_status', $data);
+          $this->db->insert('exam_status', $data);
         }
 
         $completed = $this->mod_exams->get_completed_exam_exercises($user_id, $active_exam_id);
@@ -679,7 +679,7 @@ class Ctrl_exams extends MY_Controller
 
   		$this->db->set($data);
   		$this->db->where('id', $examid);
-  		$this->db->update('bol_exam');
+  		$this->db->update('exam');
 
     	redirect("/exams");
     }

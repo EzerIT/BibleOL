@@ -45,7 +45,7 @@ class Mod_exams extends CI_Model{
     }
 
     public function get_exam_by_id(int $id) {
-      $query = $this->db->get_where('bol_exam', array('id' => $id));
+      $query = $this->db->get_where('exam', array('id' => $id));
       return $query->row();
     }
 
@@ -65,23 +65,23 @@ class Mod_exams extends CI_Model{
     }
 
     public function get_template_id(int $quizid){
-      $query = $this->db->get_where('bol_sta_quiz', array('id' => $quizid));
+      $query = $this->db->get_where('sta_quiz', array('id' => $quizid));
       return $query->row()->templid;
     }
 
     public function get_active_exam(int $id) {
-      $query = $this->db->get_where('bol_exam_active', array('id' => $id));
+      $query = $this->db->get_where('exam_active', array('id' => $id));
       return $query->row();
     }
 
     public function get_completed_exam_exercises(int $user_id, int $active_exam_id) {
       $completed = array();
-      $query = $this->db->get_where('bol_exam_results', array('userid' => $user_id, 'activeexamid' => $active_exam_id));
+      $query = $this->db->get_where('exam_results', array('userid' => $user_id, 'activeexamid' => $active_exam_id));
       $res = $query->result();
       foreach ($res as $row) {
         $template_id = $row->quiztemplid;
-        $query2 = $this->db->get_where('bol_sta_quiztemplate', array('id' => $template_id));
-        $path = str_replace('/var/www/BibleOL/quizzes/', '', $query2->row()->pathname);
+        $query2 = $this->db->get_where('sta_quiztemplate', array('id' => $template_id));
+        $path = str_replace(realpath(__DIR__."/../../quizzes"), '', $query2->row()->pathname);
         array_push($completed, $path);
       }
 
