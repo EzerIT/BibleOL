@@ -145,8 +145,9 @@ class PanelQuestion {
     // Parameter:
     //     qd: The information required to generate a exercise.
     //     dict: The collection of Emdros objects for this question.
+    //     exam_mode: We're running an exam.
     //
-    constructor(qd : QuizData, dict : Dictionary) {
+    constructor(qd : QuizData, dict : Dictionary, exam_mode: boolean) {
         this.qd = qd;
         this.sentence = dict.sentenceSetQuiz;
         ////////////////////////////////////////////////////////////////////
@@ -1025,11 +1026,13 @@ class PanelQuestion {
         // Make buttons "Check answer" and "Show answer"
         let quizCard: JQuery = $('.quizcard');
 
-        // Add check and show buttons
-        quizCard.append('<div class="buttonlist1">'
-            + `<button class="btn btn-quiz" id="check_answer" type="button">${localize('check_answer')}</button>`
-            + `<button class="btn btn-quiz" id="show_answer" type="button">${localize('show_answer')}</button>`
-            + '</div>');
+        if (!exam_mode) {
+            // Add check and show buttons
+            quizCard.append('<div class="buttonlist1">'
+                            + `<button class="btn btn-quiz" id="check_answer" type="button">${localize('check_answer')}</button>`
+                            + `<button class="btn btn-quiz" id="show_answer" type="button">${localize('show_answer')}</button>`
+                            + '</div>');
+        }
 
         // Add prev and next buttons to slide through multiple subquizzes
         if (quizCardNum > 1) {

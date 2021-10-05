@@ -1482,7 +1482,7 @@ var Answer = (function () {
     return Answer;
 }());
 var PanelQuestion = (function () {
-    function PanelQuestion(qd, dict) {
+    function PanelQuestion(qd, dict, exam_mode) {
         var _this = this;
         this.vAnswers = [];
         this.answersPerCard = [];
@@ -2042,10 +2042,12 @@ var PanelQuestion = (function () {
         }
         this.subQuizMax = quizCardNum;
         var quizCard = $('.quizcard');
-        quizCard.append('<div class="buttonlist1">'
-            + ("<button class=\"btn btn-quiz\" id=\"check_answer\" type=\"button\">" + localize('check_answer') + "</button>")
-            + ("<button class=\"btn btn-quiz\" id=\"show_answer\" type=\"button\">" + localize('show_answer') + "</button>")
-            + '</div>');
+        if (!exam_mode) {
+            quizCard.append('<div class="buttonlist1">'
+                + ("<button class=\"btn btn-quiz\" id=\"check_answer\" type=\"button\">" + localize('check_answer') + "</button>")
+                + ("<button class=\"btn btn-quiz\" id=\"show_answer\" type=\"button\">" + localize('show_answer') + "</button>")
+                + '</div>');
+        }
         if (quizCardNum > 1) {
             quizContainer.prepend('<div class="prev-next-btn prev" id="prevsubquiz" style="visibility:hidden;">&#10094;</div>');
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
@@ -2237,11 +2239,12 @@ var QuizStatistics = (function () {
     return QuizStatistics;
 }());
 var Quiz = (function () {
-    function Quiz(qid) {
+    function Quiz(qid, inExam) {
         var _this = this;
         this.currentDictIx = -1;
         this.currentPanelQuestion = null;
         this.quiz_statistics = new QuizStatistics(qid);
+        this.exam_mode = inExam;
         $('button#next_question').on('click', function () { return _this.nextQuestion(); });
         $('button#finish').on('click', function () { return _this.finishQuiz(true); });
         $('button#finishNoStats').on('click', function () { return _this.finishQuiz(false); });
@@ -2288,7 +2291,7 @@ var Quiz = (function () {
             else
                 $('div#progressbar').progressbar({ value: this.currentDictIx + 1, max: dictionaries.sentenceSets.length });
             $('#progresstext').html((this.currentDictIx + 1) + '/' + dictionaries.sentenceSets.length);
-            this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict);
+            this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
             if (this.currentDictIx + 1 === dictionaries.sentenceSets.length) {
                 $('button#next_question').attr('disabled', 'disabled');
                 $('button#finish').removeAttr('disabled');
@@ -2301,8 +2304,13 @@ var Quiz = (function () {
         $('#grammarbuttongroup input:enabled:checked').trigger('change');
     };
     Quiz.prototype.finishQuiz = function (gradingFlag) {
-        if (quizdata.quizid == -1)
-            window.location.replace(site_url + 'text/select_quiz');
+        var _this = this;
+        if (quizdata.quizid == -1) {
+            if (this.exam_mode)
+                window.location.replace(site_url + 'exam/active_exams');
+            else
+                window.location.replace(site_url + 'text/select_quiz');
+        }
         else {
             if (this.currentPanelQuestion === null)
                 alert('System error: No current question panel');
@@ -2311,13 +2319,38 @@ var Quiz = (function () {
             this.quiz_statistics.grading = gradingFlag;
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
             $.post(site_url + 'statistics/update_stat', this.quiz_statistics)
-                .done(function () { return window.location.replace(site_url + 'text/select_quiz'); })
+                .done(function () {
+                if (!_this.exam_mode)
+                    window.location.replace(site_url + 'text/select_quiz');
+            })
                 .fail(function (jqXHR, textStatus, errorThrow) {
                 $('#textcontainer')
                     .removeClass('textcontainer-background')
                     .addClass('alert alert-danger')
                     .html("<h1>" + localize('error_response') + "</h1><p>" + errorThrow + "</p>");
             });
+            if (this.exam_mode) {
+                $.get(site_url + 'statistics/update_exam_quiz_stat?examid=' + $('#exam_id').html() + '&quizid=' + $('#quiz_id').html() + '&exercise_lst=' + $('#exercise_lst').html())
+                    .done(function () {
+                    if ($('#exercise_lst').html()) {
+                        var exercise_lst = $('#exercise_lst').html().split("~");
+                        var next_quiz = exercise_lst.shift();
+                        alert('Continue to ' + site_url + 'exams/show_quiz?quiz=' + next_quiz + '&count=10&examid=' + $('#exam_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
+                        return window.location.replace(site_url + 'exams/show_quiz?quiz=' + next_quiz + '&count=10&examid=' + $('#exam_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
+                    }
+                    else {
+                        alert("done");
+                        return window.location.replace(site_url + 'exams/exam_done');
+                    }
+                })
+                    .fail(function (jqXHR, textStatus, errorThrow) {
+                    alert(localize('error_response') + " : " + errorThrow + "</p>");
+                    $('#textcontainer')
+                        .removeClass('textcontainer-background')
+                        .addClass('alert alert-danger')
+                        .html("<h1>" + localize('error_response') + "</h1><p>" + errorThrow + "</p>");
+                });
+            }
         }
     };
     return Quiz;
@@ -2379,7 +2412,7 @@ $(function () {
             $('div#progressbar').hide();
         else
             $('progress#progress').hide();
-        quiz = new Quiz(quizdata.quizid);
+        quiz = new Quiz(quizdata.quizid, $('#exam_id').length > 0);
         quiz.nextQuestion();
         $('#gramtabs .selectbutton input:enabled:checked').trigger('change');
     }

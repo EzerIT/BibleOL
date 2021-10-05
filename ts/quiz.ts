@@ -19,6 +19,7 @@ class Quiz {
     private quiz_statistics      : QuizStatistics;       // Statistics about the execution of the exercise
     private tHbOpen              : number;               // ID of timer for opening heartbeat dialog
     private tHbClose             : number;               // ID of timer for closing heartbeat dialog
+    private exam_mode            : boolean;              // Are we running an exam?
 
     //------------------------------------------------------------------------------------------
     // Constructor method
@@ -28,8 +29,9 @@ class Quiz {
     // Parameter:
     //     qid: The server's identification of statistics for this exercise execution.
     //
-    constructor(qid : number) {
+    constructor(qid : number, inExam : boolean) {
         this.quiz_statistics = new QuizStatistics(qid);
+        this.exam_mode = inExam;
 
         // Set up handlers for the buttons
         $('button#next_question').on('click', () => this.nextQuestion());
@@ -116,7 +118,7 @@ class Quiz {
             $('#progresstext').html((this.currentDictIx+1)+'/'+dictionaries.sentenceSets.length);
             
             // Create a panel for the next question
-            this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict);
+            this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
             
             if (this.currentDictIx+1 === dictionaries.sentenceSets.length) {
                 // This is the last question, disable the 'Next' button
@@ -142,8 +144,12 @@ class Quiz {
     //     gradingFlag: May the statistics be used for grading the student?
     //
     private finishQuiz(gradingFlag : boolean) : void {
-        if (quizdata.quizid == -1) // User not logged in
-            window.location.replace(site_url + 'text/select_quiz'); // Go to quiz selection
+        if (quizdata.quizid == -1) { // User not logged in
+            if (this.exam_mode)
+                window.location.replace(site_url + 'exam/active_exams');
+            else
+                window.location.replace(site_url + 'text/select_quiz'); // Go to quiz selection
+        }
         else {
             if (this.currentPanelQuestion===null)
                 alert('System error: No current question panel');
@@ -159,13 +165,35 @@ class Quiz {
                 site_url + 'statistics/update_stat',
                 this.quiz_statistics
             )
-                .done(() => window.location.replace(site_url + 'text/select_quiz')) // Go to quiz selection
+                .done(() => {
+                    if (!this.exam_mode)
+                        window.location.replace(site_url + 'text/select_quiz'); // Go to quiz selection
+                })
                 .fail((jqXHR: JQueryXHR, textStatus: string, errorThrow: string) => {
                     $('#textcontainer')
                         .removeClass('textcontainer-background')
                         .addClass('alert alert-danger')
                         .html(`<h1>${localize('error_response')}</h1><p>${errorThrow}</p>`);
                 });
+            if (this.exam_mode) {
+                $.get(site_url + 'statistics/update_exam_quiz_stat?examid=' + $('#exam_id').html() + '&quizid=' + $('#quiz_id').html() + '&exercise_lst=' + $('#exercise_lst').html())
+                    .done(() => {
+                        if ($('#exercise_lst').html()) {
+                            var exercise_lst = $('#exercise_lst').html().split("~");
+                            var next_quiz = exercise_lst.shift();
+                            return window.location.replace(site_url + 'exams/show_quiz?quiz=' + next_quiz + '&count=10&examid=' + $('#exam_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
+                        }
+                        else {
+                            return window.location.replace(site_url + 'exams/exam_done');
+                        }
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrow) {
+                        $('#textcontainer')
+                            .removeClass('textcontainer-background')
+                            .addClass('alert alert-danger')
+                            .html(`<h1>${localize('error_response')}</h1><p>${errorThrow}</p>`);
+                    });
+            }
         }
     }
 }
