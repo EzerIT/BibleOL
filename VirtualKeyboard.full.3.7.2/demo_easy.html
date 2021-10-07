@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+ <head>
+  <title>Virtual Keyboard</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+
+  <script type="text/javascript" src="vk_easy.js?vk_skin=flat_gray&vk_layout=RU%20Russian" ></script>
+  <style type="text/css">
+      h1 {
+          font-size: 150%;
+      }
+      h2 {
+          font-size: 130%;
+          padding: 0 6px;
+      }
+      input, textarea, iframe {
+          width: 500px;
+      }
+  </style>
+ </head>
+ <body>
+<center><b><a href="http://allanguages.info">Official site</a></b><br /></center>
+<hr />
+Demos: [<a href="demo_inline.html">Plain text</a>] |
+[<a href="demo_popup.html">Popup mode</a>] |
+[<a href="demo_iframe.html">IFrame mode (isolated from page)</a>] |
+[<a>Lite install</a>] |
+[<a href="richedit/tinymce/plugins/Jsvk/examples/sample.html">TinyMCE</a>] |
+[<a href="richedit/tinymce3/plugins/Jsvk/examples/sample.html">TinyMCE 3</a>] |
+[<a href="richedit/xinha/plugins/Jsvk/examples/sample.html">Xinha</a>] |
+[<a href="richedit/fckeditor/editor/plugins/Jsvk/examples/sample.html">FCKEditor</a>] |
+[<a href="richedit/ckeditor/plugins/Jsvk/examples/sample.html">CKEditor</a>]
+  <h1 align="center">VirtualKeyboard demo page</h1>
+  <table cellpadding="0" cellspacing="0" border="0">
+   <tr>
+    <td valign="top">
+     <form action="no.cgi" method="get">
+      <div>
+       Subject (no VK):<br />
+       <input name="subject" type="text" /><br />
+       Password (no VK animation):<br />
+       <input name="password" type="password" class="VK_no_animate keyboardInput" /><br />
+       Textarea:<br />
+       <textarea name="textarea" cols="55" rows="10" wrap="soft" class="keyboardInput"></textarea><br />
+       Richtext control:<br />
+       <iframe class="keyboardInput" onload="initFrame(this);"></iframe>
+       <script type="text/javascript">
+           function initFrame (t) {
+               t.contentWindow.document.body.innerHTML = "Sample text";
+               t.contentWindow.document.body.contentEditable=true;
+               t.contentWindow.document.designMode="On";
+           }
+       </script>
+      </div>
+     </form>
+    </td>
+    <td valign="top">
+     &nbsp;<strong>Tip: </strong><em>move mouse pointer over the text field and you'll see the keyboard icon on the right. Click it.</em>
+     <h2>Installation</h2>
+     <ol>
+      <li>Add <code>&lt;script type="text/javascript" src="vk_easy.js" &gt;&lt;/script&gt;</code>
+          to the page's HEAD section</li>
+      <li>Add CSS class <code>keyboardInput</code> to any input fields which should receive keyboard input</li>
+      <li>Click on the keyboard icon to open the keyboard</li>
+     </ol>
+     <h2>Resources</h2>
+     <ul>
+      <li><a href="http://bts.debugger.ru/index.php?tasks=all&project=5">Bugtracker</a></li>
+      <li><a href="http://allanguages.info/forum">Support forum</a></li>
+      <li><a href="http://debugger.ru/projects/virtualkeyboard">Project page</a></li>
+      <li><a href="http://www.codeproject.com/jscript/jsvk.asp">Project page @CodeProject</a></li>
+      <li><a href="http://freshmeat.net/project/jsvk">Project page @Freshmeat</a></li>
+     </ul>
+    </td>
+   </tr>
+
+  </table>
+ </body>
+</html>

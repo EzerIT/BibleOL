@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+ <head>
+  <title>Virtual Keyboard</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+
+  <script type="text/javascript" src="vk_loader.js?vk_layout=CN%20Chinese%20Simpl.%20Pinyin&vk_skin=flat_gray" ></script>
+  <style type="text/css">
+      html, body {
+          font: 12px Verdana, Arial, Tahoma;
+      }
+      table {
+          border-collapse: collapse;
+          padding: 0;
+          margin: 0;
+      }
+      td {
+          margin: 0;
+          text-align: left;
+          vertical-align: top;
+      }
+      td.layouts {
+          font-size: 12px;
+      }
+      td.layouts a {
+          white-space: nowrap;
+          font-size: 11px;
+          font-weight: bold;
+          color: #555;
+      }
+      td.layouts a:hover {
+          color: #000;
+      }
+      label {
+          white-space: nowrap;
+      }
+
+      #skins a {
+          position: relative;
+      }
+      #skins a img {
+          border: 0;
+          display: none;
+          left: 0%;
+          position: absolute;
+          top: 100%;
+      }
+      #skins a:hover {
+          z-index: 2;
+      }
+      #skins a:hover img {
+          display: block;
+      }
+
+      h1 {
+          font-size: 150%;
+      }
+      h2 {
+          font-size: 130%;
+          padding: 0 6px;
+      }
+      table form input {
+          width: 247px;
+      }
+      table form textarea {
+          width: 500px;
+      }
+
+  </style>
+ </head>
+ <body><!-- test -->
+<center><b><a href="http://allanguages.info">Official site</a></b><br /></center>
+<hr />
+Demos: [<a>Plain text</a>] |
+[<a href="demo_popup.html">Popup mode</a>] |
+[<a href="demo_iframe.html">IFrame mode (isolated from page)</a>] |
+[<a href="demo_easy.html">Lite install</a>] |
+[<a href="richedit/tinymce/plugins/Jsvk/examples/sample.html">TinyMCE</a>] |
+[<a href="richedit/tinymce3/plugins/Jsvk/examples/sample.html">TinyMCE 3</a>] |
+[<a href="richedit/xinha/plugins/Jsvk/examples/sample.html">Xinha</a>] |
+[<a href="richedit/fckeditor/editor/plugins/Jsvk/examples/sample.html">FCKEditor</a>] |
+[<a href="richedit/ckeditor/plugins/Jsvk/examples/sample.html">CKEditor</a>]
+  <h1 align="center">VirtualKeyboard developer demo</h1>
+  <table>
+   <tr>
+    <td rowspan="3" style="width: 40%">
+     <form action="no.cgi" method="get">
+      <div>
+       <table>
+        <tr>
+         <td>
+          Simple input:<br />
+          <input type="text" onfocus="VirtualKeyboard.attachInput(this)" />
+         </td>
+         <td>
+          Password (no keyboard animation):<br />
+          <input type="password" class="VK_no_animate" onfocus="VirtualKeyboard.attachInput(this)" />
+         </td>
+        </tr>
+        <tr>
+         <td colspan="2">
+          Text area:<br />
+          <textarea id="text" rows="6" wrap="soft" onfocus="VirtualKeyboard.attachInput(this)"></textarea>
+          <button onclick="VirtualKeyboard.toggle('text','td'); return false;">toggle</button>
+         </td>
+        </tr>
+       </table>
+       <div id="td"></div>
+      </div>
+     </form>
+    </td>
+    <td>
+     <h2>Resources</h2>
+     <ul>
+      <li><a href="http://bts.debugger.ru/index.php?tasks=all&project=5">Bugtracker</a></li>
+      <li><a href="http://allanguages.info/forum">Support forum</a></li>
+      <li><a href="http://debugger.ru/projects/virtualkeyboard">Project page</a></li>
+      <li><a href="http://www.codeproject.com/jscript/jsvk.asp">Project page @CodeProject</a></li>
+      <li><a href="http://freshmeat.net/project/jsvk">Project page @Freshmeat</a></li>
+     </ul>
+    </td>
+   </tr>
+   <tr>
+    <td>
+     <h2>Layouts filter</h2>
+     <div id="lfilter" onclick="setFilter()">
+     </div>
+    </td>
+   </tr>
+   <tr>
+    <td>
+     <h2>Skins</h2>
+     <div id="skins"></div>
+     </div>
+    </td>
+   </tr>
+   <tr>
+    <td colspan="2" class="layouts">
+     <h2>Supported languagues</h2>
+     <div id="layouts"></div>
+    </td>
+     <script type="text/javascript">
+         /**
+          *  Collects all selected filters and changes available layouts
+          */
+         function setFilter() {
+             var filter = []
+                ,cbxs = document.getElementsByTagName('input');
+             for (var i=0,cL=cbxs.length; i<cL; i++) {
+                 if (cbxs[i].checked)
+                     filter.push(cbxs[i].value);
+             }
+             VirtualKeyboard.setVisibleLayoutCodes(filter);
+         }
+
+
+         EM.addEventListener(window,'domload',function(){
+             /*
+             *  building the list of language codes
+             */
+             var codes = VirtualKeyboard.getLayoutCodes()
+                ,cont = document.getElementById('lfilter')
+                ,html = []
+             for (var i=0, cL=codes.length; i<cL; i++) {
+                 html.push ("<td><label for='cbx"+i+"'><input id='cbx"+i+"' type='checkbox' value='"+codes[i]+"' />"+codes[i]+"</label></td>");
+                 if (!((i+1)%10))
+                     html.push('</tr><tr>');
+             }
+             cont.innerHTML = '<table><tr>'+html.join("")+'</tr></table>';
+
+             /*
+             *  open the keyboard
+             */
+             VirtualKeyboard.toggle('text','td');
+
+             /*
+             *  building the list of layouts
+             */
+             var el = document.getElementById('layouts')
+                ,lt = VirtualKeyboard.getLayouts()
+                ,dl = window.location.href.replace(/[?#].+/,"")
+
+             for (var i=0,lL=lt.length; i<lL; i++) {
+                 var cl = lt[i];
+                 cl = cl[0]+" "+cl[1];
+                 lt[i] = "<a href='"+dl+"?vk_layout="+cl+"' onclick='VirtualKeyboard.switchLayout(this.title);return false;' title='"+cl+"' alt='"+cl+"' >"+cl+"</a>";
+             }
+             el.innerHTML += lt.join("&nbsp;| ");
+
+             /*
+             *  build the list of skins
+             */
+             var skins = ['winxp','small','soberTouch','textual','flat_gray','air_large','air_mid','air_small','goldie'].sort()
+                ,html = []
+                ,el = document.getElementById('skins')
+             for (var i=0, sL=skins.length; i<sL; i++) {
+                 var cs = skins[i]
+                 html[i] = "<a href='"+dl+"?vk_skin="+cs+"' title='"+cs+"' alt='"+cs+"' >"+cs+
+                            "<img src='"+dl.replace(/\/[^\/]+.html/i,"")+"/css/"+cs+"/thumbnail.png' title='"+cs+"' alt='"+cs+"' /></a>";
+             }
+             el.innerHTML = html.join("&nbsp;| ");
+
+         });
+
+     </script>
+    </td>
+   </tr>
+
+  </table>
+ </body>
+</html>

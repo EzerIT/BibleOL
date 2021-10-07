@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+ <head>
+  <title>Virtual Keyboard</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+
+  <script type="text/javascript" src="vk_iframe.js?vk_skin=goldie&vk_layout=IN Devanagari" ></script>
+  <style type="text/css">
+      h1 {
+          font-size: 150%;
+      }
+      h2 {
+          font-size: 130%;
+          padding: 0 6px;
+      }
+  </style>
+ </head>
+ <body>
+<center><b><a href="http://allanguages.info">Official site</a></b><br /></center>
+<hr />
+Demos: [<a href="demo_inline.html">Plain text</a>] |
+[<a href="demo_popup.html">Popup mode</a>] |
+[<a>IFrame mode (isolated from page)</a>] |
+[<a href="demo_easy.html">Lite install</a>] |
+[<a href="richedit/tinymce/plugins/Jsvk/examples/sample.html">TinyMCE</a>] |
+[<a href="richedit/tinymce3/plugins/Jsvk/examples/sample.html">TinyMCE 3</a>] |
+[<a href="richedit/xinha/plugins/Jsvk/examples/sample.html">Xinha</a>] |
+[<a href="richedit/fckeditor/editor/plugins/Jsvk/examples/sample.html">FCKEditor</a>] |
+[<a href="richedit/ckeditor/plugins/Jsvk/examples/sample.html">CKEditor</a>]
+  <h1 align="center">VirtualKeyboard demo page</h1>
+  <table cellpadding="0" cellspacing="0" border="0">
+   <tr>
+    <td valign="top">
+     <form action="no.cgi" method="get">
+      <div>
+       Subject:<br />
+       <input type="text" onfocus="IFrameVirtualKeyboard.attachInput(this)" /><br />
+       Password (has keyboard animation disabled):<br />
+       <input type="password" class="VK_no_animate" onfocus="IFrameVirtualKeyboard.attachInput(this)" /><br />
+       Text:<br />
+       <textarea id="text" cols="55" rows="10" wrap="soft" onfocus="IFrameVirtualKeyboard.attachInput(this)"></textarea>
+       <div id="td"></div>
+       <button onclick="IFrameVirtualKeyboard.toggle('text','td'); return false;" >Keyboard</button>
+      </div>
+     </form>
+    </td>
+    <td valign="top">
+     &nbsp;<strong>Tip: </strong><em>Click on the "Keyboard" button to open the keyboard.</em>
+     <h2>Installation</h2>
+     <ol>
+      <li>Add <code>&lt;script type="text/javascript" src="vk_iframe.js" &gt;&lt;/script&gt;</code>
+          to the page's HEAD section</li>
+      <li>Add container to place keyboard <code>&lt;div id="keyboard"&gt;&lt;/div&gt;</code></li>
+      <li>Add button to open the keyboard <code>&lt;button onclick="IFrameVirtualKeyboard.toggle('default_input_id', 'keyboard');"&gt;Keyboard&lt;/button&gt;</code>
+      <li>Add attribute <code>onfocus="IFrameVirtualKeyboard.attachInput(this)"</code> to any fields which should receive keyboard input
+      <li>Click on the field to open the keyboard</li>
+     </ol>
+     <h2>Resources</h2>
+     <ul>
+      <li><a href="http://bts.debugger.ru/index.php?tasks=all&project=5">Bugtracker</a></li>
+      <li><a href="http://allanguages.info/forum">Support forum</a></li>
+      <li><a href="http://debugger.ru/projects/virtualkeyboard">Project page</a></li>
+      <li><a href="http://www.codeproject.com/jscript/jsvk.asp">Project page @CodeProject</a></li>
+      <li><a href="http://freshmeat.net/project/jsvk">Project page @Freshmeat</a></li>
+     </ul>
+    </td>
+   </tr>
+  </table>
+ </body>
+</html>
