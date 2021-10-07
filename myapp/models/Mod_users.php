@@ -76,17 +76,14 @@ class Mod_users extends CI_Model {
     }
 
     public function is_admin() {
-        return true;
         return $this->me->isadmin && $this->accepted_current_policy();
     }
 
     public function is_teacher() {
-        return true;
         return ($this->me->isteacher || $this->me->isadmin) && $this->accepted_current_policy(); // All admins are teachers
     }
 
     public function is_translator() {
-        return true;
         return ($this->me->istranslator || $this->me->isadmin) && $this->accepted_current_policy(); // All admins are translator
     }
 
