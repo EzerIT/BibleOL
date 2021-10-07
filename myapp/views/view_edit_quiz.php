@@ -9,7 +9,8 @@
   </ul>
    
   <div id="tab_description">
-    <textarea id="txtdesc" style="width:100%; height:100px" wrap="hard"></textarea>
+      &nbsp;<!-- &nbsp; is required to circumvent a bug in some versions of Firefox -->
+      <textarea id="txtdesc" style="width:100%; height:100px" wrap="hard"></textarea>
   </div>
   <div id="tab_universe">
     <div id="passagetree">
