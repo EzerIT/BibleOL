@@ -48,6 +48,7 @@ DocumentCookie = new function () {
           document.cookie = name + "=" + value
                          + (path ? ";path=" + path
                                  : "")
+                         +";SameSite=Strict"
                          + (expire ? ";NoExp=" + ((expire instanceof Date)?expire.toGMTString()
                                                                           :new Date(new Date().getTime()+expire*1000).toGMTString())
                                    : "")
