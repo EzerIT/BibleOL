@@ -730,11 +730,11 @@ class Ctrl_exams extends MY_Controller
           if ($this->quiz_data->quizFeatures->useVirtualKeyboard) {
               switch ($this->db_config->dbinfo->charSet) {
                 case 'hebrew':
-                      $javascripts[] = 'virtualkeyboard/vk_loader.js?vk_layout=IL%20Biblical%20Hebrew%20(SIL)&amp;vk_skin=goldie';
+                      $javascripts[] = 'VirtualKeyboard.full.3.7.2/vk_loader.js?vk_layout=IL%20Biblical%20Hebrew%20(SIL)&amp;vk_skin=goldie';
                       break;
 
                 case 'greek':
-                      $javascripts[] = 'virtualkeyboard/vk_loader.js?vk_layout=GR%20Greek%20Polytonic&amp;vk_skin=goldie';
+                      $javascripts[] = 'VirtualKeyboard.full.3.7.2/vk_loader.js?vk_layout=GR%20Greek%20Polytonic&amp;vk_skin=goldie';
                       break;
 
                 case 'transliterated_hebrew':
