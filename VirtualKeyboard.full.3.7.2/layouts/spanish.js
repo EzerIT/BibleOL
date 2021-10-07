@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'ES'
+﻿WirtualKeyboard.addLayout({code:'ES'
 ,name:'Spanish'
 ,normal:'º1234567890\'¡çqwertyuiop`+asdfghjklñ´zxcvbnm,.-'
 ,shift:{0:'ª!"·$%&/()=?¿',24:'^*',36:'¨',44:';:_'}

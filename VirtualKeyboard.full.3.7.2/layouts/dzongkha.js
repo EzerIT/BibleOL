@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'DZ-BT'
+﻿WirtualKeyboard.addLayout({code:'DZ-BT'
 ,name:'Dzongkha'
 ,normal:'༉༡༢༣༤༥༦༧༨༩༠༔།ཝཀཁགངིེོུཅཆཇཉཏཐདནཔཕབམཙཚཛཞཟའཡརལཤསཧཨ'
 ,shift:{0:'༊༄༅༆',6:'༈༸༴༼༽ཿ༑ྭྐྑྒྔ྄ྀཻཽྕྖྗྙྟྠྡྣྤྥྦྨྩྪྫྮྯཱྱྲླྴྶྷ'}

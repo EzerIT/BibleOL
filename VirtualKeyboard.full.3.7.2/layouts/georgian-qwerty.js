@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'KA-GE'
+﻿WirtualKeyboard.addLayout({code:'KA-GE'
 ,name:'Georgian QWERTY'
 ,normal:'„1234567890-=~ქწერტყუიოპ[]ასდფგჰჯკლ;\'ზხცვბნმ,./'
 ,shift:{0:'“!@#$%^&*()_+|',15:'ჭ',17:'ღთ',24:'{}',27:'შ',32:'ჟ',35:':"ძ',39:'ჩ',42:'N',44:'<>?'}

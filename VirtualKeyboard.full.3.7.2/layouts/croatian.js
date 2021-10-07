@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'HR'
+﻿WirtualKeyboard.addLayout({code:'HR'
 ,name:'Croatian'
 ,normal:'¸1234567890\'+žqwertzuiopšđasdfghjklčćyxcvbnm,.-'
 ,shift:{0:'¨!"#$%&/()=?*',44:';:_'}

@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'SQ-AL'
+﻿WirtualKeyboard.addLayout({code:'SQ-AL'
 ,name:'Albanian'
 ,normal:'\\1234567890-=]qwertzuiopç@asdfghjklë[yxcvbnm,./'
 ,shift:{0:'|!"#$%^&*()_+}',25:'\'',36:'{',44:';:?'}

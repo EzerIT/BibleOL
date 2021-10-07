@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'BLA'
+﻿WirtualKeyboard.addLayout({code:'BLA'
 ,name:'Blackfoot Phonetic'
 ,normal:'`1234567890-=\\wetyiop[]ashk;\'nm,᙮/'
 ,shift:{0:'~!@#$%^&*()_+|',24:'{}',35:':"',44:'<>?'}

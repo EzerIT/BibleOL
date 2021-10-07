@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'NB-NO'
+﻿WirtualKeyboard.addLayout({code:'NB-NO'
 ,name:'Norwegian'
 ,normal:'|1234567890+\\\'qwertyuiopå¨asdfghjkløæzxcvbnm,.-'
 ,shift:{0:'§!"#¤%&/()=?`*',25:'^',44:';:_'}

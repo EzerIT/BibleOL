@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'CHR'
+﻿WirtualKeyboard.addLayout({code:'CHR'
 ,name:'Cherokee Phonetic'
 ,normal:'`1234567890-=\\qwetyuio[]asdghjkl;\'cvnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',24:'{}',35:':"',44:'<>?'}

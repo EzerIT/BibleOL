@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'SR-SP'
+﻿WirtualKeyboard.addLayout({code:'SR-SP'
 ,name:'Serbian (Latin)'
 ,normal:'‚1234567890\'+žqwertzuiopšđasdfghjklčćyxcvbnm,.-'
 ,shift:{0:'~!"#$%&/()=?*',44:';:_'}

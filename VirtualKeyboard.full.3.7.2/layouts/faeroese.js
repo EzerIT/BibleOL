@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'FO'
+﻿WirtualKeyboard.addLayout({code:'FO'
 ,name:'Faeroese'
 ,normal:'½1234567890+´\'qwertyuiopåðasdfghjklæøzxcvbnm,.-'
 ,shift:{0:'§!"#¤%&/()=?`*',44:';:_'}

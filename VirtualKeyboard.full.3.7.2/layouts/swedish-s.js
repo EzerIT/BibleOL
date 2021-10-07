@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'SE'
+﻿WirtualKeyboard.addLayout({code:'SE'
 ,name:'Swedish with Sami'
 ,normal:'§1234567890+´\'qwertyuiopå¨asdfghjklöäzxcvbnm,.-'
 ,shift:{0:'½!"#¤%&/()=?`*',25:'^',44:';:_'}

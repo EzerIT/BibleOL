@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'FR'
+﻿WirtualKeyboard.addLayout({code:'FR'
 ,name:'French'
 ,normal:'²&é"\'(-è_çà)=*azertyuiop^$qsdfghjklmùwxcvbn,;:!'
 ,shift:{1:'1234567890°+µ',24:'¨£',36:'%',43:'?./§'}

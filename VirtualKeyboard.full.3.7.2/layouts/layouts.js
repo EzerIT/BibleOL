@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayoutList(
+﻿WirtualKeyboard.addLayoutList(
 {code:'EL-GR'
 ,name:'Greek Polytonic'
 ,normal:'~1234567890-=\\;ςερτυθιοπ[]ασδφγηξκλ΄\'ζχψωβνμ,./'

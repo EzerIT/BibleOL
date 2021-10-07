@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'TR'
+﻿WirtualKeyboard.addLayout({code:'TR'
 ,name:'Turkish F'
 ,normal:'+1234567890/-xfgğıodrnhpqwuieaütkmlyşjövcçzsb.,'
 ,shift:{0:'*!"^$%&\'()=?_',27:'İ',45:':;'}

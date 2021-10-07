@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'UK-UA'
+﻿WirtualKeyboard.addLayout({code:'UK-UA'
 ,name:'Ukrainian Phonetic'
 ,normal:'„1234567890-єючшертиуіопяїасдфґгйклжщзхцвбнм,.ь'
 ,shift:{0:'“!:№;%V’?()—',44:'«»'}

@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'TA-IN'
+﻿WirtualKeyboard.addLayout({code:'TA-IN'
 ,name:'Sinhala Indic'
 ,normal:'්\u200dර1234567890-=\\ුඅෑරඑහමසදචඤ;්ිාෙටයවනකත.\'ංජඩඉබපලග/'
 ,shift:{0:'ෙ!@#$%^&*()_+|ූඋැඍඔශඹෂධඡඥ:ෟීෘෆඨ්\u200dයXණඛථ,"ඞඣඪඊභඵළඝ?'}

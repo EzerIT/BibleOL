@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'HE-IL'
+﻿WirtualKeyboard.addLayout({code:'HE-IL'
 ,name:'Biblical Hebrew (Tiro)'
 ,normal:'׃1234567890־◦׀̇׳קראטוןםפ][שדגכעיחלךף֚זסבהנמצתץ֭'
 ,shift:{0:'ְֱֲֳִֵֶַָֺֹֻּֽֿׁׂׅ֤֪֦֥֧֛֑֖֣֮֩֙֒֯֝֠֨ׄ֬֫֟֓֞֜֡֕֔֗֘'}

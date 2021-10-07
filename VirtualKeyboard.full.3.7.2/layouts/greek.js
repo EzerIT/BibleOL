@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'EL-GR'
+﻿WirtualKeyboard.addLayout({code:'EL-GR'
 ,name:'Greek'
 ,normal:'`1234567890-=\\;ςερτυθιοπ[]ασδφγηξκλ΄\'ζχψωβνμ,./'
 ,shift:{0:'~!@#$%^&*()_+|:΅',24:'{}',35:'¨"',44:'<>?'}

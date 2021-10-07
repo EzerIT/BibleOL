@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'MYA-MM'
+﻿WirtualKeyboard.addLayout({code:'MYA-MM'
 ,name:'Zawgyi Myanmar'
 ,normal:'`၁၂၃၄၅၆၇၈၉၀-=၏ဆတနမအပကငသစဟ]ေ်ိ္ါ့ျုူးဒဖထခလဘညာယ.။'
 ,shift:{0:'~ဍ႑ဋ၌%/ရဂ()×+႒ွ်ၽႊႏၽြႊ႔႕ႈဥဏဧ}ဗွီၤြံဲဳဴၚဓဇဌဃဠႀၿၾဝဈ၊'}

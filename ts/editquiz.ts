@@ -66,7 +66,7 @@ declare let dir_name           : string;   // Name of exercise file directory
 //****************************************************************************************************
 // Other globale variables
 //
-let VirtualKeyboard    : any;                          // Virtual keyboard
+let WirtualKeyboard    : any;                          // Virtual keyboard
 let origMayLocate      : boolean;                      // Does the exercise original allow users to locate passages?
 let origSentBefore     : number;                       // Context sentences before question in original
 let origSentAfter      : number;                       // Context sentences after question in original
@@ -424,7 +424,7 @@ function numberInputModifiedListener(e : JQueryEventObject) : void {
 //****************************************************************************************************
 // The main program
 // 
-// The execution of this function is postponed one second to ensure that ckeditor and VirtualKeyboard
+// The execution of this function is postponed one second to ensure that ckeditor and WirtualKeyboard
 // have been loaded.
 // This delay needed to be inserted after adding the Chinese interface; but later it seemed to be unnecessary.
 // Maybe it can be removed again by replaceing setTimeout(....,1000) with $(....).
@@ -445,9 +445,9 @@ setTimeout(function() {
     charset = new Charset(configuration.charSet);
 
     
-    if (VirtualKeyboard) {
-        VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
-        VirtualKeyboard.toggle('firstinput','virtualkbid');
+    if (WirtualKeyboard) {
+        WirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
+        WirtualKeyboard.toggle('firstinput','virtualkbid');
     }
 
     // Configure the text editor

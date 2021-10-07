@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'IU-IKU'
+﻿WirtualKeyboard.addLayout({code:'IU-IKU'
 ,name:'Inuktitut - nakvitot'
 ,normal:'`1234567890-=\\qwertyuiop[]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',24:'{[',35:':"',44:'<>?'}

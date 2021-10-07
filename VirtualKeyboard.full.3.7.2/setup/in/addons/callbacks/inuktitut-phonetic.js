@@ -1,1 +1,1 @@
-VirtualKeyboard.Langs.IKU.charProcessor
+WirtualKeyboard.Langs.IKU.charProcessor

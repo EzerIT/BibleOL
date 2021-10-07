@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'ET-EE'
+﻿WirtualKeyboard.addLayout({code:'ET-EE'
 ,name:'Estonian'
 ,normal:'ˇ1234567890+´\'qwertyuiopüõasdfghjklöäzxcvbnm,.-'
 ,shift:{0:'~!"#¤%&/()=?`*',44:';:_'}

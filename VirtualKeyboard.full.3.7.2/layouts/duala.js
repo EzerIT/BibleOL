@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'DUA-CM'
+﻿WirtualKeyboard.addLayout({code:'DUA-CM'
 ,name:'Duala'
 ,normal:'`1234567890-=\\ŋwertyuiopɛɔasdfghjkl;\'zɗcɓbnm,./'
 ,shift:{0:'~!@#₦%^&*()_+|',35:':"',44:'<>?'}

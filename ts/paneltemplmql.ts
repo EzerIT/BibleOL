@@ -1290,7 +1290,7 @@ abstract class PanelTemplMql {
                    {kbdRowId : kbdRowId, sfh: sfh, i: i}, // Event data
                    (e : JQueryEventObject) => {
                        $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
-                       VirtualKeyboard.attachInput(e.currentTarget);
+                       WirtualKeyboard.attachInput(e.currentTarget);
 
                        // Monitor changes to the input field
                        this.monitorChange(<JQuery<HTMLElement>>$(e.currentTarget), e.data.sfh, e.data.i);

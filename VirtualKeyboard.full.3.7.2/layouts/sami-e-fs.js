@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'SE'
+﻿WirtualKeyboard.addLayout({code:'SE'
 ,name:'Sami Extended Finland-Sweden'
 ,normal:'§1234567890+´đášertŧuiopåŋasdfghjklöäzčcvbnm,.-'
 ,shift:{0:'½!"#¤%&/()=?`',44:';:_'}

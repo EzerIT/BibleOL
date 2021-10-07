@@ -10,7 +10,7 @@
  * @version $Rev: 643 $
  * @lastchange $Author: wingedfox $ $Date: 2009-07-09 19:19:14 +0400 (Чт, 09 июл 2009) $
  */
-VirtualKeyboard.Langs.LA = new function () {
+WirtualKeyboard.Langs.LA = new function () {
     var self = this;
     var remap1 = {
  ga:'ǧa',ge:'ǧe',gi:'ǧi','go':'ǧo',gu:'ǧu',Ga:'Ʀa',Ge:'Ʀe',GI:'Ʀi',Go:'Ʀo',Gu:'Ʀu',GA:'ƦA',GE:'ƦE',GI:'ƦI',GO:'ƦO',GU:'ƦU'

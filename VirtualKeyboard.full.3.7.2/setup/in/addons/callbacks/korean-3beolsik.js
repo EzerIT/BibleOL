@@ -1,1 +1,1 @@
-VirtualKeyboard.Langs.KR.charProcessor
+WirtualKeyboard.Langs.KR.charProcessor

@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'KY-KG'
+﻿WirtualKeyboard.addLayout({code:'KY-KG'
 ,name:'Kyrgyz Cyrillic'
 ,normal:'ё1234567890-=\\йцукенгшщзхъфывапролджэячсмитьбю.'
 ,shift:{1:'!"№;%:?*()_+/',46:','}

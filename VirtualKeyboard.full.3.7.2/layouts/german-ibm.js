@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'DE'
+﻿WirtualKeyboard.addLayout({code:'DE'
 ,name:'German (IBM)'
 ,normal:'^1234567890ß´#qwertzuiopü+asdfghjklöäyxcvbnm,.-'
 ,shift:{0:'°!"§$%&/()=?`\'',25:'*',44:';:_'}

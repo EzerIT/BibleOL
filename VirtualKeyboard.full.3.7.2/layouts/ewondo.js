@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'EWO-CM'
+﻿WirtualKeyboard.addLayout({code:'EWO-CM'
 ,name:'Ewondo'
 ,normal:'`1234567890-=\\ŋwertyuiopɛɔasdfghəkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#₵%^&*()_+|',32:'Ǝ',35:':"',44:'<>?'}

@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'HE-IL'
+﻿WirtualKeyboard.addLayout({code:'HE-IL'
 ,name:'Biblical Hebrew (SIL)'
 ,normal:'€1234567890־ּ\\קוֶרתיִֹֻפ[]ַסדשׂגהשׁכלְ’זחצטבנמ,./'
 ,shift:{0:'₪!֘֨֜֞',7:'֬֝()–',13:'׀֗',16:'ֵ',19:'֟',22:'ֺף{}ָש',33:'ך',35:'״”',39:'ץ',42:'ןםעא?'}

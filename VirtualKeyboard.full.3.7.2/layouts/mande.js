@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'MNK-GN'
+﻿WirtualKeyboard.addLayout({code:'MNK-GN'
 ,name:'Mande'
 ,normal:'`1234567890-=\\ɛwertyuiopƝ]asdfghƒkl;\'zɔcŋbnm,./'
 ,shift:{0:'~!@#₦%^&*()_+|',25:'}',35:':"',44:'<>?'}

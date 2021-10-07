@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'GAZ-ET'
+﻿WirtualKeyboard.addLayout({code:'GAZ-ET'
 ,name:'Oromo'
 ,normal:'`1234567890-=\\qwertyuiop[]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',24:'{}',35:':"',44:'<>?'}

@@ -1,1 +1,1 @@
-VirtualKeyboard.Langs.JP.processChar
+WirtualKeyboard.Langs.JP.processChar

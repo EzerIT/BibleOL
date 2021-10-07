@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'YOR-NG'
+﻿WirtualKeyboard.addLayout({code:'YOR-NG'
 ,name:'Yoruba'
 ,normal:'`1234567890-=\\qwertyuiop[]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',24:'{}',35:':"',44:'<>?'}

@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'FI'
+﻿WirtualKeyboard.addLayout({code:'FI'
 ,name:'Finnish'
 ,normal:'§1234567890+´\'qwertyuiopå¨asdfghjklöäzxcvbnm,.-'
 ,shift:{0:'½!"#¤%&/()=?`*',25:'^',44:';:_'}

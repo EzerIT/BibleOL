@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'EM-ET'
+﻿WirtualKeyboard.addLayout({code:'EM-ET'
 ,name:'Ethiopic  Pan-Amharic'
 ,normal:'`1234567890-=\\ቀወeረተየuioፐ[]aሰደፈገሀጀከለ፤\'ዘሸቸቨበነመ፣./'
 ,shift:{0:'~!@#$%^&*()_+|ቐ',18:'ጠ',21:'ዕ',23:'ጰ{}',27:'ጸዻ',30:'ጘሐ',33:'ኸ',35:'፡"ዠ',39:'ጨ',42:'ኘ',44:'«»፧'}
@@ -154,7 +154,7 @@
                     len = str.length;
                 }
             } else {
-                chr = VirtualKeyboard.Langs.ET.conv[chr]||chr;
+                chr = WirtualKeyboard.Langs.ET.conv[chr]||chr;
                 if (str = EZnonfinal[buf+chr]) {
                     len = str.length;
                 } else if (str = EZfinal[buf+chr]) {

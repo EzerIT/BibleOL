@@ -22,24 +22,24 @@ function (chr, buf) {
             len = buf.length-1;
         }
     } else {
-        chr = VirtualKeyboard.Langs.ET.conv[chr]||chr;
+        chr = WirtualKeyboard.Langs.ET.conv[chr]||chr;
         if (chr==' ') {
             str = '፡';
         } else {
             vow = vowelsXXT[chr] || vowelsXXT[chr.toLowerCase()];
             if(isNumber(vow)){
                  if (buf) {
-                     str = VirtualKeyboard.Langs.ET.cons[buf].charAt(vow);
+                     str = WirtualKeyboard.Langs.ET.cons[buf].charAt(vow);
                      if (!str || str==' ') {
                          str = buf;
                          len = buf.length;
                      }
                  } else {
-                     str = VirtualKeyboard.Langs.ET.cons['እ'].charAt(vow) || buf+chr;
+                     str = WirtualKeyboard.Langs.ET.cons['እ'].charAt(vow) || buf+chr;
                  }
              } else {
                  str = buf+chr;
-                 len = VirtualKeyboard.Langs.ET.cons[chr]?1:0;
+                 len = WirtualKeyboard.Langs.ET.cons[chr]?1:0;
              }
         }
     }

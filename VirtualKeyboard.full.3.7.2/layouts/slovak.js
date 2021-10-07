@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'SK'
+﻿WirtualKeyboard.addLayout({code:'SK'
 ,name:'Slovak'
 ,normal:';+ľščťžýáíé=´ňqwertzuiopúäasdfghjklô§yxcvbnm,.-'
 ,shift:{0:'°1234567890%ˇ)',24:'/(',35:'"!',44:'?:_'}

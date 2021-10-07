@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'UK-UA'
+﻿WirtualKeyboard.addLayout({code:'UK-UA'
 ,name:'Ukrainian'
 ,normal:'ё1234567890-=\\йцукенгшщзхїфівапролджєячсмитьбю.'
 ,shift:{1:'!"№;%:?*()_+/',46:','}

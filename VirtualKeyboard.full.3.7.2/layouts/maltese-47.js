@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'MT'
+﻿WirtualKeyboard.addLayout({code:'MT'
 ,name:'Maltese 47-key'
 ,normal:'ċ1234567890-=żqwertyuiopġħasdfghjkl;\'zxcvbnm,./'
 ,shift:{1:'!@€$%^&*()_+',35:':"',44:'<>?'}

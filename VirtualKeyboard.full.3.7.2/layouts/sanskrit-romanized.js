@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'SA-IN'
+﻿WirtualKeyboard.addLayout({code:'SA-IN'
 ,name:'Sanskrit Romanized'
 ,normal:'आ१२३४५६७८९०-=।टडेरतयुिोपऋऌअसदउगहजकल.ऽशइचवबनमएओ्'
 ,shift:{0:'ॐ॒॑!?\'"<>()_+॥ठढैृथञूीौफॠॡाषधऊघःझखॢ,॰ङईछळभणंऐऔ\u200d'}

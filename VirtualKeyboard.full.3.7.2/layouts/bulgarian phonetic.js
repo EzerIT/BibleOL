@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'BG'
+﻿WirtualKeyboard.addLayout({code:'BG'
 ,name:'Bulgarian Phonetic'
 ,normal:'ч1234567890-=юявертъуиопшщасдфгхйкл;\'зьцжбнм,./'
 ,shift:{1:'!@#$%^&*()_+',35:':"',44:'<>?'}

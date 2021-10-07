@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'BAM-ML'
+﻿WirtualKeyboard.addLayout({code:'BAM-ML'
 ,name:'Bambara'
 ,normal:'`1234567890-=\\qwertyuiopɛɔasdfghjkl;\'zɲcŋbnm,./'
 ,shift:{0:'~!@#₦%^&*()_+|',35:':"',44:'<>?'}

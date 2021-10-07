@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'VI-VN'
+﻿WirtualKeyboard.addLayout({code:'VI-VN'
 ,name:'Vietnamese'
 ,normal:'`ăâêộ̀̉̃́đ-₫\\qwertyuiopươasdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~',11:'_+|',35:':"',44:'<>?'}

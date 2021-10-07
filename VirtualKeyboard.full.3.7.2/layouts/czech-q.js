@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'CS-CZ'
+﻿WirtualKeyboard.addLayout({code:'CS-CZ'
 ,name:'Czech (QWERTY)'
 ,normal:';+ěščřžýáíé=´¨qwertyuiopú)asdfghjklů§zxcvbnm,.-'
 ,shift:{0:'°1234567890%ˇ\'',24:'/(',35:'"!',44:'?:_'}

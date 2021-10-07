@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'KM'
+﻿WirtualKeyboard.addLayout({code:'KM'
 ,name:'Khmer (NIDA 1.0)'
 ,normal:'«១២៣៤៥៦៧៨៩០ឥឲឮឆឹេរតយុិោផៀឪាសដថងហ្កលើ់ឋខចវបនមុំ។៊'
 ,shift:{0:'»!ៗ"៛%៍័៏()៌=ឭឈឺែឬទួូីៅភឿឧាំៃឌធអះញគឡោះ៉ឍឃជេះពណំុះ៕?'}

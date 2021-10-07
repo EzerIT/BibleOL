@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'LUG-UG'
+﻿WirtualKeyboard.addLayout({code:'LUG-UG'
 ,name:'Luganda'
 ,normal:'`1234567890-=\\qwertyuiopŋ]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',25:'}',35:':"',44:'<>?'}

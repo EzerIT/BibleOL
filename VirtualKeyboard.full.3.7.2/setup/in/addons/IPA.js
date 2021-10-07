@@ -10,7 +10,7 @@
  * @version $Rev: 643 $
  * @lastchange $Author: wingedfox $ $Date: 2009-07-09 19:19:14 +0400 (Thu, 09 Jul 2009) $
  */
-VirtualKeyboard.Langs.IPA = new function () {
+WirtualKeyboard.Langs.IPA = new function () {
     var self = this;
     var INPArr = {
         '˧':'˥|˦|˧|˨|˩|a\u1dc4|a\u1dc5|a\u1dc7|a\u1dc6|a\u1dc8|a\u1dc9|˹|˺|˻|˼|˽|˾|˿'
@@ -77,7 +77,7 @@ VirtualKeyboard.Langs.IPA = new function () {
     /**
      *  Callback to process keyboard input in the current IME style
      *
-     *  @see VirtualKeyboard.processChar
+     *  @see WirtualKeyboard.processChar
      *  @param {String} chr current input char
      *  @param {String} buf actual processing buffer
      *  @return {Array} new buffer contents and length
@@ -88,23 +88,23 @@ VirtualKeyboard.Langs.IPA = new function () {
            ,prefixReg = /[ΑΒ˧]/;
 
         if (chr=='\u0008') { // backspace
-             VirtualKeyboard.IME.hide();
+             WirtualKeyboard.IME.hide();
              return ['',0];
-        } else if (VirtualKeyboard.IME.getSuggestions().length) {
+        } else if (WirtualKeyboard.IME.getSuggestions().length) {
                 if (isFinite(n=parseInt(chr))) {
-                    s = VirtualKeyboard.IME.getChar(n);
+                    s = WirtualKeyboard.IME.getChar(n);
                     if (!s) {
                         return[buf,buf.length];
                     } else {
-                        VirtualKeyboard.IME.hide();
+                        WirtualKeyboard.IME.hide();
                         if (prefixReg.test(buf)) {
                             s=s.slice(-1);
                         }
                         return[s,0];
                     }
                 } else if ((a = INPArr[chr] || []).length) {
-                    s=VirtualKeyboard.IME.getSuggestions()[0];
-                    VirtualKeyboard.IME.setSuggestions((typeof a=='string')?INPArr[chr]=a.split( a.indexOf('|')!=-1?'|'
+                    s=WirtualKeyboard.IME.getSuggestions()[0];
+                    WirtualKeyboard.IME.setSuggestions((typeof a=='string')?INPArr[chr]=a.split( a.indexOf('|')!=-1?'|'
                                                                                                                    :'')
                                                                            :a);
                     if (prefixReg.test(buf)) {
@@ -112,8 +112,8 @@ VirtualKeyboard.Langs.IPA = new function () {
                     }
                     return [s+chr,1]
                 } else {
-                    s=VirtualKeyboard.IME.getSuggestions()[0];
-                    VirtualKeyboard.IME.hide();
+                    s=WirtualKeyboard.IME.getSuggestions()[0];
+                    WirtualKeyboard.IME.hide();
                     if (prefixReg.test(buf)) {
                         s=s.slice(-1);
                     }
@@ -122,7 +122,7 @@ VirtualKeyboard.Langs.IPA = new function () {
         } else {
             a = INPArr[chr] || [];
             if (a.length) {
-                VirtualKeyboard.IME.show((typeof a=='string')?INPArr[chr]=a.split( a.indexOf('|')!=-1?'|'
+                WirtualKeyboard.IME.show((typeof a=='string')?INPArr[chr]=a.split( a.indexOf('|')!=-1?'|'
                                                                                                      :'')
                                                              :a);
                 return [buf+chr,1];

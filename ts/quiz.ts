@@ -6,7 +6,7 @@
 
 /// <reference path="statistics.ts" />
 
-declare let VirtualKeyboard : any;
+declare let WirtualKeyboard : any;
 
 //****************************************************************************************************
 // Quiz class

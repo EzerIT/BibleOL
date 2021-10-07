@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'FR-CA'
+﻿WirtualKeyboard.addLayout({code:'FR-CA'
 ,name:'Canadian French (Legacy)'
 ,normal:'°1234567890-=àqwertyuiop^çasdfghjkl;èzxcvbnm,.é'
 ,shift:{1:'!"#$%?&*()_+',24:'^',35:':',44:'\''}

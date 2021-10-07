@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'EN-CA'
+﻿WirtualKeyboard.addLayout({code:'EN-CA'
 ,name:'Canadian Multilingual Standard'
 ,normal:'/1234567890-=àqwertyuiop^çasdfghjkl;èzxcvbnm,.é'
 ,shift:{0:'\\!@#$%?&*()_+',24:'¨',35:':',44:'\'"'}

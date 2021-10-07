@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'DIV-MV'
+﻿WirtualKeyboard.addLayout({code:'DIV-MV'
 ,name:'Divehi Phonetic'
 ,normal:'`1234567890-=\\ްއެރތޔުިޮޕ][ަސދފގހޖކލ؛\'ޒ×ޗވބނމ،./'
 ,shift:{0:'~!@#$%^&*)(_+|ޤޢޭޜޓޠޫީޯ÷}{ާށޑﷲޣޙޛޚޅ:"ޡޘޝޥޞޏޟ><؟'}

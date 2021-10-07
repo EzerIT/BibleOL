@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'BS-BA'
+﻿WirtualKeyboard.addLayout({code:'BS-BA'
 ,name:'Bosnian Cyrillic'
 ,normal:'`1234567890\'+жљњертзуиопшђасдфгхјклчћѕџцвбнм,.-'
 ,shift:{0:'~!"#$%&/()=?*',44:';:_'}

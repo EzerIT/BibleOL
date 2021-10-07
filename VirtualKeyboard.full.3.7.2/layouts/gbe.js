@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'GBS-BJ'
+﻿WirtualKeyboard.addLayout({code:'GBS-BJ'
 ,name:'Gbe'
 ,normal:'`1234567890-=\\ŋwertyuiopɛɔasdfghƒkl;\'zxɖvbnm,./'
 ,shift:{0:'~!@#₦%^&*()_+|',35:':"',44:'<>?'}

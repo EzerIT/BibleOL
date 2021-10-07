@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'NY-MW'
+﻿WirtualKeyboard.addLayout({code:'NY-MW'
 ,name:'Chichewa'
 ,normal:'`1234567890-=\\qwertyuiopŋ]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#₦%^&*()_+|',25:'}',35:':"',44:'<>?'}

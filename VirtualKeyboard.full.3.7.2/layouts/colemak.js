@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'EN-US'
+﻿WirtualKeyboard.addLayout({code:'EN-US'
 ,name:'Colemak'
 ,normal:'`1234567890-=\\qwfpgjluy;[]arstdhneio\'zxcvbkm,./'
 ,shift:{0:'~!@#$%^&*()_+|',23:':{}',36:'"',44:'<>?'}

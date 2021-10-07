@@ -39,7 +39,7 @@ new function () {
        }
 
     self.activate = function () {
-        VirtualKeyboard.Langs.CN.INPArr = PYArr;
+        WirtualKeyboard.Langs.CN.INPArr = PYArr;
     }
-    self.charProcessor = VirtualKeyboard.Langs.CN.processChar
+    self.charProcessor = WirtualKeyboard.Langs.CN.processChar
 }

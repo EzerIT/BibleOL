@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'RU'
+﻿WirtualKeyboard.addLayout({code:'RU'
 ,name:'Russian (Typewriter)'
 ,normal:'|№-/":,._?%!;)йцукенгшщзхъфывапролджэячсмитьбюё'
 ,shift:{0:'+1234567890=\\('}});

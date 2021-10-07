@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'DE-CH'
+﻿WirtualKeyboard.addLayout({code:'DE-CH'
 ,name:'Swiss German'
 ,normal:'§1234567890\'^$qwertzuiopü¨asdfghjklöäyxcvbnm,.-'
 ,shift:{0:'°+"*ç%&/()=?`£',24:'è!',35:'éà',44:';:_'}

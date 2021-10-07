@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'UG'
+﻿WirtualKeyboard.addLayout({code:'UG'
 ,name:'Uighur Cyrillic'
 ,normal:'ёқңғүөҗәһ\'(-ъэяшертыуиопющасдфгчйкльжзхцвбнм,.;'
 ,shift:{9:'")_',44:'<>:'}

@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'TT-RU'
+﻿WirtualKeyboard.addLayout({code:'TT-RU'
 ,name:'Tatar'
 ,normal:'һ1234567890-=\\йөукенгшәзхүфывапролдңэячсмитҗбю.'
 ,shift:{1:'!"№;%:?*()_+/',46:','}

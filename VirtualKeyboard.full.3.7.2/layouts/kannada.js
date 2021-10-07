@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'KN-IN'
+﻿WirtualKeyboard.addLayout({code:'KN-IN'
 ,name:'Kannada'
 ,normal:'ೊ1234567890-ೃೌೈಾೀೂಬಹಗದಜಡೋೇ್ಿುಪರಕತಚಟೆಂಮನವಲಸ,.ಯ'
 ,shift:{0:'ಒ',3:'್ರರ್ಜ್ಞತ್ರಕ್ಷಶ್ರ()ಃಋ',14:'ಔಐಆಈಊಭಙಘಧಝಢಞಓಏಅಇಉಫಱಖಥಛಠಎ',39:'ಣ',42:'ಳಶಷ|'}

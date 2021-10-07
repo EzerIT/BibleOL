@@ -897,7 +897,7 @@ var PanelTemplMql = (function () {
             kbdRowId = this.name_prefix + "_" + key + "_row" + (+i + 1);
             jtf.on('focus', null, { kbdRowId: kbdRowId, sfh: sfh, i: i }, function (e) {
                 $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
-                VirtualKeyboard.attachInput(e.currentTarget);
+                WirtualKeyboard.attachInput(e.currentTarget);
                 _this.monitorChange($(e.currentTarget), e.data.sfh, e.data.i);
             });
         }
@@ -2081,7 +2081,7 @@ var util;
     }
     util.mydump = mydump;
 })(util || (util = {}));
-var VirtualKeyboard;
+var WirtualKeyboard;
 var origMayLocate;
 var origSentBefore;
 var origSentAfter;
@@ -2269,9 +2269,9 @@ setTimeout(function () {
             return 'You haven\'t saved your changes.';
     });
     charset = new Charset(configuration.charSet);
-    if (VirtualKeyboard) {
-        VirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
-        VirtualKeyboard.toggle('firstinput', 'virtualkbid');
+    if (WirtualKeyboard) {
+        WirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
+        WirtualKeyboard.toggle('firstinput', 'virtualkbid');
     }
     ckeditor = $('#txtdesc').ckeditor({
         uiColor: '#feeebd',

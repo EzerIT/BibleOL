@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'LB-LU'
+﻿WirtualKeyboard.addLayout({code:'LB-LU'
 ,name:'Luxembourgish '
 ,normal:'§1234567890\'^$qwertzuiopè¨asdfghjkléàyxcvbnm,.-'
 ,shift:{0:'°+"*ç%&/()=?`£',24:'ü!',35:'öä',44:';:_'}

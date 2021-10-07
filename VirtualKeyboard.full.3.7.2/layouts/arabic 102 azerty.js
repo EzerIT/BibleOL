@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'AR-SA'
+﻿WirtualKeyboard.addLayout({code:'AR-SA'
 ,name:'Arabic (102) AZERTY'
 ,normal:'>&é"\'(-è_çà)=ذضصثقفغعهخحجدشسيبلاتنمكطئءؤرلاىةوزظ'
 ,shift:{0:'<1234567890°+ًٌَُّلإإ‘÷×؛}{\\',28:'][لأأـ،/:"~ٍِْلآآ’,.؟'}

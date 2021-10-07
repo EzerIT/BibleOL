@@ -58,8 +58,8 @@ PopupVirtualKeyboard = new function() {
      *  @access public
      */
     self.attachInput = function(el) {
-        if (hWnd && !hWnd.closed && hWnd.VirtualKeyboard) {
-            return hWnd.VirtualKeyboard.attachInput(el);
+        if (hWnd && !hWnd.closed && hWnd.WirtualKeyboard) {
+            return hWnd.WirtualKeyboard.attachInput(el);
         }
         return false
     }
@@ -90,7 +90,7 @@ PopupVirtualKeyboard = new function() {
     self.close = 
     self.hide = function (target) {
         if (!hWnd || hWnd.closed) return false;
-        if (hWnd.VirtualKeyboard.isOpen()) hWnd.VirtualKeyboard.hide();
+        if (hWnd.WirtualKeyboard.isOpen()) hWnd.WirtualKeyboard.hide();
         hWnd.close();
         hWnd = null;
         if ('function' == typeof unloadHandler) {
@@ -115,7 +115,7 @@ PopupVirtualKeyboard = new function() {
     self.onload = function () {
         if ('string' == typeof tgt)
             tgt = document.getElementById(tgt);
-        hWnd.VirtualKeyboard.show( tgt
+        hWnd.WirtualKeyboard.show( tgt
                                   ,hWnd.document.body
                                  );
         /*

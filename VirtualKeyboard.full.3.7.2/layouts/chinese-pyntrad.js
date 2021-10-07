@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'ZH-CN'
+﻿WirtualKeyboard.addLayout({code:'ZH-CN'
 ,name:'Chinese Trad. Pinyin'
 ,normal:'`1234567890-=\\qwertyuiop[]asdfghjkl;\'zxcvbnm,。/'
 ,shift:{0:'~！·#￥%…—*（）—+|',24:'{}',35:'："',44:'《》？'}
@@ -513,7 +513,7 @@ new function () {
         a.zhon=a.zhong;
         a.zon=a.zong;
         a.zua=a.zuan;
-        VirtualKeyboard.Langs.CN.INPArr = a;
+        WirtualKeyboard.Langs.CN.INPArr = a;
     }
-    self.charProcessor = VirtualKeyboard.Langs.CN.processChar;//WithDict //Tone
+    self.charProcessor = WirtualKeyboard.Langs.CN.processChar;//WithDict //Tone
 }});

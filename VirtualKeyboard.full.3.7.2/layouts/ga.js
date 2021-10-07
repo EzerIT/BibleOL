@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'GAA-GH'
+﻿WirtualKeyboard.addLayout({code:'GAA-GH'
 ,name:'Ga'
 ,normal:'`1234567890-=\\ŋwertyuiopɛɔasdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#₵%^&*()_+|',35:':"',44:'<>?'}

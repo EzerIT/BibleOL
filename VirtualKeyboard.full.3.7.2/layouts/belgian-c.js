@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'FR-BE'
+﻿WirtualKeyboard.addLayout({code:'FR-BE'
 ,name:'Belgian (Comma)'
 ,normal:'²&é"\'(§è!çà)-µazertyuiop^$qsdfghjklmùwxcvbn,;:='
 ,shift:{0:'³1234567890°_£',24:'¨*',36:'%',43:'?./+'}

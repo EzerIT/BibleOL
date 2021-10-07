@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'PL'
+﻿WirtualKeyboard.addLayout({code:'PL'
 ,name:'Polish (214)'
 ,normal:'˛1234567890+\'óqwertzuiopżśasdfghjklłąyxcvbnm,.-'
 ,shift:{0:'·!"#¤%&/()=?*ź',24:'ńć',36:'ę',44:';:_'}

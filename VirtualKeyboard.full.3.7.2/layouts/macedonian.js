@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'MK'
+﻿WirtualKeyboard.addLayout({code:'MK'
 ,name:'Macedonian'
 ,normal:'`1234567890-=жљњертѕуиопшѓасдфгхјклчќзџцвбнм,./'
 ,shift:{0:'~!„“’%‘&*()_+',44:';:?'}

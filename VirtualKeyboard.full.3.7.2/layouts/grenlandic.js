@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'KL-GL'
+﻿WirtualKeyboard.addLayout({code:'KL-GL'
 ,name:'Grenland'
 ,normal:'½1234567890+´\'qwertyuiopå¨asdfghjklæøzxcvbnm,.-'
 ,shift:{0:'§!"#¤%&/()=?`*',25:'^',44:';:_'}

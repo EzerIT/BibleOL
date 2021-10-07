@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'BZW-NG'
+﻿WirtualKeyboard.addLayout({code:'BZW-NG'
 ,name:'Bassa'
 ,normal:'`1234567890-=\\ŋwertyuiopɛɔasdfghjkl;\'zɗɓvbnm,./'
 ,shift:{0:'~!@#₦%^&*()_+|',35:':"',44:'<>?'}

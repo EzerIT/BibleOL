@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'SE-NO'
+﻿WirtualKeyboard.addLayout({code:'SE-NO'
 ,name:'Sami Extended Norway'
 ,normal:'|1234567890+\\đášertŧuiopåŋasdfghjkløæzčcvbnm,.-'
 ,shift:{0:'§!"#¤%&/()=?`',44:';:_'}

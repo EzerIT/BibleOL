@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'FA-IR'
+﻿WirtualKeyboard.addLayout({code:'FA-IR'
 ,name:'Persian standard'
 ,normal:'\u200d۱۲۳۴۵۶۷۸۹۰-=\\ضصثقفغعهخحجچشسیبلاتنمکگظطزرذدپو./'
 ,shift:{0:'÷!٬٫﷼٪×،*)(ـ+|ًٌٍَُِّْ][}{ؤئيإأآة»«:؛كٓژٰ\u200cٔء><؟'}

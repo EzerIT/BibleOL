@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'TE-IN'
+﻿WirtualKeyboard.addLayout({code:'TE-IN'
 ,name:'Telugu'
 ,normal:'ొ1234567890-ృౌైాీూబహగదజడోే్ిుపరకతచటెంమనవలస,.య'
 ,shift:{0:'ఒ',3:'్ర',5:'జ్ఞత్రక్షశ్ర()ఃఋ',14:'ఔఐఆఈఊభఙఘధఝఢఞఓఏఅఇఉఫఱఖథఛఠఎఁణ',42:'ళశష'}

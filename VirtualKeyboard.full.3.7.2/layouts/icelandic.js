@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'IS'
+﻿WirtualKeyboard.addLayout({code:'IS'
 ,name:'Icelandic'
 ,normal:'°1234567890ö-+qwertyuiopð\'asdfghjklæ´zxcvbnm,.þ'
 ,shift:{0:'¨!"#$%&/()=',12:'_*',25:'?',36:'\'',44:';:'}

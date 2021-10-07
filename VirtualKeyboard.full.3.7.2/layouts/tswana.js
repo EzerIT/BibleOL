@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'TSN-BW'
+﻿WirtualKeyboard.addLayout({code:'TSN-BW'
 ,name:'Tswana'
 ,normal:'`1234567890-=\\qwertyuiop[]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',24:'{}',35:':"',44:'<>?'}

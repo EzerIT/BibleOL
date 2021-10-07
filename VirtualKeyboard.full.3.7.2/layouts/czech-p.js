@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'CS-CZ'
+﻿WirtualKeyboard.addLayout({code:'CS-CZ'
 ,name:'Czech Programmers'
 ,normal:'`1234567890-=\\qwertyuiop[]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',24:'{}',35:':"',44:'<>?'}

@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'TR'
+﻿WirtualKeyboard.addLayout({code:'TR'
 ,name:'Turkish Q'
 ,normal:'"1234567890*-,qwertyuıopğüasdfghjklşizxcvbnmöç.'
 ,shift:{0:'é!\'^+%&/()=?_;',36:'İ',46:':'}

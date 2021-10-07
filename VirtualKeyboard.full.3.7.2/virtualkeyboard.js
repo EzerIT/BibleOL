@@ -23,7 +23,7 @@
  * @class VirtualKeyboard
  * @constructor
  */
-var VirtualKeyboard = new function () {
+var WirtualKeyboard = new function () {
   var self = this;
   self.$VERSION$ = "3.7.2.797";
 
@@ -1863,17 +1863,17 @@ var VirtualKeyboard = new function () {
  *
  *  @type {Object}
  */
-VirtualKeyboard.Langs = {};
+WirtualKeyboard.Langs = {};
 /**
  *  Simple IME thing to show input tips, supplied by the callback
  *
  *  Usage:
- *   - call VirtualKeyboard.IME.show(suggestionlist); to show the suggestions
- *   - call VirtualKeyboard.IME.hide(keep_selection); to hide IME toolbar and keep selectio if needed
+ *   - call WirtualKeyboard.IME.show(suggestionlist); to show the suggestions
+ *   - call WirtualKeyboard.IME.hide(keep_selection); to hide IME toolbar and keep selectio if needed
  *
  *  @scope public
  */
-VirtualKeyboard.IME = new function () {
+WirtualKeyboard.IME = new function () {
     var self = this;
     var html = "<div id=\"VirtualKeyboardIME\"><table><tr><td class=\"IMEControl\"><div class=\"left\"><!-- --></div></td>"
               +"<td class=\"IMEControl IMEContent\"></td>"
@@ -1894,7 +1894,7 @@ VirtualKeyboard.IME = new function () {
      *  @scope public
      */
     self.show = function (s) {
-        target = VirtualKeyboard.getAttachedInput();
+        target = WirtualKeyboard.getAttachedInput();
         var win = DOM.getWindow(target);
         /*
         *  if there's no IME or target window is not the same, as before - create new IME
@@ -2146,6 +2146,6 @@ VirtualKeyboard.IME = new function () {
     }
 }
 
-VirtualKeyboard.Layout = function () {
+WirtualKeyboard.Layout = function () {
 
 }

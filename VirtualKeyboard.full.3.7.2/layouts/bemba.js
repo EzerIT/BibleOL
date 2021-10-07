@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'BEM-ZM'
+﻿WirtualKeyboard.addLayout({code:'BEM-ZM'
 ,name:'Bemba'
 ,normal:'`1234567890-=\\qwertyuiopŋ]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#₦%^&*()_+|',25:'}',35:':"',44:'<>?'}

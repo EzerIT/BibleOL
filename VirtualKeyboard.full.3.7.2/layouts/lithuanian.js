@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'LT'
+﻿WirtualKeyboard.addLayout({code:'LT'
 ,name:'Lithuanian'
 ,normal:'`ąčęėįšųū90-ž\\qwertyuiop[]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~',9:'()_',13:'|',24:'{}',35:':"',44:'<>?'}

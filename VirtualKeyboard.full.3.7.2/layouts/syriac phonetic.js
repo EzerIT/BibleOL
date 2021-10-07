@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'SYR-SY'
+﻿WirtualKeyboard.addLayout({code:'SYR-SY'
 ,name:'Syriac Phonetic'
 ,normal:'\u070f1234567890-=܆ܩܘܖܪܬܝܜܥܧܦ][ܐܣܕܔܓܗܛܟܠܚܞܙܨܤܫܒܢܡ܀.܇'
 ,shift:{0:'̮!̥̊݉♰♱܊»)(«+:ܑܱܴܷܻܾܰܳܶܺܽ݀݁̈̄̇̃݊ـ̤̱̣̰ܸܼܹ݂ܲܵܿ،؛؟'}

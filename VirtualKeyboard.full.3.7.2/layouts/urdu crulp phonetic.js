@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'UR-PK'
+﻿WirtualKeyboard.addLayout({code:'UR-PK'
 ,name:'Urdu CRULP Phonetic'
 ,normal:'۱۲۳۴۵۶۷۸۹۰-=\\قوعرتےءیہپ][اسدفگحجکل؛\'زشچطبنم،۔/'
 ,shift:{0:'ً1234567890_+|ّْٰڑٹَئِۃُ}{آصڈ',30:'غھضخ',35:':"ذژثظ',42:'ں٘',45:'٫؟'}

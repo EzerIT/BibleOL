@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'BN-IN'
+﻿WirtualKeyboard.addLayout({code:'BN-IN'
 ,name:'Bengali'
 ,normal:'1234567890-ৃৌৈাীূবহগদজড়োে্িুপরকতচটংমনবলস,.য'
 ,shift:{3:'্রর্জ্রত্ষক্রশ্র()ঃঋ',14:'ঔঐআঈঊভঙঘধঝঢঞওএঅইউফ',33:'খথছঠ',38:'ঁণ',43:'শষ{য়'}

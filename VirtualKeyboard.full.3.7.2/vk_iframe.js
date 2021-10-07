@@ -59,8 +59,8 @@ IFrameVirtualKeyboard = new function() {
      *  @access public
      */
     self.attachInput = function(el) {
-        if (hWnd&&hWnd.VirtualKeyboard)
-            return hWnd.VirtualKeyboard.attachInput(el);
+        if (hWnd&&hWnd.WirtualKeyboard)
+            return hWnd.WirtualKeyboard.attachInput(el);
         return false;
     }
     /**
@@ -95,8 +95,8 @@ IFrameVirtualKeyboard = new function() {
             }
         } else if (!self.isOpen()) {
             iFrame.style.display = 'block';
-            if (hWnd.VirtualKeyboard) {
-                hWnd.VirtualKeyboard.show( tgt
+            if (hWnd.WirtualKeyboard) {
+                hWnd.WirtualKeyboard.show( tgt
                                           ,hWnd.document.body
                                          );
             }
@@ -124,8 +124,8 @@ IFrameVirtualKeyboard = new function() {
     self.hide = function (target) {
         if (self.isOpen()) {
             iFrame.style.display='none';
-            if (hWnd.VirtualKeyboard) {
-                hWnd.VirtualKeyboard.close();
+            if (hWnd.WirtualKeyboard) {
+                hWnd.WirtualKeyboard.close();
             }
         }
     }

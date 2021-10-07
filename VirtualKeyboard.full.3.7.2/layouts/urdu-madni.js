@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'UR-PK'
+﻿WirtualKeyboard.addLayout({code:'UR-PK'
 ,name:'Urdu - Madni'
 ,normal:'ٍ۱۲۳۴۵۶۷۸۹۰أؤ\u0602قوعرتےءیہپ][اسدفگھجکل؛\'زشچطبنم،۔/'
 ,shift:{0:'ً!\u0600ئ﷽ٌؐٔ)(ّآؔۡﷺؑڑٹ\u0601ٰٗۃُ\\+ٓصڈٖغحضخؒ:"ذژثظؓںَِ٘؟'}

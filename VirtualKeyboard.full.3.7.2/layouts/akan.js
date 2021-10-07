@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'AKA-GH'
+﻿WirtualKeyboard.addLayout({code:'AKA-GH'
 ,name:'Akan'
 ,normal:'`1234567890-=\\qwertyuiopɛɔasdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#₵%^&*()_+|',35:':"',44:'<>?'}

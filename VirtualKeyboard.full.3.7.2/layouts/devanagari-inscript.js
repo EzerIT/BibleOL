@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'HI-IN'
+﻿WirtualKeyboard.addLayout({code:'HI-IN'
 ,name:'Devanagari - INSCRIPT'
 ,normal:'ॊ1234567890-ृॉौैाीूबहगदजड़ोे्िुपरकतचटॆंमनवलस,.य'
 ,shift:{0:'ऒऍॅ्रर्ज्ञत्रक्षश्र()ःऋऑऔऐआईऊभङघधझढञओएअइउफऱखथछठऎँणऩऴळशष।य़'}

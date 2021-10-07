@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'EN-IE'
+﻿WirtualKeyboard.addLayout({code:'EN-IE'
 ,name:'Gaelic'
 ,normal:'`1234567890-=#qwertyuiop[]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'`!"£$%^&*()_+~',24:'{}',35:':@',44:'<>?'}

@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'TH'
+﻿WirtualKeyboard.addLayout({code:'TH'
 ,name:'Thai Kedmanee'
 ,normal:'_ๅ/-ภถุึคตจขชฃๆไำพะัีรนยบลฟหกดเ้่าสวงผปแอิืทมใฝ'
 ,shift:{0:'%+๑๒๓๔ู฿๕๖๗๘๙ฅ๐"ฎฑธํ๊ณฯญฐ,ฤฆฏโฌ็๋ษศซ.()ฉฮฺ์?ฒฬฦ'}

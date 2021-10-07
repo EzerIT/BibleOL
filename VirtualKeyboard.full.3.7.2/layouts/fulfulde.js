@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'FUB-CM'
+﻿WirtualKeyboard.addLayout({code:'FUB-CM'
 ,name:'Fulfulde'
 ,normal:'`1234567890-=\\qwertyuiopɗɓasdfghjkl;\'zxcŋbnm,./'
 ,shift:{0:'~!@#₦%^&*()_+|',35:':"',44:'<>?'}

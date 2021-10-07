@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'LT'
+﻿WirtualKeyboard.addLayout({code:'LT'
 ,name:'Lithuanian IBM'
 ,normal:'`!"/;:,.?()_+|ąžertyuiopį“asdfghjklųėzūcvbnmčšę'
 ,shift:{0:'~1234567890-=\\',25:'”'}

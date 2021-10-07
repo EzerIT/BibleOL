@@ -83,7 +83,7 @@
      */
     var updateIconState = function() {
         var img = icon.firstChild;
-        if (currentTarget != VirtualKeyboard.getAttachedInput()) {
+        if (currentTarget != WirtualKeyboard.getAttachedInput()) {
             img.src = img.src.replace(/jsvk[^.]*/,"jsvk");
         } else {
             img.src = img.src.replace(/jsvk[^.]*/,"jsvk_off");
@@ -124,8 +124,8 @@
      *  @scope private
      */
     var iconHide = function () {
-        if (VirtualKeyboard.isOpen()) {
-            var ct = VirtualKeyboard.getAttachedInput();
+        if (WirtualKeyboard.isOpen()) {
+            var ct = WirtualKeyboard.getAttachedInput();
             if (currentTarget != ct) {
                 currentTarget = ct;
                 placeIcon(ct);
@@ -142,7 +142,7 @@
      *  @scope protected
      */
     var iconClick = function () {
-        if (currentTarget != VirtualKeyboard.getAttachedInput()) {
+        if (currentTarget != WirtualKeyboard.getAttachedInput()) {
             var container = vk.firstChild;
             container.style.top=0;
             container.style.left=0;
@@ -152,11 +152,11 @@
 
             container.style.top = offCt.y-offVk.y+offCt.height+"px";
             container.style.left = offCt.x-offVk.x+"px";
-            VirtualKeyboard.toggle(currentTarget, container);
+            WirtualKeyboard.toggle(currentTarget, container);
             clearTimeout(iconHideTimeout);
             iconHideTimeout = null;
         } else {
-            VirtualKeyboard.close();
+            WirtualKeyboard.close();
             vk.parentNode.removeChild(vk);
             iconHideTimeout = setTimeout(iconHide, 1000);
         }

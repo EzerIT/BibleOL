@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'ZU-ZA'
+﻿WirtualKeyboard.addLayout({code:'ZU-ZA'
 ,name:'Zulu'
 ,normal:'`1234567890-=\\qwertyuiop[]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',24:'{}',35:':"',44:'<>?'}

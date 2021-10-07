@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'LV'
+﻿WirtualKeyboard.addLayout({code:'LV'
 ,name:'Latvian'
 ,normal:'­1234567890-fķūgjrmvnzēčžhšusildatec´ņbīkpoā,.ļ'
 ,shift:{0:'?!«»$%/&×()_',36:'°',44:';:'}

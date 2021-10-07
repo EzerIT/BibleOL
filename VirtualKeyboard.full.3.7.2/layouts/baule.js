@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'BCI-CI'
+﻿WirtualKeyboard.addLayout({code:'BCI-CI'
 ,name:'Baule'
 ,normal:'`1234567890-=\\qwertyuiopɛɔasdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#₵%^&*()_+|',35:':"',44:'<>?'}

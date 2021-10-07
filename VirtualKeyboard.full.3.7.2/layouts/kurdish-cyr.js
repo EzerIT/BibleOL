@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'KU'
+﻿WirtualKeyboard.addLayout({code:'KU'
 ,name:'Kurdish Cyrillic'
 ,normal:'\'1234567890әъэqwертöуиопшщасдфгhйкльжзхчвбнм,.;'
 ,shift:{0:'"!@#$%^&*()',44:'<>:'}

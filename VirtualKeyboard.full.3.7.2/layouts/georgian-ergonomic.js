@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'KA-GE'
+﻿WirtualKeyboard.addLayout({code:'KA-GE'
 ,name:'Georgian ergonomic'
 ,normal:'„!№,;%:?.()-“/ჩპუძჭტთნვშკქხიაეოდმსრბგჯჰყღჟზცლფწ'
 ,shift:{0:'\'1234567890+=§'}

@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'MR-IN'
+﻿WirtualKeyboard.addLayout({code:'MR-IN'
 ,name:'Marathi'
 ,normal:'१२३४५६७८९०-ृॉौैाीूबहगदजड़ोे्िुपरकतचटंमनवलस,.य'
 ,shift:{1:'ऍॅ्रर्ज्ञत्रक्षश्र()ःऋऑऔऐआईऊभङघधझढञओएअइउफऱखथछठ',38:'ँण',42:'ळशष।य़'}

@@ -1,4 +1,4 @@
-VirtualKeyboard.Langs.ET = {
+WirtualKeyboard.Langs.ET = {
     cons : {
         // e a,i,aa,ee,u,o,oa/wa
         // - aiAeuoWY

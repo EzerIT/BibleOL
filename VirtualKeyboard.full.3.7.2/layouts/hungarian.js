@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'HU'
+﻿WirtualKeyboard.addLayout({code:'HU'
 ,name:'Hungarian'
 ,normal:'0123456789öüóűqwertzuiopőúasdfghjkléáyxcvbnm,.-'
 ,shift:{0:'§\'"+!%/=()',44:'?:_'}

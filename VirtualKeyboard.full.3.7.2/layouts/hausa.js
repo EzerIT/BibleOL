@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'HAU-NG'
+﻿WirtualKeyboard.addLayout({code:'HAU-NG'
 ,name:'Hausa'
 ,normal:'`1234567890-=\\qwertyuiopƙƴasdfghjkl;\'zɗcɓbnm,./'
 ,shift:{0:'~!@#₦%^&*()_+|',35:':"',44:'<>?'}

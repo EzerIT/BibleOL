@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'PT'
+﻿WirtualKeyboard.addLayout({code:'PT'
 ,name:'Portuguese'
 ,normal:'\\1234567890\'«~qwertyuiop+´asdfghjklçºzxcvbnm,.-'
 ,shift:{0:'|!"#$%&/()=?»^',24:'*`',36:'ª',44:';:_'}

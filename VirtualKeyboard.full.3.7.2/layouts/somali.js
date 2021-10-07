@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'SO'
+﻿WirtualKeyboard.addLayout({code:'SO'
 ,name:'Somali'
 ,normal:'`1234567890-=\\qwertyuiop[]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',24:'{}',35:':"',44:'<>?'}

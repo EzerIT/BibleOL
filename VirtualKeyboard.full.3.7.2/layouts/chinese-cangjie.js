@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'ZH-CN'
+﻿WirtualKeyboard.addLayout({code:'ZH-CN'
 ,name:'Chinese Cangjie'
 ,normal:'`1234567890-=\\手田水口廿卜山戈人心[]日尸木火土竹十大中;\'重難金女月弓一,./'
 ,shift:{0:'~!@#$%^&*()_+|QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?'}
@@ -23,10 +23,10 @@ new function () {
      *  Layout 
      */
     self.activate = function () {
-        VirtualKeyboard.Langs.CN.INPArr = CJArr;
+        WirtualKeyboard.Langs.CN.INPArr = CJArr;
     }
 
-    self.charProcessor = VirtualKeyboard.Langs.CN.processChar;
+    self.charProcessor = WirtualKeyboard.Langs.CN.processChar;
 
     ;(function(){
         /*

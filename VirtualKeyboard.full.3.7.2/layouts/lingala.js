@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'LN-CG'
+﻿WirtualKeyboard.addLayout({code:'LN-CG'
 ,name:'Lingala'
 ,normal:'`1234567890-=\\qwertyuiopɛɔasdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',35:':"',44:'<>?'}

@@ -10,13 +10,13 @@
  * @version $Rev: 643 $
  * @lastchange $Author: wingedfox $ $Date: 2009-07-09 19:19:14 +0400 (Thu, 09 Jul 2009) $
  */
-VirtualKeyboard.Langs.CN = new function () {
+WirtualKeyboard.Langs.CN = new function () {
     var self = this;
     self.INPArr = [];
     /**
      *  Callback to process keyboard input in the current IME style
      *
-     *  @see VirtualKeyboard.processChar
+     *  @see WirtualKeyboard.processChar
      *  @param {String} chr current input char
      *  @param {String} buf actual processing buffer
      *  @return {Array} new buffer contents and length
@@ -26,34 +26,34 @@ VirtualKeyboard.Langs.CN = new function () {
         var num, str, arr
         if (chr=='\u0008') { // backspace
             if (buf && (str=buf.slice(0,-1))) {
-                VirtualKeyboard.IME.show(self.INPArr[str.toLowerCase()] || []);
+                WirtualKeyboard.IME.show(self.INPArr[str.toLowerCase()] || []);
                 return [str,str.length]
             } else {
-                VirtualKeyboard.IME.hide()
+                WirtualKeyboard.IME.hide()
                 return ['',0] //total delete; some other cases
             }
         } else { //non backspace
             str=buf+chr
             arr = self.INPArr[str.toLowerCase()] || []
             if (arr.length) { // miao
-                VirtualKeyboard.IME.show((typeof arr =='string')? self.INPArr[str.toLowerCase()]=arr.split('') : arr)
+                WirtualKeyboard.IME.show((typeof arr =='string')? self.INPArr[str.toLowerCase()]=arr.split('') : arr)
                 return [str, str.length]
-            } else if(VirtualKeyboard.IME.getSuggestions().length) { // not a part of a syllable
+            } else if(WirtualKeyboard.IME.getSuggestions().length) { // not a part of a syllable
                 if (isFinite(num=parseInt(chr))) { // miao3
-                    str = VirtualKeyboard.IME.getChar(num);
+                    str = WirtualKeyboard.IME.getChar(num);
                     if (!str) { //miao9 - no such variant
                         return[buf,buf.length]
                     } else {
-                        VirtualKeyboard.IME.hide();
+                        WirtualKeyboard.IME.hide();
                         return[str,0]
                     }
                 } else if ((arr = self.INPArr[chr.toLowerCase()] || []).length) { //nih
-                    str=VirtualKeyboard.IME.getSuggestions()[0]
-                    VirtualKeyboard.IME.setSuggestions((typeof arr =='string')? self.INPArr[str.toLowerCase()]=arr.split('') : arr)
+                    str=WirtualKeyboard.IME.getSuggestions()[0]
+                    WirtualKeyboard.IME.setSuggestions((typeof arr =='string')? self.INPArr[str.toLowerCase()]=arr.split('') : arr)
                     return [str+chr,1]
                 } else { // ni,
-                    str=VirtualKeyboard.IME.getSuggestions()[0]
-                    VirtualKeyboard.IME.hide()
+                    str=WirtualKeyboard.IME.getSuggestions()[0]
+                    WirtualKeyboard.IME.hide()
                     return [str+(chr.charCodeAt()==10? '': chr),0]
                 }
             }

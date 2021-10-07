@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'ES-MX'
+﻿WirtualKeyboard.addLayout({code:'ES-MX'
 ,name:'Latin American'
 ,normal:'|1234567890\'¿}qwertyuiop´+asdfghjklñ{zxcvbnm,.-'
 ,shift:{0:'°!"#$%&/()=?¡]',24:'¨*',36:'[',44:';:_'}

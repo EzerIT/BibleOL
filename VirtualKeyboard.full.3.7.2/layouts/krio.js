@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'KRI-SL'
+﻿WirtualKeyboard.addLayout({code:'KRI-SL'
 ,name:'Krio'
 ,normal:'`1234567890-=\\qwertyuiopɛɔasdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',35:':"',44:'<>?'}

@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'RO'
+﻿WirtualKeyboard.addLayout({code:'RO'
 ,name:'Romanian'
 ,normal:']1234567890+\'âqwertzuiopăîasdfghjklşţyxcvbnm,.-'
 ,shift:{0:'[!"#¤%&/()=?*',44:';:_'}

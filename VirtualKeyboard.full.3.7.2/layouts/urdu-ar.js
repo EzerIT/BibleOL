@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'UR-PK'
+﻿WirtualKeyboard.addLayout({code:'UR-PK'
 ,name:'Urdu Arabic'
 ,normal:'`١٢٣٤٥٦٧٨٩٠-=ڍقصيرتٿعڳوپڇچاسدفگهجڪلکڱزخطڀبنم،.ئ'
 ,shift:{0:'~!ٰءِءَءُ^۽ﯗ()_+ٺَضِڙٽثغهُڦڃڄآشڊلا̈هگحهجه:؛ـذّظاًٻڻ۾“”؟'}});

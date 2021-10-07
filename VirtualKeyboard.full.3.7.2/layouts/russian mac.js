@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'RU'
+﻿WirtualKeyboard.addLayout({code:'RU'
 ,name:'Russian (Mac)'
 ,normal:'>1234567890-=ёйцукенгшщзхъфывапролджэячсмитьбю/'
 ,shift:{0:'<!"№%:,.;()_+',46:'?'}

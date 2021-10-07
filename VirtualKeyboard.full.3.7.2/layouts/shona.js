@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'SN-ZW'
+﻿WirtualKeyboard.addLayout({code:'SN-ZW'
 ,name:'Shona'
 ,normal:'`1234567890-=\\qwertyuiop[]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',24:'{}',35:':"',44:'<>?'}

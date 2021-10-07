@@ -19,10 +19,10 @@ new function () {
      *  Layout 
      */
     self.activate = function () {
-        VirtualKeyboard.Langs.CN.INPArr = CJArr;
+        WirtualKeyboard.Langs.CN.INPArr = CJArr;
     }
 
-    self.charProcessor = VirtualKeyboard.Langs.CN.processChar;
+    self.charProcessor = WirtualKeyboard.Langs.CN.processChar;
 
     ;(function(){
         /*

@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'EN-US'
+﻿WirtualKeyboard.addLayout({code:'EN-US'
 ,name:'US English + Cyrillic'
 ,normal:'`1234567890-=\\qwertyuiop[]asdfghjkl;\'zxcvbnm,./'
 ,shift:{0:'~!@#$%^&*()_+|',24:'{}',35:':"',44:'<>?'}

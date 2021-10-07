@@ -14,9 +14,9 @@
 /*
 *  Prevent duplicate keyboard loading
 */
-if (!window.VirtualKeyboard) {
+if (!window.WirtualKeyboard) {
 
-VirtualKeyboard = new function () {
+WirtualKeyboard = new function () {
   var self = this, to = null;
   self.show = self.hide = self.toggle = self.attachInput = function () {
      window.status = 'VirtualKeyboard is not loaded yet.';

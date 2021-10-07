@@ -23,7 +23,7 @@ function (chr, buf) {
             len = buf.length-1;
         }
     } else {
-        chr = VirtualKeyboard.Langs.ET.conv[chr] || convWashRa[chr] || chr;
+        chr = WirtualKeyboard.Langs.ET.conv[chr] || convWashRa[chr] || chr;
         if (chr==' ') {
             str = '፡';
         } else {
@@ -44,7 +44,7 @@ function (chr, buf) {
             } else {
                 vow = vowelsWashRa[chr] || vowelsWashRa[chr.toLowerCase()];
                 if (isNumber(vow) && buf) {
-                    str = VirtualKeyboard.Langs.ET.cons[buf].charAt(vow);
+                    str = WirtualKeyboard.Langs.ET.cons[buf].charAt(vow);
                     if (!str || str==' ') {
                         str = buf;
                         len = buf.length;
@@ -54,7 +54,7 @@ function (chr, buf) {
                     if ('`' == str || '~' == str)
                         len = 1;
                     else
-                        len = VirtualKeyboard.Langs.ET.cons[chr]?1:0;
+                        len = WirtualKeyboard.Langs.ET.cons[chr]?1:0;
                 }
             }
         }

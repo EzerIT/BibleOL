@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'TT-BT'
+﻿WirtualKeyboard.addLayout({code:'TT-BT'
 ,name:'Delam Tibetan'
 ,normal:'༄༡༢༣༤༥༦༧༨༩༠ཝ༅ཧཕཡརཐཆཛའདཔཀཅཨིོེfུཁསགངབཇཟལཚཞཤཙམནཏཉ'
 ,shift:{0:'࿓༪༫༬༭༮༯༰༱༲༳༕࿔༴༸ྊཪཋསྦྱ༂༖ཌདྲྭཫ཮༁སྒྱསྦྲགྲྭFསྤྱསྒྲརྒྱསྐྱསྨྲསྤྲྈསྐྲ༃སྨྱༀཥརྩྭརྐྱཎཊ྅'}

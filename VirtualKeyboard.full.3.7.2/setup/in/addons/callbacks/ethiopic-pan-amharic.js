@@ -149,7 +149,7 @@
                     len = str.length;
                 }
             } else {
-                chr = VirtualKeyboard.Langs.ET.conv[chr]||chr;
+                chr = WirtualKeyboard.Langs.ET.conv[chr]||chr;
                 if (str = EZnonfinal[buf+chr]) {
                     len = str.length;
                 } else if (str = EZfinal[buf+chr]) {

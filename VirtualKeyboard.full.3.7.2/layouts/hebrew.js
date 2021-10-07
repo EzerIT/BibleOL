@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'HE-IL'
+﻿WirtualKeyboard.addLayout({code:'HE-IL'
 ,name:'Hebrew'
 ,normal:';1234567890-=\\/\'קראטוןםפ][שדגכעיחלךף,זסבהנמצתץ.'
 ,shift:{0:'~!@#$%^&*)(_+|QWERTYUIOP}{ASDFGHJKL:"ZXCVBNM><?'}

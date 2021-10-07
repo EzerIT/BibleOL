@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'AR-EG'
+﻿WirtualKeyboard.addLayout({code:'AR-EG'
 ,name:'Pashto-FSI'
 ,normal:'ﷲ١٢٣٤٥٦٧٨٩٠­=؛قويرتېعئوپطصاسدفږهجکل;\'زخچځبنم،./'
 ,shift:{0:'ة![]﴾٪^﴿*()-+ۀؤىړټ',20:'غۍۋ­ظضآشډﭪګحژگﻻ:"ذښثڅﱣڼً«»؟'}

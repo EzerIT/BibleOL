@@ -1,4 +1,4 @@
-﻿VirtualKeyboard.addLayout({code:'SL-SI'
+﻿WirtualKeyboard.addLayout({code:'SL-SI'
 ,name:'Slovenian'
 ,normal:'¸1234567890\'+žqwertzuiopšđasdfghjklčćyxcvbnm,.-'
 ,shift:{0:'¨!"#$%&/()=?*',44:';:_'}
