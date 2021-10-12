@@ -247,9 +247,13 @@ class Mod_statistics extends CI_Model {
         $templids = array();
         foreach ($query->result() as $row) {
             // Find all templates for a relevant student relating to each path
+
+            // We need to escape parentheses i pathnames twice. So ( becomes \\(
+            $escaped_pathname = str_replace("\\","\\\\",addcslashes($row->pathname,"()"));
+
             $query2 = $this->db
                 ->select('id')
-                ->where("pathname REGEXP '^{$this->quizzespath}/{$row->pathname}/[^/]*$'")
+                ->where("pathname REGEXP '^{$this->quizzespath}/$escaped_pathname/[^/]*$'")
                 ->where_in('userid',$userids)
                 ->get('sta_quiztemplate');
             foreach ($query2->result() as $row2)
@@ -288,9 +292,13 @@ class Mod_statistics extends CI_Model {
         $pathset = array(); // This is used as a set
         foreach ($query->result() as $row) {
             // Find all templates for a relevant student relating to each path
+
+            // We need to escape parentheses i pathnames twice. So ( becomes \\(
+            $escaped_pathname = str_replace("\\","\\\\",addcslashes($row->pathname,"()"));
+
             $query2 = $this->db
                 ->select('pathname')
-                ->where("pathname REGEXP '^{$this->quizzespath}/{$row->pathname}/[^/]*$'")
+                ->where("pathname REGEXP '^{$this->quizzespath}/$escaped_pathname/[^/]*$'")
                 ->get('sta_quiztemplate');
             foreach ($query2->result() as $row2)
                 $pathset[$row2->pathname] = true;
