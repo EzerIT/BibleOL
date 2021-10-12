@@ -43,7 +43,7 @@ class Migration_Exam_mode extends CI_Migration {
         $this->dbforge->add_key('id', true);
         $this->dbforge->create_table('exam',['comment' => 'Each entry on this table defines a new exam to be performed.']);
         
-        // Foreign key on classid in userclass table
+        // Foreign key on ownerid in exam table
         if (!$this->db->query("ALTER TABLE {$this->db->dbprefix}exam ADD FOREIGN KEY (ownerid) REFERENCES {$this->db->dbprefix}user(id) ON DELETE CASCADE ON UPDATE CASCADE"))
             echo "    ERROR: Foregin key (ownerid) on {$this->db->dbprefix}exam failed\n";
         else
@@ -69,13 +69,12 @@ class Migration_Exam_mode extends CI_Migration {
         $this->dbforge->add_key('id', true);
         $this->dbforge->create_table('exam_finished');
 
-
         echo "Create {$this->db->dbprefix}exam_results\n";
         $this->dbforge->add_field(['id'           => ['type' => 'INT', 'null' => false, 'auto_increment' => true],
-                                   'userid'       => ['type' => 'INT', 'default' => null],
-                                   'activeexamid' => ['type' => 'INT', 'default' => null],
-                                   'quizid'       => ['type' => 'INT', 'default' => null],
-                                   'quiztemplid'  => ['type' => 'INT', 'default' => null]]);
+                                   'userid'       => ['type' => 'INT', 'null' => false],
+                                   'activeexamid' => ['type' => 'INT', 'null' => false],
+                                   'quizid'       => ['type' => 'INT', 'null' => false],
+                                   'quiztemplid'  => ['type' => 'INT', 'null' => false]]);
         $this->dbforge->add_key('id', true);
         $this->dbforge->create_table('exam_results');
 
