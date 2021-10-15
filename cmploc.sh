@@ -26,14 +26,18 @@ for lcode in $iflangs; do
 done
 
 for lcode in $iflangs; do
-    echo -n "#     Comparing $lcode"
-    if diff -r myapp/language/langsrc/$lcode $TMP/interface/$lcode > $TMP/output; then
-        echo " --  No difference"
+    echo "#     Comparing $lcode"
+    if [ $lcode = "comment" ]; then 
+        if diff -r myapp/language/langsrc/$lcode $TMP/interface/$lcode > $TMP/output; then
+            echo " --  No difference"
+        else
+            echo
+            cat $TMP/output
+        fi
+        rm $TMP/output
     else
-        echo
-        cat $TMP/output
+        php index.php translate if_php_cmp_db $lcode myapp/language/langsrc/$lcode
     fi
-    rm $TMP/output
 done
 
 

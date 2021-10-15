@@ -390,6 +390,68 @@ class Ctrl_translate extends MY_Controller {
             $this->mod_translate->if_php2db($_SERVER['argv'][$lc_ix], $_SERVER['argv'][$lc_ix+1], $incr);
     }
 
+    // $a is an array of the form ["key1" => ["key2" => "x"]]. This function returns the max length of key1 and key2
+    private function find_lengths(array $a) {
+        $k1 = 0;
+        $k2 = 0;
+        foreach ($a as $key1 => $bb) {
+            if (strlen($key1)>$k1) $k1=strlen($key1);
+            foreach ($bb as $key2 => $bbb) {
+                if (strlen($key2)>$k2) $k2=strlen($key2);
+            }
+        }
+        return [$k1,$k2];
+    }
+    
+    function if_php_cmp_db() {
+        if (!is_cli()) {
+            echo '<pre>This command can only be run from the command line</pre>';
+            die;
+        }
+
+		if ($_SERVER['argc']!=5)
+		    die("Usage: php index.php translate if_php_cmp_db <language code>[_variant] <source directory>\n");
+
+        $only_db = [];
+        $only_php = [];
+        $diff = [];
+        
+        $this->mod_translate->if_php_cmp_db($_SERVER['argv'][3],$_SERVER['argv'][4], $only_db, $only_php, $diff);
+
+        if (!empty($only_db)) {
+            list($tglen,$keylen) = $this->find_lengths($only_db);
+
+            echo "ONLY IN DATABASE:\n";
+            foreach ($only_db as $textgroup => $entries)
+                foreach ($entries as $key => $value)
+                    printf("|%-{$tglen}s|%-{$keylen}s|%s|\n",$textgroup,$key,$value);
+            echo "\n";
+        }
+
+        if (!empty($only_php)) {
+            list($tglen,$keylen) = $this->find_lengths($only_php);
+
+            echo "ONLY IN PHP:\n";
+            foreach ($only_php as $textgroup => $entries)
+                foreach ($entries as $key => $value)
+                    printf("|%-{$tglen}s|%-{$keylen}s|%s|\n",$textgroup,$key,$value);
+            echo "\n";
+        }
+
+        if (!empty($diff)) {
+            list($tglen,$keylen) = $this->find_lengths($diff);
+
+            echo "DIFFERENT VALUES:\n";
+            foreach ($diff as $textgroup => $entries)
+                foreach ($entries as $key => $value) {
+                    printf("|%-{$tglen}s|%-{$keylen}s|PHP|%s|\n",$textgroup,$key,$value[0]);
+                    printf("|%-{$tglen}s|%-{$keylen}s|DB |%s|\n",$textgroup,$key,$value[1]);
+                    echo "----------------------------------------------------------------\n";
+                }
+        }
+    }
+
+    
     function gram_db2prop() {
         if (!is_cli()) {
             echo '<pre>This command can only be run from the command line</pre>';

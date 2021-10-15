@@ -710,6 +710,97 @@ class Mod_translate extends CI_Model {
         }
     }
 
+
+    // $short_langname may contain '_<variant>'.
+    // $src is the source directory where the php files are found.
+    // $only_db will hold key=>values only in the database
+    // $only_php will hold key=>values only in the php files
+    // $diff will hold key=>[value_php,value_db] for values that differ.
+    public function if_php_cmp_db(string $short_langname, string $src, array &$only_db, array &$only_php, array &$diff) {
+        $table_name = "language_{$short_langname}";
+
+        $this->load->helper('directory');
+
+
+        $all_db_groups = [];
+        $query = $this->db->select('textgroup')->distinct()->get($table_name);
+        foreach ($query->result() as $row)
+            $all_db_groups[$row->textgroup] = $row->textgroup;
+
+        $d = directory_map($src, 1);
+
+        foreach ($d as $file) {
+            // Loop through files
+
+            if (!preg_match('/_lang.php$/', $file))
+                continue;
+
+            $short_file = substr($file, 0, -9); // Remove '_lang.php'
+            if ($short_file=='db' || $short_file=='email')
+                continue;
+
+            $db_values = [];
+            $dbphpdiffs = [];
+            $ophps = [];
+            
+            $comment_query = $this->db->where('textgroup',$short_file)->get('language_comment');
+            $format = array();
+            foreach ($comment_query->result() as $row)
+                $format[$row->symbolic_name] = is_null($row->format) ? "" : $row->format;
+
+            $lang_query = $this->db->where('textgroup',$short_file)->get($table_name);
+            foreach ($lang_query->result() as $row)
+                $db_values[$row->symbolic_name] = $row->text;
+
+            unset($all_db_groups[$short_file]);
+                
+            $lang = array();
+            include($src.DIRECTORY_SEPARATOR.$file);
+                
+            foreach ($lang as $key => $text) {
+                if (isset($db_values[$key])) {
+                    // Key is already in database
+
+                    if ($format[$key]!='keep_blanks')
+                        $text = preg_replace('/\s+/',' ',$text); // Remove extraneous whitespace
+                    
+                    if ($db_values[$key]!=$text)
+                        $dbphpdiffs[$key] = [$text, $db_values[$key]];
+
+                    unset($db_values[$key]);
+                }
+                else {
+                    // Key is not in database
+
+                    $ophps[$key] = $text;
+                }
+            }
+
+            // What is left in $db_values are only in the database
+            if (!empty($db_values))
+                $only_db[$short_file] = $db_values;
+                
+            if (!empty($ophps))
+                $only_php[$short_file] = $ophps;
+
+            if (!empty($dbphpdiffs))
+                $diff[$short_file] = $dbphpdiffs;
+        }
+
+        foreach ($all_db_groups as $db_group) {
+
+            $db_values = [];
+
+            $lang_query = $this->db->where('textgroup',$db_group)->get($table_name);
+            foreach ($lang_query->result() as $row)
+                $db_values[$row->symbolic_name] = $row->text;
+
+            if (!empty($db_values))
+                $only_db[$db_group] = $db_values;
+        }
+    }
+
+
     public function if_phpcomment2db(string $src, bool $incr) {
         $this->load->helper('directory');
         $this->load->dbforge();
