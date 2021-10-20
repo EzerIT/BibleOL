@@ -57,9 +57,7 @@ function logos() {
         <div class="col-md-8" id="landingpanel">
             <img class="graphic-element" src="/images/dadel/DaDEL_ID_graphic_element_RGB.png" style="height:110%">
             <div id="landingtext">
-                <h1>Please Note: New User Interface</h1>
-                <p>Bible Online Learner has a new user interface. The old system will until the end of the year
-                    be available on <a href="https://bibleol-old.3bmoodle.dk">bibleol-old.3bmoodle.dk</a></p>
+                <?= $this->lang->line('temporary_intro') ?>
                 <?= $center ?>
             </div>
         </div>

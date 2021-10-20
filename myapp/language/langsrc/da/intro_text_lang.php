@@ -36,3 +36,7 @@ $lang['intro_right4'] = "<p>Swahili-ordbogen er udviklet af Dr. David Instone-Br
 $lang['intro_right_head'] = "Bible Online Learner &ndash; fri global læring";
 $lang['welcome'] = "Velkommen til Bible Online Learner";
 $lang['welcome2'] = "%s, velkommen til Bible Online Learner";
+
+$lang['temporary_intro'] = "<h1>Bemærk: Nyt brugerinterface</h1> "
+                         . "<p>Bible Online Learner har fået et nyt brugerinterface. Det gamle system vil kunne tilgås "
+                         . "året ud på <a href=\"https://bibleol-old.3bmoodle.dk\">bibleol-old.3bmoodle.dk</a></p>";

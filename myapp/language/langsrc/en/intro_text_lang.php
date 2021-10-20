@@ -35,3 +35,7 @@ $lang['intro_right4'] = "<p>The Swahili lexicon was developed by Dr David Inston
 $lang['intro_right_head'] = "Bible Online Learner for Free Global Learning";
 $lang['welcome'] = "Welcome to Bible Online Learner";
 $lang['welcome2'] = "%s, welcome to Bible Online Learner";
+
+$lang['temporary_intro'] = "<h1>Please Note: New User Interface</h1> "
+                         . "<p>Bible Online Learner has a new user interface. The old system will until the end of the year"
+                         . "be available on <a href=\"https://bibleol-old.3bmoodle.dk\">bibleol-old.3bmoodle.dk</a></p>";
