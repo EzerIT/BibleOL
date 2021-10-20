@@ -101,11 +101,6 @@ class Migration_Language_packs extends CI_Migration {
 		
 		$this->db->where('lang','zh-simp')->update('db_localize',array('lang' => 'zh-Hans'));
 		$this->db->where('lang','zh-trad')->update('db_localize',array('lang' => 'zh-Hant'));
-
-        die();
-		
-        
-        
     }
     
 	public function down()
