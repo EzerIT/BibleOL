@@ -55,7 +55,7 @@ function logos() {
 <?php if (isset($landingpage)): ?>
     <div class="row" id="landing-row">
         <div class="col-md-8" id="landingpanel">
-            <img class="graphic-element" src="/images/dadel/DaDEL_ID_graphic_element_RGB.png" style="height:110%">
+            <img class="graphic-element" src="<?= site_url("/images/dadel/DaDEL_ID_graphic_element_RGB.png") ?>" style="height:110%">
             <div id="landingtext">
                 <?= $this->lang->line('temporary_intro') ?>
                 <?= $center ?>
@@ -65,28 +65,18 @@ function logos() {
 
             <?php if (!isset($logged_in_name)): ?>
                 <h1><?= $this->lang->line('press_login_button') ?></h1>
-                <form action="/login">
-                    <button class="btn btn-primary"><?= $this->lang->line('login') ?></button>
-                </form>
+                <p style="margin-left: 1em"><a class="btn btn-primary" href="<?= site_url("/login") ?>"><?= $this->lang->line('login') ?></a></p>
                 <h1><?= $this->lang->line('no_login') ?></h1>
-                <form action="/users/sign_up">
-                    <button class="btn btn-outline-dark"><?= $this->lang->line('sign_up') ?></button>
-                </form>
+                <p style="margin-left: 1em;margin-bottom: 0"><a class="btn btn-outline-dark" href="<?= site_url("/users/sign_up") ?>"><?= $this->lang->line('sign_up') ?></a></p>
             <?php else: ?>
                 <h1><?= sprintf($this->lang->line('welcome2'),$logged_in_name) ?></h1>
             <?php endif; ?>
 
-            <form action="/text/select_text">
-                <button class="btn btn-outline-dark"><?= $this->lang->line('start_text_reading') ?></button>
-            </form>
-            <form action="/text/select_quiz">
-                <button class="btn btn-outline-dark"><?= $this->lang->line('try_an_exercise') ?></button>
-            </form>
+            <p style="margin-left: 1em;margin-bottom: 0"><a class="btn btn-outline-dark" href="<?= site_url("/text/select_text") ?>"><?= $this->lang->line('start_text_reading') ?></a></p>
+            <p style="margin-left: 1em;margin-bottom: 0"><a class="btn btn-outline-dark" href="<?= site_url("/text/select_quiz") ?>"><?= $this->lang->line('try_an_exercise') ?></a></p>
 
             <?php if (isset($logged_in_name)): ?>
-                <form action="/login">
-                    <button class="btn btn-primary"><?= $this->lang->line('logout') ?></button>
-                </form>
+                <p style="margin-left: 1em"><a class="btn btn-primary" href="<?= site_url("/login") ?>"><?= $this->lang->line('logout') ?></a></p>
             <?php endif; ?>
 
         </div>

@@ -95,12 +95,12 @@ $cols = $ix+1;
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light pt-0 pb-0 mb-3">
   <div class="divnavbar">
-  <a class="navbar-brand d-block d-lg-none" href="<?= site_url('/') ?>"><img alt="" src="/images/BibleOL_logo.png" style="max-width: 100%; height: 60px; padding: 8px"></a>
+  <a class="navbar-brand d-block d-lg-none" href="<?= site_url('/') ?>"><img alt="" src="<?= site_url("/images/BibleOL_logo.png") ?>" style="max-width: 100%; height: 60px; padding: 8px"></a>
     <button class="navbar-toggler mt-1 mb-1" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"><img alt="" src="/images/dadel/menutoggler.png" style="max-width: 100%; height: 25px;"></span>
+      <span class="navbar-toggler-icon"><img alt="" src="<?= site_url("/images/dadel/menutoggler.png") ?>" style="max-width: 100%; height: 25px;"></span>
     </button>
     <div class="collapse navbar-collapse" id="mainMenu">
-    <span class="navbar-text pr-3"><a class="navbar-brand d-none d-lg-inline" href="<?= site_url('/') ?>"><img alt="" src="/images/BibleOL_logo.png" style="max-width: 100%; height: 60px; padding: 8px;"></a></span>
+    <span class="navbar-text pr-3"><a class="navbar-brand d-none d-lg-inline" href="<?= site_url('/') ?>"><img alt="" src="<?= site_url("/images/BibleOL_logo.png") ?>" style="max-width: 100%; height: 60px; padding: 8px;"></a></span>
       <ul class="navbar-nav">
         <?php for ($c=0; $c<$cols; ++$c): ?>
           <?php if (!isset($content[$c])): ?>

@@ -17,7 +17,7 @@
           </div>
           <div class="col-md-4 footer footer-column">
             <h2>Follow BibleOL</h2>
-            <img src="/images/dadel/facebook.png" style="height: 35px;">
+            <img src="<?= site_url("/images/dadel/facebook.png") ?>" style="height: 35px;">
             <a class="social" href="">Join our language community</a>
           </div>
           <div class="col-md-4 footer footer-column">

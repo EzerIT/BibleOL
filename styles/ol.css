@@ -354,7 +354,7 @@ a.myview {
 a.gramtabs,
 a.grammargroup {
   width: auto;
-  background: white url(/images/dadel/expand_more_24px.png) no-repeat;
+  background: white url(../images/dadel/expand_more_24px.png) no-repeat;
   background-position: right 5px center;
 }
 div#grammargroup {
@@ -419,7 +419,7 @@ div#grammargroup {
   font-size: 11pt;
   text-align: center;
   padding-top: 43px;
-  background: white url(/images/dadel/remove_red_eye_24px_rounded.svg) no-repeat;
+  background: white url(../images/dadel/remove_red_eye_24px_rounded.svg) no-repeat;
   background-position: top 10px center;
   background-size: 30px;
   margin-bottom: -1px;
@@ -440,7 +440,7 @@ div#grammargroup {
   font-size: 11pt;
   text-align: center;
   padding-top: 43px;
-  background: white url(/images/dadel/close.png) no-repeat;
+  background: white url(../images/dadel/close.png) no-repeat;
   background-position: top 13px center;
   background-size: 25px;
   margin-bottom: -1px;
