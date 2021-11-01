@@ -52,12 +52,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['default_controller'] = "ctrl_main_page";
 
-if ($this->config->item('lj_enabled')) {
-    $route['(lj)/(.+)'] = function ($name, $path) {
-        $this->directory="../third_party/$name/controllers/"; // $this is the CI_Router object
-        return "Ctrl_$path";
-    };
-}
+// This was part of the defunct "Learning Journey" it has been retained here for reference:
+//if ($this->config->item('lj_enabled')) {
+//    $route['(lj)/(.+)'] = function ($name, $path) {
+//        $this->directory="../third_party/$name/controllers/"; // $this is the CI_Router object
+//        return "Ctrl_$path";
+//    };
+//}
 
 $route['(.+)'] = "Ctrl_$1";
 $route['404_override'] = '';

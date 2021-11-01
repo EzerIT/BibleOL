@@ -42,10 +42,11 @@ if ($this->mod_users->is_logged_in()) {
       $content[$ix][] = make_anchor2('grades/teacher_grades', 'grades_quizzes');
     }
 
-    if ($this->config->item('lj_enabled')) {
-        $this->load->helper('lj_menu_helper');
-        lj_menu_add($head, $content);
-    }
+// This was part of the defunct "Learning Journey" it has been retained here for reference:
+//    if ($this->config->item('lj_enabled')) {
+//        $this->load->helper('lj_menu_helper');
+//        lj_menu_add($head, $content);
+//    }
 
     if ($this->mod_users->is_teacher() || $this->mod_users->is_translator()) {
         // Teacher or translator
