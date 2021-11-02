@@ -608,7 +608,7 @@
             "feat": "verse"
         }
     ],
-    "picDb": "http:\/\/resources.3bmoodle.dk",
+    "picDb": "https:\/\/resources.3bmoodle.dk",
     "sentencegrammar": [
         {
             "mytype": "SentenceGrammar",
