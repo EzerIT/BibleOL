@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{11 August 2021}
+\date{8 October 2021}
 
 \makeindex
 
@@ -240,7 +240,7 @@ Copyright © 2021 by Claus Tøndering, claus@ezer.dk
 
 The document is made available under a Creative Commons Attribution 4.0 International License
 
-(see \url{http://creativecommons.org/licenses/by/4.0/})
+(see \url{https://creativecommons.org/licenses/by/4.0/})
 \end{center}
 \end{titlingpage*}
 
@@ -264,11 +264,11 @@ server and developers who need to modify or expand the way Bible OL works.
 \section{License and Copyright}\index{license}\index{copyright}
 
 Except where otherwise noted, the Bible OL source code is distributed under an MIT
-License\footnote{\url{http://opensource.org/licenses/MIT}}. The code is Copyright © 2021 by Claus
+License\footnote{\url{https://opensource.org/licenses/MIT}}. The code is Copyright © 2021 by Claus
 Tøndering, claus@ezer.dk and its other authors.
 
 The present document is made available under a Creative Commons Attribution 4.0 International
-License\footnote{\url{http://creativecommons.org/licenses/by/4.0/}}.
+License\footnote{\url{https://creativecommons.org/licenses/by/4.0/}}.
 
 
 %%%%%%%%%%%%%%%%%%%% How To Read This Document %%%%%%%%%%%%%%%%%%%%
@@ -309,14 +309,15 @@ exercise.\\
 \midrule
 
 \parbox[t]{3cm}{question item\index{question item|hyperit}} & Each question in an exercise contains
-several question items. The question in Figure \ref{fig-question} has \emph{two} question items.\\
+several question items. The question in Figure \ref{fig-question} has two question items -- one
+corresponding to each sentence unit -- but only one is displayed at a time.\\
 
 \midrule
 \parbox[t]{3cm}{sentence unit\index{sentence unit|see {quiz object}}\par
   quiz object\index{quiz object (a.k.a. sentence unit)|hyperit}\par
   question object\index{question object|see {quiz object}}} &
 These terms are synonymous. The terms refer to the Emdros objects that are the subject of a question
-item. They are marked in red in the question text. (See Figure \ref{fig-question}.)\\
+item. They are marked in purple in the question text. (See Figure \ref{fig-question}.)\\
 
 \midrule
 
@@ -339,7 +340,7 @@ found in older parts of the code.\\
 grammar selection box%
 \index{grammar selection box|hyperit}\index{selection box|see {grammar selection box}}
 &
-A box found on the left part of the display where the user can select what
+A box shown above the text when the user clicks ``MyView''. Here, the user can select what
 in-line grammatical features to display. See Figure \ref{fig-grammar-info}.\\
 
 \midrule
@@ -418,9 +419,9 @@ PLOT. The project became known as EuroPLOT\index{EuroPLOT},\footnote{\url{http:/
 3ET changed its name to \emph{PLOTLearner.}
 
 Since PLOTLearner was part of an EU project the source code was made open under an MIT
-License.\footnote{\url{http://opensource.org/licenses/MIT}.} PLOTLearner was the last Java-based
+License.\footnote{\url{https://opensource.org/licenses/MIT}.} PLOTLearner was the last Java-based
 version of the product, and it can be downloaded from
-\url{http://eplot.3bmoodle.dk/index.php/downloads}.
+\url{https://eplot.3bmoodle.dk/index.php/downloads}.
 
 %%%%%%%%%%%%%%%%%%%% Bible Online Learner: Web-based (since 2013) %%%%%%%%%%%%%%%%%%%%
 \section{Bible Online Learner\index{Bible Online Learner}: Web-based (since 2013)}
@@ -454,11 +455,11 @@ following instructions are aimed at people with a computer running the Linux ope
 
 \subsection{Step 1. Server Software}
 
-The following software must be installed on your server (please pay attention to the PHP version number):
+The following software must be installed on your server:
 
 \begin{itemize}
-\item Apache\index{Apache} (web server\index{web server}). I use version 2.4.18, but version 2.2.22 also works.
-\item MySQL\index{MySQL} (database system). I use version 5.7.21.
+\item Apache\index{Apache} (web server\index{web server}). I use version 2.4.18.
+\item MySQL\index{MySQL} (database system). I use version 5.7.33.
 \item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.11.0.
 \item PHP\index{PHP}. I use version 7.1.
 \item git\index{Git}. I use version 2.7.4.
@@ -528,7 +529,7 @@ cd %\textrm{\emph{installation directory}}%
 git clone --recursive https://github.com/EzerIT/BibleOL
 \end{lstlisting}\index{clone|hyperit}
 
-This will fetch all the Bible OL software, including five submodules needed by Bible OL. The
+This will fetch all the Bible OL software, including a couple of submodules needed by Bible OL. The
 \emph{git}\index{Git} command will create a directory called \texttt{BibleOL} under the current directory.
 
 \emph{Note:} If you have forked\index{fork GitHub} Bible OL on GitHub you should replace the URL in the ``git clone''
@@ -631,11 +632,13 @@ Copy the file \texttt{myapp/config/config.php-dist} to \texttt{myapp/config/conf
 following line in the copy:
 
 \begin{lstlisting}[language=PHP]
-$config['base_url'] = 'http://example.com';%\index{base URL}%
+$config['base_url'] = 'https://example.com';%\index{base URL}%
 $config['lj_enabled'] = false;
 \end{lstlisting}
 
-Replace `http://example.com' with the top URL of the web site for your Bible OL installation.
+Replace `https://example.com' with the top URL of the web site for your Bible OL installation. NOTE:
+It is highly recommended that your installation runs HTTPS. If it doesn't, you should change
+\texttt{\$config['cookie\_secure']} to \texttt{false}; but then some parts of the system may not work reliably.
 
 If you plan to use \emph{Learning Journey} (see Section \ref{sec-lj}), set \texttt{\$config['lj\_enabled']} to \texttt{true}.
 
@@ -661,7 +664,6 @@ Populate the database with the available translations by issuing this command:
 \end{lstlisting}
 
 (On my computer, this takes a couple of minutes.)
-
 
 \subsection{Step 7. Add Administrator\index{administrator}}
 
@@ -703,13 +705,13 @@ RewriteBase /%\index{RewriteBase, Apache directive}%
 \end{lstlisting}
 
 The correct value here depends on your Apache configuration. If your web server is set up to serve
-Bible OL at the url \texttt{http://example.com/alpha/beta}, then the above line should be changed to:
+Bible OL at the url \texttt{https://example.com/alpha/beta}, then the above line should be changed to:
 
 \begin{lstlisting}
 RewriteBase /alpha/beta%\index{RewriteBase, Apache directive}%
 \end{lstlisting}
 
-If you have a dedicated hostname for Bible OL (for example, \texttt{http://example.com}), you should
+If you have a dedicated hostname for Bible OL (for example, \texttt{https://example.com}), you should
 leave \emph{RewriteBase} as it is: a single slash.
 
 \subsection{Step 9. Set Up Quiz Template Directory}
@@ -763,7 +765,6 @@ sudo service apache2 reload
 
 
 
-
 %%%%%%%%%%%%%%%%%%%% Bible OL Development System Setup %%%%%%%%%%%%%%%%%%%%
 \section{Bible OL Development\index{development} System Setup}\label{sec-devel}
 
@@ -786,13 +787,15 @@ done. Your system may be different, and you may need to do things I have not des
 For Bible OL, I use a computer with the Linux\index{Linux} operating system (the
 Ubuntu\index{Ubuntu} distribution). I am sure the system could also be set up on a
 Windows\index{Windows} or Mac\index{Mac} computer, but I have not tried it and you will not find any
-instructions how to do it here.
+instructions about how to do it here.
 
 The following should be installed:
 
 \begin{itemize}
 \item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.31.1.
-\item PHP\index{PHP}. I use version 7.4.
+\item PHP\index{PHP}. I use version 7.4.\footnote{The current main installation on
+    \texttt{https://bibleol.3bmoodle.dk} uses PHP version 7.1, so it is probably a good
+    idea to avoid using PHP features added since that version.}
 \item nodejs\index{nodejs} (JavaScript runtime, used for compiling TypeScript and Less). I use version
   10.19.0.
 \item npm\index{npm} (package manager for nodejs). I use version 6.14.4.
@@ -848,21 +851,21 @@ git-hooks/setup.sh
 \noindent
 as described in Section \ref{sec-download-bol}.
 
-Bible OL uses a number of Git submodules: ckeditor, zocial, jstree, and
-virtualkeyboard. The \mbox{``-\thinspace-recursive''} flag in the ``git clone'' command causes these submodules to be
+Bible OL uses two Git submodules: zocial and jstree.
+The \mbox{``-\thinspace-recursive''} flag in the ``git clone'' command causes these submodules to be
 cloned from the ``EzerIT'' repository. You may want to replace them with your own copies of the
 repositories. The following table lists their names and their location on GitHub:
 
 \begin{my-tabu}{lll}{ \headiii{Submodule}{My forked location}{Original location} }
-ckeditor         \index{ckeditor}        & EzerIT/ckeditor-releases   & ckeditor/ckeditor-releases \\
 zocial           \index{zocial}          & EzerIT/css-social-buttons  & samcollins/css-social-buttons \\
 jstree           \index{jstree}          & EzerIT/jstree              & vakata/jstree \\
-virtualkeyboard  \index{virtualkeyboard} & EzerIT/virtualkeyboard     & \emph{Not on GitHub} \\
 \end{my-tabu}
 
-Previous versions of Bible OL also used submodules called CodeIgniter and bootstrap. They are no longer
-submodules but an integrated part of the Bible OL software tree; they are located in the directories
-\texttt{CodeIgniter\_Local} and \texttt{bootstrap\_local}, respectively.
+Previous versions of Bible OL also used submodules called CodeIgniter, bootstrap, ckeditor, and
+virtualkeyboard. They are no longer submodules but an integrated part of the Bible OL software tree;
+they are located in the directories \texttt{CodeIgniter\_Local}, \texttt{bootstrap\_local},
+\texttt{ckeditor}, and \texttt{VirtualKeyboard.full.3.7.2},
+respectively.
 
 \subsection{Installing Emdros\index{Emdros!installation}}\label{sec-install-start}
  
@@ -875,7 +878,7 @@ In order to install Emdros, you should follow the instructions given in in Secti
 \emph{Lessc}\index{lessc} is the Less\index{Less} compiler. It runs under \emph{nodejs}\index{nodejs}, which is
 a stand-alone JavaScript\index{JavaScript} runtime system.
 
-For information about how to use the Less compiler, see \url{http://lesscss.org}.
+For information about how to use the Less compiler, see \url{https://lesscss.org}.
 
 The \emph{lessc} command can be installed using this shell command:
  
@@ -886,7 +889,7 @@ sudo npm install -g less
 The ``-g'' option means the software is installed globally and can be used by all users of the
 computer. Alternatively, the ``-g'' option and the ``sudo'' can be omitted, which will install
 \emph{lessc} only for the local user; but in that case the \emph{lessc} command must be executed using
-the pathname \mbox{\emph{\textasciitilde/node\_modules/.bin/lessc}}.
+the pathname \mbox{\emph{node\_modules/.bin/lessc}} (this pathname is relative to the installation directory).
  
 I use version 3.11.3 of \emph{lessc}.
 
@@ -895,7 +898,7 @@ I use version 3.11.3 of \emph{lessc}.
 \emph{Tsc}\index{tsc} is the TypeScript\index{TypeScript} compiler. It
 runs under \emph{nodejs},\index{nodejs} which is a stand-alone JavaScript\index{JavaScript} runtime
 system. For information about how to use the TypeScript compiler, see
-\url{http://www.typescriptlang.org}.
+\url{https://www.typescriptlang.org}.
 
 The \emph{tsc} command can be installed using these shell commands:
  
@@ -907,7 +910,7 @@ npm install @types/bootstrap@4.5.0 @types/jquery @types/jqueryui
 The ``-g'' option means the software is installed globally and can be used by all users of the
 computer. Alternatively, the ``-g'' option and the ``sudo'' can be omitted, which will install
 typescript only for the local user; but in that case the \emph{tsc} command must be executed using
-the pathname \mbox{\emph{\textasciitilde/node\_modules/.bin/tsc}}.
+the pathname \mbox{\emph{node\_modules/.bin/tsc}} (this pathname is relative to the installation directory).
 
 Note that there is no ``sudo'' and no ``-g'' option on the second ``npm'' command.
 
@@ -933,7 +936,7 @@ points you to where you may learn more about them.
 %%%%%%%%%%%%%%%%%%%% PHP %%%%%%%%%%%%%%%%%%%%
 \section{PHP}\index{PHP|hyperit}
 
-The main language used on the server side is PHP\footnote{\url{http://php.net}.}, which is a popular
+The main language used on the server side is PHP\footnote{\url{https://php.net}.}, which is a popular
 general-purpose scripting language that is especially suited to web development.
 
 In order to execute Bible OL, the PHP implementation on the server must be enhanced with features to
@@ -942,7 +945,7 @@ execute MQL commands. This is described in Section \ref{sec-install-emdros}.
 %%%%%%%%%%%%%%%%%%%% CodeIgniter %%%%%%%%%%%%%%%%%%%%
 \section{CodeIgniter}\label{sec-codeigniter}\index{CodeIgniter}
 
-Bible OL uses a PHP framework known as \emph{CodeIgniter.}\footnote{\url{http://www.codeigniter.com}.}
+Bible OL uses a PHP framework known as \emph{CodeIgniter.}\footnote{\url{https://codeigniter.com}.}
 More information about this is given in Chapter \ref{chap-codeigniter-use}.
 
 
@@ -950,7 +953,7 @@ More information about this is given in Chapter \ref{chap-codeigniter-use}.
 \section{SQL}\index{SQL|hyperit}
 
 SQL\footnote{See \url{https://en.wikipedia.org/wiki/SQL}.} is a language for manipulating a
-relational database. Bible OL uses the MySQL database\footnote{\url{http://www.mysql.com}.} system to store
+relational database. Bible OL uses the MySQL database\footnote{\url{https://www.mysql.com}.} system to store
 information about users who have an account on the Bible OL website. Bible OL uses the SQLite3
 database system to store the ``Words Database'' (see chapter \ref{chap-multiple-choice}) and the
 ``Hints Database'' (see Chapter \ref{chap-hints}).
@@ -961,7 +964,7 @@ SQL commands are executed from PHP code through CodeIgniter.
 %%%%%%%%%%%%%%%%%%%% MQL %%%%%%%%%%%%%%%%%%%%
 \section{MQL}\label{sec-mql}\index{MQL}
 
-MQL is a language for manipulating Emdros\index{Emdros}\footnote{\url{http://emdros.org}.} text
+MQL is a language for manipulating Emdros\index{Emdros}\footnote{\url{https://emdros.org}.} text
 databases. The PHP implementation on the server must be extended with function to execute MQL
 commands. This is described in Section \ref{sec-install-emdros}.
 
@@ -987,12 +990,12 @@ in CSS. Most styling is written in Less which is then compiled into CSS.
 %%%%%%%%%%%%%%%%%%%% Less %%%%%%%%%%%%%%%%%%%%
 \section{Less}\label{sec-less}\index{Less}
 
-Less\footnote{\url{http://lesscss.org}.} is a CSS pre-processor, meaning that it
+Less\footnote{\url{https://lesscss.org}.} is a CSS pre-processor, meaning that it
 extends the CSS language, adding features that allow variables, mixins, functions and many other
 techniques that allow you to make CSS that is more maintainable, themable and extendable.
 
-Although Less style files can be compiled when used in a browser, the Bible OL implementation
-compiles Less files only once and stores the resulting CSS files.
+Although Less style files can be automatically compiled as they are being used in a browser, the
+Bible OL implementation compiles Less files only once and stores the resulting CSS files.
 
 More information about how Less is used is given in Chapter \ref{chap-less-use}.
 
@@ -1007,7 +1010,7 @@ is written in TypeScript which is then compiled into JavaScript.
 %%%%%%%%%%%%%%%%%%%% TypeScript %%%%%%%%%%%%%%%%%%%%
 \section{TypeScript}\label{sec-typescript}\index{TypeScript}
 
-TypeScript\footnote{\url{http://www.typescriptlang.org}.} is a superset of JavaScript that adds
+TypeScript\footnote{\url{https://www.typescriptlang.org}.} is a superset of JavaScript that adds
 strong typing and proper classes to JavaScript.
 
 Most of the client-side software of Bible OL is written in TypeScript which is then compiled into
@@ -1019,7 +1022,7 @@ More information about how TypeScript is used is given in Section
 %%%%%%%%%%%%%%%%%%%% JSON %%%%%%%%%%%%%%%%%%%%
 \section{JSON}\index{JSON|hyperit}
 
-JSON\footnote{\url{http://json.org}.} is a text-based data-interchange format. It is used to
+JSON\footnote{\url{https://www.json.org}.} is a text-based data-interchange format. It is used to
 transfer data between the server and the client.
 
 %%%%%%%%%%%%%%%%%%%% jQuery and jQuery UI %%%%%%%%%%%%%%%%%%%%
@@ -1136,10 +1139,12 @@ since it would require considerable knowledge on the part of the student.)
 
 Emdros is a database system for storing and retrieving annotated text. Emdros was developed by Ulrik
 Sandborg-Petersen\index{Sandborg-Petersen, Ulrik}. A short introduction to Emdros for linguists is
-found at \url{http://emdros.org/petersen-emdros-COLING-2004.pdf}. More documents are available at
-\url{http://emdros.org/docs.html}.
+found at \url{https://emdros.org/petersen-emdros-COLING-2004.pdf}. More documents are available at
+\url{https://emdros.org/docs.html}.
 
-Here, only a very brief description of the system will be given. Emdros divides a text into
+Here, only a very brief description of the system will be given.
+
+Emdros divides a text into
 \emph{objects.}\index{Emdros!object|hyperit} Typical objects are \emph{word, clause,} and
 \emph{sentence.} For biblical texts, objects such as \emph{book, chapter,} and \emph{verse} are also
 used. Each occurrence of the smallest object, typically a word, is identified by a number, called a
@@ -1225,8 +1230,7 @@ by at most three words, followed by a verb in the present tense, except cases wh
 derived from `to be'.''
 
 The exact syntax of MQL queries can be quite arcane and is beyond the scope of this paper, but
-examples can be found in \url{http://emdros.org/petersen-emdros-COLING-2004.pdf}.
-
+examples can be found in \url{https://emdros.org/petersen-emdros-COLING-2004.pdf}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1250,7 +1254,7 @@ License: MIT.\\
 ckeditor\index{ckeditor} & An HTML text editor. It is used in the server code to allow the user to
 edit the description of an exercise.
 
-Webpage: \url{http://ckeditor.com}.
+Webpage: \url{https://ckeditor.com}.
 
 Source: \url{https://github.com/ckeditor/ckeditor-releases}.
 
@@ -1258,7 +1262,7 @@ License: A choice between GPL, LGPL, and MPL.\\
 
 CodeIgniter\_Local\index{CodeIgniter} & The CodeIgniter framework used by PHP code on the server side of Bible OL.
 
-Webpage: \url{http://www.codeigniter.com}.
+Webpage: \url{https://codeigniter.com}.
 
 Source: \url{https://github.com/bcit-ci/CodeIgniter}.
 
@@ -1268,9 +1272,7 @@ culmus-fonts & A collection of Hebrew fonts\index{font}. These files are not use
 few of the font files from the subdirectory \texttt{Squirrel} have been copied to the
 \texttt{styles/fonts} directory.
 
-Webpage: \url{http://culmus.sourceforge.net}.
-
-Source: \url{http://sourceforge.net/projects/culmus/files/culmus/0.130}\footnote{This does not
+Source: \url{https://sourceforge.net/projects/culmus/files/culmus/0.130}\footnote{This does not
   include the \texttt{Squirrel} subdirectory. Unfortunately, I don't recall the origin of that directory.}
 
 License: GPL.\\
@@ -1283,9 +1285,9 @@ jquery-\allowbreak{}ui-\allowbreak{}1.10.2.custom & A customized version of \emp
   UI.}\index{jQuery UI} Used by the client to display
 components of the user interface.
 
-Webpage: \url{http://jqueryui.com}.
+Webpage: \url{https://jqueryui.com}.
 
-Source: \url{http://jqueryui.com/download}.
+Source: \url{https://jqueryui.com/download}.
 
 License: MIT.\\
 
@@ -1296,9 +1298,9 @@ should therefore never be edited.\\
 
 js/jquery-\allowbreak{}1.9.1.min.js js/jquery.min.map & These files are part of jQuery.\index{jQuery}
 
-Webpage: \url{http://jquery.com}.
+Webpage: \url{https://jquery.com}.
 
-Source: \url{http://jquery.com/download}.
+Source: \url{https://jquery.com/download}.
 
 License: MIT.\\
 
@@ -1306,7 +1308,7 @@ License: MIT.\\
 jstree\label{jstree}\index{jstree} & A JavaScript component used by the server to display a hierarchy of books, chapters, and
 verses of the Bible.
 
-Webpage: \url{http://jstree.com}.
+Webpage: \url{https://jstree.com}.
 
 Source: \url{https://github.com/vakata/jstree}.
 
@@ -1315,7 +1317,7 @@ License: A choice between MIT and GPL.\\
 myapp & The server code. Chapter \ref{chap-server-code} gives more information.
 
 License: MIT, except for the file
-\texttt{myapp/\allowbreak{}controllers/\allowbreak{}ctrl\_upload.php}, which contains code take from
+\texttt{myapp/\allowbreak{}controllers/\allowbreak{}ctrl\_upload.php}, which contains code taken from
 \texttt{valums-\allowbreak{}file-\allowbreak{}uploader-\allowbreak{}b3b20b1} mentioned below.\\
 
 quizzes & Quiz templates\index{quiz template} available for the user. This directory
@@ -1337,9 +1339,9 @@ SILfonts & A collection of Hebrew, Greek and phonetic fonts\index{font}. These f
 by the server, but a few of the font files have been
 copied to the \texttt{styles/fonts} directory.
 
-Webpage: \url{http://scripts.sil.org}.
+Webpage: \url{https://scripts.sil.org}.
 
-Source: Search the \url{http://scripts.sil.org} website for relevant fonts.
+Source: Search the \url{https://scripts.sil.org} website for relevant fonts.
 
 License: SIL Open Font License.\\
 
@@ -1349,28 +1351,12 @@ techdoc & The technical documentation.\\
 
 ts & TypeScript\index{TypeScript} source files for the client.\\
 
-ts/jquery & The TypeScript definitions of the interfaces and variables found in \emph{jQuery}.\index{jQuery}
-
-Webpage: \url{http://definitelytyped.org}.
-
-Source: \url{https://github.com/borisyankov/DefinitelyTyped/tree/master/jquery}.
-
-License: MIT.\\
-
-ts/jqueryui & The TypeScript definitions of the interfaces found in \emph{jQuery UI}.\index{jQuery UI}
-
-Webpage: \url{http://definitelytyped.org}.
-
-Source: \url{https://github.com/borisyankov/DefinitelyTyped/tree/master/jqueryui}.
-
-License: MIT.\\
-
 valums-\allowbreak{}file-\allowbreak{}uploader-\allowbreak{}b3b20b1 & An old version of a file upload mechanism, used to upload exercise
 files to the server. This code was released under a GPL license. Since this code was copied to Bible
 OL, it ownership and licensing has changed. It is now known as \emph{FineUploader} and is available
 from these sources:
 
-Webpage: \url{http://fineuploader.com}.
+Webpage: \url{https://fineuploader.com}.
 
 Source: \url{https://github.com/FineUploader/fine-uploader}
 
@@ -1379,22 +1365,18 @@ License.\footnote{\url{https://github.com/FineUploader/fine-uploader/blob/master
 tell this from their license, but according to their website the license allows royalty-free use for
 non-commercial purposes.)\\
 
-virtualkeyboard\index{virtualkeyboard} & A JavaScript-based virtual keyboard%
+VirtualKeyboard.\allowbreak{}full.3.7.2\index{virtualkeyboard} & A JavaScript-based virtual keyboard%
 \index{virtual keyboard}\index{keyboard, virtual|see {virtual keyboard}}
-for typing Greek and Hebrew in the client.
+for typing Greek and Hebrew characters in the client.
 
-Website: \url{http://allanguages.info}.
-
-Source: \url{http://freecode.com/projects/jsvk}.
+Source: \url{http://freshmeat.sourceforge.net/projects/jsvk}.
 
 License: LGPL.\\
 
 zocial\index{zocial} & Icon\index{icon} and styles for setting up a Google or Facebook
 login\index{login!Google}\index{login!Facebook} button.
 
-Website: \url{http://zocial.smcllns.com}.
-
-Source: \url{https://github.com/samcollins/css-social-buttons}.
+Website: \url{https://smcllns.github.io/css-social-buttons/}.
 
 License: MIT. \\
 \end{my-longtabu}
@@ -1474,8 +1456,7 @@ Text in the database comes in three different alphabets:
 \item Hebrew/Aramaic characters in \emph{ETCBC4 transcription}.%
   \index{alphabet!transcribed|hyperit}\index{transcribed alphabet|see {alphabet, transcribed}}\label{page-transcribed}
   This transcription is defined in the document \texttt{ETCBC4-transcription.pdf} which is located
-  together with the current document or can be downloaded from
-  \url{http://shebanq.ancient-data.org/shebanq/static/docs/ETCBC4-transcription.pdf}. (In the
+  together with the current document. (In the
   following text, this will be known as the \emph{transcribed} alphabet.)
 
 \end{itemize}
@@ -1527,7 +1508,7 @@ sets of noncontiguous monads. Each contiguous part of a sentence is a
 \bibleref{Genesis}{1}{29-30}:
 
 \begin{center}
-  \includegraphics[width=0.9\textwidth]{gen1_29-30.png}
+  \includegraphics[width=0.8\textwidth]{gen1_29-30.png}
 \end{center}
 
 The sentence starting with the word \heb{הִנֵּה֩} consists of two parts. One sentence\_atom starts at
@@ -1667,24 +1648,24 @@ Classical Greek used polytonic accents%
 over vowels. For example, the letter alpha could have these polytonic accents:
 
 \begin{my-tabu}{cll}{ \headiii{Character}{Greek accent name}{English accent name} }
-    ά & Oxia\index{oxia} (οξεία) & Acute\index{accent!acute}\index{acute accent|see {accent, acute}}\\
-    ὰ & Varia\index{varia} (βαρεία) & Grave\index{accent!grave}\index{grave accent|see {accent, grave}}\\
-    ᾶ & Perispomeni\index{perispomeni} (περισπωμένη) & Circumflex\index{accent!circumflex}\index{circumflex accent|see {accent, circumflex}}\\
+    {\LARGE ά} & Oxia\index{oxia} (οξεία) & Acute\index{accent!acute}\index{acute accent|see {accent, acute}}\\
+    {\LARGE ὰ} & Varia\index{varia} (βαρεία) & Grave\index{accent!grave}\index{grave accent|see {accent, grave}}\\
+    {\LARGE ᾶ} & Perispomeni\index{perispomeni} (περισπωμένη) & Circumflex\index{accent!circumflex}\index{circumflex accent|see {accent, circumflex}}\\
 \end{my-tabu}
 
 Modern Greek is not a polytonic language, and in 1982 the polytonic accents were replaced by a
 single, monotonic accent\index{accent!monotonic}\index{monotonic accent|see {accent, monotonic}}:
 the \emph{tonos}\index{tonos} (τόνος). In the early years of the monotonic system, particularly when
 reformers wished to differentiate their system from the polytonic, the tonos on letters was a novel
-sign: typically a dot or wedge: α\hspace{-0.5mm}̍\hspace{0.5mm}. However, the Greek government
-decreed in 1986 that the tonos shall be the acute. So you must now write ά instead of
-α\hspace{-0.5mm}̍\hspace{0.5mm}.\footnote{Source:
-  \url{http://www.opoudjis.net/unicode/unicode_gkbkgd.html}, accessed 2 September 2019.}
+sign: typically a dot or wedge: {\LARGE α\hspace{-0.5mm}̍\hspace{0.5mm}}. However, the Greek government
+decreed in 1986 that the tonos shall be the acute. So you must now write {\LARGE ά} instead of
+{\LARGE α\hspace{-0.5mm}̍\hspace{0.5mm}}.\footnote{Source:
+  \url{http://www.opoudjis.net/unicode/unicode_gkbkgd.html}, accessed 2 November 2021.}
 
 This confusion has had an impact on the representation of the oxia and tonos accents in Unicode.
 Because of the decision from 1982, Unicode\index{Unicode} distinguishes between the oxia
 and the tonos; but because of the decision from 1986, a change was made in Unicode
-version 3.0 stating that the character ά should be encoded with the Unicode value for GREEK SMALL
+version 3.0 stating that the character {\LARGE ά} should be encoded with the Unicode value for GREEK SMALL
 LETTER ALPHA WITH TONOS, even when writing ancient Greek.
 
 The affected Unicode characters are:
@@ -1696,20 +1677,20 @@ The affected Unicode characters are:
     \cmidrule{2-3}
     \textbf{Character} & \textbf{tonos} & \textbf{oxia}\\
     \midrule
-    ά & 03AC & 1F71\\
-    έ & 03AD & 1F73\\
-    ή & 03AE & 1F75\\
-    ί & 03AF & 1F77\\
-    ό & 03CC & 1F79\\
-    ύ & 03CD & 1F7B\\
-    ώ & 03CE & 1F7D\\
-    ΐ & 0390 & 1FD3\\
-    ΰ & 03B0 & 1FE3\\
+    {\LARGE ά} & 03AC & 1F71\\
+    {\LARGE έ} & 03AD & 1F73\\
+    {\LARGE ή} & 03AE & 1F75\\
+    {\LARGE ί} & 03AF & 1F77\\
+    {\LARGE ό} & 03CC & 1F79\\
+    {\LARGE ύ} & 03CD & 1F7B\\
+    {\LARGE ώ} & 03CE & 1F7D\\
+    {\LARGE ΐ} & 0390 & 1FD3\\
+    {\LARGE ΰ} & 03B0 & 1FE3\\
     \bottomrule
   \end{tabu}
 \end{center}
 
-So nowadays the correct way to encode the character ά is to use the value 03AC, regardless of
+So nowadays the correct way to encode the character {\LARGE ά} is to use the value 03AC, regardless of
 whether the accent is an oxia or a tonos.
 
 But here's the catch: \emph{The nestle1904\index{nestle1904} database uses the oxia encodings, not
@@ -1754,10 +1735,6 @@ Database Specification File\index{Database Specification File}\index{Specificati
 Database Type Information File\index{Database Type Information File}\index{Type Information File|see {Database Type Information File}} &
 \ref{sec-tif}\\
 
-.glosslang.json &
-Lexicon Information File\index{Lexicon Information File}\index{glosslang file|see {Lexicon Information File}} &
-\ref{sec-lif}\\
-
 .bookorder &
 Database Book Order File\index{Database Book Order File}\index{Book Order File|see {Database Book Order File}} &
 \ref{sec-bookorder}\\
@@ -1768,7 +1745,7 @@ In the following sections the string ``PRIM'' is used to denote the primary name
 
 \pfbreak
 
-Most of the files are JSON\index{JSON} files. A JSON file contains key/value pairs%
+The first two files are JSON\index{JSON} files. A JSON file contains key/value pairs%
 \index{key value pairs@key/value pairs},
 where the value can be a string, a number, a Boolean value, an array of values, or another
 collection of key/value pairs.
@@ -1838,7 +1815,7 @@ will write the data in ugly format to standard output.
 
 The directory \texttt{db} contains JSON files in both the ugly and the pretty format. For example,
 the file \texttt{ETCBC4.db.json} is the ugly version of \texttt{ETCBC4.db.pretty.json}. The
-developer should only modify the \texttt{.pretty.json} files and then run the
+developer should only modify the \texttt{.pretty.json} files and then use the
 \emph{Makefile} in the top source directory, which will generate the corresponding ugly JSON files.
 
 
@@ -1949,13 +1926,12 @@ The Database Specification File is a JSON file containing the following key/valu
 
 \end{my-longtabu}
 
-
 \subsection{The \emph{objectSettings} Key}\label{sec-objectsettings}\index{objectSettings|hyperit}
 
 The \emph{objectSettings} key in the Database Specification File gives detailed information about
 how the Emdros object types and their features should be treated by Bible OL. The
 \emph{objectSettings} key has a value that is a collection of key/value pairs, where the keys are
-Emdros object type. The corresponding values give information about how the Emdros object should be
+Emdros object type, and the corresponding values give information about how the Emdros object should be
 treated.
 
 Listing \ref{list-ossample} shows a subset of the \emph{objectSettings} for the ETCBC4 database.
@@ -1992,7 +1968,7 @@ When you are creating an exercise with the ETCBC4 database, the ``Sentences'' an
 tabs allow you to specify a sentence unit (a.k.a. quiz object\index{quiz object (a.k.a. sentence unit)}) type:
 
 \begin{center}
-  \includegraphics[width=0.9\textwidth]{senselect.png}
+  \includegraphics[width=0.7\textwidth]{senselect.png}
 \end{center}
 
 The values in the drop down box are the Emdros object that have \emph{mayselect}\index{mayselect} set to \emph{true}
@@ -2024,10 +2000,6 @@ in the ETCBC4 database.
             "ignoreRequest": true,
             "isRange": true
         },
-        "english": {
-            "ignoreSelect": true,
-            "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
-        },
         "g_word_cons_utf8": {
             "hideWord": true,
             "foreignText": true
@@ -2042,12 +2014,19 @@ in the ETCBC4 database.
             "hideValues": [
                 "weyq"
             ]
-        }
+        },
+        "gloss": {
+            "ignoreSelect": true,
+            "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",
+            "indirdb": "mysql",
+            ...
+         }
+
     }
 \end{lstlisting}
 
-In this subset, the features \emph{lexeme\_occurrences, english, g\_word\_const\_utf8,
-  g\_word\_nocant\_utf8,} and \emph{vt} are mentioned. The value associated with each of these keys is
+In this subset, the features \emph{lexeme\_occurrences, g\_word\_const\_utf8,
+  g\_word\_nocant\_utf8, vt,} and \emph{gloss} are mentioned. The value associated with each of these keys is
 another collection of key/value pairs. Many of the values are Boolean, and an absent key is
 equivalent to a Boolean value of \emph{false}. Thus, the absence of a \emph{hideWord} key from
 \emph{lexeme\_occurrences} has the same meaning as if \emph{hideWord} had been given the value
@@ -2094,7 +2073,7 @@ object:
   the user interface. (This is not currently used by any Emdros databases in Bible OL.)\\
 
   matchregexp & A regular expression used to check if an answer provided by a learner matches the
-  value of a feature. For example, the \emph{english} feature for the Hebrew word \heb{אֶרֶץ} has the value
+  value of a feature. For example, the English \emph{gloss} feature for the Hebrew word \heb{אֶרֶץ} has the value
   ``land; territory, country; the earth''. The regular expression in \emph{matchregexp} is designed
   to ensure that a learner's answer is accepted, regardless of whether the answer is ``land'',
   ``territory'', ``country'', or ``the earth''.\\
@@ -2116,7 +2095,7 @@ The keys \emph{ignoreSelect} and \emph{isDefault} control the contents of the fe
 menu when creating an exercise:
 
 \begin{center}
-  \includegraphics[width=0.9\textwidth]{featselect.png}
+  \includegraphics[width=0.7\textwidth]{featselect.png}
 \end{center}
 
 If \emph{ignoreSelect} is set for a feature, then that feature is not shown in the selection menu.
@@ -2132,7 +2111,7 @@ questions:
 
 
 \begin{center}
-  \includegraphics[width=0.9\textwidth]{numbers.png}
+  \includegraphics[width=0.7\textwidth]{numbers.png}
 \end{center}
 
 \subsubsection{Pseudofeatures}\label{sec-pseudofeature}\index{pseudofeature|hyperit}
@@ -2241,7 +2220,7 @@ Bible OL may replace this with these specifications:
 \end{lstlisting}
 
 
-
+\\\HERTIL\\\
 \subsection{The \emph{sentencegrammar} Key}\label{sentencegrammar}\index{sentencegrammar}
 
 The \emph{sentencegrammar} key in the Database Specification File gives detailed information about
@@ -2681,44 +2660,6 @@ Listing \ref{list-enum2values-sample} shows a subset of \emph{enum2values} for t
 For example, lines \ref{line-bool-start}-\ref{line-bool-end} show that the enumeration type
 \emph{boolean\_t} has the values \emph{false} and \emph{true.}
 
-%%%%%%%%%%%%%%%%%%%% Lexicon Information File: PRIM.glosslang.json %%%%%%%%%%%%%%%%%%%%
-\section{Lexicon Information File: PRIM.glosslag.json}\label{sec-lif}\index{Lexicon Information File|hyperit}
-
-The Emdros databases in Bible OL have an associated Lexicon Information File. This file contains
-information about the lexicons available for that database.
-
-This Lexicon Information File contains the following key/value pairs:
-
-\begin{my-longtabu}{lX}{ \headii{Key}{Value} }
-  from & An array of abbreviations of the source languages found in the lexicon for the database.
-  The available abbreviations are \emph{heb} for Hebrew, \emph{aram} form Aramaic, and \emph{greek}
-  for Greek.\\
-
-  to & An array of abbreviations of the target languages found in the lexicon for the database.
-  The abbreviations are the two-letter language codes defined in international standard ISO~639-1
-  (for example, \emph{en} for English and \emph{de} for German).\\
-\end{my-longtabu}
-
-As an example, listing \ref{list-glosslang-example} shows the content of the file
-\texttt{db/ETCBC4.glosslang.json}.
-
-\begin{lstlisting}[caption=A sample Lexicon Information file,label=list-glosslang-example]
-{
-    "from": [
-        "heb",
-        "aram"
-    ],
-    "to": [
-        "en",
-        "de",
-        "es",
-        "nl"
-    ]
-}
-\end{lstlisting}
-
-This file states that lexicons exist that translate from Hebrew and Aramaic into English, German,
-Spanish, and Dutch.
 
 
 %%%%%%%%%%%%%%%%%%%% Database Book Order File: PRIM.bookorder %%%%%%%%%%%%%%%%%%%%
@@ -3309,9 +3250,9 @@ A user requests Bible OL to display a particular passage by accessing a URL%
 in one of these formats:
 
 \begin{lstlisting}[frame=]
-http://%\textrm{\textit{hostname}}%/text/show_text/%\textrm{\textit{dsfname}}%/%\textrm{\textit{book}}%/%\textrm{\textit{chapter}}%
-http://%\textrm{\textit{hostname}}%/text/show_text/%\textrm{\textit{dsfname}}%/%\textrm{\textit{book}}%/%\textrm{\textit{chapter}}%/%\textrm{\textit{verse}}%
-http://%\textrm{\textit{hostname}}%/text/show_text/%\textrm{\textit{dsfname}}%/%\textrm{\textit{book}}%/%\textrm{\textit{chapter}}%/%\textrm{\textit{firstverse}}%/%\textrm{\textit{lastverse}}%
+https://%\textrm{\textit{hostname}}%/text/show_text/%\textrm{\textit{dsfname}}%/%\textrm{\textit{book}}%/%\textrm{\textit{chapter}}%
+https://%\textrm{\textit{hostname}}%/text/show_text/%\textrm{\textit{dsfname}}%/%\textrm{\textit{book}}%/%\textrm{\textit{chapter}}%/%\textrm{\textit{verse}}%
+https://%\textrm{\textit{hostname}}%/text/show_text/%\textrm{\textit{dsfname}}%/%\textrm{\textit{book}}%/%\textrm{\textit{chapter}}%/%\textrm{\textit{firstverse}}%/%\textrm{\textit{lastverse}}%
 \end{lstlisting}
 
 The first variant retrieves an entire chapter, the second variant retrieves a single verse, and the
@@ -3388,8 +3329,8 @@ A user requests Bible OL to start a particular exercise by accessing a URL%
 in one of these formats:
 
 \begin{lstlisting}[frame=]
-http://%\textrm{\textit{hostname}}%/text/show_quiz?quiz=%\textrm{\textit{excercisename}}%&count=%\textrm{\textit{numberOfQuestions}}%
-http://%\textrm{\textit{hostname}}%/text/show_quiz_univ?quiz=%\textrm{\textit{excercisename}}%&count=%\textrm{\textit{numberOfQuestions}}%
+https://%\textrm{\textit{hostname}}%/text/show_quiz?quiz=%\textrm{\textit{excercisename}}%&count=%\textrm{\textit{numberOfQuestions}}%
+https://%\textrm{\textit{hostname}}%/text/show_quiz_univ?quiz=%\textrm{\textit{excercisename}}%&count=%\textrm{\textit{numberOfQuestions}}%
 \end{lstlisting}
 
 The first variant executes an exercise based on the set of Bible passages specified in the
@@ -3461,7 +3402,7 @@ or ``SAVE outcome''\index{save outcome button@``SAVE outcome'' button} button. W
 happens when one of these buttons is pressed, depends on whether the user is logged in or not. If
 the user not logged in, the client instructs the server to display the \emph{Select a Quiz} web
 page. But if the user is logged in, the client sends the result to the server URL
-\texttt{http://}\textit{hostname}\texttt{/statistics/update\_stat}, which updates the
+\texttt{https://}\textit{hostname}\texttt{/statistics/update\_stat}, which updates the
 statistics\index{statistics} for the user. The record in the user statistics table has a field
 called \emph{grading}; this field is set to 0 if the user pressed the ``SAVE outcome'' button, the
 field is set to 1 if the use pressed the ``GRADE task'' button. The \emph{grading} field is used by
@@ -3816,8 +3757,8 @@ website.\\
 
 urls & An array of references to URLs that are relevant for the word. Each entry in the array is
 itself an array with two elements: the URL and a string identifying the icon to show in Bible OL. If,
-for example an element in \emph{url} has the value [~``http://example.com/here.html'',~``v''~],
-Bible OL will show a hyperlink to \texttt{http://example.com/here.html} in the form of a V icon.
+for example an element in \emph{url} has the value [~``https://example.com/here.html'',~``v''~],
+Bible OL will show a hyperlink to \texttt{https://example.com/here.html} in the form of a V icon.
 For more information see Section
 \ref{sec-resource-web}.\\
 \end{my-longtabu}
@@ -4068,13 +4009,13 @@ large library for performing a number of tasks. Currently, Bible OL uses CodeIgn
 
 If you are going to modify server\index{server} code, you will need a good understanding of how
 CodeIgniter works, and you should therefore read the documentation at
-\url{http://www.codeigniter.com/docs}. The following sections provide a few examples of what
+\url{https://codeigniter.com/docs}. The following sections provide a few examples of what
 CodeIgniter can do for the programmer.
 
 %%%%%%%%%%%%%%%%%%%% URL Decoding %%%%%%%%%%%%%%%%%%%%
 \section{URL Decoding}\label{url-decoding}\index{URL!decoding in CodeIgniter}
 
-When a user accesses a URL such as, for example, \texttt{http://website/aaaaa/bbb}, this will cause
+When a user accesses a URL such as, for example, \texttt{https://website/aaaaa/bbb}, this will cause
 CodeIgniter to call the PHP function \emph{bbb} in the class \emph{Ctrl\_aaaaa}, which is located in
 the file \emph{ctrl\_aaaaa.php}.
 
@@ -4085,7 +4026,7 @@ php index.php aaaaa bbb
 \end{lstlisting}
 
 \noindent
-is equivalent to accessing \texttt{http://website/aaaaa/bbb}.
+is equivalent to accessing \texttt{https://website/aaaaa/bbb}.
 
 If the function name is omitted, it defaults to \emph{index}.
 
@@ -4426,7 +4367,7 @@ The driver for native MQL assumes that MQL support has been added to PHP. Sectio
 
 Using the native MQL driver, the MQL API is available directly from within PHP. A C++\index{C++}
 version of the MQL API is described in the Emdros\index{Emdros} Programmer's Reference
-Guide\footnote{\url{http://emdros.org/progref/current}}.
+Guide\footnote{\url{https://emdros.org/progref/current}}.
 
 \subsection{Driver for External MQL}\label{sec-mql-extern}\index{MQL driver!external|hyperit}
 
@@ -5373,7 +5314,7 @@ Compare, for example, the CSS code in the left column below with the Less code i
 
 
 Section \ref{sec-installing-lessc} describes how to install the Less compiler
-\emph{lessc}\index{lessc}. Details of the Less language can be found at \url{http://lesscss.org}.
+\emph{lessc}\index{lessc}. Details of the Less language can be found at \url{https://lesscss.org}.
 
 Although Less style files can be compiled when used in a browser, the Bible OL implementation
 compiles Less files only once and stores the resulting CSS files. This is achieved through the
@@ -5406,7 +5347,7 @@ There are three different TypeScript programs that can run as client code:
 \section{TypeScript}\label{sec-typescript-use}\index{TypeScript|hyperit}
 
 TypeScript is a superset of JavaScript that adds strong typing and proper classes to JavaScript.\index{JavaScript}
-The website \url{http://www.typescriptlang.org} contains a tutorial and the formal specification of
+The website \url{https://www.typescriptlang.org} contains a tutorial and the formal specification of
 the language.
 
 Section \ref{sec-installing-tsc} describes how to install the TypeScript compiler \emph{tsc}.\index{tsc}
@@ -6575,7 +6516,7 @@ website.
 
 The resource web site is a collection of photos from the Middle East. Many of them relate to events
 and places described in the Bible. The photos have descriptive texts that contain Bible references.
-The URL of the resource website is \url{http://resources.3bmoodle.dk}.
+The URL of the resource website is \url{https://resources.3bmoodle.dk}.
 
 Bible OL can use information from the resource website to add picture links to Bible passages. If a
 photo in the resource website refers to, for example, \bibleref{Exodus}{3}{2}, and a user ticks the
@@ -6599,7 +6540,7 @@ php index.php pic2db
 in a cron\index{cron job} job. This command calls Bible OL's \emph{Ctrl\_pic2db} controller (in the file
 \texttt{myapp/\allowbreak{}controllers/\allowbreak{}ctrl\_pic2db.php}), which requests information from the resource database.
 
-By accessing the URL \url{http://resources.3bmoodle.dk/jsonrefs.php}, the \emph{Ctrl\_pic2db}
+By accessing the URL \url{https://resources.3bmoodle.dk/jsonrefs.php}, the \emph{Ctrl\_pic2db}
 controller receives a JSON object from the resources website containing information about the photos
 and the Bible verses to which they refer. Bible OL stores this information in the
 \emph{bible\_refs}\index{bible\_refs table} table in the user database\index{user database} (see Section
@@ -6611,7 +6552,7 @@ functioning of that website. The URLs are intended to identify videos, documents
 that may relevant for studying a particular verse.
 
 Information about these URLs is also retrieved by the cron job above. By accessing the URL
-\url{http://resources.3bmoodle.dk/jsonurls.php}, the \emph{Ctrl\_pic2db} controller receives a JSON
+\url{https://resources.3bmoodle.dk/jsonurls.php}, the \emph{Ctrl\_pic2db} controller receives a JSON
 object from the resources website containing information about the URLs and the Bible verses to
 which they refer. Bible OL stores this information in the \emph{bible\_urls}%
 \index{bible\_urls table}
@@ -6623,7 +6564,7 @@ urls are displayed as ``V'', ``D'', or ``U'' icons.
 
 SHEBANQ (System for HEBrew text: ANnotations for Queries and markup) is a website that uses the
 ETCBC4 database for displaying text and grammar information for the Hebrew Bible. The URL is
-\url{http://shebanq.ancient-data.org}.
+\url{https://shebanq.ancient-data.org}.
 
 When Bible OL displays a text from the Old Testament, an icon in the upper right corner of the text
 area provides a link to the same chapter at the SHEBANQ website. A similar link to Bible OL is found
@@ -6642,11 +6583,11 @@ Testament.\index{Old Testament}
 The database comes from the \emph{Eep Talstra Center for Bible and Computer}%
 \index{Eep Talstra Center for Bible and Computer}
 and is made available under a Creative Commons Attribution-NonCommercial 4.0 International
-License\index{license}.\footnote{\url{http://creativecommons.org/licenses/by-nc/4.0}.} When
+License\index{license}.\footnote{\url{https://creativecommons.org/licenses/by-nc/4.0}.} When
 describing the database, a text similar to this one should be used: ``The database itself can be
 found through this persistent identifier: \texttt{urn:nbn:nl:ui:13-048i-71}.'' The identifier should
 be a hyperlink pointing to
-\url{http://www.persistent-identifier.nl/?identifier=urn:nbn:nl:ui:13-048i-71}.
+\url{https://www.persistent-identifier.nl/?identifier=urn:nbn:nl:ui:13-048i-71}.
 
 Prior to using this database in Bible OL, I have added additional features to the information from
 its original creators. More details about this is given in Section \ref{etcbc-origin}.
