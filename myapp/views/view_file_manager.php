@@ -55,6 +55,7 @@
     <input type="hidden" name="dir" value="<?= $dirlist['relativedir'] ?>">
     <input type="hidden" name="operation" value="">
     <input type="hidden" name="newowner" value="">
+    <input type="hidden" name="examname" value="">
     <table class="type2 table table-striped table-sm">
       <tr>
         <th><?= $this->lang->line('mark') ?><br><a class="badge badge-primary" href="#" onclick="uncheckAll(); return false;"><?= $this->lang->line('uncheck_all') ?></a></th>
@@ -90,6 +91,7 @@
     <?php if ($isadmin): ?>
       <a class="btn btn-outline-dark" onclick="changeOwner(); return false;" href="#"><span class="fas fa-user"></span> <?= $this->lang->line('change_owner_files') ?></a>
     <?php endif; ?>
+    <a class="btn btn-primary" onclick="createExam(); return false;" href="#"><span class="fas fa-plus-circle"></span> <?= $this->lang->line('create_exam_marked') ?></a>
   </p>
 <?php endif; ?>
 
@@ -109,15 +111,15 @@
 
   <script>
     function uncheckAll() {
-        $('input[name="file[]"]:checked').prop('checked',false);   
+        $('input[name="file[]"]:checked').prop('checked',false);
     }
   </script>
-      
+
 
   <!-- Dialogs for this page follow -->
 
   <?php //*********************************************************************
-        // Make Directory dialog 
+        // Make Directory dialog
         //*********************************************************************
     ?>
   <div id="mkdir-dialog" class="modal fade">
@@ -178,7 +180,7 @@
 
 
   <?php //*********************************************************************
-        // Rename dialog 
+        // Rename dialog
         //*********************************************************************
     ?>
   <div id="rename-dialog" class="modal fade">
@@ -249,7 +251,7 @@
 
 
   <?php //*********************************************************************
-        // Create Quiz dialog 
+        // Create Quiz dialog
         //*********************************************************************
     ?>
   <div id="newquiz-dialog" class="modal fade">
@@ -297,7 +299,7 @@
 
 
   <?php //*********************************************************************
-        // Copy/Move Warning dialog 
+        // Copy/Move Warning dialog
         //*********************************************************************
     ?>
   <div id="copy-dialog-warning" class="modal fade">
@@ -403,7 +405,7 @@
                     }
                 });
             }
-            
+
             $('#copy-delete-form').submit();
         });
         $('#delete-dialog-confirm-no').click(function() {
@@ -423,7 +425,53 @@
   </script>
 
   <?php //*********************************************************************
-        // Passage Insert Warning dialog 
+        // Create Exam dialog
+        //*********************************************************************
+    ?>
+  <div id="create-exam-dialog" class="modal fade">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header justify-content-between">
+          <div><h4 class="modal-title"><?= $this->lang->line('create_exam') ?></h4></div>
+          <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
+        </div>
+        <div class="modal-body">
+          <span><?= $this->lang->line('create_exam_name') ?></span>
+          <input type="text" id="exam_name" name="exam_name">
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="create-exam-confirm" class="btn btn-primary"><?= $this->lang->line('create_exam') ?></button>
+          <button type="button" id="create-exam-cancel" class="btn btn-outline-dark" data-dismiss="modal"><?= $this->lang->line('cancel') ?></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(function() {
+        $('#create-exam-confirm').click(function() {
+            $('input[name="examname"]').val($('#exam_name').val());
+            $('#copy-delete-form').attr('action', '<?= site_url('exams/create_exam') ?>');
+            $('#copy-delete-form').submit();
+        });
+        $('#create-exam-cancel').click(function() {
+            $('input[name="operation"]').val(''); // Paranoia
+            $("#create-exam-dialog").modal('hide');
+        });
+    });
+
+    function createExam() {
+        if ($('input[name="file[]"]:checked').length===0) {
+            myalert('<?= $this->lang->line('file_selection') ?>','<?= $this->lang->line('no_files_selected') ?>');
+            return;
+        }
+        $('input[name="operation"]').val('create_exam');
+        $('#create-exam-dialog').modal('show');
+    }
+  </script>
+
+  <?php //*********************************************************************
+        // Passage Insert Warning dialog
         //*********************************************************************
     ?>
   <div id="passage-insert-dialog-confirm" class="modal fade">
@@ -452,7 +500,7 @@
         else if (sessionStorage.copy_passage_dir=="<?= $dirlist['relativedir'] ?>")
             $('[data-filename="' + sessionStorage.copy_passage_file + '"]').removeClass('badge-primary').addClass('badge-success'); // Mark the active 'Copy passages' button
 
-              
+
         $('#passage-insert-dialog-confirm-yes').click(
 
             // Called when the 'Yes' button in the passage insert dialog has been pressed
@@ -473,11 +521,11 @@
                 }).fail(function(jqXHR, textStatus, errorThrown) {
                     myalert("<?= $this->lang->line('server_error') ?>",errorThrown);
                 });
-                
+
                 $("#passage-insert-dialog-confirm").modal('hide');
             }
         );
-        
+
         $('#passage-insert-dialog-confirm-no').click(
 
             // Called when the 'No' button in the passage insert dialog has been pressed
@@ -510,7 +558,7 @@
         $('#passage-insert-description').text("<?= $this->lang->line('insert_passages_from') ?>".format(sessionStorage.copy_passage_dir + "/" + sessionStorage.copy_passage_file));
 
         $('input[name="passage-source"]').val(sessionStorage.copy_passage_dir + "/" + sessionStorage.copy_passage_file + ".3et");
-          
+
         $('#passage-insert-dialog-confirm').modal('show');
     }
 
@@ -524,7 +572,7 @@
         $(elem).removeClass('badge-primary').addClass('badge-success'); // Mark the active 'Copy passages' button
     }
   </script>
-                                                                                                        
+
 
 
   <?php //*********************************************************************
@@ -567,7 +615,7 @@
                 $('#chown-error-text').text('<?= $this->lang->line('no_user_selected') ?>');
                 $('#chown-error').show();
                 return false;
-            }    
+            }
             $('input[name="newowner"]').val(userid);
             $('#copy-delete-form').submit();
         });
@@ -606,4 +654,3 @@
         });
     });
   </script>
-

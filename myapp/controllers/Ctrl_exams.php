@@ -142,18 +142,16 @@ class Ctrl_exams extends MY_Controller
 
         // Add exercise tags to XML
         foreach ($exercises as $key => $value) {
-            if ($key != 0) {
-                $value = str_replace('"', '', $value);
-                print($value);
-                $exercise_node = $dom->createElement('exercise');
-                $root->appendChild($exercise_node);
-                $exercise_name = $dom->createElement('exercisename', $value);
-                $exercise_node->appendChild($exercise_name);
-                $numq_node = $dom->createElement('numq', '10');
-                $exercise_node->appendChild($numq_node);
-                $weight_node = $dom->createElement('weight', '1');
-                $exercise_node->appendChild($weight_node);
-            }
+            $value = str_replace('"', '', $value);
+            print($value);
+            $exercise_node = $dom->createElement('exercise');
+            $root->appendChild($exercise_node);
+            $exercise_name = $dom->createElement('exercisename', $value);
+            $exercise_node->appendChild($exercise_name);
+            $numq_node = $dom->createElement('numq', '10');
+            $exercise_node->appendChild($numq_node);
+            $weight_node = $dom->createElement('weight', '1');
+            $exercise_node->appendChild($weight_node);
         }
 
         return $dom->saveXML();
@@ -170,30 +168,28 @@ class Ctrl_exams extends MY_Controller
         try {
             $this->mod_users->check_teacher();
 
-            if (isset($_POST['create_exam'])) {
-                $create = trim($_POST['create_exam']);
+            $exam_name = $_POST['examname'];
+            $files = $_POST['file'];
 
-                if (preg_match('|[/?*;{}"\'\\\\]|', $create)) {
-                    throw new DataException($this->lang->line('illegal_char_folder_name'));
-                }
-
-                $exercise_lst = $_POST['exercise_list'];
-
-                $ex_ar = explode(',', $exercise_lst);
-
-                $xml = simplexml_load_string($this->create_config_file($create, $ex_ar));
-
-              	$data = array(
-              		'exam_name' => $create,
-              		'ownerid' => $this->mod_users->my_id(),
-              		'examcode' => $xml->asXML(),
-              		'examcodehash' => hash("md5", $xml)
-              	);
-                $this->db->insert('exam', $data);
-                $insert_id = $this->db->insert_id();
-
-                redirect("/exams/edit_exam?exam=$insert_id");
+            if (preg_match('|[/?*;{}"\'\\\\]|', $exam_name)) {
+                throw new DataException($this->lang->line('illegal_char_folder_name'));
             }
+
+            // $ex_ar = explode(',', $exercise_lst);
+
+            $xml = simplexml_load_string($this->create_config_file($exam_name, $files));
+
+          	$data = array(
+          		'exam_name' => $exam_name,
+          		'ownerid' => $this->mod_users->my_id(),
+          		'examcode' => $xml->asXML(),
+          		'examcodehash' => hash("md5", $xml)
+          	);
+            $this->db->insert('exam', $data);
+            $insert_id = $this->db->insert_id();
+
+            redirect("/exams/edit_exam?exam=$insert_id");
+
         } catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('illegal_char_folder_name'));
         }
