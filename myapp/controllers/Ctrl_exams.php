@@ -118,7 +118,7 @@ class Ctrl_exams extends MY_Controller
 
 
     // Create xml configuration file
-    public function create_config_file($examname, array $exercises)
+    public function create_config_file($examname, array $exercises, $dir)
     {
 
             // Set up XML
@@ -146,7 +146,7 @@ class Ctrl_exams extends MY_Controller
             print($value);
             $exercise_node = $dom->createElement('exercise');
             $root->appendChild($exercise_node);
-            $exercise_name = $dom->createElement('exercisename', $value);
+            $exercise_name = $dom->createElement('exercisename', $dir . "/" . $value);
             $exercise_node->appendChild($exercise_name);
             $numq_node = $dom->createElement('numq', '10');
             $exercise_node->appendChild($numq_node);
@@ -170,6 +170,7 @@ class Ctrl_exams extends MY_Controller
 
             $exam_name = $_POST['examname'];
             $files = $_POST['file'];
+            $dir = $_POST['dir'];
 
             if (preg_match('|[/?*;{}"\'\\\\]|', $exam_name)) {
                 throw new DataException($this->lang->line('illegal_char_folder_name'));
@@ -177,7 +178,7 @@ class Ctrl_exams extends MY_Controller
 
             // $ex_ar = explode(',', $exercise_lst);
 
-            $xml = simplexml_load_string($this->create_config_file($exam_name, $files));
+            $xml = simplexml_load_string($this->create_config_file($exam_name, $files, $dir));
 
           	$data = array(
           		'exam_name' => $exam_name,
