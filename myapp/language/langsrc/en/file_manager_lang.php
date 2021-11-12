@@ -3,6 +3,7 @@
 $lang['access_denied_to'] = "Access denied to '%s'";
 $lang['added_ownership'] = "Ownership added for these exercises:";
 $lang['already_exists'] = "'%s' already exists";
+$lang['cancel'] = "Cancel";
 $lang['cancel_copy'] = "Cancel copy operation";
 $lang['cancel_copy_title'] = "Cancel copy";
 $lang['cancel_move'] = "Cancel move operation";
@@ -24,6 +25,9 @@ $lang['copy_files'] = "Copy Files";
 $lang['copy_marked'] = "Copy marked files";
 $lang['copy_or_delete_files'] = "Copy or Delete Files";
 $lang['copy_passages'] = "Copy passages";
+$lang['create_exam'] = "Create Exam";
+$lang['create_exam_marked'] = "Create new exam from marked files";
+$lang['create_exam_name'] = "Exam Name: ";
 $lang['create_exercise_button'] = "Create exercise";
 $lang['create_exercise_heading'] = "Create Exercise";
 $lang['create_folder'] = "Create Folder";
@@ -55,7 +59,8 @@ $lang['file_mgmt_description'] = "<p>Here you can upload or delete exercise file
         . "     <p>Note: You can only delete a folder if it is empty.</p>\n"
         . "     <p>The “Edit visibility” button allows you to control who can see the contents of each folder.</p>\n"
         . "     <p>Additionally, exercise files can be created with the stand-alone Windows-based version of PLOTLearner.\n"
-        . "     The exercise files have file type “.3et”.</p>";
+        . "     The exercise files have file type “.3et”.</p>\n"
+        . "     <p>Finally, for creating a new exam, select the files you want the exam to contain.</p>";
 $lang['file_selection'] = "File selection";
 $lang['folders'] = "Folders";
 $lang['folder_name_prompt'] = "Folder name:";

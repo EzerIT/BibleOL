@@ -83,7 +83,7 @@ on the page.
 This button redirects to the exam creation page.
 -->
 <div>
-  <a class="btn btn-primary" href="/exams/new_exam"><?= $this->lang->line('create_new_exam_button') ?></a>
+  <a class="btn btn-primary" href="<?= site_url('/file_manager') ?>"><?= $this->lang->line('create_new_exam_button') ?></a>
 </div>
 
 

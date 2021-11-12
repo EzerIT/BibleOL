@@ -411,4 +411,3 @@ $use_textarea['visible_to_class'] = false;
 $comment['wrong_database'] = "";
 $format['wrong_database'] = "";
 $use_textarea['wrong_database'] = false;
-
