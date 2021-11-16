@@ -62,6 +62,8 @@ class Ctrl_exams extends MY_Controller
         else
           $owned_classes = $this->mod_userclass->get_classes_for_user($user_id);
 
+
+
         foreach ($owned_classes as $class_id){
           $active_exam_query = $this->db->get_where('exam_active', array('class_id' => $class_id))->result();
           foreach ($active_exam_query as $exam_row) {
@@ -210,7 +212,7 @@ class Ctrl_exams extends MY_Controller
         $exam_name = $_GET["exname"];
         $exam_id = $_GET["exid"];
         $timezone_offset = $_GET["timezone-offset"];
-        $seconds_offset = $timezone_offset * 60;
+        $seconds_offset = $timezone_offset * 60 + date('Z');
         $class_id = $_GET["class_select"];
         $instance_name = $_GET["instance_name"];
         $exam_start_date = $_GET["start_date"] ;

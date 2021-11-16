@@ -143,7 +143,7 @@
 
 <script>
   $(".end-time").each(function () {
-    this.innerText = new Date((this.innerText - new Date().getTimezoneOffset() * 60) * 1000);
+    this.innerText = new Date((this.innerText - new Date().getTimezoneOffset() * 60 - <?= $timezone_offset ?>) * 1000);
   })
 
   function dltexam(examid, examname) {
