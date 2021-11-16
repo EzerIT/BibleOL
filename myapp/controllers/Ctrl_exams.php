@@ -102,6 +102,7 @@ class Ctrl_exams extends MY_Controller
               'page_count' => $page_count,
               'past_exams_list' => $past_exams_list,
               'sortorder' => $sortorder,
+              'timezone_offset' => date('Z'),
             ),
             true
         );
@@ -208,18 +209,21 @@ class Ctrl_exams extends MY_Controller
 
         $exam_name = $_GET["exname"];
         $exam_id = $_GET["exid"];
+        $timezone_offset = $_GET["timezone-offset"];
+        $seconds_offset = $timezone_offset * 60;
         $class_id = $_GET["class_select"];
         $instance_name = $_GET["instance_name"];
-        $exam_start_date = $_GET["start_date"];
+        $exam_start_date = $_GET["start_date"] ;
         $exam_end_date = $_GET["end_date"];
         $exam_length = $_GET["duration"];
         $exam_start_time = $_GET["start_time"];
         $exam_end_time = $_GET["end_time"];
 
-        $exam_start = strtotime("$exam_start_date $exam_start_time");
-        $exam_end = strtotime("$exam_end_date $exam_end_time");
+        // Start and end times are stored in local time zone of server
+        $exam_start = strtotime("$exam_start_date $exam_start_time") + $seconds_offset;
+        $exam_end = strtotime("$exam_end_date $exam_end_time") + $seconds_offset;
         if ($exam_start > $exam_end) {
-          $exam_start = strtotime("now");
+          $exam_start = strtotime("now") + $seconds_offset;
         }
 
         $data = array(

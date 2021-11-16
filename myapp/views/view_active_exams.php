@@ -35,7 +35,7 @@
           <tr>
             <td class="leftalign"><?= $exam->class_id ?></td>
             <td class="leftalign"><?= $exam->instance_name ?></td>
-            <td class="leftalign"><?= date("m-d-Y H:i", $exam->exam_end_time) ?></td>
+            <td class="leftalign end-time"><?= $exam->exam_end_time ?></td>
             <td class="leftalign"><?= $exam->exam_length ?></td>
             <td class="leftalign">
               <a class="badge badge-primary" href="/exams/take_exam?exam=<?= $exam->id ?>">Take Exam</a>
@@ -142,6 +142,10 @@
 
 
 <script>
+  $(".end-time").each(function () {
+    this.innerText = new Date((this.innerText - new Date().getTimezoneOffset() * 60) * 1000);
+  })
+
   function dltexam(examid, examname) {
     $('#delete-exid').attr('value', examid);
     document.getElementById('delete-exam-instance').innerHTML = examname;
