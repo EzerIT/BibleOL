@@ -62,9 +62,10 @@ class Ctrl_exams extends MY_Controller
         else
           $owned_classes = $this->mod_userclass->get_classes_for_user($user_id);
 
-
+        $class_names = array();
 
         foreach ($owned_classes as $class_id){
+          $class_names[$class_id] = $this->mod_classes->get_class_by_id($class_id)->classname;
           $active_exam_query = $this->db->get_where('exam_active', array('class_id' => $class_id))->result();
           foreach ($active_exam_query as $exam_row) {
             if ($exam_row->exam_end_time > time()){
@@ -98,6 +99,7 @@ class Ctrl_exams extends MY_Controller
             'view_active_exams',
             array(
               'active_exams_list' => $active_exams_list,
+              'class_names' => $class_names,
               'future_exams_list' => $future_exams_list,
               'offset' => $offset,
               'orderby' => $orderby,
