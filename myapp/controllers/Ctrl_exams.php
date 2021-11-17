@@ -70,8 +70,11 @@ class Ctrl_exams extends MY_Controller
           foreach ($active_exam_query as $exam_row) {
             if ($exam_row->exam_end_time > time()){
               if ($exam_row->exam_start_time <= time()){
-                $exam_finished_query = $this->db->get_where('exam_finished', array('userid' => $user_id, 'activeexamid' => $exam_row->id));
-                if (!$exam_finished_query->row()) array_push($active_exams_list, $exam_row);
+                if ($this->mod_users->is_teacher()) array_push($active_exmas_list, $exam_row);
+                else {
+                  $exam_finished_query = $this->db->get_where('exam_finished', array('userid' => $user_id, 'activeexamid' => $exam_row->id));
+                  if (!$exam_finished_query->row()) array_push($active_exams_list, $exam_row);
+                }
               } else {
                 array_push($future_exams_list, $exam_row);
               }
@@ -538,6 +541,11 @@ class Ctrl_exams extends MY_Controller
         $active_exam_id = $_GET['exam'];
         $active_exam = $this->mod_exams->get_active_exam($active_exam_id);
         $exam_id = $active_exam->exam_id;
+
+        // $query_finished = $this->db->get_where('exam_finished', array('userid' => $user_id, 'activeexamid' => $_GET['exam']));
+        // if ($query_finished->row()) {
+        //
+        // }
 
         $now = time();
         if ($active_exam->exam_length == 0) {
