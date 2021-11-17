@@ -70,7 +70,7 @@ class Ctrl_exams extends MY_Controller
           foreach ($active_exam_query as $exam_row) {
             if ($exam_row->exam_end_time > time()){
               if ($exam_row->exam_start_time <= time()){
-                if ($this->mod_users->is_teacher()) array_push($active_exmas_list, $exam_row);
+                if ($this->mod_users->is_teacher()) array_push($active_exams_list, $exam_row);
                 else {
                   $exam_finished_query = $this->db->get_where('exam_finished', array('userid' => $user_id, 'activeexamid' => $exam_row->id));
                   if (!$exam_finished_query->row()) array_push($active_exams_list, $exam_row);
@@ -325,6 +325,8 @@ class Ctrl_exams extends MY_Controller
     }
 
     public function exam_done() {
+      $this->load->view('view_top1', array('title' => $this->lang->line('take_exam')));
+      $this->load->view('view_top2');
       $this->load->view('view_exam_done');
     }
 
@@ -548,7 +550,7 @@ class Ctrl_exams extends MY_Controller
         // }
 
         $now = time();
-        if ($active_exam->exam_length == 0) {
+        if ($active_exam->exam_length == 0 || $this->mod_users->is_teacher()) {
           $deadline = $active_exam->exam_end_time;
         }
         else {
@@ -570,7 +572,8 @@ class Ctrl_exams extends MY_Controller
           $this->db->insert('exam_status', $data);
         }
 
-        $completed = $this->mod_exams->get_completed_exam_exercises($user_id, $active_exam_id);
+        $completed = array();
+        if (!$this->mod_users->is_teacher()) $completed = $this->mod_exams->get_completed_exam_exercises($user_id, $active_exam_id);
 
         $examcode = $this->mod_exams->get_exam_by_id($exam_id)->examcode;
         $xml = simplexml_load_string($examcode);
