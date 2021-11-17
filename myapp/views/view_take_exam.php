@@ -1,10 +1,13 @@
 
-
-<div id="timer">
-  Time Left: <p id="timeLeft"></p>
+<div id="exam-info" style="display: flex; flex-direction: row;">
+  <div id="timer" class="cke_editable cke_editable_themed cke_contents_ltr cke_show_borders">
+    Time Left: <p id="timeLeft"></p>
+  </div>
+  <div id="exam-description" class="cke_editable cke_editable_themed cke_contents_ltr cke_show_borders" style="flex-grow:2;">
+    Description:
+    <?= $xml->description ?>
+  </div>
 </div>
-
-<p id="test"></p>
 
 <div>
 <object id="quiz_frame" data="/exams/show_quiz?quiz=<?= str_replace("/", "%2F", array_shift($exercises)) ?>&examid=<?= $exam_id ?>&exercise_lst=<?= str_replace("/", "%2F", implode("~",$exercises)) ?>" width="100%" height="auto" onLoad="loaded()" onclick="frameClick()">
