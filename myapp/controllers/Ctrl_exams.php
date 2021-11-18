@@ -289,6 +289,10 @@ class Ctrl_exams extends MY_Controller
       try {
         $this->mod_users->check_teacher();
 
+        if ($this->mod_exams->get_exam_by_id($_GET['exam'])->ownerid != $this->mod_users->my_id()) {
+          redirect("/exams");
+        }
+
         $this->load->model('mod_askemdros');
         $this->load->model('mod_localize');
 
