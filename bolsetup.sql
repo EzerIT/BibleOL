@@ -499,6 +499,7 @@ CREATE TABLE `bol_exam` (
   `ownerid` int NOT NULL COMMENT 'ID of the owner of the exercise (from the Users table)',
   `examcode` text COMMENT 'The actual XML text of the Exam template. Going forward, we may create more columns to capture elemnts of the XML code that need to be used all the time to make decoding the XML text unnecessary in most cases.',
   `examcodehash` text NOT NULL COMMENT 'A hash value of the examcode field. It can be used to speed up the comparison of the examcode field from different entries in this table: If the examcodehash values are different, then the examcode values will also be different.',
+  `archived` int DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `ownerid` (`ownerid`),
   CONSTRAINT `bol_exam_ibfk_1` FOREIGN KEY (`ownerid`) REFERENCES `bol_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -572,6 +573,3 @@ CREATE TABLE `bol_exam_status` (
   KEY `activeexamid` (`activeexamid`),
   CONSTRAINT `bol_exam_status_ibfk_1` FOREIGN KEY (`activeexamid`) REFERENCES `bol_exam_active` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
-
-

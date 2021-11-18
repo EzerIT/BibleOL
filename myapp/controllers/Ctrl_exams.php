@@ -264,7 +264,7 @@ class Ctrl_exams extends MY_Controller
         $exid = $_POST["exid"];
 
         # Remove exam from database.
-        $this->db->delete('exam', array('id' => $exid));
+        $this->db->update('exam', array('archived' => 1), array('id' => $exid));
 
         redirect("/exams");
     }
