@@ -50,12 +50,12 @@ class Mod_exams extends CI_Model{
     }
 
     public function get_all_exams(){
-        $query = $this->db->get('exam');
+        $query = $this->db->get_where('exam', array('archived' => 0));
         return $query->result();
     }
 
     public function get_all_exams_part(int $limit, int $offset, string $orderby, string $sortorder){
-        $query = $this->db->order_by($orderby, $sortorder)->get('exam', $limit, $offset);
+        $query = $this->db->order_by($orderby, $sortorder)->get_where('exam', array('archived' => 0), $limit, $offset);
         return $query->result();
     }
 
