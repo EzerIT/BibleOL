@@ -571,6 +571,10 @@ following lines in the copy:
 \begin{lstlisting}[language=PHP]
 $config['variants'] = array();
 
+$config['users_per_page'] = 30;
+$config['exams_per_page'] = 30;
+$config['lines_per_page'] = 20;
+
 $config['pw_salt'] = 'xxxxxxx';
 $config['mql_driver'] = 'native';
 $config['mail_sender_address'] = 'xxxxx@xxxxx.xx';
@@ -592,6 +596,15 @@ You should modify these values thus:
 language variants (see Section \ref{sec-variants}) that Bible OL should provide. The variant names should
 consist of only letters and digits. (Note: Whenever this value is changed, Bible OL will be quite slow the
 first time a biblical text is displayed. This is because the system creates database tables for the added variants.)\\
+
+\$config['users\_per\_page']\index{users per page} & The number of users to display on each page when
+displaying the list of all users.\\
+
+\$config['exams\_per\_page']\index{exams per page}\index{exam} & The number of exams to display on each page when
+displaying the list of all exams.\\
+
+\$config['lines\_per\_page']\index{translations!lines per page} & The number of items to display on  each page when
+modifying the user interface translation tables.\\
 
 \$config['pw\_salt']\index{salt} & A random text string of, say, 6-8 characters. This is used to randomize the
   user passwords stored in the user database\index{user database}.\\
@@ -2707,7 +2720,7 @@ which indicates that only chapters 2, 6-9, and 23 of Leviticus are available.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Quiz Templates %%%%%%%%%%%%%%%%%%%%
 \chapter{Quiz Templates}\index{quiz template|hyperit}
-\\\HERTIL\\\
+
 \textbf{Read this chapter if you need to understand how exercises are stored in the server.}
 \plainbreak{3}
 
@@ -2720,8 +2733,8 @@ Listing \ref{list-qtsample} shows a typical quiz template.
 
 \begin{lstlisting}[language=XML,numbers=left,caption=Quiz template sample,label=list-qtsample]
 <?xml version="1.0" encoding="UTF-8"?>
-<questiontemplate version="3">
-  <desc><![CDATA[Which gender is this?]]></desc>
+<questiontemplate version="6">
+  <desc><![CDATA[<p>Which gender is this?</p>]]></desc>
   <database>ETCBC4</database>
   <properties>ETCBC4</properties>
   <path>Genesis:1:1</path> %\label{xml-pa}%
@@ -2730,7 +2743,7 @@ Listing \ref{list-qtsample} shows a typical quiz template.
   <path>Exodus</path> %\label{xml-pb}%
   <sentenceselection version="1">
     <questionobject>word</questionobject>
-    <featurehandlers version="2">
+    <featurehandlers version="3">
       <enumfeature version="1">
         <name>sp</name>
         <comparator>equals</comparator>
@@ -2746,18 +2759,22 @@ Listing \ref{list-qtsample} shows a typical quiz template.
     </featurehandlers>
     <useforquizobjects>true</useforquizobjects>
   </sentenceselection>
-  <quizfeatures version="3"> %\label{xml-qf}%
+  <quizfeatures version="4"> %\label{xml-qf}%
     <show>visual</show>
     <request>gn</request>
   </quizfeatures>
+  <maylocate>true</maylocate>
+  <sentbefore>0</sentbefore>
+  <sentafter>0</sentafter>
+  <fixedquestions>0</fixedquestions>
 </questiontemplate>
 \end{lstlisting}
 
 The \emph{version} attribute used in several elements identifies what elements may legally appear
 within other elements. For example, the current version of Bible OL allows the elements \xml{show},
-\xml{request}, \xml{requestdd}, and \xml{dontshow} within the \xml{quizfeatures} element (see line
+\xml{request}, \xml{requestdd}, \xml{dontshow}, and \xml{dontshowobject} within the \xml{quizfeatures} element (see line
 \ref{xml-qf} above). If a future version of Bible OL changes the legal content of
-\xml{quizfeatures}, the \xmla{version="3"} string should be changed to \xmla{version="4"}.
+\xml{quizfeatures}, the \xmla{version="4"} string should be changed to \xmla{version="5"}.
 
 
 The top level of the quiz template is the \xml{questiontemplate} element. It contains these
@@ -2795,6 +2812,10 @@ question sentence. If this XML element is absent, it is assumed have the value \
 
 \xml{sentafter} & An integer value indicating the number of context sentences to display after the
 question sentence. If this XML element is absent, it is assumed have the value \emph{0}.\\
+
+\xml{fixedquestions} & If this value is \emph{0}, the user can choose how many questions the quiz should
+generate. If the value is different from \emph{0}, the number of questions is fixed at that number.
+If this XML element is absent, it is assumed have the value \emph{0}.\\
 
 \end{my-longtabu}
 
@@ -3119,6 +3140,7 @@ preposition/noun pair.)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Multiple-Choice Questions %%%%%%%%%%%%%%%%%%%%
+
 \chapter{Multiple-Choice Questions}\label{chap-multiple-choice}\index{multiple-choice|hyperit}
 
 \textbf{Read this chapter if you need to understand or modify the way Bible OL automatically
@@ -3127,14 +3149,13 @@ preposition/noun pair.)
 
 
 If a request feature\index{request feature} in an exercise has an
-enumeration\index{Emdros!enumeration} type, the request feature is displayed as a drop-down box and
-thus becomes a multiple choice question:
+enumeration\index{Emdros!enumeration} type, the request feature is displayed as a multiple choice question:
 
 \begin{center}
-  \includegraphics[width=0.148\textwidth]{gender.png}
+  \includegraphics[width=0.6\textwidth]{gender.png}
 \end{center}
 
-But in some cases it is desirable that features of string type are also displayed as multiple
+But in some situations it is desirable that features of string type are also displayed as multiple
 choice. For example, in the current version of Bible OL, this is possible for the features
 \emph{g\_word\_nocant\_utf8}\footnote{That is, \emph{Text (no cantillation marks).}} and
 \emph{g\_prs\_utf8}\footnote{That is, \emph{Pronominal suffix.}}.
@@ -3142,15 +3163,16 @@ choice. For example, in the current version of Bible OL, this is possible for th
 A separate ``Words Database''\index{Words Database|hyperit} exists with the information necessary for this to work.
 
 The Words Database is an SQLite3\index{SQLite3} database containing all possible values for the relevant feature.
-Bible OL then constructs a drop-down box containing at most ten of the possible values, chosen at
+Bible OL then constructs a multiple choice selector containing at most ten of the possible values, chosen at
 random but guaranteed to contain the correct answer:
 
 \begin{center}
-  \includegraphics[width=0.4\textwidth]{pronsuf.png}
+  \includegraphics[width=0.7\textwidth]{pronsuf.png}
 \end{center}
 
-The strings in the drop-down box are chosen based on three keys from the \emph{objectSettings}\index{objectSettings} of
-the Database Specification file. (See Section \ref{sec-objectsettings}.)
+The strings in the multiple choice selector are chosen based on the following three keys from the
+\emph{objectSettings}\index{objectSettings} of the Database Specification file (see Section
+\ref{sec-objectsettings}):
 
 \begin{itemize}
 \item The name of the Words Database, found under the \emph{alternateshowrequestDb} key.
@@ -3191,11 +3213,11 @@ This will yield a collection of all possible pronominal suffixes associated with
 value ``CM/''. Bible OL will then choose ten of these at random, while still ensuring that the
 correct answer (\heb{ֹו}) is among them, and present them in a drop-down box.
 
-If the SQL statement yields only a single value, it is not turned into a drop-down box as with the second
-word here:
+If the SQL statement yields only a single value, it is not presented as a multiple choice selector
+as with this word:
 
 \begin{center}
-  \includegraphics[width=0.4\textwidth]{pronsuf2.png}
+  \includegraphics[width=0.3\textwidth]{pronsuf2.png}  % From Isaiah 60:3
 \end{center}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3212,8 +3234,8 @@ example, the word \heb{תֵרָאֶה} (\bibleref{Genesis}{1}{9}) can be either 
 masculine or 3rd person, singular, feminine. A student looking merely at the word form, will not be
 able to determine the correct interpretation. In the context of \bibleref{Genesis}{1}{9} the word is
 3rd person, singular, feminine. A teacher can choose to display the \emph{hint} feature in exercises
-to help the student select the correct interpretation. For example, \bibleref{Genesis}{1}{9} may be
-displayed thus:
+to help the student select the correct interpretation. For example, \heb{תֵרָאֶה} may be
+displayed thus in an exercise:
 
 \begin{center}
   \includegraphics[width=0.6\textwidth]{hint.png}
@@ -3232,7 +3254,7 @@ Hints are only available for verbs, and only in situations where the verb form i
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Client/Server Data Exchange %%%%%%%%%%%%%%%%%%%%
 \chapter{Data Exchange}\label{chap-data-exchange}
-
+\HERTIL
 \textbf{Read this chapter if you are going to work with code that accesses the Emdros databases on
   the server or displays text and exercises in the client.}
 \plainbreak{3}
