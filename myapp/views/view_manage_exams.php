@@ -104,6 +104,7 @@ This button redirects to the exam creation page.
         <form id="create-instance-form" action="<?= site_url('exams/create_exam_instance') ?>" method="get">
           <input type="hidden" name="exname" id="create-instance-examname">
           <input type="hidden" name="exid" id="create-instance-examid">
+          <input type="hidden" name="timezone-offset" id="timezone-offset">
           <?= $this->lang->line('class') ?>: <select id="class_select" name="class_select">
             <?php foreach ($n_o_c as $owned_class): ?>
               <option value="<?= $owned_class->id ?>"><?= $owned_class->classname ?></option>
@@ -142,6 +143,7 @@ This button redirects to the exam creation page.
     $('#create-instance-error').hide();
     $('#create-instance-examname').attr('value', examname);
     $('#create-instance-examid').attr('value', examid);
+    $('#timezone-offset').attr('value', new Date().getTimezoneOffset());
     $('#instance_name').attr('value', examname);
     let tomo = new Date();
     tomo.setDate(tomo.getDate() + 1);

@@ -62,13 +62,19 @@ class Ctrl_exams extends MY_Controller
         else
           $owned_classes = $this->mod_userclass->get_classes_for_user($user_id);
 
+        $class_names = array();
+
         foreach ($owned_classes as $class_id){
+          $class_names[$class_id] = $this->mod_classes->get_class_by_id($class_id)->classname;
           $active_exam_query = $this->db->get_where('exam_active', array('class_id' => $class_id))->result();
           foreach ($active_exam_query as $exam_row) {
             if ($exam_row->exam_end_time > time()){
               if ($exam_row->exam_start_time <= time()){
-                $exam_finished_query = $this->db->get_where('exam_finished', array('userid' => $user_id, 'activeexamid' => $exam_row->id));
-                if (!$exam_finished_query->row()) array_push($active_exams_list, $exam_row);
+                if ($this->mod_users->is_teacher()) array_push($active_exams_list, $exam_row);
+                else {
+                  $exam_finished_query = $this->db->get_where('exam_finished', array('userid' => $user_id, 'activeexamid' => $exam_row->id));
+                  if (!$exam_finished_query->row()) array_push($active_exams_list, $exam_row);
+                }
               } else {
                 array_push($future_exams_list, $exam_row);
               }
@@ -96,12 +102,14 @@ class Ctrl_exams extends MY_Controller
             'view_active_exams',
             array(
               'active_exams_list' => $active_exams_list,
+              'class_names' => $class_names,
               'future_exams_list' => $future_exams_list,
               'offset' => $offset,
               'orderby' => $orderby,
               'page_count' => $page_count,
               'past_exams_list' => $past_exams_list,
               'sortorder' => $sortorder,
+              'timezone_offset' => date('Z'),
             ),
             true
         );
@@ -208,18 +216,21 @@ class Ctrl_exams extends MY_Controller
 
         $exam_name = $_GET["exname"];
         $exam_id = $_GET["exid"];
+        $timezone_offset = $_GET["timezone-offset"];
+        $seconds_offset = $timezone_offset * 60 + date('Z');
         $class_id = $_GET["class_select"];
         $instance_name = $_GET["instance_name"];
-        $exam_start_date = $_GET["start_date"];
+        $exam_start_date = $_GET["start_date"] ;
         $exam_end_date = $_GET["end_date"];
         $exam_length = $_GET["duration"];
         $exam_start_time = $_GET["start_time"];
         $exam_end_time = $_GET["end_time"];
 
-        $exam_start = strtotime("$exam_start_date $exam_start_time");
-        $exam_end = strtotime("$exam_end_date $exam_end_time");
+        // Start and end times are stored in local time zone of server
+        $exam_start = strtotime("$exam_start_date $exam_start_time") + $seconds_offset;
+        $exam_end = strtotime("$exam_end_date $exam_end_time") + $seconds_offset;
         if ($exam_start > $exam_end) {
-          $exam_start = strtotime("now");
+          $exam_start = strtotime("now") + $seconds_offset;
         }
 
         $data = array(
@@ -253,7 +264,7 @@ class Ctrl_exams extends MY_Controller
         $exid = $_POST["exid"];
 
         # Remove exam from database.
-        $this->db->delete('exam', array('id' => $exid));
+        $this->db->update('exam', array('archived' => 1), array('id' => $exid));
 
         redirect("/exams");
     }
@@ -277,6 +288,10 @@ class Ctrl_exams extends MY_Controller
     {
       try {
         $this->mod_users->check_teacher();
+
+        if ($this->mod_exams->get_exam_by_id($_GET['exam'])->ownerid != $this->mod_users->my_id()) {
+          redirect("/exams");
+        }
 
         $this->load->model('mod_askemdros');
         $this->load->model('mod_localize');
@@ -314,6 +329,8 @@ class Ctrl_exams extends MY_Controller
     }
 
     public function exam_done() {
+      $this->load->view('view_top1', array('title' => $this->lang->line('take_exam')));
+      $this->load->view('view_top2');
       $this->load->view('view_exam_done');
     }
 
@@ -531,8 +548,13 @@ class Ctrl_exams extends MY_Controller
         $active_exam = $this->mod_exams->get_active_exam($active_exam_id);
         $exam_id = $active_exam->exam_id;
 
+        // $query_finished = $this->db->get_where('exam_finished', array('userid' => $user_id, 'activeexamid' => $_GET['exam']));
+        // if ($query_finished->row()) {
+        //
+        // }
+
         $now = time();
-        if ($active_exam->exam_length == 0) {
+        if ($active_exam->exam_length == 0 || $this->mod_users->is_teacher()) {
           $deadline = $active_exam->exam_end_time;
         }
         else {
@@ -554,7 +576,8 @@ class Ctrl_exams extends MY_Controller
           $this->db->insert('exam_status', $data);
         }
 
-        $completed = $this->mod_exams->get_completed_exam_exercises($user_id, $active_exam_id);
+        $completed = array();
+        if (!$this->mod_users->is_teacher()) $completed = $this->mod_exams->get_completed_exam_exercises($user_id, $active_exam_id);
 
         $examcode = $this->mod_exams->get_exam_by_id($exam_id)->examcode;
         $xml = simplexml_load_string($examcode);
