@@ -563,7 +563,7 @@ Change the text USERNAME, PASSWORD, and DATABASE to be the database username, pa
 name.
 
 
-\subsection{Step 5. Additional Configuration}
+\subsection{Step 5. Additional Configuration}\label{sec-ol-config}
 
 Copy the file \texttt{myapp/config/ol.php-dist} to \texttt{myapp/config/ol.php}\index{ol.php} and modify the
 following lines in the copy:
@@ -646,14 +646,11 @@ following line in the copy:
 
 \begin{lstlisting}[language=PHP]
 $config['base_url'] = 'https://example.com';%\index{base URL}%
-$config['lj_enabled'] = false;
 \end{lstlisting}
 
 Replace `https://example.com' with the top URL of the web site for your Bible OL installation. NOTE:
 It is highly recommended that your installation runs HTTPS. If it doesn't, you should change
 \texttt{\$config['cookie\_secure']} to \texttt{false}; but then some parts of the system may not work reliably.
-
-If you plan to use \emph{Learning Journey} (see Section \ref{sec-lj}), set \texttt{\$config['lj\_enabled']} to \texttt{true}.
 
 
 \subsection{Step 6. Initialize MySQL\index{MySQL}}
@@ -663,9 +660,6 @@ The following commands should be executed with the current directory set to \tex
 \subsubsection*{Substep 1}
 
 Initialize the contents of the database from the content of the file \texttt{bolsetup.sql}.
-
-If you plan to use \emph{Learning Journey} (see Section \ref{sec-lj}), you may also want to import
-the content of the file \texttt{ljsetup.sql}.
 
 
 \subsubsection*{Substep 2}
@@ -1718,7 +1712,7 @@ a few places in Bible OL.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Database Description Files %%%%%%%%%%%%%%%%%%%%
-\chapter{Database Description Files}\index{Database Description File}\index{Description File|see {Database Description File}}
+\chapter{Database Description Files}\index{Database Description File}\index{Description File|see {Database Description File}}\label{chap-db-desc-files}
 
 \textbf{Read this chapter if you are going to work with code that accesses the Emdros databases on
   the server or displays text and exercises in the client.}
@@ -3254,7 +3248,7 @@ Hints are only available for verbs, and only in situations where the verb form i
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Client/Server Data Exchange %%%%%%%%%%%%%%%%%%%%
 \chapter{Data Exchange}\label{chap-data-exchange}
-\HERTIL
+
 \textbf{Read this chapter if you are going to work with code that accesses the Emdros databases on
   the server or displays text and exercises in the client.}
 \plainbreak{3}
@@ -3330,6 +3324,11 @@ headers, HTML code to lay out the menu, and these JavaScript variables:
   quizdata\hmmindex{quizdata JavaScript variable@\string\emph{quizdata} JavaScript variable} &
   This variable is \emph{null}, indicating that we are displaying text, not running an
   exercise.\\
+
+  l\_icon\_map\hmmindex{l_icon_map JavaScript variable@\string\emph{l\_icon\_map} JavaScript variable} &
+  This variable translates internal icon names to HTML class names used to display the icons. This
+  translation originates in the file \texttt{myapp/helpers/icon\_helper.php}.\\
+
 \end{my-longtabu}
 
 Included in the HTML document that the server sends to the client is a link to a number of CSS and
@@ -3403,6 +3402,8 @@ more than the relevant headers, HTML code to lay out the menu, and these JavaScr
   A JavaScript object containing information about the exercise being run. This includes
   information about the display features and the request features and their (correct) values. This
   variable is described in Chapter \ref{chap-quizdata}.\\
+
+  l\_icon\_map & The same as in Section \ref{displaying-text}.\\
 \end{my-longtabu}
 
 Included in the HTML document that the server sends to the client is a link to a number of CSS and
@@ -3425,13 +3426,13 @@ page. But if the user is logged in, the client sends the result to the server UR
 \texttt{https://}\textit{hostname}\texttt{/statistics/update\_stat}, which updates the
 statistics\index{statistics} for the user. The record in the user statistics table has a field
 called \emph{grading}; this field is set to 0 if the user pressed the ``SAVE outcome'' button, the
-field is set to 1 if the use pressed the ``GRADE task'' button. The \emph{grading} field is used by
-Learning Journey (see Section \ref{sec-lj}).
+field is set to 1 if the use pressed the ``GRADE task'' button.
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% The dictionaries Variable %%%%%%%%%%%%%%%%%%%%
+
 \chapter{The \emph{dictionaries} Variable}\label{chap-dictionary}%
 \index{dictionaries JavaScript variable@\emph{dictionaries} JavaScript variable|hyperit}
 
@@ -3865,14 +3866,15 @@ This is a simplified overview of the relevant TypeScript definitions in the clie
 
 \begin{lstlisting}[language=TypeScript]
 interface QuizData {
-    quizid       : number;
-    quizFeatures : ExtendedQuizFeatures;
-    desc         : string;
-    maylocate    : boolean;
-    sentbefore   : number;
-    sentafter    : number;
-    monad2Id     : number[];
-    id2FeatVal   : string[][];
+    quizid         : number;
+    quizFeatures   : ExtendedQuizFeatures;
+    desc           : string;
+    maylocate      : boolean;
+    sentbefore     : number;
+    sentafter      : number;
+    fixedquestions : number;
+    monad2Id       : number[];
+    id2FeatVal     : string[][];
 }
 
 interface ExtendedQuizFeatures {%\index{ExtendedQuizFeatures TypeScript interface@\emph{ExtendedQuizFeatures} TypeScript interface}%
@@ -3896,6 +3898,7 @@ class Quiz_data {
     public $maylocate;
     public $sentbefore;
     public $sentafter;
+    public $fixedquestions;
     public $monad2Id;         // An array of integers
     public $id2FeatVal;       // An array of arrays of strings
 }
@@ -3935,7 +3938,11 @@ The fields of the \emph{QuizData} interface are:
 
   sentafter & An integer value indicating the number of context sentences to display after the
               question sentence.\\
-  
+
+  fixedquestions & An integer whose value is zero if the user can choose how may questions the exercise
+                   should have. If the value is greater than zero, the exercise always has that number of
+                   questions.\\
+
   monad2Id & An array that maps monads\index{monad} to the ID\_Ds\index{Emdros!ID\_D} of a quiz
              object\index{quiz object (a.k.a. sentence unit)}. If a quiz object covers more
              than one word, several entries in this array will have the same value. (Note that this
@@ -4004,8 +4011,9 @@ interface has these members:
     displayed text.\\
 
     useVirtualKeyboard & \emph{True} if the client should display a virtual keyboard%
-    \index{virtual keyboard}
-    to facilitate the typing of text in a foreign alphabet.\\
+    \index{virtual keyboard} to facilitate the typing of text in a foreign alphabet. Note: This
+    field was used in previous
+    versions of Bible OL; it is not currently used.\\
 
 \addlinespace[-1mm]\bottomrule
 \end{tabu*}
@@ -4025,11 +4033,11 @@ software.
 
 Bible OL uses a PHP\index{PHP} framework known as \emph{CodeIgniter,} which provides a simple
 decoding of URLs, forces a model-view-controller approach to the software structure, and provides a
-large library for performing a number of tasks. Currently, Bible OL uses CodeIgniter version 3.1.7.
+large library for performing a number of tasks. Currently, Bible OL uses CodeIgniter version 3.1.9.
 
 If you are going to modify server\index{server} code, you will need a good understanding of how
 CodeIgniter works, and you should therefore read the documentation at
-\url{https://codeigniter.com/docs}. The following sections provide a few examples of what
+\url{https://codeigniter.com/userguide3}. The following sections provide a few examples of what
 CodeIgniter can do for the programmer.
 
 %%%%%%%%%%%%%%%%%%%% URL Decoding %%%%%%%%%%%%%%%%%%%%
@@ -4134,29 +4142,7 @@ The code for CodeIgniter itself resides in the directory \texttt{CodeIgniter}.
 
 CodeIgniter is configured through definitions in the files located in the directory
 \texttt{myapp/config}. I have added a file \texttt{ol.php}\index{ol.php} to this directory
-containing these configuration variables:
-
-\begin{my-tabu}{lX}{ \headii{Index in \$config}{Value} }
-pw\_salt & Salt\index{salt} for storing the password in the user database\index{user database}.\\
-
-mql\_driver & Set to \texttt{'native'} to select a built-in MQL driver\index{MQL driver}. Set to or
-\texttt{'extern'} to run MQL commands external to the PHP interpreter.\\
-
-mail\_sender\_address & The sender\index{email address} address on email sent by Bible OL to
-registered users.\\
-
-mail\_sender\_name & The sender\index{email sender} name on email sent by Bible OL to registered
-users.\\
-
-google\_client\_id & Used by Google login\index{login!Google} (see Section \ref{sec-oauth-login}).\\
-
-google\_client\_secret & Used by Google login\index{login!Google} (see Section \ref{sec-oauth-login}).\\
-
-facebook\_client\_id & Used by Facebook login\index{login!Facebook} (see Section \ref{sec-oauth-login}).\\
-
-facebook\_client\_secret & Used by Facebook login\index{login!Facebook} (see Section \ref{sec-oauth-login}).\\
-\end{my-tabu}
-
+containing various configuration variables, which are described in Section \ref{sec-ol-config}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -4187,7 +4173,11 @@ classes & Manages classes (that is, groups of users).\\
 
 config & Allows users to change their font preferences.\\
 
+exams & Manages exams\index{exam}.\\
+
 file\_manager & Management of files and directories in the \texttt{quizzes} directory.\\
+
+grades & Handles grading of exams.\\
 
 lang & Switches user interface language.\\
 
@@ -4236,6 +4226,8 @@ mod\_askemdros & Retrieves Emdros-related data.\\
 mod\_classdir & Manages class permissions for an exercise directory.\\
 mod\_classes & Manages classes (that is, groups of users).\\
 mod\_config & Manages users' font\index{font} preferences.\\
+mod\_exams & Manages exams\index{exam}.\\
+mod\_grades & Handles grading of exams.\\
 mod\_intro\_text & Generates the text on the front page.\\
 mod\_localize & Generates localization information for JavaScript code (see Section \ref{sec-localize-javascript}).\\
 mod\_quizpath & Exercise directory operations.\\
@@ -4413,7 +4405,7 @@ The server provides two different login mechanism. One uses a local\index{login!
 Google and Facebook provide authentication using the OAuth~2 protocol.
 
 Google's description of how their OAuth implementation works can be found here:
-\url{https://developers.google.com/accounts/docs/OAuth2WebServer}. Facebook's implementation works
+\url{https://developers.google.com/identity/protocols/oauth2/web-server}. Facebook's implementation works
 in a similar manner.
 
 The following is a brief description of the mechanism as it is set up on the Bible OL installation
@@ -4611,40 +4603,35 @@ The user database contains these tables:
 
 \begin{center}
 \begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l}
-alphabet              & language\_LANG                  & personal\_font         \\
-bible\_refs           & language\_LANG\_VARIANT         & sta\_displayfeature    \\
-bible\_urls           & lexicon\_Aramaic                & sta\_question          \\
-class                 & lexicon\_Aramaic\_LANG          & sta\_quiz              \\
-classexercise         & lexicon\_Aramaic\_LANG\_VARIANT & sta\_quiztemplate      \\
-db\_localize          & lexicon\_greek                  & sta\_requestfeature    \\
-db\_localize\_VARIANT & lexicon\_greek\_LANG            & sta\_universe          \\
-exercisedir           & lexicon\_greek\_LANG\_VARIANT   & translation\_languages \\
-exerciseowner         & lexicon\_Hebrew                 & user                   \\
-font                  & lexicon\_Hebrew\_LANG           & userclass              \\
-heb\_urls             & lexicon\_Hebrew\_LANG\_VARIANT  & userconfig             \\
-language\_comment     & migrations                      &                        \\
+alphabet              & font                            & migrations             \\
+bible\_refs           & heb\_urls                       & personal\_font         \\
+bible\_urls           & language\_comment               & sta\_displayfeature    \\
+class                 & language\_LANG                  & sta\_question          \\
+classexercise         & language\_LANG\_VARIANT         & sta\_quiz              \\
+db\_localize          & lexicon\_Aramaic                & sta\_quiztemplate      \\
+db\_localize\_VARIANT & lexicon\_Aramaic\_LANG          & sta\_requestfeature    \\
+exam                  & lexicon\_Aramaic\_LANG\_VARIANT & sta\_universe          \\ 
+exam\_active          & lexicon\_greek                  & translation\_languages \\ 
+exam\_finished        & lexicon\_greek\_LANG            & user                   \\ 
+exam\_results         & lexicon\_greek\_LANG\_VARIANT   & userclass              \\ 
+exam\_status          & lexicon\_Hebrew                 & userconfig             \\ 
+exercisedir           & lexicon\_Hebrew\_LANG           &                        \\ 
+exerciseowner         & lexicon\_Hebrew\_LANG\_VARIANT  &                        \\ 
 \end{tabu}
 \end{center}
+
 
 The characters ``LANG'' in the names above should be replaced with language codes, such as ``en''
 for English or ``da'' for Danish. The charaters ``VARIANT'' int the names above should be replaced
 with the names of the available variants; if no variants are available, the variant database tables
 do not exist.
 
-Additionally, the user database contains these tables that are used by Learning Journey (see Section \ref{sec-lj}):
-
-\begin{center}
-\begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l@{\hspace{1cm}}l}
-sta\_grading & sta\_gradingfeature & sta\_gradingpath & sta\_grading\_system \\
-\end{tabu}
-\end{center}
-
 The names are typically prefixed by a common text string found in
 \emph{\$db[\q default\q][\q dbprefix\q]} in the file \texttt{myapp/config/database.php}. If that
 value is \emph{`bol\_',} the database tables will be named \emph{bol\_alphabet,
   bol\_bible\_refs} etc.
 
-The tables (except for those used by Learning Journey) are described in the following sections.
+The tables are described in the following sections.
 
 %%%%%%%%%%%%%%%%%%%% The user Table %%%%%%%%%%%%%%%%%%%%
 \section{The \emph{user} Table}\label{sec-user-table}\index{user table|hyperit}
@@ -4909,6 +4896,7 @@ valid      & Boolean & \emph{False} if the user has deleted the entry, \emph{tru
 grading    & Boolean & \emph{True} if this entry is to be used for grading
                        purposes, \emph{false} otherwise. (This is controlled by the user clicking
                        ``GRADE task'' or ``SAVE outcome'' at the end of an exercise.) \\
+tot\_questions & Integer & The number of questions actually answered by the user. \\
 \end{my-longtabu}
 
 
@@ -5024,6 +5012,14 @@ correct    & Boolean & \emph{True} if the user's answer is correct.\footnote{Thi
   testing if \emph{value}=\emph{answer}. For example, when providing an English translation of a
   word, a correct \emph{answer} may be ``do'' even if the \emph{value} is ``make, do; fix; deal with''.}\\
 \end{my-longtabu}
+
+
+\section{The \emph{exam}, \emph{exam\_active}, \emph{exam\_finished}, \emph{exam\_results} and
+  \emph{exam\_status} Tables}\index{exam table}\index{exam\_active table}\index{exam\_finished table}\index{exam\_results table}\index{exam\_status table}
+
+TO DO: These tables have not yet been documented.
+
+
 
 %%%%%%%%%%%%%%%%%%%% The heb_urls Table %%%%%%%%%%%%%%%%%%%%
 \section{The \emph{heb\_urls} Table}%
@@ -5338,14 +5334,18 @@ Section \ref{sec-installing-lessc} describes how to install the Less compiler
 
 Although Less style files can be compiled when used in a browser, the Bible OL implementation
 compiles Less files only once and stores the resulting CSS files. This is achieved through the
-Makefile\index{Makefile} in the top directory. The command ``make\index{make} styles/ol.css'' will compile the Less
-file.\footnote{The simple command ``make'' will compile all Less and TypeScript files.}
+Makefile\index{Makefile} in the top directory. The command ``make\index{make} styles/ol.css
+styles/ol\_zh.css'' will compile the Less file.\footnote{The simple command ``make'' will compile
+  all Less and TypeScript files and also generate some Database Description Files (see Chapter
+  \ref{chap-db-desc-files}).}
 
 At present, Bible OL uses only one Less file, namely \texttt{styles/ol.less} which compiles into
-\texttt{styles/ol.css}.
+\texttt{styles/ol\_zh.css}, which is used with the Chinese user interface, and
+\texttt{styles/ol.css}, which is used with all other languages.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Client Code %%%%%%%%%%%%%%%%%%%%
+\HERTIL
 \chapter{Client Code}\label{chap-client-code}\index{client}
 
 \textbf{Read this chapter if you are going to understand or modify the client code.}
