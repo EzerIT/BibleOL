@@ -5345,7 +5345,6 @@ At present, Bible OL uses only one Less file, namely \texttt{styles/ol.less} whi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Client Code %%%%%%%%%%%%%%%%%%%%
-\HERTIL
 \chapter{Client Code}\label{chap-client-code}\index{client}
 
 \textbf{Read this chapter if you are going to understand or modify the client code.}
@@ -5374,7 +5373,7 @@ Section \ref{sec-installing-tsc} describes how to install the TypeScript compile
 
 The Bible OL implementation compiles TypeScript files only once and stores the resulting JavaScript
 files. This is achieved through the Makefile\index{Makefile} in the top directory. The command ``make all'' (or
-simply ``make'')\index{make} will compile the TypeScript files (and the Less file).
+simply ``make'')\index{make} will compile the TypeScript files (plus the Less file and some Database Description Files (see Chapter \ref{chap-db-desc-files})).
 
 The TypeScript files are found in the directory \texttt{ts}; the resulting JavaScript files are
 stored in the directory \texttt{js}.
@@ -5704,7 +5703,7 @@ upper left corner of a query page at SHEBANQ:
   \includegraphics[width=0.5\textwidth]{shebanq.png}
 \end{center}
 
-In this example, the query ID is 799.
+In this example, the query ID is 968.
 
 When editing a quiz template on Bible OL, a user can request the client code to import this query
 from SHEBANQ.
@@ -5940,8 +5939,8 @@ the text display area it is simply ``Clause1'', as shown in Figure \ref{fig-clau
 
 \begin{figure}[h]
   \begin{center}
-    \parbox{0.5\textwidth}{
-      \includegraphics[width=0.5\textwidth]{clause1.png}
+    \parbox{0.7\textwidth}{
+      \includegraphics[width=0.7\textwidth]{clause1.png}
       \caption{The term ``Clause level 1'' is used in the grammar selection box, but ``Clause1'' is
         used in the text area.}\label{fig-clause1}
     }
@@ -6027,7 +6026,7 @@ which these values should be sorted when presented to the user. Normally, the va
 alphabetically thus:
 
 \begin{center}
-  \includegraphics[width=0.3\textwidth]{psp.png}
+  \includegraphics[width=0.6\textwidth]{psp.png}
 \end{center}
 
 But if the English translation starts with ``\#1'', ``\#2'' etc. these numbers indicate the sort
@@ -6035,7 +6034,7 @@ order. So with the contents of \emph{gender\_t} given in Listing \ref{list-emdro
 genders are sorted thus:
 
 \begin{center}
-  \includegraphics[width=0.148\textwidth]{gender.png}
+  \includegraphics[width=0.6\textwidth]{gender2.png}
 \end{center}
 
 
@@ -6060,6 +6059,7 @@ the English localization of the \emph{nestle1904} database.
     }
 \end{lstlisting}
 
+\HERTIL
 In this listing the enumeration value \emph{ADV} of type \emph{clause\_type\_t} is normally translated ``Adverbial'', but in
 the text display area it is simply ``ADV'', as shown in Figure \ref{fig-clause2}.
 
