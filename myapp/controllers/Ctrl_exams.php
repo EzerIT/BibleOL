@@ -768,7 +768,8 @@ class Ctrl_exams extends MY_Controller
                                                'js_list' => $javascripts));
           $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
           $this->load->view('view_top2');
-          $this->load->view('view_exam_display', array('examid' => $examid,
+          $this->load->view('view_text_display', array('is_exam' => true,
+                                                       'examid' => $examid,
                                                        'exercise_lst' => $exercise_lst,
                                                        'quizid' => $this->quiz_data->quizid,
                                                        'is_quiz' => true,
