@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering\\Ezer IT Consulting}
-\date{8 October 2021}
+\date{9 December 2021}
 
 \makeindex
 
@@ -5209,7 +5209,7 @@ The tables contain these fields:
 
 \begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
 id                  & Integer & Unique number identifying this entry.     \\
-strongs             & Integer & The Strong's number for the lexeme. \\
+strongs             & Integer & The Strong's number\index{Strongs's number} for the lexeme. \\
 strongs\_unreliable & Boolean & \emph{True} if the indicated Strong's number is considered unreliable.\\
 lemma               & Text    & The lexeme in accented Greek characters.\\
 tally               & Integer & The number of occurrences of this word in the text. \\
@@ -6059,13 +6059,12 @@ the English localization of the \emph{nestle1904} database.
     }
 \end{lstlisting}
 
-\HERTIL
 In this listing the enumeration value \emph{ADV} of type \emph{clause\_type\_t} is normally translated ``Adverbial'', but in
 the text display area it is simply ``ADV'', as shown in Figure \ref{fig-clause2}.
 
 \begin{center}
-  \parbox{0.7\textwidth}{
-    \includegraphics[width=0.7\textwidth]{clause2.png}
+  \parbox{0.8\textwidth}{
+    \includegraphics[width=0.8\textwidth]{clause2.png}  % Luke 1:5
     \captionof{figure}{The term ``Adverbial'' is used in the grammar information box, but ``ADV'' is
       used in the text area.}\label{fig-clause2}
   }
@@ -6440,7 +6439,7 @@ specified, then that variant will be updated.
 %%%%%%%%%%%%%%%%%%%% Plug-ins %%%%%%%%%%%%%%%%%%%%
 \chapter{Plug-ins}\index{plug-in}
 
-\textbf{Read this chapter if you want to modify Learning Journey or write a new plug-in.}
+\textbf{Read this chapter if you want to write a new plug-in.}
 \plainbreak{3}
 
 CodeIgniter and Bible OL provide a limited mechanism for writing plug-ins (that is, extensions to
@@ -6502,22 +6501,6 @@ if ($this->config->item('xxx_enabled')) {
 \end{lstlisting}
 
 
-At present, the only available plug-in is \emph{Learning Journey}. 
-
-%%%%%%%%%%%%%%%%%%%% The Learning Journey Plug-in %%%%%%%%%%%%%%%%%%%%
-\section{The Learning Journey Plug-in}\label{sec-lj}\index{Learning Journey}
-
-Bible OL collects information about the answers users give to exercises and how much time they spend
-on each exercise. The Learning Journey plug-in%
-\footnote{Developed by Judith Gottschalk.\index{Gottschalk, Judith}}
-accesses this information and provides statistics\index{statistics} about each user's
-performance.
-
-No further information about Learning Journey is given in this document.
-
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Complementary Websites %%%%%%%%%%%%%%%%%%%%
 \chapter{Complementary Websites}
@@ -6544,7 +6527,7 @@ photo in the resource website refers to, for example, \bibleref{Exodus}{3}{2}, a
 text next to verse 2:
 
 \begin{center}
-\includegraphics[width=0.9\textwidth]{exodus3.png}
+\includegraphics[width=0.7\textwidth]{exodus3.png}
 \end{center}
 
 Clicking on the icon will cause the web browser to display the relevant photo. If there are more
@@ -7359,16 +7342,10 @@ In the \emph{raw\_lemma} feature, both of these are given as ``βατος''.
 
 \subsection{Features: strongs and strongs\_unreliable}
 
-The \emph{strongs} feature is an integer feature containing Strong's number for the lemma. The
+The \emph{strongs} feature is an integer feature containing Strong's number\index{Strongs's number} for the lemma. The
 \emph{strongs\_unreliable} feature is a Boolean feature which is \emph{true} if the indicated
 Strong's number is considered unreliable.
 
-If a Strong's number is considered unreliable, Bible OL lists the corresponding gloss in
-parentheses. For example (from \bibleref{Matthew}{6}{18}):
-
-\begin{center}
-  \includegraphics[width=0.4\textwidth]{unreliable.png}
-\end{center}
 
 \subsection{Features: lexeme\_occurrences and frequency\_rank}
 
