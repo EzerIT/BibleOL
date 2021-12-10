@@ -1,4 +1,4 @@
-<?php if ($is_exam): ?>
+<?php if (isset($is_exam) && $is_exam): ?>
   <div id="quiz_id" style="display: none;"><?= $quizid ?></div>
   <div id="exam_id" style="display: none;"><?= $examid ?></div>
   <div id="exercise_lst" style="display: none;"><?= $exercise_lst ?></div>
@@ -64,7 +64,7 @@
       <div id="buttonlist2">
           <button id="next_question" class="btn btn-quiz" type="button"><?= $this->lang->line('next') ?></button>
           <button id="finish" class="btn btn-quiz" type="button"><?= $this->lang->line('finish') ?></button>
-          <?php if (!$is_exam): ?>
+          <?php if (!(isset($is_exam) && $is_exam)): ?>
             <button id="finishNoStats" class="btn btn-quiz" type="button"><?= $this->lang->line('finish_no_grading') ?></button>
           <?php endif; ?>
       </div>
@@ -99,7 +99,7 @@
 </div>
 
 
-<?php if ($is_quiz && !$is_exam): ?>
+<?php if ($is_quiz && !(isset($is_exam) && $is_exam)): ?>
     <!-- Dialog for test heartbeat -->
     <div id="heartbeat-dialog" class="modal fade">
         <div class="modal-dialog">
