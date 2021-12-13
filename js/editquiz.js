@@ -1436,14 +1436,17 @@ var ButtonsAndLabel = (function () {
                         limitButton_1.removeClass('badge-success').addClass('badge-danger').html(localize('limited'));
                 };
                 updateBadge_1();
-                limitButton_1.click(function () {
-                    var ld = new LimitDialog(valueType, getFeatureSetting(otype, featName), hideFeatures, function (newHideFeatures) {
+                var limitButton_clickFunction_1 = function () {
+                    new LimitDialog(valueType, getFeatureSetting(otype, featName), hideFeatures, function (newHideFeatures) {
                         _this.hideFeatures = hideFeatures = newHideFeatures;
                         updateBadge_1();
                     });
-                });
+                };
                 var removeit = function () { return _this.limitter.empty(); };
-                this.reqFeat.change(function () { return _this.limitter.append(limitButton_1); });
+                this.reqFeat.change(function () {
+                    limitButton_1.click(limitButton_clickFunction_1);
+                    _this.limitter.append(limitButton_1);
+                });
                 if (select === ButtonSelection.REQUEST)
                     this.reqFeat.change();
                 this.dcFeat.change(removeit);

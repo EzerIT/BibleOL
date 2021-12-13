@@ -176,21 +176,25 @@ class ButtonsAndLabel {
                                                                                                  
                 updateBadge();
 
-                
-                limitButton.click(() => {
-                    let ld : LimitDialog = new LimitDialog(valueType,
-                                                           getFeatureSetting(otype,featName),
-                                                           hideFeatures,
-                                                           (newHideFeatures : string[]) => {
-                                                               this.hideFeatures = hideFeatures = newHideFeatures;
-                                                               updateBadge();
-                                                           });
-                });
 
+                let limitButton_clickFunction = () => {
+                    new LimitDialog(valueType,
+                                    getFeatureSetting(otype,featName),
+                                    hideFeatures,
+                                    (newHideFeatures : string[]) => {
+                                        this.hideFeatures = hideFeatures = newHideFeatures;
+                                        updateBadge();
+                                    });
+                };
 
                 let removeit = () => this.limitter.empty();
                 
-                this.reqFeat.change( () => this.limitter.append(limitButton) );
+                this.reqFeat.change( () =>
+                    {
+                        limitButton.click(limitButton_clickFunction);
+                        this.limitter.append(limitButton);
+                    }
+                );
 
                 if (select===ButtonSelection.REQUEST)
                     this.reqFeat.change();  // Trigger the change event
