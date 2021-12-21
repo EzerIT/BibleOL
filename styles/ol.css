@@ -480,6 +480,10 @@ div.selectbutton label:hover {
   background-color: #e5e5e5;
   color: #002A3A;
 }
+.shortcut {
+  font-size: 8pt;
+  justify-content: center;
+}
 div.selectbutton.multiple_choice label {
   font-size: 14pt;
   font-weight: normal;
@@ -764,9 +768,12 @@ div.quizitem {
   width: 50px;
   text-align: center;
   font-weight: normal;
+  font-size: 18pt;
+}
+.letterinput .delbutton.noshortcut,
+.letterinput .inputbutton.noshortcut {
   height: 50px;
   line-height: 50px;
-  font-size: 18pt;
 }
 .letterinput .delbutton:hover,
 .letterinput .inputbutton:hover {

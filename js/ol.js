@@ -1481,6 +1481,76 @@ var Answer = (function () {
     };
     return Answer;
 }());
+var KeyTable = (function () {
+    function KeyTable() {
+        this.elements = [];
+        this.actions = [];
+    }
+    KeyTable.prototype.add = function (card, row, letter, id, action) {
+        if (!this.elements[card])
+            this.elements[card] = [];
+        if (!this.elements[card][row])
+            this.elements[card][row] = new Object;
+        if (!this.elements[card][row][letter])
+            this.elements[card][row][letter] = [];
+        this.elements[card][row][letter].push(id);
+        if (!this.actions[card])
+            this.actions[card] = [];
+        this.actions[card][row] = action;
+    };
+    KeyTable.prototype.get_key = function (card, row, letter) {
+        if (!this.elements[card] || !this.elements[card][row])
+            return null;
+        return this.elements[card][row][letter];
+    };
+    KeyTable.prototype.get_action = function (card, row) {
+        if (!this.actions[card])
+            return null;
+        return this.actions[card][row];
+    };
+    return KeyTable;
+}());
+var Cursor = (function () {
+    function Cursor(minrow, maxrow, pq) {
+        this.minrow = minrow;
+        this.maxrow = maxrow;
+        this.pq = pq;
+        this.card = 0;
+        this.row = this.minrow;
+    }
+    Cursor.prototype.hide = function () {
+        $("#ptr_" + this.card + "_" + this.row).hide();
+    };
+    Cursor.prototype.show = function () {
+        $("#ptr_" + this.card + "_" + this.row).show();
+    };
+    Cursor.prototype.set = function (c, r) {
+        if (c === void 0) { c = 0; }
+        if (r === void 0) { r = this.minrow; }
+        this.hide();
+        this.card = c;
+        this.row = r;
+        this.show();
+    };
+    Cursor.prototype.prevNextCard = function (n, gotoTop) {
+        this.set(this.card + n, gotoTop ? this.minrow : this.maxrow - 1);
+    };
+    Cursor.prototype.prevNextItem = function (n) {
+        if (n > 0) {
+            if (this.row + n >= this.maxrow)
+                this.pq.prevNextSubQuestion(n, true);
+            else
+                this.set(this.card, this.row + n);
+        }
+        else {
+            if (this.row + n < this.minrow)
+                this.pq.prevNextSubQuestion(n, false);
+            else
+                this.set(this.card, this.row + n);
+        }
+    };
+    return Cursor;
+}());
 var PanelQuestion = (function () {
     function PanelQuestion(qd, dict, exam_mode) {
         var _this = this;
@@ -1488,6 +1558,7 @@ var PanelQuestion = (function () {
         this.answersPerCard = [];
         this.question_stat = new QuestionStatistics;
         this.subQuizIndex = 0;
+        this.keytable = new KeyTable;
         this.qd = qd;
         this.sentence = dict.sentenceSetQuiz;
         var smo = dict.getSingleMonadObject(getFirst(this.sentence));
@@ -1553,9 +1624,9 @@ var PanelQuestion = (function () {
         var quizCardNum = qoFeatures.length;
         var quizContainer = $('div#quizcontainer');
         this.subQuizMax = quizCardNum;
-        for (var qoid in qoFeatures) {
+        var _loop_2 = function (qoid) {
             if (isNaN(+qoid))
-                continue;
+                return "continue";
             if (headInd >= headLen)
                 headInd -= headLen;
             var quizCard_1 = +qoid === 0
@@ -1566,9 +1637,9 @@ var PanelQuestion = (function () {
             quizContainer.append(quizCard_1);
             var fvals = qoFeatures[+qoid];
             if (dontShow) {
-                quizTab.append("<tr>" + questionheaders[headInd] + "<td>" + (+qoid + 1) + "</td></tr>");
+                quizTab.append("<tr><td>&nbsp;</td>" + questionheaders[headInd] + "<td>" + (+qoid + 1) + "</td></tr>");
                 ++headInd;
-                this.question_stat.show_feat.values.push("" + (+qoid + 1));
+                this_2.question_stat.show_feat.values.push("" + (+qoid + 1));
             }
             for (var sfi in showFeatures) {
                 if (isNaN(+sfi))
@@ -1577,7 +1648,7 @@ var PanelQuestion = (function () {
                 var val = fvals[sf];
                 var featType = featuresHere[sf];
                 var featset = getFeatureSetting(oType, sf);
-                this.question_stat.show_feat.values.push(val);
+                this_2.question_stat.show_feat.values.push(val);
                 if (featType == null && sf !== 'visual')
                     alert("Unexpected (1) featType==null in panelquestion.ts; sf=\"" + sf + "\"");
                 if (sf === 'visual')
@@ -1609,16 +1680,18 @@ var PanelQuestion = (function () {
                 if (val == null)
                     alert('Unexpected val==null in panelquestion.ts');
                 if (featType === 'string' || featType == 'ascii') {
-                    quizTab.append("<tr>" + questionheaders[headInd]
+                    quizTab.append("<tr><td>&nbsp;</td>" + questionheaders[headInd]
                         + ("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + (val === '' ? '-' : val) + "</td></tr>"));
                     ++headInd;
                 }
                 else {
-                    quizTab.append("<tr>" + questionheaders[headInd] + "<td>" + val + "</td></tr>");
+                    quizTab.append("<tr><td>&nbsp;</td>" + questionheaders[headInd] + "<td>" + val + "</td></tr>");
                     ++headInd;
                 }
             }
-            var _loop_2 = function (rfi) {
+            if (!this_2.cursor)
+                this_2.cursor = new Cursor(headInd, headLen, this_2);
+            var _loop_3 = function (rfi) {
                 if (isNaN(+rfi))
                     return "continue";
                 var rf = requestFeatures[+rfi].name;
@@ -1654,15 +1727,22 @@ var PanelQuestion = (function () {
                             var item = new StringWithSort(s, s);
                             var option = $('<div class="selectbutton multiple_choice">'
                                 + ("<input type=\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
-                                + ("<label class=\"" + charSetClass + "\" for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
+                                + ("<label class=\"" + charSetClass + "\" for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "<span class=\"shortcut\"></span></label>")
                                 + '</div>');
-                            option.data('sws', item);
+                            option
+                                .data('sws', item)
+                                .data('id', item.getInternal() + "_" + quizItemID);
                             optArray.push(option);
                             if (s === correctAnswer)
                                 this_2.vAnswers.push(new Answer(cwyn, item, s, null));
                         }
                         optArray.sort(function (a, b) { return StringWithSort.compare(a.data('sws'), b.data('sws')); });
-                        $.each(optArray, function (ix, o) { return quiz_div_1.append(o); });
+                        $.each(optArray, function (ix, o) {
+                            quiz_div_1.append(o);
+                            var sc = ix == 9 ? '0' : (ix + 1) + '';
+                            o.find('.shortcut').text(sc);
+                            _this.keytable.add(+qoid, headInd, sc, o.data('id'), 1);
+                        });
                         v = cwyn.getJQuery();
                     }
                 }
@@ -1914,11 +1994,14 @@ var PanelQuestion = (function () {
                         var letterinput_1 = $('<div class="letterinput"></div>');
                         vf.append(letterinput_1);
                         if (charset.isRtl)
-                            letterinput_1.append('<div class="delbutton">&rarr;</div>');
+                            letterinput_1.append("<div class=\"delbutton\" id=\"bs_" + quizItemID + "\">&rarr;</div>");
                         else
-                            letterinput_1.append('<div class="delbutton">&larr;</div>');
+                            letterinput_1.append("<div class=\"delbutton\" id=\"bs_" + quizItemID + ">&larr;</div>");
+                        this_2.keytable.add(+qoid, headInd, 'Backspace', "bs_" + quizItemID, 2);
                         showLetters_1.forEach(function (letter, i) {
-                            letterinput_1.append("<div class=\"inputbutton " + PanelQuestion.charclass(featset) + "\">" + letter + "</div>");
+                            var sc = String.fromCharCode(i + 97);
+                            letterinput_1.append("<div class=\"inputbutton " + PanelQuestion.charclass(featset) + "\" id=\"" + sc + "_" + quizItemID + "\" data-letter=\"" + letter + "\">" + letter + "<span class=\"shortcut\">" + sc + "</span></div>");
+                            _this.keytable.add(+qoid, headInd, sc, sc + "_" + quizItemID, 2);
                         });
                         hasForeignInput = true;
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
@@ -1956,11 +2039,14 @@ var PanelQuestion = (function () {
                         var row = $('<tr></tr>');
                         for (var c = 0; c < 3; c++) {
                             var ix = r + c * numberOfRows;
-                            if (ix < numberOfItems)
+                            if (ix < numberOfItems) {
+                                var sc = String.fromCharCode(ix + 97);
                                 row.append('<td style="text-align:left"><div class="selectbutton">'
                                     + ("<input type=\"checkbox\" id=\"" + swsValues[ix].getInternal() + "_" + quizItemID + "\" value=\"" + swsValues[ix].getInternal() + "\">")
-                                    + ("<label for=\"" + swsValues[ix].getInternal() + "_" + quizItemID + "\">" + swsValues[ix].getString() + "</label>")
+                                    + ("<label for=\"" + swsValues[ix].getInternal() + "_" + quizItemID + "\">" + swsValues[ix].getString() + "<span class=\"shortcut\">" + sc + "</span></label>")
                                     + '</div></td>');
+                                this_2.keytable.add(+qoid, headInd, sc, swsValues[ix].getInternal() + "_" + quizItemID, 3);
+                            }
                             else
                                 row.append('<td></td>');
                         }
@@ -1976,7 +2062,7 @@ var PanelQuestion = (function () {
                 else {
                     var values = typeinfo.enum2values[featType];
                     if (values == null) {
-                        v.append('<tr>'
+                        v.append('<tr><td>&nbsp;</td>'
                             + questionheaders[headInd]
                             + '<td>QuestionPanel.UnknType</td></tr>');
                     }
@@ -2004,7 +2090,10 @@ var PanelQuestion = (function () {
                                         + ("<input type=\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
                                         + ("<label for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
                                         + '</div>');
-                                    option.data('sws', item);
+                                    option
+                                        .data('sws', item)
+                                        .data('char', item.getString()[0].toLowerCase())
+                                        .data('id', item.getInternal() + "_" + quizItemID);
                                     optArray.push(option);
                                     if (correctIsOther)
                                         this_2.vAnswers.push(new Answer(cwyn, item, localize('other_value'), null));
@@ -2017,29 +2106,93 @@ var PanelQuestion = (function () {
                                     + ("<input type=\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
                                     + ("<label for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
                                     + '</div>');
-                                option.data('sws', item);
+                                option
+                                    .data('sws', item)
+                                    .data('char', item.getString()[0].toLowerCase())
+                                    .data('id', item.getInternal() + "_" + quizItemID);
                                 optArray.push(option);
                                 if (sFriendly === correctAnswerFriendly)
                                     this_2.vAnswers.push(new Answer(cwyn, item, s, null));
                             }
                         }
                         optArray.sort(function (a, b) { return StringWithSort.compare(a.data('sws'), b.data('sws')); });
-                        $.each(optArray, function (ix, o) { return quiz_div_2.append(o); });
+                        $.each(optArray, function (ix, o) {
+                            quiz_div_2.append(o);
+                            _this.keytable.add(+qoid, headInd, o.data('char'), o.data('id'), 1);
+                        });
                         v = cwyn.getJQuery();
                     }
                 }
                 var quizRow = $('<tr></tr>');
+                quizRow.append("<td><span style=\"display:none\" id=\"ptr_" + +qoid + "_" + headInd + "\">&gt;</span></td>");
                 quizRow.append(questionheaders[headInd]);
                 quizRow.append(v);
                 quizTab.append(quizRow);
                 ++headInd;
             };
-            var this_2 = this;
             for (var rfi in requestFeatures) {
-                _loop_2(rfi);
+                _loop_3(rfi);
             }
-            this.answersPerCard.push(this.vAnswers.length);
+            this_2.answersPerCard.push(this_2.vAnswers.length);
+            this_2.cursor.set();
+        };
+        var this_2 = this;
+        for (var qoid in qoFeatures) {
+            _loop_2(qoid);
         }
+        $('body')
+            .unbind('keydown')
+            .keydown(this, function onPress(event) {
+            var pq = event.data;
+            if (event.key === "ArrowRight")
+                $('#nextsubquiz:visible').click();
+            else if (event.key === "ArrowLeft")
+                $('#prevsubquiz:visible').click();
+            else if (event.key === "ArrowDown")
+                pq.cursor.prevNextItem(1);
+            else if (event.key === "ArrowUp")
+                pq.cursor.prevNextItem(-1);
+            else if (event.key === "N")
+                $('#next_question:enabled').click();
+            else if (event.key === "C")
+                $('#check_answer').click();
+            else if (event.key === "S") {
+                $('.shortcut').toggle();
+                $('.inputbutton').toggleClass('noshortcut');
+                $('.delbutton').toggleClass('noshortcut');
+            }
+            else {
+                var ids = pq.keytable.get_key(pq.cursor.card, pq.cursor.row, event.key);
+                if (ids) {
+                    switch (pq.keytable.get_action(pq.cursor.card, pq.cursor.row)) {
+                        case 1:
+                            if (ids.length > 1) {
+                                for (var i in ids) {
+                                    if (isNaN(+i))
+                                        continue;
+                                    if ($("#" + ids[i]).prop('checked')) {
+                                        var i1 = +i + 1;
+                                        if (i1 == ids.length)
+                                            i1 = 0;
+                                        $("#" + ids[i1]).prop('checked', true);
+                                        return false;
+                                    }
+                                }
+                            }
+                            $("#" + ids[0]).prop('checked', true);
+                            break;
+                        case 2:
+                            $("#" + ids[0]).click();
+                            break;
+                        case 3:
+                            $("#" + ids[0]).prop('checked', !$("#" + ids[0]).prop('checked'));
+                    }
+                }
+                else
+                    return true;
+            }
+            return false;
+        });
         this.subQuizMax = quizCardNum;
         var quizCard = $('.quizcard');
         if (!exam_mode) {
@@ -2053,7 +2206,7 @@ var PanelQuestion = (function () {
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
         }
         $('div.inputbutton').click(function () {
-            var letter = String($(this).text());
+            var letter = $(this).data('letter');
             $(this)
                 .parent().siblings('input')
                 .val($(this).parent().siblings('input').val() + letter);
@@ -2068,11 +2221,11 @@ var PanelQuestion = (function () {
         });
         $('#prevsubquiz').off('click');
         $('#prevsubquiz').on('click', function () {
-            _this.prevNextSubQuestion(-1);
+            _this.prevNextSubQuestion(-1, true);
         });
         $('#nextsubquiz').off('click');
         $('#nextsubquiz').on('click', function () {
-            _this.prevNextSubQuestion(1);
+            _this.prevNextSubQuestion(1, true);
         });
         $('button#check_answer').off('click');
         $('button#check_answer').on('click', function () {
@@ -2099,6 +2252,19 @@ var PanelQuestion = (function () {
                 scrollTop: $('#myview').offset().top - 5
             }, 50);
         });
+        switch (resizer.getWindowSize()) {
+            case 'lg':
+            case 'xl':
+                $('.shortcut').show();
+                $('.inputbutton').removeClass('noshortcut');
+                $('.delbutton').removeClass('noshortcut');
+                break;
+            default:
+                $('.shortcut').hide();
+                $('.inputbutton').addClass('noshortcut');
+                $('.delbutton').addClass('noshortcut');
+                break;
+        }
         this.question_stat.start_time = Math.round((new Date()).getTime() / 1000);
     }
     PanelQuestion.charclass = function (featset) {
@@ -2131,9 +2297,10 @@ var PanelQuestion = (function () {
         }
         return qoFeatures;
     };
-    PanelQuestion.prototype.prevNextSubQuestion = function (n) {
+    PanelQuestion.prototype.prevNextSubQuestion = function (n, gotoTop) {
         if (this.subQuizIndex + n >= 0 && this.subQuizIndex + n < this.subQuizMax) {
             this.subQuizIndex += n;
+            this.cursor.prevNextCard(n, gotoTop);
         }
         var i;
         var slides = $('#quizcontainer').find('.quizcard');

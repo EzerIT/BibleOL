@@ -1,3 +1,4 @@
+
 // -*- js -*-
 // Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
 
@@ -7,6 +8,91 @@
 
 /// <reference path="componentwithyesno.ts" />
 /// <reference path="answer.ts" />
+
+
+class KeyTable {
+    private elements : any = [];  // Indexed by qoid, rowid, key, item. Value is element ID
+    private actions : any = [];  // Indexed by qoid, rowid. Value is action (1=check, 2=click, 3=toggle)
+
+
+    // Action: 1 = check
+    //         2 = click
+    //         3 = toggle
+    public add(card : number, row : number, letter : string, id : string, action : number) {
+        if (!this.elements[card]) this.elements[card] = [];
+        if (!this.elements[card][row]) this.elements[card][row] = new Object;
+        if (!this.elements[card][row][letter]) this.elements[card][row][letter] = [];
+
+        this.elements[card][row][letter].push(id);
+
+        if (!this.actions[card]) this.actions[card] = [];
+        this.actions[card][row] = action;
+    }
+
+    public get_key(card : number, row : number, letter : string) : string[] {
+        if (!this.elements[card] || !this.elements[card][row])
+            return null;
+        return this.elements[card][row][letter];
+    }
+
+    public get_action(card : number, row : number) : number {
+        if (!this.actions[card])
+            return null;
+        return this.actions[card][row];
+    }
+}
+
+class Cursor {
+    public card : number;
+    public row : number;
+
+    constructor(private minrow : number, private maxrow : number, private pq : PanelQuestion)
+    {
+        this.card = 0;
+        this.row = this.minrow;
+    }
+
+    private hide() {
+        $(`#ptr_${this.card}_${this.row}`).hide();
+    }
+
+    private show() {
+        $(`#ptr_${this.card}_${this.row}`).show();
+    }
+
+    public set(c : number = 0, r : number = this.minrow) {
+        this.hide();
+
+        this.card = c;
+        this.row = r;
+
+        this.show();
+    }
+
+    // n is always valid
+    public prevNextCard(n : number /* 1 or -1 */, gotoTop : boolean) {
+        this.set(this.card + n, gotoTop ? this.minrow : this.maxrow-1);
+    }
+
+    // n may not be valid
+    public prevNextItem(n : number /* 1 or -1 */) {
+        if (n>0) {
+            if (this.row+n>=this.maxrow)
+                this.pq.prevNextSubQuestion(n,true);
+            else
+                this.set(this.card, this.row+n);
+
+        }
+        else {
+            if (this.row+n<this.minrow)
+                this.pq.prevNextSubQuestion(n,false);
+            else
+                this.set(this.card, this.row+n);
+        }
+    }
+}
+
+
 
 
 //****************************************************************************************************
@@ -26,6 +112,10 @@ class PanelQuestion {
     private subQuizIndex   : number = 0;    // Used to toggle subquestions
     private subQuizMax     : number;        // Used to define max number of subquestions
 
+    private keytable : KeyTable = new KeyTable;
+    private cursor : Cursor;
+
+
     //------------------------------------------------------------------------------------------
     // charclass static method
     //
@@ -41,7 +131,7 @@ class PanelQuestion {
              : featset.transliteratedText ? charset.transliteratedClass : '';
     }
 
-    
+
     //------------------------------------------------------------------------------------------
     // updateQuestionStat method
     //
@@ -81,7 +171,7 @@ class PanelQuestion {
         let hasSeen    : boolean[]         = [];  // Maps id_d => true if the id_d has been seen. (An id_d
                                                   // can occur several times; for example, the id_d of a
                                                   // clause may occur for each monad within the clause.)
-        
+
         let allmonads : number[] = getMonadArray(this.sentence); // All monads in the sentence
         for (let i=0, len=allmonads.length; i<len; ++i) {
             let id_d : number = this.qd.monad2Id[allmonads[i]];
@@ -94,20 +184,21 @@ class PanelQuestion {
         }
         return qoFeatures;
     }
-    
+
 
     //------------------------------------------------------------------------------------------
     // prevNextSubQuestion method
     //
     // Method used to toggle subquestions in a quiz.
     //
-    private prevNextSubQuestion(n: number): void {
+    public prevNextSubQuestion(n : number, gotoTop : boolean): void {
         if (this.subQuizIndex + n >= 0 && this.subQuizIndex + n < this.subQuizMax) {
-            this.subQuizIndex += n; // If the proposed move (n; usually 1 or -1) is within the boundaries, proceed...
+            this.subQuizIndex += n; // If the proposed move (n; always 1 or -1) is within the boundaries, proceed...
+            this.cursor.prevNextCard(n,gotoTop);
         }
         let i: number;
         let slides: JQuery = $('#quizcontainer').find('.quizcard');
-        
+
         if (this.subQuizIndex < 1) {
             $('#prevsubquiz').css({ "visibility": "hidden" }); // hide button if the quizcard is the first
         };
@@ -117,22 +208,22 @@ class PanelQuestion {
         }
 
         if (this.subQuizIndex < slides.length - 1) {
-            $('#nextsubquiz').css({"visibility": "visible"}) // show button if the quizcard is the second last 
-        }; 
+            $('#nextsubquiz').css({"visibility": "visible"}) // show button if the quizcard is not the last
+        };
 
         if (this.subQuizIndex === slides.length - 1) {
             $('#nextsubquiz').css({"visibility": "hidden"}) // hide button if the quizcard is the last
-        }; 
+        };
 
         // Show the quizcard change
-        for (i = 0; i < slides.length; i++) { 
+        for (i = 0; i < slides.length; i++) {
             if (i === this.subQuizIndex) {
                 slides.slice(i).css({ "display": "block" });
             } else {
                 slides.slice(i).css({ "display": "none" });
             }
         }
-        // Scroll to myview 
+        // Scroll to myview
         $('html, body').animate({
             scrollTop: $('#myview').offset().top - 5
           }, 50);
@@ -192,24 +283,24 @@ class PanelQuestion {
             $('.location').html(this.location);
 
 
-        
+
         ///////////////////////////////////
         // Generate table of question items
-        
+
         // Cache a few variables for easy access
         let dontShow        : boolean  = qd.quizFeatures.dontShow;   // Display (number) instead of text of the quizobject
         let showFeatures    : string[] = qd.quizFeatures.showFeatures;
         let requestFeatures : {name : string; usedropdown : boolean; hideFeatures : string[];}[]
                                        = qd.quizFeatures.requestFeatures;
         let oType           : string   = qd.quizFeatures.objectType;
-        
+
         // Variables for creating table content (<td> parts)
         let featuresHere    : FeatureMap        = typeinfo.obj2feat[oType];          // Maps feature name => feature type
         let qoFeatures      : util.str2strArr[] = this.buildQuizObjectFeatureList(); // Feature/value pairs for each question object
         let hasForeignInput : boolean           = false;                             // Do we need a virtual keyboard?
         let quizItemID      : number            = 0;                                 // Counts quizitems to be used to group radio buttons together (see name attribute)
 
-        
+
         // Save question text and location for statistics
         this.question_stat.text = dict.generateSentenceHtml(qd);
         this.question_stat.location = location_realname;
@@ -220,11 +311,11 @@ class PanelQuestion {
         let questionheaders: string[] = []; // Initialize empty array for questionheaders
                                             // For each question card, the headers are pulled out from this list
         let headInd : number = 0;           // Header index is the index into questionheaders
-        
+
         /////////////////////////////
         // Define question headers //
 
-        // Define headers for dontShow items 
+        // Define headers for dontShow items
         if (dontShow) {
             questionheaders.push('<th>' + localize('item_number') + '</th>');
             this.question_stat.show_feat.names.push('item_number');
@@ -246,14 +337,13 @@ class PanelQuestion {
             this.question_stat.req_feat.names.push(requestFeatures[sfi].name);  // Save feature name for statistics
         }
 
-        // Now, the array questionheaders contains a list of <th>...</th> elements to be put before 
+        // Now, the array questionheaders contains a list of <th>...</th> elements to be put before
         // each question on the question cards
         let headLen: number = questionheaders.length;
         let quizCardNum: number = qoFeatures.length; // Count number of quizcards to define the appearance of toggle buttons
         let quizContainer: JQuery = $('div#quizcontainer');
 
         this.subQuizMax = quizCardNum;
-
 
         // The <div class="quizcontainer">...</div> will be created with this contents:
         //
@@ -294,20 +384,21 @@ class PanelQuestion {
             quizContainer.append(quizCard);
 
             let fvals: util.str2strArr = qoFeatures[+qoid]; // Feature/value pairs for current quiz object
-            
+
 
             ///////////////////////////////////
             // Loop through display features
             //
             // For each display feature, the following will be added to <table class="quiztab">...</table>:
             // <tr>
+            //     <td>&nbsp;</td>
             //     <th>Feature name</th>    -- Taken from questionheaders[headInd]
             //     <td>Feature value</td>
             // </tr>
 
             // Extra "display feature" for quiz objects that are marked by 'dontShow'
             if (dontShow) {
-                quizTab.append(`<tr>${questionheaders[headInd]}<td>${+qoid + 1}</td></tr>`);
+                quizTab.append(`<tr><td>&nbsp;</td>${questionheaders[headInd]}<td>${+qoid + 1}</td></tr>`);
                 ++headInd;
                 this.question_stat.show_feat.values.push("" + (+qoid + 1));  // Save feature value for statistics
             }
@@ -326,7 +417,7 @@ class PanelQuestion {
 
                 if (sf==='visual')
                     featType = 'string';
-                
+
                 if (featType=='hint') {
                     // The feature value looks like this:
                     // "featurename=value" or "featurename=value,featurename=value"
@@ -358,29 +449,33 @@ class PanelQuestion {
 
                 if (val==null)
                     alert('Unexpected val==null in panelquestion.ts');
-                
+
                 if (featType === 'string' || featType == 'ascii') {
-                    quizTab.append(`<tr>${questionheaders[headInd]}`
+                    quizTab.append(`<tr><td>&nbsp;</td>${questionheaders[headInd]}`
                         + `<td class="${PanelQuestion.charclass(featset)}">${val === '' ? '-' : val}</td></tr>`);
                     ++headInd;
                 }
                 else {
-                    quizTab.append(`<tr>${questionheaders[headInd]}<td>${val}</td></tr>`);
+                    quizTab.append(`<tr><td>&nbsp;</td>${questionheaders[headInd]}<td>${val}</td></tr>`);
                     ++headInd;
                 }
             }
 
             ///////////////////////////////////
-            // Loop through request features 
+            // Loop through request features
             //
             // For each request feature, the following will be added to <table class="quiztab">...</table>:
             // <tr>
+            //     <td>Pointer</td>
             //     <th>Feature name</th>       -- Taken from questionheaders[headInd]
             //     <td class="qbox">...</td>   -- The user's answer is chosen here.
             // </tr>
             //
             // Note: The variable v, introduced below, will eventually hold the string
             // <td class="qbox">...</td> with the appropriate contents.
+
+            if (!this.cursor)
+                this.cursor = new Cursor(headInd,headLen,this);
 
             for (let rfi in requestFeatures) {
                 if (isNaN(+rfi)) continue; // Not numeric
@@ -392,7 +487,7 @@ class PanelQuestion {
                 let featType      : string   = featuresHere[rf];                   // Feature type
                 let featset       : FeatureSetting = getFeatureSetting(oType,rf);  // Feature configuration
                 let v             : JQuery   = null;                               // Component to hold the data entry field or a message
-                
+
                 ++quizItemID; // Update quizItemID for each grouping of radio buttons
 
                 if (correctAnswer==null)
@@ -439,29 +534,33 @@ class PanelQuestion {
                         // </td>                                                                   cwyn
                         //
                         // In the items above, the letter N is the value of the quizItemID variable
-                        
+
                         let quiz_div : JQuery             = $('<div class="quizitem"></div>'); // Used to ancor the checkbox buttons and to add additional data
                         let optArray : JQuery[]           = [];                                // All the multiple choice options
                         let cwyn     : ComponentWithYesNo = new ComponentWithYesNo(quiz_div, COMPONENT_TYPE.comboBox2); // Result indicator
                         let charSetClass : string         = configuration.charSet=='transliterated_hebrew' ? 'hebrew_translit' : configuration.charSet;
-                        
+
                         cwyn.addChangeListener();
-                        
+
                         for (let valix in suggestions) {
                             if (isNaN(+valix)) continue; // Not numeric
 
                             // We use a StringWithSort object to handle the option strings. This may
                             // seem unnecessary in this case, but it means that comboboxes can be
                             // handled in a uniform manner.
-                            
+
                             let s      : string         = suggestions[+valix];     // Current suggestion
                             let item   : StringWithSort = new StringWithSort(s,s); // StringWithSort holding the current suggestion
                             let option : JQuery         = $('<div class="selectbutton multiple_choice">'
                                 + `<input type="radio" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
-                                + `<label class="${charSetClass}" for="${item.getInternal()}_${quizItemID}">${item.getString()}</label>`
+                                + `<label class="${charSetClass}" for="${item.getInternal()}_${quizItemID}">${item.getString()}<span class="shortcut"></span></label>`
                                 + '</div>');
 
-                            option.data('sws',item); // Associate the answer string with the <option> element
+                            option
+                                .data('sws',item) // Associate the answer string with the <option> element
+                                .data('id',`${item.getInternal()}_${quizItemID}`); // The id of the <input> element
+
+
                             optArray.push(option);
                             if (s===correctAnswer)
                                 this.vAnswers.push(new Answer(cwyn,item,s,null));
@@ -469,10 +568,17 @@ class PanelQuestion {
 
                         // Sort the options alphabetically
                         optArray.sort((a: JQuery, b: JQuery) => StringWithSort.compare(a.data('sws'), b.data('sws')));
-                        
 
-                        // Append optArray to quiz_div
-                        $.each(optArray, (ix : number, o : JQuery) => quiz_div.append(o));
+
+                        // Append optArray to quiz_div and associate keystroke
+                        $.each(optArray,
+                               (ix : number, o : JQuery) => {
+                                   quiz_div.append(o);
+                                   let sc : string = ix==9 ? '0' : (ix+1)+''; // Make shortcut 1,2,3...9,0
+                                   o.find('.shortcut').text(sc);
+                                   this.keytable.add(+qoid, headInd, sc, o.data('id'), 1);
+                               }
+                              );
 
                         v = cwyn.getJQuery();
                     }
@@ -480,7 +586,6 @@ class PanelQuestion {
 
                 // In case a text input is requested
                 else if (featType==='string' || featType==='ascii') {
-
                     // Create this HTML structure in the variable v:      From these variables
                     // <td class="qbox">                                   cwyn
                     //   <img ...>                                         cwyn
@@ -496,24 +601,24 @@ class PanelQuestion {
                     //     </div>                                          vf
                     //   </div>                                            vf
                     // </td>                                               cwyn
-                    
-                    
+
+
                     let cwyn: ComponentWithYesNo;
                     let trimmedAnswer : string = correctAnswer.trim()
                         .replace(/&lt;/g,'<')
                         .replace(/&gt;/g,'>')
                         .replace(/&quot;/g,'"')
                         .replace(/&amp;/g, '&');   // Unescape HTML characters in correctAnswer
-                    
 
-                    if (featset.foreignText || featset.transliteratedText) {                      
+
+                    if (featset.foreignText || featset.transliteratedText) {
                         let answerArray           : string[] = trimmedAnswer.split(""); // Array of chars of the correct answer
                         let answerLetters         : string[] = [];                      // Array with only unique letters of correct answer
                         let additionalCons        : string[] = [];                      // Array with consonants to be added to answerLetters
                         let additionalVowels      : string[] = [];                      // Array with vowels to be added to answerLetters
                         let answerLettersRandom   : string[];                           // Random array of answerLetters + additionalCons
                         let showLetters           : string[] = [];                      // Unique letters that are finally shown
-                        
+
                         // Push unique letters to answerLetters
                         $.each(answerArray, (i: number, el: string) => {
                             if($.inArray(el, answerLetters) === -1) answerLetters.push(el);
@@ -543,7 +648,7 @@ class PanelQuestion {
                                 break;
                             }
                         }
-                            
+
                         // push combined letter if shinDot or sinDot are set
                         if (shinDot) {
                             answerLetters.push('ש' + '\u05C1');
@@ -720,7 +825,7 @@ class PanelQuestion {
                                 case 'ψ':                              // if psi
                                     additionalCons.push('π');          // push pi
                                     break;
-                                
+
                                 ///////////////////////////////////
                                 // Greek vowels
                                 case 'α':                              // if alpha
@@ -747,7 +852,7 @@ class PanelQuestion {
                                     additionalVowels.push('ο');          // push omikron
                                     break;
                             }
-                 
+
                         }
 
                         // Randomize additional Consonants
@@ -762,49 +867,55 @@ class PanelQuestion {
                         // Push max 2 Consonants and max 3 Vowels to answerLetters
                         answerLettersRandom = answerLetters.concat(additionalCons.slice(0, 3))
                             .concat(additionalVowels.slice(0, 3));
-                        
+
                         // Make all letters unique and save them in showLetters
                         $.each(answerLettersRandom, (i: number, el: string) => {
                                 if($.inArray(el, showLetters) === -1) showLetters.push(el);
                         });
-                        
+
                         // Sort letters alphabetically
                         showLetters.sort();
-                        
+
                         let vf : JQuery = $(`<div class="inputquizitem"><input data-kbid="${PanelQuestion.kbid++}" type="text"`
                                 + ` class="${PanelQuestion.charclass(featset)}"></div>`);
 
                         // Create letterinput and set del button to remove letters from input field
                         let letterinput : JQuery = $('<div class="letterinput"></div>');
-                        
+
                         vf.append(letterinput);
 
                         if (charset.isRtl)
-                            letterinput.append('<div class="delbutton">&rarr;</div>');
+                            letterinput.append(`<div class="delbutton" id="bs_${quizItemID}">&rarr;</div>`);
                         else
-                            letterinput.append('<div class="delbutton">&larr;</div>');
+                            letterinput.append(`<div class="delbutton" id="bs_${quizItemID}>&larr;</div>`);
+
+                        this.keytable.add(+qoid, headInd, 'Backspace', `bs_${quizItemID}`, 2);
+
                         
                         // Set randomized letter buttons to be inputted in the input field
                         showLetters.forEach((letter: string, i: number) => {
-                            letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}">${letter}</div>`);
+                            let sc : string = String.fromCharCode(i+97); // a, b, c, etc.
+                            letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" id="${sc}_${quizItemID}" data-letter="${letter}">${letter}<span class="shortcut">${sc}</span></div>`);
+                            this.keytable.add(+qoid, headInd, sc, `${sc}_${quizItemID}`, 2);
+
                         });
 
-        
+
                         hasForeignInput = true;
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
                         cwyn.addKeypressListener();
                         v = cwyn.getJQuery();
                     }
-                    else {                   
+                    else {
                         let vf : JQuery = $('<div class="inputquizitem"><input type="text"></div>');
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
                         cwyn.addKeypressListener();
                         v = cwyn.getJQuery();
                     }
-                    
+
                     this.vAnswers.push(new Answer(cwyn, null, trimmedAnswer, featset.matchregexp));
                 }
-                
+
                 // In case a number is requested
                 else if (featType === 'integer') {
                     // Create this HTML structure in the variable v:      From these variables
@@ -814,7 +925,7 @@ class PanelQuestion {
                     //   <img ...>                                         cwyn
                     //   <input type="number" ...>                         intf
                     // </td>                                               cwyn
-                        
+
                     let intf : JQuery = $('<input type="number">');
                     let cwyn : ComponentWithYesNo = new ComponentWithYesNo(intf,COMPONENT_TYPE.textField);
                     cwyn.addKeypressListener();
@@ -837,7 +948,7 @@ class PanelQuestion {
 
                     // Add "None of these" as a final option
                     swsValues.push(new StringWithSort(`<i>${localize('none_of_these')}</i>`, 'none_of_these'));
-                    
+
 
                     // Create this HTML structure in the variable v:                  From these variables
                     // <td class="qbox">                                               cwyn
@@ -869,7 +980,7 @@ class PanelQuestion {
 
 
                     let selections : JQuery = $('<table class="list-of"></table>');
-                    selections.append(`<tr><td colspan="3">${localize('select_1_or_more')}</td></tr>`); // TODO: Localize
+                    selections.append(`<tr><td colspan="3">${localize('select_1_or_more')}</td></tr>`);
 
                     // Arrange in three columns
                     let numberOfItems : number = swsValues.length;                // Number of values
@@ -879,17 +990,22 @@ class PanelQuestion {
                         let row : JQuery = $('<tr></tr>');
                         for (let c=0; c<3; c++) {
                             let ix = r+c*numberOfRows;
-                            if (ix<numberOfItems)
+                            if (ix<numberOfItems) {
+                                let sc : string = String.fromCharCode(ix+97); // a, b, c, etc.
+
                                 row.append('<td style="text-align:left"><div class="selectbutton">'
                                            + `<input type="checkbox" id="${swsValues[ix].getInternal()}_${quizItemID}" value="${swsValues[ix].getInternal()}">`
-                                           + `<label for="${swsValues[ix].getInternal()}_${quizItemID}">${swsValues[ix].getString()}</label>`
+                                           + `<label for="${swsValues[ix].getInternal()}_${quizItemID}">${swsValues[ix].getString()}<span class="shortcut">${sc}</span></label>`
                                            + '</div></td>');
+
+                                this.keytable.add(+qoid, headInd, sc, `${swsValues[ix].getInternal()}_${quizItemID}`, 3);
+                            }
                             else
                                 row.append('<td></td>');
                         }
                         selections.append(row);
                     }
-                    
+
                     let cwyn : ComponentWithYesNo = new ComponentWithYesNo(selections,COMPONENT_TYPE.checkBoxes);
                     cwyn.addChangeListener();
                     v = cwyn.getJQuery();
@@ -897,14 +1013,14 @@ class PanelQuestion {
                         correctAnswer = '(none_of_these)';
                     this.vAnswers.push(new Answer(cwyn,null,correctAnswer,null));
                 }
-                
+
                 // One option from a multiple choice list is requested
                 else {
                     // This is an enumeration feature type, get the collection of possible values
                     let values: string[] = typeinfo.enum2values[featType]; // Possible Emdros feature values
 
                     if (values == null) {
-                        v.append('<tr>'
+                        v.append('<tr><td>&nbsp;</td>'
                             + questionheaders[headInd]
                             + '<td>QuestionPanel.UnknType</td></tr>');
                     }
@@ -934,7 +1050,7 @@ class PanelQuestion {
                         // </td>                                                                   cwyn
                         //
                         // In the items above, the letter N is the value of the quizItemID variable
-                            
+
                         let quiz_div : JQuery   = $('<div class="quizitem"></div>');
                         let optArray  : JQuery[] = []; // All the multiple choice options
                         let cwyn      : ComponentWithYesNo = new ComponentWithYesNo(quiz_div, COMPONENT_TYPE.comboBox1); // Result indicator
@@ -948,15 +1064,15 @@ class PanelQuestion {
                         let correctIsOther        : boolean =         // Is the correct answer one of the values that make up 'Other value'?
                                                     featset.otherValues && featset.otherValues.indexOf(correctAnswer)!==-1 ||
                                                     hideFeatures && hideFeatures.indexOf(correctAnswer) !== -1;
-                        
-                       
-                        
+
+
+
                         // Loop though all possible values and add the appropriate localized name
                         // or "Other value" to the combo box
 
                         for (let valix in values) {
                             if (isNaN(+valix)) continue; // Not numeric
-                            
+
 
                             let s : string = values[+valix]; // Feature value under consideration
                             if (featset.hideValues && featset.hideValues.indexOf(s)!==-1)
@@ -969,16 +1085,20 @@ class PanelQuestion {
                                     hasAddedOther = true;
 
                                     let item: StringWithSort = new StringWithSort('#1000 ' + localize('other_value'), 'othervalue');
-                                    
+
 
                                     let option: JQuery = $('<div class="selectbutton">'
                                         + `<input type="radio" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
                                         + `<label for="${item.getInternal()}_${quizItemID}">${item.getString()}</label>`
                                         + '</div>');
-                                    
-                                    option.data('sws',item); // Associate the answer string with the <option> element
+
+                                    option
+                                        .data('sws',item) // Associate the answer string with the <option> element
+                                        .data('char',item.getString()[0].toLowerCase()) // The first character of the option
+                                        .data('id',`${item.getInternal()}_${quizItemID}`); // The id of the <input> element
+
                                     optArray.push(option);
-                                    if (correctIsOther) 
+                                    if (correctIsOther)
                                         this.vAnswers.push(new Answer(cwyn,item,localize('other_value'),null));
                                 }
                             }
@@ -989,37 +1109,111 @@ class PanelQuestion {
                                                         + `<input type="radio" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
                                                         + `<label for="${item.getInternal()}_${quizItemID}">${item.getString()}</label>`
                                                         + '</div>');
-                                
-                                option.data('sws',item); // Associate the answer string with the <option> element
+
+                                option
+                                    .data('sws',item) // Associate the answer string with the <option> element
+                                    .data('char',item.getString()[0].toLowerCase()) // The first character of the option
+                                    .data('id',`${item.getInternal()}_${quizItemID}`); // The id of the <input> element
                                 optArray.push(option);
                                 if (sFriendly===correctAnswerFriendly) // s is the correct answer
                                     this.vAnswers.push(new Answer(cwyn,item,s,null));
                             }
-                            
+
                         }
 
                         // Sort the options using the optional sorting index in the value strings
                         optArray.sort((a : JQuery, b : JQuery) => StringWithSort.compare(a.data('sws'),b.data('sws')));
 
-                        // Append optArray to mc_select
-                        $.each(optArray, (ix : number, o : JQuery) => quiz_div.append(o));
-                        
+
+                        // Append optArray to quiz_div and associate keystroke
+                        $.each(optArray,
+                               (ix : number, o : JQuery) => {
+                                   quiz_div.append(o);
+                                   this.keytable.add(+qoid, headInd, o.data('char'), o.data('id'), 1);
+                               }
+                              );
+
                         v = cwyn.getJQuery();
-                    
+
                     }
-                    
+
                 }
 
                 let quizRow: JQuery = $('<tr></tr>');
+                quizRow.append(`<td><span style="display:none" id="ptr_${+qoid}_${headInd}">&gt;</span></td>`);
                 quizRow.append(questionheaders[headInd]);
                 quizRow.append(v);
                 quizTab.append(quizRow);
-                
+
                 ++headInd;
             }
 
             this.answersPerCard.push(this.vAnswers.length);
+            this.cursor.set();
         }
+
+        $('body')
+            .unbind('keydown')
+            .keydown(this, // Will be stored in event.data when a key is pressed
+                     function onPress(event) {
+                         let pq : PanelQuestion = event.data;
+
+                         if (event.key==="ArrowRight")
+                             $('#nextsubquiz:visible').click();
+                         else if (event.key==="ArrowLeft")
+                             $('#prevsubquiz:visible').click();
+                         else if (event.key==="ArrowDown")
+                             pq.cursor.prevNextItem(1);
+                         else if (event.key==="ArrowUp")
+                             pq.cursor.prevNextItem(-1);
+                         else if (event.key==="N")
+                             $('#next_question:enabled').click();
+                         else if (event.key==="C")
+                             $('#check_answer').click();
+                         else if (event.key==="S") {
+                             $('.shortcut').toggle();
+                             $('.inputbutton').toggleClass('noshortcut');
+                             $('.delbutton').toggleClass('noshortcut');
+                         }
+                         else {
+                             let ids = pq.keytable.get_key(pq.cursor.card, pq.cursor.row, event.key);
+
+                             if (ids) {
+                                 switch (pq.keytable.get_action(pq.cursor.card, pq.cursor.row)) {
+                                 case 1: // Check
+                                     if (ids.length>1) {
+                                         // More than one option starts with this character
+                                         for (let i in ids) {
+                                             if (isNaN(+i)) continue; // Not numeric
+
+                                             if ($(`#${ids[i]}`).prop('checked')) {
+                                                 let i1 : number = +i+1;
+                                                 if (i1==ids.length)
+                                                     i1 = 0;
+                                                 $(`#${ids[i1]}`).prop('checked',true);
+                                                 return false;
+                                             }
+                                         }
+                                         // If we reach this point, no item starting the character has been checked
+                                     }
+                                     $(`#${ids[0]}`).prop('checked',true);
+                                     break;
+
+                                 case 2: // Click
+                                     $(`#${ids[0]}`).click();
+                                     break;
+
+                                 case 3: // Toggle
+                                     $(`#${ids[0]}`).prop('checked', !$(`#${ids[0]}`).prop('checked'));
+                                 }
+                             }
+                             else
+                                 return true;
+                         }
+
+                         return false;
+                     });
+
 
         this.subQuizMax = quizCardNum
 
@@ -1037,15 +1231,15 @@ class PanelQuestion {
         // Add prev and next buttons to slide through multiple subquizzes
         if (quizCardNum > 1) {
             quizContainer.prepend('<div class="prev-next-btn prev" id="prevsubquiz" style="visibility:hidden;">&#10094;</div>');
-            quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');    
+            quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
         }
-        
+
         $('div.inputbutton').click(function () {
-            let letter: string = String($(this).text());
+            let letter: string = $(this).data('letter'); //String($(this).text());
             $(this)
                   .parent().siblings('input')  // get the input field
                   .val($(this).parent().siblings('input').val() + letter);  // add letter
-        
+
             return false;    // disable default link action (otherwise # added to url)
         });
 
@@ -1055,24 +1249,24 @@ class PanelQuestion {
             $(this)          // the delete button
                   .parent().siblings('input')    // get the input field
                   .val(value.slice(0, -1));  // clear its value
-        
+
             return false;    // disable default link action (otherwise # added to url)
         });
-    
+
 
          // Add previous and next handlers for multiple subquestions
          $('#prevsubquiz').off('click'); // Remove old handler
          $('#prevsubquiz').on('click',
                                 () => {
-                                    this.prevNextSubQuestion(-1);
+                                    this.prevNextSubQuestion(-1,true);
                                 });
          $('#nextsubquiz').off('click'); // Remove old handler
          $('#nextsubquiz').on('click',
-                                () => {
-                                    this.prevNextSubQuestion(1);
+                              () => {
+                                  this.prevNextSubQuestion(1,true);
                                 });
 
-        
+
 	// Add "Check answer" button handler
         $('button#check_answer').off('click'); // Remove old handler
         $('button#check_answer').on('click',
@@ -1090,7 +1284,7 @@ class PanelQuestion {
 
                                     }
                                     );
-            
+
         // Add "Show answer" button handler
         $('button#show_answer').off('click'); // Remove old handler
         $('button#show_answer').on('click',
@@ -1109,8 +1303,22 @@ class PanelQuestion {
 
                                 }
             );
-        
-       
+
+        switch (resizer.getWindowSize()) {
+        case 'lg':
+        case 'xl':
+            $('.shortcut').show();
+            $('.inputbutton').removeClass('noshortcut');
+            $('.delbutton').removeClass('noshortcut');
+            break;
+
+        default:
+            $('.shortcut').hide();
+            $('.inputbutton').addClass('noshortcut');
+            $('.delbutton').addClass('noshortcut');
+            break;
+        }
+
 
         this.question_stat.start_time = Math.round((new Date()).getTime() / 1000); // Start time for statistcs
     }

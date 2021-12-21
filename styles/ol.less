@@ -613,7 +613,10 @@ div.selectbutton label {
         color: @dadelblue;
     }
 }
-
+.shortcut {
+    font-size: 8pt;
+    justify-content: center;
+}
 div.selectbutton.multiple_choice label {
     font-size: 14pt;
     font-weight: normal;
@@ -969,8 +972,10 @@ div.quizitem {
         width: 50px;
         text-align: center;
         font-weight: normal;
-        height: 50px;
-        line-height: 50px;
+        &.noshortcut {
+            height: 50px;
+            line-height: 50px;
+        }
         font-size: 18pt;
         &:hover {
             border-color: @dadelblue;
