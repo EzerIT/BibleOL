@@ -603,6 +603,7 @@ div.selectbutton label {
     background-color: white;
     margin-left: 7px;
     // margin-bottom: 1em !important;
+    height: 27px;
     padding-top: 0.2em;
     padding-bottom: 0.2em;
     padding-left: 0.5em;
@@ -615,11 +616,49 @@ div.selectbutton label {
 }
 .shortcut {
     font-size: 8pt;
+    background: white;
+    width: 1em;
     justify-content: center;
+    position:relative;
+    border: solid 1px;
+    line-height: 10px;
+    &.multichoice {
+        right: 1.3em;
+        bottom: 40px;
+    }
+    &.keybutton {
+        right: 0.5em;
+        bottom: 55px;
+    }
+    &.multioption {
+        right: 1.3em;
+        bottom: 30px;
+    }
 }
+
+.hebrew .shortcut {
+    &.multichoice {
+        right: -1.3em;
+    }
+    &.keybutton {
+        right: -0.5em;
+    }
+}
+
+
+//.hebrew .shortcut.multichoice {
+//    right: -1.3em;
+//}
+// 
+//.inputbutton.hebrew .shortcut {
+//    right: -0.5em;
+//    bottom: 55px;
+//}
+
 div.selectbutton.multiple_choice label {
     font-size: 14pt;
     font-weight: normal;
+    height: 45px;
 }
 
 div.selectbutton input[type="checkbox"], div.selectbutton input[type="radio"],
@@ -956,6 +995,36 @@ div.quizitem {
     
 }
 
+span.inputshow {
+    width: 80%;
+    margin-left: 13px;
+    margin-right: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border: solid 1px;
+
+    &.hebrew {
+        font-family: Ezra SIL Webfont, Times New Roman, Serif !important;
+        font-size: 18pt !important;
+        height: 36pt;
+    }
+
+    &.hebrew_translit {
+        font-size: 16pt !important;
+        height: 32pt;
+    }
+
+    &.greek {
+        font-size: 16pt !important;
+        height: 32pt;
+    }
+}
+
+
 .letterinput {
 //    display: flexbox;
     padding: 13px;
@@ -972,6 +1041,8 @@ div.quizitem {
         width: 50px;
         text-align: center;
         font-weight: normal;
+            height: 50px;
+            line-height: 50px;
         &.noshortcut {
             height: 50px;
             line-height: 50px;
@@ -990,18 +1061,6 @@ div.quizitem {
 }
 
 
-input.hebrew {
-    font-family: Ezra SIL Webfont, Times New Roman, Serif !important;
-    font-size: 18pt !important;
-}
-
-input.hebrew_translit {
-    font-size: 16pt !important;
-}
-
-input.greek {
-    font-size: 16pt !important;
-}
 
 td span {
     display: flex;

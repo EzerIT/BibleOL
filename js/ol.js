@@ -1258,9 +1258,10 @@ var COMPONENT_TYPE;
 (function (COMPONENT_TYPE) {
     COMPONENT_TYPE[COMPONENT_TYPE["textField"] = 0] = "textField";
     COMPONENT_TYPE[COMPONENT_TYPE["textFieldWithVirtKeyboard"] = 1] = "textFieldWithVirtKeyboard";
-    COMPONENT_TYPE[COMPONENT_TYPE["comboBox1"] = 2] = "comboBox1";
-    COMPONENT_TYPE[COMPONENT_TYPE["comboBox2"] = 3] = "comboBox2";
-    COMPONENT_TYPE[COMPONENT_TYPE["checkBoxes"] = 4] = "checkBoxes";
+    COMPONENT_TYPE[COMPONENT_TYPE["textFieldForeign"] = 2] = "textFieldForeign";
+    COMPONENT_TYPE[COMPONENT_TYPE["comboBox1"] = 3] = "comboBox1";
+    COMPONENT_TYPE[COMPONENT_TYPE["comboBox2"] = 4] = "comboBox2";
+    COMPONENT_TYPE[COMPONENT_TYPE["checkBoxes"] = 5] = "checkBoxes";
 })(COMPONENT_TYPE || (COMPONENT_TYPE = {}));
 var ComponentWithYesNo = (function () {
     function ComponentWithYesNo(elem, elemType) {
@@ -1367,6 +1368,10 @@ var Answer = (function () {
                 $(this.c).find('input').val(this.answerString);
                 break;
             }
+            case COMPONENT_TYPE.textFieldForeign: {
+                $(this.c).find('.inputshow').text(this.answerString);
+                break;
+            }
             case COMPONENT_TYPE.comboBox1:
             case COMPONENT_TYPE.comboBox2: {
                 var correctAnswer_1 = this['answerSws']['internal'];
@@ -1404,8 +1409,13 @@ var Answer = (function () {
             var isCorrect_1;
             switch (this.cType) {
                 case COMPONENT_TYPE.textField:
+                case COMPONENT_TYPE.textFieldForeign:
                 case COMPONENT_TYPE.textFieldWithVirtKeyboard:
-                    userAnswer_1 = $(this.c).find('input').val().trim()
+                    if (this.cType == COMPONENT_TYPE.textFieldForeign)
+                        userAnswer_1 = $(this.c).find('.inputshow').text();
+                    else
+                        userAnswer_1 = $(this.c).find('input').val();
+                    userAnswer_1 = userAnswer_1.trim()
                         .replace(/\u03ac/g, '\u1f71')
                         .replace(/\u03ad/g, '\u1f73')
                         .replace(/\u03ae/g, '\u1f75')
@@ -1523,6 +1533,18 @@ var Cursor = (function () {
     };
     Cursor.prototype.show = function () {
         $("#ptr_" + this.card + "_" + this.row).show();
+        var toppos;
+        if (this.row == this.minrow)
+            toppos = $('#myview').offset().top - 5;
+        else {
+            var prevelem = $("#ptr_" + this.card + "_" + (this.row - 1));
+            prevelem.show();
+            toppos = prevelem.offset().top - 5;
+            prevelem.hide();
+        }
+        $('html, body').animate({
+            scrollTop: toppos
+        }, 50);
     };
     Cursor.prototype.set = function (c, r) {
         if (c === void 0) { c = 0; }
@@ -1727,7 +1749,7 @@ var PanelQuestion = (function () {
                             var item = new StringWithSort(s, s);
                             var option = $('<div class="selectbutton multiple_choice">'
                                 + ("<input type=\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
-                                + ("<label class=\"" + charSetClass + "\" for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "<span class=\"shortcut\"></span></label>")
+                                + ("<label class=\"" + charSetClass + "\" for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "<span class=\"shortcut multichoice\"></span></label>")
                                 + '</div>');
                             option
                                 .data('sws', item)
@@ -1739,7 +1761,7 @@ var PanelQuestion = (function () {
                         optArray.sort(function (a, b) { return StringWithSort.compare(a.data('sws'), b.data('sws')); });
                         $.each(optArray, function (ix, o) {
                             quiz_div_1.append(o);
-                            var sc = ix == 9 ? '0' : (ix + 1) + '';
+                            var sc = String.fromCharCode(ix + 97);
                             o.find('.shortcut').text(sc);
                             _this.keytable.add(+qoid, headInd, sc, o.data('id'), 1);
                         });
@@ -1989,29 +2011,30 @@ var PanelQuestion = (function () {
                                 showLetters_1.push(el);
                         });
                         showLetters_1.sort();
-                        var vf = $("<div class=\"inputquizitem\"><input data-kbid=\"" + PanelQuestion.kbid++ + "\" type=\"text\""
-                            + (" class=\"" + PanelQuestion.charclass(featset) + "\"></div>"));
+                        var vf = $("<div class=\"inputquizitem\"><span class=\"inputshow " + PanelQuestion.charclass(featset) + "\"></div>");
                         var letterinput_1 = $('<div class="letterinput"></div>');
                         vf.append(letterinput_1);
                         if (charset.isRtl)
                             letterinput_1.append("<div class=\"delbutton\" id=\"bs_" + quizItemID + "\">&rarr;</div>");
                         else
-                            letterinput_1.append("<div class=\"delbutton\" id=\"bs_" + quizItemID + ">&larr;</div>");
+                            letterinput_1.append("<div class=\"delbutton\" id=\"bs_" + quizItemID + "\">&larr;</div>");
                         this_2.keytable.add(+qoid, headInd, 'Backspace', "bs_" + quizItemID, 2);
                         showLetters_1.forEach(function (letter, i) {
                             var sc = String.fromCharCode(i + 97);
-                            letterinput_1.append("<div class=\"inputbutton " + PanelQuestion.charclass(featset) + "\" id=\"" + sc + "_" + quizItemID + "\" data-letter=\"" + letter + "\">" + letter + "<span class=\"shortcut\">" + sc + "</span></div>");
+                            letterinput_1.append("<div class=\"inputbutton " + PanelQuestion.charclass(featset) + "\" id=\"" + sc + "_" + quizItemID + "\" data-letter=\"" + letter + "\">" + letter + "<span class=\"shortcut keybutton\">" + sc + "</span></div>");
                             _this.keytable.add(+qoid, headInd, sc, sc + "_" + quizItemID, 2);
                         });
                         hasForeignInput = true;
-                        cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
+                        cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textFieldForeign);
                         cwyn.addKeypressListener();
+                        cwyn.addChangeListener();
                         v = cwyn.getJQuery();
                     }
                     else {
                         var vf = $('<div class="inputquizitem"><input type="text"></div>');
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
                         cwyn.addKeypressListener();
+                        cwyn.addChangeListener();
                         v = cwyn.getJQuery();
                     }
                     this_2.vAnswers.push(new Answer(cwyn, null, trimmedAnswer, featset.matchregexp));
@@ -2043,7 +2066,7 @@ var PanelQuestion = (function () {
                                 var sc = String.fromCharCode(ix + 97);
                                 row.append('<td style="text-align:left"><div class="selectbutton">'
                                     + ("<input type=\"checkbox\" id=\"" + swsValues[ix].getInternal() + "_" + quizItemID + "\" value=\"" + swsValues[ix].getInternal() + "\">")
-                                    + ("<label for=\"" + swsValues[ix].getInternal() + "_" + quizItemID + "\">" + swsValues[ix].getString() + "<span class=\"shortcut\">" + sc + "</span></label>")
+                                    + ("<label for=\"" + swsValues[ix].getInternal() + "_" + quizItemID + "\">" + swsValues[ix].getString() + "<span class=\"shortcut multioption\">" + sc + "</span></label>")
                                     + '</div></td>');
                                 this_2.keytable.add(+qoid, headInd, sc, swsValues[ix].getInternal() + "_" + quizItemID, 3);
                             }
@@ -2175,17 +2198,21 @@ var PanelQuestion = (function () {
                                         if (i1 == ids.length)
                                             i1 = 0;
                                         $("#" + ids[i1]).prop('checked', true);
+                                        $("#" + ids[i1]).change();
                                         return false;
                                     }
                                 }
                             }
                             $("#" + ids[0]).prop('checked', true);
+                            $("#" + ids[0]).change();
                             break;
                         case 2:
                             $("#" + ids[0]).click();
+                            $("#" + ids[0]).change();
                             break;
                         case 3:
                             $("#" + ids[0]).prop('checked', !$("#" + ids[0]).prop('checked'));
+                            $("#" + ids[0]).change();
                     }
                 }
                 else
@@ -2208,15 +2235,16 @@ var PanelQuestion = (function () {
         $('div.inputbutton').click(function () {
             var letter = $(this).data('letter');
             $(this)
-                .parent().siblings('input')
-                .val($(this).parent().siblings('input').val() + letter);
+                .parent().siblings('span')
+                .text($(this).parent().siblings('span').text() + letter);
+            $(this).change();
             return false;
         });
         $('div.delbutton').click(function () {
-            var value = String($(this).parent().siblings('input').val());
+            var value = String($(this).parent().siblings('span').text());
             $(this)
-                .parent().siblings('input')
-                .val(value.slice(0, -1));
+                .parent().siblings('span')
+                .text(value.slice(0, -1));
             return false;
         });
         $('#prevsubquiz').off('click');
@@ -2235,9 +2263,6 @@ var PanelQuestion = (function () {
                 var a = _this.vAnswers[aix];
                 a.checkIt(false);
             }
-            $('html, body').animate({
-                scrollTop: $('#myview').offset().top - 5
-            }, 50);
         });
         $('button#show_answer').off('click');
         $('button#show_answer').on('click', function () {

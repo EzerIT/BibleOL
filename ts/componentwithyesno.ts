@@ -15,6 +15,7 @@
 enum COMPONENT_TYPE {
     textField,                 // Text field
     textFieldWithVirtKeyboard, // Text field with virtual keyboard
+    textFieldForeign,          // Text field with individual keys for typing foreign characters
     comboBox1,                 // An ordinary combobox (for Latin text)
     comboBox2,                 // A styled combobox (for Hebrew text)
     checkBoxes,                // A collection of several checkboxes

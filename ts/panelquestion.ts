@@ -58,6 +58,23 @@ class Cursor {
 
     private show() {
         $(`#ptr_${this.card}_${this.row}`).show();
+
+
+        // Scroll to previous element (hoping this will center current element)
+        let toppos : number;
+
+        if (this.row==this.minrow)
+            toppos = $('#myview').offset().top - 5;
+        else {
+            let prevelem : JQuery = $(`#ptr_${this.card}_${this.row-1}`);
+            prevelem.show();                    // Show it...
+            toppos = prevelem.offset().top - 5; // ...get its position...
+            prevelem.hide();                    // ...and hide it again
+        }
+        
+        $('html, body').animate({
+            scrollTop: toppos
+        }, 50);
     }
 
     public set(c : number = 0, r : number = this.minrow) {
@@ -553,7 +570,7 @@ class PanelQuestion {
                             let item   : StringWithSort = new StringWithSort(s,s); // StringWithSort holding the current suggestion
                             let option : JQuery         = $('<div class="selectbutton multiple_choice">'
                                 + `<input type="radio" id="${item.getInternal()}_${quizItemID}" name="quizitem_${quizItemID}" value="${item.getInternal()}">`
-                                + `<label class="${charSetClass}" for="${item.getInternal()}_${quizItemID}">${item.getString()}<span class="shortcut"></span></label>`
+                                + `<label class="${charSetClass}" for="${item.getInternal()}_${quizItemID}">${item.getString()}<span class="shortcut multichoice"></span></label>`
                                 + '</div>');
 
                             option
@@ -574,7 +591,7 @@ class PanelQuestion {
                         $.each(optArray,
                                (ix : number, o : JQuery) => {
                                    quiz_div.append(o);
-                                   let sc : string = ix==9 ? '0' : (ix+1)+''; // Make shortcut 1,2,3...9,0
+                                   let sc : string = String.fromCharCode(ix+97); // a, b, c, etc.
                                    o.find('.shortcut').text(sc);
                                    this.keytable.add(+qoid, headInd, sc, o.data('id'), 1);
                                }
@@ -876,8 +893,9 @@ class PanelQuestion {
                         // Sort letters alphabetically
                         showLetters.sort();
 
-                        let vf : JQuery = $(`<div class="inputquizitem"><input data-kbid="${PanelQuestion.kbid++}" type="text"`
-                                + ` class="${PanelQuestion.charclass(featset)}"></div>`);
+//                        let vf : JQuery = $(`<div class="inputquizitem"><input data-kbid="${PanelQuestion.kbid++}" type="text"`
+//                                + ` class="${PanelQuestion.charclass(featset)}"></div>`);
+                        let vf : JQuery = $(`<div class="inputquizitem"><span class="inputshow ${PanelQuestion.charclass(featset)}"></div>`);
 
                         // Create letterinput and set del button to remove letters from input field
                         let letterinput : JQuery = $('<div class="letterinput"></div>');
@@ -887,7 +905,7 @@ class PanelQuestion {
                         if (charset.isRtl)
                             letterinput.append(`<div class="delbutton" id="bs_${quizItemID}">&rarr;</div>`);
                         else
-                            letterinput.append(`<div class="delbutton" id="bs_${quizItemID}>&larr;</div>`);
+                            letterinput.append(`<div class="delbutton" id="bs_${quizItemID}">&larr;</div>`);
 
                         this.keytable.add(+qoid, headInd, 'Backspace', `bs_${quizItemID}`, 2);
 
@@ -895,21 +913,23 @@ class PanelQuestion {
                         // Set randomized letter buttons to be inputted in the input field
                         showLetters.forEach((letter: string, i: number) => {
                             let sc : string = String.fromCharCode(i+97); // a, b, c, etc.
-                            letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" id="${sc}_${quizItemID}" data-letter="${letter}">${letter}<span class="shortcut">${sc}</span></div>`);
+                            letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" id="${sc}_${quizItemID}" data-letter="${letter}">${letter}<span class="shortcut keybutton">${sc}</span></div>`);
                             this.keytable.add(+qoid, headInd, sc, `${sc}_${quizItemID}`, 2);
 
                         });
 
 
                         hasForeignInput = true;
-                        cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
+                        cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textFieldForeign);
                         cwyn.addKeypressListener();
+                        cwyn.addChangeListener();
                         v = cwyn.getJQuery();
                     }
                     else {
                         let vf : JQuery = $('<div class="inputquizitem"><input type="text"></div>');
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
                         cwyn.addKeypressListener();
+                        cwyn.addChangeListener();
                         v = cwyn.getJQuery();
                     }
 
@@ -995,7 +1015,7 @@ class PanelQuestion {
 
                                 row.append('<td style="text-align:left"><div class="selectbutton">'
                                            + `<input type="checkbox" id="${swsValues[ix].getInternal()}_${quizItemID}" value="${swsValues[ix].getInternal()}">`
-                                           + `<label for="${swsValues[ix].getInternal()}_${quizItemID}">${swsValues[ix].getString()}<span class="shortcut">${sc}</span></label>`
+                                           + `<label for="${swsValues[ix].getInternal()}_${quizItemID}">${swsValues[ix].getString()}<span class="shortcut multioption">${sc}</span></label>`
                                            + '</div></td>');
 
                                 this.keytable.add(+qoid, headInd, sc, `${swsValues[ix].getInternal()}_${quizItemID}`, 3);
@@ -1191,20 +1211,24 @@ class PanelQuestion {
                                                  if (i1==ids.length)
                                                      i1 = 0;
                                                  $(`#${ids[i1]}`).prop('checked',true);
+                                                 $(`#${ids[i1]}`).change();
                                                  return false;
                                              }
                                          }
                                          // If we reach this point, no item starting the character has been checked
                                      }
                                      $(`#${ids[0]}`).prop('checked',true);
+                                     $(`#${ids[0]}`).change();
                                      break;
 
                                  case 2: // Click
                                      $(`#${ids[0]}`).click();
+                                     $(`#${ids[0]}`).change();
                                      break;
 
                                  case 3: // Toggle
                                      $(`#${ids[0]}`).prop('checked', !$(`#${ids[0]}`).prop('checked'));
+                                     $(`#${ids[0]}`).change();
                                  }
                              }
                              else
@@ -1237,18 +1261,18 @@ class PanelQuestion {
         $('div.inputbutton').click(function () {
             let letter: string = $(this).data('letter'); //String($(this).text());
             $(this)
-                  .parent().siblings('input')  // get the input field
-                  .val($(this).parent().siblings('input').val() + letter);  // add letter
-
+                  .parent().siblings('span')  // get the input field
+                  .text($(this).parent().siblings('span').text() + letter);  // add letter
+            $(this).change();
             return false;    // disable default link action (otherwise # added to url)
         });
 
 
         $('div.delbutton').click(function () {
-            let value: string = String($(this).parent().siblings('input').val());
+            let value: string = String($(this).parent().siblings('span').text());
             $(this)          // the delete button
-                  .parent().siblings('input')    // get the input field
-                  .val(value.slice(0, -1));  // clear its value
+                  .parent().siblings('span')    // get the input field
+                  .text(value.slice(0, -1));  // clear its value
 
             return false;    // disable default link action (otherwise # added to url)
         });
@@ -1278,9 +1302,9 @@ class PanelQuestion {
                                             a.checkIt(false);
                                         }
 
-                                        $('html, body').animate({
-                                            scrollTop: $('#myview').offset().top - 5
-                                        }, 50);
+//                                        $('html, body').animate({
+//                                            scrollTop: $('#myview').offset().top - 5
+//                                        }, 50);
 
                                     }
                                     );

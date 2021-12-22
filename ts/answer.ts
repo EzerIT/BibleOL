@@ -66,6 +66,11 @@ class Answer {
                 $(this.c).find('input').val(this.answerString);
                 break;
             }
+
+            case COMPONENT_TYPE.textFieldForeign: {
+                $(this.c).find('.inputshow').text(this.answerString);
+                break;
+            }
             
             case COMPONENT_TYPE.comboBox1:
             case COMPONENT_TYPE.comboBox2: {
@@ -128,13 +133,19 @@ class Answer {
 
             switch (this.cType) {
             case COMPONENT_TYPE.textField:
+            case COMPONENT_TYPE.textFieldForeign:
             case COMPONENT_TYPE.textFieldWithVirtKeyboard:
                 // Check if the string provided by the user is correct
                 
                 // TODO: Normalize Unicode characters (relevant only in Greek)
 
+                if (this.cType==COMPONENT_TYPE.textFieldForeign)
+                    userAnswer = ($(this.c).find('.inputshow').text() as string);
+                else
+                    userAnswer = ($(this.c).find('input').val() as string);
+                
                 // Fix Greek accents (see "A Note on Greek Accents in Unicode" in the technical documentation)
-                userAnswer = ($(this.c).find('input').val() as string).trim()
+                userAnswer = userAnswer.trim()
                   //.replace(/\u003b/g, '\u037e')  // SEMICOLON -> GREEK QUESTION MARK
                   //.replace(/\u00b7/g, '\u0387')  // MIDDLE DOT -> GREEK ANO TELEIA
                     .replace(/\u03ac/g, '\u1f71')  // GREEK SMALL LETTER ALPHA WITH TONOS -> OXIA
