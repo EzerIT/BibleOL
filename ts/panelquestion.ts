@@ -1,4 +1,3 @@
-
 // -*- js -*-
 // Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
 
@@ -13,6 +12,7 @@
 class KeyTable {
     private elements : any = [];  // Indexed by qoid, rowid, key, item. Value is element ID
     private actions : any = [];  // Indexed by qoid, rowid. Value is action (1=check, 2=click, 3=toggle)
+    private focus : any = [];  // Indexed by qoid, rowid. Value is element ID
 
 
     // Action: 1 = check
@@ -29,6 +29,11 @@ class KeyTable {
         this.actions[card][row] = action;
     }
 
+    public addfocus(card : number, row : number, id : string) {
+        if (!this.focus[card]) this.focus[card] = [];
+        this.focus[card][row] = id;
+    }
+
     public get_key(card : number, row : number, letter : string) : string[] {
         if (!this.elements[card] || !this.elements[card][row])
             return null;
@@ -39,6 +44,12 @@ class KeyTable {
         if (!this.actions[card])
             return null;
         return this.actions[card][row];
+    }
+
+    public get_focus(card : number, row : number) : number {
+        if (!this.focus[card])
+            return null;
+        return this.focus[card][row];
     }
 }
 
@@ -70,6 +81,11 @@ class Cursor {
             prevelem.show();                    // Show it...
             toppos = prevelem.offset().top - 5; // ...get its position...
             prevelem.hide();                    // ...and hide it again
+
+            if ($(`#keyinp_${this.card}_${this.row}`).length) {
+                $(`#keyinp_${this.card}_${this.row}`).focus();
+                $('body').unbind('keydown');
+            }
         }
         
         $('html, body').animate({
@@ -131,7 +147,8 @@ class PanelQuestion {
 
     private keytable : KeyTable = new KeyTable;
     private cursor : Cursor;
-
+    private keyinps : string[] = [];
+    
 
     //------------------------------------------------------------------------------------------
     // charclass static method
@@ -926,7 +943,10 @@ class PanelQuestion {
                         v = cwyn.getJQuery();
                     }
                     else {
-                        let vf : JQuery = $('<div class="inputquizitem"><input type="text"></div>');
+                        let vf : JQuery = $(`<div class="inputquizitem"><input id="keyinp_${+qoid}_${headInd}" type="text"></div>`);
+//                        this.keytable.addfocus(+qoid, headInd, `keyinp_${+qoid}_${headInd}`);
+                        this.keyinps.push(`keyinp_${+qoid}_${headInd}`);
+
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
                         cwyn.addKeypressListener();
                         cwyn.addChangeListener();
@@ -1172,71 +1192,111 @@ class PanelQuestion {
             this.cursor.set();
         }
 
+
+        let body_keydown = function onPress(event : any) {
+            let pq : PanelQuestion = event.data;
+
+            if (event.key==="x") {
+                console.log('body - x - return false');
+                return false;
+            }
+            if (event.key==="y") {
+                console.log('body - y - return true');
+                return true;
+            }
+            if (event.key==="ArrowRight")
+                $('#nextsubquiz:visible').click();
+            else if (event.key==="ArrowLeft")
+                $('#prevsubquiz:visible').click();
+            else if (event.key==="ArrowDown")
+                pq.cursor.prevNextItem(1);
+            else if (event.key==="ArrowUp")
+                pq.cursor.prevNextItem(-1);
+//            else if (event.key==="F") {
+//                $('#xyzzy_0').focus();
+//                $('body').unbind('keydown');
+//            }
+            else if (event.key==="N")
+                $('#next_question:enabled').click();
+            else if (event.key==="C")
+                $('#check_answer').click();
+            else if (event.key==="S") {
+                $('.shortcut').toggle();
+                $('.inputbutton').toggleClass('noshortcut');
+                $('.delbutton').toggleClass('noshortcut');
+            }
+            else {
+                let ids = pq.keytable.get_key(pq.cursor.card, pq.cursor.row, event.key);
+
+                if (ids) {
+                    switch (pq.keytable.get_action(pq.cursor.card, pq.cursor.row)) {
+                    case 1: // Check
+                        if (ids.length>1) {
+                            // More than one option starts with this character
+                            for (let i in ids) {
+                                if (isNaN(+i)) continue; // Not numeric
+
+                                if ($(`#${ids[i]}`).prop('checked')) {
+                                    let i1 : number = +i+1;
+                                    if (i1==ids.length)
+                                        i1 = 0;
+                                    $(`#${ids[i1]}`).prop('checked',true);
+                                    $(`#${ids[i1]}`).change();
+                                    return false;
+                                }
+                            }
+                            // If we reach this point, no item starting the character has been checked
+                        }
+                        $(`#${ids[0]}`).prop('checked',true);
+                        $(`#${ids[0]}`).change();
+                        break;
+
+                    case 2: // Click
+                        $(`#${ids[0]}`).click();
+                        $(`#${ids[0]}`).change();
+                        break;
+
+                    case 3: // Toggle
+                        $(`#${ids[0]}`).prop('checked', !$(`#${ids[0]}`).prop('checked'));
+                        $(`#${ids[0]}`).change();
+                    }
+                }
+                else
+                    return true;
+            }
+
+            return false;
+        };
+        
+
+        let xyzzy_keydown = function onPress(event : any) {
+            let pq : PanelQuestion = event.data;
+            console.log('xyzzy_keydown',event.key,this);
+            if (event.key==="ArrowDown") {
+                pq.cursor.prevNextItem(1);
+                $(this).blur();
+                $('body').keydown(pq, body_keydown);
+                return false;
+            }
+            else if (event.key==="ArrowUp") {
+                pq.cursor.prevNextItem(-1);
+                $(this).blur();
+                $('body').keydown(pq, body_keydown);
+                return false;
+            }
+
+            return true;
+        };
+
+
+        for (let keyi of this.keyinps)
+            $(`#${keyi}`).keydown(this, xyzzy_keydown);
+                                 
+        
         $('body')
             .unbind('keydown')
             .keydown(this, // Will be stored in event.data when a key is pressed
-                     function onPress(event) {
-                         let pq : PanelQuestion = event.data;
-
-                         if (event.key==="ArrowRight")
-                             $('#nextsubquiz:visible').click();
-                         else if (event.key==="ArrowLeft")
-                             $('#prevsubquiz:visible').click();
-                         else if (event.key==="ArrowDown")
-                             pq.cursor.prevNextItem(1);
-                         else if (event.key==="ArrowUp")
-                             pq.cursor.prevNextItem(-1);
-                         else if (event.key==="N")
-                             $('#next_question:enabled').click();
-                         else if (event.key==="C")
-                             $('#check_answer').click();
-                         else if (event.key==="S") {
-                             $('.shortcut').toggle();
-                             $('.inputbutton').toggleClass('noshortcut');
-                             $('.delbutton').toggleClass('noshortcut');
-                         }
-                         else {
-                             let ids = pq.keytable.get_key(pq.cursor.card, pq.cursor.row, event.key);
-
-                             if (ids) {
-                                 switch (pq.keytable.get_action(pq.cursor.card, pq.cursor.row)) {
-                                 case 1: // Check
-                                     if (ids.length>1) {
-                                         // More than one option starts with this character
-                                         for (let i in ids) {
-                                             if (isNaN(+i)) continue; // Not numeric
-
-                                             if ($(`#${ids[i]}`).prop('checked')) {
-                                                 let i1 : number = +i+1;
-                                                 if (i1==ids.length)
-                                                     i1 = 0;
-                                                 $(`#${ids[i1]}`).prop('checked',true);
-                                                 $(`#${ids[i1]}`).change();
-                                                 return false;
-                                             }
-                                         }
-                                         // If we reach this point, no item starting the character has been checked
-                                     }
-                                     $(`#${ids[0]}`).prop('checked',true);
-                                     $(`#${ids[0]}`).change();
-                                     break;
-
-                                 case 2: // Click
-                                     $(`#${ids[0]}`).click();
-                                     $(`#${ids[0]}`).change();
-                                     break;
-
-                                 case 3: // Toggle
-                                     $(`#${ids[0]}`).prop('checked', !$(`#${ids[0]}`).prop('checked'));
-                                     $(`#${ids[0]}`).change();
-                                 }
-                             }
-                             else
-                                 return true;
-                         }
-
-                         return false;
-                     });
+                     body_keydown);
 
 
         this.subQuizMax = quizCardNum
