@@ -489,6 +489,7 @@ div.selectbutton label:hover {
   position: relative;
   border: solid 1px;
   line-height: 10px;
+  direction: ltr;
 }
 .shortcut.multichoice {
   right: 1.3em;

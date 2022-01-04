@@ -8,6 +8,129 @@
 /// <reference path="componentwithyesno.ts" />
 /// <reference path="answer.ts" />
 
+class foreign2shortcut {
+    private static map : { [foreign:string] : string } = {};
+
+    public static init() {
+        switch (configuration.charSet) {
+        case 'hebrew':
+            foreign2shortcut.map['א'] = '>';
+            foreign2shortcut.map['ב'] = 'b'; 
+            foreign2shortcut.map['ג'] = 'g'; 
+            foreign2shortcut.map['ד'] = 'd'; 
+            foreign2shortcut.map['ה'] = 'h'; 
+            foreign2shortcut.map['ו'] = 'w'; 
+            foreign2shortcut.map['ז'] = 'z'; 
+            foreign2shortcut.map['ח'] = 'x'; 
+            foreign2shortcut.map['ט'] = 'v'; 
+            foreign2shortcut.map['י'] = 'j'; 
+            foreign2shortcut.map['ך'] = 'K'; 
+            foreign2shortcut.map['כ'] = 'k'; 
+            foreign2shortcut.map['ל'] = 'l'; 
+            foreign2shortcut.map['ם'] = 'M'; 
+            foreign2shortcut.map['מ'] = 'm'; 
+            foreign2shortcut.map['ן'] = 'N';
+            foreign2shortcut.map['נ'] = 'n';
+            foreign2shortcut.map['ס'] = 's';
+            foreign2shortcut.map['ע'] = '<';
+            foreign2shortcut.map['ף'] = 'P';
+            foreign2shortcut.map['פ'] = 'p';
+            foreign2shortcut.map['ץ'] = 'Y';
+            foreign2shortcut.map['צ'] = 'y';
+            foreign2shortcut.map['ק'] = 'q';
+            foreign2shortcut.map['ר'] = 'r';
+            foreign2shortcut.map['שׁ'] = 'c';
+            foreign2shortcut.map['שׂ'] = 'f';
+            foreign2shortcut.map['ש'] = '#';
+            foreign2shortcut.map['ת'] = 't';
+            foreign2shortcut.map['־'] = '&';  // Maqaf
+            foreign2shortcut.map['ֿ'] = '2';  // Rafe         
+            foreign2shortcut.map['ּ'] = '.';  // Dagesh       
+            foreign2shortcut.map['ֽ'] = '$';  // Meteg        
+            foreign2shortcut.map['ְ'] = ':';  // Sheva        
+            foreign2shortcut.map['ֳ'] = '+';  // Hataf qamats 
+            foreign2shortcut.map['ֲ'] = 'A';  // Hataf patah  
+            foreign2shortcut.map['ֱ'] = 'E';  // Hataf segol  
+            foreign2shortcut.map['ֵ'] = '1';  // Tsere        
+            foreign2shortcut.map['ָ'] = '@';  // Qamats       
+            foreign2shortcut.map['ַ'] = 'a';  // Patah        
+            foreign2shortcut.map['ֶ'] = 'e';  // Segol        
+            foreign2shortcut.map['ִ'] = 'I';  // Hiriq        
+            foreign2shortcut.map['ֹ'] = 'o';  // Holam        
+            foreign2shortcut.map['ֻ'] = 'u';  // Qubuts       
+            break;
+
+        case "greek":
+            foreign2shortcut.map['α'] = 'a';
+            foreign2shortcut.map['β'] = 'b';
+            foreign2shortcut.map['γ'] = 'g';
+            foreign2shortcut.map['δ'] = 'd'; 
+            foreign2shortcut.map['ε'] = 'e'; 
+            foreign2shortcut.map['ζ'] = 'z'; 
+            foreign2shortcut.map['η'] = 'h'; 
+            foreign2shortcut.map['θ'] = 'q'; 
+            foreign2shortcut.map['ι'] = 'i'; 
+            foreign2shortcut.map['κ'] = 'k'; 
+            foreign2shortcut.map['λ'] = 'l'; 
+            foreign2shortcut.map['μ'] = 'm'; 
+            foreign2shortcut.map['ν'] = 'n'; 
+            foreign2shortcut.map['ξ'] = 'x'; 
+            foreign2shortcut.map['ο'] = 'o'; 
+            foreign2shortcut.map['π'] = 'p'; 
+            foreign2shortcut.map['ρ'] = 'r'; 
+            foreign2shortcut.map['ς'] = 'c'; 
+            foreign2shortcut.map['σ'] = 's'; 
+            foreign2shortcut.map['τ'] = 't'; 
+            foreign2shortcut.map['υ'] = 'u'; 
+            foreign2shortcut.map['φ'] = 'f'; 
+            foreign2shortcut.map['χ'] = 'j'; 
+            foreign2shortcut.map['ψ'] = 'q'; 
+            foreign2shortcut.map['ω'] = 'w'; 
+
+            foreign2shortcut.map['Α'] = 'A';
+            foreign2shortcut.map['Β'] = 'B';
+            foreign2shortcut.map['Γ'] = 'G';
+            foreign2shortcut.map['Δ'] = 'D'; 
+            foreign2shortcut.map['Ε'] = 'E'; 
+            foreign2shortcut.map['Ζ'] = 'Z'; 
+            foreign2shortcut.map['Η'] = 'H'; 
+            foreign2shortcut.map['Θ'] = 'Q'; 
+            foreign2shortcut.map['Ι'] = 'I'; 
+            foreign2shortcut.map['Κ'] = 'K'; 
+            foreign2shortcut.map['Λ'] = 'L'; 
+            foreign2shortcut.map['Μ'] = 'M'; 
+            foreign2shortcut.map['Ν'] = 'N'; 
+            foreign2shortcut.map['Ξ'] = 'X'; 
+            foreign2shortcut.map['Ο'] = 'O'; 
+            foreign2shortcut.map['Π'] = 'P'; 
+            foreign2shortcut.map['Ρ'] = 'R'; 
+            foreign2shortcut.map['Σ'] = 'S'; 
+            foreign2shortcut.map['Τ'] = 'T'; 
+            foreign2shortcut.map['Υ'] = 'U'; 
+            foreign2shortcut.map['Φ'] = 'F'; 
+            foreign2shortcut.map['Χ'] = 'J'; 
+            foreign2shortcut.map['Ψ'] = 'Q'; 
+            foreign2shortcut.map['Ω'] = 'W'; 
+            break;
+
+        case "transliterated_hebrew":
+            for (let a = 97; a<123; ++a)
+                foreign2shortcut.map[String.fromCharCode(a)] = String.fromCharCode(a);
+            foreign2shortcut.map['ʔ'] = '>';
+            foreign2shortcut.map['ʕ'] = '<';
+            break;
+        }
+    }
+
+    public static get(letter : string) : string {
+        if (foreign2shortcut.map[letter])
+            return foreign2shortcut.map[letter];
+        else
+            return '?';
+    }
+}
+
+
 
 class KeyTable {
     private elements : any = [];  // Indexed by qoid, rowid, key, item. Value is element ID
@@ -275,6 +398,9 @@ class PanelQuestion {
     constructor(qd : QuizData, dict : Dictionary, exam_mode: boolean) {
         this.qd = qd;
         this.sentence = dict.sentenceSetQuiz;
+
+        foreign2shortcut.init();
+        
         ////////////////////////////////////////////////////////////////////
         // Calculate the Bible reference (the 'location') for this sentence.
 
@@ -929,9 +1055,15 @@ class PanelQuestion {
                         
                         // Set randomized letter buttons to be inputted in the input field
                         showLetters.forEach((letter: string, i: number) => {
-                            let sc : string = String.fromCharCode(i+97); // a, b, c, etc.
-                            letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" id="${sc}_${quizItemID}" data-letter="${letter}">${letter}<span class="shortcut keybutton">${sc}</span></div>`);
-                            this.keytable.add(+qoid, headInd, sc, `${sc}_${quizItemID}`, 2);
+                            //let sc : string = String.fromCharCode(i+97); // a, b, c, etc.
+                            let sc : string = foreign2shortcut.get(letter);
+                            if (sc!='?') {
+                                let sc_id : string = 'sc' + sc.charCodeAt(0);
+                                letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" id="${sc_id}_${quizItemID}" data-letter="${letter}">${letter}<span class="shortcut keybutton">${sc}</span></div>`);
+                                this.keytable.add(+qoid, headInd, sc, `${sc_id}_${quizItemID}`, 2);
+                            }
+                            else 
+                                letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" data-letter="${letter}">${letter}</div>`);
 
                         });
 
@@ -1196,6 +1328,8 @@ class PanelQuestion {
         let body_keydown = function onPress(event : any) {
             let pq : PanelQuestion = event.data;
 
+            console.log("KEY:",event.key);
+            
             if (event.key==="x") {
                 console.log('body - x - return false');
                 return false;
@@ -1216,11 +1350,11 @@ class PanelQuestion {
 //                $('#xyzzy_0').focus();
 //                $('body').unbind('keydown');
 //            }
-            else if (event.key==="N")
+            else if (event.key==="PageDown")
                 $('#next_question:enabled').click();
-            else if (event.key==="C")
+            else if (event.key==="Home")
                 $('#check_answer').click();
-            else if (event.key==="S") {
+            else if (event.key==="Insert") {
                 $('.shortcut').toggle();
                 $('.inputbutton').toggleClass('noshortcut');
                 $('.delbutton').toggleClass('noshortcut');
