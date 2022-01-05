@@ -154,9 +154,9 @@ class Foreign2Shortcut {
 // actions: The action performed on the target element (1=check, 2=click, 3=toggle)
 // focus: The ID of the HTML element, if any, to receive input focus when a row is selected
 class KeyTable {
-    private static elements : any = [];  // Indexed by qoid, rowid, key, item. Value is element ID
-    private static actions : any = [];  // Indexed by qoid, rowid. Value is action
-    private static focus : any = [];  // Indexed by qoid, rowid. Value is element ID
+    private elements : any = [];  // Indexed by qoid, rowid, key, item. Value is element ID
+    private actions : any = [];  // Indexed by qoid, rowid. Value is action
+    private focus : any = [];  // Indexed by qoid, rowid. Value is element ID
 
 
     // Adds an action to be performed on a given element.
@@ -166,7 +166,7 @@ class KeyTable {
     //     letter: The shortcut key
     //     id: The ID of the HTML element to be manipulated by the keystroke
     //     action: The actio to be performed on the element (1=check, 2=click, 3=toggle)
-    public static add(card : number, row : number, letter : string, id : string, action : number) {
+    public add(card : number, row : number, letter : string, id : string, action : number) {
         if (!this.elements[card]) this.elements[card] = [];
         if (!this.elements[card][row]) this.elements[card][row] = new Object;
         if (!this.elements[card][row][letter]) this.elements[card][row][letter] = [];
@@ -182,7 +182,7 @@ class KeyTable {
     //     card: The question object number
     //     row: The row on the card for the question object
     //     id: The ID of the HTML element to receive input focus
-    public static addfocus(card : number, row : number, id : string) {
+    public addfocus(card : number, row : number, id : string) {
         if (!this.focus[card]) this.focus[card] = [];
         this.focus[card][row] = id;
     }
@@ -192,7 +192,7 @@ class KeyTable {
     //     card: The question object number
     //     row: The row on the card for the question object
     //     letter: The shortcut key
-    public static get_element(card : number, row : number, letter : string) : string[] {
+    public get_element(card : number, row : number, letter : string) : string[] {
         if (!this.elements[card] || !this.elements[card][row])
             return null;
         return this.elements[card][row][letter];
@@ -202,7 +202,7 @@ class KeyTable {
     // Parameters:
     //     card: The question object number
     //     row: The row on the card for the question object
-    public static get_action(card : number, row : number) : number {
+    public get_action(card : number, row : number) : number {
         if (!this.actions[card])
             return null;
         return this.actions[card][row];
@@ -212,7 +212,7 @@ class KeyTable {
     // Parameters:
     //     card: The question object number
     //     row: The row on the card for the question object
-    public static get_focus(card : number, row : number) : number {
+    public get_focus(card : number, row : number) : number {
         if (!this.focus[card])
             return null;
         return this.focus[card][row];
@@ -226,43 +226,48 @@ class KeyTable {
 // cursor (that is, the > pointing to the selected row).
 //
 class Cursor {
-    public card : number; // The current question object
-    public row : number;  // The selected row
+    public static card : number; // The current question object
+    public static row : number;  // The selected row
+    private static minrow: number; // The row containing the first request feature
+    private static maxrow: number; // The maximum number of rows + 1
 
-    constructor(private minrow : number, private maxrow : number, private pq : PanelQuestion)
+    // Initializes the cursor
+    public static init(minrow : number, maxrow : number)
     {
-        this.card = 0;
-        this.row = this.minrow;
+        Cursor.minrow = minrow;
+        Cursor.maxrow = maxrow;
+        Cursor.card = 0;
+        Cursor.row = minrow;
     }
 
     // Hides the cursor for the current row.
-    private hide() {
-        $(`#ptr_${this.card}_${this.row}`).hide();
+    private static hide() {
+        $(`#ptr_${Cursor.card}_${Cursor.row}`).hide();
     }
 
     // Displays the cursor for the current row.
     // This function also scrolls the window to an appropriate position and, if necessary, assigns
     // input focus.
-    private show() {
-        $(`#ptr_${this.card}_${this.row}`).show();
+    private static show() {
+        $(`#ptr_${Cursor.card}_${Cursor.row}`).show();
 
 
         let toppos : number; // The position to which to scroll
 
-        if (this.row==this.minrow)
+        if (Cursor.row==Cursor.minrow)
             toppos = $('#myview').offset().top - 5; // Scroll position is at the top
         else {
             // Scroll position is at the element before the one selected
             
-            let prevelem : JQuery = $(`#ptr_${this.card}_${this.row-1}`);
+            let prevelem : JQuery = $(`#ptr_${Cursor.card}_${Cursor.row-1}`);
             prevelem.show();                    // Show it...
             toppos = prevelem.offset().top - 5; // ...get its position...
             prevelem.hide();                    // ...and hide it again
         }
 
-        if ($(`#keyinp_${this.card}_${this.row}`).length) {
+        if ($(`#keyinp_${Cursor.card}_${Cursor.row}`).length) {
             // Assign focus and make sure that keystrokes are not sent to other elements
-            $(`#keyinp_${this.card}_${this.row}`).focus();
+            $(`#keyinp_${Cursor.card}_${Cursor.row}`).focus();
             $('body').unbind('keydown');
         }
         
@@ -273,26 +278,27 @@ class Cursor {
     }
 
     // Goes to a specified question object and row
-    public set(c : number = 0, r : number = this.minrow) {
-        this.hide();
+    public static set(c : number = 0, r : number = Cursor.minrow) {
+        console.log("Cursor.set",c,r);
+        Cursor.hide();
 
-        this.card = c;
-        this.row = r;
+        Cursor.card = c;
+        Cursor.row = r;
 
-        this.show();
+        Cursor.show();
     }
 
     // Moves to the next or previous row
     // Parameter:
     //    n: +1 or -1. Indicates direction of movement.
-    public prevNextItem(n : number /* 1 or -1 */) {
+    public static prevNextItem(n : number /* 1 or -1 */) {
         if (n>0) {
-            if (this.row+n<this.maxrow)
-                this.set(this.card, this.row+n);
+            if (Cursor.row+n<Cursor.maxrow)
+                Cursor.set(Cursor.card, Cursor.row+n);
         }
         else {
-            if (this.row+n>=this.minrow)
-                this.set(this.card, this.row+n);
+            if (Cursor.row+n>=Cursor.minrow)
+                Cursor.set(Cursor.card, Cursor.row+n);
         }
     }
 }
@@ -311,11 +317,11 @@ class PanelQuestion {
     private answersPerCard : number[] = []; // answersPerCard[n] is the first available index in vAnswers after question object number n
     private question_stat  : QuestionStatistics = new QuestionStatistics; // Answer statistics
     private static kbid    : number = 1;    // Input field identification for keyboard
-    private gradingFlag	   : boolean;	   // May the statistics be used for grading the student?
+    private gradingFlag	   : boolean;	    // May the statistics be used for grading the student?
     private subQuizIndex   : number = 0;    // Used to toggle subquestions
     private subQuizMax     : number;        // Used to define max number of subquestions
 
-    private cursor : Cursor;
+    private keytable : KeyTable = new KeyTable;
     private keyinps : string[] = [];
     
 
@@ -398,7 +404,7 @@ class PanelQuestion {
         if (this.subQuizIndex + n >= 0 && this.subQuizIndex + n < this.subQuizMax) {
             // If the proposed move (n; always 1 or -1) is within the boundaries, proceed...
             this.subQuizIndex += n;
-            this.cursor.set(this.subQuizIndex + n);
+            Cursor.set(this.subQuizIndex);
         }
         let i: number;
         let slides: JQuery = $('#quizcontainer').find('.quizcard');
@@ -681,8 +687,7 @@ class PanelQuestion {
             // Note: The variable v, introduced below, will eventually hold the string
             // <td class="qbox">...</td> with the appropriate contents.
 
-            if (!this.cursor)
-                this.cursor = new Cursor(headInd,headLen,this);
+            Cursor.init(headInd,headLen);
 
             for (let rfi in requestFeatures) {
                 if (isNaN(+rfi)) continue; // Not numeric
@@ -783,7 +788,7 @@ class PanelQuestion {
                                    quiz_div.append(o);
                                    let sc : string = String.fromCharCode(ix+97); // a, b, c, etc.
                                    o.find('.shortcut').text(sc);
-                                   KeyTable.add(+qoid, headInd, sc, o.data('id'), 1);
+                                   this.keytable.add(+qoid, headInd, sc, o.data('id'), 1);
                                }
                               );
 
@@ -1097,7 +1102,7 @@ class PanelQuestion {
                         else
                             letterinput.append(`<div class="delbutton" id="bs_${quizItemID}">&larr;</div>`);
 
-                        KeyTable.add(+qoid, headInd, 'Backspace', `bs_${quizItemID}`, 2);
+                        this.keytable.add(+qoid, headInd, 'Backspace', `bs_${quizItemID}`, 2);
 
                         
                         // Set randomized letter buttons to be inputted in the input field
@@ -1107,7 +1112,7 @@ class PanelQuestion {
                             if (sc!='?') {
                                 let sc_id : string = 'sc' + sc.charCodeAt(0);
                                 letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" id="${sc_id}_${quizItemID}" data-letter="${letter}">${letter}<span class="shortcut keybutton">${sc}</span></div>`);
-                                KeyTable.add(+qoid, headInd, sc, `${sc_id}_${quizItemID}`, 2);
+                                this.keytable.add(+qoid, headInd, sc, `${sc_id}_${quizItemID}`, 2);
                             }
                             else 
                                 letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" data-letter="${letter}">${letter}</div>`);
@@ -1123,7 +1128,7 @@ class PanelQuestion {
                     }
                     else {
                         let vf : JQuery = $(`<div class="inputquizitem"><input id="keyinp_${+qoid}_${headInd}" type="text"></div>`);
-//                        KeyTable.addfocus(+qoid, headInd, `keyinp_${+qoid}_${headInd}`);
+//                        this.keytable.addfocus(+qoid, headInd, `keyinp_${+qoid}_${headInd}`);
                         this.keyinps.push(`keyinp_${+qoid}_${headInd}`);
 
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
@@ -1217,7 +1222,7 @@ class PanelQuestion {
                                            + `<label for="${swsValues[ix].getInternal()}_${quizItemID}">${swsValues[ix].getString()}<span class="shortcut multioption">${sc}</span></label>`
                                            + '</div></td>');
 
-                                KeyTable.add(+qoid, headInd, sc, `${swsValues[ix].getInternal()}_${quizItemID}`, 3);
+                                this.keytable.add(+qoid, headInd, sc, `${swsValues[ix].getInternal()}_${quizItemID}`, 3);
                             }
                             else
                                 row.append('<td></td>');
@@ -1348,7 +1353,7 @@ class PanelQuestion {
                         $.each(optArray,
                                (ix : number, o : JQuery) => {
                                    quiz_div.append(o);
-                                   KeyTable.add(+qoid, headInd, o.data('char'), o.data('id'), 1);
+                                   this.keytable.add(+qoid, headInd, o.data('char'), o.data('id'), 1);
                                }
                               );
 
@@ -1368,7 +1373,7 @@ class PanelQuestion {
             }
 
             this.answersPerCard.push(this.vAnswers.length);
-            this.cursor.set();
+            Cursor.set();
         }
 
 
@@ -1390,9 +1395,9 @@ class PanelQuestion {
             else if (event.key==="ArrowLeft")
                 $('#prevsubquiz:visible').click();
             else if (event.key==="ArrowDown")
-                pq.cursor.prevNextItem(1);
+                Cursor.prevNextItem(1);
             else if (event.key==="ArrowUp")
-                pq.cursor.prevNextItem(-1);
+                Cursor.prevNextItem(-1);
 //            else if (event.key==="F") {
 //                $('#xyzzy_0').focus();
 //                $('body').unbind('keydown');
@@ -1407,10 +1412,10 @@ class PanelQuestion {
                 $('.delbutton').toggleClass('noshortcut');
             }
             else {
-                let ids = KeyTable.get_element(pq.cursor.card, pq.cursor.row, event.key);
+                let ids = pq.keytable.get_element(Cursor.card, Cursor.row, event.key);
 
                 if (ids) {
-                    switch (KeyTable.get_action(pq.cursor.card, pq.cursor.row)) {
+                    switch (pq.keytable.get_action(Cursor.card, Cursor.row)) {
                     case 1: // Check
                         if (ids.length>1) {
                             // More than one option starts with this character
@@ -1454,13 +1459,13 @@ class PanelQuestion {
             let pq : PanelQuestion = event.data;
             console.log('xyzzy_keydown',event.key,this);
             if (event.key==="ArrowDown") {
-                pq.cursor.prevNextItem(1);
+                Cursor.prevNextItem(1);
                 $(this).blur();
                 $('body').keydown(pq, body_keydown);
                 return false;
             }
             else if (event.key==="ArrowUp") {
-                pq.cursor.prevNextItem(-1);
+                Cursor.prevNextItem(-1);
                 $(this).blur();
                 $('body').keydown(pq, body_keydown);
                 return false;
