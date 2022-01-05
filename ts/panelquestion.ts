@@ -8,140 +8,165 @@
 /// <reference path="componentwithyesno.ts" />
 /// <reference path="answer.ts" />
 
-class foreign2shortcut {
+
+//****************************************************************************************************
+// Foreign2Shortcut class
+//
+// This class manages the releationship between a non-Latic character set and the associated Latin
+// shortcut key.
+
+class Foreign2Shortcut {
     private static map : { [foreign:string] : string } = {};
 
+    // Initializes the table
     public static init() {
         switch (configuration.charSet) {
         case 'hebrew':
-            foreign2shortcut.map['א'] = '>';
-            foreign2shortcut.map['ב'] = 'b'; 
-            foreign2shortcut.map['ג'] = 'g'; 
-            foreign2shortcut.map['ד'] = 'd'; 
-            foreign2shortcut.map['ה'] = 'h'; 
-            foreign2shortcut.map['ו'] = 'w'; 
-            foreign2shortcut.map['ז'] = 'z'; 
-            foreign2shortcut.map['ח'] = 'x'; 
-            foreign2shortcut.map['ט'] = 'v'; 
-            foreign2shortcut.map['י'] = 'j'; 
-            foreign2shortcut.map['ך'] = 'K'; 
-            foreign2shortcut.map['כ'] = 'k'; 
-            foreign2shortcut.map['ל'] = 'l'; 
-            foreign2shortcut.map['ם'] = 'M'; 
-            foreign2shortcut.map['מ'] = 'm'; 
-            foreign2shortcut.map['ן'] = 'N';
-            foreign2shortcut.map['נ'] = 'n';
-            foreign2shortcut.map['ס'] = 's';
-            foreign2shortcut.map['ע'] = '<';
-            foreign2shortcut.map['ף'] = 'P';
-            foreign2shortcut.map['פ'] = 'p';
-            foreign2shortcut.map['ץ'] = 'Y';
-            foreign2shortcut.map['צ'] = 'y';
-            foreign2shortcut.map['ק'] = 'q';
-            foreign2shortcut.map['ר'] = 'r';
-            foreign2shortcut.map['שׁ'] = 'c';
-            foreign2shortcut.map['שׂ'] = 'f';
-            foreign2shortcut.map['ש'] = '#';
-            foreign2shortcut.map['ת'] = 't';
-            foreign2shortcut.map['־'] = '&';  // Maqaf
-            foreign2shortcut.map['ֿ'] = '2';  // Rafe         
-            foreign2shortcut.map['ּ'] = '.';  // Dagesh       
-            foreign2shortcut.map['ֽ'] = '$';  // Meteg        
-            foreign2shortcut.map['ְ'] = ':';  // Sheva        
-            foreign2shortcut.map['ֳ'] = '+';  // Hataf qamats 
-            foreign2shortcut.map['ֲ'] = 'A';  // Hataf patah  
-            foreign2shortcut.map['ֱ'] = 'E';  // Hataf segol  
-            foreign2shortcut.map['ֵ'] = '1';  // Tsere        
-            foreign2shortcut.map['ָ'] = '@';  // Qamats       
-            foreign2shortcut.map['ַ'] = 'a';  // Patah        
-            foreign2shortcut.map['ֶ'] = 'e';  // Segol        
-            foreign2shortcut.map['ִ'] = 'I';  // Hiriq        
-            foreign2shortcut.map['ֹ'] = 'o';  // Holam        
-            foreign2shortcut.map['ֻ'] = 'u';  // Qubuts       
+            Foreign2Shortcut.map['א'] = '>';
+            Foreign2Shortcut.map['ב'] = 'b'; 
+            Foreign2Shortcut.map['ג'] = 'g'; 
+            Foreign2Shortcut.map['ד'] = 'd'; 
+            Foreign2Shortcut.map['ה'] = 'h'; 
+            Foreign2Shortcut.map['ו'] = 'w'; 
+            Foreign2Shortcut.map['ז'] = 'z'; 
+            Foreign2Shortcut.map['ח'] = 'x'; 
+            Foreign2Shortcut.map['ט'] = 'v'; 
+            Foreign2Shortcut.map['י'] = 'j'; 
+            Foreign2Shortcut.map['ך'] = 'K'; 
+            Foreign2Shortcut.map['כ'] = 'k'; 
+            Foreign2Shortcut.map['ל'] = 'l'; 
+            Foreign2Shortcut.map['ם'] = 'M'; 
+            Foreign2Shortcut.map['מ'] = 'm'; 
+            Foreign2Shortcut.map['ן'] = 'N';
+            Foreign2Shortcut.map['נ'] = 'n';
+            Foreign2Shortcut.map['ס'] = 's';
+            Foreign2Shortcut.map['ע'] = '<';
+            Foreign2Shortcut.map['ף'] = 'P';
+            Foreign2Shortcut.map['פ'] = 'p';
+            Foreign2Shortcut.map['ץ'] = 'Y';
+            Foreign2Shortcut.map['צ'] = 'y';
+            Foreign2Shortcut.map['ק'] = 'q';
+            Foreign2Shortcut.map['ר'] = 'r';
+            Foreign2Shortcut.map['שׁ'] = 'c';
+            Foreign2Shortcut.map['שׂ'] = 'f';
+            Foreign2Shortcut.map['ש'] = '#';
+            Foreign2Shortcut.map['ת'] = 't';
+            Foreign2Shortcut.map['־'] = '&';  // Maqaf
+            Foreign2Shortcut.map['ֿ'] = '2';  // Rafe         
+            Foreign2Shortcut.map['ּ'] = '.';  // Dagesh       
+            Foreign2Shortcut.map['ֽ'] = '$';  // Meteg        
+            Foreign2Shortcut.map['ְ'] = ':';  // Sheva        
+            Foreign2Shortcut.map['ֳ'] = '+';  // Hataf qamats 
+            Foreign2Shortcut.map['ֲ'] = 'A';  // Hataf patah  
+            Foreign2Shortcut.map['ֱ'] = 'E';  // Hataf segol  
+            Foreign2Shortcut.map['ֵ'] = '1';  // Tsere        
+            Foreign2Shortcut.map['ָ'] = '@';  // Qamats       
+            Foreign2Shortcut.map['ַ'] = 'a';  // Patah        
+            Foreign2Shortcut.map['ֶ'] = 'e';  // Segol        
+            Foreign2Shortcut.map['ִ'] = 'I';  // Hiriq        
+            Foreign2Shortcut.map['ֹ'] = 'o';  // Holam        
+            Foreign2Shortcut.map['ֻ'] = 'u';  // Qubuts       
             break;
 
         case "greek":
-            foreign2shortcut.map['α'] = 'a';
-            foreign2shortcut.map['β'] = 'b';
-            foreign2shortcut.map['γ'] = 'g';
-            foreign2shortcut.map['δ'] = 'd'; 
-            foreign2shortcut.map['ε'] = 'e'; 
-            foreign2shortcut.map['ζ'] = 'z'; 
-            foreign2shortcut.map['η'] = 'h'; 
-            foreign2shortcut.map['θ'] = 'q'; 
-            foreign2shortcut.map['ι'] = 'i'; 
-            foreign2shortcut.map['κ'] = 'k'; 
-            foreign2shortcut.map['λ'] = 'l'; 
-            foreign2shortcut.map['μ'] = 'm'; 
-            foreign2shortcut.map['ν'] = 'n'; 
-            foreign2shortcut.map['ξ'] = 'x'; 
-            foreign2shortcut.map['ο'] = 'o'; 
-            foreign2shortcut.map['π'] = 'p'; 
-            foreign2shortcut.map['ρ'] = 'r'; 
-            foreign2shortcut.map['ς'] = 'c'; 
-            foreign2shortcut.map['σ'] = 's'; 
-            foreign2shortcut.map['τ'] = 't'; 
-            foreign2shortcut.map['υ'] = 'u'; 
-            foreign2shortcut.map['φ'] = 'f'; 
-            foreign2shortcut.map['χ'] = 'j'; 
-            foreign2shortcut.map['ψ'] = 'q'; 
-            foreign2shortcut.map['ω'] = 'w'; 
+            Foreign2Shortcut.map['α'] = 'a';
+            Foreign2Shortcut.map['β'] = 'b';
+            Foreign2Shortcut.map['γ'] = 'g';
+            Foreign2Shortcut.map['δ'] = 'd'; 
+            Foreign2Shortcut.map['ε'] = 'e'; 
+            Foreign2Shortcut.map['ζ'] = 'z'; 
+            Foreign2Shortcut.map['η'] = 'h'; 
+            Foreign2Shortcut.map['θ'] = 'q'; 
+            Foreign2Shortcut.map['ι'] = 'i'; 
+            Foreign2Shortcut.map['κ'] = 'k'; 
+            Foreign2Shortcut.map['λ'] = 'l'; 
+            Foreign2Shortcut.map['μ'] = 'm'; 
+            Foreign2Shortcut.map['ν'] = 'n'; 
+            Foreign2Shortcut.map['ξ'] = 'x'; 
+            Foreign2Shortcut.map['ο'] = 'o'; 
+            Foreign2Shortcut.map['π'] = 'p'; 
+            Foreign2Shortcut.map['ρ'] = 'r'; 
+            Foreign2Shortcut.map['ς'] = 'c'; 
+            Foreign2Shortcut.map['σ'] = 's'; 
+            Foreign2Shortcut.map['τ'] = 't'; 
+            Foreign2Shortcut.map['υ'] = 'u'; 
+            Foreign2Shortcut.map['φ'] = 'f'; 
+            Foreign2Shortcut.map['χ'] = 'j'; 
+            Foreign2Shortcut.map['ψ'] = 'q'; 
+            Foreign2Shortcut.map['ω'] = 'w'; 
 
-            foreign2shortcut.map['Α'] = 'A';
-            foreign2shortcut.map['Β'] = 'B';
-            foreign2shortcut.map['Γ'] = 'G';
-            foreign2shortcut.map['Δ'] = 'D'; 
-            foreign2shortcut.map['Ε'] = 'E'; 
-            foreign2shortcut.map['Ζ'] = 'Z'; 
-            foreign2shortcut.map['Η'] = 'H'; 
-            foreign2shortcut.map['Θ'] = 'Q'; 
-            foreign2shortcut.map['Ι'] = 'I'; 
-            foreign2shortcut.map['Κ'] = 'K'; 
-            foreign2shortcut.map['Λ'] = 'L'; 
-            foreign2shortcut.map['Μ'] = 'M'; 
-            foreign2shortcut.map['Ν'] = 'N'; 
-            foreign2shortcut.map['Ξ'] = 'X'; 
-            foreign2shortcut.map['Ο'] = 'O'; 
-            foreign2shortcut.map['Π'] = 'P'; 
-            foreign2shortcut.map['Ρ'] = 'R'; 
-            foreign2shortcut.map['Σ'] = 'S'; 
-            foreign2shortcut.map['Τ'] = 'T'; 
-            foreign2shortcut.map['Υ'] = 'U'; 
-            foreign2shortcut.map['Φ'] = 'F'; 
-            foreign2shortcut.map['Χ'] = 'J'; 
-            foreign2shortcut.map['Ψ'] = 'Q'; 
-            foreign2shortcut.map['Ω'] = 'W'; 
+            Foreign2Shortcut.map['Α'] = 'A';
+            Foreign2Shortcut.map['Β'] = 'B';
+            Foreign2Shortcut.map['Γ'] = 'G';
+            Foreign2Shortcut.map['Δ'] = 'D'; 
+            Foreign2Shortcut.map['Ε'] = 'E'; 
+            Foreign2Shortcut.map['Ζ'] = 'Z'; 
+            Foreign2Shortcut.map['Η'] = 'H'; 
+            Foreign2Shortcut.map['Θ'] = 'Q'; 
+            Foreign2Shortcut.map['Ι'] = 'I'; 
+            Foreign2Shortcut.map['Κ'] = 'K'; 
+            Foreign2Shortcut.map['Λ'] = 'L'; 
+            Foreign2Shortcut.map['Μ'] = 'M'; 
+            Foreign2Shortcut.map['Ν'] = 'N'; 
+            Foreign2Shortcut.map['Ξ'] = 'X'; 
+            Foreign2Shortcut.map['Ο'] = 'O'; 
+            Foreign2Shortcut.map['Π'] = 'P'; 
+            Foreign2Shortcut.map['Ρ'] = 'R'; 
+            Foreign2Shortcut.map['Σ'] = 'S'; 
+            Foreign2Shortcut.map['Τ'] = 'T'; 
+            Foreign2Shortcut.map['Υ'] = 'U'; 
+            Foreign2Shortcut.map['Φ'] = 'F'; 
+            Foreign2Shortcut.map['Χ'] = 'J'; 
+            Foreign2Shortcut.map['Ψ'] = 'Q'; 
+            Foreign2Shortcut.map['Ω'] = 'W'; 
             break;
 
         case "transliterated_hebrew":
             for (let a = 97; a<123; ++a)
-                foreign2shortcut.map[String.fromCharCode(a)] = String.fromCharCode(a);
-            foreign2shortcut.map['ʔ'] = '>';
-            foreign2shortcut.map['ʕ'] = '<';
+                Foreign2Shortcut.map[String.fromCharCode(a)] = String.fromCharCode(a);
+            Foreign2Shortcut.map['ʔ'] = '>';
+            Foreign2Shortcut.map['ʕ'] = '<';
             break;
         }
     }
 
+    // Performs a lookup in the table
+    // Parameter:
+    //    letter: The non-Latin character
+    // Returns:
+    //    The Latin shortcut key, or '?' if no shortcut exists
     public static get(letter : string) : string {
-        if (foreign2shortcut.map[letter])
-            return foreign2shortcut.map[letter];
+        if (Foreign2Shortcut.map[letter])
+            return Foreign2Shortcut.map[letter];
         else
             return '?';
     }
 }
 
 
-
+//****************************************************************************************************
+// KeyTable class
+//
+// This class provides the link between shortcut keystrokes and the actions they perform.
+//
+// The class manages three items of information:
+// elements: The IDs of HTML elements to be manipulated by a given keystroke
+// actions: The action performed on the target element (1=check, 2=click, 3=toggle)
+// focus: The ID of the HTML element, if any, to receive input focus when a row is selected
 class KeyTable {
-    private elements : any = [];  // Indexed by qoid, rowid, key, item. Value is element ID
-    private actions : any = [];  // Indexed by qoid, rowid. Value is action (1=check, 2=click, 3=toggle)
-    private focus : any = [];  // Indexed by qoid, rowid. Value is element ID
+    private static elements : any = [];  // Indexed by qoid, rowid, key, item. Value is element ID
+    private static actions : any = [];  // Indexed by qoid, rowid. Value is action
+    private static focus : any = [];  // Indexed by qoid, rowid. Value is element ID
 
 
-    // Action: 1 = check
-    //         2 = click
-    //         3 = toggle
-    public add(card : number, row : number, letter : string, id : string, action : number) {
+    // Adds an action to be performed on a given element.
+    // Parameters:
+    //     card: The question object number
+    //     row: The row on the card for the question object
+    //     letter: The shortcut key
+    //     id: The ID of the HTML element to be manipulated by the keystroke
+    //     action: The actio to be performed on the element (1=check, 2=click, 3=toggle)
+    public static add(card : number, row : number, letter : string, id : string, action : number) {
         if (!this.elements[card]) this.elements[card] = [];
         if (!this.elements[card][row]) this.elements[card][row] = new Object;
         if (!this.elements[card][row][letter]) this.elements[card][row][letter] = [];
@@ -152,33 +177,57 @@ class KeyTable {
         this.actions[card][row] = action;
     }
 
-    public addfocus(card : number, row : number, id : string) {
+    // Adds an element to receive input focus when a row is selected.
+    // Parameters:
+    //     card: The question object number
+    //     row: The row on the card for the question object
+    //     id: The ID of the HTML element to receive input focus
+    public static addfocus(card : number, row : number, id : string) {
         if (!this.focus[card]) this.focus[card] = [];
         this.focus[card][row] = id;
     }
 
-    public get_key(card : number, row : number, letter : string) : string[] {
+    // Returns an array of the IDs of elements to be affected by a given keystroke.
+    // Parameters:
+    //     card: The question object number
+    //     row: The row on the card for the question object
+    //     letter: The shortcut key
+    public static get_element(card : number, row : number, letter : string) : string[] {
         if (!this.elements[card] || !this.elements[card][row])
             return null;
         return this.elements[card][row][letter];
     }
 
-    public get_action(card : number, row : number) : number {
+    // Returns the action to be performed on a given element.
+    // Parameters:
+    //     card: The question object number
+    //     row: The row on the card for the question object
+    public static get_action(card : number, row : number) : number {
         if (!this.actions[card])
             return null;
         return this.actions[card][row];
     }
 
-    public get_focus(card : number, row : number) : number {
+    // Returns the ID of the element to receive input focus when a given row is selected.
+    // Parameters:
+    //     card: The question object number
+    //     row: The row on the card for the question object
+    public static get_focus(card : number, row : number) : number {
         if (!this.focus[card])
             return null;
         return this.focus[card][row];
     }
 }
 
+//****************************************************************************************************
+// Cursor class
+//
+// This class keeps track of the currently selected question object and row and the associated
+// cursor (that is, the > pointing to the selected row).
+//
 class Cursor {
-    public card : number;
-    public row : number;
+    public card : number; // The current question object
+    public row : number;  // The selected row
 
     constructor(private minrow : number, private maxrow : number, private pq : PanelQuestion)
     {
@@ -186,36 +235,44 @@ class Cursor {
         this.row = this.minrow;
     }
 
+    // Hides the cursor for the current row.
     private hide() {
         $(`#ptr_${this.card}_${this.row}`).hide();
     }
 
+    // Displays the cursor for the current row.
+    // This function also scrolls the window to an appropriate position and, if necessary, assigns
+    // input focus.
     private show() {
         $(`#ptr_${this.card}_${this.row}`).show();
 
 
-        // Scroll to previous element (hoping this will center current element)
-        let toppos : number;
+        let toppos : number; // The position to which to scroll
 
         if (this.row==this.minrow)
-            toppos = $('#myview').offset().top - 5;
+            toppos = $('#myview').offset().top - 5; // Scroll position is at the top
         else {
+            // Scroll position is at the element before the one selected
+            
             let prevelem : JQuery = $(`#ptr_${this.card}_${this.row-1}`);
             prevelem.show();                    // Show it...
             toppos = prevelem.offset().top - 5; // ...get its position...
             prevelem.hide();                    // ...and hide it again
+        }
 
-            if ($(`#keyinp_${this.card}_${this.row}`).length) {
-                $(`#keyinp_${this.card}_${this.row}`).focus();
-                $('body').unbind('keydown');
-            }
+        if ($(`#keyinp_${this.card}_${this.row}`).length) {
+            // Assign focus and make sure that keystrokes are not sent to other elements
+            $(`#keyinp_${this.card}_${this.row}`).focus();
+            $('body').unbind('keydown');
         }
         
+        // Scroll
         $('html, body').animate({
             scrollTop: toppos
         }, 50);
     }
 
+    // Goes to a specified question object and row
     public set(c : number = 0, r : number = this.minrow) {
         this.hide();
 
@@ -225,30 +282,20 @@ class Cursor {
         this.show();
     }
 
-    // n is always valid
-    public prevNextCard(n : number /* 1 or -1 */, gotoTop : boolean) {
-        this.set(this.card + n, gotoTop ? this.minrow : this.maxrow-1);
-    }
-
-    // n may not be valid
+    // Moves to the next or previous row
+    // Parameter:
+    //    n: +1 or -1. Indicates direction of movement.
     public prevNextItem(n : number /* 1 or -1 */) {
         if (n>0) {
-            if (this.row+n>=this.maxrow)
-                this.pq.prevNextSubQuestion(n,true);
-            else
+            if (this.row+n<this.maxrow)
                 this.set(this.card, this.row+n);
-
         }
         else {
-            if (this.row+n<this.minrow)
-                this.pq.prevNextSubQuestion(n,false);
-            else
+            if (this.row+n>=this.minrow)
                 this.set(this.card, this.row+n);
         }
     }
 }
-
-
 
 
 //****************************************************************************************************
@@ -268,7 +315,6 @@ class PanelQuestion {
     private subQuizIndex   : number = 0;    // Used to toggle subquestions
     private subQuizMax     : number;        // Used to define max number of subquestions
 
-    private keytable : KeyTable = new KeyTable;
     private cursor : Cursor;
     private keyinps : string[] = [];
     
@@ -348,10 +394,11 @@ class PanelQuestion {
     //
     // Method used to toggle subquestions in a quiz.
     //
-    public prevNextSubQuestion(n : number, gotoTop : boolean): void {
+    public prevNextSubQuestion(n : number): void {
         if (this.subQuizIndex + n >= 0 && this.subQuizIndex + n < this.subQuizMax) {
-            this.subQuizIndex += n; // If the proposed move (n; always 1 or -1) is within the boundaries, proceed...
-            this.cursor.prevNextCard(n,gotoTop);
+            // If the proposed move (n; always 1 or -1) is within the boundaries, proceed...
+            this.subQuizIndex += n;
+            this.cursor.set(this.subQuizIndex + n);
         }
         let i: number;
         let slides: JQuery = $('#quizcontainer').find('.quizcard');
@@ -399,7 +446,7 @@ class PanelQuestion {
         this.qd = qd;
         this.sentence = dict.sentenceSetQuiz;
 
-        foreign2shortcut.init();
+        Foreign2Shortcut.init();
         
         ////////////////////////////////////////////////////////////////////
         // Calculate the Bible reference (the 'location') for this sentence.
@@ -736,7 +783,7 @@ class PanelQuestion {
                                    quiz_div.append(o);
                                    let sc : string = String.fromCharCode(ix+97); // a, b, c, etc.
                                    o.find('.shortcut').text(sc);
-                                   this.keytable.add(+qoid, headInd, sc, o.data('id'), 1);
+                                   KeyTable.add(+qoid, headInd, sc, o.data('id'), 1);
                                }
                               );
 
@@ -1050,17 +1097,17 @@ class PanelQuestion {
                         else
                             letterinput.append(`<div class="delbutton" id="bs_${quizItemID}">&larr;</div>`);
 
-                        this.keytable.add(+qoid, headInd, 'Backspace', `bs_${quizItemID}`, 2);
+                        KeyTable.add(+qoid, headInd, 'Backspace', `bs_${quizItemID}`, 2);
 
                         
                         // Set randomized letter buttons to be inputted in the input field
                         showLetters.forEach((letter: string, i: number) => {
                             //let sc : string = String.fromCharCode(i+97); // a, b, c, etc.
-                            let sc : string = foreign2shortcut.get(letter);
+                            let sc : string = Foreign2Shortcut.get(letter);
                             if (sc!='?') {
                                 let sc_id : string = 'sc' + sc.charCodeAt(0);
                                 letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" id="${sc_id}_${quizItemID}" data-letter="${letter}">${letter}<span class="shortcut keybutton">${sc}</span></div>`);
-                                this.keytable.add(+qoid, headInd, sc, `${sc_id}_${quizItemID}`, 2);
+                                KeyTable.add(+qoid, headInd, sc, `${sc_id}_${quizItemID}`, 2);
                             }
                             else 
                                 letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" data-letter="${letter}">${letter}</div>`);
@@ -1076,7 +1123,7 @@ class PanelQuestion {
                     }
                     else {
                         let vf : JQuery = $(`<div class="inputquizitem"><input id="keyinp_${+qoid}_${headInd}" type="text"></div>`);
-//                        this.keytable.addfocus(+qoid, headInd, `keyinp_${+qoid}_${headInd}`);
+//                        KeyTable.addfocus(+qoid, headInd, `keyinp_${+qoid}_${headInd}`);
                         this.keyinps.push(`keyinp_${+qoid}_${headInd}`);
 
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
@@ -1170,7 +1217,7 @@ class PanelQuestion {
                                            + `<label for="${swsValues[ix].getInternal()}_${quizItemID}">${swsValues[ix].getString()}<span class="shortcut multioption">${sc}</span></label>`
                                            + '</div></td>');
 
-                                this.keytable.add(+qoid, headInd, sc, `${swsValues[ix].getInternal()}_${quizItemID}`, 3);
+                                KeyTable.add(+qoid, headInd, sc, `${swsValues[ix].getInternal()}_${quizItemID}`, 3);
                             }
                             else
                                 row.append('<td></td>');
@@ -1301,7 +1348,7 @@ class PanelQuestion {
                         $.each(optArray,
                                (ix : number, o : JQuery) => {
                                    quiz_div.append(o);
-                                   this.keytable.add(+qoid, headInd, o.data('char'), o.data('id'), 1);
+                                   KeyTable.add(+qoid, headInd, o.data('char'), o.data('id'), 1);
                                }
                               );
 
@@ -1352,7 +1399,7 @@ class PanelQuestion {
 //            }
             else if (event.key==="PageDown")
                 $('#next_question:enabled').click();
-            else if (event.key==="Home")
+            else if (event.key==="End")
                 $('#check_answer').click();
             else if (event.key==="Insert") {
                 $('.shortcut').toggle();
@@ -1360,10 +1407,10 @@ class PanelQuestion {
                 $('.delbutton').toggleClass('noshortcut');
             }
             else {
-                let ids = pq.keytable.get_key(pq.cursor.card, pq.cursor.row, event.key);
+                let ids = KeyTable.get_element(pq.cursor.card, pq.cursor.row, event.key);
 
                 if (ids) {
-                    switch (pq.keytable.get_action(pq.cursor.card, pq.cursor.row)) {
+                    switch (KeyTable.get_action(pq.cursor.card, pq.cursor.row)) {
                     case 1: // Check
                         if (ids.length>1) {
                             // More than one option starts with this character
@@ -1474,15 +1521,9 @@ class PanelQuestion {
 
          // Add previous and next handlers for multiple subquestions
          $('#prevsubquiz').off('click'); // Remove old handler
-         $('#prevsubquiz').on('click',
-                                () => {
-                                    this.prevNextSubQuestion(-1,true);
-                                });
+         $('#prevsubquiz').on('click', () => this.prevNextSubQuestion(-1));
          $('#nextsubquiz').off('click'); // Remove old handler
-         $('#nextsubquiz').on('click',
-                              () => {
-                                  this.prevNextSubQuestion(1,true);
-                                });
+         $('#nextsubquiz').on('click', () => this.prevNextSubQuestion(1));
 
 
 	// Add "Check answer" button handler
