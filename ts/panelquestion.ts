@@ -248,9 +248,15 @@ class Cursor {
     // Displays the cursor for the current row.
     // This function also scrolls the window to an appropriate position and, if necessary, assigns
     // input focus.
-    private static show() {
+    // Parameter:
+    //     force: True if this fuction was called because of a manually set focus. In that case,
+    //            only the cursor mark should be set.
+    
+    private static show(force : boolean = false) {
         $(`#ptr_${Cursor.card}_${Cursor.row}`).show();
 
+        if (force)
+            return;
 
         let toppos : number; // The position to which to scroll
 
@@ -278,27 +284,41 @@ class Cursor {
     }
 
     // Goes to a specified question object and row
-    public static set(c : number = 0, r : number = Cursor.minrow) {
-        console.log("Cursor.set",c,r);
+    // Parameters:
+    //     c: The question object number
+    //     r: The row number.
+    //     force: True if this fuction was called because of a manually set focus. In that case,
+    //            only the cursor mark should be set.
+    public static set(c : number = 0, r : number = Cursor.minrow, force : boolean = false) {
         Cursor.hide();
 
         Cursor.card = c;
         Cursor.row = r;
 
-        Cursor.show();
+        Cursor.show(force);
     }
 
     // Moves to the next or previous row
     // Parameter:
     //    n: +1 or -1. Indicates direction of movement.
-    public static prevNextItem(n : number /* 1 or -1 */) {
+    // Returns:
+    //    True if the cursor was moved, false otherwise
+    public static prevNextItem(n : number /* 1 or -1 */) : boolean {
         if (n>0) {
-            if (Cursor.row+n<Cursor.maxrow)
+            if (Cursor.row+n<Cursor.maxrow) {
                 Cursor.set(Cursor.card, Cursor.row+n);
+                return true;
+            }
+            else
+                return false;
         }
         else {
-            if (Cursor.row+n>=Cursor.minrow)
+            if (Cursor.row+n>=Cursor.minrow) {
                 Cursor.set(Cursor.card, Cursor.row+n);
+                return true;
+            }
+            else
+                return false;
         }
     }
 }
@@ -410,19 +430,19 @@ class PanelQuestion {
         let slides: JQuery = $('#quizcontainer').find('.quizcard');
 
         if (this.subQuizIndex < 1) {
-            $('#prevsubquiz').css({ "visibility": "hidden" }); // hide button if the quizcard is the first
+            $('#prevsubquiz').hide(); // hide button if the quizcard is the first
         };
 
         if (this.subQuizIndex > 0) {
-            $('#prevsubquiz').css({ "visibility": "visible" }); // show button if the index is 1 or higher
+            $('#prevsubquiz').show(); // show button if the index is 1 or higher
         }
 
         if (this.subQuizIndex < slides.length - 1) {
-            $('#nextsubquiz').css({"visibility": "visible"}) // show button if the quizcard is not the last
+            $('#nextsubquiz').show(); // show button if the quizcard is not the last
         };
 
         if (this.subQuizIndex === slides.length - 1) {
-            $('#nextsubquiz').css({"visibility": "hidden"}) // hide button if the quizcard is the last
+            $('#nextsubquiz').hide(); // hide button if the quizcard is the last
         };
 
         // Show the quizcard change
@@ -439,45 +459,30 @@ class PanelQuestion {
           }, 50);
     }
 
-
     //------------------------------------------------------------------------------------------
-    // Constructor method
+    // location_info method
+    //
+    // Handles the "Locate" information in a question
     //
     // Parameter:
-    //     qd: The information required to generate a exercise.
     //     dict: The collection of Emdros objects for this question.
-    //     exam_mode: We're running an exam.
     //
-    constructor(qd : QuizData, dict : Dictionary, exam_mode: boolean) {
-        this.qd = qd;
-        this.sentence = dict.sentenceSetQuiz;
-
-        Foreign2Shortcut.init();
-        
-        ////////////////////////////////////////////////////////////////////
+    private location_info(dict : Dictionary) {
         // Calculate the Bible reference (the 'location') for this sentence.
 
         // We base the location on the first monad in the sentence.
         let smo : SingleMonadObject = dict.getSingleMonadObject(getFirst(this.sentence));
-        let location_realname = ''; // Unlocalized
         this.location = smo.bcv_loc; // Localized
+
+
+        // Save the location for statistics
+        this.question_stat.location = '';
+        
         for (let unix in configuration.universeHierarchy) {
             let unixi : number = +unix;
             if (isNaN(unixi)) continue; // Not numeric
 
-            let uniname : string = configuration.universeHierarchy[unixi].type;
-
-            switch (unixi) {
-            case 0:
-                location_realname += smo.bcv[unixi] + ', ';
-                break;
-            case 2:
-                location_realname += ', ';
-                // Fall through
-            case 1:
-                location_realname += smo.bcv[unixi];
-                break;
-            }
+            this.question_stat.location += smo.bcv[unixi] + (unixi!=2 ? ', ' : '');
         }
 
         // Location functionality: used by locate button in quiz
@@ -494,8 +499,161 @@ class PanelQuestion {
 
         if ($('#locate_cb').prop('checked'))
             $('.location').html(this.location);
+    }
+    
+    //------------------------------------------------------------------------------------------
+    // body_keydown handler
+    //
+    // Handles shortcut characters outside of text input fields.
+    // NOTE: This is an event handler, so it is declared as a field, not a method.
+    //
+    private body_keydown = (event : any) => {
+        console.log('body THIS',this);
+        let pq : PanelQuestion = event.data;
+        let ctrl : boolean = event.ctrlKey || event.metaKey;
+
+        
+        console.log("body KEY:",ctrl ? "CTRL-" + event.key : event.key);
+        
+        if (event.key==="PageDown")
+            $('#nextsubquiz:visible').click();
+        else if (event.key==="PageUp")
+            $('#prevsubquiz:visible').click();
+        else if (event.key==="ArrowDown" && !ctrl)
+            Cursor.prevNextItem(1);
+        else if (event.key==="ArrowUp")
+            Cursor.prevNextItem(-1);
+        else if (event.key==="ArrowDown" && ctrl)
+            $('#next_question:enabled').click();
+        else if (event.key==="h" && ctrl)
+            $('#check_answer').click();
+        else if (event.key==="j" && ctrl)
+            $('#show_answer').click();
+        else if (event.key==="s" && ctrl) {
+            $('.shortcut').toggle();
+        }
+        else if (!ctrl) {
+            let ids = pq.keytable.get_element(Cursor.card, Cursor.row, event.key);
+
+            if (ids) {
+                switch (pq.keytable.get_action(Cursor.card, Cursor.row)) {
+                case 1: // Check
+                    if (ids.length>1) {
+                        // More than one option starts with this character
+                        for (let i in ids) {
+                            if (isNaN(+i)) continue; // Not numeric
+
+                            if ($(`#${ids[i]}`).prop('checked')) {
+                                let i1 : number = +i+1;
+                                if (i1==ids.length)
+                                    i1 = 0;
+                                $(`#${ids[i1]}`).prop('checked',true);
+                                $(`#${ids[i1]}`).change();
+                                return false;
+                            }
+                        }
+                        // If we reach this point, no item starting the character has been checked
+                    }
+                    $(`#${ids[0]}`).prop('checked',true);
+                    $(`#${ids[0]}`).change();
+                    break;
+
+                case 2: // Click
+                    $(`#${ids[0]}`).click();
+                    $(`#${ids[0]}`).change();
+                    break;
+
+                case 3: // Toggle
+                    $(`#${ids[0]}`).prop('checked', !$(`#${ids[0]}`).prop('checked'));
+                    $(`#${ids[0]}`).change();
+                }
+            }
+            else
+                return true;
+        }
+        else
+            return true;
+
+        return false;
+    }
+
+    //------------------------------------------------------------------------------------------
+    // textfield_keydown handler
+    //
+    // Handles shortcut characters inside text input fields.
+    // NOTE: This is an event handler, so it is declared as a field, not a method.
+    //
+    private textfield_keydown = (event : any) => {
+        console.log('textfield THIS',this);
+
+        let pq : PanelQuestion = event.data;
+        let ctrl : boolean = event.ctrlKey || event.metaKey;
+
+        console.log("textfield KEY:",ctrl ? "CTRL-" + event.key : event.key);
+
+        if (event.key==="ArrowDown") {
+            if (Cursor.prevNextItem(1))
+                $(event.target).blur();
+            return false;
+        }
+        else if (event.key==="ArrowUp") {
+            if (Cursor.prevNextItem(-1))
+                $(event.target).blur();
+            return false;
+        }
+        else if (event.key==="PageDown") {
+            if ($('#nextsubquiz').is(':visible')) {
+                $(event.target).blur();
+                $('#nextsubquiz:visible').click();
+            }
+            return false;
+        }
+        else if (event.key==="PageUp") {
+            if ($('#prevsubquiz').is(':visible')) {
+                $(event.target).blur();
+                $('#prevsubquiz:visible').click();
+            }
+            return false;
+        }
+        else if (event.key==="ArrowDown" && ctrl) {
+            $('#next_question:enabled').click();
+            return false;
+        }
+        else if (event.key==="h" && ctrl) {
+            $('#check_answer').click();
+            return false;
+        }
+        else if (event.key==="j" && ctrl) {
+            $('#show_answer').click();
+            return false;
+        }
+        else if (event.key==="s" && ctrl) {
+            $('.shortcut').toggle();
+            return false;
+        }
+
+        return true;
+    }
 
 
+    
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Parameters:
+    //     qd: The information required to generate a exercise.
+    //     dict: The collection of Emdros objects for this question.
+    //     exam_mode: We're running an exam.
+    //
+    constructor(qd : QuizData, dict : Dictionary, exam_mode: boolean) {
+        this.qd = qd;
+        this.sentence = dict.sentenceSetQuiz;
+
+        Foreign2Shortcut.init();
+        this.location_info(dict);
+
+        // Save question text for statistics
+        this.question_stat.text = dict.generateSentenceHtml(qd);
 
         ///////////////////////////////////
         // Generate table of question items
@@ -513,10 +671,6 @@ class PanelQuestion {
         let hasForeignInput : boolean           = false;                             // Do we need a virtual keyboard?
         let quizItemID      : number            = 0;                                 // Counts quizitems to be used to group radio buttons together (see name attribute)
 
-
-        // Save question text and location for statistics
-        this.question_stat.text = dict.generateSentenceHtml(qd);
-        this.question_stat.location = location_realname;
 
         /////////////////////////////////////////////////
         // CREATE TABLE ENTRIES FOR EACH QUESTION CARD //
@@ -1127,8 +1281,7 @@ class PanelQuestion {
                         v = cwyn.getJQuery();
                     }
                     else {
-                        let vf : JQuery = $(`<div class="inputquizitem"><input id="keyinp_${+qoid}_${headInd}" type="text"></div>`);
-//                        this.keytable.addfocus(+qoid, headInd, `keyinp_${+qoid}_${headInd}`);
+                        let vf : JQuery = $(`<div class="inputquizitem"><input id="keyinp_${+qoid}_${headInd}" data-qoid="${+qoid}" data-row="${headInd}" type="text"></div>`);
                         this.keyinps.push(`keyinp_${+qoid}_${headInd}`);
 
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
@@ -1376,113 +1529,16 @@ class PanelQuestion {
             Cursor.set();
         }
 
-
-        let body_keydown = function onPress(event : any) {
-            let pq : PanelQuestion = event.data;
-
-            console.log("KEY:",event.key);
-            
-            if (event.key==="x") {
-                console.log('body - x - return false');
-                return false;
-            }
-            if (event.key==="y") {
-                console.log('body - y - return true');
-                return true;
-            }
-            if (event.key==="ArrowRight")
-                $('#nextsubquiz:visible').click();
-            else if (event.key==="ArrowLeft")
-                $('#prevsubquiz:visible').click();
-            else if (event.key==="ArrowDown")
-                Cursor.prevNextItem(1);
-            else if (event.key==="ArrowUp")
-                Cursor.prevNextItem(-1);
-//            else if (event.key==="F") {
-//                $('#xyzzy_0').focus();
-//                $('body').unbind('keydown');
-//            }
-            else if (event.key==="PageDown")
-                $('#next_question:enabled').click();
-            else if (event.key==="End")
-                $('#check_answer').click();
-            else if (event.key==="Insert") {
-                $('.shortcut').toggle();
-                $('.inputbutton').toggleClass('noshortcut');
-                $('.delbutton').toggleClass('noshortcut');
-            }
-            else {
-                let ids = pq.keytable.get_element(Cursor.card, Cursor.row, event.key);
-
-                if (ids) {
-                    switch (pq.keytable.get_action(Cursor.card, Cursor.row)) {
-                    case 1: // Check
-                        if (ids.length>1) {
-                            // More than one option starts with this character
-                            for (let i in ids) {
-                                if (isNaN(+i)) continue; // Not numeric
-
-                                if ($(`#${ids[i]}`).prop('checked')) {
-                                    let i1 : number = +i+1;
-                                    if (i1==ids.length)
-                                        i1 = 0;
-                                    $(`#${ids[i1]}`).prop('checked',true);
-                                    $(`#${ids[i1]}`).change();
-                                    return false;
-                                }
-                            }
-                            // If we reach this point, no item starting the character has been checked
-                        }
-                        $(`#${ids[0]}`).prop('checked',true);
-                        $(`#${ids[0]}`).change();
-                        break;
-
-                    case 2: // Click
-                        $(`#${ids[0]}`).click();
-                        $(`#${ids[0]}`).change();
-                        break;
-
-                    case 3: // Toggle
-                        $(`#${ids[0]}`).prop('checked', !$(`#${ids[0]}`).prop('checked'));
-                        $(`#${ids[0]}`).change();
-                    }
-                }
-                else
-                    return true;
-            }
-
-            return false;
-        };
-        
-
-        let xyzzy_keydown = function onPress(event : any) {
-            let pq : PanelQuestion = event.data;
-            console.log('xyzzy_keydown',event.key,this);
-            if (event.key==="ArrowDown") {
-                Cursor.prevNextItem(1);
-                $(this).blur();
-                $('body').keydown(pq, body_keydown);
-                return false;
-            }
-            else if (event.key==="ArrowUp") {
-                Cursor.prevNextItem(-1);
-                $(this).blur();
-                $('body').keydown(pq, body_keydown);
-                return false;
-            }
-
-            return true;
-        };
-
-
         for (let keyi of this.keyinps)
-            $(`#${keyi}`).keydown(this, xyzzy_keydown);
-                                 
+            $(`#${keyi}`)
+            .keydown(this, this.textfield_keydown)
+            .focus(event => Cursor.set($(event.target).data('qoid'),$(event.target).data('row'),true))
+            .blur(() => $('body').unbind('keydown').keydown(this, this.body_keydown));
         
         $('body')
             .unbind('keydown')
             .keydown(this, // Will be stored in event.data when a key is pressed
-                     body_keydown);
+                     this.body_keydown);
 
 
         this.subQuizMax = quizCardNum
@@ -1500,9 +1556,13 @@ class PanelQuestion {
 
         // Add prev and next buttons to slide through multiple subquizzes
         if (quizCardNum > 1) {
-            quizContainer.prepend('<div class="prev-next-btn prev" id="prevsubquiz" style="visibility:hidden;">&#10094;</div>');
+            let prevsubquiz : JQuery = $('<div class="prev-next-btn prev" id="prevsubquiz">&#10094;</div>');
+            quizContainer.prepend(prevsubquiz);
+            prevsubquiz.hide();
+            
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
         }
+        
 
         $('div.inputbutton').click(function () {
             let letter: string = $(this).data('letter'); //String($(this).text());
@@ -1541,13 +1601,8 @@ class PanelQuestion {
                                             let a: Answer = this.vAnswers[aix];
                                             a.checkIt(false);
                                         }
-
-//                                        $('html, body').animate({
-//                                            scrollTop: $('#myview').offset().top - 5
-//                                        }, 50);
-
                                     }
-                                    );
+                                   );
 
         // Add "Show answer" button handler
         $('button#show_answer').off('click'); // Remove old handler
@@ -1572,14 +1627,10 @@ class PanelQuestion {
         case 'lg':
         case 'xl':
             $('.shortcut').show();
-            $('.inputbutton').removeClass('noshortcut');
-            $('.delbutton').removeClass('noshortcut');
             break;
 
         default:
             $('.shortcut').hide();
-            $('.inputbutton').addClass('noshortcut');
-            $('.delbutton').addClass('noshortcut');
             break;
         }
 

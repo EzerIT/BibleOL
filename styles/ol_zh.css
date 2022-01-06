@@ -830,12 +830,6 @@ span.inputshow.greek {
   font-weight: normal;
   height: 50px;
   line-height: 50px;
-  font-size: 18pt;
-}
-.letterinput .delbutton.noshortcut,
-.letterinput .inputbutton.noshortcut {
-  height: 50px;
-  line-height: 50px;
 }
 .letterinput .delbutton:hover,
 .letterinput .inputbutton:hover {
