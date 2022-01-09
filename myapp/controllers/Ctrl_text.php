@@ -176,7 +176,7 @@ class Ctrl_text extends MY_Controller {
           if ($numq <= 0) {
             $numq = 10;
           }
-          $this->show_quiz_common($_GET['quiz'], $numq, $examid=$_GET['examid'], $exercise_lst=$_GET['exercise_lst']);
+          $this->show_quiz_common($_GET['quiz'], $numq, $universe = null, $examid=$_GET['examid'], $exercise_lst=$_GET['exercise_lst']);
 
         } else {
           $this->show_quiz_common($_GET['quiz'], $number_of_quizzes);
@@ -255,27 +255,44 @@ class Ctrl_text extends MY_Controller {
                         break;
                 }
             }
+
+            $display_data = array(
+              'is_quiz' => true,
+              'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
+              'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
+              'quizData_json' => $this->mod_askemdros->quiz_data_json,
+              'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
+              'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
+              'l10n_json' => $this->mod_askemdros->l10n_json,
+              'l10n_js_json' => $this->mod_localize->get_json(),
+              'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
+              'is_logged_in' => $this->mod_users->is_logged_in(),
+            );
+
+            $exam_data = array(
+              'is_exam' => $examid !== null,
+              'examid' => $examid,
+              'exercise_lst' => $exercise_lst,
+              'quizid' => $this->quiz_data->quizid,
+            );
+
+            if ($examid) {
+              $display_data = array_merge($display_data, $exam_data);
+            }
+
+
             $this->load->view('view_top1', array('title' => $this->lang->line('quiz'),
                                                  'css_list' => array('styles/selectbox.css'),
                                                  'js_list' => $javascripts));
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => false));
-            $this->load->view('view_text_display', array('is_quiz' => true,
-                                                         'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
-                                                         'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
-                                                         'quizData_json' => $this->mod_askemdros->quiz_data_json,
-                                                         'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
-                                                         'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
-                                                         'l10n_json' => $this->mod_askemdros->l10n_json,
-                                                         'l10n_js_json' => $this->mod_localize->get_json(),
-                                                         'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
-                                                         'is_logged_in' => $this->mod_users->is_logged_in(),
-                                                         'is_exam' => $examid != null,
-                                                         'examid' => $examid,
-                                                         'exercise_lst' => $exercise_lst,
-                                                         'quizid' => $this->quiz_data->quizid));
-            $this->load->view('view_bottom');
+            if ($examid === null) {
+              $this->load->view('view_menu_bar', array('langselect' => false));
+            }
+            $this->load->view('view_text_display', $display_data);
+            if ($examid === null) {
+              $this->load->view('view_bottom');
+            }
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('quiz'));
