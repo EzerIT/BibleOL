@@ -498,6 +498,7 @@ div.selectbutton label:hover {
   position: relative;
   border: solid 1px;
   line-height: 10px;
+  direction: ltr;
 }
 .shortcut.multichoice {
   right: 1.3em;
@@ -827,12 +828,6 @@ span.inputshow.greek {
   width: 50px;
   text-align: center;
   font-weight: normal;
-  height: 50px;
-  line-height: 50px;
-  font-size: 18pt;
-}
-.letterinput .delbutton.noshortcut,
-.letterinput .inputbutton.noshortcut {
   height: 50px;
   line-height: 50px;
 }

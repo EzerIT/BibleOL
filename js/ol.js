@@ -1491,10 +1491,130 @@ var Answer = (function () {
     };
     return Answer;
 }());
+var Foreign2Shortcut = (function () {
+    function Foreign2Shortcut() {
+    }
+    Foreign2Shortcut.init = function () {
+        switch (configuration.charSet) {
+            case 'hebrew':
+                Foreign2Shortcut.map['א'] = '>';
+                Foreign2Shortcut.map['ב'] = 'b';
+                Foreign2Shortcut.map['ג'] = 'g';
+                Foreign2Shortcut.map['ד'] = 'd';
+                Foreign2Shortcut.map['ה'] = 'h';
+                Foreign2Shortcut.map['ו'] = 'w';
+                Foreign2Shortcut.map['ז'] = 'z';
+                Foreign2Shortcut.map['ח'] = 'x';
+                Foreign2Shortcut.map['ט'] = 'v';
+                Foreign2Shortcut.map['י'] = 'j';
+                Foreign2Shortcut.map['ך'] = 'K';
+                Foreign2Shortcut.map['כ'] = 'k';
+                Foreign2Shortcut.map['ל'] = 'l';
+                Foreign2Shortcut.map['ם'] = 'M';
+                Foreign2Shortcut.map['מ'] = 'm';
+                Foreign2Shortcut.map['ן'] = 'N';
+                Foreign2Shortcut.map['נ'] = 'n';
+                Foreign2Shortcut.map['ס'] = 's';
+                Foreign2Shortcut.map['ע'] = '<';
+                Foreign2Shortcut.map['ף'] = 'P';
+                Foreign2Shortcut.map['פ'] = 'p';
+                Foreign2Shortcut.map['ץ'] = 'Y';
+                Foreign2Shortcut.map['צ'] = 'y';
+                Foreign2Shortcut.map['ק'] = 'q';
+                Foreign2Shortcut.map['ר'] = 'r';
+                Foreign2Shortcut.map['שׁ'] = 'c';
+                Foreign2Shortcut.map['שׂ'] = 'f';
+                Foreign2Shortcut.map['ש'] = '#';
+                Foreign2Shortcut.map['ת'] = 't';
+                Foreign2Shortcut.map['־'] = '&';
+                Foreign2Shortcut.map['ֿ'] = '2';
+                Foreign2Shortcut.map['ּ'] = '.';
+                Foreign2Shortcut.map['ֽ'] = '$';
+                Foreign2Shortcut.map['ְ'] = ':';
+                Foreign2Shortcut.map['ֳ'] = '+';
+                Foreign2Shortcut.map['ֲ'] = 'A';
+                Foreign2Shortcut.map['ֱ'] = 'E';
+                Foreign2Shortcut.map['ֵ'] = '1';
+                Foreign2Shortcut.map['ָ'] = '@';
+                Foreign2Shortcut.map['ַ'] = 'a';
+                Foreign2Shortcut.map['ֶ'] = 'e';
+                Foreign2Shortcut.map['ִ'] = 'I';
+                Foreign2Shortcut.map['ֹ'] = 'o';
+                Foreign2Shortcut.map['ֻ'] = 'u';
+                break;
+            case "greek":
+                Foreign2Shortcut.map['α'] = 'a';
+                Foreign2Shortcut.map['β'] = 'b';
+                Foreign2Shortcut.map['γ'] = 'g';
+                Foreign2Shortcut.map['δ'] = 'd';
+                Foreign2Shortcut.map['ε'] = 'e';
+                Foreign2Shortcut.map['ζ'] = 'z';
+                Foreign2Shortcut.map['η'] = 'h';
+                Foreign2Shortcut.map['θ'] = 'q';
+                Foreign2Shortcut.map['ι'] = 'i';
+                Foreign2Shortcut.map['κ'] = 'k';
+                Foreign2Shortcut.map['λ'] = 'l';
+                Foreign2Shortcut.map['μ'] = 'm';
+                Foreign2Shortcut.map['ν'] = 'n';
+                Foreign2Shortcut.map['ξ'] = 'x';
+                Foreign2Shortcut.map['ο'] = 'o';
+                Foreign2Shortcut.map['π'] = 'p';
+                Foreign2Shortcut.map['ρ'] = 'r';
+                Foreign2Shortcut.map['ς'] = 'c';
+                Foreign2Shortcut.map['σ'] = 's';
+                Foreign2Shortcut.map['τ'] = 't';
+                Foreign2Shortcut.map['υ'] = 'u';
+                Foreign2Shortcut.map['φ'] = 'f';
+                Foreign2Shortcut.map['χ'] = 'j';
+                Foreign2Shortcut.map['ψ'] = 'q';
+                Foreign2Shortcut.map['ω'] = 'w';
+                Foreign2Shortcut.map['Α'] = 'A';
+                Foreign2Shortcut.map['Β'] = 'B';
+                Foreign2Shortcut.map['Γ'] = 'G';
+                Foreign2Shortcut.map['Δ'] = 'D';
+                Foreign2Shortcut.map['Ε'] = 'E';
+                Foreign2Shortcut.map['Ζ'] = 'Z';
+                Foreign2Shortcut.map['Η'] = 'H';
+                Foreign2Shortcut.map['Θ'] = 'Q';
+                Foreign2Shortcut.map['Ι'] = 'I';
+                Foreign2Shortcut.map['Κ'] = 'K';
+                Foreign2Shortcut.map['Λ'] = 'L';
+                Foreign2Shortcut.map['Μ'] = 'M';
+                Foreign2Shortcut.map['Ν'] = 'N';
+                Foreign2Shortcut.map['Ξ'] = 'X';
+                Foreign2Shortcut.map['Ο'] = 'O';
+                Foreign2Shortcut.map['Π'] = 'P';
+                Foreign2Shortcut.map['Ρ'] = 'R';
+                Foreign2Shortcut.map['Σ'] = 'S';
+                Foreign2Shortcut.map['Τ'] = 'T';
+                Foreign2Shortcut.map['Υ'] = 'U';
+                Foreign2Shortcut.map['Φ'] = 'F';
+                Foreign2Shortcut.map['Χ'] = 'J';
+                Foreign2Shortcut.map['Ψ'] = 'Q';
+                Foreign2Shortcut.map['Ω'] = 'W';
+                break;
+            case "transliterated_hebrew":
+                for (var a = 97; a < 123; ++a)
+                    Foreign2Shortcut.map[String.fromCharCode(a)] = String.fromCharCode(a);
+                Foreign2Shortcut.map['ʔ'] = '>';
+                Foreign2Shortcut.map['ʕ'] = '<';
+                break;
+        }
+    };
+    Foreign2Shortcut.get = function (letter) {
+        if (Foreign2Shortcut.map[letter])
+            return Foreign2Shortcut.map[letter];
+        else
+            return '?';
+    };
+    Foreign2Shortcut.map = {};
+    return Foreign2Shortcut;
+}());
 var KeyTable = (function () {
     function KeyTable() {
         this.elements = [];
         this.actions = [];
+        this.focus = [];
     }
     KeyTable.prototype.add = function (card, row, letter, id, action) {
         if (!this.elements[card])
@@ -1508,7 +1628,12 @@ var KeyTable = (function () {
             this.actions[card] = [];
         this.actions[card][row] = action;
     };
-    KeyTable.prototype.get_key = function (card, row, letter) {
+    KeyTable.prototype.addfocus = function (card, row, id) {
+        if (!this.focus[card])
+            this.focus[card] = [];
+        this.focus[card][row] = id;
+    };
+    KeyTable.prototype.get_element = function (card, row, letter) {
         if (!this.elements[card] || !this.elements[card][row])
             return null;
         return this.elements[card][row][letter];
@@ -1518,57 +1643,73 @@ var KeyTable = (function () {
             return null;
         return this.actions[card][row];
     };
+    KeyTable.prototype.get_focus = function (card, row) {
+        if (!this.focus[card])
+            return null;
+        return this.focus[card][row];
+    };
     return KeyTable;
 }());
 var Cursor = (function () {
-    function Cursor(minrow, maxrow, pq) {
-        this.minrow = minrow;
-        this.maxrow = maxrow;
-        this.pq = pq;
-        this.card = 0;
-        this.row = this.minrow;
+    function Cursor() {
     }
-    Cursor.prototype.hide = function () {
-        $("#ptr_" + this.card + "_" + this.row).hide();
+    Cursor.init = function (minrow, maxrow) {
+        Cursor.minrow = minrow;
+        Cursor.maxrow = maxrow;
+        Cursor.card = 0;
+        Cursor.row = minrow;
     };
-    Cursor.prototype.show = function () {
-        $("#ptr_" + this.card + "_" + this.row).show();
-        var toppos;
-        if (this.row == this.minrow)
-            toppos = $('#myview').offset().top - 5;
-        else {
-            var prevelem = $("#ptr_" + this.card + "_" + (this.row - 1));
-            prevelem.show();
-            toppos = prevelem.offset().top - 5;
-            prevelem.hide();
+    Cursor.hide = function () {
+        $("#ptr_" + Cursor.card + "_" + Cursor.row).hide();
+    };
+    Cursor.show = function (force) {
+        if (force === void 0) { force = false; }
+        $("#ptr_" + Cursor.card + "_" + Cursor.row).show();
+        if (force)
+            return;
+        var scrollToPos;
+        var questiontop = $('#myview').offset().top - 5;
+        var top = $("#row_" + Cursor.card + "_" + Cursor.row).offset().top;
+        var bottom = top + $("#row_" + Cursor.card + "_" + Cursor.row).height() + 10;
+        if (bottom - window.scrollY >= window.innerHeight || top - window.scrollY < 0) {
+            if (questiontop + window.innerHeight >= bottom)
+                scrollToPos = questiontop;
+            else
+                scrollToPos = bottom - window.innerHeight;
+        }
+        if ($("#keyinp_" + Cursor.card + "_" + Cursor.row).length) {
+            $("#keyinp_" + Cursor.card + "_" + Cursor.row).focus();
+            $('body').unbind('keydown');
         }
         $('html, body').animate({
-            scrollTop: toppos
+            scrollTop: scrollToPos
         }, 50);
     };
-    Cursor.prototype.set = function (c, r) {
+    Cursor.set = function (c, r, force) {
         if (c === void 0) { c = 0; }
-        if (r === void 0) { r = this.minrow; }
-        this.hide();
-        this.card = c;
-        this.row = r;
-        this.show();
+        if (r === void 0) { r = Cursor.minrow; }
+        if (force === void 0) { force = false; }
+        Cursor.hide();
+        Cursor.card = c;
+        Cursor.row = r;
+        Cursor.show(force);
     };
-    Cursor.prototype.prevNextCard = function (n, gotoTop) {
-        this.set(this.card + n, gotoTop ? this.minrow : this.maxrow - 1);
-    };
-    Cursor.prototype.prevNextItem = function (n) {
+    Cursor.prevNextItem = function (n) {
         if (n > 0) {
-            if (this.row + n >= this.maxrow)
-                this.pq.prevNextSubQuestion(n, true);
+            if (Cursor.row + n < Cursor.maxrow) {
+                Cursor.set(Cursor.card, Cursor.row + n);
+                return true;
+            }
             else
-                this.set(this.card, this.row + n);
+                return false;
         }
         else {
-            if (this.row + n < this.minrow)
-                this.pq.prevNextSubQuestion(n, false);
+            if (Cursor.row + n >= Cursor.minrow) {
+                Cursor.set(Cursor.card, Cursor.row + n);
+                return true;
+            }
             else
-                this.set(this.card, this.row + n);
+                return false;
         }
     };
     return Cursor;
@@ -1581,39 +1722,115 @@ var PanelQuestion = (function () {
         this.question_stat = new QuestionStatistics;
         this.subQuizIndex = 0;
         this.keytable = new KeyTable;
+        this.keyinps = [];
+        this.body_keydown = function (event) {
+            var pq = event.data;
+            var ctrl = event.ctrlKey || event.metaKey;
+            if (event.key === "PageDown")
+                $('#nextsubquiz:visible').click();
+            else if (event.key === "PageUp")
+                $('#prevsubquiz:visible').click();
+            else if (event.key === "ArrowDown" && !ctrl)
+                Cursor.prevNextItem(1);
+            else if (event.key === "ArrowUp")
+                Cursor.prevNextItem(-1);
+            else if (event.key === "ArrowDown" && ctrl)
+                $('#next_question:enabled').click();
+            else if (event.key === "g" && ctrl)
+                $('#check_answer').click();
+            else if (event.key === "j" && ctrl)
+                $('#show_answer').click();
+            else if (event.key === "s" && ctrl) {
+                $('.shortcut').toggle();
+            }
+            else if (!ctrl) {
+                var ids = pq.keytable.get_element(Cursor.card, Cursor.row, event.key);
+                if (ids) {
+                    switch (pq.keytable.get_action(Cursor.card, Cursor.row)) {
+                        case 1:
+                            if (ids.length > 1) {
+                                for (var i in ids) {
+                                    if (isNaN(+i))
+                                        continue;
+                                    if ($("#" + ids[i]).prop('checked')) {
+                                        var i1 = +i + 1;
+                                        if (i1 == ids.length)
+                                            i1 = 0;
+                                        $("#" + ids[i1]).prop('checked', true);
+                                        $("#" + ids[i1]).change();
+                                        return false;
+                                    }
+                                }
+                            }
+                            $("#" + ids[0]).prop('checked', true);
+                            $("#" + ids[0]).change();
+                            break;
+                        case 2:
+                            $("#" + ids[0]).click();
+                            $("#" + ids[0]).change();
+                            break;
+                        case 3:
+                            $("#" + ids[0]).prop('checked', !$("#" + ids[0]).prop('checked'));
+                            $("#" + ids[0]).change();
+                    }
+                }
+                else
+                    return true;
+            }
+            else
+                return true;
+            return false;
+        };
+        this.textfield_keydown = function (event) {
+            var pq = event.data;
+            var ctrl = event.ctrlKey || event.metaKey;
+            if (event.key === "ArrowDown" && !ctrl) {
+                if (Cursor.prevNextItem(1))
+                    $(event.target).blur();
+                return false;
+            }
+            else if (event.key === "ArrowUp") {
+                if (Cursor.prevNextItem(-1))
+                    $(event.target).blur();
+                return false;
+            }
+            else if (event.key === "PageDown") {
+                if ($('#nextsubquiz').is(':visible')) {
+                    $(event.target).blur();
+                    $('#nextsubquiz:visible').click();
+                }
+                return false;
+            }
+            else if (event.key === "PageUp") {
+                if ($('#prevsubquiz').is(':visible')) {
+                    $(event.target).blur();
+                    $('#prevsubquiz:visible').click();
+                }
+                return false;
+            }
+            else if (event.key === "ArrowDown" && ctrl) {
+                $('#next_question:enabled').click();
+                return false;
+            }
+            else if (event.key === "g" && ctrl) {
+                $('#check_answer').click();
+                return false;
+            }
+            else if (event.key === "j" && ctrl) {
+                $('#show_answer').click();
+                return false;
+            }
+            else if (event.key === "s" && ctrl) {
+                $('.shortcut').toggle();
+                return false;
+            }
+            return true;
+        };
         this.qd = qd;
         this.sentence = dict.sentenceSetQuiz;
-        var smo = dict.getSingleMonadObject(getFirst(this.sentence));
-        var location_realname = '';
-        this.location = smo.bcv_loc;
-        for (var unix in configuration.universeHierarchy) {
-            var unixi = +unix;
-            if (isNaN(unixi))
-                continue;
-            var uniname = configuration.universeHierarchy[unixi].type;
-            switch (unixi) {
-                case 0:
-                    location_realname += smo.bcv[unixi] + ', ';
-                    break;
-                case 2:
-                    location_realname += ', ';
-                case 1:
-                    location_realname += smo.bcv[unixi];
-                    break;
-            }
-        }
-        if (this.qd.maylocate) {
-            $('input#locate_cb').on('click', null, this.location, function (e) {
-                if ($(this).prop('checked'))
-                    $('.location').html(e.data);
-                else
-                    $('.location').html('');
-            });
-        }
-        else
-            $('#locate_choice').hide();
-        if ($('#locate_cb').prop('checked'))
-            $('.location').html(this.location);
+        Foreign2Shortcut.init();
+        this.location_info(dict);
+        this.question_stat.text = dict.generateSentenceHtml(qd);
         var dontShow = qd.quizFeatures.dontShow;
         var showFeatures = qd.quizFeatures.showFeatures;
         var requestFeatures = qd.quizFeatures.requestFeatures;
@@ -1622,8 +1839,6 @@ var PanelQuestion = (function () {
         var qoFeatures = this.buildQuizObjectFeatureList();
         var hasForeignInput = false;
         var quizItemID = 0;
-        this.question_stat.text = dict.generateSentenceHtml(qd);
-        this.question_stat.location = location_realname;
         var questionheaders = [];
         var headInd = 0;
         if (dontShow) {
@@ -1711,8 +1926,7 @@ var PanelQuestion = (function () {
                     ++headInd;
                 }
             }
-            if (!this_2.cursor)
-                this_2.cursor = new Cursor(headInd, headLen, this_2);
+            Cursor.init(headInd, headLen);
             var _loop_3 = function (rfi) {
                 if (isNaN(+rfi))
                     return "continue";
@@ -2020,9 +2234,14 @@ var PanelQuestion = (function () {
                             letterinput_1.append("<div class=\"delbutton\" id=\"bs_" + quizItemID + "\">&larr;</div>");
                         this_2.keytable.add(+qoid, headInd, 'Backspace', "bs_" + quizItemID, 2);
                         showLetters_1.forEach(function (letter, i) {
-                            var sc = String.fromCharCode(i + 97);
-                            letterinput_1.append("<div class=\"inputbutton " + PanelQuestion.charclass(featset) + "\" id=\"" + sc + "_" + quizItemID + "\" data-letter=\"" + letter + "\">" + letter + "<span class=\"shortcut keybutton\">" + sc + "</span></div>");
-                            _this.keytable.add(+qoid, headInd, sc, sc + "_" + quizItemID, 2);
+                            var sc = Foreign2Shortcut.get(letter);
+                            if (sc != '?') {
+                                var sc_id = 'sc' + sc.charCodeAt(0);
+                                letterinput_1.append("<div class=\"inputbutton " + PanelQuestion.charclass(featset) + "\" id=\"" + sc_id + "_" + quizItemID + "\" data-letter=\"" + letter + "\">" + letter + "<span class=\"shortcut keybutton\">" + sc + "</span></div>");
+                                _this.keytable.add(+qoid, headInd, sc, sc_id + "_" + quizItemID, 2);
+                            }
+                            else
+                                letterinput_1.append("<div class=\"inputbutton " + PanelQuestion.charclass(featset) + "\" data-letter=\"" + letter + "\">" + letter + "</div>");
                         });
                         hasForeignInput = true;
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textFieldForeign);
@@ -2031,7 +2250,8 @@ var PanelQuestion = (function () {
                         v = cwyn.getJQuery();
                     }
                     else {
-                        var vf = $('<div class="inputquizitem"><input type="text"></div>');
+                        var vf = $("<div class=\"inputquizitem\"><input id=\"keyinp_" + +qoid + "_" + headInd + "\" data-qoid=\"" + +qoid + "\" data-row=\"" + headInd + "\" type=\"text\"></div>");
+                        this_2.keyinps.push("keyinp_" + +qoid + "_" + headInd);
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
                         cwyn.addKeypressListener();
                         cwyn.addChangeListener();
@@ -2146,7 +2366,7 @@ var PanelQuestion = (function () {
                         v = cwyn.getJQuery();
                     }
                 }
-                var quizRow = $('<tr></tr>');
+                var quizRow = $("<tr id=\"row_" + +qoid + "_" + headInd + "\"></tr>");
                 quizRow.append("<td><span style=\"display:none\" id=\"ptr_" + +qoid + "_" + headInd + "\">&gt;</span></td>");
                 quizRow.append(questionheaders[headInd]);
                 quizRow.append(v);
@@ -2157,69 +2377,22 @@ var PanelQuestion = (function () {
                 _loop_3(rfi);
             }
             this_2.answersPerCard.push(this_2.vAnswers.length);
-            this_2.cursor.set();
+            Cursor.set();
         };
         var this_2 = this;
         for (var qoid in qoFeatures) {
             _loop_2(qoid);
         }
+        for (var _i = 0, _a = this.keyinps; _i < _a.length; _i++) {
+            var keyi = _a[_i];
+            $("#" + keyi)
+                .keydown(this, this.textfield_keydown)
+                .focus(function (event) { return Cursor.set($(event.target).data('qoid'), $(event.target).data('row'), true); })
+                .blur(function () { return $('body').unbind('keydown').keydown(_this, _this.body_keydown); });
+        }
         $('body')
             .unbind('keydown')
-            .keydown(this, function onPress(event) {
-            var pq = event.data;
-            if (event.key === "ArrowRight")
-                $('#nextsubquiz:visible').click();
-            else if (event.key === "ArrowLeft")
-                $('#prevsubquiz:visible').click();
-            else if (event.key === "ArrowDown")
-                pq.cursor.prevNextItem(1);
-            else if (event.key === "ArrowUp")
-                pq.cursor.prevNextItem(-1);
-            else if (event.key === "N")
-                $('#next_question:enabled').click();
-            else if (event.key === "C")
-                $('#check_answer').click();
-            else if (event.key === "S") {
-                $('.shortcut').toggle();
-                $('.inputbutton').toggleClass('noshortcut');
-                $('.delbutton').toggleClass('noshortcut');
-            }
-            else {
-                var ids = pq.keytable.get_key(pq.cursor.card, pq.cursor.row, event.key);
-                if (ids) {
-                    switch (pq.keytable.get_action(pq.cursor.card, pq.cursor.row)) {
-                        case 1:
-                            if (ids.length > 1) {
-                                for (var i in ids) {
-                                    if (isNaN(+i))
-                                        continue;
-                                    if ($("#" + ids[i]).prop('checked')) {
-                                        var i1 = +i + 1;
-                                        if (i1 == ids.length)
-                                            i1 = 0;
-                                        $("#" + ids[i1]).prop('checked', true);
-                                        $("#" + ids[i1]).change();
-                                        return false;
-                                    }
-                                }
-                            }
-                            $("#" + ids[0]).prop('checked', true);
-                            $("#" + ids[0]).change();
-                            break;
-                        case 2:
-                            $("#" + ids[0]).click();
-                            $("#" + ids[0]).change();
-                            break;
-                        case 3:
-                            $("#" + ids[0]).prop('checked', !$("#" + ids[0]).prop('checked'));
-                            $("#" + ids[0]).change();
-                    }
-                }
-                else
-                    return true;
-            }
-            return false;
-        });
+            .keydown(this, this.body_keydown);
         this.subQuizMax = quizCardNum;
         var quizCard = $('.quizcard');
         if (!exam_mode) {
@@ -2229,7 +2402,9 @@ var PanelQuestion = (function () {
                 + '</div>');
         }
         if (quizCardNum > 1) {
-            quizContainer.prepend('<div class="prev-next-btn prev" id="prevsubquiz" style="visibility:hidden;">&#10094;</div>');
+            var prevsubquiz = $('<div class="prev-next-btn prev" id="prevsubquiz">&#10094;</div>');
+            quizContainer.prepend(prevsubquiz);
+            prevsubquiz.hide();
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
         }
         $('div.inputbutton').click(function () {
@@ -2248,13 +2423,9 @@ var PanelQuestion = (function () {
             return false;
         });
         $('#prevsubquiz').off('click');
-        $('#prevsubquiz').on('click', function () {
-            _this.prevNextSubQuestion(-1, true);
-        });
+        $('#prevsubquiz').on('click', function () { return _this.prevNextSubQuestion(-1); });
         $('#nextsubquiz').off('click');
-        $('#nextsubquiz').on('click', function () {
-            _this.prevNextSubQuestion(1, true);
-        });
+        $('#nextsubquiz').on('click', function () { return _this.prevNextSubQuestion(1); });
         $('button#check_answer').off('click');
         $('button#check_answer').on('click', function () {
             var firstAns = _this.subQuizIndex == 0 ? 0 : _this.answersPerCard[_this.subQuizIndex - 1];
@@ -2281,13 +2452,9 @@ var PanelQuestion = (function () {
             case 'lg':
             case 'xl':
                 $('.shortcut').show();
-                $('.inputbutton').removeClass('noshortcut');
-                $('.delbutton').removeClass('noshortcut');
                 break;
             default:
                 $('.shortcut').hide();
-                $('.inputbutton').addClass('noshortcut');
-                $('.delbutton').addClass('noshortcut');
                 break;
         }
         this.question_stat.start_time = Math.round((new Date()).getTime() / 1000);
@@ -2322,26 +2489,25 @@ var PanelQuestion = (function () {
         }
         return qoFeatures;
     };
-    PanelQuestion.prototype.prevNextSubQuestion = function (n, gotoTop) {
+    PanelQuestion.prototype.prevNextSubQuestion = function (n) {
         if (this.subQuizIndex + n >= 0 && this.subQuizIndex + n < this.subQuizMax) {
             this.subQuizIndex += n;
-            this.cursor.prevNextCard(n, gotoTop);
         }
         var i;
         var slides = $('#quizcontainer').find('.quizcard');
         if (this.subQuizIndex < 1) {
-            $('#prevsubquiz').css({ "visibility": "hidden" });
+            $('#prevsubquiz').hide();
         }
         ;
         if (this.subQuizIndex > 0) {
-            $('#prevsubquiz').css({ "visibility": "visible" });
+            $('#prevsubquiz').show();
         }
         if (this.subQuizIndex < slides.length - 1) {
-            $('#nextsubquiz').css({ "visibility": "visible" });
+            $('#nextsubquiz').show();
         }
         ;
         if (this.subQuizIndex === slides.length - 1) {
-            $('#nextsubquiz').css({ "visibility": "hidden" });
+            $('#nextsubquiz').hide();
         }
         ;
         for (i = 0; i < slides.length; i++) {
@@ -2352,9 +2518,30 @@ var PanelQuestion = (function () {
                 slides.slice(i).css({ "display": "none" });
             }
         }
-        $('html, body').animate({
-            scrollTop: $('#myview').offset().top - 5
-        }, 50);
+        Cursor.set(this.subQuizIndex);
+    };
+    PanelQuestion.prototype.location_info = function (dict) {
+        var smo = dict.getSingleMonadObject(getFirst(this.sentence));
+        this.location = smo.bcv_loc;
+        this.question_stat.location = '';
+        for (var unix in configuration.universeHierarchy) {
+            var unixi = +unix;
+            if (isNaN(unixi))
+                continue;
+            this.question_stat.location += smo.bcv[unixi] + (unixi != 2 ? ', ' : '');
+        }
+        if (this.qd.maylocate) {
+            $('input#locate_cb').on('click', null, this.location, function (e) {
+                if ($(this).prop('checked'))
+                    $('.location').html(e.data);
+                else
+                    $('.location').html('');
+            });
+        }
+        else
+            $('#locate_choice').hide();
+        if ($('#locate_cb').prop('checked'))
+            $('.location').html(this.location);
     };
     PanelQuestion.kbid = 1;
     return PanelQuestion;

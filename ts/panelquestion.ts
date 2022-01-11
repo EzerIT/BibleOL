@@ -9,15 +9,163 @@
 /// <reference path="answer.ts" />
 
 
+//****************************************************************************************************
+// Foreign2Shortcut class
+//
+// This class manages the releationship between a non-Latic character set and the associated Latin
+// shortcut key.
+
+class Foreign2Shortcut {
+    private static map : { [foreign:string] : string } = {};
+
+    // Initializes the table
+    public static init() {
+        switch (configuration.charSet) {
+        case 'hebrew':
+            Foreign2Shortcut.map['א'] = '>';
+            Foreign2Shortcut.map['ב'] = 'b'; 
+            Foreign2Shortcut.map['ג'] = 'g'; 
+            Foreign2Shortcut.map['ד'] = 'd'; 
+            Foreign2Shortcut.map['ה'] = 'h'; 
+            Foreign2Shortcut.map['ו'] = 'w'; 
+            Foreign2Shortcut.map['ז'] = 'z'; 
+            Foreign2Shortcut.map['ח'] = 'x'; 
+            Foreign2Shortcut.map['ט'] = 'v'; 
+            Foreign2Shortcut.map['י'] = 'j'; 
+            Foreign2Shortcut.map['ך'] = 'K'; 
+            Foreign2Shortcut.map['כ'] = 'k'; 
+            Foreign2Shortcut.map['ל'] = 'l'; 
+            Foreign2Shortcut.map['ם'] = 'M'; 
+            Foreign2Shortcut.map['מ'] = 'm'; 
+            Foreign2Shortcut.map['ן'] = 'N';
+            Foreign2Shortcut.map['נ'] = 'n';
+            Foreign2Shortcut.map['ס'] = 's';
+            Foreign2Shortcut.map['ע'] = '<';
+            Foreign2Shortcut.map['ף'] = 'P';
+            Foreign2Shortcut.map['פ'] = 'p';
+            Foreign2Shortcut.map['ץ'] = 'Y';
+            Foreign2Shortcut.map['צ'] = 'y';
+            Foreign2Shortcut.map['ק'] = 'q';
+            Foreign2Shortcut.map['ר'] = 'r';
+            Foreign2Shortcut.map['שׁ'] = 'c';
+            Foreign2Shortcut.map['שׂ'] = 'f';
+            Foreign2Shortcut.map['ש'] = '#';
+            Foreign2Shortcut.map['ת'] = 't';
+            Foreign2Shortcut.map['־'] = '&';  // Maqaf
+            Foreign2Shortcut.map['ֿ'] = '2';  // Rafe         
+            Foreign2Shortcut.map['ּ'] = '.';  // Dagesh       
+            Foreign2Shortcut.map['ֽ'] = '$';  // Meteg        
+            Foreign2Shortcut.map['ְ'] = ':';  // Sheva        
+            Foreign2Shortcut.map['ֳ'] = '+';  // Hataf qamats 
+            Foreign2Shortcut.map['ֲ'] = 'A';  // Hataf patah  
+            Foreign2Shortcut.map['ֱ'] = 'E';  // Hataf segol  
+            Foreign2Shortcut.map['ֵ'] = '1';  // Tsere        
+            Foreign2Shortcut.map['ָ'] = '@';  // Qamats       
+            Foreign2Shortcut.map['ַ'] = 'a';  // Patah        
+            Foreign2Shortcut.map['ֶ'] = 'e';  // Segol        
+            Foreign2Shortcut.map['ִ'] = 'I';  // Hiriq        
+            Foreign2Shortcut.map['ֹ'] = 'o';  // Holam        
+            Foreign2Shortcut.map['ֻ'] = 'u';  // Qubuts       
+            break;
+
+        case "greek":
+            Foreign2Shortcut.map['α'] = 'a';
+            Foreign2Shortcut.map['β'] = 'b';
+            Foreign2Shortcut.map['γ'] = 'g';
+            Foreign2Shortcut.map['δ'] = 'd'; 
+            Foreign2Shortcut.map['ε'] = 'e'; 
+            Foreign2Shortcut.map['ζ'] = 'z'; 
+            Foreign2Shortcut.map['η'] = 'h'; 
+            Foreign2Shortcut.map['θ'] = 'q'; 
+            Foreign2Shortcut.map['ι'] = 'i'; 
+            Foreign2Shortcut.map['κ'] = 'k'; 
+            Foreign2Shortcut.map['λ'] = 'l'; 
+            Foreign2Shortcut.map['μ'] = 'm'; 
+            Foreign2Shortcut.map['ν'] = 'n'; 
+            Foreign2Shortcut.map['ξ'] = 'x'; 
+            Foreign2Shortcut.map['ο'] = 'o'; 
+            Foreign2Shortcut.map['π'] = 'p'; 
+            Foreign2Shortcut.map['ρ'] = 'r'; 
+            Foreign2Shortcut.map['ς'] = 'c'; 
+            Foreign2Shortcut.map['σ'] = 's'; 
+            Foreign2Shortcut.map['τ'] = 't'; 
+            Foreign2Shortcut.map['υ'] = 'u'; 
+            Foreign2Shortcut.map['φ'] = 'f'; 
+            Foreign2Shortcut.map['χ'] = 'j'; 
+            Foreign2Shortcut.map['ψ'] = 'q'; 
+            Foreign2Shortcut.map['ω'] = 'w'; 
+
+            Foreign2Shortcut.map['Α'] = 'A';
+            Foreign2Shortcut.map['Β'] = 'B';
+            Foreign2Shortcut.map['Γ'] = 'G';
+            Foreign2Shortcut.map['Δ'] = 'D'; 
+            Foreign2Shortcut.map['Ε'] = 'E'; 
+            Foreign2Shortcut.map['Ζ'] = 'Z'; 
+            Foreign2Shortcut.map['Η'] = 'H'; 
+            Foreign2Shortcut.map['Θ'] = 'Q'; 
+            Foreign2Shortcut.map['Ι'] = 'I'; 
+            Foreign2Shortcut.map['Κ'] = 'K'; 
+            Foreign2Shortcut.map['Λ'] = 'L'; 
+            Foreign2Shortcut.map['Μ'] = 'M'; 
+            Foreign2Shortcut.map['Ν'] = 'N'; 
+            Foreign2Shortcut.map['Ξ'] = 'X'; 
+            Foreign2Shortcut.map['Ο'] = 'O'; 
+            Foreign2Shortcut.map['Π'] = 'P'; 
+            Foreign2Shortcut.map['Ρ'] = 'R'; 
+            Foreign2Shortcut.map['Σ'] = 'S'; 
+            Foreign2Shortcut.map['Τ'] = 'T'; 
+            Foreign2Shortcut.map['Υ'] = 'U'; 
+            Foreign2Shortcut.map['Φ'] = 'F'; 
+            Foreign2Shortcut.map['Χ'] = 'J'; 
+            Foreign2Shortcut.map['Ψ'] = 'Q'; 
+            Foreign2Shortcut.map['Ω'] = 'W'; 
+            break;
+
+        case "transliterated_hebrew":
+            for (let a = 97; a<123; ++a)
+                Foreign2Shortcut.map[String.fromCharCode(a)] = String.fromCharCode(a);
+            Foreign2Shortcut.map['ʔ'] = '>';
+            Foreign2Shortcut.map['ʕ'] = '<';
+            break;
+        }
+    }
+
+    // Performs a lookup in the table
+    // Parameter:
+    //    letter: The non-Latin character
+    // Returns:
+    //    The Latin shortcut key, or '?' if no shortcut exists
+    public static get(letter : string) : string {
+        if (Foreign2Shortcut.map[letter])
+            return Foreign2Shortcut.map[letter];
+        else
+            return '?';
+    }
+}
+
+
+//****************************************************************************************************
+// KeyTable class
+//
+// This class provides the link between shortcut keystrokes and the actions they perform.
+//
+// The class manages three items of information:
+// elements: The IDs of HTML elements to be manipulated by a given keystroke
+// actions: The action performed on the target element (1=check, 2=click, 3=toggle)
+// focus: The ID of the HTML element, if any, to receive input focus when a row is selected
 class KeyTable {
     private elements : any = [];  // Indexed by qoid, rowid, key, item. Value is element ID
-    private actions : any = [];  // Indexed by qoid, rowid. Value is action (1=check, 2=click, 3=toggle)
+    private actions : any = [];  // Indexed by qoid, rowid. Value is action
     private focus : any = [];  // Indexed by qoid, rowid. Value is element ID
 
 
-    // Action: 1 = check
-    //         2 = click
-    //         3 = toggle
+    // Adds an action to be performed on a given element.
+    // Parameters:
+    //     card: The question object number
+    //     row: The row on the card for the question object
+    //     letter: The shortcut key
+    //     id: The ID of the HTML element to be manipulated by the keystroke
+    //     action: The actio to be performed on the element (1=check, 2=click, 3=toggle)
     public add(card : number, row : number, letter : string, id : string, action : number) {
         if (!this.elements[card]) this.elements[card] = [];
         if (!this.elements[card][row]) this.elements[card][row] = new Object;
@@ -29,23 +177,41 @@ class KeyTable {
         this.actions[card][row] = action;
     }
 
+    // Adds an element to receive input focus when a row is selected.
+    // Parameters:
+    //     card: The question object number
+    //     row: The row on the card for the question object
+    //     id: The ID of the HTML element to receive input focus
     public addfocus(card : number, row : number, id : string) {
         if (!this.focus[card]) this.focus[card] = [];
         this.focus[card][row] = id;
     }
 
-    public get_key(card : number, row : number, letter : string) : string[] {
+    // Returns an array of the IDs of elements to be affected by a given keystroke.
+    // Parameters:
+    //     card: The question object number
+    //     row: The row on the card for the question object
+    //     letter: The shortcut key
+    public get_element(card : number, row : number, letter : string) : string[] {
         if (!this.elements[card] || !this.elements[card][row])
             return null;
         return this.elements[card][row][letter];
     }
 
+    // Returns the action to be performed on a given element.
+    // Parameters:
+    //     card: The question object number
+    //     row: The row on the card for the question object
     public get_action(card : number, row : number) : number {
         if (!this.actions[card])
             return null;
         return this.actions[card][row];
     }
 
+    // Returns the ID of the element to receive input focus when a given row is selected.
+    // Parameters:
+    //     card: The question object number
+    //     row: The row on the card for the question object
     public get_focus(card : number, row : number) : number {
         if (!this.focus[card])
             return null;
@@ -53,79 +219,112 @@ class KeyTable {
     }
 }
 
+//****************************************************************************************************
+// Cursor class
+//
+// This class keeps track of the currently selected question object and row and the associated
+// cursor (that is, the > pointing to the selected row).
+//
 class Cursor {
-    public card : number;
-    public row : number;
+    public static card : number; // The current question object
+    public static row : number;  // The selected row
+    private static minrow: number; // The row containing the first request feature
+    private static maxrow: number; // The maximum number of rows + 1
 
-    constructor(private minrow : number, private maxrow : number, private pq : PanelQuestion)
+    // Initializes the cursor
+    public static init(minrow : number, maxrow : number)
     {
-        this.card = 0;
-        this.row = this.minrow;
+        Cursor.minrow = minrow;
+        Cursor.maxrow = maxrow;
+        Cursor.card = 0;
+        Cursor.row = minrow;
     }
 
-    private hide() {
-        $(`#ptr_${this.card}_${this.row}`).hide();
+    // Hides the cursor for the current row.
+    private static hide() {
+        $(`#ptr_${Cursor.card}_${Cursor.row}`).hide();
     }
 
-    private show() {
-        $(`#ptr_${this.card}_${this.row}`).show();
+    // Displays the cursor for the current row.
+    // This function also scrolls the window to an appropriate position and, if necessary, assigns
+    // input focus.
+    // Parameter:
+    //     force: True if this fuction was called because of a manually set focus. In that case,
+    //            only the cursor mark should be set.
+    
+    private static show(force : boolean = false) {
+        $(`#ptr_${Cursor.card}_${Cursor.row}`).show();
 
+        if (force)
+            return;
 
-        // Scroll to previous element (hoping this will center current element)
-        let toppos : number;
+        let scrollToPos : number; // The position to which to scroll
 
-        if (this.row==this.minrow)
-            toppos = $('#myview').offset().top - 5;
-        else {
-            let prevelem : JQuery = $(`#ptr_${this.card}_${this.row-1}`);
-            prevelem.show();                    // Show it...
-            toppos = prevelem.offset().top - 5; // ...get its position...
-            prevelem.hide();                    // ...and hide it again
+        let questiontop = $('#myview').offset().top - 5; // Preferred top of screen
+        let top = $(`#row_${Cursor.card}_${Cursor.row}`).offset().top; // Top of current requestattribute
+        let bottom = top + $(`#row_${Cursor.card}_${Cursor.row}`).height() + 10; // Button of current request attribue
+                                                                                 // (the 10 is a  margin)
 
-            if ($(`#keyinp_${this.card}_${this.row}`).length) {
-                $(`#keyinp_${this.card}_${this.row}`).focus();
-                $('body').unbind('keydown');
-            }
+        if (bottom - window.scrollY >= window.innerHeight || top - window.scrollY < 0) {
+            // We must scroll - preferably to questiontop if this keeps the question inside the window
+
+            if (questiontop + window.innerHeight >= bottom)
+                scrollToPos = questiontop;
+            else
+                scrollToPos = bottom - window.innerHeight;
+        }
+            
+        if ($(`#keyinp_${Cursor.card}_${Cursor.row}`).length) {
+            // Assign focus and make sure that keystrokes are not sent to other elements
+            $(`#keyinp_${Cursor.card}_${Cursor.row}`).focus();
+            $('body').unbind('keydown');
         }
         
+        // Scroll
         $('html, body').animate({
-            scrollTop: toppos
+            scrollTop: scrollToPos
         }, 50);
     }
 
-    public set(c : number = 0, r : number = this.minrow) {
-        this.hide();
+    // Goes to a specified question object and row
+    // Parameters:
+    //     c: The question object number
+    //     r: The row number.
+    //     force: True if this fuction was called because of a manually set focus. In that case,
+    //            only the cursor mark should be set.
+    public static set(c : number = 0, r : number = Cursor.minrow, force : boolean = false) {
+        Cursor.hide();
 
-        this.card = c;
-        this.row = r;
+        Cursor.card = c;
+        Cursor.row = r;
 
-        this.show();
+        Cursor.show(force);
     }
 
-    // n is always valid
-    public prevNextCard(n : number /* 1 or -1 */, gotoTop : boolean) {
-        this.set(this.card + n, gotoTop ? this.minrow : this.maxrow-1);
-    }
-
-    // n may not be valid
-    public prevNextItem(n : number /* 1 or -1 */) {
+    // Moves to the next or previous row
+    // Parameter:
+    //    n: +1 or -1. Indicates direction of movement.
+    // Returns:
+    //    True if the cursor was moved, false otherwise
+    public static prevNextItem(n : number /* 1 or -1 */) : boolean {
         if (n>0) {
-            if (this.row+n>=this.maxrow)
-                this.pq.prevNextSubQuestion(n,true);
+            if (Cursor.row+n<Cursor.maxrow) {
+                Cursor.set(Cursor.card, Cursor.row+n);
+                return true;
+            }
             else
-                this.set(this.card, this.row+n);
-
+                return false;
         }
         else {
-            if (this.row+n<this.minrow)
-                this.pq.prevNextSubQuestion(n,false);
+            if (Cursor.row+n>=Cursor.minrow) {
+                Cursor.set(Cursor.card, Cursor.row+n);
+                return true;
+            }
             else
-                this.set(this.card, this.row+n);
+                return false;
         }
     }
 }
-
-
 
 
 //****************************************************************************************************
@@ -141,12 +340,11 @@ class PanelQuestion {
     private answersPerCard : number[] = []; // answersPerCard[n] is the first available index in vAnswers after question object number n
     private question_stat  : QuestionStatistics = new QuestionStatistics; // Answer statistics
     private static kbid    : number = 1;    // Input field identification for keyboard
-    private gradingFlag	   : boolean;	   // May the statistics be used for grading the student?
+    private gradingFlag	   : boolean;	    // May the statistics be used for grading the student?
     private subQuizIndex   : number = 0;    // Used to toggle subquestions
     private subQuizMax     : number;        // Used to define max number of subquestions
 
     private keytable : KeyTable = new KeyTable;
-    private cursor : Cursor;
     private keyinps : string[] = [];
     
 
@@ -225,28 +423,28 @@ class PanelQuestion {
     //
     // Method used to toggle subquestions in a quiz.
     //
-    public prevNextSubQuestion(n : number, gotoTop : boolean): void {
+    public prevNextSubQuestion(n : number): void {
         if (this.subQuizIndex + n >= 0 && this.subQuizIndex + n < this.subQuizMax) {
-            this.subQuizIndex += n; // If the proposed move (n; always 1 or -1) is within the boundaries, proceed...
-            this.cursor.prevNextCard(n,gotoTop);
+            // If the proposed move (n; always 1 or -1) is within the boundaries, proceed...
+            this.subQuizIndex += n;
         }
         let i: number;
         let slides: JQuery = $('#quizcontainer').find('.quizcard');
 
         if (this.subQuizIndex < 1) {
-            $('#prevsubquiz').css({ "visibility": "hidden" }); // hide button if the quizcard is the first
+            $('#prevsubquiz').hide(); // hide button if the quizcard is the first
         };
 
         if (this.subQuizIndex > 0) {
-            $('#prevsubquiz').css({ "visibility": "visible" }); // show button if the index is 1 or higher
+            $('#prevsubquiz').show(); // show button if the index is 1 or higher
         }
 
         if (this.subQuizIndex < slides.length - 1) {
-            $('#nextsubquiz').css({"visibility": "visible"}) // show button if the quizcard is not the last
+            $('#nextsubquiz').show(); // show button if the quizcard is not the last
         };
 
         if (this.subQuizIndex === slides.length - 1) {
-            $('#nextsubquiz').css({"visibility": "hidden"}) // hide button if the quizcard is the last
+            $('#nextsubquiz').hide(); // hide button if the quizcard is the last
         };
 
         // Show the quizcard change
@@ -257,48 +455,34 @@ class PanelQuestion {
                 slides.slice(i).css({ "display": "none" });
             }
         }
-        // Scroll to myview
-        $('html, body').animate({
-            scrollTop: $('#myview').offset().top - 5
-          }, 50);
+
+        Cursor.set(this.subQuizIndex);
     }
 
-
     //------------------------------------------------------------------------------------------
-    // Constructor method
+    // location_info method
+    //
+    // Handles the "Locate" information in a question
     //
     // Parameter:
-    //     qd: The information required to generate a exercise.
     //     dict: The collection of Emdros objects for this question.
-    //     exam_mode: We're running an exam.
     //
-    constructor(qd : QuizData, dict : Dictionary, exam_mode: boolean) {
-        this.qd = qd;
-        this.sentence = dict.sentenceSetQuiz;
-        ////////////////////////////////////////////////////////////////////
+    private location_info(dict : Dictionary) {
         // Calculate the Bible reference (the 'location') for this sentence.
 
         // We base the location on the first monad in the sentence.
         let smo : SingleMonadObject = dict.getSingleMonadObject(getFirst(this.sentence));
-        let location_realname = ''; // Unlocalized
         this.location = smo.bcv_loc; // Localized
+
+
+        // Save the location for statistics
+        this.question_stat.location = '';
+        
         for (let unix in configuration.universeHierarchy) {
             let unixi : number = +unix;
             if (isNaN(unixi)) continue; // Not numeric
 
-            let uniname : string = configuration.universeHierarchy[unixi].type;
-
-            switch (unixi) {
-            case 0:
-                location_realname += smo.bcv[unixi] + ', ';
-                break;
-            case 2:
-                location_realname += ', ';
-                // Fall through
-            case 1:
-                location_realname += smo.bcv[unixi];
-                break;
-            }
+            this.question_stat.location += smo.bcv[unixi] + (unixi!=2 ? ', ' : '');
         }
 
         // Location functionality: used by locate button in quiz
@@ -315,8 +499,153 @@ class PanelQuestion {
 
         if ($('#locate_cb').prop('checked'))
             $('.location').html(this.location);
+    }
+    
+    //------------------------------------------------------------------------------------------
+    // body_keydown handler
+    //
+    // Handles shortcut characters outside of text input fields.
+    // NOTE: This is an event handler, so it is declared as a field, not a method.
+    //
+    private body_keydown = (event : any) => {
+        let pq : PanelQuestion = event.data;
+        let ctrl : boolean = event.ctrlKey || event.metaKey;
+
+        if (event.key==="PageDown")
+            $('#nextsubquiz:visible').click();
+        else if (event.key==="PageUp")
+            $('#prevsubquiz:visible').click();
+        else if (event.key==="ArrowDown" && !ctrl)
+            Cursor.prevNextItem(1);
+        else if (event.key==="ArrowUp")
+            Cursor.prevNextItem(-1);
+        else if (event.key==="ArrowDown" && ctrl)
+            $('#next_question:enabled').click();
+        else if (event.key==="g" && ctrl)
+            $('#check_answer').click();
+        else if (event.key==="j" && ctrl)
+            $('#show_answer').click();
+        else if (event.key==="s" && ctrl) {
+            $('.shortcut').toggle();
+        }
+        else if (!ctrl) {
+            let ids = pq.keytable.get_element(Cursor.card, Cursor.row, event.key);
+
+            if (ids) {
+                switch (pq.keytable.get_action(Cursor.card, Cursor.row)) {
+                case 1: // Check
+                    if (ids.length>1) {
+                        // More than one option starts with this character
+                        for (let i in ids) {
+                            if (isNaN(+i)) continue; // Not numeric
+
+                            if ($(`#${ids[i]}`).prop('checked')) {
+                                let i1 : number = +i+1;
+                                if (i1==ids.length)
+                                    i1 = 0;
+                                $(`#${ids[i1]}`).prop('checked',true);
+                                $(`#${ids[i1]}`).change();
+                                return false;
+                            }
+                        }
+                        // If we reach this point, no item starting the character has been checked
+                    }
+                    $(`#${ids[0]}`).prop('checked',true);
+                    $(`#${ids[0]}`).change();
+                    break;
+
+                case 2: // Click
+                    $(`#${ids[0]}`).click();
+                    $(`#${ids[0]}`).change();
+                    break;
+
+                case 3: // Toggle
+                    $(`#${ids[0]}`).prop('checked', !$(`#${ids[0]}`).prop('checked'));
+                    $(`#${ids[0]}`).change();
+                }
+            }
+            else
+                return true;
+        }
+        else
+            return true;
+
+        return false;
+    }
+
+    //------------------------------------------------------------------------------------------
+    // textfield_keydown handler
+    //
+    // Handles shortcut characters inside text input fields.
+    // NOTE: This is an event handler, so it is declared as a field, not a method.
+    //
+    private textfield_keydown = (event : any) => {
+        let pq : PanelQuestion = event.data;
+        let ctrl : boolean = event.ctrlKey || event.metaKey;
+
+        if (event.key==="ArrowDown" && !ctrl) {
+            if (Cursor.prevNextItem(1))
+                $(event.target).blur();
+            return false;
+        }
+        else if (event.key==="ArrowUp") {
+            if (Cursor.prevNextItem(-1))
+                $(event.target).blur();
+            return false;
+        }
+        else if (event.key==="PageDown") {
+            if ($('#nextsubquiz').is(':visible')) {
+                $(event.target).blur();
+                $('#nextsubquiz:visible').click();
+            }
+            return false;
+        }
+        else if (event.key==="PageUp") {
+            if ($('#prevsubquiz').is(':visible')) {
+                $(event.target).blur();
+                $('#prevsubquiz:visible').click();
+            }
+            return false;
+        }
+        else if (event.key==="ArrowDown" && ctrl) {
+            $('#next_question:enabled').click();
+            return false;
+        }
+        else if (event.key==="g" && ctrl) {
+            $('#check_answer').click();
+            return false;
+        }
+        else if (event.key==="j" && ctrl) {
+            $('#show_answer').click();
+            return false;
+        }
+        else if (event.key==="s" && ctrl) {
+            $('.shortcut').toggle();
+            return false;
+        }
+
+        return true;
+    }
 
 
+    
+    //------------------------------------------------------------------------------------------
+    // Constructor method
+    //
+    // Parameters:
+    //     qd: The information required to generate a exercise.
+    //     dict: The collection of Emdros objects for this question.
+    //     exam_mode: We're running an exam.
+    //
+    constructor(qd : QuizData, dict : Dictionary, exam_mode: boolean) {
+        this.qd = qd;
+        this.sentence = dict.sentenceSetQuiz;
+
+        Foreign2Shortcut.init();
+        this.location_info(dict);
+
+        // Save question text for statistics
+        this.question_stat.text = dict.generateSentenceHtml(qd);
 
         ///////////////////////////////////
         // Generate table of question items
@@ -334,10 +663,6 @@ class PanelQuestion {
         let hasForeignInput : boolean           = false;                             // Do we need a virtual keyboard?
         let quizItemID      : number            = 0;                                 // Counts quizitems to be used to group radio buttons together (see name attribute)
 
-
-        // Save question text and location for statistics
-        this.question_stat.text = dict.generateSentenceHtml(qd);
-        this.question_stat.location = location_realname;
 
         /////////////////////////////////////////////////
         // CREATE TABLE ENTRIES FOR EACH QUESTION CARD //
@@ -508,8 +833,7 @@ class PanelQuestion {
             // Note: The variable v, introduced below, will eventually hold the string
             // <td class="qbox">...</td> with the appropriate contents.
 
-            if (!this.cursor)
-                this.cursor = new Cursor(headInd,headLen,this);
+            Cursor.init(headInd,headLen);
 
             for (let rfi in requestFeatures) {
                 if (isNaN(+rfi)) continue; // Not numeric
@@ -929,9 +1253,15 @@ class PanelQuestion {
                         
                         // Set randomized letter buttons to be inputted in the input field
                         showLetters.forEach((letter: string, i: number) => {
-                            let sc : string = String.fromCharCode(i+97); // a, b, c, etc.
-                            letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" id="${sc}_${quizItemID}" data-letter="${letter}">${letter}<span class="shortcut keybutton">${sc}</span></div>`);
-                            this.keytable.add(+qoid, headInd, sc, `${sc}_${quizItemID}`, 2);
+                            //let sc : string = String.fromCharCode(i+97); // a, b, c, etc.
+                            let sc : string = Foreign2Shortcut.get(letter);
+                            if (sc!='?') {
+                                let sc_id : string = 'sc' + sc.charCodeAt(0);
+                                letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" id="${sc_id}_${quizItemID}" data-letter="${letter}">${letter}<span class="shortcut keybutton">${sc}</span></div>`);
+                                this.keytable.add(+qoid, headInd, sc, `${sc_id}_${quizItemID}`, 2);
+                            }
+                            else 
+                                letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" data-letter="${letter}">${letter}</div>`);
 
                         });
 
@@ -943,8 +1273,7 @@ class PanelQuestion {
                         v = cwyn.getJQuery();
                     }
                     else {
-                        let vf : JQuery = $(`<div class="inputquizitem"><input id="keyinp_${+qoid}_${headInd}" type="text"></div>`);
-//                        this.keytable.addfocus(+qoid, headInd, `keyinp_${+qoid}_${headInd}`);
+                        let vf : JQuery = $(`<div class="inputquizitem"><input id="keyinp_${+qoid}_${headInd}" data-qoid="${+qoid}" data-row="${headInd}" type="text"></div>`);
                         this.keyinps.push(`keyinp_${+qoid}_${headInd}`);
 
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
@@ -1179,7 +1508,7 @@ class PanelQuestion {
 
                 }
 
-                let quizRow: JQuery = $('<tr></tr>');
+                let quizRow: JQuery = $(`<tr id="row_${+qoid}_${headInd}"></tr>`);
                 quizRow.append(`<td><span style="display:none" id="ptr_${+qoid}_${headInd}">&gt;</span></td>`);
                 quizRow.append(questionheaders[headInd]);
                 quizRow.append(v);
@@ -1189,114 +1518,19 @@ class PanelQuestion {
             }
 
             this.answersPerCard.push(this.vAnswers.length);
-            this.cursor.set();
+            Cursor.set();
         }
 
-
-        let body_keydown = function onPress(event : any) {
-            let pq : PanelQuestion = event.data;
-
-            if (event.key==="x") {
-                console.log('body - x - return false');
-                return false;
-            }
-            if (event.key==="y") {
-                console.log('body - y - return true');
-                return true;
-            }
-            if (event.key==="ArrowRight")
-                $('#nextsubquiz:visible').click();
-            else if (event.key==="ArrowLeft")
-                $('#prevsubquiz:visible').click();
-            else if (event.key==="ArrowDown")
-                pq.cursor.prevNextItem(1);
-            else if (event.key==="ArrowUp")
-                pq.cursor.prevNextItem(-1);
-//            else if (event.key==="F") {
-//                $('#xyzzy_0').focus();
-//                $('body').unbind('keydown');
-//            }
-            else if (event.key==="N")
-                $('#next_question:enabled').click();
-            else if (event.key==="C")
-                $('#check_answer').click();
-            else if (event.key==="S") {
-                $('.shortcut').toggle();
-                $('.inputbutton').toggleClass('noshortcut');
-                $('.delbutton').toggleClass('noshortcut');
-            }
-            else {
-                let ids = pq.keytable.get_key(pq.cursor.card, pq.cursor.row, event.key);
-
-                if (ids) {
-                    switch (pq.keytable.get_action(pq.cursor.card, pq.cursor.row)) {
-                    case 1: // Check
-                        if (ids.length>1) {
-                            // More than one option starts with this character
-                            for (let i in ids) {
-                                if (isNaN(+i)) continue; // Not numeric
-
-                                if ($(`#${ids[i]}`).prop('checked')) {
-                                    let i1 : number = +i+1;
-                                    if (i1==ids.length)
-                                        i1 = 0;
-                                    $(`#${ids[i1]}`).prop('checked',true);
-                                    $(`#${ids[i1]}`).change();
-                                    return false;
-                                }
-                            }
-                            // If we reach this point, no item starting the character has been checked
-                        }
-                        $(`#${ids[0]}`).prop('checked',true);
-                        $(`#${ids[0]}`).change();
-                        break;
-
-                    case 2: // Click
-                        $(`#${ids[0]}`).click();
-                        $(`#${ids[0]}`).change();
-                        break;
-
-                    case 3: // Toggle
-                        $(`#${ids[0]}`).prop('checked', !$(`#${ids[0]}`).prop('checked'));
-                        $(`#${ids[0]}`).change();
-                    }
-                }
-                else
-                    return true;
-            }
-
-            return false;
-        };
-        
-
-        let xyzzy_keydown = function onPress(event : any) {
-            let pq : PanelQuestion = event.data;
-            console.log('xyzzy_keydown',event.key,this);
-            if (event.key==="ArrowDown") {
-                pq.cursor.prevNextItem(1);
-                $(this).blur();
-                $('body').keydown(pq, body_keydown);
-                return false;
-            }
-            else if (event.key==="ArrowUp") {
-                pq.cursor.prevNextItem(-1);
-                $(this).blur();
-                $('body').keydown(pq, body_keydown);
-                return false;
-            }
-
-            return true;
-        };
-
-
         for (let keyi of this.keyinps)
-            $(`#${keyi}`).keydown(this, xyzzy_keydown);
-                                 
+            $(`#${keyi}`)
+            .keydown(this, this.textfield_keydown)
+            .focus(event => Cursor.set($(event.target).data('qoid'),$(event.target).data('row'),true))
+            .blur(() => $('body').unbind('keydown').keydown(this, this.body_keydown));
         
         $('body')
             .unbind('keydown')
             .keydown(this, // Will be stored in event.data when a key is pressed
-                     body_keydown);
+                     this.body_keydown);
 
 
         this.subQuizMax = quizCardNum
@@ -1314,9 +1548,13 @@ class PanelQuestion {
 
         // Add prev and next buttons to slide through multiple subquizzes
         if (quizCardNum > 1) {
-            quizContainer.prepend('<div class="prev-next-btn prev" id="prevsubquiz" style="visibility:hidden;">&#10094;</div>');
+            let prevsubquiz : JQuery = $('<div class="prev-next-btn prev" id="prevsubquiz">&#10094;</div>');
+            quizContainer.prepend(prevsubquiz);
+            prevsubquiz.hide();
+            
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
         }
+        
 
         $('div.inputbutton').click(function () {
             let letter: string = $(this).data('letter'); //String($(this).text());
@@ -1340,15 +1578,9 @@ class PanelQuestion {
 
          // Add previous and next handlers for multiple subquestions
          $('#prevsubquiz').off('click'); // Remove old handler
-         $('#prevsubquiz').on('click',
-                                () => {
-                                    this.prevNextSubQuestion(-1,true);
-                                });
+         $('#prevsubquiz').on('click', () => this.prevNextSubQuestion(-1));
          $('#nextsubquiz').off('click'); // Remove old handler
-         $('#nextsubquiz').on('click',
-                              () => {
-                                  this.prevNextSubQuestion(1,true);
-                                });
+         $('#nextsubquiz').on('click', () => this.prevNextSubQuestion(1));
 
 
 	// Add "Check answer" button handler
@@ -1361,13 +1593,8 @@ class PanelQuestion {
                                             let a: Answer = this.vAnswers[aix];
                                             a.checkIt(false);
                                         }
-
-//                                        $('html, body').animate({
-//                                            scrollTop: $('#myview').offset().top - 5
-//                                        }, 50);
-
                                     }
-                                    );
+                                   );
 
         // Add "Show answer" button handler
         $('button#show_answer').off('click'); // Remove old handler
@@ -1392,14 +1619,10 @@ class PanelQuestion {
         case 'lg':
         case 'xl':
             $('.shortcut').show();
-            $('.inputbutton').removeClass('noshortcut');
-            $('.delbutton').removeClass('noshortcut');
             break;
 
         default:
             $('.shortcut').hide();
-            $('.inputbutton').addClass('noshortcut');
-            $('.delbutton').addClass('noshortcut');
             break;
         }
 
