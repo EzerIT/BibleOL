@@ -258,19 +258,22 @@ class Cursor {
         if (force)
             return;
 
-        let toppos : number; // The position to which to scroll
+        let scrollToPos : number; // The position to which to scroll
 
-        if (Cursor.row==Cursor.minrow)
-            toppos = $('#myview').offset().top - 5; // Scroll position is at the top
-        else {
-            // Scroll position is at the element before the one selected
-            
-            let prevelem : JQuery = $(`#ptr_${Cursor.card}_${Cursor.row-1}`);
-            prevelem.show();                    // Show it...
-            toppos = prevelem.offset().top - 5; // ...get its position...
-            prevelem.hide();                    // ...and hide it again
+        let questiontop = $('#myview').offset().top - 5; // Preferred top of screen
+        let top = $(`#row_${Cursor.card}_${Cursor.row}`).offset().top; // Top of current requestattribute
+        let bottom = top + $(`#row_${Cursor.card}_${Cursor.row}`).height() + 10; // Button of current request attribue
+                                                                                 // (the 10 is a  margin)
+
+        if (bottom - window.scrollY >= window.innerHeight || top - window.scrollY < 0) {
+            // We must scroll - preferably to questiontop if this keeps the question inside the window
+
+            if (questiontop + window.innerHeight >= bottom)
+                scrollToPos = questiontop;
+            else
+                scrollToPos = bottom - window.innerHeight;
         }
-
+            
         if ($(`#keyinp_${Cursor.card}_${Cursor.row}`).length) {
             // Assign focus and make sure that keystrokes are not sent to other elements
             $(`#keyinp_${Cursor.card}_${Cursor.row}`).focus();
@@ -279,7 +282,7 @@ class Cursor {
         
         // Scroll
         $('html, body').animate({
-            scrollTop: toppos
+            scrollTop: scrollToPos
         }, 50);
     }
 
@@ -424,7 +427,6 @@ class PanelQuestion {
         if (this.subQuizIndex + n >= 0 && this.subQuizIndex + n < this.subQuizMax) {
             // If the proposed move (n; always 1 or -1) is within the boundaries, proceed...
             this.subQuizIndex += n;
-            Cursor.set(this.subQuizIndex);
         }
         let i: number;
         let slides: JQuery = $('#quizcontainer').find('.quizcard');
@@ -453,10 +455,8 @@ class PanelQuestion {
                 slides.slice(i).css({ "display": "none" });
             }
         }
-        // Scroll to myview
-        $('html, body').animate({
-            scrollTop: $('#myview').offset().top - 5
-          }, 50);
+
+        Cursor.set(this.subQuizIndex);
     }
 
     //------------------------------------------------------------------------------------------
@@ -508,13 +508,9 @@ class PanelQuestion {
     // NOTE: This is an event handler, so it is declared as a field, not a method.
     //
     private body_keydown = (event : any) => {
-        console.log('body THIS',this);
         let pq : PanelQuestion = event.data;
         let ctrl : boolean = event.ctrlKey || event.metaKey;
 
-        
-        console.log("body KEY:",ctrl ? "CTRL-" + event.key : event.key);
-        
         if (event.key==="PageDown")
             $('#nextsubquiz:visible').click();
         else if (event.key==="PageUp")
@@ -584,14 +580,10 @@ class PanelQuestion {
     // NOTE: This is an event handler, so it is declared as a field, not a method.
     //
     private textfield_keydown = (event : any) => {
-        console.log('textfield THIS',this);
-
         let pq : PanelQuestion = event.data;
         let ctrl : boolean = event.ctrlKey || event.metaKey;
 
-        console.log("textfield KEY:",ctrl ? "CTRL-" + event.key : event.key);
-
-        if (event.key==="ArrowDown") {
+        if (event.key==="ArrowDown" && !ctrl) {
             if (Cursor.prevNextItem(1))
                 $(event.target).blur();
             return false;
@@ -1516,7 +1508,7 @@ class PanelQuestion {
 
                 }
 
-                let quizRow: JQuery = $('<tr></tr>');
+                let quizRow: JQuery = $(`<tr id="row_${+qoid}_${headInd}"></tr>`);
                 quizRow.append(`<td><span style="display:none" id="ptr_${+qoid}_${headInd}">&gt;</span></td>`);
                 quizRow.append(questionheaders[headInd]);
                 quizRow.append(v);

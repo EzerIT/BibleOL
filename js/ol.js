@@ -1667,21 +1667,22 @@ var Cursor = (function () {
         $("#ptr_" + Cursor.card + "_" + Cursor.row).show();
         if (force)
             return;
-        var toppos;
-        if (Cursor.row == Cursor.minrow)
-            toppos = $('#myview').offset().top - 5;
-        else {
-            var prevelem = $("#ptr_" + Cursor.card + "_" + (Cursor.row - 1));
-            prevelem.show();
-            toppos = prevelem.offset().top - 5;
-            prevelem.hide();
+        var scrollToPos;
+        var questiontop = $('#myview').offset().top - 5;
+        var top = $("#row_" + Cursor.card + "_" + Cursor.row).offset().top;
+        var bottom = top + $("#row_" + Cursor.card + "_" + Cursor.row).height() + 10;
+        if (bottom - window.scrollY >= window.innerHeight || top - window.scrollY < 0) {
+            if (questiontop + window.innerHeight >= bottom)
+                scrollToPos = questiontop;
+            else
+                scrollToPos = bottom - window.innerHeight;
         }
         if ($("#keyinp_" + Cursor.card + "_" + Cursor.row).length) {
             $("#keyinp_" + Cursor.card + "_" + Cursor.row).focus();
             $('body').unbind('keydown');
         }
         $('html, body').animate({
-            scrollTop: toppos
+            scrollTop: scrollToPos
         }, 50);
     };
     Cursor.set = function (c, r, force) {
@@ -1723,10 +1724,8 @@ var PanelQuestion = (function () {
         this.keytable = new KeyTable;
         this.keyinps = [];
         this.body_keydown = function (event) {
-            console.log('body THIS', _this);
             var pq = event.data;
             var ctrl = event.ctrlKey || event.metaKey;
-            console.log("body KEY:", ctrl ? "CTRL-" + event.key : event.key);
             if (event.key === "PageDown")
                 $('#nextsubquiz:visible').click();
             else if (event.key === "PageUp")
@@ -1783,11 +1782,9 @@ var PanelQuestion = (function () {
             return false;
         };
         this.textfield_keydown = function (event) {
-            console.log('textfield THIS', _this);
             var pq = event.data;
             var ctrl = event.ctrlKey || event.metaKey;
-            console.log("textfield KEY:", ctrl ? "CTRL-" + event.key : event.key);
-            if (event.key === "ArrowDown") {
+            if (event.key === "ArrowDown" && !ctrl) {
                 if (Cursor.prevNextItem(1))
                     $(event.target).blur();
                 return false;
@@ -2369,7 +2366,7 @@ var PanelQuestion = (function () {
                         v = cwyn.getJQuery();
                     }
                 }
-                var quizRow = $('<tr></tr>');
+                var quizRow = $("<tr id=\"row_" + +qoid + "_" + headInd + "\"></tr>");
                 quizRow.append("<td><span style=\"display:none\" id=\"ptr_" + +qoid + "_" + headInd + "\">&gt;</span></td>");
                 quizRow.append(questionheaders[headInd]);
                 quizRow.append(v);
@@ -2386,111 +2383,6 @@ var PanelQuestion = (function () {
         for (var qoid in qoFeatures) {
             _loop_2(qoid);
         }
-        var xbody_keydown = function (event) {
-            var pq = event.data;
-            var ctrl = event.ctrlKey || event.metaKey;
-            console.log("body KEY:", ctrl ? "CTRL-" + event.key : event.key);
-            if (event.key === "PageDown")
-                $('#nextsubquiz:visible').click();
-            else if (event.key === "PageUp")
-                $('#prevsubquiz:visible').click();
-            else if (event.key === "ArrowDown" && !ctrl)
-                Cursor.prevNextItem(1);
-            else if (event.key === "ArrowUp")
-                Cursor.prevNextItem(-1);
-            else if (event.key === "ArrowDown" && ctrl)
-                $('#next_question:enabled').click();
-            else if (event.key === "h" && ctrl)
-                $('#check_answer').click();
-            else if (event.key === "j" && ctrl)
-                $('#show_answer').click();
-            else if (event.key === "s" && ctrl) {
-                $('.shortcut').toggle();
-            }
-            else if (!ctrl) {
-                var ids = pq.keytable.get_element(Cursor.card, Cursor.row, event.key);
-                if (ids) {
-                    switch (pq.keytable.get_action(Cursor.card, Cursor.row)) {
-                        case 1:
-                            if (ids.length > 1) {
-                                for (var i in ids) {
-                                    if (isNaN(+i))
-                                        continue;
-                                    if ($("#" + ids[i]).prop('checked')) {
-                                        var i1 = +i + 1;
-                                        if (i1 == ids.length)
-                                            i1 = 0;
-                                        $("#" + ids[i1]).prop('checked', true);
-                                        $("#" + ids[i1]).change();
-                                        return false;
-                                    }
-                                }
-                            }
-                            $("#" + ids[0]).prop('checked', true);
-                            $("#" + ids[0]).change();
-                            break;
-                        case 2:
-                            $("#" + ids[0]).click();
-                            $("#" + ids[0]).change();
-                            break;
-                        case 3:
-                            $("#" + ids[0]).prop('checked', !$("#" + ids[0]).prop('checked'));
-                            $("#" + ids[0]).change();
-                    }
-                }
-                else
-                    return true;
-            }
-            else
-                return true;
-            return false;
-        };
-        var xtextfield_keydown = function (event) {
-            var pq = event.data;
-            var ctrl = event.ctrlKey || event.metaKey;
-            console.log("textfield KEY:", ctrl ? "CTRL-" + event.key : event.key);
-            if (event.key === "ArrowDown") {
-                if (Cursor.prevNextItem(1))
-                    $(event.target).blur();
-                return false;
-            }
-            else if (event.key === "ArrowUp") {
-                if (Cursor.prevNextItem(-1))
-                    $(event.target).blur();
-                return false;
-            }
-            else if (event.key === "PageDown") {
-                if ($('#nextsubquiz').is(':visible')) {
-                    $(event.target).blur();
-                    $('#nextsubquiz:visible').click();
-                }
-                return false;
-            }
-            else if (event.key === "PageUp") {
-                if ($('#prevsubquiz').is(':visible')) {
-                    $(event.target).blur();
-                    $('#prevsubquiz:visible').click();
-                }
-                return false;
-            }
-            else if (event.key === "ArrowDown" && ctrl) {
-                $('#next_question:enabled').click();
-                return false;
-            }
-            else if (event.key === "h" && ctrl) {
-                $('#check_answer').click();
-                return false;
-            }
-            else if (event.key === "j" && ctrl) {
-                $('#show_answer').click();
-                return false;
-            }
-            else if (event.key === "s" && ctrl) {
-                $('.shortcut').toggle();
-                return false;
-            }
-            return true;
-        };
         for (var _i = 0, _a = this.keyinps; _i < _a.length; _i++) {
             var keyi = _a[_i];
             $("#" + keyi)
@@ -2600,7 +2492,6 @@ var PanelQuestion = (function () {
     PanelQuestion.prototype.prevNextSubQuestion = function (n) {
         if (this.subQuizIndex + n >= 0 && this.subQuizIndex + n < this.subQuizMax) {
             this.subQuizIndex += n;
-            Cursor.set(this.subQuizIndex);
         }
         var i;
         var slides = $('#quizcontainer').find('.quizcard');
@@ -2627,9 +2518,7 @@ var PanelQuestion = (function () {
                 slides.slice(i).css({ "display": "none" });
             }
         }
-        $('html, body').animate({
-            scrollTop: $('#myview').offset().top - 5
-        }, 50);
+        Cursor.set(this.subQuizIndex);
     };
     PanelQuestion.prototype.location_info = function (dict) {
         var smo = dict.getSingleMonadObject(getFirst(this.sentence));
