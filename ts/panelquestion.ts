@@ -521,7 +521,7 @@ class PanelQuestion {
             Cursor.prevNextItem(-1);
         else if (event.key==="ArrowDown" && ctrl)
             $('#next_question:enabled').click();
-        else if (event.key==="h" && ctrl)
+        else if (event.key==="g" && ctrl)
             $('#check_answer').click();
         else if (event.key==="j" && ctrl)
             $('#show_answer').click();
@@ -611,7 +611,7 @@ class PanelQuestion {
             $('#next_question:enabled').click();
             return false;
         }
-        else if (event.key==="h" && ctrl) {
+        else if (event.key==="g" && ctrl) {
             $('#check_answer').click();
             return false;
         }
