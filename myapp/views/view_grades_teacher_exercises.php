@@ -87,6 +87,7 @@
           <?php endforeach; ?>
         </select>
       </div>
+      <BR>
 
       <div class="row">
         <div class="form-group col">

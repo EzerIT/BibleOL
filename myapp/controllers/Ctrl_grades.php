@@ -223,7 +223,7 @@ class Ctrl_grades extends MY_Controller {
             $center_text = $this->load->view('view_grades_teacher_exam_classes', array('classes' => $classes), true);
 
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_class_heading'),
-                                                      'left' => $this->lang->line('select_class_description'),
+                                                      'left' => $this->lang->line('select_exam_class_description'),
                                                       'center' => $center_text));
             $this->load->view('view_bottom');
         }

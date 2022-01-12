@@ -41,7 +41,9 @@ $lang['question_count_colon'] = "Questions:";
 $lang['question_items_per_min'] = "Question items per minute";
 $lang['sec_per_correct'] = "Seconds per correct";
 $lang['select_class_description'] = "<p>Here you will find a list of classes you manage.</p>\n"
-        . "<p>Click the “Students” or “Exercises” button next to a class.</p>";
+        . "<p>Click the “Exercises” button next to a class.</p>";
+$lang['select_exam_class_description'] = "<p>Here you will find a list of classes you manage.</p>\n"
+        . "<p>Click the “Exam” button next to a class.</p>";
 $lang['select_class_heading'] = "Select Class";
 $lang['select_grouped_by'] = "Select grades grouped by";
 $lang['select_period_heading'] = "Select a Period";
