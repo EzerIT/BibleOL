@@ -604,9 +604,6 @@ var GrammarSelectionBox = (function () {
         }
     };
     GrammarSelectionBox.clearBoxes = function (force) {
-        $('html, body').animate({
-            scrollTop: $('#myview').offset().top - 5
-        }, 50);
         if (!inQuiz) {
             if (force) {
                 for (var i in sessionStorage) {
@@ -1667,8 +1664,8 @@ var Cursor = (function () {
         $("#ptr_" + Cursor.card + "_" + Cursor.row).show();
         if (force)
             return;
+        var questiontop = $('#quizdesc').offset().top;
         var scrollToPos;
-        var questiontop = $('#myview').offset().top - 5;
         var top = $("#row_" + Cursor.card + "_" + Cursor.row).offset().top;
         var bottom = top + $("#row_" + Cursor.card + "_" + Cursor.row).height() + 10;
         if (bottom - window.scrollY >= window.innerHeight || top - window.scrollY < 0) {
@@ -2444,9 +2441,6 @@ var PanelQuestion = (function () {
                 a.showIt();
                 a.checkIt(true);
             }
-            $('html, body').animate({
-                scrollTop: $('#myview').offset().top - 5
-            }, 50);
         });
         switch (resizer.getWindowSize()) {
             case 'lg':
@@ -2624,17 +2618,14 @@ var Quiz = (function () {
         this.currentPanelQuestion = null;
         this.quiz_statistics = new QuizStatistics(qid);
         this.exam_mode = inExam;
-        $('button#next_question').on('click', function () { return _this.nextQuestion(); });
+        $('button#next_question').on('click', function () { return _this.nextQuestion(false); });
         $('button#finish').on('click', function () { return _this.finishQuiz(true); });
         $('button#finishNoStats').on('click', function () { return _this.finishQuiz(false); });
     }
-    Quiz.prototype.nextQuestion = function () {
+    Quiz.prototype.nextQuestion = function (first) {
         var _this = this;
         var timeBeforeHbOpen = 600000;
         var timeBeforeHbClose = 28000;
-        $('html, body').animate({
-            scrollTop: $('#myview').offset().top - 5
-        }, 50);
         var heartbeatDialog = $('#heartbeat-dialog');
         var monitorUser = function () {
             window.clearTimeout(_this.tHbOpen);
@@ -2681,6 +2672,9 @@ var Quiz = (function () {
             alert('No more questions');
         util.FollowerBox.resetCheckboxCounters();
         $('#grammarbuttongroup input:enabled:checked').trigger('change');
+        $('html, body').animate({
+            scrollTop: first ? 0 : $('#myview').offset().top - 5
+        }, 50);
     };
     Quiz.prototype.finishQuiz = function (gradingFlag) {
         var _this = this;
@@ -2789,7 +2783,7 @@ $(function () {
         else
             $('progress#progress').hide();
         quiz = new Quiz(quizdata.quizid, $('#exam_id').length > 0);
-        quiz.nextQuestion();
+        quiz.nextQuestion(true);
         $('#gramtabs .selectbutton input:enabled:checked').trigger('change');
     }
     else {

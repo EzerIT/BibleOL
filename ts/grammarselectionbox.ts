@@ -406,11 +406,6 @@ class GrammarSelectionBox {
     //            True means uncheck all checkboxes.
     //
     public static clearBoxes(force : boolean) {
-        // $('input[type="checkbox"]').prop('checked',false); // Uncheck all checkboxes
-        $('html, body').animate({
-            scrollTop: $('#myview').offset().top - 5 // -5 to add take 5 additional px above myview
-        }, 50);
-
         if (!inQuiz) {
             if (force) {
                 // Remove all information about selected grammar items

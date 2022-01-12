@@ -34,7 +34,7 @@ class Quiz {
         this.exam_mode = inExam;
 
         // Set up handlers for the buttons
-        $('button#next_question').on('click', () => this.nextQuestion());
+        $('button#next_question').on('click', () => this.nextQuestion(false));
         $('button#finish').on('click', () => this.finishQuiz(true));
         $('button#finishNoStats').on('click', () => this.finishQuiz(false));
     }
@@ -45,14 +45,12 @@ class Quiz {
     // Called at the start of an exercise and whenever the user clicks 'Next',
     // Replaces the current quiz question with the next one, if any.
     //
-    public nextQuestion() : void {
+    // Parameter:
+    //    first: True for the first question in a quiz
+    //
+    public nextQuestion(first : boolean) : void {
         const timeBeforeHbOpen  : number = 600000; // (600 seconds) Time before heartbeat dialog is shown to user
         const timeBeforeHbClose : number = 28000;  // (28 seconds) Time before heartbeat dialog is automatically closed
-
-        // Move to top of the question
-        $('html, body').animate({
-            scrollTop: $('#myview').offset().top - 5 // -5 to add take 5 additional px above myview
-        }, 50);
 
 
         //--------------------------------------------------------------------------------
@@ -132,6 +130,13 @@ class Quiz {
 
         util.FollowerBox.resetCheckboxCounters(); // Reset counters in preparation for the following trigger() call
         $('#grammarbuttongroup input:enabled:checked').trigger('change'); // Make sure grammar is displayed for relevant checkboxes
+
+        // Move to top of the question
+        $('html, body').animate({
+            scrollTop: first ? 0 : $('#myview').offset().top - 5 // -5 to add take 5 additional px above myview
+        }, 50);
+
+
     }
 
     //------------------------------------------------------------------------------------------

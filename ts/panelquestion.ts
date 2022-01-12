@@ -258,9 +258,8 @@ class Cursor {
         if (force)
             return;
 
+        let questiontop = $('#quizdesc').offset().top; // Preferred top of screen
         let scrollToPos : number; // The position to which to scroll
-
-        let questiontop = $('#myview').offset().top - 5; // Preferred top of screen
         let top = $(`#row_${Cursor.card}_${Cursor.row}`).offset().top; // Top of current requestattribute
         let bottom = top + $(`#row_${Cursor.card}_${Cursor.row}`).height() + 10; // Button of current request attribue
                                                                                  // (the 10 is a  margin)
@@ -279,7 +278,7 @@ class Cursor {
             $(`#keyinp_${Cursor.card}_${Cursor.row}`).focus();
             $('body').unbind('keydown');
         }
-        
+
         // Scroll
         $('html, body').animate({
             scrollTop: scrollToPos
@@ -1607,11 +1606,6 @@ class PanelQuestion {
                                         a.showIt();
                                         a.checkIt(true);
                                     }
-
-                                    $('html, body').animate({
-                                        scrollTop: $('#myview').offset().top - 5
-                                    }, 50);
-
                                 }
             );
 
