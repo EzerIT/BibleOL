@@ -102,3 +102,5 @@ $lang['grds_exercise_by_student_caption'] = "Daily results for each student";
 $lang['grades_for_exercise'] = "Grades for exercise “%s”";
 $lang['exam_grades_for_class'] = "Exam Grades for the class “%s”";
 $lang['grades_for_exam'] = "Exam Grading";
+
+$lang['grds_exam_by_student_caption'] = "<b>Note:</b> The percentage in brackets does not consider the weights of each exercise on the exam. This percentage is used just for visual reference and does not impact grading.";

@@ -261,7 +261,7 @@
         <tr class="<?php echo 'headerDet';  ?>">
           <td><?= $st ?></td>
           <td class="text-center"><?= Statistics_timeperiod::format_time($startTime) ?></td>
-          <td class="text-center"><?= round($tot_percent/$ncounter) . "% (" . round($tot_percWeighted/$tot_weight)   ?>%)</td>
+          <td class="text-center"><?= round($tot_percWeighted/$tot_weight) . "% (" .  round($tot_percent/$ncounter)  ?>%)</td>
           <td class="text-center"><?= calculateGrade($grade_system, ($tot_percWeighted/$tot_weight)) ?></td>
           <td class="text-center"><?= $result["duration"] ?></td>
           <td class="text-center"><?= sprintf("%.1f",round(60/($tot_featpMin/$ncounter))) ?></td>
