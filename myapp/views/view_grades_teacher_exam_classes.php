@@ -10,7 +10,7 @@
     <tr>
       <td><?= $cl->classname ?></td>
       <td style="padding-left:5px;text-align:center;">
-       <a class="badge badge-primary" href="<?= site_url('grades/teacher_exam') ?>?classid=<?= $cl->id ?>"><?= $this->lang->line('grouped_by_exercises') ?></a>
+       <a class="badge badge-primary" href="<?= site_url('grades/teacher_exam') ?>?classid=<?= $cl->id ?>"><?= $this->lang->line('grouped_by_exams') ?></a>
      </td>
     </tr>
   <?php endforeach; ?>

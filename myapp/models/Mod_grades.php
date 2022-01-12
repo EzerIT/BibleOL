@@ -444,8 +444,6 @@ class Mod_grades extends CI_Model {
         }
 
         ksort($users_exam); // Sort by user ID
-        error_log("AAH: DEBUG: QUERY (id $activeexamid): " . print_r($query->result(), true));
-        error_log("AAH: DEBUG: get_users_and_exam_results: " . print_r($users_exam, true));
 
         return $users_exam;
     }
@@ -657,8 +655,6 @@ class Mod_grades extends CI_Model {
             $matches=array();
             if ( preg_match_all('/<exercisename>(.*)<\/exercisename>/',$row->examcode, $matches) ) {
               $exercise_name=$matches[1][$ex_count];
-              error_log("AHH: DEBUG: Matches: " . print_r($matches,true));
-              error_log("AHH: DEBUG: Matches Name: " . print_r($matches[1][$ex_count],true));
             }
             else {
               $exercise_name="N/A";

@@ -545,9 +545,6 @@ class Ctrl_grades extends MY_Controller {
         try {
             $this->mod_users->check_teacher();
 
-
-
-
             $this->load->helper('form');
             $this->load->helper('form');
             $this->load->library('form_validation');
@@ -600,10 +597,8 @@ class Ctrl_grades extends MY_Controller {
                     $real_students = array(); // Will be used as a set
 
                     // foreach ($users_and_templs as $uid => $templs) {
-                    error_log("AAH: DEBUG: users_and_templs: " . print_r($users_and_templs, true));
                     foreach ($users_and_templs as $uid => $exams) {
                         $see_nongraded = $nongraded && $this->mod_grades->may_see_nongraded($uid, $ex);
-                        error_log("AAH: DEBUG: In the loop checking exams: " . print_r($exams, true));
 
                         // $res = $this->mod_grades->get_score_by_date_user_templ($uid,
                         $res = $this->mod_grades->get_score_by_user_active_exam($uid,

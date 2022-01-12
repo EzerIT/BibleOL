@@ -349,12 +349,12 @@
             echo "
             $('#det_" . $key . "').click(
               function() {
-                if ($('." . $key . "_hiddenDetails').is(':visible')) {
-                  $('." . $key . "_hiddenDetails').hide();
+                if ($('." . $key . "_hiddenDetails').css('visibility')=='visible') {
+                  $('." . $key . "_hiddenDetails').css('visibility',' collapse');
                   $('#det_" . $key . "').text('" . $this->lang->line('detail') . "')
                 }
                 else {
-                  $('." . $key . "_hiddenDetails').show();
+                  $('." . $key . "_hiddenDetails').css('visibility',' visible');
                   $('#det_" . $key . "').text('" . $this->lang->line('hide_detail') . "')
                 }
 
