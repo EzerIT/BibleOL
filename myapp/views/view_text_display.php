@@ -1,3 +1,9 @@
+<?php if (isset($is_exam) && $is_exam): ?>
+  <div id="quiz_id" style="display: none;"><?= $quizid ?></div>
+  <div id="exam_id" style="display: none;"><?= $examid ?></div>
+  <div id="exercise_lst" style="display: none;"><?= $exercise_lst ?></div>
+<? endif; ?>
+
 <div class="row">
 <div class="col-lg-3">
 </div>
@@ -17,7 +23,7 @@
     <?php else: ?>
       <h1></h1>
     <?php endif; ?>
-   
+
     <div id="greyspace"></div>
     <div id="myview">
       <ul><li><a class="myview" href="#gramtabs"><h2><?= $this->lang->line('my_view') ?></h2></a></li></ul>
@@ -42,7 +48,7 @@
         <div style="float:right;"><a href="<?= $shebanq_link ?>" title="Find chapter at SHEBANQ" target="shebanq"><img src="<?= site_url('/images/shebanq_logo32.png') ?>" alt=""></a></div>
       <?php endif; ?>
     </div>
-          
+
     <?php if ($is_quiz): ?>
       <!-- Progress bar
        <progress> works in most browsers, <div id="progressbar"> is for older browsers and uses JQuery UI*/ -->
@@ -57,12 +63,14 @@
       <div id="quizcontainer"></div>
       <div id="buttonlist2">
           <button id="next_question" class="btn btn-quiz" type="button"><?= $this->lang->line('next') ?></button>
-          <button id="finish" class="btn btn-quiz" type="button"><?= $this->lang->line('finish') ?></button>
-          <button id="finishNoStats" class="btn btn-quiz" type="button"><?= $this->lang->line('finish_no_grading') ?></button>
+          <button id="finish" class="btn btn-quiz" type="button"><?= isset($is_exam) && $is_exam ? $this->lang->line('finish_section') : $this->lang->line('finish') ?></button>
+          <?php if (!(isset($is_exam) && $is_exam)): ?>
+            <button id="finishNoStats" class="btn btn-quiz" type="button"><?= $this->lang->line('finish_no_grading') ?></button>
+          <?php endif; ?>
       </div>
-      
+
     <?php endif; ?>
-   
+
     <p><button id="togglemql"><?= $this->lang->line('toggle_mql') ?></button></p>
     <pre class="mqlarea"><?= $mql_list ?></pre>
   </div>
@@ -91,7 +99,7 @@
 </div>
 
 
-<?php if ($is_quiz): ?>
+<?php if ($is_quiz && !(isset($is_exam) && $is_exam)): ?>
     <!-- Dialog for test heartbeat -->
     <div id="heartbeat-dialog" class="modal fade">
         <div class="modal-dialog">
@@ -126,7 +134,7 @@
 
     <?php $this->load->helper('icon_helper'); ?>
     var l_icon_map = <?= L_icon::json() ?>;
-         
+
     $(function() {
             $('.mqlarea').hide();
             $('button#togglemql').click(function() {

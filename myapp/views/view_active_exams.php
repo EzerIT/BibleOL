@@ -4,12 +4,12 @@
       Active
     </a>
   </li>
-  <!--
   <li class="nav-item">
     <a class="nav-link" id="future-tab" data-toggle="tab" href="#future_exams" role="tab" aria-controls="profile" aria-selected="false">
       Future
     </a>
   </li>
+  <!--
   <li class="nav-item">
     <a class="nav-link" id="past-tab" data-toggle="tab" href="#past_exams" role="tab" aria-controls="contact" aria-selected="false">
       Past
@@ -35,7 +35,7 @@
           <tr>
             <td class="leftalign"><?= $class_names[$exam->class_id] ?></td>
             <td class="leftalign"><?= $exam->instance_name ?></td>
-            <td class="leftalign end-time"><?= $exam->exam_end_time ?></td>
+            <td class="leftalign time"><?= $exam->exam_end_time ?></td>
             <td class="leftalign"><?= $exam->exam_length ?></td>
             <td class="leftalign">
               <a class="badge badge-primary" href="/exams/take_exam?exam=<?= $exam->id ?>">Take Exam</a>
@@ -49,14 +49,13 @@
     </div>
   </div>
 
-<!--
+<?php if ($this->mod_users->is_teacher()): ?>
   <div class="tab-pane fade" id="future_exams" role="tabpanel" aria-labelledby="profile-tab">
     <div class="table-responsive">
       <table class="type2 table table-striped">
         <tr>
           <th><?= $this->lang->line('class_name') ?></th>
           <th><?= $this->lang->line('exam_name') ?></th>
-          <th><?= $this->lang->line('start_date') ?></th>
           <th><?= $this->lang->line('start_time') ?></th>
           <th><?= $this->lang->line('duration') ?></th>
           <th><?= $this->lang->line('user_operations') ?></th>
@@ -65,8 +64,7 @@
           <tr>
             <td class="leftalign"><?= $exam->class_id ?></td>
             <td class="leftalign"><?= $exam->instance_name ?></td>
-            <td class="leftalign"><?= $exam->exam_start_date ?></td>
-            <td class="leftalign"><?= $exam->exam_start_time ?></td>
+            <td class="leftalign time"><?= $exam->exam_start_time ?></td>
             <td class="leftalign"><?= $exam->exam_length ?></td>
             <td class="leftalign">
               <a class="badge badge-danger" href="#" onclick="dltexam(<?= $exam->id ?>, '<?= $exam->exam_name ?>');"><?= $this->lang->line('delete_exam_instance') ?></a>
@@ -76,8 +74,9 @@
       </table>
     </div>
   </div>
+<?php endif; ?>
 
-  <div class="tab-pane fade" id="past_exams" role="tabpanel" aria-labelledby="contact-tab">
+  <!-- <div class="tab-pane fade" id="past_exams" role="tabpanel" aria-labelledby="contact-tab">
     <div class="table-responsive">
       <table class="type2 table table-striped">
         <tr>
@@ -100,9 +99,9 @@
         <?php endforeach; ?>
       </table>
     </div>
-  </div>
+  </div> -->
 </div>
--->
+
 
 
 <!-- Delete Exam Instance Modal -->
@@ -142,7 +141,7 @@
 
 
 <script>
-  $(".end-time").each(function () {
+  $(".time").each(function () {
     this.innerText = new Date((this.innerText) * 1000).toString().split(" (")[0];
   })
 

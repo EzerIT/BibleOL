@@ -76,6 +76,10 @@ $comment['finish'] = "";
 $format['finish'] = "";
 $use_textarea['finish'] = false;
 
+$comment['finish_section'] = "";
+$format['finish_section'] = "";
+$use_textarea['finish_section'] = false;
+
 $comment['finish_no_grading'] = "";
 $format['finish_no_grading'] = "";
 $use_textarea['finish_no_grading'] = false;
@@ -323,4 +327,3 @@ $use_textarea['valid_chapters'] = false;
 $comment['warning'] = "";
 $format['warning'] = "";
 $use_textarea['warning'] = false;
-

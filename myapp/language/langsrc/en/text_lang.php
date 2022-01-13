@@ -22,6 +22,7 @@ $lang['everything'] = "Everything";
 $lang['features'] = "Features";
 $lang['file_exists_overwrite'] = "The file already exists. Do you want to replace it?";
 $lang['finish'] = "GRADE task";
+$lang['finish_section'] = "Finish Section";
 $lang['finish_no_grading'] = "SAVE outcome";
 $lang['first_verse'] = "First verse";
 $lang['first_verse_prompt'] = "First verse:";
