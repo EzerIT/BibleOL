@@ -236,7 +236,7 @@
         <?php $hiddenStyles = array();
         foreach ($resscoreall_ind as $ra): ?>
           <?PHP $lineId = 0; $stk = str_replace(" ", "__", $st); $hiddenStyles["$stk"] = ".{$stk}_hiddenDetails {
-           display: none;
+           visibility: collapse;
           }
           "?>
         <?php foreach ($ra as $time => $result): ?>
