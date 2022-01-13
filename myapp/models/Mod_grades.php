@@ -697,7 +697,7 @@ class Mod_grades extends CI_Model {
 
         $query = $this->db
             ->from('sta_quiz q')
-            ->select('rf.name rfname,sum(`rf`.`correct`)/sum(q.tot_questions)*100 `pct`')
+            ->select('rf.name rfname,sum(`rf`.`correct`)/q.tot_questions*100 `pct`')
             ->join('sta_question quest','quest.quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
             ->where('rf.userid',$uid);
@@ -739,7 +739,7 @@ class Mod_grades extends CI_Model {
 
         $query = $this->db
             ->from('exam_results er')
-            ->select('rf.name rfname,sum(`rf`.`correct`)/sum(q.tot_questions)*100 `pct`')
+            ->select('rf.name rfname,sum(`rf`.`correct`)/q.tot_questions*100 `pct`')
             ->join('sta_quiz q','q.id=er.quizid')
             ->join('sta_question quest','quest.quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
