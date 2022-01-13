@@ -260,8 +260,8 @@ class Cursor {
 
         let questiontop = $('#quizdesc').offset().top; // Preferred top of screen
         let scrollToPos : number; // The position to which to scroll
-        let top = $(`#row_${Cursor.card}_${Cursor.row}`).offset().top; // Top of current requestattribute
-        let bottom = top + $(`#row_${Cursor.card}_${Cursor.row}`).height() + 10; // Button of current request attribue
+        let top = $(`#row_${Cursor.card}_${Cursor.row}`).offset().top; // Top of current request attribute
+        let bottom = top + $(`#row_${Cursor.card}_${Cursor.row}`).height() + 10; // Bottom of current request attribue
                                                                                  // (the 10 is a  margin)
 
         if (bottom - window.scrollY >= window.innerHeight || top - window.scrollY < 0) {
