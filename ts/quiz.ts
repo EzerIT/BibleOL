@@ -181,7 +181,7 @@ class Quiz {
                         if ($('#exercise_lst').html()) {
                             var exercise_lst = $('#exercise_lst').html().split("~");
                             var next_quiz = exercise_lst.shift();
-                            return window.location.replace(site_url + 'exams/show_quiz?quiz=' + next_quiz + '&count=10&examid=' + $('#exam_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
+                            return window.location.replace(site_url + 'text/show_quiz?quiz=' + next_quiz + '&count=10&examid=' + $('#exam_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
                         }
                         else {
                             return window.location.replace(site_url + 'exams/exam_done');
