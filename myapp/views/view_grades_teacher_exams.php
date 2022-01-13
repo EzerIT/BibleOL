@@ -39,34 +39,22 @@
         });
     </script>
 <?php else: ?>
-    <h1><?= sprintf($this->lang->line('stat_for_class'), htmlspecialchars($classname)) ?></h1>
+    <h1><?= sprintf($this->lang->line('exam_grades_for_class'), htmlspecialchars($classname)) ?></h1>
 <?php endif; ?>
 
 <div class="card mb-3" id="selector" <?= $status==2 ? '' : 'style="display:none"' ?>>
   <div class="card-body">
-    <?= form_open("grades/teacher_exercises",array('method'=>'get')) ?>
+    <?= form_open("grades/teacher_exam",array('method'=>'get')) ?>
       <input type="hidden" name="classid" value="<?= $classid ?>">
-
-      <p><?= $this->lang->line('specify_period') ?></p>
-      <table>
-        <tr>
-          <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_from') ?></td>
-          <td style="padding-left:5px"><input type="text" name="start_date" value="<?= $start_date ?>"></td>
-        </tr>
-        <tr>
-          <td style="font-weight:bold;padding-right:5px;padding-left:20px;"><?= $this->lang->line('period_to') ?></td>
-          <td style="padding-left:5px"><input type="text" name="end_date" value="<?= $end_date ?>"></td>
-        </tr>
-      </table>
 
       <p>&nbsp;</p>
       <div>
-        <span style="font-weight:bold"><?= $this->lang->line('exercise_prompt') ?></span>
-        <select name="exercise">
-          <option value="" <?= set_select('exercise', '', true) ?>></option>
-          <?php foreach($exercise_list as $ex): ?>
-            <?php $ex2 = htmlspecialchars($ex); ?>
-            <option value="<?= $ex2 ?>" <?= set_select('exercise', $ex) ?>><?= $ex2 ?></option>
+        <span style="font-weight:bold"><?= $this->lang->line('exam_prompt') ?></span>
+        <select name="exam">
+          <option value="" <?= set_select('exam', '', true) ?>></option>
+          <?php foreach($exam_list as $ex): ?>
+            <?php $ex2 = htmlspecialchars($ex["name"]); ?>
+            <option value="<?= $ex["id"] ?>" <?= set_select('exam', $ex["id"]) ?>><?= $ex2 ?></option>
           <?php endforeach; ?>
         </select>
       </div>
@@ -96,28 +84,27 @@
         </div>
       </div>
 
-      <div class="row">
+      <!-- <div class="row">
         <div class="form-group col">
           <label for="nongraded" class="col-form-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
           <input class="checkbox" id="nongraded" name="nongraded" value="on" type="checkbox" <?= set_checkbox('nongraded','on') ?>>
         </div>
-      </div>
+      </div> -->
 
       <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
     </form>
   </div>
 </div>
 
-<script>
+<!-- <script>
     $(function() {
             $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
         });
-</script>
+</script> -->
 
 
 <?php if ($status!=2): ?>
-  <h1><?= sprintf($this->lang->line('stat_for_class'), htmlspecialchars($classname)) ?></h1>
-  <h2><?= sprintf($this->lang->line('statistics_for_exercise'),htmlspecialchars($quiz)) ?></h2>
+  <h1><?= sprintf($this->lang->line('exam_grades_for_class'), htmlspecialchars($classname)) ?></h1>
   <BR>
 
   <?php if ($status==0): ?>
@@ -197,27 +184,29 @@
       }
     ?>
 
-    <h2><?= $this->lang->line('hgst_pct_correct_by_date') ?></h2>
-    <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="cvs" width="800" height="500">
-      [No canvas support]
-    </canvas>
+    <div style="display:none">
+      <h2><?= $this->lang->line('hgst_pct_correct_by_date') ?></h2>
+      <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="cvs" width="800" height="500">
+        [No canvas support]
+      </canvas>
 
-    <hr style="margin-top:20px">
-    <h2><?= $this->lang->line('hgst_speed_by_date') ?></h2>
-    <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="cvsspf" width="800" height="500">
-      [No canvas support]
-    </canvas>
+      <hr style="margin-top:20px">
+      <h2><?= $this->lang->line('hgst_speed_by_date') ?></h2>
+      <canvas style="background:#f8f8f8; display:inline-block; vertical-align:top;" id="cvsspf" width="800" height="500">
+        [No canvas support]
+      </canvas>
+    </div>
 
 
     <p style="margin-top:10px">
           <a id="show1" class="badge badge-primary" style="display:none" href="#"><?= $this->lang->line('show_table') ?></a>
-          <a id="hide1" class="badge badge-primary" href="#"><?= $this->lang->line('hide_table') ?></a>
+          <!-- <a id="hide1" class="badge badge-primary" href="#"><?= $this->lang->line('hide_table') ?></a> -->
     </p>
     <BR>
     <div class="table-responsive" id="table1" style="display:block">
-      <h2><?= sprintf($this->lang->line('grades_for_exercise'),htmlspecialchars($quiz)) ?></h2>
+      <h2><?= sprintf($this->lang->line('grades_for_exam'),htmlspecialchars($quiz)) ?></h2>
       <table class="type2 table table-striped autowidth">
-        <caption><?= $this->lang->line('grds_exercise_by_student_caption') ?></caption>
+        <caption><?= $this->lang->line('grds_exam_by_student_caption') ?></caption>
         <tr>
           <th><?= $this->lang->line('student') ?></th>
           <th class="text-center"><?= $this->lang->line('date') ?></th>
@@ -236,29 +225,63 @@
         <?php $hiddenStyles = array();
         foreach ($resscoreall_ind as $ra): ?>
           <?PHP $lineId = 0; $stk = str_replace(" ", "__", $st); $hiddenStyles["$stk"] = ".{$stk}_hiddenDetails {
-           visibility: collapse;
+            visibility: collapse;
           }
-          "?>
+          ";
+
+          //Reset the counters each student
+          $tot_percent = 0;
+          $tot_percWeighted = 0;
+          $tot_grade = 0;
+          $tot_gradeWeighted = 0;
+          $startTime = 0;
+          $ncounter = 0;
+          $tot_weight = 0;
+          $tot_duration = 0;
+          $tot_featpMin = 0;
+          ?>
         <?php foreach ($ra as $time => $result): ?>
-        <tr class="<?php echo $lineId==0?'headerDet':"{$stk}_hiddenDetails";  ?>">
-          <td><?= $lineId==0?$st . " (" . $this->lang->line('hgst_grade') .")":$st ?></td>
-          <!-- <td class="text-center"><?= Statistics_timeperiod::format_date($time) ?></td> -->
+          <?php
+          // Prepares data
+          $ncounter += 1;
+          if ( $startTime == 0 ) {
+            $startTime = $time;
+          }
+          $tot_duration += $result["duration"];
+          $tot_featpMin += 60/$result['featpermin'];
+          $tot_weight += $result['weight'];
+          $tot_percent += $result['percentage'];
+          $tot_percWeighted += $result['percentage'] * $result['weight'];
+          if ( round(60/$result['featpermin'])<=$max_time ) {
+            // if the user took less than the max alloted time per question
+            $tot_grade += $result['percentage'];
+            $tot_gradeWeighted += $result['percentage'] * $result['weight'];
+          }
+          ?>
+        <?php endforeach; ?>
+        <tr class="<?php echo 'headerDet';  ?>">
+          <td><?= $st ?></td>
+          <td class="text-center"><?= Statistics_timeperiod::format_time($startTime) ?></td>
+          <td class="text-center"><?= round($tot_percWeighted/$tot_weight) . "% (" .  round($tot_percent/$ncounter)  ?>%)</td>
+          <td class="text-center"><?= calculateGrade($grade_system, ($tot_percWeighted/$tot_weight)) ?></td>
+          <td class="text-center"><?= $result["duration"] ?></td>
+          <td class="text-center"><?= sprintf("%.1f",round(60/($tot_featpMin/$ncounter))) ?></td>
+          <td class="text-center">
+              <a id="det_<?php echo $stk;?>" class="badge badge-primary" href="#"><?= $this->lang->line('detail') ?></a>
+          </td>
+        </tr>
+
+        <?php
+        // Print the exercise pieces
+        foreach ($ra as $time => $result): ?>
+        <tr class="<?php echo "{$stk}_hiddenDetails";  ?>">
+          <td>>>> <?= $result["exercise_name"] ?></td>
           <td class="text-center"><?= Statistics_timeperiod::format_time($time) ?></td>
           <td class="text-center"><?= round($result['percentage']) ?>%</td>
           <td class="text-center"><?= (round(60/$result['featpermin'])<=$max_time)?calculateGrade($grade_system, $result['percentage']):calculateGrade($grade_system, 0) ?></td>
-          <!-- <td class="text-center"><?= $result['count'] ?></td> -->
           <td class="text-center"><?= $result["duration"] ?></td>
           <td class="text-center"><?= sprintf("%.1f",round(60/$result['featpermin'])) ?></td>
-          <td class="text-center">
-            <!-- <a id="show1" class="badge badge-primary" style="display:none" href="#"><?= $this->lang->line('show_table') ?></a> -->
-            <!-- <a id="hide1" class="badge badge-primary" href="#"><?= $this->lang->line('hide_table') ?></a> -->
-            <?php if ($lineId == 0) {
-            ?>
-              <a id="det_<?php echo $stk;?>" class="badge badge-primary" href="#"><?= $this->lang->line('detail') ?></a>
-            <?php }
-            $lineId +=1;
-            ?>
-          </td>
+          <td class="text-center"></td>
         </tr>
         <?php endforeach; ?>
         <?php $st = next($students); ?>

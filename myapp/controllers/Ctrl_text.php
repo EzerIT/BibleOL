@@ -168,8 +168,19 @@ class Ctrl_text extends MY_Controller {
         else
             $number_of_quizzes = intval($_GET['count']);
 
+        if (array_key_exists('examid', $_GET)) {
+          $quiz = $_GET['quiz'];
+          $exam_parameters = $_SESSION['exam_parameters'];
+          $numq = $exam_parameters[$quiz]['numq'];
 
-        $this->show_quiz_common($_GET['quiz'], $number_of_quizzes);
+          if ($numq <= 0) {
+            $numq = 10;
+          }
+          $this->show_quiz_common($_GET['quiz'], $numq, $universe = null, $examid=$_GET['examid'], $exercise_lst=$_GET['exercise_lst']);
+
+        } else {
+          $this->show_quiz_common($_GET['quiz'], $number_of_quizzes);
+        }
     }
 
     public function convert_quiz() {
@@ -189,7 +200,7 @@ class Ctrl_text extends MY_Controller {
 			print "Usage: php index.php text convert_quiz <filename>\n";
 			die;
 		}
-        
+
         $filename = $this->uri->segment(3);
         for ($i=4; $i<=$this->uri->total_segments(); ++$i)
             $filename .= '/' . $this->uri->segment($i);
@@ -217,7 +228,7 @@ class Ctrl_text extends MY_Controller {
     }
 
     // Common code for show_quiz() and show_quiz_sel()
-	private function show_quiz_common(string $quiz, int $number_of_quizzes, array $universe = null) {
+	private function show_quiz_common(string $quiz, int $number_of_quizzes, array $universe = null, int $examid = null, string $exercise_lst = null) {
         try {
             // MODEL:
             $this->load->model('mod_quizpath');
@@ -244,23 +255,44 @@ class Ctrl_text extends MY_Controller {
                         break;
                 }
             }
+
+            $display_data = array(
+              'is_quiz' => true,
+              'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
+              'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
+              'quizData_json' => $this->mod_askemdros->quiz_data_json,
+              'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
+              'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
+              'l10n_json' => $this->mod_askemdros->l10n_json,
+              'l10n_js_json' => $this->mod_localize->get_json(),
+              'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
+              'is_logged_in' => $this->mod_users->is_logged_in(),
+            );
+
+            $exam_data = array(
+              'is_exam' => $examid !== null,
+              'examid' => $examid,
+              'exercise_lst' => $exercise_lst,
+              'quizid' => $this->quiz_data->quizid,
+            );
+
+            if ($examid) {
+              $display_data = array_merge($display_data, $exam_data);
+            }
+
+
             $this->load->view('view_top1', array('title' => $this->lang->line('quiz'),
                                                  'css_list' => array('styles/selectbox.css'),
                                                  'js_list' => $javascripts));
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => false));
-            $this->load->view('view_text_display', array('is_quiz' => true,
-                                                         'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
-                                                         'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
-                                                         'quizData_json' => $this->mod_askemdros->quiz_data_json,
-                                                         'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
-                                                         'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
-                                                         'l10n_json' => $this->mod_askemdros->l10n_json,
-                                                         'l10n_js_json' => $this->mod_localize->get_json(),
-                                                         'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
-                                                         'is_logged_in' => $this->mod_users->is_logged_in()));
-            $this->load->view('view_bottom');
+            if ($examid === null) {
+              $this->load->view('view_menu_bar', array('langselect' => false));
+            }
+            $this->load->view('view_text_display', $display_data);
+            if ($examid === null) {
+              $this->load->view('view_bottom');
+            }
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('quiz'));
@@ -318,14 +350,14 @@ class Ctrl_text extends MY_Controller {
     }
 
 	public function add_universe_level() {
-        // $_GET is typically array("rangelow"=>"7032", "rangehigh"=>"7323", "ref"=>"Genesis:16", 
+        // $_GET is typically array("rangelow"=>"7032", "rangehigh"=>"7323", "ref"=>"Genesis:16",
         //                          "lev"=>"3", "db"=>"ETCBC4", "prop"=>"BHS4")
 
         // MODEL:
         $this->load->model('mod_askemdros');
         $this->mod_askemdros->setup($_GET['db'], $_GET['prop']);
         $this->loc = json_decode($this->db_config->l10n_json);
-        
+
         $this->load->library('universe_tree');
         $res = $this->universe_tree->expand_level(intval($_GET['rangelow']), intval($_GET['rangehigh']),
                                                   $_GET['ref'], intval($_GET['lev']));
@@ -346,7 +378,7 @@ class Ctrl_text extends MY_Controller {
             $this->load->model('mod_localize');
 
             $this->mod_quizpath->init($_GET['quiz'], false, false);
-            
+
             $this->mod_askemdros->edit_quiz();
 
             $this->loc = json_decode($this->db_config->l10n_json);
@@ -542,7 +574,7 @@ class Ctrl_text extends MY_Controller {
             $this->load->model('mod_askemdros');
 
             $this->mod_quizpath->init(rawurldecode($_POST['dir']) . '/' . rawurldecode($_POST['quiz']) . '.3et', false, false, false);
-            
+
             // Protect against malicious posting:
             if ($this->mod_quizpath->file_exists()) {
                 $owner = $this->mod_quizpath->get_excercise_owner();

@@ -717,75 +717,76 @@ class Ctrl_exams extends MY_Controller
         }
     }
 
-    public function show_quiz() {
-          if (!isset($_GET['quiz'])) {
-              $this->select_quiz();
-              return;
-          }
-
-          $quiz = $_GET['quiz'];
-          $exam_parameters = $_SESSION['exam_parameters'];
-          $numq = $exam_parameters[$quiz]['numq'];
-
-          if ($numq <= 0){
-            $numq = 10;
-          }
-
-          $this->show_quiz_common($_GET['quiz'], $numq, $_GET['examid'], $_GET['exercise_lst']);
-      }
-
-    // Common code for show_quiz() and show_quiz_sel()
-    private function show_quiz_common(string $quiz, int $number_of_quizzes, int $examid, string $exercise_lst, array $universe = null) {
-      try {
-          // MODEL:
-          $this->load->model('mod_quizpath');
-          $this->load->model('mod_askemdros');
-          $this->mod_quizpath->init($quiz, false, true);
-
-          $this->mod_askemdros->show_quiz($number_of_quizzes, $universe);
-          $this->load->model('mod_localize');
-
-          // VIEW:
-          $javascripts = array('js/ol.js');
-          if ($this->quiz_data->quizFeatures->useVirtualKeyboard) {
-              switch ($this->db_config->dbinfo->charSet) {
-                case 'hebrew':
-                      $javascripts[] = 'VirtualKeyboard.full.3.7.2/vk_loader.js?vk_layout=IL%20Biblical%20Hebrew%20(SIL)&amp;vk_skin=goldie';
-                      break;
-
-                case 'greek':
-                      $javascripts[] = 'VirtualKeyboard.full.3.7.2/vk_loader.js?vk_layout=GR%20Greek%20Polytonic&amp;vk_skin=goldie';
-                      break;
-
-                case 'transliterated_hebrew':
-                      // Nothing for now
-                      break;
-              }
-          }
-
-          $this->load->view('view_top1', array('title' => $this->lang->line('quiz'),
-                                               'css_list' => array('styles/selectbox.css'),
-                                               'js_list' => $javascripts));
-          $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
-          $this->load->view('view_top2');
-          $this->load->view('view_exam_display', array('examid' => $examid,
-                                                       'exercise_lst' => $exercise_lst,
-                                                       'quizid' => $this->quiz_data->quizid,
-                                                       'is_quiz' => true,
-                                                       'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
-                                                       'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
-                                                       'quizData_json' => $this->mod_askemdros->quiz_data_json,
-                                                       'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
-                                                       'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
-                                                       'l10n_json' => $this->mod_askemdros->l10n_json,
-                                                       'l10n_js_json' => $this->mod_localize->get_json(),
-                                                       'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
-                                                       'is_logged_in' => $this->mod_users->is_logged_in()));
-      }
-      catch (DataException $e) {
-          $this->error_view($e->getMessage(), $this->lang->line('quiz'));
-      }
-    }
+    // public function show_quiz() {
+    //       if (!isset($_GET['quiz'])) {
+    //           $this->select_quiz();
+    //           return;
+    //       }
+    //
+    //       $quiz = $_GET['quiz'];
+    //       $exam_parameters = $_SESSION['exam_parameters'];
+    //       $numq = $exam_parameters[$quiz]['numq'];
+    //
+    //       if ($numq <= 0){
+    //         $numq = 10;
+    //       }
+    //
+    //       $this->show_quiz_common($_GET['quiz'], $numq, $_GET['examid'], $_GET['exercise_lst']);
+    //   }
+    //
+    // // Common code for show_quiz() and show_quiz_sel()
+    // private function show_quiz_common(string $quiz, int $number_of_quizzes, int $examid, string $exercise_lst, array $universe = null) {
+    //   try {
+    //       // MODEL:
+    //       $this->load->model('mod_quizpath');
+    //       $this->load->model('mod_askemdros');
+    //       $this->mod_quizpath->init($quiz, false, true);
+    //
+    //       $this->mod_askemdros->show_quiz($number_of_quizzes, $universe);
+    //       $this->load->model('mod_localize');
+    //
+    //       // VIEW:
+    //       $javascripts = array('js/ol.js');
+    //       if ($this->quiz_data->quizFeatures->useVirtualKeyboard) {
+    //           switch ($this->db_config->dbinfo->charSet) {
+    //             case 'hebrew':
+    //                   $javascripts[] = 'VirtualKeyboard.full.3.7.2/vk_loader.js?vk_layout=IL%20Biblical%20Hebrew%20(SIL)&amp;vk_skin=goldie';
+    //                   break;
+    //
+    //             case 'greek':
+    //                   $javascripts[] = 'VirtualKeyboard.full.3.7.2/vk_loader.js?vk_layout=GR%20Greek%20Polytonic&amp;vk_skin=goldie';
+    //                   break;
+    //
+    //             case 'transliterated_hebrew':
+    //                   // Nothing for now
+    //                   break;
+    //           }
+    //       }
+    //
+    //       $this->load->view('view_top1', array('title' => $this->lang->line('quiz'),
+    //                                            'css_list' => array('styles/selectbox.css'),
+    //                                            'js_list' => $javascripts));
+    //       $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
+    //       $this->load->view('view_top2');
+    //       $this->load->view('view_text_display', array('is_exam' => true,
+    //                                                    'examid' => $examid,
+    //                                                    'exercise_lst' => $exercise_lst,
+    //                                                    'quizid' => $this->quiz_data->quizid,
+    //                                                    'is_quiz' => true,
+    //                                                    'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
+    //                                                    'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
+    //                                                    'quizData_json' => $this->mod_askemdros->quiz_data_json,
+    //                                                    'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
+    //                                                    'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
+    //                                                    'l10n_json' => $this->mod_askemdros->l10n_json,
+    //                                                    'l10n_js_json' => $this->mod_localize->get_json(),
+    //                                                    'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
+    //                                                    'is_logged_in' => $this->mod_users->is_logged_in()));
+    //   }
+    //   catch (DataException $e) {
+    //       $this->error_view($e->getMessage(), $this->lang->line('quiz'));
+    //   }
+    // }
 
     function submit_exam_quiz() {
 
