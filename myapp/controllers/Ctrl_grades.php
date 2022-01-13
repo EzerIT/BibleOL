@@ -696,8 +696,8 @@ class Ctrl_grades extends MY_Controller {
                                                                                       'exam_list' => $exam_list), true);
 
             $main_params = array('left_title' => $this->lang->line('select_period_heading'),
-                                 'left' => $this->lang->line('time_period_description')
-                                 . $this->lang->line('student_exam_description'),
+                                 'left' => $this->lang->line('student_exam_description')
+                                 . $this->lang->line('student_exam_description2'),
                                  'center' => $center_text);
 
             if ($status==1) {
