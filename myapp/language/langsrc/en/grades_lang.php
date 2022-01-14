@@ -107,4 +107,4 @@ $lang['grades_for_exam'] = "Exam Grading";
 
 $lang['grds_exam_by_student_caption'] = "<b>Note:</b> The percentage in brackets does not consider the weights of each exercise on the exam. This percentage is used just for visual reference and does not impact grading.";
 $lang['student_exam_description'] = "<p><b>Choose the Exam Instance you want to grade for this class.</b></p>";
-$lang['student_exam_description2'] = "<p>You can change the default grading by select an alternate granding on the combo box.</p>";
+$lang['student_exam_description2'] = "<p>You can change the default grading by selecting an alternate grading system in the combo box.</p>";
