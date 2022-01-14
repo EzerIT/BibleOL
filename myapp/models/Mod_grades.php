@@ -176,10 +176,36 @@ class Mod_grades extends CI_Model {
             }
         }
 
-        // Set end time and grading for quiz (MRCN: and the total number of questions)
+        /* Set end time and grading for quiz (MRCN: and the total number of questions) */
+        // Get the total number of features for this quiz
+        $tot_features=$this->quizRequestedFeatures($quizid);
+        // Write the results to the DB
         $query = $this->db->where('id',$quizid)->update('sta_quiz',array('end' => $time,
                                                                          'grading' => $this->input->post('grading')=='true' ? 1 : 0,
-                                                                         'tot_questions' => $this->input->post('question_count') ));
+                                                                         'tot_questions' => $this->input->post('question_count') * $tot_features ));
+    }
+
+    // Get the number of features requested by a quiz
+    public function quizRequestedFeatures(int $quizid) {
+      $tot_features = 1;
+
+      $query = $this->db->select('quizcode')
+      ->from('sta_quiz')->join('sta_quiztemplate','sta_quiztemplate.id=sta_quiz.templid')
+      ->where('sta_quiz.ID',$quizid)
+      ->get();
+
+      $quizSrc = $query->result();
+
+      if ( !empty($quizSrc) ) {
+        $matches=array();
+        if ( preg_match_all('/<request>(.*)<\/request>/',$quizSrc[0]->quizcode, $matches) ) {
+          $tot_features = sizeof($matches[0]);
+        }
+
+      }
+      // error_log("AAH: DEBUG: Tot Features denerated: " . $tot_features);
+
+      return $tot_features;
     }
 
     // Get all templates with finished quizzes for user $user_id
@@ -697,7 +723,8 @@ class Mod_grades extends CI_Model {
 
         $query = $this->db
             ->from('sta_quiz q')
-            ->select('rf.name rfname,sum(`rf`.`correct`)/q.tot_questions*100 `pct`')
+            // ->select('rf.name rfname,sum(`rf`.`correct`)/q.tot_questions*100 `pct`')
+            ->select('rf.name rfname,sum(`rf`.`correct`)/count(*)*100 `pct`')
             ->join('sta_question quest','quest.quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
             ->where('rf.userid',$uid);
@@ -712,7 +739,8 @@ class Mod_grades extends CI_Model {
                 ->where('q.start <=',$period_end)
                 ->where('end IS NOT NULL')
                 ->where('valid',1)
-                ->group_by('q.id,rfname')
+                // ->group_by('q.id,rfname')
+                ->group_by('rfname')
                 ->get();
         } else {
           // MRCN
@@ -722,9 +750,10 @@ class Mod_grades extends CI_Model {
                   ->where('q.start <=',$period_end)
                   ->where('end IS NOT NULL')
                   ->where('valid',1)
-                  ->group_by('q.id, rfname')
+                  ->group_by('rfname')
                   // ->group_by('q.id, rfname')
-                  ->order_by('pct desc')
+                  // // ->group_by('q.id, rfname')
+                  // ->order_by('pct desc')
                   ->get();
         }
 
@@ -739,7 +768,8 @@ class Mod_grades extends CI_Model {
 
         $query = $this->db
             ->from('exam_results er')
-            ->select('rf.name rfname,sum(`rf`.`correct`)/q.tot_questions*100 `pct`')
+            // ->select('rf.name rfname,sum(`rf`.`correct`)/q.tot_questions*100 `pct`')
+            ->select('rf.name rfname,sum(`rf`.`correct`)/count(*)*100 `pct`')
             ->join('sta_quiz q','q.id=er.quizid')
             ->join('sta_question quest','quest.quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
@@ -755,7 +785,8 @@ class Mod_grades extends CI_Model {
                 // ->where('q.start <=',$period_end)
                 ->where('end IS NOT NULL')
                 ->where('valid',1)
-                ->group_by('q.id,rfname')
+                // ->group_by('q.id,rfname')
+                ->group_by('rfname')
                 ->get();
         } else {
           // MRCN
@@ -765,9 +796,10 @@ class Mod_grades extends CI_Model {
                   // ->where('q.start <=',$period_end)
                   ->where('end IS NOT NULL')
                   ->where('valid',1)
-                  ->group_by('q.id, rfname')
+                  ->group_by('rfname')
                   // ->group_by('q.id, rfname')
-                  ->order_by('pct desc')
+                  // // ->group_by('q.id, rfname')
+                  // ->order_by('pct desc')
                   ->get();
         }
 
