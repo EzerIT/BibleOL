@@ -5,8 +5,15 @@
 <? endif; ?>
 
 <div class="row">
-<div class="col-lg-3">
-</div>
+    <div class="col-lg-3 sidepanel">
+        <?php if (!isset($is_exam) || !$is_exam): ?>
+            <div class="card mb-3 d-none d-lg-block">
+                <h5 class="card-header bg-primary text-light"><?= $this->lang->line('shortcut_heading') ?></h5>
+                <div class="card-body"><?= $this->lang->line('shortcut_text') ?></div>
+            </div>
+        <?php endif; ?>
+    </div>
+
 
 <div class="col-lg-6 col-md-8">
   <?php if ($is_quiz && !$is_logged_in): ?>

@@ -84,3 +84,5 @@ $lang['using_database'] = "Bruger databasen: %s";
 $lang['using_database_version'] = "Version %s";
 $lang['valid_chapters'] = "Gyldige kapitler:";
 $lang['warning'] = "Advarsel:";
+$lang['shortcut_heading'] = 'Genvejstaster';
+$lang['shortcut_text'] = 'Du kan benytte genvejstaster. En engelsk beskrivelse af hvordan de benyttes, kan <a target="_blank" href="/ShortcutKeyDescriptionA4.pdf">downloades her</a>.';

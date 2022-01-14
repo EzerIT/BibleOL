@@ -102,3 +102,5 @@ $lang['ExamTBL_MaxDur'] = 'Max Duration';
 $lang['ExamTBL_Teacher'] = 'Teacher/Instructor';
 $lang['ExamTBL_Operation'] = 'Operation';
 $lang['click_exam'] = "Click on a exam to open it.  If the exam is already taken, it will display the grades when availiable.";
+$lang['shortcut_heading'] = 'Shortcut keys';
+$lang['shortcut_text'] = 'Shortcut keys are available. You can <a target="_blank" href="/ShortcutKeyDescriptionA4.pdf">download</a> a description of how to use them.';
