@@ -4,6 +4,3 @@
 [submodule "jstree"]
 	path = jstree
 	url = https://github.com/EzerIT/jstree
-[submodule "virtualkeyboard"]
-	path = virtualkeyboard
-	url = https://github.com/EzerIT/virtualkeyboard
