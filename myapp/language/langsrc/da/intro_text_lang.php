@@ -15,25 +15,6 @@ $lang['intro_center'] = "<h1>Hvad er Bible Online Learner?</h1>\n"
         . "    <p>Kildeteksten til Bible OL er tilgængelig på <a href=\"https://github.com/EzerIT/BibleOL\"\n"
         . "    target=\"_blank\">GitHub</a>. Vi håber at udviklere vil fork'e denne kode og hjælpe os med at\n"
         . "    tilføje nye faciliteter.</p>";
-$lang['intro_right1'] = "<p>Siden 2014 har Bible Online Learner være en del af <a href=\"http://global-learning.org\"\n"
-        . "    target=\"_blank\">Global Learning Initiative</a>. Yderligere oplysnigner fås hos professor Nicolai\n"
-        . "    Winther-Nielsen (nwn [at] dbi . edu) hos <a href=\"http://fih.fjellhaug.no\"\n"
-        . "    target=\"_blank\">Fjellhaug International University College Denmark (FIUC-DK)</a>.<br>\n"
-        . "\n"
-        . "    Bible Online Learner blev udviklet af Claus Tøndering fra <a href=\"http://www.ezer.dk\"\n"
-        . "    target=\"_blank\">Ezer IT Consulting</a>.<br>\n"
-        . "\n"
-        . "    For sit PhD-studium ved Aalborg universitet udvikler Judith Gottschalk <i>Learning Journey,</i>\n"
-        . "    en plugin som giver statistiske oplysninger om\n"
-        . "    hvorledes studerende klarer sig i Bible OL.</p>";
-$lang['intro_right2'] = "<p>Bible Online Learner er baseret på PLOTLearner, et PC-program der blev udklet som en del af <a\n"
-        . "    href=\"http://www.eplot.eu\" target=\"_blank\">EuroPLOT-projektet</a> i 2010-2013. Nærværende\n"
-        . "    websted er resultatet af videre udvikling foretaget af Ezer IT Consulting uden for\n"
-        . "    EuroPLOT-projektet. Webstedet vedligeholdes af <a href=\"http://3bmoodle.dk\" target=\"_blank\">3BM\n"
-        . "    Bible Software and Multimedia</a>.</p>";
-$lang['intro_right3'] = "<p>SHEBANQ-webstedet blev skabt af Wido van Peursen og Dirk Roorda.</p>";
-$lang['intro_right4'] = "<p>Swahili-ordbogen er udviklet af Dr. David Instone-Brewer og betalt af United Bible Societies. Ordbogens brug i Bible Online Learner er foreløbig kun eksperimentel.</p>";
-$lang['intro_right_head'] = "Bible Online Learner &ndash; fri global læring";
 $lang['welcome'] = "Velkommen til Bible Online Learner";
 $lang['welcome2'] = "%s, velkommen til Bible Online Learner";
 

@@ -14,23 +14,5 @@ $lang['intro_center'] = "<h1>¿Qué Es Bible Online Learner?</h1>\n"
         . "       <p>La fuente de código para Bible OL está disponible en <a href=\"https://github.com/EzerIT/BibleOL\"\n"
         . "       target=\"_blank\">GitHub</a>. Esperamos que programadores puedan trabajar con este código y se unan a nosotros para adicionar\n"
         . "       características adicionales.</p>";
-$lang['intro_right1'] = "<p>Desde el 2014, Bible Online Learner ha sido parte de <a href=\"http://global-learning.org\"\n"
-        . "       target=\"_blank\">Global Learning Initiative</a>. Para más información, por favor contacte Profesor\n"
-        . "       Nicolai Winther-Nielsen (nwn [at] dbi . edu) de <a\n"
-        . "       href=\"http://fih.fjellhaug.no\" target=\"_blank\">Fjellhaug International\n"
-        . "       University College Denmark (FIUC-DK)</a>.<br>\n"
-        . "\n"
-        . "       Bible Online Learner fue desarrollado por Claus Tøndering of <a href=\"http://www.ezer.dk\"\n"
-        . "       target=\"_blank\">Ezer IT Consulting</a>.<br>\n"
-        . "\n"
-        . "       Para su Doctorado en Aalborg University, Judith Gottschalk está desarrollando <i>Learning Journey,</i>\n"
-        . "       una adición con estadísticas en el rendimiento del estudiante.</p>";
-$lang['intro_right2'] = "<p>Bible Online Learner está basado en PLOTLearner, un programa de desarrollado como parte del proyecto\n"
-        . "       <a href=\"http://www.eplot.eu\" target=\"_blank\">EuroPLOT</a> 2010-2013. El\n"
-        . "       presente sitio web es el resultado de major desarrollo por Ezer IT Consulting fuera del proyecto\n"
-        . "       EuroPLOT, y el sitio web es mantenido por <a href=\"http://3bmoodle.dk\"\n"
-        . "       target=\"_blank\">3BM Bible Software and Multimedia</a>.</p>";
-$lang['intro_right3'] = "<p>El sitio web SHEBANQ fue creado por Wido van Peursen and Dirk Roorda.</p>";
-$lang['intro_right_head'] = "Bible Online Learner para un Aprendizaje Global Gratuito";
 $lang['welcome'] = "Bienvenido Bible Online Learner";
 $lang['welcome2'] = "%s, bienvenido a Bible Online Learner";
