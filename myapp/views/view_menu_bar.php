@@ -40,6 +40,7 @@ if ($this->mod_users->is_logged_in()) {
 
     if ($this->mod_users->is_teacher()) {
       $content[$ix][] = make_anchor2('grades/teacher_grades', 'grades_quizzes');
+      $content[$ix][] = make_anchor2('grades/teacher_exam_grades', 'grades_exams');
     }
 
 // This was part of the defunct "Learning Journey" it has been retained here for reference:

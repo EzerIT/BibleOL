@@ -18,6 +18,7 @@ $lang['features_by_student_caption'] = "Results per feature for each student";
 $lang['features_one_student_caption'] = "Results per feature for %s";
 $lang['for_user'] = "For user %s";
 $lang['grouped_by_exercises'] = "Exercises";
+$lang['grouped_by_exams'] = "Exams";
 $lang['grouped_by_students'] = "Students";
 $lang['hide_selector'] = "Hide selector";
 $lang['hide_table'] = "Hide table";
@@ -40,7 +41,9 @@ $lang['question_count_colon'] = "Questions:";
 $lang['question_items_per_min'] = "Question items per minute";
 $lang['sec_per_correct'] = "Seconds per correct";
 $lang['select_class_description'] = "<p>Here you will find a list of classes you manage.</p>\n"
-        . "<p>Click the “Students” or “Exercises” button next to a class.</p>";
+        . "<p>Click the “Exercises” button next to a class.</p>";
+$lang['select_exam_class_description'] = "<p>Here you will find a list of classes you manage.</p>\n"
+        . "<p>Click the “Exam” button next to a class.</p>";
 $lang['select_class_heading'] = "Select Class";
 $lang['select_grouped_by'] = "Select grades grouped by";
 $lang['select_period_heading'] = "Select a Period";
@@ -52,6 +55,7 @@ $lang['speed_by_date'] = "Answering speed by date";
 $lang['starts'] = "Starts";
 $lang['statistics_for_exercise'] = "Grades & Statistics for exercise “%s”";
 $lang['statistics_per_class_heading'] = "Statistics per Class";
+$lang['Exam_grades_per_class_heading'] = "Exam Grades per Class";
 $lang['statistics_title'] = "Statistics";
 $lang['stat_all_ex'] = "Grades for all exercises";
 $lang['stat_for_class'] = "Grades & Statistics for the class “%s”";
@@ -78,6 +82,7 @@ $lang['total_time_spent'] = "Total time spent: %d hours %d minutes";
 $lang['wrong'] = "Wrong";
 
 // MRCN for New grading
+$lang['exam_prompt'] = "Select Exam: ";
 $lang['grade_system_prompt'] = "Select the grade system: ";
 $lang['show_max_time_prompt'] = "Set the maximum average time (in seconds) per answer. If the average time per answer is higher than this amount, grade is set to the owest grade on the system. Leave as 0 to disable this feature: ";
 $lang['hgst_pct_correct_by_date'] = "Highest % of correct answers by date";
@@ -97,3 +102,9 @@ $lang['best_total_time'] = "Total time (s)";
 $lang['grades_per_class_heading'] = "Grades per Class";
 $lang['grds_exercise_by_student_caption'] = "Daily results for each student";
 $lang['grades_for_exercise'] = "Grades for exercise “%s”";
+$lang['exam_grades_for_class'] = "Exam Grades for the class “%s”";
+$lang['grades_for_exam'] = "Exam Grading";
+
+$lang['grds_exam_by_student_caption'] = "<b>Note:</b> The percentage in brackets does not consider the weights of each exercise on the exam. This percentage is used just for visual reference and does not impact grading.";
+$lang['student_exam_description'] = "<p><b>Choose the Exam Instance you want to grade for this class.</b></p>";
+$lang['student_exam_description2'] = "<p>You can change the default grading by selecting an alternate grading system in the combo box.</p>";
