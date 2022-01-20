@@ -61,7 +61,7 @@
         </tr>
         <?php foreach ($future_exams_list as $exam): ?>
           <tr>
-            <td class="leftalign"><?= $exam->class_id ?></td>
+            <td class="leftalign"><?= $class_names[$exam->class_id] ?></td>
             <td class="leftalign"><?= $exam->instance_name ?></td>
             <td class="leftalign time"><?= $exam->exam_start_time ?></td>
             <td class="leftalign"><?= $exam->exam_length ?></td>
