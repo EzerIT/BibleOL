@@ -49,7 +49,6 @@
     </div>
   </div>
 
-<?php if ($this->mod_users->is_teacher()): ?>
   <div class="tab-pane fade" id="future_exams" role="tabpanel" aria-labelledby="profile-tab">
     <div class="table-responsive">
       <table class="type2 table table-striped">
@@ -67,14 +66,15 @@
             <td class="leftalign time"><?= $exam->exam_start_time ?></td>
             <td class="leftalign"><?= $exam->exam_length ?></td>
             <td class="leftalign">
-              <a class="badge badge-danger" href="#" onclick="dltexam(<?= $exam->id ?>, '<?= $exam->exam_name ?>');"><?= $this->lang->line('delete_exam_instance') ?></a>
+              <?php if ($this->mod_users->is_teacher()): ?>
+                <a class="badge badge-danger" href="#" onclick="dltexam(<?= $exam->id ?>, '<?= $exam->instance_name ?>');"><?= $this->lang->line('delete_exam_instance') ?></a>
+              <?php endif; ?>
             </td>
           </tr>
         <?php endforeach; ?>
       </table>
     </div>
   </div>
-<?php endif; ?>
 
   <!-- <div class="tab-pane fade" id="past_exams" role="tabpanel" aria-labelledby="contact-tab">
     <div class="table-responsive">
