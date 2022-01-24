@@ -1234,7 +1234,7 @@ class Mod_translate extends CI_Model {
                     for ($hix=$first_stem; $hix<$header_count; ++$hix) {
                         if (empty($record[$hix]))
                             continue;
-                        
+
                         $query = $this->db
                             ->select('id')
                             ->where('lex', $record[1])
@@ -1242,9 +1242,12 @@ class Mod_translate extends CI_Model {
                             ->get("lexicon_{$src_language}");
 
                         $row = $query->row();
-                        assert(!is_null($row));
-                        $toinsert[] = array('lex_id' => $row->id,
-                                            'gloss' => $record[$hix]);
+
+                        if (is_null($row)) 
+                            echo "Extra word in CSV file: lex=$record[1] vs=",$harray[$hix][0],"\n";
+                        else
+                            $toinsert[] = array('lex_id' => $row->id,
+                                                'gloss' => $record[$hix]);
                     }
                     break;
 
