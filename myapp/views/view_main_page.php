@@ -55,9 +55,8 @@ function logos() {
 <?php if (isset($landingpage)): ?>
     <div class="row" id="landing-row">
         <div class="col-md-8" id="landingpanel">
-            <img class="graphic-element" src="<?= site_url("/images/dadel/DaDEL_ID_graphic_element_RGB.png") ?>" style="height:110%">
+            <img class="graphic-element" src="<?= site_url("/images/dadel/DaDEL_ID_graphic_element_RGB.png") ?>" style="height:82%">
             <div id="landingtext">
-                <?= $this->lang->line('temporary_intro') ?>
                 <?= $center ?>
             </div>
         </div>

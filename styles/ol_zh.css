@@ -1387,7 +1387,7 @@ footer .row {
   margin: 0 !important;
 }
 .logointro {
-  padding: 4vw !important;
+  padding: 0 4vw 4vw 4vw !important;
 }
 .logopanel {
   padding: 2vw 4vw !important;

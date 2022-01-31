@@ -17,7 +17,3 @@ $lang['intro_center'] = "<h1>Hvad er Bible Online Learner?</h1>\n"
         . "    tilføje nye faciliteter.</p>";
 $lang['welcome'] = "Velkommen til Bible Online Learner";
 $lang['welcome2'] = "%s, velkommen til Bible Online Learner";
-
-$lang['temporary_intro'] = "<h1>Bemærk: Nyt brugerinterface</h1> "
-                         . "<p>Bible Online Learner har fået et nyt brugerinterface. Det gamle system vil kunne tilgås "
-                         . "året ud på <a href=\"https://bibleol-old.3bmoodle.dk\">bibleol-old.3bmoodle.dk</a></p>";
