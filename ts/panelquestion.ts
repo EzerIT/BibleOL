@@ -430,20 +430,22 @@ class PanelQuestion {
         let i: number;
         let slides: JQuery = $('#quizcontainer').find('.quizcard');
 
-        if (this.subQuizIndex < 1) {
+        if (this.subQuizIndex < 1)
             $('#prevsubquiz').hide(); // hide button if the quizcard is the first
-        };
-
-        if (this.subQuizIndex > 0) {
+        else
             $('#prevsubquiz').show(); // show button if the index is 1 or higher
-        }
 
         if (this.subQuizIndex < slides.length - 1) {
             $('#nextsubquiz').show(); // show button if the quizcard is not the last
+            // Disable "Next" button
+            $('button#next_question').attr('disabled', 'disabled');
         };
 
         if (this.subQuizIndex === slides.length - 1) {
             $('#nextsubquiz').hide(); // hide button if the quizcard is the last
+            // Enable "Next" button unless it was disabled for other reasons
+            if ($('button#next_question').data('dontenable')!=true)
+                $('button#next_question').removeAttr('disabled');
         };
 
         // Show the quizcard change
@@ -1552,6 +1554,7 @@ class PanelQuestion {
             prevsubquiz.hide();
             
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
+            $('button#next_question').attr('disabled', 'disabled'); // Disable "Next" button because we are not at the last question
         }
         
 

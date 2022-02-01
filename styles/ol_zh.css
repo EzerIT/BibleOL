@@ -1227,6 +1227,10 @@ label {
   border: solid 2px #43B02A !important;
   border-radius: 20px;
 }
+.btn.disabled,
+.btn:disabled {
+  opacity: 0.45;
+}
 .btn.btn-gloss-selector {
   margin: 0;
   border: solid 2px #43B02A;

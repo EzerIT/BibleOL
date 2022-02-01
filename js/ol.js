@@ -2403,6 +2403,7 @@ var PanelQuestion = (function () {
             quizContainer.prepend(prevsubquiz);
             prevsubquiz.hide();
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
+            $('button#next_question').attr('disabled', 'disabled');
         }
         $('div.inputbutton').click(function () {
             var letter = $(this).data('letter');
@@ -2489,19 +2490,19 @@ var PanelQuestion = (function () {
         }
         var i;
         var slides = $('#quizcontainer').find('.quizcard');
-        if (this.subQuizIndex < 1) {
+        if (this.subQuizIndex < 1)
             $('#prevsubquiz').hide();
-        }
-        ;
-        if (this.subQuizIndex > 0) {
+        else
             $('#prevsubquiz').show();
-        }
         if (this.subQuizIndex < slides.length - 1) {
             $('#nextsubquiz').show();
+            $('button#next_question').attr('disabled', 'disabled');
         }
         ;
         if (this.subQuizIndex === slides.length - 1) {
             $('#nextsubquiz').hide();
+            if ($('button#next_question').data('dontenable') != true)
+                $('button#next_question').removeAttr('disabled');
         }
         ;
         for (i = 0; i < slides.length; i++) {
@@ -2663,7 +2664,7 @@ var Quiz = (function () {
             $('#progresstext').html((this.currentDictIx + 1) + '/' + dictionaries.sentenceSets.length);
             this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
             if (this.currentDictIx + 1 === dictionaries.sentenceSets.length) {
-                $('button#next_question').attr('disabled', 'disabled');
+                $('button#next_question').attr('disabled', 'disabled').data('dontenable', true);
                 $('button#finish').removeAttr('disabled');
                 $('button#finishNoStats').removeAttr('disabled');
             }
