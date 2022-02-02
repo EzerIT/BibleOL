@@ -450,6 +450,12 @@ class Ctrl_translate extends MY_Controller {
                     echo "----------------------------------------------------------------\n";
                 }
         }
+
+        if (!empty($not_in_comment)) {
+            echo "NOT IN COMMENT FILE:\n";
+            foreach ($not_in_comment as $nic)
+                echo $nic,"\n";
+        }
     }
 
     
