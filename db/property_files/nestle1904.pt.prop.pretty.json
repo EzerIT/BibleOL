@@ -1,6 +1,6 @@
 {
     "dbdescription": "Grego (Nestle 1904, NT)",
-    "dbcopyright": "Domínio Público.",
+    "dbcopyright": "Domínio público.",
     "emdrosobject": {
         "word": {
             "_objname": "Palavra",
@@ -15,17 +15,17 @@
             "normalized": "Normalizado",
             "raw_normalized": "Normalizado (caixa baixa, sem acentos)",
             "number": "Número",
-            "possessor_number": "Número Possuidor",
+            "possessor_number": "Número do possuidor",
             "suffix": "Extra",
             "surface": "Texto",
             "strongs": "Número da concordância de Strong",
             "strongs_unreliable": "Strong não é confiável?",
             "gender": "Gênero",
             "case": "Caso",
-            "psp": "Parte do Discurso"
+            "psp": "Classe de palavra"
         },
         "clause1": {
-            "_objname": "Clausula Nível 1",
+            "_objname": "Clausula de nível 1",
             "typ": "Função"
         },
         "clause1_abbrev": {
@@ -171,7 +171,8 @@
     "grammargroup": {
         "word": {
             "lexeme": "Lexema",
-            "morphology": "Morfologia"
+            "morphology": "Morfologia",
+            "glosses": "Glosas"
         }
     },
     "grammarmetafeature": {
