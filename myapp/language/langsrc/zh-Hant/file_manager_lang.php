@@ -48,8 +48,7 @@ $lang['file_exists_moved'] = "然後重新把移動來的檔案插入。";
 $lang['file_mgmt'] = "管理檔案";
 $lang['file_mgmt_description'] = "<p>您可以在這裡上載或刪除練習檔案，建立資料夾來存放多個檔案，或是刪除資料夾。</p>\n"
         . "     <p>留意：空的資料夾才能刪除。</p>\n"
-        . "     <p>按“設定誰能看”，可以設定誰能看每個資料夾裡的檔案。練習檔案的檔案類型是“.3et”。</p>\n"
-        . "     <p>此外，您可以用Windows版的獨立軟件PLOTLearner來製作練習檔案。練習檔案的檔案類型是“.3et”。</p>";
+        . "     <p>按“設定誰能看”，可以設定誰能看每個資料夾裡的檔案。練習檔案的檔案類型是“.3et”。</p>\n";
 $lang['file_selection'] = "選取檔案";
 $lang['folders'] = "資料夾";
 $lang['folder_name_prompt'] = "資料夾名稱：";
@@ -84,7 +83,6 @@ $lang['rename_file_heading'] = "把檔案重新命名";
 $lang['select_database_prompt'] = "選擇資料庫：";
 $lang['upload_exercises_button'] = "上載練習";
 $lang['upload_exercise_files1'] = "上載練習檔案";
-$lang['upload_exercise_files2'] = "您可以用Windows版的獨立軟件PLOTLearner來製作練習範本檔案。練習檔案的檔案類型是“.3et”。";
 $lang['upload_exercise_files3_other'] = "在這裡，您可以把練習範本檔案上載到這個網站的'%s'資料夾裡。";
 $lang['upload_exercise_files3_top'] = "在這裡，您可以把練習範本檔案上載到這個網站的最上層資料夾裡。";
 $lang['upload_exercise_files4'] = "請按右邊的“上載檔案”按鈕，以選取要上載的檔案。（在一些瀏覽器裡，您也可以把檔案拉來放進這個按鈕。）";

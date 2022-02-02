@@ -53,9 +53,7 @@ $lang['file_mgmt'] = "Filhåndtering";
 $lang['file_mgmt_description'] = "<p>Her kan du uploade eller slette øvelsesfiler, og du kan oprette og slette mapper til\n"
         . "     filerne.</p>\n"
         . "     <p>NB: Du kan kun slette en mappe hvis den er tom.</p>\n"
-        . "     <p>Under knappen »Redigér synlighed« kan du styre hvem der kan se indholdet af hver mappe.</p>\n"
-        . "     <p>Øvelsesfiler kan desuden skabes med det Windows-baserede PC-program PLOTLearner.\n"
-        . "     Øvelsesfilerne har filtypen ».3et«.</p>";
+        . "     <p>Under knappen »Redigér synlighed« kan du styre hvem der kan se indholdet af hver mappe.</p>\n";
 $lang['file_selection'] = "Filvalg";
 $lang['folders'] = "Mapper";
 $lang['folder_name_prompt'] = "Mappenavn:";
@@ -95,7 +93,6 @@ $lang['rename_file_heading'] = "Omdøb fil";
 $lang['select_database_prompt'] = "Vælg database:";
 $lang['upload_exercises_button'] = "Upload øvelser";
 $lang['upload_exercise_files1'] = "Upload øvelsesfiler";
-$lang['upload_exercise_files2'] = "Du kan lave øvelsesfiler med det Windows-baserede PC-program PLOTLearner. Øvelsesfiler har filtypen ».3et«.";
 $lang['upload_exercise_files3_other'] = "Her kan du uploade øvelsesfiler til mappen '%s' på dette websted.";
 $lang['upload_exercise_files3_top'] = "Her kan du uploade øvelsesfiler til den øverste mappe på dette websted.";
 $lang['upload_exercise_files4'] = "Klik på knappen »upload filer« her til højre for at vælge de filer der skal uploades. (I nogle browsere kan man også trække filer over på knappen og slippe dem dér.)";

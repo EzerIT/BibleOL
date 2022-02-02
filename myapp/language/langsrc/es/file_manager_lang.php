@@ -49,9 +49,7 @@ $lang['file_mgmt'] = "Gestión de archivo";
 $lang['file_mgmt_description'] = "<p>Aquí tú puedes subir o borrar los archivos de ejercicios, o tú puedes crear o borrar carpetas para los\n"
         . "     archivos.</p>\n"
         . "     <p>Nota: Tú puedes solamente borrar una carpeta si está vacía.</p>\n"
-        . "     <p>El botón “Editar visibilidad” te permite controlar quien puede ver los contenidos de cada carpeta.</p>\n"
-        . "     <p>Adicionalmente, los archivos de ejercicio pueden ser creados con la versión  stand-alone para Windows de PLOTLearner.\n"
-        . "     Los archivos de ejercicios tienen el tipo de archivo “.3et”.</p>";
+        . "     <p>El botón “Editar visibilidad” te permite controlar quien puede ver los contenidos de cada carpeta.</p>\n";
 $lang['file_selection'] = "Selección de Archivo";
 $lang['folders'] = "Carpetas";
 $lang['folder_name_prompt'] = "Nombre de carpeta:";
@@ -86,7 +84,6 @@ $lang['rename_file_heading'] = "Cambiar nombre al archivo";
 $lang['select_database_prompt'] = "Seleccionar base de datos:";
 $lang['upload_exercises_button'] = "Cargar ejercicios";
 $lang['upload_exercise_files1'] = "Subir archivos de ejercicios";
-$lang['upload_exercise_files2'] = "Tú puedes generar modelos de archivos de ejercicios con la versión stand-alone para Windows de PLOTLearner. Los archivos de ejercicios tienen extensión de archivo tipo “.3et”.";
 $lang['upload_exercise_files3_other'] = "Aquí, tú puedes subir los modelos de archivos de ejercicios a la carpeta '%s' de este sitio web.";
 $lang['upload_exercise_files3_top'] = "Aquí, tú puedes subir los modelos de archivos de ejercicios a la carpeta encontrada en la parte superior de este sitio web.";
 $lang['upload_exercise_files4'] = "Haga click al botón “Cargar archivos” a la derecha para seleccionar archivos para cargar. (En algunos navegadores, tú puedes también arrastrar y soltar archivos en el botón.)";

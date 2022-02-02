@@ -49,9 +49,7 @@ $lang['file_mgmt'] = "Gestão de Arquivo";
 $lang['file_mgmt_description'] = "<p>Você pode importar ou excluir arquivos de exercício aqui, ou você pode criar ou deletar pastas para os\n"
         . "     arquivos.</p>\n"
         . "     <p>Nota: Você só poderá excluir uma pasta se ela estiver vazia.</p>\n"
-        . "     <p>O botão “Editar visibilidade” lhe permite controlar quem poderá ver o conteúdo de cada pasta.</p>\n"
-        . "     <p>Ademais, arquivos de exercício podem ser criados com a versão stand-alone para Windows do PLOTLearner.\n"
-        . "     Os arquivos de exercício tem a extensão de arquivo “.3et”.</p>";
+        . "     <p>O botão “Editar visibilidade” lhe permite controlar quem poderá ver o conteúdo de cada pasta.</p>\n";
 $lang['file_selection'] = "Seleção de arquivo";
 $lang['folders'] = "Pastas";
 $lang['folder_name_prompt'] = "Nome da pasta:";
@@ -86,7 +84,6 @@ $lang['rename_file_heading'] = "Dar novo nome ao arquivo";
 $lang['select_database_prompt'] = "Selecionar banco de dados:";
 $lang['upload_exercises_button'] = "Importar exercícios";
 $lang['upload_exercise_files1'] = "Importar Arquivos de Exercício";
-$lang['upload_exercise_files2'] = "Você pode gerar o gabarito, ou modelo, do exercício com a versão stand-alone para Windows do PLOTLearner. Os arquivos de exercício têm a extensão de arquivo “.3et”.";
 $lang['upload_exercise_files3_other'] = "Aqui, você pode importar o gabarito, ou modelo, dos arquivos de exercício para a pasta '%s' deste website.";
 $lang['upload_exercise_files3_top'] = "Aqui, você pode importar o gabarito, ou modelo, dos arquivos de exercício para a pasta do topo deste website.";
 $lang['upload_exercise_files4'] = "Clique no botão “Importar Arquivos” à direita para selecionar arquivos para importar. (Em alguns navegadores, você também pode arrastar arquivos e soltá-los no botão.)";

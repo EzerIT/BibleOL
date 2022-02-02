@@ -58,8 +58,6 @@ $lang['file_mgmt_description'] = "<p>Here you can upload or delete exercise file
         . "     files.</p>\n"
         . "     <p>Note: You can only delete a folder if it is empty.</p>\n"
         . "     <p>The “Edit visibility” button allows you to control who can see the contents of each folder.</p>\n"
-        . "     <p>Additionally, exercise files can be created with the stand-alone Windows-based version of PLOTLearner.\n"
-        . "     The exercise files have file type “.3et”.</p>\n"
         . "     <p>Finally, for creating a new exam, select the files you want the exam to contain.</p>";
 $lang['file_selection'] = "File selection";
 $lang['folders'] = "Folders";
@@ -100,7 +98,6 @@ $lang['rename_file_heading'] = "Rename File";
 $lang['select_database_prompt'] = "Select database:";
 $lang['upload_exercises_button'] = "Upload exercises";
 $lang['upload_exercise_files1'] = "Upload Exercise Files";
-$lang['upload_exercise_files2'] = "You can generate exercise template files with the stand-alone Windows-based version of PLOTLearner. The exercise files have file type “.3et”.";
 $lang['upload_exercise_files3_other'] = "Here, you can upload the exercise template files to the '%s' folder of this web site.";
 $lang['upload_exercise_files3_top'] = "Here, you can upload the exercise template files to the top folder of this web site.";
 $lang['upload_exercise_files4'] = "Click the “Upload files” button to the right to select files to upload. (In some browsers, you can also drag and drop files into the button.)";

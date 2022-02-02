@@ -90,7 +90,6 @@ $lang['rename_file_heading'] = "ፋይሉን እንደ ገና መሰየም ";
 $lang['select_database_prompt'] = "የመረጃ ቋትን መምረጥ";
 $lang['upload_exercises_button'] = "መልመጃ ፋይሎችን መስቀል";
 $lang['upload_exercise_files1'] = "የመልመጃ ፋሎችን መስቀል";
-$lang['upload_exercise_files2'] = "በ PLOT ተማሪ እትም ላይ በመመሥረት ብቻውን በሚሰራው መስኮት በመጠቀም የመለማመጃ ፋይሎችን ማዘጋጀት ይችላሉ። የመለማመጃ ፋይሎቹ “.3et” ፋይል አይነት ናቸው።";
 $lang['upload_exercise_files3_other'] = "እዚህ ጋ፣  መለማመጃ ማቀናበሪያ ፋይሎችዎን በዚህ ድሕረ-ገጽ ውስጥ በ  '%s ማኅደር ውስጥ መስቀል ይችላሉ።";
 $lang['upload_exercise_files3_top'] = "እዚህ ጋ፣  መለማመጃ ማቀናበሪያ ፋይሎችዎን በዚህ ድሕረ-ገጽ ውስጥ በላይኛው ማኅደር ውስጥ መስቀል ይችላሉ። ";
 $lang['upload_exercise_files4'] = "ፋይሎችዎን ለሰቀላ ለመምረጥ በቀኝ በኵል ያለውን “Upload files” የሚለውን ቍልፍ ጠቅ ያድርጉ (በተጨማሪም፣ በአንዳንድ የኢንተርኔት ሙዳዮች፣ ፋይሎችን ወደ መምረጫ ቍልፉ ለማስገባት ስቦ አምጥቶ በመልቀቅ ማስገባት ይችላሉ)";

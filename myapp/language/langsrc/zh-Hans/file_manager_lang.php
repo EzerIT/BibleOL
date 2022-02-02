@@ -48,8 +48,7 @@ $lang['file_exists_moved'] = "然后重新把移动来的档案插入。";
 $lang['file_mgmt'] = "管理档案";
 $lang['file_mgmt_description'] = "<p>您可以在这里上载或删除练习档案，建立资料夹来存放多个档案，或是删除资料夹。</p>\n"
         . "     <p>留意：空的资料夹才能删除。</p>\n"
-        . "     <p>按“设定谁能看”，可以设定谁能看每个资料夹里的档案。</p>\n"
-        . "     <p>此外，您可以用Windows版的独立软件PLOTLearner来制作练习档案。练习档案的档案类型是“.3et”。</p>";
+        . "     <p>按“设定谁能看”，可以设定谁能看每个资料夹里的档案。</p>\n";
 $lang['file_selection'] = "选取档案";
 $lang['folders'] = "资料夹";
 $lang['folder_name_prompt'] = "资料夹名称：";
@@ -84,7 +83,6 @@ $lang['rename_file_heading'] = "把档案重新命名";
 $lang['select_database_prompt'] = "选择资料库：";
 $lang['upload_exercises_button'] = "上载练习";
 $lang['upload_exercise_files1'] = "上载练习档案";
-$lang['upload_exercise_files2'] = "您可以用Windows版的独立软件PLOTLearner来制作练习范本档案。练习档案的档案类型是“.3et”。";
 $lang['upload_exercise_files3_other'] = "在这里，您可以把练习范本档案上载到这个网站的'%s'资料夹里。";
 $lang['upload_exercise_files3_top'] = "在这里，您可以把练习范本档案上载到这个网站的最上层资料夹里。";
 $lang['upload_exercise_files4'] = "请按右边的“上载档案”按钮，以选取要上载的档案。（在一些浏览器里，您也可以把档案拉来放进这个按钮。）";

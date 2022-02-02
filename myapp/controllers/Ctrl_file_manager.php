@@ -287,8 +287,7 @@ class Ctrl_file_manager extends MY_Controller {
                                              array('dir' => $this->mod_quizpath->get_relative()),
                                              true);
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('upload_exercise_files1'),
-                                                      'left' => '<p>'.$this->lang->line('upload_exercise_files2').'</p>'
-                                                                .($this->mod_quizpath->is_top()
+                                                      'left' => ($this->mod_quizpath->is_top()
                                                                   ? $this->lang->line('upload_exercise_files3_top')
                                                                   : sprintf($this->lang->line('upload_exercise_files3_other'),
                                                                             $this->mod_quizpath->get_relative()))

@@ -360,10 +360,6 @@ $comment['upload_exercise_files1'] = "";
 $format['upload_exercise_files1'] = "";
 $use_textarea['upload_exercise_files1'] = false;
 
-$comment['upload_exercise_files2'] = "";
-$format['upload_exercise_files2'] = "";
-$use_textarea['upload_exercise_files2'] = true;
-
 $comment['upload_exercise_files3_other'] = "";
 $format['upload_exercise_files3_other'] = "";
 $use_textarea['upload_exercise_files3_other'] = true;

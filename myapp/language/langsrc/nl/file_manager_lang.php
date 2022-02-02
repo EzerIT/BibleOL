@@ -49,9 +49,7 @@ $lang['file_exists_moved'] = "Probeer vervolgens het verplaatste bestand opnieuw
 $lang['file_mgmt'] = "Bestandsmanagement";
 $lang['file_mgmt_description'] = "<p>Hier kun je bestanden met oefeningen uploaden of verwijderen. Bovendien kun je voor deze bestanden mappen maken of verwijderen.</p>\n"
         . "<p>Noot: Je kunt uitsluitend een map verwijderen wanneer deze leeg is.</p>\n"
-        . "<p>De \"Wijzig zichtbaarheid\" knop maakt het mogelijk om aan te geven wie de inhoud van de mappen kan zien.</p>\n"
-        . "<p>Bovendien kunnen oefeningen worden  gemaakt met de stand-alone Windows-versie van PLOTLearner. \n"
-        . "De bestanden van deze oefeningen hebben de bestandsaanduiding “.3et”.</p>";
+        . "<p>De \"Wijzig zichtbaarheid\" knop maakt het mogelijk om aan te geven wie de inhoud van de mappen kan zien.</p>\n";
 $lang['file_selection'] = "Bestandsselectie";
 $lang['folders'] = "Mappen";
 $lang['folder_name_prompt'] = "Mapnaam:";
@@ -87,7 +85,6 @@ $lang['rename_file_heading'] = "Hernoem Bestand";
 $lang['select_database_prompt'] = "Selecteer database:";
 $lang['upload_exercises_button'] = "Upload oefeningen";
 $lang['upload_exercise_files1'] = "Upload Oefeningsbestanden";
-$lang['upload_exercise_files2'] = "Je kunt templates voor oefeningen maken met behulp van de stand-alone Windows-versie van PLOTLearner. De bestanden van deze oefeningen hebben de bestandsaanduiding “.3et”.";
 $lang['upload_exercise_files3_other'] = "Hier kun je de templates van oefeningen uploaden naar de '%s' map van deze website.";
 $lang['upload_exercise_files3_top'] = "Hier kun je de templates van oefeningen uploaden naar de eerste map van deze website.";
 $lang['upload_exercise_files4'] = "Klik op de \"Bestanden uploaden\" button rechts om bestanden te selecteren om te uploaden. (In sommige browsers kun je bestanden oog slepen en droppen op deze button.)";
