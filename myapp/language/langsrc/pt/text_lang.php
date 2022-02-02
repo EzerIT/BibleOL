@@ -4,8 +4,6 @@ $lang['book_prompt'] = "Livro:";
 $lang['cannot_write_to_quiz_file'] = "Arquivo do teste não pode ser escrito";
 $lang['chapter'] = "Capítulo";
 $lang['chapter_prompt'] = "Capítulo:";
-$lang['check_answer'] = "Checar resposta";
-$lang['clear_grammar'] = "Limpar gramática";
 $lang['click_folder'] = "Clique em uma pasta para abri-la, ou selecione o número de questões que você quer de um teste em particular e se você quer utilizar a presente seleção de passagem ou especificar suas próprias passagens.";
 $lang['corpus_copyright'] = "<h3>Copyright for the ETCBC4 database:</h3><p>%s</p>\n"
         . "     <h3>Copyright for the Nestle 1904 database:</h3><p>%s</p>";
@@ -83,7 +81,6 @@ $lang['shebanq_query_id_prompt'] = "ID de questão do SHEBANQ:";
 $lang['shebanq_version_prompt'] = "versão de banco de dados do SHEBANQ:";
 $lang['shortcut_heading'] = "Teclas de atalho";
 $lang['shortcut_text'] = "As teclas de atalho estão disponíveis. Você pode fazer o <a target=\"_blank\" href=\"/ShortcutKeyDescriptionA4.pdf\">download</a> de uma descrição  (em inglês) de como usá-las.";
-$lang['show_answer'] = "Mostrar resposta";
 $lang['show_link_icons_prompt'] = "Mostrar ícones de link:";
 $lang['show_only_options'] = "Mostrar estas opções ao estudante";
 $lang['show_quiz_passages'] = "Mostrar as passagens do teste";
