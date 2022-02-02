@@ -198,7 +198,6 @@ function calculateGrade($schemaID, $percentage) {
     return -1;
   }
   $gradeSystem = $arrayOfGradeSchemes[$schemaID];
-  error_log("\nBOL: DEBUG: array: ".print_r($gradeSystem,true), 3, "/tmp/bolmc.log");
 
   // return the grade according with the type
   switch ($gradeSystem["SchemeType"]) {
