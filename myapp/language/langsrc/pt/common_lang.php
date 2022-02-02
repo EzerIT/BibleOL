@@ -12,6 +12,7 @@ $lang['google_no_valid_reply'] = "Nenhuma resposta válida do Google";
 $lang['illegal_class_id'] = "Identificação de Classe Ilegal";
 $lang['illegal_user_id'] = "Identificação de Usuário Ilegal";
 $lang['language'] = "Língua";
+$lang['main_variant'] = "Versão principal";
 $lang['missing_folder_name'] = "Nome da pasta faltando";
 $lang['missing_quiz_filename'] = "Nome de arquivo do quiz faltando";
 $lang['must_be_admin'] = "Você precisa entrar como administrador para acessar esta função";

@@ -1,0 +1,36 @@
+<?php
+
+$lang['alphabetically'] = "Alfabeticamente";
+$lang['by_frequency'] = "Por frequência";
+$lang['comment'] = "Comentário";
+$lang['download_lex'] = "Baixar Léxico";
+$lang['first_occurrence'] = "Primeira ocorrência";
+$lang['for_non_variant'] = "(Principal versão)";
+$lang['for_variant'] = "(Variante: %s)";
+$lang['illegal_source_language'] = "Língua original ilegal";
+$lang['illegal_target_language'] = "Língua alvo ilegal";
+$lang['lang_aram'] = "Aramaico";
+$lang['lang_greek'] = "Grego";
+$lang['lang_heb'] = "Hebraico";
+$lang['lexeme'] = "Lexema";
+$lang['lex_variant'] = "(Variante: %s)";
+$lang['malformed_url'] = "URL malformada";
+$lang['modified'] = "Modificado?";
+$lang['name_prefix'] = "Prefixo de nome";
+$lang['occurrences'] = "Ocorrências";
+$lang['revert'] = "Reverter";
+$lang['revert_all'] = "Reverter tudo";
+$lang['select_words_translate'] = "Selecionar palavras para traduzir";
+$lang['set_variant'] = "Configurar variante";
+$lang['show_strings_without_translation'] = "Mostrar %d item(s) sem tradução";
+$lang['stem'] = "Tronco";
+$lang['submit_changes'] = "Submeter mudanças";
+$lang['symbolic_lexeme'] = "Lexema simbólico";
+$lang['symbolic_name'] = "Nome simbólico";
+$lang['target_language'] = "Língua alvo:";
+$lang['translate_grammar_terms'] = "Traduzir Termos Gramaticais";
+$lang['translate_interface_desc'] = "<p>Prover uma tradução para cada item para a interface de usuário.</p>";
+$lang['translate_lex'] = "Traduzir glosas";
+$lang['translate_user_interface'] = "Traduzir Interface de Usuário";
+$lang['unknown_variant'] = "Variante desconhecida";
+$lang['untranslated_strings'] = "Itens Sem Tradução";

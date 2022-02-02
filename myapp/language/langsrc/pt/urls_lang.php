@@ -1,7 +1,7 @@
 <?php
 
 $lang['aramaic_glosses'] = "Glosas aramaicas";
-$lang['bad_post_parameters'] = "O Browser enviou parâmetros errados";
+$lang['bad_post_parameters'] = "O navegador enviou parâmetros errados";
 $lang['create_url_heading'] = "Criar Link para Lexema %s";
 $lang['delete_url'] = "Deletar link";
 $lang['delete_url_confirm'] = "Deletar link da glosa %s<br>para: %s ?";
@@ -16,7 +16,7 @@ $lang['icon_l-icon-film'] = "Filme";
 $lang['icon_l-icon-globe'] = "Mapa";
 $lang['icon_l-icon-link'] = "Link";
 $lang['icon_l-icon-logos'] = "Logos";
-$lang['icon_l-icon-music'] = "Musica";
+$lang['icon_l-icon-music'] = "Música";
 $lang['icon_l-icon-picture'] = "Imagem";
 $lang['icon_l-icon-speaker'] = "Som";
 $lang['illegal_lang_code'] = "Código de língua não permitido";

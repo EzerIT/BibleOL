@@ -25,6 +25,7 @@ $lang['new_google_user'] = "Novo Usuário do Google";
 $lang['no_email'] = "<h1>Você não tem um endereço de email</h1>\n"
         . "    <p>O se endereço de email não foi encontrado na lista de usuários. Portanto, não podemos lhe enviar um email com\n"
         . "    informações referentes à senha. Por favor entre em contato com o seu administrador de sistemas. Ele poderá fazer uma nova senha para você.</p>";
+$lang['no_login'] = "Não tem login ...?";
 $lang['or'] = "ou";
 $lang['password'] = "Senha";
 $lang['password_reset'] = "Senha refeita";
@@ -36,7 +37,8 @@ $lang['password_reset_message'] = "querido/a %s,\n"
         . "Você pode mudar sua senha ao selecionar 'Perfil' no menu 'Minhas Informações'.\n";
 $lang['password_reset_sent'] = "Um email contendo o seu nome de usuário e uma nova senha foi enviado para %s";
 $lang['password_reset_subject'] = "A sua senha do Bible Online Learner mudou";
-$lang['please_log_in'] = "Entre por favor";
+$lang['please_log_in'] = "Por favor, entre";
+$lang['press_login_button'] = "Clique no botão para logar";
 $lang['reset_link_bad'] = "O link para refazer a senha não existe ou expirou";
 $lang['several_accounts'] = "O seu endereço de email está associado com várias contas. Especifique um desses nomes de usuário: %s";
 $lang['sign_in_facebook'] = "Entrar com Facebook";

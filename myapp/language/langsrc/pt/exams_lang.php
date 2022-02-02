@@ -1,0 +1,35 @@
+<?php
+
+$lang['active_exams'] = "Exames Ativos";
+$lang['active_exams_description'] = "Lista de exames que estão disponíveis.";
+$lang['choose_exercises_in_order'] = "Exercícios aparecerão na ordem na qual eles foram selecionados.";
+$lang['class_name'] = "Nome da classe";
+$lang['create_exam'] = "Criar exame";
+$lang['create_exam_description'] = "Aqui você pode selecionar quais exercícios você quer incluir em um novo exame. Se os exercícios forem modificados, as mudanças também impactarão o exame.";
+$lang['create_exam_instance'] = "Criar Instância";
+$lang['create_new_exam_button'] = "Criar Novo Exame";
+$lang['delete_exam'] = "Deletar Exame";
+$lang['delete_exam_instance'] = "Deletar Instância de Exame";
+$lang['duration'] = "Duração (minutos)";
+$lang['edit_exam'] = "Editar Exame";
+$lang['edit_exam_description'] = "Aqui você pode selecionar o conjunto de parâmetros para cada exercício.";
+$lang['end_date'] = "Data final";
+$lang['end_time'] = "Hora final";
+$lang['exams_per_page'] = "Cada página mostra %s exames";
+$lang['exam_mgmt'] = "Gerenciamento de Exames";
+$lang['exam_mgmt_description'] = "Aqui você pode gerenciar os exames existentes ou criar um novo exame.";
+$lang['exam_name'] = "Nome do exame";
+$lang['finish'] = "Seção Final";
+$lang['instance_name'] = "Nome da instância";
+$lang['next'] = "Próximo";
+$lang['number_of_exams'] = "Número de exames: %s";
+$lang['owner'] = "Proprietário";
+$lang['planned_end'] = "Final planejado";
+$lang['planned_start'] = "Início planejado";
+$lang['please_choose_exercises'] = "Por favor, escolha os exercícios";
+$lang['start_date'] = "Data de início";
+$lang['start_time'] = "Horário de início";
+$lang['take_exam'] = "Começar Exame";
+$lang['take_exam_description'] = "Se você deixar/atualizar a página de exame, você não perderá o seu progresso para as partes do exame que você já terminou. Quando retomar seu exame, você começará novamente com a última parte do seu trabalho.";
+$lang['time'] = "Tempo (minutos)";
+$lang['user_operations'] = "Operações";
