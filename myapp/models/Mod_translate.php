@@ -765,9 +765,14 @@ class Mod_translate extends CI_Model {
                         $not_in_comment[] = "$short_file: $key";
                     else
                         if ($format[$key]!='keep_blanks') {
-                            $text = preg_replace('/\s+/',' ',$text); // Remove extraneous whitespace
+                            // Remove extraneous whitespace
+                            $text = preg_replace('/\s+/',' ',$text);
                             $db_values[$key] = preg_replace('/\s+/',' ',$db_values[$key]);
                         }
+                    
+                    // Remove 'carriage returns'
+                    $text = preg_replace('/\r/','',$text);
+                    $db_values[$key] = preg_replace('/\r/','',$db_values[$key]);
                     
                     if ($db_values[$key]!=$text)
                         $dbphpdiffs[$key] = [$text, $db_values[$key]];
