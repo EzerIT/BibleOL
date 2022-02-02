@@ -415,8 +415,9 @@ class Ctrl_translate extends MY_Controller {
         $only_db = [];
         $only_php = [];
         $diff = [];
+        $not_in_comment = [];
         
-        $this->mod_translate->if_php_cmp_db($_SERVER['argv'][3],$_SERVER['argv'][4], $only_db, $only_php, $diff);
+        $this->mod_translate->if_php_cmp_db($_SERVER['argv'][3],$_SERVER['argv'][4], $only_db, $only_php, $diff, $not_in_comment);
 
         if (!empty($only_db)) {
             list($tglen,$keylen) = $this->find_lengths($only_db);

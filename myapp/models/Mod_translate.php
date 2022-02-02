@@ -716,7 +716,7 @@ class Mod_translate extends CI_Model {
     // $only_db will hold key=>values only in the database
     // $only_php will hold key=>values only in the php files
     // $diff will hold key=>[value_php,value_db] for values that differ.
-    public function if_php_cmp_db(string $short_langname, string $src, array &$only_db, array &$only_php, array &$diff) {
+    public function if_php_cmp_db(string $short_langname, string $src, array &$only_db, array &$only_php, array &$diff, array &$not_in_comment) {
         $table_name = "language_{$short_langname}";
 
         $this->load->helper('directory');
@@ -761,8 +761,11 @@ class Mod_translate extends CI_Model {
                 if (isset($db_values[$key])) {
                     // Key is already in database
 
-                    if ($format[$key]!='keep_blanks')
-                        $text = preg_replace('/\s+/',' ',$text); // Remove extraneous whitespace
+                    if (!isset($format[$key]))
+                        $not_in_comment[] = "$short_file: $key";
+                    else
+                        if ($format[$key]!='keep_blanks')
+                            $text = preg_replace('/\s+/',' ',$text); // Remove extraneous whitespace
                     
                     if ($db_values[$key]!=$text)
                         $dbphpdiffs[$key] = [$text, $db_values[$key]];
