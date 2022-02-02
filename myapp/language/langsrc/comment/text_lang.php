@@ -327,3 +327,11 @@ $use_textarea['valid_chapters'] = false;
 $comment['warning'] = "";
 $format['warning'] = "";
 $use_textarea['warning'] = false;
+
+$comment['shortcut_heading'] = "";
+$format['shortcut_heading'] = "";
+$use_textarea['shortcut_heading'] = false;
+
+$comment['shortcut_text'] = "HTML";
+$format['shortcut_text'] = "";
+$use_textarea['shortcut_text'] = true;
