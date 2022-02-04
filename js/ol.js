@@ -1392,14 +1392,15 @@ var Answer = (function () {
             }
         }
     };
-    Answer.prototype.checkIt = function (fromShowIt) {
+    Answer.prototype.checkIt = function (fromShowIt, displayIt) {
         if (fromShowIt) {
             if (!this.hasAnswered) {
                 this.hasAnswered = true;
                 this.firstAnswer = "*Unanswered*";
                 this.firstAnswerCorrect = false;
             }
-            this.comp.setYesNo(true);
+            if (displayIt)
+                this.comp.setYesNo(true);
         }
         else {
             var userAnswer_1;
@@ -1465,12 +1466,12 @@ var Answer = (function () {
                 this.firstAnswer = userAnswer_1;
                 this.firstAnswerCorrect = isCorrect_1;
             }
-            if (this.hasAnswered)
+            if (this.hasAnswered && displayIt)
                 this.comp.setYesNo(isCorrect_1);
         }
     };
     Answer.prototype.commitIt = function () {
-        this.checkIt(false);
+        this.checkIt(false, false);
         if (!this.hasAnswered) {
             this.hasAnswered = true;
             this.firstAnswer = "*Unanswered*";
@@ -1732,7 +1733,7 @@ var PanelQuestion = (function () {
             else if (event.key === "ArrowUp")
                 Cursor.prevNextItem(-1);
             else if (event.key === "ArrowDown" && ctrl)
-                $('#next_question:enabled').click();
+                $('#next_question:visible:enabled').click();
             else if (event.key === "g" && ctrl)
                 $('#check_answer').click();
             else if (event.key === "j" && ctrl)
@@ -1806,7 +1807,7 @@ var PanelQuestion = (function () {
                 return false;
             }
             else if (event.key === "ArrowDown" && ctrl) {
-                $('#next_question:enabled').click();
+                $('#next_question:visible:enabled').click();
                 return false;
             }
             else if (event.key === "g" && ctrl) {
@@ -2403,7 +2404,9 @@ var PanelQuestion = (function () {
             quizContainer.prepend(prevsubquiz);
             prevsubquiz.hide();
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
-            $('button#next_question').attr('disabled', 'disabled');
+            $('button#next_question').hide();
+            $('button#finish').hide();
+            $('button#finishNoStats').hide();
         }
         $('div.inputbutton').click(function () {
             var letter = $(this).data('letter');
@@ -2430,7 +2433,7 @@ var PanelQuestion = (function () {
             var lastAns = _this.answersPerCard[_this.subQuizIndex];
             for (var aix = firstAns; aix < lastAns; ++aix) {
                 var a = _this.vAnswers[aix];
-                a.checkIt(false);
+                a.checkIt(false, true);
             }
         });
         $('button#show_answer').off('click');
@@ -2440,7 +2443,7 @@ var PanelQuestion = (function () {
             for (var aix = firstAns; aix < lastAns; ++aix) {
                 var a = _this.vAnswers[+aix];
                 a.showIt();
-                a.checkIt(true);
+                a.checkIt(true, true);
             }
         });
         switch (resizer.getWindowSize()) {
@@ -2496,13 +2499,16 @@ var PanelQuestion = (function () {
             $('#prevsubquiz').show();
         if (this.subQuizIndex < slides.length - 1) {
             $('#nextsubquiz').show();
-            $('button#next_question').attr('disabled', 'disabled');
+            $('button#next_question').hide();
+            $('button#finish').hide();
+            $('button#finishNoStats').hide();
         }
         ;
         if (this.subQuizIndex === slides.length - 1) {
             $('#nextsubquiz').hide();
-            if ($('button#next_question').data('dontenable') != true)
-                $('button#next_question').removeAttr('disabled');
+            $('button#next_question').show();
+            $('button#finish').show();
+            $('button#finishNoStats').show();
         }
         ;
         for (i = 0; i < slides.length; i++) {
@@ -2664,7 +2670,7 @@ var Quiz = (function () {
             $('#progresstext').html((this.currentDictIx + 1) + '/' + dictionaries.sentenceSets.length);
             this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
             if (this.currentDictIx + 1 === dictionaries.sentenceSets.length) {
-                $('button#next_question').attr('disabled', 'disabled').data('dontenable', true);
+                $('button#next_question').attr('disabled', 'disabled');
                 $('button#finish').removeAttr('disabled');
                 $('button#finishNoStats').removeAttr('disabled');
             }

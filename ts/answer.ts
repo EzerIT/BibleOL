@@ -112,8 +112,9 @@ class Answer {
     //
     // Parameter:
     //     fromShowIt: True if this call comes from the user clicking "Show answer".
+    //     displayIt: True if the result should be displayed on the web page
     //
-    public checkIt(fromShowIt : boolean) : void {
+    public checkIt(fromShowIt : boolean, displayIt : boolean) : void {
         if (fromShowIt) {
             // The question panel now shows the correct answers, but they were not
             // necessarily provided by the user. If the user has not committed an answer to
@@ -123,7 +124,8 @@ class Answer {
                 this.firstAnswer = "*Unanswered*";
                 this.firstAnswerCorrect = false;
             }
-            this.comp.setYesNo(true);
+            if (displayIt)
+                this.comp.setYesNo(true);
         }
         else {
             // The question panel contains the user's answers.
@@ -219,7 +221,7 @@ class Answer {
                 this.firstAnswer = userAnswer;
                 this.firstAnswerCorrect = isCorrect;
             }
-            if (this.hasAnswered)
+            if (this.hasAnswered && displayIt)
                 this.comp.setYesNo(isCorrect);
         }
     }
@@ -231,7 +233,7 @@ class Answer {
     // It checks the correctness of each question item and marks unaswered question items as such.
     //
     public commitIt() : void {
-        this.checkIt(false);
+        this.checkIt(false,false);
         if (!this.hasAnswered) {
             this.hasAnswered = true;
             this.firstAnswer = "*Unanswered*";

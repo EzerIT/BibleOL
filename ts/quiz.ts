@@ -120,7 +120,7 @@ class Quiz {
             
             if (this.currentDictIx+1 === dictionaries.sentenceSets.length) {
                 // This is the last question, disable the 'Next' button
-                $('button#next_question').attr('disabled', 'disabled').data('dontenable',true);
+                $('button#next_question').attr('disabled', 'disabled');
                 $('button#finish').removeAttr('disabled');
                 $('button#finishNoStats').removeAttr('disabled');
             }

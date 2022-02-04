@@ -437,15 +437,18 @@ class PanelQuestion {
 
         if (this.subQuizIndex < slides.length - 1) {
             $('#nextsubquiz').show(); // show button if the quizcard is not the last
-            // Disable "Next" button
-            $('button#next_question').attr('disabled', 'disabled');
+            // Hide "Next", "GRADE task" and "SAVE outcome" buttons
+            $('button#next_question').hide();
+            $('button#finish').hide();
+            $('button#finishNoStats').hide();
         };
 
         if (this.subQuizIndex === slides.length - 1) {
             $('#nextsubquiz').hide(); // hide button if the quizcard is the last
-            // Enable "Next" button unless it was disabled for other reasons
-            if ($('button#next_question').data('dontenable')!=true)
-                $('button#next_question').removeAttr('disabled');
+            // Show "Next", "GRADE task" and "SAVE outcome" buttons
+            $('button#next_question').show();
+            $('button#finish').show();
+            $('button#finishNoStats').show();
         };
 
         // Show the quizcard change
@@ -521,7 +524,7 @@ class PanelQuestion {
         else if (event.key==="ArrowUp")
             Cursor.prevNextItem(-1);
         else if (event.key==="ArrowDown" && ctrl)
-            $('#next_question:enabled').click();
+            $('#next_question:visible:enabled').click();
         else if (event.key==="g" && ctrl)
             $('#check_answer').click();
         else if (event.key==="j" && ctrl)
@@ -609,7 +612,7 @@ class PanelQuestion {
             return false;
         }
         else if (event.key==="ArrowDown" && ctrl) {
-            $('#next_question:enabled').click();
+            $('#next_question:visible:enabled').click();
             return false;
         }
         else if (event.key==="g" && ctrl) {
@@ -1554,7 +1557,11 @@ class PanelQuestion {
             prevsubquiz.hide();
             
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
-            $('button#next_question').attr('disabled', 'disabled'); // Disable "Next" button because we are not at the last question
+
+            // Hide "Next", "GRADE task" and "SAVE outcome" buttons
+            $('button#next_question').hide();
+            $('button#finish').hide();
+            $('button#finishNoStats').hide();
         }
         
 
@@ -1593,7 +1600,7 @@ class PanelQuestion {
                                         let lastAns  : number = this.answersPerCard[this.subQuizIndex];
                                         for (let aix=firstAns; aix<lastAns; ++aix) {
                                             let a: Answer = this.vAnswers[aix];
-                                            a.checkIt(false);
+                                            a.checkIt(false,true);
                                         }
                                     }
                                    );
@@ -1607,7 +1614,7 @@ class PanelQuestion {
                                     for (let aix=firstAns; aix<lastAns; ++aix) {
                                         let a: Answer = this.vAnswers[+aix];
                                         a.showIt();
-                                        a.checkIt(true);
+                                        a.checkIt(true,true);
                                     }
                                 }
             );
