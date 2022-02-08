@@ -171,7 +171,7 @@ class Ctrl_text extends MY_Controller {
         if (array_key_exists('examid', $_GET)) {
           $quiz = $_GET['quiz'];
           $exam_parameters = $_SESSION['exam_parameters'];
-          $numq = $exam_parameters[$quiz]['numq'];
+          $numq = $exam_parameters[str_replace("+", "%2B", $quiz)]['numq'];
 
           if ($numq <= 0) {
             $numq = 10;
