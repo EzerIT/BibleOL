@@ -67,7 +67,7 @@ on the page.
       </tr>
       <?php foreach ($allexams as $exam): ?>
           <tr>
-              <td class="leftalign"><?= $exam->exam_name ?></td>
+              <td class="leftalign"><?= str_replace("%2B", "+", $exam->exam_name) ?></td>
               <td class="leftalign"><?= $this->mod_users->user_full_name($exam->ownerid) ?></td>
               <td class="leftalign">
                   <a class="badge badge-primary" href="/exams/edit_exam?exam=<?= $exam->id ?>"><?= $this->lang->line('edit_exam') ?></a>

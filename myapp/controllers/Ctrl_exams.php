@@ -140,7 +140,7 @@ class Ctrl_exams extends MY_Controller
         // Add root tags to XML
         $root = $dom->createElement('exam');
         $dom->appendChild($root);
-        $examname_node = $dom->createElement('examname', $examname);
+        $examname_node = $dom->createElement('examname', str_replace("+", "%2B", $examname));
         $root->appendChild($examname_node);
         $teacher_id = $dom->createElement('teacher_id', $this->mod_users->my_id());
         $root->appendChild($teacher_id);
@@ -586,7 +586,7 @@ class Ctrl_exams extends MY_Controller
 
         $exercises = array();
         foreach ($xml->exercise as $exercise) {
-          $name = $exercise->exercisename;
+          $name = str_replace("+", "%2B", $exercise->exercisename);
           if (!in_array($name, $completed)) {
             $name = trim($name);
             array_push($exercises, $name);

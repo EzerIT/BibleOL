@@ -17,7 +17,7 @@ Display exam editing form.
 		<h3>Editing exam:
 			<?php
 				# Display exam name.
-				echo $xml->examname;
+				echo str_replace("%2B", "+", $xml->examname);
 				#print_r($xml);
 			?>
 		</h3>
@@ -42,7 +42,7 @@ Display exam editing form.
 				<h5>
 					<?php
 						# Display the name of the current exercise.
-						echo $x->exercisename;
+						echo str_replace("%2B", "+", $x->exercisename);
 					?>
 				</h5>
 				<?php
