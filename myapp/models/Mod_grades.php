@@ -198,7 +198,7 @@ class Mod_grades extends CI_Model {
 
       if ( !empty($quizSrc) ) {
         $matches=array();
-        if ( preg_match_all('/<request>(.*)<\/request>/',$quizSrc[0]->quizcode, $matches) ) {
+        if ( preg_match_all('/<request.*>(.*)<\/request>/',$quizSrc[0]->quizcode, $matches) ) {
           $tot_features = sizeof($matches[0]);
         }
 
@@ -672,14 +672,14 @@ class Mod_grades extends CI_Model {
             $day = $row->start;
             // get the wight for this interation
             $matches=array();
-            if ( preg_match_all('/<weight>([0-9]*)<\/weight>/',$row->examcode, $matches) ) {
+            if ( preg_match_all('/<weight.*>([0-9]*)<\/weight>/',$row->examcode, $matches) ) {
               $weight=$matches[1][$ex_count];
             }
             else {
               $weight=1;
             }
             $matches=array();
-            if ( preg_match_all('/<exercisename>(.*)<\/exercisename>/',$row->examcode, $matches) ) {
+            if ( preg_match_all('/<exercisename.*>(.*)<\/exercisename>/',$row->examcode, $matches) ) {
               $exercise_name=$matches[1][$ex_count];
             }
             else {
