@@ -88,7 +88,26 @@ $(function() {
         let currentDict : Dictionary = new Dictionary(dictionaries,0,null);
         currentDict.generateSentenceHtml(null);
         $('#gramtabs .selectbutton input:enabled:checked').trigger('change'); // Make sure the relevant features are displayed
+
+        // Colorize rare words
+        $('.textdisplay').each(function() {
+            if (+$(this).siblings('.lexeme_occurrences').text()<+$('#color-limit').val())
+                $(this).css('color','blue');
+        });
+
+        $('#color-limit').change(() => {
+            $('.textdisplay').each(function() {
+                if (+$(this).siblings('.lexeme_occurrences').text()<+$('#color-limit').val())
+                    $(this).css('color','blue');
+                else
+                    $(this).css('color','black');
+
+            });
+        });
+
     }
+
+
 });
 
 

@@ -398,6 +398,7 @@ var GrammarSelectionBox = (function () {
         this.addBr = new util.AddBetween('<br>');
         this.borderBoxes = [];
         this.separateLinesBoxes = [];
+        this.seenLexemeOccurrences = false;
     }
     GrammarSelectionBox.adjustDivLevWidth = function (level) {
         $(".showborder.lev" + level).each(function (index) {
@@ -420,12 +421,18 @@ var GrammarSelectionBox = (function () {
                 this.addBr.reset();
                 break;
             case WHAT.groupend:
+                if (this.seenLexemeOccurrences) {
+                    this.subgroupgrammardivs += '<div>Color limit: <input id="color-limit" type="number" value="200" style="width:5em"></div>';
+                    this.seenLexemeOccurrences = false;
+                }
                 this.subgroupgrammardivs += '</div></div>';
                 break;
             case WHAT.feature:
             case WHAT.metafeature:
                 var disabled = mayShowFeature(objType, origObjType, featName, sgiObj) ? '' : 'disabled';
                 if (this.hasSeenGrammarGroup) {
+                    if (objType === "word" && featName === "lexeme_occurrences")
+                        this.seenLexemeOccurrences = true;
                     this.subgroupgrammardivs += "<div class=\"selectbutton\"><input id=\"" + objType + "_" + featName + "_cb\" type=\"checkbox\" " + disabled + "><label for=\"" + objType + "_" + featName + "_cb\">" + featNameLoc + "</label></div>";
                 }
                 else {
@@ -2798,5 +2805,17 @@ $(function () {
         var currentDict = new Dictionary(dictionaries, 0, null);
         currentDict.generateSentenceHtml(null);
         $('#gramtabs .selectbutton input:enabled:checked').trigger('change');
+        $('.textdisplay').each(function () {
+            if (+$(this).siblings('.lexeme_occurrences').text() < +$('#color-limit').val())
+                $(this).css('color', 'blue');
+        });
+        $('#color-limit').change(function () {
+            $('.textdisplay').each(function () {
+                if (+$(this).siblings('.lexeme_occurrences').text() < +$('#color-limit').val())
+                    $(this).css('color', 'blue');
+                else
+                    $(this).css('color', 'black');
+            });
+        });
     }
 });

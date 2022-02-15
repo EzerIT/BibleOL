@@ -40,6 +40,8 @@ class GrammarSelectionBox {
     private borderBoxes         : util.BorderFollowerBox[] = [];        // Handles checkbox for "show borders"
     private separateLinesBoxes  : util.SeparateLinesFollowerBox[] = []; // Handles checkbox for "separate lines"
     private wordSpaceBox        : util.WordSpaceFollowerBox;            // Handles checkbox for "word spacing"
+
+    private seenLexemeOccurrences : boolean = false;
     
     //****************************************************************************************************
     // adjustDivLevWidth static method
@@ -96,6 +98,10 @@ class GrammarSelectionBox {
                     break;
                                           
                 case WHAT.groupend:
+                    if (this.seenLexemeOccurrences) {
+                        this.subgroupgrammardivs += '<div>Color limit: <input id="color-limit" type="number" value="200" style="width:5em"></div>';
+                        this.seenLexemeOccurrences = false;
+                    }
                     this.subgroupgrammardivs += '</div></div>';
                     break;
                                           
@@ -103,8 +109,11 @@ class GrammarSelectionBox {
                 case WHAT.metafeature:
                     let disabled: string = mayShowFeature(objType, origObjType, featName, sgiObj) ? '' : 'disabled';
                                           
-                    if (this.hasSeenGrammarGroup) {
-                        this.subgroupgrammardivs += `<div class="selectbutton"><input id="${objType}_${featName}_cb" type="checkbox" ${disabled}><label for="${objType}_${featName}_cb">${featNameLoc}</label></div>`;
+                if (this.hasSeenGrammarGroup) {
+                    if (objType==="word" && featName==="lexeme_occurrences")
+                        this.seenLexemeOccurrences = true;
+                    
+                    this.subgroupgrammardivs += `<div class="selectbutton"><input id="${objType}_${featName}_cb" type="checkbox" ${disabled}><label for="${objType}_${featName}_cb">${featNameLoc}</label></div>`;
                     } else {
                         this.checkboxes += `<div class="selectbutton"><input id="${objType}_${featName}_cb" type="checkbox" ${disabled}><label for="${objType}_${featName}_cb">${featNameLoc}</label></div>`;
                     }
