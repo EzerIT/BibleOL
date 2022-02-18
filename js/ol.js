@@ -390,6 +390,26 @@ function getSentenceGrammarFor(oType) {
             return configuration.sentencegrammar[i];
     return null;
 }
+function getSessionValue() {
+    var sessionValue;
+    try {
+        sessionValue = JSON.parse(sessionStorage.getItem(configuration.propertiesName));
+    }
+    catch (e) {
+        sessionValue = {};
+    }
+    if (!sessionValue)
+        sessionValue = {};
+    return sessionValue;
+}
+function setSessionValue(sessionValue) {
+    sessionStorage.setItem(configuration.propertiesName, JSON.stringify(sessionValue));
+}
+function setOneSessionValue(key, value) {
+    var sessionValue = getSessionValue();
+    sessionValue[key] = value;
+    setSessionValue(sessionValue);
+}
 var GrammarSelectionBox = (function () {
     function GrammarSelectionBox() {
         this.checkboxes = '';
@@ -398,7 +418,7 @@ var GrammarSelectionBox = (function () {
         this.addBr = new util.AddBetween('<br>');
         this.borderBoxes = [];
         this.separateLinesBoxes = [];
-        this.seenLexemeOccurrences = false;
+        this.seenFreqRank = false;
     }
     GrammarSelectionBox.adjustDivLevWidth = function (level) {
         $(".showborder.lev" + level).each(function (index) {
@@ -421,18 +441,19 @@ var GrammarSelectionBox = (function () {
                 this.addBr.reset();
                 break;
             case WHAT.groupend:
-                if (this.seenLexemeOccurrences) {
-                    this.subgroupgrammardivs += '<div>Color limit: <input id="color-limit" type="number" value="200" style="width:5em"></div>';
-                    this.seenLexemeOccurrences = false;
+                this.subgroupgrammardivs += '</div>';
+                if (this.seenFreqRank && !inQuiz) {
+                    this.subgroupgrammardivs += "<div class=\"color-limit\"><span class=\"color-limit-prompt\">" + localize('word_frequency_color_limit') + "</span><input id=\"color-limit\" type=\"number\" style=\"width:5em\"></div>";
+                    this.seenFreqRank = false;
                 }
-                this.subgroupgrammardivs += '</div></div>';
+                this.subgroupgrammardivs += '</div>';
                 break;
             case WHAT.feature:
             case WHAT.metafeature:
                 var disabled = mayShowFeature(objType, origObjType, featName, sgiObj) ? '' : 'disabled';
                 if (this.hasSeenGrammarGroup) {
-                    if (objType === "word" && featName === "lexeme_occurrences")
-                        this.seenLexemeOccurrences = true;
+                    if (objType === "word" && featName === "frequency_rank")
+                        this.seenFreqRank = true;
                     this.subgroupgrammardivs += "<div class=\"selectbutton\"><input id=\"" + objType + "_" + featName + "_cb\" type=\"checkbox\" " + disabled + "><label for=\"" + objType + "_" + featName + "_cb\">" + featNameLoc + "</label></div>";
                 }
                 else {
@@ -496,16 +517,20 @@ var GrammarSelectionBox = (function () {
             return;
         if (leveli === 0) {
             $("#" + objType + "_" + featName + "_cb").on('change', function (e) {
+                var isManual = [];
+                for (var _i = 1; _i < arguments.length; _i++) {
+                    isManual[_i - 1] = arguments[_i];
+                }
                 if ($(e.currentTarget).prop('checked')) {
-                    if (!inQuiz) {
-                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                    if (!inQuiz && isManual[0] != 'manual') {
+                        setOneSessionValue($(e.currentTarget).prop('id'), true);
                     }
                     $(".wordgrammar." + featName).removeClass('dontshowit').addClass('showit');
                     _this.wordSpaceBox.implicit(true);
                 }
                 else {
-                    if (!inQuiz) {
-                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                    if (!inQuiz && isManual[0] != 'manual') {
+                        setOneSessionValue($(e.currentTarget).prop('id'), false);
                     }
                     $(".wordgrammar." + featName).removeClass('showit').addClass('dontshowit');
                     _this.wordSpaceBox.implicit(false);
@@ -516,9 +541,13 @@ var GrammarSelectionBox = (function () {
         }
         else {
             $("#" + objType + "_" + featName + "_cb").on('change', function (e) {
+                var isManual = [];
+                for (var _i = 1; _i < arguments.length; _i++) {
+                    isManual[_i - 1] = arguments[_i];
+                }
                 if ($(e.currentTarget).prop('checked')) {
-                    if (!inQuiz) {
-                        sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                    if (!inQuiz && isManual[0] != 'manual') {
+                        setOneSessionValue($(e.currentTarget).prop('id'), true);
                     }
                     $(".xgrammar." + objType + "_" + featName).removeClass('dontshowit').addClass('showit');
                     if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
@@ -529,8 +558,8 @@ var GrammarSelectionBox = (function () {
                         _this.borderBoxes[leveli].implicit(true);
                 }
                 else {
-                    if (!inQuiz) {
-                        sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                    if (!inQuiz && isManual[0] != 'manual') {
+                        setOneSessionValue($(e.currentTarget).prop('id'), false);
                     }
                     $(".xgrammar." + objType + "_" + featName).removeClass('showit').addClass('dontshowit');
                     if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
@@ -554,15 +583,19 @@ var GrammarSelectionBox = (function () {
             if (leveli === 0) {
                 this_1.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
                 $('#ws_cb').on('change', function (e) {
+                    var isManual = [];
+                    for (var _i = 1; _i < arguments.length; _i++) {
+                        isManual[_i - 1] = arguments[_i];
+                    }
                     if ($(e.currentTarget).prop('checked')) {
-                        if (!inQuiz) {
-                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                        if (!inQuiz && isManual[0] != 'manual') {
+                            setOneSessionValue($(e.currentTarget).prop('id'), true);
                         }
                         _this.wordSpaceBox.explicit(true);
                     }
                     else {
-                        if (!inQuiz) {
-                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                        if (!inQuiz && isManual[0] != 'manual') {
+                            setOneSessionValue($(e.currentTarget).prop('id'), false);
                         }
                         _this.wordSpaceBox.explicit(false);
                     }
@@ -573,30 +606,38 @@ var GrammarSelectionBox = (function () {
             else {
                 this_1.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
                 $("#lev" + leveli + "_seplin_cb").on('change', leveli, function (e) {
+                    var isManual = [];
+                    for (var _i = 1; _i < arguments.length; _i++) {
+                        isManual[_i - 1] = arguments[_i];
+                    }
                     if ($(e.currentTarget).prop('checked')) {
-                        if (!inQuiz) {
-                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                        if (!inQuiz && isManual[0] != 'manual') {
+                            setOneSessionValue($(e.currentTarget).prop('id'), true);
                         }
                         _this.separateLinesBoxes[e.data].explicit(true);
                     }
                     else {
-                        if (!inQuiz) {
-                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                        if (!inQuiz && isManual[0] != 'manual') {
+                            setOneSessionValue($(e.currentTarget).prop('id'), false);
                         }
                         _this.separateLinesBoxes[e.data].explicit(false);
                     }
                 });
                 this_1.borderBoxes[leveli] = new util.BorderFollowerBox(leveli);
                 $("#lev" + leveli + "_sb_cb").on('change', leveli, function (e) {
+                    var isManual = [];
+                    for (var _i = 1; _i < arguments.length; _i++) {
+                        isManual[_i - 1] = arguments[_i];
+                    }
                     if ($(e.currentTarget).prop('checked')) {
-                        if (!inQuiz) {
-                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                        if (!inQuiz && isManual[0] != 'manual') {
+                            setOneSessionValue($(e.currentTarget).prop('id'), true);
                         }
                         _this.borderBoxes[e.data].explicit(true);
                     }
                     else {
-                        if (!inQuiz) {
-                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                        if (!inQuiz && isManual[0] != 'manual') {
+                            setOneSessionValue($(e.currentTarget).prop('id'), false);
                         }
                         _this.borderBoxes[e.data].explicit(false);
                     }
@@ -612,19 +653,23 @@ var GrammarSelectionBox = (function () {
     };
     GrammarSelectionBox.clearBoxes = function (force) {
         if (!inQuiz) {
+            var sessionValue = getSessionValue();
             if (force) {
-                for (var i in sessionStorage) {
-                    if (sessionStorage[i] == configuration.propertiesName) {
-                        sessionStorage.removeItem(i);
-                        $('#' + i).prop('checked', false);
-                        $('#' + i).trigger('change');
-                    }
+                for (var i in sessionValue) {
+                    if (i === 'color-limit')
+                        $('#color-limit').val(9999).trigger('change', 'manual');
+                    else
+                        $('#' + i).prop('checked', false).trigger('change', 'manual');
                 }
+                sessionStorage.removeItem(configuration.propertiesName);
             }
             else {
-                for (var i in sessionStorage) {
-                    if (sessionStorage[i] == configuration.propertiesName)
-                        $('#' + i).prop('checked', true);
+                $('#color-limit').val(9999);
+                for (var i in sessionValue) {
+                    if (i === 'color-limit')
+                        $('#color-limit').val(sessionValue[i]);
+                    else
+                        $('#' + i).prop('checked', sessionValue[i]);
                 }
             }
         }
@@ -634,10 +679,30 @@ var GrammarSelectionBox = (function () {
                 $('#grammarbuttongroup .selectbutton input:checked').each(function () { IDs_1.push($(this).attr('id')); });
                 for (var i in IDs_1) {
                     $('#' + IDs_1[i]).prop('checked', false);
-                    $('#' + IDs_1[i]).trigger('change');
+                    $('#' + IDs_1[i]).trigger('change', 'manual');
                 }
             }
         }
+    };
+    GrammarSelectionBox.setColorizeHandler = function () {
+        var colorizeFunction = function (event) {
+            var isManual = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                isManual[_i - 1] = arguments[_i];
+            }
+            var collim = +$('#color-limit').val();
+            $('.textdisplay').each(function () {
+                $(this).toggleClass('colorized', +$(this).siblings('.frequency_rank').text() > collim);
+            });
+            if (isManual[0] != 'manual')
+                setOneSessionValue('color-limit', collim);
+        };
+        $('#color-limit').on('change', colorizeFunction);
+        var timeoutId = 0;
+        $('#color-limit').keyup(function () {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(colorizeFunction, 20);
+        });
     };
     GrammarSelectionBox.buildGrammarAccordion = function () {
         var tabs1 = $('#myview').tabs({
@@ -2798,24 +2863,14 @@ $(function () {
             $('progress#progress').hide();
         quiz = new Quiz(quizdata.quizid, $('#exam_id').length > 0);
         quiz.nextQuestion(true);
-        $('#gramtabs .selectbutton input:enabled:checked').trigger('change');
+        $('#gramtabs .selectbutton input:enabled:checked').trigger('change', 'manual');
     }
     else {
         $('#cleargrammar').on('click', function () { GrammarSelectionBox.clearBoxes(true); });
         var currentDict = new Dictionary(dictionaries, 0, null);
         currentDict.generateSentenceHtml(null);
-        $('#gramtabs .selectbutton input:enabled:checked').trigger('change');
-        $('.textdisplay').each(function () {
-            if (+$(this).siblings('.lexeme_occurrences').text() < +$('#color-limit').val())
-                $(this).css('color', 'blue');
-        });
-        $('#color-limit').change(function () {
-            $('.textdisplay').each(function () {
-                if (+$(this).siblings('.lexeme_occurrences').text() < +$('#color-limit').val())
-                    $(this).css('color', 'blue');
-                else
-                    $(this).css('color', 'black');
-            });
-        });
+        GrammarSelectionBox.setColorizeHandler();
+        $('#gramtabs .selectbutton input:enabled:checked').trigger('change', 'manual');
+        $('#color-limit').trigger('change', 'manual');
     }
 });

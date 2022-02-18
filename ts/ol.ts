@@ -78,33 +78,19 @@ $(function() {
         quiz = new Quiz(quizdata.quizid, $('#exam_id').length>0);
         quiz.nextQuestion(true);
         
-        $('#gramtabs .selectbutton input:enabled:checked').trigger('change'); // Make sure the relevant features are displayed
+        $('#gramtabs .selectbutton input:enabled:checked').trigger('change','manual'); // Make sure the relevant features are displayed
     }
     else {
         // Display text
-        $('#cleargrammar').on('click',() => { GrammarSelectionBox.clearBoxes(true); });
+        $('#cleargrammar').on('click', () => { GrammarSelectionBox.clearBoxes(true); });
 
         // Generate the text to display
         let currentDict : Dictionary = new Dictionary(dictionaries,0,null);
         currentDict.generateSentenceHtml(null);
-        $('#gramtabs .selectbutton input:enabled:checked').trigger('change'); // Make sure the relevant features are displayed
-
-        // Colorize rare words
-        $('.textdisplay').each(function() {
-            if (+$(this).siblings('.lexeme_occurrences').text()<+$('#color-limit').val())
-                $(this).css('color','blue');
-        });
-
-        $('#color-limit').change(() => {
-            $('.textdisplay').each(function() {
-                if (+$(this).siblings('.lexeme_occurrences').text()<+$('#color-limit').val())
-                    $(this).css('color','blue');
-                else
-                    $(this).css('color','black');
-
-            });
-        });
-
+        GrammarSelectionBox.setColorizeHandler();
+        
+        $('#gramtabs .selectbutton input:enabled:checked').trigger('change','manual'); // Make sure the relevant features are displayed
+        $('#color-limit').trigger('change','manual'); // Trigger colorization
     }
 
 

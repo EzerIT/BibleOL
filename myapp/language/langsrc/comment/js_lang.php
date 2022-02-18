@@ -268,6 +268,10 @@ $comment['visual'] = "";
 $format['visual'] = "";
 $use_textarea['visual'] = false;
 
+$comment['word_frequency_color_limit'] = "";
+$format['word_frequency_color_limit'] = "";
+$use_textarea['word_frequency_color_limit'] = false;
+
 $comment['word_spacing'] = "";
 $format['word_spacing'] = "";
 $use_textarea['word_spacing'] = false;

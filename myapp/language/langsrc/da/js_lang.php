@@ -67,5 +67,6 @@ $lang['verb_class_dont_care'] = "Irrelevant";
 $lang['verb_class_no'] = "Nej";
 $lang['verb_class_yes'] = "Ja";
 $lang['visual'] = "Tekst";
+$lang['word_frequency_color_limit'] = "Hyppighedsgrænse for farvelægning:";
 $lang['word_spacing'] = "Ordmellemrum";
 $lang['yes'] = "Ja";

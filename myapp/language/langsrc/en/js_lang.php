@@ -67,5 +67,6 @@ $lang['verb_class_dont_care'] = "Don't care";
 $lang['verb_class_no'] = "No";
 $lang['verb_class_yes'] = "Yes";
 $lang['visual'] = "Text";
+$lang['word_frequency_color_limit'] = "Word frequency color limit:";
 $lang['word_spacing'] = "Word spacing";
 $lang['yes'] = "Yes";

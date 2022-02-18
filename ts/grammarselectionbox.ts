@@ -23,6 +23,34 @@
 //
 //****************************************************************************************************
 
+function getSessionValue() : any
+{
+    let sessionValue : any;
+    
+    try {
+        sessionValue = JSON.parse(sessionStorage.getItem(configuration.propertiesName));
+    }
+    catch (e) {
+        sessionValue = {};
+    }
+
+    if (!sessionValue)
+        sessionValue = {};
+
+    return sessionValue;
+}
+
+function setSessionValue(sessionValue : any) : void
+{
+    sessionStorage.setItem(configuration.propertiesName, JSON.stringify(sessionValue));
+}
+
+function setOneSessionValue(key : string, value : any) : void
+{
+    let sessionValue = getSessionValue();
+    sessionValue[key] = value;
+    setSessionValue(sessionValue);
+}
 
 
 //****************************************************************************************************
@@ -41,7 +69,7 @@ class GrammarSelectionBox {
     private separateLinesBoxes  : util.SeparateLinesFollowerBox[] = []; // Handles checkbox for "separate lines"
     private wordSpaceBox        : util.WordSpaceFollowerBox;            // Handles checkbox for "word spacing"
 
-    private seenLexemeOccurrences : boolean = false;
+    private seenFreqRank        : boolean = false;
     
     //****************************************************************************************************
     // adjustDivLevWidth static method
@@ -98,11 +126,12 @@ class GrammarSelectionBox {
                     break;
                                           
                 case WHAT.groupend:
-                    if (this.seenLexemeOccurrences) {
-                        this.subgroupgrammardivs += '<div>Color limit: <input id="color-limit" type="number" value="200" style="width:5em"></div>';
-                        this.seenLexemeOccurrences = false;
+                    this.subgroupgrammardivs += '</div>';
+                    if (this.seenFreqRank && !inQuiz) {
+                        this.subgroupgrammardivs += `<div class="color-limit"><span class="color-limit-prompt">${localize('word_frequency_color_limit')}</span><input id="color-limit" type="number" style="width:5em"></div>`;
+                        this.seenFreqRank = false;
                     }
-                    this.subgroupgrammardivs += '</div></div>';
+                    this.subgroupgrammardivs += '</div>';
                     break;
                                           
                 case WHAT.feature:
@@ -110,8 +139,8 @@ class GrammarSelectionBox {
                     let disabled: string = mayShowFeature(objType, origObjType, featName, sgiObj) ? '' : 'disabled';
                                           
                 if (this.hasSeenGrammarGroup) {
-                    if (objType==="word" && featName==="lexeme_occurrences")
-                        this.seenLexemeOccurrences = true;
+                    if (objType==="word" && featName==="frequency_rank")
+                        this.seenFreqRank = true;
                     
                     this.subgroupgrammardivs += `<div class="selectbutton"><input id="${objType}_${featName}_cb" type="checkbox" ${disabled}><label for="${objType}_${featName}_cb">${featNameLoc}</label></div>`;
                     } else {
@@ -212,7 +241,6 @@ class GrammarSelectionBox {
 
             this.checkboxes += '</div></div>';
         }
-        // this.checkboxes += `<p><button class="btn btn-clear" id="cleargrammar">${localize('clear_grammar')}</button></p>`;
         this.checkboxes += `<button class="btn btn-clear" id="cleargrammar">${localize('clear_grammar')}</button>`;
         return this.checkboxes;
     }
@@ -238,22 +266,22 @@ class GrammarSelectionBox {
                                leveli      : number) : void {
                                    if (whattype!=WHAT.feature && whattype!=WHAT.metafeature)
                                        return;
-                                   
+
                                    if (leveli===0) { // Handling of words
 
-                                       $(`#${objType}_${featName}_cb`).on('change', (e : JQueryEventObject) => {
+                                       $(`#${objType}_${featName}_cb`).on('change', (e : JQueryEventObject, ...isManual : any) => {
                                            if ($(e.currentTarget).prop('checked')) {
-                                               if (!inQuiz) {
+                                               if (!inQuiz && isManual[0]!='manual') {
                                                    // Save setting in browser
-                                                   sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                                                   setOneSessionValue($(e.currentTarget).prop('id'), true);
                                                }
                                                $(`.wordgrammar.${featName}`).removeClass('dontshowit').addClass('showit');
                                                this.wordSpaceBox.implicit(true);
                                            }
                                            else {
-                                               if (!inQuiz) {
+                                               if (!inQuiz && isManual[0]!='manual') {
                                                    // Remove setting from browser
-                                                   sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                                                   setOneSessionValue($(e.currentTarget).prop('id'), false);
                                                }
                                                $(`.wordgrammar.${featName}`).removeClass('showit').addClass('dontshowit');
                                                this.wordSpaceBox.implicit(false);
@@ -265,11 +293,11 @@ class GrammarSelectionBox {
                                    }
                                    else { // Handling of clause, phrase, etc.
                                        
-                                       $(`#${objType}_${featName}_cb`).on('change', (e : JQueryEventObject) => {
+                                       $(`#${objType}_${featName}_cb`).on('change', (e : JQueryEventObject, ...isManual : any) => {
                                            if ($(e.currentTarget).prop('checked')) {
-                                               if (!inQuiz) {
+                                               if (!inQuiz && isManual[0]!='manual') {
                                                    // Save setting in browser
-                                                   sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                                                   setOneSessionValue($(e.currentTarget).prop('id'), true);
                                                }
                                                $(`.xgrammar.${objType}_${featName}`).removeClass('dontshowit').addClass('showit');
                                                if (configuration.databaseName=='ETCBC4' && leveli==2 && objType=="clause_atom" && featName=="tab") {
@@ -280,9 +308,9 @@ class GrammarSelectionBox {
                                                    this.borderBoxes[leveli].implicit(true);
                                            }
                                            else {
-                                               if (!inQuiz) {
+                                               if (!inQuiz && isManual[0]!='manual') {
                                                    // Remove setting from browser
-                                                   sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                                                   setOneSessionValue($(e.currentTarget).prop('id'), false);
                                                }
                                                $(`.xgrammar.${objType}_${featName}`).removeClass('showit').addClass('dontshowit');
                                                if (configuration.databaseName=='ETCBC4' && leveli==2 && objType=="clause_atom" && featName=="tab") {
@@ -320,18 +348,18 @@ class GrammarSelectionBox {
                 this.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
 
                 // Only Hebrew has a #ws_cb
-                $('#ws_cb').on('change',(e : JQueryEventObject) => {
+                $('#ws_cb').on('change', (e : JQueryEventObject, ...isManual : any) => {
                     if ($(e.currentTarget).prop('checked')) {
-                        if (!inQuiz) {
+                        if (!inQuiz && isManual[0]!='manual') {
                             // Save setting in browser
-                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                            setOneSessionValue($(e.currentTarget).prop('id'), true);
                         }
                         this.wordSpaceBox.explicit(true);
                     }
                     else {
-                        if (!inQuiz) {
+                        if (!inQuiz && isManual[0]!='manual') {
                             // Remove setting from browser
-                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                            setOneSessionValue($(e.currentTarget).prop('id'), false);
                         }
                         this.wordSpaceBox.explicit(false);
                     }
@@ -345,18 +373,18 @@ class GrammarSelectionBox {
                 // Set change handlers for the checkboxes for "separate lines" and "show border".
                 this.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
 
-                $(`#lev${leveli}_seplin_cb`).on('change', leveli, (e : JQueryEventObject) => {
+                $(`#lev${leveli}_seplin_cb`).on('change', leveli, (e : JQueryEventObject, ...isManual : any) => {
                     if ($(e.currentTarget).prop('checked')) {
-                        if (!inQuiz) {
+                        if (!inQuiz && isManual[0]!='manual') {
                             // Save setting in browser
-                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                            setOneSessionValue($(e.currentTarget).prop('id'), true);
                         }
                         this.separateLinesBoxes[e.data].explicit(true);
                     }
                     else {
-                        if (!inQuiz) {
+                        if (!inQuiz && isManual[0]!='manual') {
                             // Remove setting from browser
-                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                            setOneSessionValue($(e.currentTarget).prop('id'), false);
                         }
                         this.separateLinesBoxes[e.data].explicit(false);
                     }
@@ -364,18 +392,18 @@ class GrammarSelectionBox {
 
                 this.borderBoxes[leveli] = new util.BorderFollowerBox(leveli);
                 
-                $(`#lev${leveli}_sb_cb`).on('change', leveli, (e : JQueryEventObject) => {
+                $(`#lev${leveli}_sb_cb`).on('change', leveli, (e : JQueryEventObject, ...isManual : any) => {
                     if ($(e.currentTarget).prop('checked')) {
-                        if (!inQuiz) {
+                        if (!inQuiz && isManual[0]!='manual') {
                             // Save setting in browser
-                            sessionStorage.setItem($(e.currentTarget).prop('id'), configuration.propertiesName);
+                            setOneSessionValue($(e.currentTarget).prop('id'), true);
                         }
                         this.borderBoxes[e.data].explicit(true);
                     }
                     else {
-                        if (!inQuiz) {
+                        if (!inQuiz && isManual[0]!='manual') {
                             // Remove setting from browser
-                            sessionStorage.removeItem($(e.currentTarget).prop('id'));
+                            setOneSessionValue($(e.currentTarget).prop('id'), false);
                         }
                         this.borderBoxes[e.data].explicit(false);
                     }
@@ -416,21 +444,26 @@ class GrammarSelectionBox {
     //
     public static clearBoxes(force : boolean) {
         if (!inQuiz) {
+            let sessionValue = getSessionValue();
+
             if (force) {
                 // Remove all information about selected grammar items
-                for (let i in sessionStorage) {
-                    if (sessionStorage[i]==configuration.propertiesName) {
-                        sessionStorage.removeItem(i);
-                        $('#' + i).prop('checked',false);
-                        $('#' + i).trigger('change');
-                    }
+                for (let i in sessionValue) {
+                    if (i==='color-limit')
+                        $('#color-limit').val(9999).trigger('change','manual');
+                    else
+                        $('#' + i).prop('checked',false).trigger('change','manual');
                 }
+                sessionStorage.removeItem(configuration.propertiesName);
             }
             else {
                 // Enforce selected grammar items
-                for (let i in sessionStorage) {
-                    if (sessionStorage[i]==configuration.propertiesName)
-                        $('#' + i).prop('checked',true);
+                $('#color-limit').val(9999);  // Default value
+                for (let i in sessionValue) {
+                    if (i==='color-limit')
+                        $('#color-limit').val(sessionValue[i]);
+                    else
+                        $('#' + i).prop('checked',sessionValue[i]);
                 }
             }
         }
@@ -440,13 +473,46 @@ class GrammarSelectionBox {
                 let IDs: any[] = []
                 $('#grammarbuttongroup .selectbutton input:checked').each(function () { IDs.push($(this).attr('id')); });    
                 for (let i in IDs) {
-                        $('#' + IDs[i]).prop('checked',false);
-                        $('#' + IDs[i]).trigger('change');
+                    $('#' + IDs[i]).prop('checked',false);
+                    $('#' + IDs[i]).trigger('change','manual');
                 }
             }
         }
     }
 
+    //****************************************************************************************************
+    // setColorizeHandler static method
+    //
+    // Sets up eventhandlers for changes to the word frequency color limit
+    //
+    public static setColorizeHandler() {
+        
+        //****************************************************************************************************
+        // colorizeFunction colors all words with a frequency_rank greater than the specified limit
+        let colorizeFunction = function(event : JQueryEventObject, ...isManual : any) {
+            let collim : number = +$('#color-limit').val();
+            
+            $('.textdisplay').each(function() {
+                $(this).toggleClass('colorized', +$(this).siblings('.frequency_rank').text() > collim);
+            });
+
+            if (isManual[0]!='manual')
+                setOneSessionValue('color-limit', collim);
+        };
+
+        // Add handler to the change even (when the up/down button is used) and a delayed hadler for
+        // the keyup even (when the user types a value)
+        
+        $('#color-limit').on('change', colorizeFunction);
+
+        let timeoutId = 0;
+        $('#color-limit').keyup(function() {
+            clearTimeout(timeoutId); // doesn't matter if it's 0
+            timeoutId = setTimeout(colorizeFunction,20); // Wait 20 ms for input field to be updated
+        });
+    }
+
+    
     //****************************************************************************************************
     // buildGrammarAccordion static method
     //
