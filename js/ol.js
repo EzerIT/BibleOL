@@ -516,7 +516,7 @@ var GrammarSelectionBox = (function () {
         if (whattype != WHAT.feature && whattype != WHAT.metafeature)
             return;
         if (leveli === 0) {
-            $("#" + objType + "_" + featName + "_cb").on('change', function (e) {
+            $("#" + objType + "_" + featName + "_cb").change(function (e) {
                 var isManual = [];
                 for (var _i = 1; _i < arguments.length; _i++) {
                     isManual[_i - 1] = arguments[_i];
@@ -540,7 +540,7 @@ var GrammarSelectionBox = (function () {
             });
         }
         else {
-            $("#" + objType + "_" + featName + "_cb").on('change', function (e) {
+            $("#" + objType + "_" + featName + "_cb").change(function (e) {
                 var isManual = [];
                 for (var _i = 1; _i < arguments.length; _i++) {
                     isManual[_i - 1] = arguments[_i];
@@ -582,7 +582,7 @@ var GrammarSelectionBox = (function () {
             var sg = configuration.sentencegrammar[leveli];
             if (leveli === 0) {
                 this_1.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
-                $('#ws_cb').on('change', function (e) {
+                $('#ws_cb').change(function (e) {
                     var isManual = [];
                     for (var _i = 1; _i < arguments.length; _i++) {
                         isManual[_i - 1] = arguments[_i];
@@ -605,7 +605,7 @@ var GrammarSelectionBox = (function () {
             }
             else {
                 this_1.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
-                $("#lev" + leveli + "_seplin_cb").on('change', leveli, function (e) {
+                $("#lev" + leveli + "_seplin_cb").change(leveli, function (e) {
                     var isManual = [];
                     for (var _i = 1; _i < arguments.length; _i++) {
                         isManual[_i - 1] = arguments[_i];
@@ -624,7 +624,7 @@ var GrammarSelectionBox = (function () {
                     }
                 });
                 this_1.borderBoxes[leveli] = new util.BorderFollowerBox(leveli);
-                $("#lev" + leveli + "_sb_cb").on('change', leveli, function (e) {
+                $("#lev" + leveli + "_sb_cb").change(leveli, function (e) {
                     var isManual = [];
                     for (var _i = 1; _i < arguments.length; _i++) {
                         isManual[_i - 1] = arguments[_i];
@@ -697,7 +697,7 @@ var GrammarSelectionBox = (function () {
             if (isManual[0] != 'manual')
                 setOneSessionValue('color-limit', collim);
         };
-        $('#color-limit').on('change', colorizeFunction);
+        $('#color-limit').change(colorizeFunction);
         var timeoutId = 0;
         $('#color-limit').keyup(function () {
             clearTimeout(timeoutId);

@@ -269,7 +269,7 @@ class GrammarSelectionBox {
 
                                    if (leveli===0) { // Handling of words
 
-                                       $(`#${objType}_${featName}_cb`).on('change', (e : JQueryEventObject, ...isManual : any) => {
+                                       $(`#${objType}_${featName}_cb`).change( (e : JQuery.TriggeredEvent, ...isManual : any) => {
                                            if ($(e.currentTarget).prop('checked')) {
                                                if (!inQuiz && isManual[0]!='manual') {
                                                    // Save setting in browser
@@ -293,7 +293,7 @@ class GrammarSelectionBox {
                                    }
                                    else { // Handling of clause, phrase, etc.
                                        
-                                       $(`#${objType}_${featName}_cb`).on('change', (e : JQueryEventObject, ...isManual : any) => {
+                                       $(`#${objType}_${featName}_cb`).change( (e : JQuery.TriggeredEvent, ...isManual : any) => {
                                            if ($(e.currentTarget).prop('checked')) {
                                                if (!inQuiz && isManual[0]!='manual') {
                                                    // Save setting in browser
@@ -348,7 +348,7 @@ class GrammarSelectionBox {
                 this.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
 
                 // Only Hebrew has a #ws_cb
-                $('#ws_cb').on('change', (e : JQueryEventObject, ...isManual : any) => {
+                $('#ws_cb').change( (e : JQuery.TriggeredEvent, ...isManual : any) => {
                     if ($(e.currentTarget).prop('checked')) {
                         if (!inQuiz && isManual[0]!='manual') {
                             // Save setting in browser
@@ -373,7 +373,7 @@ class GrammarSelectionBox {
                 // Set change handlers for the checkboxes for "separate lines" and "show border".
                 this.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
 
-                $(`#lev${leveli}_seplin_cb`).on('change', leveli, (e : JQueryEventObject, ...isManual : any) => {
+                $(`#lev${leveli}_seplin_cb`).change(leveli, (e : JQuery.TriggeredEvent, ...isManual : any) => {
                     if ($(e.currentTarget).prop('checked')) {
                         if (!inQuiz && isManual[0]!='manual') {
                             // Save setting in browser
@@ -392,7 +392,7 @@ class GrammarSelectionBox {
 
                 this.borderBoxes[leveli] = new util.BorderFollowerBox(leveli);
                 
-                $(`#lev${leveli}_sb_cb`).on('change', leveli, (e : JQueryEventObject, ...isManual : any) => {
+                $(`#lev${leveli}_sb_cb`).change(leveli, (e : JQuery.TriggeredEvent, ...isManual : any) => {
                     if ($(e.currentTarget).prop('checked')) {
                         if (!inQuiz && isManual[0]!='manual') {
                             // Save setting in browser
@@ -489,7 +489,7 @@ class GrammarSelectionBox {
         
         //****************************************************************************************************
         // colorizeFunction colors all words with a frequency_rank greater than the specified limit
-        let colorizeFunction = function(event : JQueryEventObject, ...isManual : any) {
+        let colorizeFunction = function(event : JQuery.TriggeredEvent, ...isManual : any) {
             let collim : number = +$('#color-limit').val();
             
             $('.textdisplay').each(function() {
@@ -503,7 +503,7 @@ class GrammarSelectionBox {
         // Add handler to the change even (when the up/down button is used) and a delayed hadler for
         // the keyup even (when the user types a value)
         
-        $('#color-limit').on('change', colorizeFunction);
+        $('#color-limit').change(colorizeFunction);
 
         let timeoutId = 0;
         $('#color-limit').keyup(function() {
