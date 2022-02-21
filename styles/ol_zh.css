@@ -490,6 +490,9 @@ div.selectbutton label:hover {
   background-color: #e5e5e5;
   color: #002A3A;
 }
+div.selectbutton label.disabled {
+  opacity: 0.45;
+}
 div.color-limit {
   font-family: 'titillium';
   font-size: 10pt;

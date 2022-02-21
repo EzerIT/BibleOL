@@ -142,9 +142,9 @@ class GrammarSelectionBox {
                     if (objType==="word" && featName==="frequency_rank")
                         this.seenFreqRank = true;
                     
-                    this.subgroupgrammardivs += `<div class="selectbutton"><input id="${objType}_${featName}_cb" type="checkbox" ${disabled}><label for="${objType}_${featName}_cb">${featNameLoc}</label></div>`;
+                    this.subgroupgrammardivs += `<div class="selectbutton"><input id="${objType}_${featName}_cb" type="checkbox" ${disabled}><label class="${disabled}" for="${objType}_${featName}_cb">${featNameLoc}</label></div>`;
                     } else {
-                        this.checkboxes += `<div class="selectbutton"><input id="${objType}_${featName}_cb" type="checkbox" ${disabled}><label for="${objType}_${featName}_cb">${featNameLoc}</label></div>`;
+                        this.checkboxes += `<div class="selectbutton"><input id="${objType}_${featName}_cb" type="checkbox" ${disabled}><label class="${disabled}" for="${objType}_${featName}_cb">${featNameLoc}</label></div>`;
                     }
                     break;
             }
