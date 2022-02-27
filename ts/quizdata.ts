@@ -68,24 +68,38 @@ function mayShowFeature(oType : string, origOtype : string, feat : string, sgiOb
     if (!inQuiz)
         return true;
 
-    if (sgiObj.mytype==='GrammarMetaFeature') {
+    let qf : ExtendedQuizFeatures = quizdata.quizFeatures;
+
+    // Function to check if origOtype is a dontShowObject
+    function isDontShowObject() {
+        for (let dso of qf.dontShowObjects)
+            if (dso.content===origOtype)
+                return true;
+        return false;
+    }
+    
+    // Handle metafeatures as their separate components, unless we have a dontShowObject,
+    // because dontShowObjects handle metafeatures in the same way as ordinary features
+    if (sgiObj.mytype==='GrammarMetaFeature' && !isDontShowObject()) {
         // GrammarMetaFeatures are comprised of several features. All of them must be displayable
         // for the meta feature to be displayable.
 
-        for (let i in sgiObj.items) {
-            if (isNaN(+i)) continue; // Not numeric
-            if (!mayShowFeature(oType, origOtype, sgiObj.items[+i].name, sgiObj.items[+i]))
+        for (let it of sgiObj.items) {
+            if (!mayShowFeature(oType, origOtype, it.name, it))
                 return false;
         }
         return true;
     }
 
-    let qf : ExtendedQuizFeatures = quizdata.quizFeatures;
+    let regex_feat = new RegExp(
+        (sgiObj.mytype==='GrammarFeature' && getFeatureSetting(oType,feat).isGloss!==undefined)
+            ? '\\bglosses\\b'    // In dontShowObjects we look for "glosses" rather than "english", "german" etc.
+            : `\\b${feat}\\b`);
 
     // Emdros object types in dontShowObjects may not be displayed (except for a feature explicitly marked "show")
-    for (let ix=0, len=qf.dontShowObjects.length; ix<len; ++ix)
-        if (qf.dontShowObjects[ix].content===origOtype) // origOtype is a 'dontShowObject'...
-            return qf.dontShowObjects[ix].show===feat; // ...so we only show it if it is in the "show" attribute
+    for (let dso of qf.dontShowObjects)
+        if (dso.content===origOtype) // origOtype is a 'dontShowObject'...
+            return dso.show!==undefined && Boolean(dso.show.match(regex_feat)); // ...so we only show it if it is in the "show" attribute
 
     // The object type was not in dontShowObjects. If it is not the sentence unit of the exercise,
     // we may display it.
@@ -93,8 +107,8 @@ function mayShowFeature(oType : string, origOtype : string, feat : string, sgiOb
         return true;
 
     // For the sentence unit of the quiz, request featues must not be displayed
-    for (let ix=0, len=qf.requestFeatures.length; ix<len; ++ix)
-        if (qf.requestFeatures[ix].name===feat)
+    for (let rf of qf.requestFeatures)
+        if (rf.name===feat)
             return false;
 
     // Don't-show features must not be displayed

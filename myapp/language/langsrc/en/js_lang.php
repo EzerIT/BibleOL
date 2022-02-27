@@ -23,6 +23,7 @@ $lang['feature'] = "Feature";
 $lang['feature_prompt'] = "Feature:";
 $lang['feature_specification'] = "Feature specification";
 $lang['friendly_featsel_prompt'] = "Friendly feature selector:";
+$lang['glosses'] = "Glosses";
 $lang['high_value_prompt'] = "High value:";
 $lang['import_shebanq'] = "Import from SHEBANQ";
 $lang['item_number'] = "Item number";

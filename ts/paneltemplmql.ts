@@ -1078,7 +1078,8 @@ abstract class PanelTemplMql {
 
             case 'ascii':
             case 'string':
-                if (key===Qere.feature())
+                if (configuration.propertiesName==="ETCBC4"          && key==="qere_utf8"      ||
+                    configuration.propertiesName==="ETCBC4-translit" && key==="qere_translit")
                     this.generateQerePanel(key, fhs);
                 else
                     this.generateStringPanel(key, fhs, featset.foreignText);

@@ -19,72 +19,18 @@ interface QuizFeatures {
     dontShowFeatures : string[]; // Features to hide from the user
     dontShowObjects  : {         // Object types to hide from the user
         content      : string;   // Name of object type
-        show?        : string;   // Feature to show even though object is hidden
+        show?        : string;   // Features to show even though object is hidden
     } [];
 }
 
 
-//****************************************************************************************************
-// Qere class
-//
-// Contains static methods with hand coded database dependency for qere detection.
-//
-class Qere {
-    private static dbName  : string = 'ETCBC4'; // Emdros database with qere forms
-    private static dbOtype : string = 'word';   // Emdros object type with qere forms
-
-    //------------------------------------------------------------------------------------------
-    // database_has_qere static method
-    //
-    // Returns true if the current Emdros database has words with a qere form.
-    //
-    public static database_has_qere() : boolean {
-        return configuration.databaseName===Qere.dbName;
-    }
-
-    //------------------------------------------------------------------------------------------
-    // otype_has_qere static method
-    //
-    // Checks if the specified Emdros object type has a qere form.
-    //
-    // Parameter:
-    //     otype: Emdros object type.
-    // Returns:
-    //     True if the specified Emdros object type has a qere form.
-    //
-    public static otype_has_qere(otype : string) : boolean {
-        return otype===Qere.dbOtype;
-    }
-
-    //------------------------------------------------------------------------------------------
-    // otype static method
-    //
-    // Returns the name of the Emdros object type that has a qere form.
-    //
-    public static otype() : string {
-        return Qere.dbOtype;
-    }
-
-    //------------------------------------------------------------------------------------------
-    // feature static method
-    //
-    // Returns the name of the Emdros feature containing the qere form.
-    //
-    public static feature() : string {
-        if (configuration.propertiesName==="ETCBC4")
-            return "qere_utf8";
-        if (configuration.propertiesName==="ETCBC4-translit")
-            return "qere_translit";
-        return null;
-    }
-}
 
 //****************************************************************************************************
 // ButtonSelection enumeration
 //
 // Names the radio buttons and checkboxes that speficy the handling of a feature
 //
-enum ButtonSelection { SHOW, REQUEST, REQUEST_DROPDOWN, DONT_CARE, DONT_SHOW, SHOW_QERE };
+enum ButtonSelection { SHOW, REQUEST, REQUEST_DROPDOWN, DONT_CARE, DONT_SHOW };
 
 
 //****************************************************************************************************
@@ -98,9 +44,10 @@ class ButtonsAndLabel {
     private dcFeat	 : JQuery; // The "Don't care" radio button
     private dontShowFeat : JQuery; // The "Don't show" radio button
     private ddCheck	 : JQuery; // The "Multiple choice" checkbox
-    private showQere	 : JQuery; // The "Show qere" radio button
     private feat	 : JQuery; // The <span> element containing the feature name
     private limitter	 : JQuery; // The <span> element containing the hideFeatures selector
+
+    private static buttonNumber : number = 0; // Used by button name generator
     
     //------------------------------------------------------------------------------------------
     // Constructor method
@@ -117,15 +64,15 @@ class ButtonsAndLabel {
                 private useDropDown       : boolean,         // Can multiple choice be used?
                 private canShow           : boolean,         // Can this be a display feature?
                 private canRequest        : boolean,         // Can this be a request feature?
-                private canDisplayGrammar : boolean,         // Can this be a "don't show" feature?
-                private canShowQere       : boolean          // Include a "show qere" button?
+                private canDisplayGrammar : boolean          // Can this be a "don't show" feature?
                ) {
 
-        this.showFeat     = canShow           ? $(`<input type="radio" name="feat_${otype}_${featName}" value="show">`)         : $('<span></span>');
-        this.reqFeat      = canRequest        ? $(`<input type="radio" name="feat_${otype}_${featName}" value="request">`)      : $('<span></span>');
-        this.dcFeat       =                     $(`<input type="radio" name="feat_${otype}_${featName}" value="dontcare">`);
-        this.dontShowFeat = canDisplayGrammar ? $(`<input type="radio" name="feat_${otype}_${featName}" value="dontshowfeat">`) : $('<span></span>');
-        this.showQere     = canShowQere       ? $(`<input type="radio" name="feat_${otype}_${featName}" value="showqere">`)     : $('<span></span>');
+        ++ButtonsAndLabel.buttonNumber;
+        
+        this.showFeat     = canShow           ? $(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="show">`)	  : $('<span></span>');
+	this.reqFeat	  = canRequest	      ? $(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="request">`)	  : $('<span></span>');
+	this.dcFeat	  =			$(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontcare">`);
+	this.dontShowFeat = canDisplayGrammar ? $(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontshowfeat">`) : $('<span></span>');
 	this.feat         =                     $(`<span>${lab}</span>`);
         this.limitter     =                     $('<span></span>');
         
@@ -135,15 +82,11 @@ class ButtonsAndLabel {
         case ButtonSelection.REQUEST_DROPDOWN: this.reqFeat.prop('checked',true);      break;
         case ButtonSelection.DONT_CARE:        this.dcFeat.prop('checked',true);       break;
         case ButtonSelection.DONT_SHOW:        this.dontShowFeat.prop('checked',true); break;
-        case ButtonSelection.SHOW_QERE:        this.showQere.prop('checked',true);     break;
 	}
 
         if (useDropDown) {
-            this.ddCheck = $(`<input type="checkbox" name="dd_${otype}_${featName}">`);
+            this.ddCheck = $(`<input type="checkbox" name="dd_${ButtonsAndLabel.buttonNumber}">`);
             this.ddCheck.prop('checked', select!=ButtonSelection.REQUEST);
-        }
-        else if (canShowQere) {
-            this.ddCheck = this.showQere; // Drop down and showQere share a position
         }
         else
             this.ddCheck = $('<span></span>'); // Empty space filler
@@ -256,9 +199,6 @@ class ButtonsAndLabel {
 
         case ButtonSelection.DONT_SHOW:
             return this.canDisplayGrammar && this.dontShowFeat.prop('checked');
-
-        case ButtonSelection.SHOW_QERE:
-            return this.canShowQere && this.showQere.prop('checked');
         }
     }
 
@@ -279,8 +219,6 @@ class ButtonsAndLabel {
     public getFeatName() : string {
         return this.featName;
     }
-
-
 }
 
 //****************************************************************************************************
@@ -420,8 +358,9 @@ class LimitDialog {
 // This class contains the exercise feature settings for a single Emdros object type.
 //
 class PanelForOneOtype  {
-    public visualBAL : ButtonsAndLabel;                                            // The setting for the "visual" pseudo feature
-    public allBAL    : ButtonsAndLabel[] = [];                                     // The settings for all other features
+    public visualBAL : ButtonsAndLabel;                    // The setting for the "visual" pseudo feature
+    public allBAL    : ButtonsAndLabel[] = [];             // The settings for all other features for the question object
+    public allObjBAL : {[ key : string ] : ButtonsAndLabel[]} = {}; // The settings for all features for other objects
     private panel    : JQuery = $('<table class="striped featuretable"></table>'); // The entire feature selection panel
 
     //------------------------------------------------------------------------------------------
@@ -457,11 +396,10 @@ class PanelForOneOtype  {
                                              otype,                               // The Emdros object type
                                              useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, // Initially selected radio button
                                              null,                                // hideFeatures
-                                             configuration.objHasSurface===otype && !!getFeatureSetting(otype,configuration.surfaceFeature).alternateshowrequestSql, // Can multiple choice be used?
+                                             configuration.objHasSurface===otype && Boolean(getFeatureSetting(otype,configuration.surfaceFeature).alternateshowrequestSql), // Can multiple choice be used?
                                              true,                                // Can this be a display feature?
                                              configuration.objHasSurface===otype, // Can this be a request feature?
-                                             false,                               // Can this be a "don't show" feature?
-                                             false);                              // Include a "show qere" button?
+                                             false);                              // Can this be a "don't show" feature?
 
         this.panel.append(this.visualBAL.getRow());
 
@@ -473,7 +411,7 @@ class PanelForOneOtype  {
         // Note:
         // getFeatureSetting(otype, featName).ignoreShow means featName cannot be a display feature.
         // getFeatureSetting(otype, featName).ignoreRequest means featName cannot be a request feature.
-        // sg===null && !sg.containsFeature(featName) means featName cannot be a "don't show" feature (because it is never shown).
+        // sg===null || !sg.containsFeature(featName) means featName cannot be a "don't show" feature (because it is never shown).
         
         // Go through all features and identify the ones to include in the panel
         for (let featName in getObjectSetting(otype).featuresetting) {
@@ -501,11 +439,10 @@ class PanelForOneOtype  {
                                           otype,                                                       // The Emdros object type             
                                           useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, // Initially selected radio button
                                           ptqf.getHideFeatures(featName),                              // List of feature values to hide from student
-                                          !!getFeatureSetting(otype,featName).alternateshowrequestSql, // Can multiple choice be used?       
+                                          Boolean(getFeatureSetting(otype,featName).alternateshowrequestSql), // Can multiple choice be used?       
                                           !getFeatureSetting(otype, featName).ignoreShow,              // Can this be a display feature?     
                                           !getFeatureSetting(otype, featName).ignoreRequest,           // Can this be a request feature?     
-                                          sg!==null && sg.containsFeature(featName),                   // Can this be a "don't show" feature?
-                                          false);                                                      // Include a "show qere" button?
+                                          sg!==null && sg.containsFeature(featName));                  // Can this be a "don't show" feature?
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }
@@ -516,14 +453,14 @@ class PanelForOneOtype  {
         ////////////////////////////////////////////////////////////////////////////////////////
 
         // Add space between rows
-        this.panel.append('<tr><td colspan="5"></td><td class="leftalign">&nbsp;</tr>');
+        this.panel.append('<tr><td colspan="6"></td><td class="leftalign">&nbsp;</td></tr>');
 
         // Add headings to the table
         this.panel.append('<tr>'
                           + '<td colspan="2"></td>'
                           + `<th>${localize('dont_care')}</th>`
                           + `<th>${localize('dont_show')}</th>`
-                          + `<th>${Qere.database_has_qere() && !Qere.otype_has_qere(otype) ? localize('show_qere') : ''}</th>`
+                          + `<th></th>`
                           + `<th class="leftalign">${localize('other_sentence_unit_types')}</th>`
                           + '<th></th>'
                           + '</tr>');
@@ -534,20 +471,54 @@ class PanelForOneOtype  {
             if (isNaN(leveli)) continue; // Not numeric
 
             let otherOtype : string = configuration.sentencegrammar[leveli].objType;
-            if (otherOtype!==otype && configuration.objectSettings[otherOtype].mayselect) {
-                let bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), // The localized name of the object  
-                                              'otherOtype_' + otherOtype,        // The pseudo name of the feature     
-                                              otype,                             // The Emdros object type             
-                                              useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, // Initially selected radio button
-                                              null,                              // hideFeatures
-                                              false,                             // Can multiple choice be used?       
-					      false,				 // Can this be a display feature?     
-					      false,				 // Can this be a request feature?     
-					      true,				 // Can this be a "don't show" feature?
-                                              Qere.database_has_qere() && Qere.otype_has_qere(otherOtype)); // Include a "show qere" button?
+            this.allObjBAL[otherOtype] = []; // The settings for all features for otherOtype
 
-                this.allBAL.push(bal);
-                this.panel.append(bal.getRow());
+            if (otherOtype!==otype && configuration.objectSettings[otherOtype].mayselect) {
+                this.panel.append(`<tr><td colspan="7">${otherOtype}</td></tr>`);
+
+                let other_sg : SentenceGrammar = getSentenceGrammarFor(otherOtype);
+
+                if (other_sg===null) // Object has not features to display
+                    continue;
+
+                let hasSeenGlosses : boolean = false;
+                other_sg.walkFeatureNames(otherOtype,
+                                          (whattype    : WHAT,
+                                           objType     : string,
+                                           origObjType : string,
+                                           featName    : string,
+                                           featNameLoc : string,
+                                           sgiObj      : SentenceGrammarItem
+                                          ) : void  => {
+                                              if (whattype!==WHAT.feature && whattype!==WHAT.metafeature)
+                                                  return;
+                                              
+                                              if (whattype===WHAT.feature && getFeatureSetting(objType,featName).isGloss!==undefined) {
+                                                  if (hasSeenGlosses)
+                                                      return;
+                                                  hasSeenGlosses = true;
+                                                  featName = 'glosses';
+                                                  featNameLoc = localize(featName);
+                                              }
+                                              
+                                              // Go through all features and identify the ones to include in the panel
+                                              // Ignore features of type 'url'
+                                              if (typeinfo.obj2feat[objType][featName]==='url')
+                                                  return;
+
+                                              let bal = new ButtonsAndLabel(featNameLoc,                              // The localized name of the feature  
+                                                                            featName,                                                                  // The Emdros name of the feature     
+                                                                            objType,                                                                // The Emdros object type             
+                                                                            useSavedFeatures ? ptqf.getObjectSelector(origObjType,featName) : ButtonSelection.DONT_CARE, // Initially selected radio button
+                                                                            null,                                                                      // List of feature values to hide from student
+                                                                            false,                                                                     // Can multiple choice be used?       
+                                                                            false,                                                                     // Can this be a display feature?     
+                                                                            false,                                                                     // Can this be a request feature?     
+                                                                            true);                                                                     // Can this be a "don't show" feature?
+                                              this.allObjBAL[otherOtype].push(bal);
+                                              this.panel.append(bal.getRow());
+                                          }
+                                         );
             }
         }
     }
@@ -695,12 +666,14 @@ class PanelTemplQuizFeatures {
     // Returns:
     //     The radiobutton setting for the specifed feature.
     //
-    public getObjectSelector(otype : string) : ButtonSelection {
+    public getObjectSelector(otype : string, featName : string) : ButtonSelection {
+        let regex_feat = new RegExp(`\\b${featName}\\b`);
+
 	if (this.initialQf && this.initialQf.dontShowObjects) {
             for (let i=0; i<this.initialQf.dontShowObjects.length; ++i) {
 		if (this.initialQf.dontShowObjects[i].content===otype) {
-                    if (this.initialQf.dontShowObjects[i].show) // We assume the feature to show is qere
-		        return ButtonSelection.SHOW_QERE;
+                    if (this.initialQf.dontShowObjects[i].show!==undefined && this.initialQf.dontShowObjects[i].show.match(regex_feat))
+		        return ButtonSelection.DONT_CARE;
                     else
 		        return ButtonSelection.DONT_SHOW;
                 }
@@ -772,7 +745,7 @@ class PanelTemplQuizFeatures {
 	else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST))
 	    qf.requestFeatures.push({name : 'visual', usedropdown : this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures : null});
 
-        // Store informaiton about other features and about additional object types
+        // Store informaiton about other features for the question object
         for (let i=0; i<this.visiblePanel.allBAL.length; ++i) {
             let bal : ButtonsAndLabel = this.visiblePanel.allBAL[i];
 
@@ -780,17 +753,34 @@ class PanelTemplQuizFeatures {
 		qf.showFeatures.push(bal.getFeatName());
 	    else if (bal.isSelected(ButtonSelection.REQUEST))
 	        qf.requestFeatures.push({name : bal.getFeatName(), usedropdown : bal.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures : bal.getHideFeatures()});
-	    else if (bal.isSelected(ButtonSelection.DONT_SHOW)) {
-                let fn = bal.getFeatName();
-                if (fn.substring(0,11) === 'otherOtype_') // 11 is the length of 'otherOtype_'
-                    qf.dontShowObjects.push({content: fn.substring(11)});
+	    else if (bal.isSelected(ButtonSelection.DONT_SHOW))
+		qf.dontShowFeatures.push(bal.getFeatName());
+        }
+
+        // Store informaiton about other features for other objects
+        // Method:
+        //     If all features for an object are DONT_CARE, skip the object.
+        //     If at least one feature is DONT_SHOW, push the object along with information about the DONT_CARE features
+        for (let otherOtype in this.visiblePanel.allObjBAL) {
+            let allDONT_CARE : boolean = true;
+            for (let bal of this.visiblePanel.allObjBAL[otherOtype]) {
+                if (bal.isSelected(ButtonSelection.DONT_SHOW)) {
+                    allDONT_CARE = false;
+                    break;
+                }
+            }
+            if (!allDONT_CARE) {
+                let showstring : string = '';
+                for (let bal of this.visiblePanel.allObjBAL[otherOtype]) {
+                    if (bal.isSelected(ButtonSelection.DONT_CARE))
+                        showstring += bal.getFeatName() + ' ';
+                }
+                if (showstring==='') 
+                    qf.dontShowObjects.push({content: otherOtype});
                 else
-		    qf.dontShowFeatures.push(fn);
+                    qf.dontShowObjects.push({content: otherOtype, show : showstring.trim()});
             }
-	    else if (bal.isSelected(ButtonSelection.SHOW_QERE)) {
-                qf.dontShowObjects.push({content: Qere.otype(), show: Qere.feature()});
-            }
-	}
+        }
 	return qf;
     }
 

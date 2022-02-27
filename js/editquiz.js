@@ -789,7 +789,8 @@ var PanelTemplMql = (function () {
                     break;
                 case 'ascii':
                 case 'string':
-                    if (key === Qere.feature())
+                    if (configuration.propertiesName === "ETCBC4" && key === "qere_utf8" ||
+                        configuration.propertiesName === "ETCBC4-translit" && key === "qere_translit")
                         this.generateQerePanel(key, fhs);
                     else
                         this.generateStringPanel(key, fhs, featset.foreignText);
@@ -1337,29 +1338,6 @@ var PanelTemplQuizObjectSelector = (function (_super) {
     };
     return PanelTemplQuizObjectSelector;
 }(PanelTemplMql));
-var Qere = (function () {
-    function Qere() {
-    }
-    Qere.database_has_qere = function () {
-        return configuration.databaseName === Qere.dbName;
-    };
-    Qere.otype_has_qere = function (otype) {
-        return otype === Qere.dbOtype;
-    };
-    Qere.otype = function () {
-        return Qere.dbOtype;
-    };
-    Qere.feature = function () {
-        if (configuration.propertiesName === "ETCBC4")
-            return "qere_utf8";
-        if (configuration.propertiesName === "ETCBC4-translit")
-            return "qere_translit";
-        return null;
-    };
-    Qere.dbName = 'ETCBC4';
-    Qere.dbOtype = 'word';
-    return Qere;
-}());
 var ButtonSelection;
 (function (ButtonSelection) {
     ButtonSelection[ButtonSelection["SHOW"] = 0] = "SHOW";
@@ -1367,11 +1345,10 @@ var ButtonSelection;
     ButtonSelection[ButtonSelection["REQUEST_DROPDOWN"] = 2] = "REQUEST_DROPDOWN";
     ButtonSelection[ButtonSelection["DONT_CARE"] = 3] = "DONT_CARE";
     ButtonSelection[ButtonSelection["DONT_SHOW"] = 4] = "DONT_SHOW";
-    ButtonSelection[ButtonSelection["SHOW_QERE"] = 5] = "SHOW_QERE";
 })(ButtonSelection || (ButtonSelection = {}));
 ;
 var ButtonsAndLabel = (function () {
-    function ButtonsAndLabel(lab, featName, otype, select, hideFeatures, useDropDown, canShow, canRequest, canDisplayGrammar, canShowQere) {
+    function ButtonsAndLabel(lab, featName, otype, select, hideFeatures, useDropDown, canShow, canRequest, canDisplayGrammar) {
         var _this = this;
         this.featName = featName;
         this.hideFeatures = hideFeatures;
@@ -1379,12 +1356,11 @@ var ButtonsAndLabel = (function () {
         this.canShow = canShow;
         this.canRequest = canRequest;
         this.canDisplayGrammar = canDisplayGrammar;
-        this.canShowQere = canShowQere;
-        this.showFeat = canShow ? $("<input type=\"radio\" name=\"feat_" + otype + "_" + featName + "\" value=\"show\">") : $('<span></span>');
-        this.reqFeat = canRequest ? $("<input type=\"radio\" name=\"feat_" + otype + "_" + featName + "\" value=\"request\">") : $('<span></span>');
-        this.dcFeat = $("<input type=\"radio\" name=\"feat_" + otype + "_" + featName + "\" value=\"dontcare\">");
-        this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_" + otype + "_" + featName + "\" value=\"dontshowfeat\">") : $('<span></span>');
-        this.showQere = canShowQere ? $("<input type=\"radio\" name=\"feat_" + otype + "_" + featName + "\" value=\"showqere\">") : $('<span></span>');
+        ++ButtonsAndLabel.buttonNumber;
+        this.showFeat = canShow ? $("<input type=\"radio\" name=\"feat_" + ButtonsAndLabel.buttonNumber + "\" value=\"show\">") : $('<span></span>');
+        this.reqFeat = canRequest ? $("<input type=\"radio\" name=\"feat_" + ButtonsAndLabel.buttonNumber + "\" value=\"request\">") : $('<span></span>');
+        this.dcFeat = $("<input type=\"radio\" name=\"feat_" + ButtonsAndLabel.buttonNumber + "\" value=\"dontcare\">");
+        this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_" + ButtonsAndLabel.buttonNumber + "\" value=\"dontshowfeat\">") : $('<span></span>');
         this.feat = $("<span>" + lab + "</span>");
         this.limitter = $('<span></span>');
         switch (select) {
@@ -1401,16 +1377,10 @@ var ButtonsAndLabel = (function () {
             case ButtonSelection.DONT_SHOW:
                 this.dontShowFeat.prop('checked', true);
                 break;
-            case ButtonSelection.SHOW_QERE:
-                this.showQere.prop('checked', true);
-                break;
         }
         if (useDropDown) {
-            this.ddCheck = $("<input type=\"checkbox\" name=\"dd_" + otype + "_" + featName + "\">");
+            this.ddCheck = $("<input type=\"checkbox\" name=\"dd_" + ButtonsAndLabel.buttonNumber + "\">");
             this.ddCheck.prop('checked', select != ButtonSelection.REQUEST);
-        }
-        else if (canShowQere) {
-            this.ddCheck = this.showQere;
         }
         else
             this.ddCheck = $('<span></span>');
@@ -1488,8 +1458,6 @@ var ButtonsAndLabel = (function () {
                 return this.dcFeat.prop('checked');
             case ButtonSelection.DONT_SHOW:
                 return this.canDisplayGrammar && this.dontShowFeat.prop('checked');
-            case ButtonSelection.SHOW_QERE:
-                return this.canShowQere && this.showQere.prop('checked');
         }
     };
     ButtonsAndLabel.prototype.getHideFeatures = function () {
@@ -1498,6 +1466,7 @@ var ButtonsAndLabel = (function () {
     ButtonsAndLabel.prototype.getFeatName = function () {
         return this.featName;
     };
+    ButtonsAndLabel.buttonNumber = 0;
     return ButtonsAndLabel;
 }());
 var LimitDialog = (function () {
@@ -1573,7 +1542,9 @@ var LimitDialog = (function () {
 }());
 var PanelForOneOtype = (function () {
     function PanelForOneOtype(otype, ptqf) {
+        var _this = this;
         this.allBAL = [];
+        this.allObjBAL = {};
         this.panel = $('<table class="striped featuretable"></table>');
         var useSavedFeatures = otype === ptqf.initialOtype;
         this.panel.append('<tr>'
@@ -1585,7 +1556,7 @@ var PanelForOneOtype = (function () {
             + ("<th class=\"leftalign\">" + localize('feature') + "</th>")
             + '<th></th>'
             + '</tr>');
-        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && !!getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql, true, configuration.objHasSurface === otype, false, false);
+        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && Boolean(getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql), true, configuration.objHasSurface === otype, false);
         this.panel.append(this.visualBAL.getRow());
         var hasSurfaceFeature = otype === configuration.objHasSurface;
         var sg = getSentenceGrammarFor(otype);
@@ -1603,29 +1574,52 @@ var PanelForOneOtype = (function () {
         }
         for (var ix = 0; ix < keylist.length; ++ix) {
             var featName = keylist[ix];
-            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName), featName, otype, useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, ptqf.getHideFeatures(featName), !!getFeatureSetting(otype, featName).alternateshowrequestSql, !getFeatureSetting(otype, featName).ignoreShow, !getFeatureSetting(otype, featName).ignoreRequest, sg !== null && sg.containsFeature(featName), false);
+            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName), featName, otype, useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, ptqf.getHideFeatures(featName), Boolean(getFeatureSetting(otype, featName).alternateshowrequestSql), !getFeatureSetting(otype, featName).ignoreShow, !getFeatureSetting(otype, featName).ignoreRequest, sg !== null && sg.containsFeature(featName));
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }
-        this.panel.append('<tr><td colspan="5"></td><td class="leftalign">&nbsp;</tr>');
+        this.panel.append('<tr><td colspan="6"></td><td class="leftalign">&nbsp;</td></tr>');
         this.panel.append('<tr>'
             + '<td colspan="2"></td>'
             + ("<th>" + localize('dont_care') + "</th>")
             + ("<th>" + localize('dont_show') + "</th>")
-            + ("<th>" + (Qere.database_has_qere() && !Qere.otype_has_qere(otype) ? localize('show_qere') : '') + "</th>")
+            + "<th></th>"
             + ("<th class=\"leftalign\">" + localize('other_sentence_unit_types') + "</th>")
             + '<th></th>'
             + '</tr>');
-        for (var level in configuration.sentencegrammar) {
+        var _loop_1 = function (level) {
             var leveli = +level;
             if (isNaN(leveli))
-                continue;
+                return "continue";
             var otherOtype = configuration.sentencegrammar[leveli].objType;
+            this_1.allObjBAL[otherOtype] = [];
             if (otherOtype !== otype && configuration.objectSettings[otherOtype].mayselect) {
-                var bal = new ButtonsAndLabel(getObjectFriendlyName(otherOtype), 'otherOtype_' + otherOtype, otype, useSavedFeatures ? ptqf.getObjectSelector(otherOtype) : ButtonSelection.DONT_CARE, null, false, false, false, true, Qere.database_has_qere() && Qere.otype_has_qere(otherOtype));
-                this.allBAL.push(bal);
-                this.panel.append(bal.getRow());
+                this_1.panel.append("<tr><td colspan=\"7\">" + otherOtype + "</td></tr>");
+                var other_sg = getSentenceGrammarFor(otherOtype);
+                if (other_sg === null)
+                    return "continue";
+                var hasSeenGlosses_1 = false;
+                other_sg.walkFeatureNames(otherOtype, function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
+                    if (whattype !== WHAT.feature && whattype !== WHAT.metafeature)
+                        return;
+                    if (whattype === WHAT.feature && getFeatureSetting(objType, featName).isGloss !== undefined) {
+                        if (hasSeenGlosses_1)
+                            return;
+                        hasSeenGlosses_1 = true;
+                        featName = 'glosses';
+                        featNameLoc = localize(featName);
+                    }
+                    if (typeinfo.obj2feat[objType][featName] === 'url')
+                        return;
+                    var bal = new ButtonsAndLabel(featNameLoc, featName, objType, useSavedFeatures ? ptqf.getObjectSelector(origObjType, featName) : ButtonSelection.DONT_CARE, null, false, false, false, true);
+                    _this.allObjBAL[otherOtype].push(bal);
+                    _this.panel.append(bal.getRow());
+                });
             }
+        };
+        var this_1 = this;
+        for (var level in configuration.sentencegrammar) {
+            _loop_1(level);
         }
     }
     PanelForOneOtype.prototype.hide = function () {
@@ -1683,12 +1677,13 @@ var PanelTemplQuizFeatures = (function () {
             if (this.initialQf.requestFeatures[i].name === feat)
                 return this.initialQf.requestFeatures[i].hideFeatures;
     };
-    PanelTemplQuizFeatures.prototype.getObjectSelector = function (otype) {
+    PanelTemplQuizFeatures.prototype.getObjectSelector = function (otype, featName) {
+        var regex_feat = new RegExp("\\b" + featName + "\\b");
         if (this.initialQf && this.initialQf.dontShowObjects) {
             for (var i = 0; i < this.initialQf.dontShowObjects.length; ++i) {
                 if (this.initialQf.dontShowObjects[i].content === otype) {
-                    if (this.initialQf.dontShowObjects[i].show)
-                        return ButtonSelection.SHOW_QERE;
+                    if (this.initialQf.dontShowObjects[i].show !== undefined && this.initialQf.dontShowObjects[i].show.match(regex_feat))
+                        return ButtonSelection.DONT_CARE;
                     else
                         return ButtonSelection.DONT_SHOW;
                 }
@@ -1735,15 +1730,29 @@ var PanelTemplQuizFeatures = (function () {
                 qf.showFeatures.push(bal.getFeatName());
             else if (bal.isSelected(ButtonSelection.REQUEST))
                 qf.requestFeatures.push({ name: bal.getFeatName(), usedropdown: bal.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures: bal.getHideFeatures() });
-            else if (bal.isSelected(ButtonSelection.DONT_SHOW)) {
-                var fn = bal.getFeatName();
-                if (fn.substring(0, 11) === 'otherOtype_')
-                    qf.dontShowObjects.push({ content: fn.substring(11) });
-                else
-                    qf.dontShowFeatures.push(fn);
+            else if (bal.isSelected(ButtonSelection.DONT_SHOW))
+                qf.dontShowFeatures.push(bal.getFeatName());
+        }
+        for (var otherOtype in this.visiblePanel.allObjBAL) {
+            var allDONT_CARE = true;
+            for (var _i = 0, _a = this.visiblePanel.allObjBAL[otherOtype]; _i < _a.length; _i++) {
+                var bal = _a[_i];
+                if (bal.isSelected(ButtonSelection.DONT_SHOW)) {
+                    allDONT_CARE = false;
+                    break;
+                }
             }
-            else if (bal.isSelected(ButtonSelection.SHOW_QERE)) {
-                qf.dontShowObjects.push({ content: Qere.otype(), show: Qere.feature() });
+            if (!allDONT_CARE) {
+                var showstring = '';
+                for (var _b = 0, _c = this.visiblePanel.allObjBAL[otherOtype]; _b < _c.length; _b++) {
+                    var bal = _c[_b];
+                    if (bal.isSelected(ButtonSelection.DONT_CARE))
+                        showstring += bal.getFeatName() + ' ';
+                }
+                if (showstring === '')
+                    qf.dontShowObjects.push({ content: otherOtype });
+                else
+                    qf.dontShowObjects.push({ content: otherOtype, show: showstring.trim() });
             }
         }
         return qf;

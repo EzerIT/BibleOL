@@ -92,6 +92,10 @@ $comment['friendly_featsel_prompt'] = "";
 $format['friendly_featsel_prompt'] = "";
 $use_textarea['friendly_featsel_prompt'] = false;
 
+$comment['glosses'] = "";
+$format['glosses'] = "";
+$use_textarea['glosses'] = false;
+
 $comment['high_value_prompt'] = "";
 $format['high_value_prompt'] = "";
 $use_textarea['high_value_prompt'] = false;

@@ -23,6 +23,7 @@ $lang['feature'] = "Attribut";
 $lang['feature_prompt'] = "Attribut:";
 $lang['feature_specification'] = "Valg af attributter";
 $lang['friendly_featsel_prompt'] = "Venligt attributvalg:";
+$lang['glosses'] = "Gloser";
 $lang['high_value_prompt'] = "Øvre værdi";
 $lang['import_shebanq'] = "Importér fra SHEBANQ";
 $lang['item_number'] = "Nummer";

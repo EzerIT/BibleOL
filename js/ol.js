@@ -1072,24 +1072,38 @@ function localize(s) {
 function mayShowFeature(oType, origOtype, feat, sgiObj) {
     if (!inQuiz)
         return true;
-    if (sgiObj.mytype === 'GrammarMetaFeature') {
-        for (var i in sgiObj.items) {
-            if (isNaN(+i))
-                continue;
-            if (!mayShowFeature(oType, origOtype, sgiObj.items[+i].name, sgiObj.items[+i]))
+    var qf = quizdata.quizFeatures;
+    function isDontShowObject() {
+        for (var _i = 0, _a = qf.dontShowObjects; _i < _a.length; _i++) {
+            var dso = _a[_i];
+            if (dso.content === origOtype)
+                return true;
+        }
+        return false;
+    }
+    if (sgiObj.mytype === 'GrammarMetaFeature' && !isDontShowObject()) {
+        for (var _i = 0, _a = sgiObj.items; _i < _a.length; _i++) {
+            var it = _a[_i];
+            if (!mayShowFeature(oType, origOtype, it.name, it))
                 return false;
         }
         return true;
     }
-    var qf = quizdata.quizFeatures;
-    for (var ix = 0, len = qf.dontShowObjects.length; ix < len; ++ix)
-        if (qf.dontShowObjects[ix].content === origOtype)
-            return qf.dontShowObjects[ix].show === feat;
+    var regex_feat = new RegExp((sgiObj.mytype === 'GrammarFeature' && getFeatureSetting(oType, feat).isGloss !== undefined)
+        ? '\\bglosses\\b'
+        : "\\b" + feat + "\\b");
+    for (var _b = 0, _c = qf.dontShowObjects; _b < _c.length; _b++) {
+        var dso = _c[_b];
+        if (dso.content === origOtype)
+            return dso.show !== undefined && Boolean(dso.show.match(regex_feat));
+    }
     if (oType !== qf.objectType)
         return true;
-    for (var ix = 0, len = qf.requestFeatures.length; ix < len; ++ix)
-        if (qf.requestFeatures[ix].name === feat)
+    for (var _d = 0, _e = qf.requestFeatures; _d < _e.length; _d++) {
+        var rf = _e[_d];
+        if (rf.name === feat)
             return false;
+    }
     return qf.dontShowFeatures.indexOf(feat) === -1;
 }
 var Dictionary = (function () {
