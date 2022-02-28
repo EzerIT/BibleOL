@@ -41,8 +41,8 @@ enum ButtonSelection { SHOW, REQUEST, REQUEST_DROPDOWN, DONT_CARE, DONT_SHOW };
 class ButtonsAndLabel {
     private showFeat	 : JQuery; // The "Show" radio button
     private reqFeat	 : JQuery; // The "Request" radio button
-    private dcFeat	 : JQuery; // The "Don't care" radio button
-    private dontShowFeat : JQuery; // The "Don't show" radio button
+    public  dcFeat	 : JQuery; // The "Don't care" radio button
+    public  dontShowFeat : JQuery; // The "Don't show" radio button
     private ddCheck	 : JQuery; // The "Multiple choice" checkbox
     private feat	 : JQuery; // The <span> element containing the feature name
     private limitter	 : JQuery; // The <span> element containing the hideFeatures selector
@@ -476,6 +476,19 @@ class PanelForOneOtype  {
             if (otherOtype!==otype && configuration.objectSettings[otherOtype].mayselect) {
                 this.panel.append(`<tr><td colspan="7">${otherOtype}</td></tr>`);
 
+                // Build 'Set all' button line
+                let buttonrow : JQuery = $('<tr><td colspan="2"></td></tr>');
+                let td_dcb : JQuery = $('<td></td>');
+                let td_dsb : JQuery = $('<td></td>');
+
+                let setAllDontCareButton : JQuery = $(`<a href="#" style="color:white" class="badge badge-primary">${localize('set_all')}</a>`);
+                let setAllDontShowButton : JQuery = $(`<a href="#" style="color:white" class="badge badge-primary">${localize('set_all')}</a>`);
+                td_dcb.append(setAllDontCareButton);
+                td_dsb.append(setAllDontShowButton);
+
+                buttonrow.append(td_dcb).append(td_dsb).append('<td colspan="3"></td>');
+                this.panel.append(buttonrow);
+                
                 let other_sg : SentenceGrammar = getSentenceGrammarFor(otherOtype);
 
                 if (other_sg===null) // Object has not features to display
@@ -519,6 +532,18 @@ class PanelForOneOtype  {
                                               this.panel.append(bal.getRow());
                                           }
                                          );
+                setAllDontCareButton.click( () =>
+                    {
+                        for (let bal of this.allObjBAL[otherOtype])
+                            bal.dcFeat.click();
+                        return false;
+                    });
+                setAllDontShowButton.click( () =>
+                    {
+                        for (let bal of this.allObjBAL[otherOtype])
+                            bal.dontShowFeat.click();
+                        return false;
+                    });
             }
         }
     }

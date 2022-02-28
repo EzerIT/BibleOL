@@ -1595,6 +1595,15 @@ var PanelForOneOtype = (function () {
             this_1.allObjBAL[otherOtype] = [];
             if (otherOtype !== otype && configuration.objectSettings[otherOtype].mayselect) {
                 this_1.panel.append("<tr><td colspan=\"7\">" + otherOtype + "</td></tr>");
+                var buttonrow = $('<tr><td colspan="2"></td></tr>');
+                var td_dcb = $('<td></td>');
+                var td_dsb = $('<td></td>');
+                var setAllDontCareButton = $("<a href=\"#\" style=\"color:white\" class=\"badge badge-primary\">" + localize('set_all') + "</a>");
+                var setAllDontShowButton = $("<a href=\"#\" style=\"color:white\" class=\"badge badge-primary\">" + localize('set_all') + "</a>");
+                td_dcb.append(setAllDontCareButton);
+                td_dsb.append(setAllDontShowButton);
+                buttonrow.append(td_dcb).append(td_dsb).append('<td colspan="3"></td>');
+                this_1.panel.append(buttonrow);
                 var other_sg = getSentenceGrammarFor(otherOtype);
                 if (other_sg === null)
                     return "continue";
@@ -1614,6 +1623,20 @@ var PanelForOneOtype = (function () {
                     var bal = new ButtonsAndLabel(featNameLoc, featName, objType, useSavedFeatures ? ptqf.getObjectSelector(origObjType, featName) : ButtonSelection.DONT_CARE, null, false, false, false, true);
                     _this.allObjBAL[otherOtype].push(bal);
                     _this.panel.append(bal.getRow());
+                });
+                setAllDontCareButton.click(function () {
+                    for (var _i = 0, _a = _this.allObjBAL[otherOtype]; _i < _a.length; _i++) {
+                        var bal = _a[_i];
+                        bal.dcFeat.click();
+                    }
+                    return false;
+                });
+                setAllDontShowButton.click(function () {
+                    for (var _i = 0, _a = _this.allObjBAL[otherOtype]; _i < _a.length; _i++) {
+                        var bal = _a[_i];
+                        bal.dontShowFeat.click();
+                    }
+                    return false;
                 });
             }
         };
