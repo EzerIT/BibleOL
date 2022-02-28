@@ -21,6 +21,7 @@ $lang['feature'] = "Feature";
 $lang['feature_prompt'] = "Característica:";
 $lang['feature_specification'] = "Especificación de característica";
 $lang['friendly_featsel_prompt'] = "Selector de característica amigable:";
+$lang['glosses'] = "Glosas";
 $lang['high_value_prompt'] = "Valor alto:";
 $lang['import_shebanq'] = "Importar desde SHEBANQ";
 $lang['item_number'] = "Elemento número";

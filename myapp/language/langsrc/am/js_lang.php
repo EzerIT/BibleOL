@@ -22,4 +22,5 @@ $lang['error_response'] = "ከመስመሩ ስህተት መጠ";
 $lang['feature'] = "ባህር";
 $lang['feature_prompt'] = "ባህር";
 $lang['feature_specification'] = "k";
+$lang['glosses'] = "የቃላት ፍቺ";
 $lang['show_answer'] = "መልስ አሳይ";

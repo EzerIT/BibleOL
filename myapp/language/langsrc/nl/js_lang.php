@@ -21,6 +21,7 @@ $lang['error_response'] = "Error respons van de server:";
 $lang['feature'] = "Element";
 $lang['feature_prompt'] = "Element:";
 $lang['feature_specification'] = "Specificatie elementen";
+$lang['glosses'] = "Glossen";
 $lang['friendly_featsel_prompt'] = "Gebruiksvriendelijke selector van elementen:";
 $lang['high_value_prompt'] = "Hoge waarde:";
 $lang['import_shebanq'] = "Importeren van SHEBANQ";
