@@ -1313,7 +1313,9 @@ class QuizFeatures extends XmlHandler {
     /************************************************************************************************
      * Class version for XML serialisation
      ************************************************************************************************/
-    const classVersion = 4; // Version 4 added "dontshowobject"
+    const classVersion = 5; // Version 5 is identical to version 4, except that other parts of the code
+                            // now accept multiple show="..." values in <dontshowobject>.
+                            // Version 4 added "dontshowobject"
                             // Version 3 added "dontshow"
                             // Version 2 added "requestdd"
 
