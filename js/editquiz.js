@@ -1545,9 +1545,11 @@ var PanelForOneOtype = (function () {
         var _this = this;
         this.allBAL = [];
         this.allObjBAL = {};
-        this.panel = $('<table class="striped featuretable"></table>');
         var useSavedFeatures = otype === ptqf.initialOtype;
-        this.panel.append('<tr>'
+        ++PanelForOneOtype.accordionNumber;
+        this.panel = $("<div class=\"accordion\" id=\"accordion" + PanelForOneOtype.accordionNumber + "\"></div>");
+        var table = $('<table class="striped featuretable"></table>');
+        table.append('<tr>'
             + ("<th>" + localize('show') + "</th>")
             + ("<th>" + localize('request') + "</th>")
             + ("<th>" + localize('dont_care') + "</th>")
@@ -1557,7 +1559,7 @@ var PanelForOneOtype = (function () {
             + '<th></th>'
             + '</tr>');
         this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && Boolean(getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql), true, configuration.objHasSurface === otype, false);
-        this.panel.append(this.visualBAL.getRow());
+        table.append(this.visualBAL.getRow());
         var hasSurfaceFeature = otype === configuration.objHasSurface;
         var sg = getSentenceGrammarFor(otype);
         var keylist = [];
@@ -1576,25 +1578,24 @@ var PanelForOneOtype = (function () {
             var featName = keylist[ix];
             var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName), featName, otype, useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, ptqf.getHideFeatures(featName), Boolean(getFeatureSetting(otype, featName).alternateshowrequestSql), !getFeatureSetting(otype, featName).ignoreShow, !getFeatureSetting(otype, featName).ignoreRequest, sg !== null && sg.containsFeature(featName));
             this.allBAL.push(bal);
-            this.panel.append(bal.getRow());
+            table.append(bal.getRow());
         }
-        this.panel.append('<tr><td colspan="6"></td><td class="leftalign">&nbsp;</td></tr>');
-        this.panel.append('<tr>'
-            + '<td colspan="2"></td>'
-            + ("<th>" + localize('dont_care') + "</th>")
-            + ("<th>" + localize('dont_show') + "</th>")
-            + "<th></th>"
-            + ("<th class=\"leftalign\">" + localize('other_sentence_unit_types') + "</th>")
-            + '<th></th>'
-            + '</tr>');
+        this.panel.append(this.wrapInCard(getObjectFriendlyName(otype), table, true, "accordion" + PanelForOneOtype.accordionNumber));
         var _loop_1 = function (level) {
+            console.log('level', level);
             var leveli = +level;
             if (isNaN(leveli))
                 return "continue";
             var otherOtype = configuration.sentencegrammar[leveli].objType;
-            this_1.allObjBAL[otherOtype] = [];
             if (otherOtype !== otype && configuration.objectSettings[otherOtype].mayselect) {
-                this_1.panel.append("<tr><td colspan=\"7\">" + otherOtype + "</td></tr>");
+                table = $('<table class="striped featuretable"></table>');
+                table.append('<tr>'
+                    + '<td colspan="2"></td>'
+                    + ("<th>" + localize('dont_care') + "</th>")
+                    + ("<th>" + localize('dont_show') + "</th>")
+                    + '<td colspan="3"></td>'
+                    + '</tr>');
+                this_1.allObjBAL[otherOtype] = [];
                 var buttonrow = $('<tr><td colspan="2"></td></tr>');
                 var td_dcb = $('<td></td>');
                 var td_dsb = $('<td></td>');
@@ -1603,7 +1604,7 @@ var PanelForOneOtype = (function () {
                 td_dcb.append(setAllDontCareButton);
                 td_dsb.append(setAllDontShowButton);
                 buttonrow.append(td_dcb).append(td_dsb).append('<td colspan="3"></td>');
-                this_1.panel.append(buttonrow);
+                table.append(buttonrow);
                 var other_sg = getSentenceGrammarFor(otherOtype);
                 if (other_sg === null)
                     return "continue";
@@ -1622,7 +1623,7 @@ var PanelForOneOtype = (function () {
                         return;
                     var bal = new ButtonsAndLabel(featNameLoc, featName, objType, useSavedFeatures ? ptqf.getObjectSelector(origObjType, featName) : ButtonSelection.DONT_CARE, null, false, false, false, true);
                     _this.allObjBAL[otherOtype].push(bal);
-                    _this.panel.append(bal.getRow());
+                    table.append(bal.getRow());
                 });
                 setAllDontCareButton.click(function () {
                     for (var _i = 0, _a = _this.allObjBAL[otherOtype]; _i < _a.length; _i++) {
@@ -1638,6 +1639,7 @@ var PanelForOneOtype = (function () {
                     }
                     return false;
                 });
+                this_1.panel.append(this_1.wrapInCard(getObjectFriendlyName(otherOtype), table, false, "accordion" + PanelForOneOtype.accordionNumber));
             }
         };
         var this_1 = this;
@@ -1645,6 +1647,21 @@ var PanelForOneOtype = (function () {
             _loop_1(level);
         }
     }
+    PanelForOneOtype.prototype.wrapInCard = function (heading, contents, open, accordionId) {
+        ++PanelForOneOtype.collapseNumber;
+        var cardBody = $('<div class="card-body"></div>');
+        var cardBodyWrapper = $("<div id=\"accbody" + PanelForOneOtype.collapseNumber + "\" class=\"collapse " + (open ? "show" : "") + "\" data-parent=\"#" + accordionId + "\"></div>");
+        cardBody.append(contents);
+        cardBodyWrapper.append(cardBody);
+        var cardHeader = $('<div class="card-header">' +
+            ("<button class=\"btn text-left\" type=\"button\" aria-expanded=\"" + open + "\" data-toggle=\"collapse\" data-target=\"#accbody" + PanelForOneOtype.collapseNumber + "\">") +
+            heading +
+            '</button>' +
+            '</div>');
+        var card = $('<div class="card"></div>');
+        card.append(cardHeader).append(cardBodyWrapper);
+        return card;
+    };
     PanelForOneOtype.prototype.hide = function () {
         this.panel.hide();
     };
@@ -1654,6 +1671,8 @@ var PanelForOneOtype = (function () {
     PanelForOneOtype.prototype.getPanel = function () {
         return this.panel;
     };
+    PanelForOneOtype.accordionNumber = 0;
+    PanelForOneOtype.collapseNumber = 0;
     return PanelForOneOtype;
 }());
 var PanelTemplQuizFeatures = (function () {

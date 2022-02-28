@@ -361,7 +361,10 @@ class PanelForOneOtype  {
     public visualBAL : ButtonsAndLabel;                    // The setting for the "visual" pseudo feature
     public allBAL    : ButtonsAndLabel[] = [];             // The settings for all other features for the question object
     public allObjBAL : {[ key : string ] : ButtonsAndLabel[]} = {}; // The settings for all features for other objects
-    private panel    : JQuery = $('<table class="striped featuretable"></table>'); // The entire feature selection panel
+
+    private static accordionNumber : number = 0; // Used by accordion ID generator
+    private static collapseNumber  : number = 0; // Used by accordion body name generator
+    private panel                  : JQuery;     // The entire feature panel for one object type
 
     //------------------------------------------------------------------------------------------
     // Constructor method
@@ -379,16 +382,22 @@ class PanelForOneOtype  {
 
         let useSavedFeatures : boolean = otype === ptqf.initialOtype; // Use features read from exercise file?
 
+
+        ++PanelForOneOtype.accordionNumber;
+        this.panel = $(`<div class="accordion" id="accordion${PanelForOneOtype.accordionNumber}"></div>`);
+        
+        let table : JQuery = $('<table class="striped featuretable"></table>'); // Feature selections for one object type
+        
         // Add headings to the table
-        this.panel.append('<tr>'
-                          + `<th>${localize('show')}</th>`
-                          + `<th>${localize('request')}</th>`
-                          + `<th>${localize('dont_care')}</th>`
-                          + `<th>${localize('dont_show')}</th>`
-                          + `<th>${localize('multiple_choice')}</th>`
-                          + `<th class="leftalign">${localize('feature')}</th>`
-                          + '<th></th>'
-                          + '</tr>');
+        table.append('<tr>'
+                     + `<th>${localize('show')}</th>`
+                     + `<th>${localize('request')}</th>`
+                     + `<th>${localize('dont_care')}</th>`
+                     + `<th>${localize('dont_show')}</th>`
+                     + `<th>${localize('multiple_choice')}</th>`
+                     + `<th class="leftalign">${localize('feature')}</th>`
+                     + '<th></th>'
+                     + '</tr>');
 
         // Set up "visual" pseudo feature
         this.visualBAL = new ButtonsAndLabel(localize('visual'),                  // The localized name of the feature
@@ -401,7 +410,7 @@ class PanelForOneOtype  {
                                              configuration.objHasSurface===otype, // Can this be a request feature?
                                              false);                              // Can this be a "don't show" feature?
 
-        this.panel.append(this.visualBAL.getRow());
+        table.append(this.visualBAL.getRow());
 
         // Set up genuine features
         let hasSurfaceFeature : boolean         = otype===configuration.objHasSurface;
@@ -444,37 +453,39 @@ class PanelForOneOtype  {
                                           !getFeatureSetting(otype, featName).ignoreRequest,           // Can this be a request feature?     
                                           sg!==null && sg.containsFeature(featName));                  // Can this be a "don't show" feature?
             this.allBAL.push(bal);
-            this.panel.append(bal.getRow());
+            table.append(bal.getRow());
         }
+
+        this.panel.append(this.wrapInCard(getObjectFriendlyName(otype), table, true, `accordion${PanelForOneOtype.accordionNumber}`));
 
         
         ////////////////////////////////////////////////////////////////////////////////////////
         // Create buttons for the additional object types to be included in the current panel //
         ////////////////////////////////////////////////////////////////////////////////////////
 
-        // Add space between rows
-        this.panel.append('<tr><td colspan="6"></td><td class="leftalign">&nbsp;</td></tr>');
-
-        // Add headings to the table
-        this.panel.append('<tr>'
-                          + '<td colspan="2"></td>'
-                          + `<th>${localize('dont_care')}</th>`
-                          + `<th>${localize('dont_show')}</th>`
-                          + `<th></th>`
-                          + `<th class="leftalign">${localize('other_sentence_unit_types')}</th>`
-                          + '<th></th>'
-                          + '</tr>');
 
         // Generate buttons for other types:
         for (let level in configuration.sentencegrammar) {
+            console.log('level',level);
+            
             let leveli : number = +level;
             if (isNaN(leveli)) continue; // Not numeric
 
             let otherOtype : string = configuration.sentencegrammar[leveli].objType;
-            this.allObjBAL[otherOtype] = []; // The settings for all features for otherOtype
-
+            
             if (otherOtype!==otype && configuration.objectSettings[otherOtype].mayselect) {
-                this.panel.append(`<tr><td colspan="7">${otherOtype}</td></tr>`);
+                table = $('<table class="striped featuretable"></table>'); // Feature selections for one object type
+
+                // Add headings to the table
+                table.append('<tr>'
+                             + '<td colspan="2"></td>'
+                             + `<th>${localize('dont_care')}</th>`
+                             + `<th>${localize('dont_show')}</th>`
+                             + '<td colspan="3"></td>'
+                             + '</tr>');
+
+            
+                this.allObjBAL[otherOtype] = []; // The settings for all features for otherOtype
 
                 // Build 'Set all' button line
                 let buttonrow : JQuery = $('<tr><td colspan="2"></td></tr>');
@@ -487,7 +498,7 @@ class PanelForOneOtype  {
                 td_dsb.append(setAllDontShowButton);
 
                 buttonrow.append(td_dcb).append(td_dsb).append('<td colspan="3"></td>');
-                this.panel.append(buttonrow);
+                table.append(buttonrow);
                 
                 let other_sg : SentenceGrammar = getSentenceGrammarFor(otherOtype);
 
@@ -529,7 +540,7 @@ class PanelForOneOtype  {
                                                                             false,                                                                     // Can this be a request feature?     
                                                                             true);                                                                     // Can this be a "don't show" feature?
                                               this.allObjBAL[otherOtype].push(bal);
-                                              this.panel.append(bal.getRow());
+                                              table.append(bal.getRow());
                                           }
                                          );
                 setAllDontCareButton.click( () =>
@@ -544,8 +555,46 @@ class PanelForOneOtype  {
                             bal.dontShowFeat.click();
                         return false;
                     });
+
+                this.panel.append(this.wrapInCard(getObjectFriendlyName(otherOtype), table, false, `accordion${PanelForOneOtype.accordionNumber}`));
             }
         }
+    }
+
+
+    //------------------------------------------------------------------------------------------
+    // wrapInCard method
+    //
+    // Embeds a heading and a feature table in a Bootstrap <div class="card"> element for use
+    // by the accordion in PanelForOneOtype.constructor().
+    //
+    // Parameters:
+    //    heading: The string to use as heading for the card.
+    //    contents: The contents of the card.
+    //    open: True if this card of the accordion should be shown initially
+    //    accordionId: The ID of the accordion containing this card.
+    //
+    private wrapInCard(heading : string, contents : JQuery, open : boolean, accordionId : string) : JQuery {
+        ++PanelForOneOtype.collapseNumber;
+
+        let cardBody : JQuery = $('<div class="card-body"></div>')
+        let cardBodyWrapper : JQuery = $(`<div id="accbody${PanelForOneOtype.collapseNumber}" class="collapse ${open ? "show" : ""}" data-parent="#${accordionId}"></div>`);
+
+        cardBody.append(contents);
+        cardBodyWrapper.append(cardBody);
+
+            
+        let cardHeader : JQuery = $('<div class="card-header">' +
+                                    `<button class="btn text-left" type="button" aria-expanded="${open}" data-toggle="collapse" data-target="#accbody${PanelForOneOtype.collapseNumber}">` +
+                                    heading +
+                                    '</button>' +
+                                    '</div>');
+
+        let card : JQuery = $('<div class="card"></div>');
+
+        card.append(cardHeader).append(cardBodyWrapper);
+
+        return card;
     }
 
     //------------------------------------------------------------------------------------------
