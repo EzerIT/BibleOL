@@ -542,68 +542,6 @@ class Ctrl_exams extends MY_Controller
       try {
         $this->mod_users->is_logged_in();
 
-        $user_id = $this->mod_users->my_id();
-
-        $active_exam_id = $_GET['exam'];
-        $active_exam = $this->mod_exams->get_active_exam($active_exam_id);
-        $exam_id = $active_exam->exam_id;
-
-        // $query_finished = $this->db->get_where('exam_finished', array('userid' => $user_id, 'activeexamid' => $_GET['exam']));
-        // if ($query_finished->row()) {
-        //
-        // }
-
-        $now = time();
-        if ($active_exam->exam_length == 0 || $this->mod_users->is_teacher()) {
-          $deadline = $active_exam->exam_end_time;
-        }
-        else {
-          $deadline = $now + ($active_exam->exam_length * 60);
-        }
-
-        $query_status = $this->db->get_where('exam_status', array('userid' => $user_id, 'activeexamid' => $_GET['exam']));
-        $status_row = $query_status->row();
-        if ($status_row) {
-          $deadline = $status_row->deadline;
-        }
-        else {
-          $data = array(
-            'userid' => $user_id,
-            'activeexamid' => $active_exam_id,
-            'start_time' => $now,
-            'deadline' => $deadline
-          );
-          $this->db->insert('exam_status', $data);
-        }
-
-        $completed = array();
-        if (!$this->mod_users->is_teacher()) $completed = $this->mod_exams->get_completed_exam_exercises($user_id, $active_exam_id);
-
-        $examcode = $this->mod_exams->get_exam_by_id($exam_id)->examcode;
-        $xml = simplexml_load_string($examcode);
-
-        $exercise_parameters = array();
-
-        $exercises = array();
-        foreach ($xml->exercise as $exercise) {
-          $name = str_replace("+", "%2B", $exercise->exercisename);
-          if (!in_array($name, $completed)) {
-            $name = trim($name);
-            array_push($exercises, $name);
-              $exercise_parameters[$name] = array();
-            $array = json_decode(json_encode((array) $exercise), TRUE);
-            # Iterate through the features of the exercise.
-        		foreach ($array as $key => $value){
-        		# If the current feature is not exercisename.
-        		  if($key != "exercisename"){
-        				$exercise_parameters[$name][$key] = $value;
-        		 	}
-        		}
-          }
-        }
-
-        $this->session->set_userdata('exam_parameters', $exercise_parameters);
-
         $this->load->model('mod_quizpath');
         $this->load->model('mod_askemdros');
 
@@ -613,25 +551,89 @@ class Ctrl_exams extends MY_Controller
         $this->load->view('view_confirm_dialog');
         $this->load->view('view_alert_dialog');
 
-        if ($exercises) {
-          $center_text = $this->load->view(
-            'view_take_exam',
-            array(
-              'deadline' => $deadline,
-              'exam_id' => $active_exam_id,
-              'exercises' => $exercises,
-              'exercise_parameters' => $exercise_parameters,
-              'xml' => $xml,
-            ),
-            true
-          );
-        }
-        else {
+        $user_id = $this->mod_users->my_id();
+        $active_exam_id = $_GET['exam'];
+
+        $query_finished = $this->db->get_where('exam_finished', array('userid' => $user_id, 'activeexamid' => $active_exam_id));
+        if ($query_finished->row() && !$this->mod_users->is_teacher()) {
           $center_text = $this->load->view(
             'view_exam_done',
             array(),
             true
           );
+        } else {
+          $active_exam = $this->mod_exams->get_active_exam($active_exam_id);
+          $exam_id = $active_exam->exam_id;
+
+          $now = time();
+          if ($active_exam->exam_length == 0 || $this->mod_users->is_teacher()) {
+            $deadline = $active_exam->exam_end_time;
+          }
+          else {
+            $deadline = $now + ($active_exam->exam_length * 60);
+          }
+
+          $query_status = $this->db->get_where('exam_status', array('userid' => $user_id, 'activeexamid' => $active_exam_id));
+          $status_row = $query_status->row();
+          if ($status_row) {
+            $deadline = $status_row->deadline;
+          }
+          else {
+            $data = array(
+              'userid' => $user_id,
+              'activeexamid' => $active_exam_id,
+              'start_time' => $now,
+              'deadline' => $deadline
+            );
+            $this->db->insert('exam_status', $data);
+          }
+
+          $completed = array();
+          if (!$this->mod_users->is_teacher()) $completed = $this->mod_exams->get_completed_exam_exercises($user_id, $active_exam_id);
+
+          $examcode = $this->mod_exams->get_exam_by_id($exam_id)->examcode;
+          $xml = simplexml_load_string($examcode);
+
+          $exercise_parameters = array();
+
+          $exercises = array();
+          foreach ($xml->exercise as $exercise) {
+            $name = str_replace("+", "%2B", $exercise->exercisename);
+            if (!in_array($name, $completed)) {
+              $name = trim($name);
+              array_push($exercises, $name);
+                $exercise_parameters[$name] = array();
+              $array = json_decode(json_encode((array) $exercise), TRUE);
+              # Iterate through the features of the exercise.
+          		foreach ($array as $key => $value){
+          		# If the current feature is not exercisename.
+          		  if($key != "exercisename"){
+          				$exercise_parameters[$name][$key] = $value;
+          		 	}
+          		}
+            }
+          }
+
+          $this->session->set_userdata('exam_parameters', $exercise_parameters);
+          if ($exercises) {
+            $center_text = $this->load->view(
+              'view_take_exam',
+              array(
+                'deadline' => $deadline,
+                'exam_id' => $active_exam_id,
+                'exercises' => $exercises,
+                'exercise_parameters' => $exercise_parameters,
+                'xml' => $xml,
+              ),
+              true
+            );
+          } else {
+            $center_text = $this->load->view(
+              'view_exam_done',
+              array(),
+              true
+            );
+          }
         }
 
         $this->load->view(
