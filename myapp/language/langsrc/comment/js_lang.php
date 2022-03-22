@@ -96,6 +96,14 @@ $comment['glosses'] = "";
 $format['glosses'] = "";
 $use_textarea['glosses'] = false;
 
+$comment['gloss_limit'] = "";
+$format['gloss_limit'] = "";
+$use_textarea['gloss_limit'] = false;
+
+$comment['gloss_limit_prompt'] = "";
+$format['gloss_limit_prompt'] = "";
+$use_textarea['gloss_limit_prompt'] = false;
+
 $comment['high_value_prompt'] = "";
 $format['high_value_prompt'] = "";
 $use_textarea['high_value_prompt'] = false;

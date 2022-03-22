@@ -8,6 +8,7 @@
 // QuizFeatures interface
 //
 // Specifies the way features should be presented to or requested from a user when running an exercise.
+// This is a subset of interface ExtendedQuizFeatures in quizdata.ts
 //
 interface QuizFeatures {
     showFeatures     : string[]; // Features to show to the user
@@ -21,6 +22,7 @@ interface QuizFeatures {
         content      : string;   // Name of object type
         show?        : string;   // Features to show even though object is hidden
     } [];
+    glosslimit       : number;   // Frequency limit for showing glosses
 }
 
 
@@ -466,8 +468,6 @@ class PanelForOneOtype  {
 
         // Generate buttons for other types:
         for (let level in configuration.sentencegrammar) {
-            console.log('level',level);
-            
             let leveli : number = +level;
             if (isNaN(leveli)) continue; // Not numeric
 
@@ -559,6 +559,15 @@ class PanelForOneOtype  {
                 this.panel.append(this.wrapInCard(getObjectFriendlyName(otherOtype), table, false, `accordion${PanelForOneOtype.accordionNumber}`));
             }
         }
+
+        /////////////////////////////////
+        // Create gloss limiter dialog //
+        /////////////////////////////////
+
+        this.panel.append(this.wrapInCard(localize('gloss_limit'),
+                                          $(`<div><span class="gloss-limit-prompt">${localize('gloss_limit_prompt')} </span><input id="gloss-limit-${otype}" type="number" value="${ptqf.getGlossLimit()}" style="width:5em"></span>`),
+                                          false,
+                                          `accordion${PanelForOneOtype.accordionNumber}`));
     }
 
 
@@ -797,6 +806,15 @@ class PanelTemplQuizFeatures {
 
 
     //------------------------------------------------------------------------------------------
+    // getGlossLimit method
+    //
+    // Returns the initial glosslimit
+    //
+    public getGlossLimit() : number {
+        return this.initialQf.glosslimit;
+    }
+
+    //------------------------------------------------------------------------------------------
     // getInfo method
     //
     // Returns the feature specification as a QuizFeatures object.
@@ -806,7 +824,8 @@ class PanelTemplQuizFeatures {
             showFeatures     : [],
             requestFeatures  : [],
             dontShowFeatures : [],
-            dontShowObjects  : []
+            dontShowObjects  : [],
+            glosslimit       : 0
         };
 
 
@@ -855,6 +874,8 @@ class PanelTemplQuizFeatures {
                     qf.dontShowObjects.push({content: otherOtype, show : showstring.trim()});
             }
         }
+
+        qf.glosslimit = +$(`#gloss-limit-${this.oldOtype}`).val();
 	return qf;
     }
 
@@ -869,7 +890,8 @@ class PanelTemplQuizFeatures {
         if (qfnow.showFeatures.length !== this.initialQf.showFeatures.length ||
             qfnow.requestFeatures.length !== this.initialQf.requestFeatures.length ||
             qfnow.dontShowFeatures.length !== this.initialQf.dontShowFeatures.length ||
-            qfnow.dontShowObjects.length !== this.initialQf.dontShowObjects.length) {
+            qfnow.dontShowObjects.length !== this.initialQf.dontShowObjects.length ||
+            qfnow.glosslimit != this.initialQf.glosslimit) {
             return true;
         }
 

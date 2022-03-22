@@ -192,6 +192,7 @@ class Mod_askemdros extends CI_Model {
                                                'request_features' => $this->decoded_3et->quizFeatures->requestFeatures,
                                                'dontshow_features' => $this->decoded_3et->quizFeatures->dontShowFeatures,
                                                'dontshow_objects' => $this->decoded_3et->quizFeatures->dontShowObjects,
+                                               'glosslimit' => $this->decoded_3et->quizFeatures->glosslimit,
                                                'oType' => $this->decoded_3et->quizObjectSelection->object));
     }
 
@@ -350,7 +351,7 @@ class Mod_askemdros extends CI_Model {
                            . '"selectedPaths":[],'
                            . '"sentenceSelection":{"object":"%s","mql":null,"featHand":{"vhand":[]},"useForQo":true},'
                            . '"quizObjectSelection":{"object":"word","mql":null,"featHand":{"vhand":[]},"useForQo":true},'
-                           . '"quizFeatures":{"showFeatures":[],"requestFeatures":[],"dontShowFeatures":[],"dontShowObjects":[]},'
+                           . '"quizFeatures":{"showFeatures":[],"requestFeatures":[],"dontShowFeatures":[],"dontShowObjects":[],"glosslimit":0},'
                            . '"maylocate":true,'
                            . '"sentbefore":0,'
                            . '"sentafter":0,'

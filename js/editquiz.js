@@ -1582,7 +1582,6 @@ var PanelForOneOtype = (function () {
         }
         this.panel.append(this.wrapInCard(getObjectFriendlyName(otype), table, true, "accordion" + PanelForOneOtype.accordionNumber));
         var _loop_1 = function (level) {
-            console.log('level', level);
             var leveli = +level;
             if (isNaN(leveli))
                 return "continue";
@@ -1646,6 +1645,7 @@ var PanelForOneOtype = (function () {
         for (var level in configuration.sentencegrammar) {
             _loop_1(level);
         }
+        this.panel.append(this.wrapInCard(localize('gloss_limit'), $("<div><span class=\"gloss-limit-prompt\">" + localize('gloss_limit_prompt') + " </span><input id=\"gloss-limit-" + otype + "\" type=\"number\" value=\"" + ptqf.getGlossLimit() + "\" style=\"width:5em\"></span>"), false, "accordion" + PanelForOneOtype.accordionNumber));
     }
     PanelForOneOtype.prototype.wrapInCard = function (heading, contents, open, accordionId) {
         ++PanelForOneOtype.collapseNumber;
@@ -1753,12 +1753,16 @@ var PanelTemplQuizFeatures = (function () {
                 return false;
         return true;
     };
+    PanelTemplQuizFeatures.prototype.getGlossLimit = function () {
+        return this.initialQf.glosslimit;
+    };
     PanelTemplQuizFeatures.prototype.getInfo = function () {
         var qf = {
             showFeatures: [],
             requestFeatures: [],
             dontShowFeatures: [],
-            dontShowObjects: []
+            dontShowObjects: [],
+            glosslimit: 0
         };
         if (!this.visiblePanel)
             return null;
@@ -1797,6 +1801,7 @@ var PanelTemplQuizFeatures = (function () {
                     qf.dontShowObjects.push({ content: otherOtype, show: showstring.trim() });
             }
         }
+        qf.glosslimit = +$("#gloss-limit-" + this.oldOtype).val();
         return qf;
     };
     PanelTemplQuizFeatures.prototype.isDirty = function () {
@@ -1804,7 +1809,8 @@ var PanelTemplQuizFeatures = (function () {
         if (qfnow.showFeatures.length !== this.initialQf.showFeatures.length ||
             qfnow.requestFeatures.length !== this.initialQf.requestFeatures.length ||
             qfnow.dontShowFeatures.length !== this.initialQf.dontShowFeatures.length ||
-            qfnow.dontShowObjects.length !== this.initialQf.dontShowObjects.length) {
+            qfnow.dontShowObjects.length !== this.initialQf.dontShowObjects.length ||
+            qfnow.glosslimit != this.initialQf.glosslimit) {
             return true;
         }
         for (var i = 0; i < qfnow.showFeatures.length; ++i)

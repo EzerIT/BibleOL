@@ -4,7 +4,7 @@ class Template extends XmlHandler {
     /************************************************************************************************
      * Class version for XML serialisation
      ************************************************************************************************/
-    const classVersion = 6; // Version 5: Accepts <fixedquestions> element
+    const classVersion = 6; // Version 6: Accepts <fixedquestions> element
 
 	/************************************************************************************************
 	 * Template data
@@ -1313,7 +1313,8 @@ class QuizFeatures extends XmlHandler {
     /************************************************************************************************
      * Class version for XML serialisation
      ************************************************************************************************/
-    const classVersion = 5; // Version 5 is identical to version 4, except that other parts of the code
+    const classVersion = 6; // Version 6 added "glosslimit"
+                            // Version 5 is identical to version 4, except that other parts of the code
                             // now accept multiple show="..." values in <dontshowobject>.
                             // Version 4 added "dontshowobject"
                             // Version 3 added "dontshow"
@@ -1328,7 +1329,8 @@ class QuizFeatures extends XmlHandler {
 	public $dontShowObjects = array();
 
     public $hideFeatures; // Value of "hidefeatures" attribute in a <request> element
-    
+    public $glosslimit = 0;  // Default value for older versions of quiz templates
+
     /************************************************************************************************
 	 * XML writer interface
 	 ************************************************************************************************/
@@ -1356,7 +1358,8 @@ class QuizFeatures extends XmlHandler {
             else
                 $res .= sprintf("%4s<dontshowobject>%s</dontshowobject>\n", ' ', htmlspecialchars($s->content));
         }
-        
+
+        $res .= sprintf("%4s<glosslimit>%s</glosslimit>\n", ' ', $quizfeatures->glosslimit);
 		$res .= sprintf("%2s</quizfeatures>\n", ' ');
 
         return $res;
@@ -1396,6 +1399,11 @@ class QuizFeatures extends XmlHandler {
                 $this->setthis_attribs = $attributes;
                 break;
 
+          case 'glosslimit':
+                $this->setthis = &$this->glosslimit;
+                $this->setthis_type = SetThisType::SET_NUM;
+                break;
+
           default:
                 PANIC(__FILE__,__LINE__);
                 break;
@@ -1408,6 +1416,7 @@ class QuizFeatures extends XmlHandler {
           case 'requestdd':
           case 'dontshow':
           case 'dontshowobject':
+          case 'glosslimit':
                 // Ignore
                 break;
 
