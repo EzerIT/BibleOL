@@ -30,6 +30,7 @@ class Dictionary {
     public $monadObjects; ///< A list of the MonadObject%s in sentence set at each level.
                            ///< $this->monadObjects[$x][$y][$z] is the $z'th monad at level $y in sentence set $x.
     public $bookTitle;    ///< Book title
+    private $glosslimit;  ///< Gloss limit for quizzes
 
 
     /// Gets the title of the book.
@@ -51,12 +52,20 @@ class Dictionary {
 
     // Look up a feature outside Emdros
     // Note: Features in $mo->features are HTML encoded
-    public function indirectLookup($feat, $mo, $fset) {
+    public function indirectLookup($feat, $mo, $fset, $test_glosslimit) {
         assert(isset($fset->indirdb));
         assert(isset($fset->sql) || isset($fset->sql_command));
         assert(isset($fset->sqlargs));
         assert(isset($fset->multiple));
 
+        if ($test_glosslimit && ($fset->isGloss ?? false)) {
+            assert(isset($mo->features['frequency_rank']));
+            if ($mo->features['frequency_rank'] <= $this->glosslimit) {
+                $mo->features[$feat] = '&#x26d4;'; // No entry sign
+                return;
+            }
+        }
+    
         $key_array = array();
         foreach ($fset->sqlargs as $sqlarg)
             $key_array[] = htmlspecialchars_decode($mo->features[$sqlarg]);
@@ -187,11 +196,14 @@ class Dictionary {
     /// @param $params['mset'] The monads that describe the text.
     /// @param $params['mset_quiz'] The monads that describe the part of the text that contains question objects. (Only set in quizzes.)
     /// @param $params['inQuiz'] Is this part of a quiz (in which case there is only one top-level object)?
+    /// @param $params['showIcons'] Show icons be shown in the text?
+    /// @param $params['glosslimit'] (optional) Limit for showing glosses in quizzes
     function __construct(array $params) {
         $msets = $params['msets'];  // Possibly includes surrounding sentences
         $this->sentenceSetsQuiz = isset($params['msets_quiz']) ? $params['msets_quiz'] : null;
         $inQuiz = $params['inQuiz'];
         $showIcons = $params['showIcons'];
+        $this->glosslimit = $params['glosslimit'] ?? 0;
 
         $CI =& get_instance();
         $CI->load->library('picdb');
@@ -294,7 +306,7 @@ class Dictionary {
                     foreach ($str->get_matched_objects() as $mo) {
                         if ($sdiIndex==0) {
                             foreach ($indirect as $feat => $fsetting)
-                                $this->indirectLookup($feat, $mo, $fsetting);
+                                $this->indirectLookup($feat, $mo, $fsetting, true);
                         }
                         $this->addMonadObject($msetIndex, $sdiIndex, $mo);
                     }

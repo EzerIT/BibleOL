@@ -241,14 +241,14 @@ class Quiz_data {
                 $extended_msets[] = $current_ms;
         }
 
-        $this->CI->load->library('dictionary', array('msets' => $extended_msets, 'msets_quiz' => $msets, 'inQuiz' => true, 'showIcons' => false));
+        $this->CI->load->library('dictionary', array('msets' => $extended_msets, 'msets_quiz' => $msets, 'inQuiz' => true, 'showIcons' => false, 'glosslimit' => $this->quizFeatures->glosslimit));
 
         $mset_union = new OlMonadSet();
         foreach ($msets as $mset)
             $mset_union->addSetNoConsolidate($mset);
 
         // **************************************************************************
-        // Populate the $this->monad2Id and $this->id2FeatValue with data from the quiz objects
+        // Populate the $this->monad2Id and $this->id2FeatVal with data from the quiz objects
         // **************************************************************************
 
         $this->CI->load->library('Suggest_answers');
@@ -275,7 +275,8 @@ class Quiz_data {
 
                 foreach ($this->quizFeatures->pseudoFeatures as $psf)
                     $this->CI->dictionary->indirectLookup($psf, $mo,
-                                                          getFeatureSetting($this->oType, $psf));
+                                                          getFeatureSetting($this->oType, $psf),
+                                                          false);
 
                 $mo->set_feature('visual', trim($visual));// For simplicity, always add "visual" pseudo-feature
 
