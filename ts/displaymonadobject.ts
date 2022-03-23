@@ -224,6 +224,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
                 text = this.displayedMo.mo.features[configuration.surfaceFeature] ;
             // <em>..</em> are added in order to mark the question object in statistics, but do not
             // affect how the word is displayed. The display is controlled by the textDisplayClass class.
+            // TODO: The above comment is no longer true; but it should be!
             text = `<em>${text}</em>`;
             textDisplayClass = ' text-danger'; // (Red text) Indicates question object
         }
