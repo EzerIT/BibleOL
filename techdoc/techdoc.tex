@@ -223,8 +223,8 @@ pdftitle={Bible Online Learner: Technical Documentation}
 
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
-\author{Claus Tøndering\\Ezer IT Consulting}
-\date{25 January 2022}
+\author{Claus Tøndering}
+\date{24 March 2022}
 
 \makeindex
 
@@ -234,7 +234,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \maketitle
 
 \begin{center}
-Copyright © 2022 by Claus Tøndering, claus@ezer.dk
+Copyright © 2022 by Claus Tøndering, claus@tondering.dk
 
 \vspace{5mm}
 
@@ -265,7 +265,7 @@ server and developers who need to modify or expand the way Bible OL works.
 
 Except where otherwise noted, the Bible OL source code is distributed under an MIT
 License\footnote{\url{https://opensource.org/licenses/MIT}}. The code is Copyright © 2022 by Claus
-Tøndering, claus@ezer.dk and its other authors.
+Tøndering, claus@tondering.dk and its other authors.
 
 The present document is made available under a Creative Commons Attribution 4.0 International
 License\footnote{\url{https://creativecommons.org/licenses/by/4.0/}}.
@@ -3039,10 +3039,14 @@ information box.\\
 
 \xml{dontshowobject} & The name of an Emdros object whose features must not be available in the
 grammar selection box\index{grammar selection box} and the grammar information box. If, however,
-this XML element has an attribute named \texttt{show}, whose value is a feature of the object, then
-that feature will be available. For example,
-\texttt{<dontshowobject show="qere\_utf8">word</dontshowobject>} means that all word features
-except \emph{qere\_utf8} will be unavailable.\\
+this XML element has an attribute named \texttt{show}, whose value is a space-separated list of features of the object, then
+those features will be available. For example,
+\texttt{<dontshowobject show="qere\_utf8 glosses">word</dontshowobject>} means that all word features
+except \emph{qere\_utf8} and \emph{glosses}\footnote{\emph{glosses} is a collective name for all the
+  pseudo-features that represent glosses} will be unavailable.\\
+
+\xml{glosslimit} & An integer that represents a frequency rank limit. Words with a frequency rank
+less than or equal to this value will have their glosses hidden.\\
 \end{my-longtabu}
 
 
