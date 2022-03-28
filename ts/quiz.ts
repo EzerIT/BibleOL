@@ -173,6 +173,24 @@ class Quiz {
                 .done(() => {
                     if (!this.exam_mode)
                         window.location.replace(site_url + 'text/select_quiz'); // Go to quiz selection
+                    else {
+                        $.get(site_url + 'statistics/update_exam_quiz_stat?examid=' + $('#exam_id').html() + '&quizid=' + $('#quiz_id').html() + '&exercise_lst=' + $('#exercise_lst').html())
+                            .done(() => {
+                                if ($('#exercise_lst').html()) {
+                                    var exercise_lst = $('#exercise_lst').html().split("~");
+                                    var next_quiz = exercise_lst.shift();
+                                    window.location.replace(site_url + 'text/show_quiz?quiz=' + next_quiz + '&count=10&examid=' + $('#exam_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
+                                }
+                                else
+                                    window.location.replace(site_url + 'exams/exam_done');
+                            })
+                            .fail(function (jqXHR, textStatus, errorThrow) {
+                                $('#textcontainer')
+                                    .removeClass('textcontainer-background')
+                                    .addClass('alert alert-danger')
+                                    .html(`<h1>${localize('error_response')}</h1><p>${errorThrow}</p>`);
+                            });
+                    }
                 })
                 .fail((jqXHR: JQueryXHR, textStatus: string, errorThrow: string) => {
                     $('#textcontainer')
@@ -180,25 +198,6 @@ class Quiz {
                         .addClass('alert alert-danger')
                         .html(`<h1>${localize('error_response')}</h1><p>${errorThrow}</p>`);
                 });
-            if (this.exam_mode) {
-                $.get(site_url + 'statistics/update_exam_quiz_stat?examid=' + $('#exam_id').html() + '&quizid=' + $('#quiz_id').html() + '&exercise_lst=' + $('#exercise_lst').html())
-                    .done(() => {
-                        if ($('#exercise_lst').html()) {
-                            var exercise_lst = $('#exercise_lst').html().split("~");
-                            var next_quiz = exercise_lst.shift();
-                            return window.location.replace(site_url + 'text/show_quiz?quiz=' + next_quiz + '&count=10&examid=' + $('#exam_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
-                        }
-                        else {
-                            return window.location.replace(site_url + 'exams/exam_done');
-                        }
-                    })
-                    .fail(function (jqXHR, textStatus, errorThrow) {
-                        $('#textcontainer')
-                            .removeClass('textcontainer-background')
-                            .addClass('alert alert-danger')
-                            .html(`<h1>${localize('error_response')}</h1><p>${errorThrow}</p>`);
-                    });
-            }
         }
     }
 }
