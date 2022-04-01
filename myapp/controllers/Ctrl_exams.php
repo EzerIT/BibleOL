@@ -590,6 +590,7 @@ class Ctrl_exams extends MY_Controller
 
           $completed = array();
           if (!$this->mod_users->is_teacher()) $completed = $this->mod_exams->get_completed_exam_exercises($user_id, $active_exam_id);
+          var_dump($completed);
 
           $examcode = $this->mod_exams->get_exam_by_id($exam_id)->examcode;
           $xml = simplexml_load_string($examcode);
@@ -599,6 +600,7 @@ class Ctrl_exams extends MY_Controller
           $exercises = array();
           foreach ($xml->exercise as $exercise) {
             $name = str_replace("+", "%2B", $exercise->exercisename);
+            var_dump($name);
             if (!in_array($name, $completed)) {
               $name = trim($name);
               array_push($exercises, $name);
