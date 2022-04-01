@@ -81,7 +81,7 @@ class Mod_exams extends CI_Model{
       foreach ($res as $row) {
         $template_id = $row->quiztemplid;
         $query2 = $this->db->get_where('sta_quiztemplate', array('id' => $template_id));
-        $path = str_replace(realpath(__DIR__."/../../quizzes"), '', $query2->row()->pathname);
+        $path = str_replace(realpath(__DIR__."/../../quizzes") . '/', '', $query2->row()->pathname);
         array_push($completed, $path);
       }
 
