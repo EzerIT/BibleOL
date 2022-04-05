@@ -484,14 +484,14 @@ class Mod_grades extends CI_Model {
           $query = $this->db
           ->from('sta_quiz q')
           //
-          ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
+          ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
           ->join('sta_question quest','quest.quizid=q.id')
           ->join('sta_requestfeature rf','quest.id=rf.questid')
           ->where('rf.userid',$uid);
         } else {
           $query = $this->db
           ->from('sta_quiz q')
-          ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
+          ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
           ->join('sta_question quest','quest.quizid=q.id')
           ->join('sta_requestfeature rf','quest.id=rf.questid')
           ->where('rf.userid',$uid);
@@ -506,7 +506,7 @@ class Mod_grades extends CI_Model {
             ->where('q.start <=',$period_end)
             ->where('end IS NOT NULL')
             ->where('valid',1)
-            ->group_by('q.id');
+            ->group_by('rf.userid, q.id');
             // TODO: MRCN
             if ($calculate_percentages) {
               $query = $query->order_by('perc desc');
@@ -529,6 +529,7 @@ class Mod_grades extends CI_Model {
             if (!isset($perdate[$day]))
                 $perdate[$day] = array('duration' => 0,
                                              'correct' => 0,
+                                             'userid' => $row->userid,
                                              'count' => 0);
             $perdate[$day]['duration'] += $row->duration;
             $perdate[$day]['correct'] += $row->correct;
@@ -555,14 +556,14 @@ class Mod_grades extends CI_Model {
           $query = $this->db
           ->from('sta_quiz q')
           //
-          ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
+          ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
           ->join('sta_question quest','quest.quizid=q.id')
           ->join('sta_requestfeature rf','quest.id=rf.questid')
           ->where('rf.userid',$uid);
         } else {
           $query = $this->db
           ->from('sta_quiz q')
-          ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
+          ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
           ->join('sta_question quest','quest.quizid=q.id')
           ->join('sta_requestfeature rf','quest.id=rf.questid')
           ->where('rf.userid',$uid);
@@ -577,7 +578,7 @@ class Mod_grades extends CI_Model {
             ->where('q.start <=',$period_end)
             ->where('end IS NOT NULL')
             ->where('valid',1)
-            ->group_by('q.id');
+            ->group_by('rf.userid, q.id');
             // TODO: MRCN
             if ($calculate_percentages) {
               $query = $query->order_by('perc desc');
@@ -601,6 +602,7 @@ class Mod_grades extends CI_Model {
             if (!isset($perdate[$day]))
                 $perdate[$day] = array('duration' => 0,
                                              'correct' => 0,
+                                             'userid' => $row->userid,
                                              'count' => 0);
             $perdate[$day]['duration'] += $row->duration;
             $perdate[$day]['correct'] += $row->correct;
@@ -626,7 +628,7 @@ class Mod_grades extends CI_Model {
           $query = $this->db
           ->from('exam_results er')
           //
-          ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`, ex.examcode',false)
+          ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`, ex.examcode',false)
           ->join('exam_active exa','exa.id=er.activeexamid')
           ->join('exam ex','exa.exam_id=ex.id')
           ->join('sta_quiz q','q.id=er.quizid')
@@ -651,7 +653,7 @@ class Mod_grades extends CI_Model {
             // ->where('q.start <=',$period_end)
             ->where('q.end IS NOT NULL')
             ->where('valid',1)
-            ->group_by('q.id,ex.examcode ');
+            ->group_by('rf.userid, q.id,ex.examcode ');
             // // TODO
             ///////////////
             $query = $query->get();
@@ -694,12 +696,15 @@ class Mod_grades extends CI_Model {
                                              'correct' => 0,
                                              'count' => 0,
                                              'exercise_name' => '',
+                                             'quizzid' => $row->id,
+                                             'userid' => $row->userid,
                                              'weight' => 0);
             $perdate[$day]['duration'] += $row->duration;
             $perdate[$day]['correct'] += $row->correct;
             $perdate[$day]['count'] += $row->cnt;
             $perdate[$day]['exercise_name'] = $exercise_name;
             $perdate[$day]['weight'] += $weight;
+            // $perdate[$day]['quizzid'] = $row->id;
             // // TODO: MRCN part of the // HACK:
             // $int_counter +=1;
         }
@@ -802,6 +807,22 @@ class Mod_grades extends CI_Model {
                   // ->order_by('pct desc')
                   ->get();
         }
+
+        return $query->result();
+    }
+
+
+    // Get answers for quizzes by quizzid
+    public function get_quizz_detail(int $uid,int $quizzid) {
+        if (empty($quizzid))
+            return array();
+
+        $query = $this->db
+            ->from('sta_question as sq')
+            ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer')
+            ->join('sta_requestfeature as rf','rf.questid = sq.id')
+            ->where('sq.quizid',$quizzid)
+            ->get();
 
         return $query->result();
     }

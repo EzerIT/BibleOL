@@ -536,6 +536,57 @@ class Ctrl_grades extends MY_Controller {
         }
     }
 
+    // prepares to show quizz detail
+    public function teacher_quizz_detail() {
+    	$this->load->model('mod_users');
+    	$this->load->model('mod_classes');
+    	$this->load->model('mod_grades');
+      // $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
+
+        try {
+            $this->mod_users->check_teacher();
+
+            $this->load->helper('calc_grades_helper');
+
+            // Get parameters
+            $quizzid = $this->uri->segment(6, 0);
+            $userid  = $this->uri->segment(8, 0);
+
+
+
+            $res_detail = $this->mod_grades-> get_quizz_detail($userid, $quizzid);
+
+            // VIEW:
+            $this->load->view('view_top1', array('title' => $this->lang->line('exercise_graphs_title'),
+                                                 'js_list' => array('RGraph/libraries/RGraph.common.core.js',
+                                                                    'RGraph/libraries/RGraph.hbar.js',
+                                                                    'RGraph/libraries/RGraph.scatter.js',
+                                                                    'RGraph/libraries/RGraph.common.dynamic.js',
+                                                                    'RGraph/libraries/RGraph.common.tooltips.js',
+                                                                    'RGraph/libraries/RGraph.common.key.js',
+                                                                    'js/datepicker_period.js',
+                                                                    'js/graphing.js',
+                                                                    'js/handle_legend.js')));
+
+            $this->load->view('view_top2');
+            $this->load->view('view_menu_bar', array('langselect' => true));
+
+            $center_text = $this->load->view('view_get_quizz_details', array('userid' => $userid,
+                                                                                      'quizzid' => $quizzid, 'resall'=>$res_detail));
+
+            $main_params = array('left_title' => $this->lang->line('select_period_heading'),
+                                 'left' => $this->lang->line('time_period_description')
+                                 . $this->lang->line('student_exercise_description'),
+                                 'center' => $center_text);
+
+
+            $this->load->view('view_bottom');
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('exercise_graphs_title'));
+        }
+    }
+
     public function teacher_exam() {
     	$this->load->model('mod_users');
     	$this->load->model('mod_classes');
