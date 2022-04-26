@@ -48,7 +48,7 @@ declare let myalert: myalertInterface;
 //
 interface JQuery {
     jstree   : Function;
-    ckeditor : Function;    
+    ckeditor : Function;
 }
 
 //****************************************************************************************************
@@ -71,6 +71,7 @@ let origMayLocate      : boolean;                      // Does the exercise orig
 let origSentBefore     : number;                       // Context sentences before question in original
 let origSentAfter      : number;                       // Context sentences after question in original
 let origFixedQuestions : number;                       // Fixed number of questions
+let origRandomize      : boolean;                      // Randomize questions
 let panelSent          : PanelTemplSentenceSelector;   // Sentence selection panel
 let panelSentUnit      : PanelTemplQuizObjectSelector; // Sentence unit selection panel
 let panelFeatures      : PanelTemplQuizFeatures;       // Features panel
@@ -102,16 +103,19 @@ function isDirty() : boolean {
 
     if ($('#maylocate_cb').prop('checked')!=origMayLocate)
         return true;
-    
+
     if ($('#sentbefore').val()!=origSentBefore)
         return true;
-    
+
     if ($('#sentafter').val()!=origSentAfter)
         return true;
 
     if ($('#fixedquestions').val()!=origFixedQuestions)
         return true;
-    
+
+    if ($('#randomorder').prop('checked')!=origRandomize)
+        return true;
+
     for (let i=0; i<checked_passages.length; ++i)
         if ($(checked_passages[i]).data('ref') !== initial_universe[i])
             return true;
@@ -176,16 +180,16 @@ function save_quiz() : void {
         myalert(localize('feature_specification'), localize('no_show_feature'));
         return;
     }
-    
+
 
     hide_error('#filename-error');
 
     // Set up handler for the 'Save' button in the filename dialog
-    
+
     $('#filename-dialog-save').off('click'); // Remove any previous handler
     $('#filename-dialog-save').on('click',() => {
         // This code is executed when the user clicks 'Save' in the filename dialog
-        
+
         if (($('#filename-name').val() as string).trim() == '')
             show_error('#filename-error', localize('missing_filename'));
         else {
@@ -202,18 +206,18 @@ function save_quiz() : void {
                         $('#filename-dialog').modal('hide');
                         save_quiz2(); // Proceed to phase 2
                         break;
-                        
+
                     case 'EXISTS':
                         // The file already exists
                         $('#filename-dialog').modal('hide');
                         check_overwrite(); // Check if it is OK to overwrite it
                         break;
-                        
+
                     case 'BADNAME':
                         // The filename is illegal
                         show_error('#filename-error', localize('badname'));
                         break;
-                        
+
                     default:
                         // Error message - display it
                         show_error('#filename-error', data);
@@ -257,11 +261,11 @@ function check_overwrite() : void {
 //
 function save_quiz2() : void {
     // Build decoded_3et so that it contains the new exercise
-    
+
     decoded_3et.desc = ckeditor.val();
-    
+
     decoded_3et.selectedPaths = [];
-    
+
     for (let i=0; i<checked_passages.length; ++i) {
         let r = $(checked_passages[i]).data('ref');
         if (r!='')
@@ -272,6 +276,7 @@ function save_quiz2() : void {
     decoded_3et.sentbefore = $('#sentbefore').val();
     decoded_3et.sentafter = $('#sentafter').val();
     decoded_3et.fixedquestions = +$('#fixedquestions').val(); // Convert to number
+    decoded_3et.randomize = $('#randomorder').prop('checked');
     if (!(decoded_3et.fixedquestions>0))
         decoded_3et.fixedquestions = 0; // Non-positive or NaN
 
@@ -285,7 +290,7 @@ function save_quiz2() : void {
                              <input type="hidden" name="quiz"     value="${encodeURIComponent(quiz_name)}">
                              <input type="hidden" name="quizdata" value="${encodeURIComponent(JSON.stringify(decoded_3et))}">
                            </form>`);
-    
+
     $('body').append(form);
 
     isSubmitting = true;
@@ -314,11 +319,11 @@ function shebanq_to_qo(qo : string, mql : string) : void {
     }
     else {
         // Decode the MQL string
-        
+
         // This is a multi-level format substitution
         // Replace & < and > with HTML entities
         let msg : string = mql.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        
+
         // Embded in HTML formatting
         msg = `<br><code>[${qo} ${msg}]</code><br>`;
 
@@ -371,7 +376,7 @@ function import_from_shebanq() : void {
         $.ajax(`${import_shebanq_url}?id=${shebanq_id}&version=${shebanq_dbvers}`)
             .done((data, textStatus, jqXHR) => {
                 // Request was answered
-                
+
                 $('.ui-dialog *').css('cursor', 'auto');
 
                 let result :
@@ -423,7 +428,7 @@ function numberInputModifiedListener(e : JQueryEventObject) : void {
 
 //****************************************************************************************************
 // The main program
-// 
+//
 // The execution of this function is postponed one second to ensure that ckeditor and WirtualKeyboard
 // have been loaded.
 // This delay needed to be inserted after adding the Chinese interface; but later it seemed to be unnecessary.
@@ -444,7 +449,7 @@ setTimeout(function() {
 
     charset = new Charset(configuration.charSet);
 
-    
+
     if (WirtualKeyboard) {
         WirtualKeyboard.setVisibleLayoutCodes([charset.keyboardName]);
         WirtualKeyboard.toggle('firstinput','virtualkbid');
@@ -492,15 +497,19 @@ setTimeout(function() {
 
     origSentAfter = decoded_3et.sentafter;
     $('#sentafter').val(origSentAfter);
-    
+
     origFixedQuestions = decoded_3et.fixedquestions;
     $('#fixedquestions').val(origFixedQuestions);
+
+    origRandomize = decoded_3et.randomize;
+    $("#randomorder").prop("checked", origRandomize);
+    $("#fixedorder").prop("checked", !origRandomize);
 
     // Monitor that #fixedquestions contains an integer
     $('#fixedquestions').on('keyup', null,
                             {err_id: "fqerror"}, // Event data
                             numberInputModifiedListener);
-    
+
     panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
     panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'), panelFeatures);
     panelSent     = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'), panelSentUnit, panelFeatures);

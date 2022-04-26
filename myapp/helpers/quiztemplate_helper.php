@@ -21,6 +21,7 @@ class Template extends XmlHandler {
     public $sentbefore = 0;  // Default value for older versions of quiz templates
     public $sentafter = 0;  // Default value for older versions of quiz templates
     public $fixedquestions = 0;  // Default value for older versions of quiz templates
+    public $randomize = true;  // Default value for older versions of quiz templates
 
 	/************************************************************************************************
 	 * XML writer interface
@@ -71,6 +72,7 @@ class Template extends XmlHandler {
         $res .= sprintf("%2s<sentbefore>%s</sentbefore>\n", ' ', $quizdata->sentbefore);
         $res .= sprintf("%2s<sentafter>%s</sentafter>\n", ' ', $quizdata->sentafter);
         $res .= sprintf("%2s<fixedquestions>%d</fixedquestions>\n", ' ', $quizdata->fixedquestions);
+        $res .= sprintf("%2s<randomize>%s</randomize>\n", ' ', $quizdata->randomize ? "true" : "false");
 		$res .= sprintf("</questiontemplate>\n", ' ');
 
         return $res;
@@ -138,6 +140,11 @@ class Template extends XmlHandler {
                 $this->setthis_type = SetThisType::SET_NUM;
                 break;
                 
+          case 'randomize':
+                $this->setthis = &$this->randomize;
+                $this->setthis_type = SetThisType::SET_BOOL;
+                break;
+
           default:
                 PANIC(__FILE__,__LINE__);
                 break;
@@ -154,6 +161,7 @@ class Template extends XmlHandler {
           case 'sentbefore':
           case 'sentafter':
           case 'fixedquestions':
+          case 'randomize':
                 // Ignore
                 break;
                 

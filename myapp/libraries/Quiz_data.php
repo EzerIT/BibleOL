@@ -103,6 +103,7 @@ class Quiz_data {
     public $sentbefore;
     public $sentafter;
     public $fixedquestions;
+    public $randomize;
 	
 	private $mainSheaf; // Contains all candidate sentences
 	private $order; // Vector<Integer>
@@ -179,6 +180,7 @@ class Quiz_data {
         $this->sentbefore = $params['sentbefore'];
         $this->sentafter = $params['sentafter'];
         $this->fixedquestions = $params['fixedquestions'];
+        $this->randomize = $params['randomize'];
         
 		$this->nextCandidate = 0;
 	}
@@ -318,7 +320,8 @@ class Quiz_data {
 		$this->order = array();
 		for ($i=0; $i<$this->numberOfCandidates; ++$i)
 			$this->order[] = $i;
-		shuffle($this->order); // Randomises $this->order 
+        if ($this->randomize)
+		    shuffle($this->order); // Randomizes $this->order 
 
 		return true;
 	}

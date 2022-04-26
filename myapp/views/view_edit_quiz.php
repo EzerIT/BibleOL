@@ -37,6 +37,14 @@
     <div style="margin-top:10px">
       <span><?= $this->lang->line('fixed_questions') ?> <input id="fixedquestions" type="text" size="8"> <span id="fqerror"></span>
     </div>
+    <div style="margin-top:10px">
+        <span><?= $this->lang->line('question_order') ?> 
+            <input type="radio" id="randomorder" name="randomize" value="true">
+            <label for="randomorder"><?= $this->lang->line('question_order_random') ?></label>
+            <input type="radio" id="fixedorder" name="randomize" value="false">
+            <label for="fixedorder"><?= $this->lang->line('question_order_fixed') ?></label>
+        </span>
+    </div>
   </div>
   <div id="tab_sentences">
   </div>

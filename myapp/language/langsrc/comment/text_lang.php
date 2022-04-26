@@ -188,6 +188,18 @@ $comment['progress'] = "";
 $format['progress'] = "";
 $use_textarea['progress'] = false;
 
+$comment['question_order'] = "";
+$format['question_order'] = "";
+$use_textarea['question_order'] = false;
+
+$comment['question_order_fixed'] = "";
+$format['question_order_fixed'] = "";
+$use_textarea['question_order_fixed'] = false;
+
+$comment['question_order_random'] = "";
+$format['question_order_random'] = "";
+$use_textarea['question_order_random'] = false;
+
 $comment['quiz'] = "Text in title bar";
 $format['quiz'] = "";
 $use_textarea['quiz'] = false;

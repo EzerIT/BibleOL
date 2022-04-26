@@ -118,11 +118,11 @@ $use_textarea['start_time'] = false;
 
 $comment['take_exam'] = "";
 $format['take_exam'] = "";
-$use_textarea['take_exam'] = "";
+$use_textarea['take_exam'] = false;
 
 $comment['take_exam_description'] = "";
 $format['take_exam_description'] = "";
-$use_textarea['take_exam_description'] = "";
+$use_textarea['take_exam_description'] = false;
 
 $comment['time'] = "";
 $format['time'] = "";

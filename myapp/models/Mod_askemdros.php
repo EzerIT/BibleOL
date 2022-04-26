@@ -188,6 +188,7 @@ class Mod_askemdros extends CI_Model {
                                                'sentbefore' => $this->decoded_3et->sentbefore,
                                                'sentafter' => $this->decoded_3et->sentafter,
                                                'fixedquestions' => $this->decoded_3et->fixedquestions,
+                                               'randomize' => $this->decoded_3et->randomize,
                                                'show_features' => $this->decoded_3et->quizFeatures->showFeatures,
                                                'request_features' => $this->decoded_3et->quizFeatures->requestFeatures,
                                                'dontshow_features' => $this->decoded_3et->quizFeatures->dontShowFeatures,
@@ -355,7 +356,8 @@ class Mod_askemdros extends CI_Model {
                            . '"maylocate":true,'
                            . '"sentbefore":0,'
                            . '"sentafter":0,'
-                           . '"fixedquestions":0'
+                           . '"fixedquestions":0,'
+                           . '"randomize":true'
                            . '}',
                            $this->db_config->dbinfo->databaseName, $db, $this->db_config->dbinfo->objHasSurface);
         }

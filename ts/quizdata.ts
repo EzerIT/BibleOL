@@ -20,6 +20,7 @@ interface QuizData {
     sentbefore     : number;
     sentafter      : number;
     fixedquestions : number;
+    randomize      : boolean;
     monad2Id       : number[];
     id2FeatVal     : util.str2strArr[]; // The value is normally a string, but in the case of value
                                         // suggestions for a multiple choice question the key ends in
