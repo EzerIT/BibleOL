@@ -224,7 +224,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering}
-\date{24 March 2022}
+\date{26 April 2022}
 
 \makeindex
 
@@ -2761,6 +2761,7 @@ Listing \ref{list-qtsample} shows a typical quiz template.
   <sentbefore>0</sentbefore>
   <sentafter>0</sentafter>
   <fixedquestions>0</fixedquestions>
+  <randomize>true</randomize>
 </questiontemplate>
 \end{lstlisting}
 
@@ -2810,6 +2811,9 @@ question sentence. If this XML element is absent, it is assumed have the value \
 \xml{fixedquestions} & If this value is \emph{0}, the user can choose how many questions the quiz should
 generate. If the value is different from \emph{0}, the number of questions is fixed at that number.
 If this XML element is absent, it is assumed have the value \emph{0}.\\
+
+\xml{randomize} & A Boolean value indicating if questions should be given in a random order. If this
+XML element is absent, it is assumed have the value \emph{true}.\\
 
 \end{my-longtabu}
 
@@ -3877,6 +3881,7 @@ interface QuizData {
     sentbefore     : number;
     sentafter      : number;
     fixedquestions : number;
+    randomize      : boolean;
     monad2Id       : number[];
     id2FeatVal     : string[][];
 }
@@ -3903,6 +3908,7 @@ class Quiz_data {
     public $sentbefore;
     public $sentafter;
     public $fixedquestions;
+    public $randomize;
     public $monad2Id;         // An array of integers
     public $id2FeatVal;       // An array of arrays of strings
 }
@@ -3957,6 +3963,8 @@ The fields of the \emph{QuizData} interface are:
                features. If, for example, a quiz object has an ID\_D of 1234, and one of the display
                or request features is \emph{case} with the value \emph{genitive}, then
                \emph{id2FeatVal[1234][\q case\q]} will have the value ``genitive''.\\
+
+  randomize & A Boolean value indicating if questions should be given in a random order.\\
 
 \end{my-longtabu}
 
