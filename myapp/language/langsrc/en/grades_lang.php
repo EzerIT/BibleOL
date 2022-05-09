@@ -108,3 +108,12 @@ $lang['grades_for_exam'] = "Exam Grading";
 $lang['grds_exam_by_student_caption'] = "<b>Note:</b> The percentage in brackets does not consider the weights of each exercise on the exam. This percentage is used just for visual reference and does not impact grading.";
 $lang['student_exam_description'] = "<p><b>Choose the Exam Instance you want to grade for this class.</b></p>";
 $lang['student_exam_description2'] = "<p>You can change the default grading by selecting an alternate grading system in the combo box.</p>";
+
+$lang['go_back'] = "Go Back";
+$lang['back_hooverover_txt'] = "Go back to the previous page";
+$lang['exercise_detail'] = "Exercise Detail";
+$lang['qest_numbr'] = "Question Number";
+$lang['feat_location'] = "Feature Location";
+$lang['right_wrong'] = "Right/Wrong";
+$lang['correct_anser'] = "Correct Answer";
+$lang['answer_by_stud'] = "Student's Answer";
