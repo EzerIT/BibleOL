@@ -100,7 +100,8 @@
             "st": "state_t",
             "pdp": "part_of_speech_t",
             "sp": "part_of_speech_t",
-            "verb_class": "list of verb_class_t"
+            "verb_class": "list of verb_class_t",
+            "monad_num": "integer"
         },
         "clause_atom": {
             "code": "integer",
