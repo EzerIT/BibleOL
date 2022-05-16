@@ -652,7 +652,6 @@ class Ctrl_exams extends MY_Controller
     }
 
     public function save_exam() {
-      var_dump($_POST);
       # Declare the array that will store the
       # names of the exercises that make up this exam.
       $exercise_list = array();
@@ -686,7 +685,6 @@ class Ctrl_exams extends MY_Controller
     				# and store it.
     				$removed = array_shift($feature_values);
     				# Assign the stored feature value to the current feature.
-            echo $x . " " . $key . " " . $removed;
     				$x->$key = $removed;
     			}
     		}

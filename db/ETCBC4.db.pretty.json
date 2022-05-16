@@ -386,6 +386,11 @@
                     "ignoreRequest": true,
                     "transliteratedText": true
                 },
+                "monad_num": {
+                    "ignoreSelect": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true
+                },
                 "gloss": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\(.*\\) *)?{0}( *\\(.*\\))?([,;].+)?$\/i",

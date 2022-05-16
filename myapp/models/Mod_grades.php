@@ -530,10 +530,12 @@ class Mod_grades extends CI_Model {
                 $perdate[$day] = array('duration' => 0,
                                              'correct' => 0,
                                              'userid' => $row->userid,
-                                             'count' => 0);
+                                             'count' => 0,
+                                             'original_count' => 0);
             $perdate[$day]['duration'] += $row->duration;
             $perdate[$day]['correct'] += $row->correct;
-            $perdate[$day]['count'] += $row->cnt;
+            $perdate[$day]['count'] += sizeof($this->get_quizz_detail($uid,$row->id));  //Count based in the number of questions, not the number of words
+            $perdate[$day]['original_count'] += $row->cnt;
             // TODO: MRCN part of the // HACK:
             $int_counter +=1;
         }
@@ -603,10 +605,12 @@ class Mod_grades extends CI_Model {
                 $perdate[$day] = array('duration' => 0,
                                              'correct' => 0,
                                              'userid' => $row->userid,
-                                             'count' => 0);
+                                             'count' => 0,
+                                             'original_count' => 0);
             $perdate[$day]['duration'] += $row->duration;
             $perdate[$day]['correct'] += $row->correct;
-            $perdate[$day]['count'] += $row->cnt;
+            $perdate[$day]['count'] += sizeof($this->get_quizz_detail($uid,$row->id));  //Count based in the number of questions, not the number of words
+            $perdate[$day]['original_count'] += $row->cnt;
             // // TODO: MRCN part of the // HACK:
             // $int_counter +=1;
         }
@@ -701,7 +705,8 @@ class Mod_grades extends CI_Model {
                                              'weight' => 0);
             $perdate[$day]['duration'] += $row->duration;
             $perdate[$day]['correct'] += $row->correct;
-            $perdate[$day]['count'] += $row->cnt;
+            // $perdate[$day]['count'] += $row->cnt;
+            $perdate[$day]['count'] += sizeof($this->get_quizz_detail($uid,$row->id));  //Count based in the number of questions, not the number of words
             $perdate[$day]['exercise_name'] = $exercise_name;
             $perdate[$day]['weight'] += $weight;
             // $perdate[$day]['quizzid'] = $row->id;
@@ -819,7 +824,7 @@ class Mod_grades extends CI_Model {
 
         $query = $this->db
             ->from('sta_question as sq')
-            ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer')
+            ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer, rf.qono')
             ->join('sta_requestfeature as rf','rf.questid = sq.id')
             ->where('sq.quizid',$quizzid)
             ->get();

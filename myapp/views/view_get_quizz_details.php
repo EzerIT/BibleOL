@@ -7,11 +7,13 @@
     //
     // print_r($resall);
 ?>
+<p><a href="javascript:history.back()" title="<?= $this->lang->line('back_hooverover_txt') ?>"><?= $this->lang->line('go_back') ?></a></p>
 <div class="table-responsive" id="table1" style="display:block">
   <h2><?= $this->lang->line('exercise_detail') ?></h2>
   <table class="type2 table table-striped autowidth">
-    <caption><?= $this->lang->line('grds_exam_by_student_caption') ?></caption>
+    <caption><?= $this->lang->line('exercise_detail') ?></caption>
     <tr>
+      <th><?= $this->lang->line('qest_numbr') ?></th>
       <th><?= $this->lang->line('feat_location') ?></th>
       <th class="text-center"><?= $this->lang->line('right_wrong') ?></th>
       <th class="text-center"><?= $this->lang->line('correct_anser') ?></th>
@@ -23,6 +25,7 @@
       <?PHP // Just in case of us showing multiple exercises on thefuture
       ?>
     <tr class="<?php echo 'headerDet';  ?>">
+      <td class="text-center"><?= $ra->qono ?></td>
       <td class="text-center"><?= $ra->location ?></td>
       <td class="text-center"><?= $ra->correct  ?></td>
       <td class="text-center"><?= $ra->value  ?></td>

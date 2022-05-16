@@ -96,6 +96,7 @@ class Mod_quizpath extends CI_Model {
 
                         $decoded_3et = harvest($contents);
                         $f->fixedquestions = set_or_default($decoded_3et->fixedquestions, 0);
+                        $f->randomize = set_or_default($decoded_3et->randomize, true);
                     }
                 }
             }
