@@ -57,7 +57,7 @@
       <?php endif; ?>
       </td>
       <td style="text-align: center;">
-      <?php if ($f->fixedquestions==0): ?>
+      <?php if ($f->fixedquestions==0 && $f->randomize): ?>
         <?= anchor(build_get('text/show_quiz_univ',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 5)), '5') ?>&nbsp;&nbsp;&nbsp;
         <?= anchor(build_get('text/show_quiz_univ',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 10)), '10') ?>&nbsp;&nbsp;&nbsp;
         <?= anchor(build_get('text/show_quiz_univ',array('quiz' => composedir($dirlist['relativedir'], $f->filename) . '.3et', 'count' => 25)), '25') ?>
