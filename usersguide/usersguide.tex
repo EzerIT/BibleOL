@@ -236,7 +236,7 @@ pdftitle={Bible Online Learner: Users's Guide}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering}
-\date{26 April 2022}
+\date{16 May 2022}
 
 \makeindex
 
@@ -299,14 +299,11 @@ At the start of most chapters you will find a line indicating if that chapter is
 On page \pageref{sec-index} you will find an index, which may help you find your way through this document.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%% General Information %%%%%%%%%%%%%%%%%%%%
-\chapter{General Information}
+%%%%%%%%%%%%%%%%%%%% User Interface %%%%%%%%%%%%%%%%%%%%
+\chapter{User Interface}
 
 \textbf{You should read this chapter.}
 \plainbreak{3}
-
-%%%%%%%%%%%%%%%%%%%% User Interface %%%%%%%%%%%%%%%%%%%%
-\section{User Interface}
 
 You access Bible OL through a web browser using an appropriate
 URL\footnote{Most users will use \url{https://bibleol.3bmoodle.dk}.}.
@@ -336,12 +333,14 @@ access your personal features of the system. Once you have logged, in, a new men
 \end{itemize}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Viewing Text %%%%%%%%%%%%%%%%%%%%
-\section{Viewing Text}\label{sec-viewing-text}
+\chapter{Viewing Text}\label{chap-viewing-text}
 
-The most basic operation of Bible OL is that of viewing the Hebrew or Greek text of the Bible. If, for
-example, you want to see Genesis chapter 1 verses 1-7, you can do it in this manner:
+\textbf{You should read this chapter.}
+\plainbreak{3}
 
+The most basic operation of Bible OL is that of viewing the Hebrew or Greek text of the Bible.
 From the \emph{Text and Exercises} menu select \emph{Display text.} This will take you to a web page
 displaying the dialog of Figure \ref{fig-selecttext}.
 \begin{figure}
@@ -362,111 +361,177 @@ Under ``Corpus'' in that dialog, you select the text database you want to use. Y
   1904 database (see Appendix XXX).
 \end{itemize}
 
-To see Genesis 1:1-7, fill out the dialog thus:
+Section \ref{sec-heb-view-text} shows how to use Bible Online Learner to study a Hebrew text.
+Section \ref{sec-gr-view-text} shows how to study a Greek text.
+
+\newcommand{\viewexampleI}[1]{%
+%
+\renewcommand{\hebgr}{\HOrG{#1}{heb}{gr}}
+\renewcommand{\hebgrlong}{\HOrG{#1}{Hebrew}{Greek}}
+%
+\section{Viewing a \hebgrlong{} Text}\label{sec-\hebgr-view-text}
+
+To see \HOrG{#1}{\bibleref{Genesis}{1}{1-7}}{\bibleref{Luke}{2}{1-5}}, fill out the dialog in figure \ref{fig-selecttext} thus:
 
 \begin{itemize}
-\item Corpus: Hebrew (ETCBC4, OT)
-\item Book: Genesis
-\item Chapter: 1
+\item Corpus: \HOrG{#1}{Hebrew (ETCBC4, OT)}{Greek (Nestle 1904, NT)}
+\item Book: \HOrG{#1}{Genesis}{Luke}
+\item Chapter: \HOrG{#1}{1}{2}
 \item First verse: 1
-\item Last verse: 7
+\item Last verse: \HOrG{#1}{7}{5}
 \item Show link icons: Don’t mark this. (See Section XXX.)
 \end{itemize}
 
-Finally, click the \emph{Display} button. This will show you Genesis 1:1-7 in Hebrew.
-
-The actual layout of the page will depend on whether you are using a computer or a smartphone
-to view the text. On a computer, the text will look as shown in Figure \ref{fig-gen-a}.
+Finally, click the \emph{Display} button. This will show you \HOrG{#1}{\bibleref{Genesis}{1}{1-7}}{\bibleref{Luke}{2}{1-5}} in \hebgrlong. (See Figure \ref{fig-\hebgr-text-a}.)
 \begin{figure}
   \begin{center}
-    \includegraphics[width=\textwidth]{text_gen_1.png}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-text-a.png}
   \end{center}
-  \caption{Displaying Genesis 1 on a computer.}\label{fig-gen-a}
+  \caption{Displaying \HOrG{#1}{Genesis 1}{Luke 2}.}\label{fig-\hebgr-text-a}
 \end{figure}
-Above the Hebrew text, you see an ``eye'' labelled ``MyView''. We shall return to that in Section
-\ref{sec-grammar-selection}. The box on the right is the so-called \emph{grammar information
-  box.}\index{grammar information box|hyperit}\index{information box|see {grammar information box}}
-This box is only visible if your mouse points to a word in the Hebrew text; in that case, the
-grammar information box will show grammatical information about the word pointed to by the mouse.
-You may find it inconvenient that the grammar information box disappears as soon as you move the
-mouse, so if you click on a word with your mouse, a dialog box will appear with the same grammar
-information. (Click the × at the top of the dialog box or the Close button at the bottom of the box
-to close the dialog. Alternatively, press the ``Esc'' key on your keyboard.)
 
-If you are using a smartphone, you have no mouse, so you never see the grammar information box.
-However, if you tap on a Hebrew word, a dialog box will appear with the grammar information. (Tap
-the × at the top of the dialog box or the Close button at the bottom of the box to close the dialog.)
+\HOrG{#1}{The small icon to the right of the first verse is a link to the same text at the SHEBANQ website.
+(See Section XXX.)}
 
-The small icon to the right of the first verse is a link to the same text at the SHEBANQ website.
-(See Section XXX.)
+
+\subsection{Viewing \hebgrlong{} Grammar Information}\label{sec-\hebgr-grammar-info}
+
+If you are viewing the text on a computer, you will have three ways to display grammar information;
+if you are using a tablet or a smartphone, you will have two ways to display grammar information.
+They are:
+
+\begin{enumerate}
+  \item Hovering the mouse over a word or sentence part. (This is not available on tablets or
+    smartphones.)
+  \item Clicking a word or sentence part.
+  \item Using the ``MyView'' selector.
+\end{enumerate}
+
+On a computer, you can use your mouse to point to a word in the text.\footnote{Known as letting your
+  mouse ``hover'' over a word.} You will then see a so-called \emph{grammar information
+  box.}\index{grammar information box|hyperit}
+to the right of the text as in Figure \ref{fig-\hebgr-text-b}.
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\textwidth]{fig-\hebgr-text-b.png}
+  \end{center}
+  \caption{Displaying the grammar information box on a computer.}\label{fig-\hebgr-text-b}
+\end{figure}
+In this box you will see detailed information about the word your mouse points to. When you move the
+mouse, the grammar information box disappears. You may find this inconvenient, so instead you can
+use the following method:
+
+On a computer, table, or smartphone, you can click or tap on a word. In that case, a dialog box will
+appear containing the grammar information box. (You can click the × at the top of the dialog box or
+the Close button at the bottom of the box to close the dialog. Alternatively, press the ``Esc'' key
+on your keyboard.)
+
+A third way to display grammar information is to use the ``MyView'' selector as described in the
+following section.
 
 %%%%%%%%%%%%%%%%%%%% The Grammar Selection Box %%%%%%%%%%%%%%%%%%%%
-\section{The Grammar Selection Box}\label{sec-grammar-selection}\index{grammar selection box|hyperit}\index{selection box|see {grammar selection box}}
+\subsection{The ``MyView'' Selector}\label{sec-\hebgr-myview-selector}\index{MyView@``MyView'' selector}
 
-If you click the icon labelled ``MyView''\index{MyView}, the system will show the so-called
-\emph{grammar selection box}. At the same time the eye icon turns into a × icon. The contents of the
-grammar selection box depends on whether you are viewing a Hebrew or a Greek text. In the case of a
-Hebrew text, the it looks as shown in Figure \ref{fig-gram-sel-a}.
+Above the \hebgrlong{} text you see an ``eye'' labelled ``MyView''. If you click the eye icon labelled
+\emph{grammar selection box}\index{grammar selection box}. At the same time the eye icon turns into
+a × icon. The grammar selection box looks as shown in Figure \ref{fig-\hebgr-gram-sel-a}.
 
 \begin{figure}
   \begin{center}
-    \includegraphics[width=0.7\textwidth]{gram_sel_1.png}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-gram-sel-a.png}
   \end{center}
-  \caption{Hebrew grammar selection box.}\label{fig-gram-sel-a}
+  \caption{\hebgrlong{} grammar selection box.}\label{fig-\hebgr-gram-sel-a}
 \end{figure}
 
-The Hebrew grammar selection box contains four buttons, identifying the four levels of the grammar
-hierarchy used by the Hebrew text: The text contains \emph{sentences,} which contain \emph{clauses,}
-which contain \emph{phrases,} which contain \emph{words.} You can click on each of these to display
-relevant grammar information.
+The \hebgrlong{} grammar selection box contains four buttons, identifying the four levels of the
+grammar hierarchy used by the \hebgrlong{} text: The text contains \emph{sentences,} which contain
+\emph{\HOrG{#1}{clauses}{level 2 clauses},} which contain \emph{\HOrG{#1}{phrases}{level 1
+    clauses},} which contain \emph{words.} You can click on each of these to display relevant
+grammar information.
 
 If, for example, you click the \emph{Word} button and then the \emph{Lexeme} button, the grammar
-selection box looks as shown in Figure \ref{fig-gram-sel-b}.
+selection box looks as shown in Figure \ref{fig-\hebgr-gram-sel-b}.
 \begin{figure}
   \begin{center}
-    \includegraphics[width=0.7\textwidth]{gram_sel_2.png}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-gram-sel-b.png}
   \end{center}
-  \caption{Grammar selection box after clicking \emph{Word} and \emph{Lexeme}.}\label{fig-gram-sel-b}
+  \caption{\hebgrlong{} grammar selection box after clicking \emph{Word} and \emph{Lexeme}.}\label{fig-\hebgr-gram-sel-b}
 \end{figure}
 If you now click the \emph{Part of speech} button, the Hebrew text changes to look as in Figure
-\ref{fig-gen-b}, where you can see the part of speech of each word of the text.
+\ref{fig-\hebgr-text-c}, where you can see the part of speech of each word of the text.
 \begin{figure}
   \begin{center}
-    \includegraphics[width=0.7\textwidth]{text_gen_2.png}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-text-c.png}
   \end{center}
-  \caption{Genesis 1 with part-of-speech information.}\label{fig-gen-b}
+  \caption{\HOrG{#1}{Genesis 1}{Luke 2} with part-of-speech information.}\label{fig-\hebgr-text-c}
 \end{figure}
 You can add additional information by clicking the relevant buttons in the grammar selection box.
 
 You can use the \emph{Clear grammar} all the selected grammar information, and you can use the ×
 icon to hide the grammar selection box.
 
-The grammar selection box also allows you to see borders between phrases, clauses or sentences,
-as well as grammatical information about each of these. If, for example, you click \emph{Clause}, and the select
-\emph{Show border}, you will see the borders of each clause. Again, but pointing your mouse to the word
-``Clause'' on the border of a particular Clause (or, alternatively, clicking the word ``Clause''), grammar
-information about the particular clause will be shown. (See Figure \ref{fig-gen-c}.)
+The grammar selection box also allows you to see borders between \HOrG{#1}{phrases, clauses,}{clauses} or sentences,
+as well as grammatical information about each of these. If, for example, you click
+\emph{\HOrG{#1}{Clause}{Clause level 1}}, and then select
+\emph{Show border}, you will see the borders of each clause.
+
+By pointing your mouse to the word ``\HOrG{#1}{Clause}{Clause1}'' on the border of a particular
+Clause (or, alternatively, clicking the word ``\HOrG{#1}{Clause}{Clause1}''), a grammar information box
+for the particular clause will be shown. (See Figure \ref{fig-\hebgr-text-d}.)
 
 \begin{figure}
   \begin{center}
-    \includegraphics[width=\textwidth]{text_gen_3.png}
+    \includegraphics[width=\textwidth]{fig-\hebgr-text-d.png}
   \end{center}
-  \caption{Showing grammar information for the second clause of Genesis 1.}\label{fig-gen-c}
+  \caption{Showing grammar information for the second clause of \HOrG{#1}{Genesis 1}{Luke 2}.}\label{fig-\hebgr-text-d}
 \end{figure}
 
-Sometimes clauses (or other parts of a sentence) can contain other clauses inside them. An example
-of this is seen in \bibleref{Genesis}{1}{7} (Figure \ref{fig-gen-d}). Here, you can see how the
-clause \heb{וַיַּבְדֵּ֗ל בֵּ֤ין הַמַּ֨יִם֙ וּבֵ֣ין הַמַּ֔יִם} is split in two and contains the clause \heb{אֲשֶׁר֙ מִתַּ֣חַת לָרָקִ֔יעַ} inside it.
-The split clause is marked by its missing left and right borders.
+\HOrG{#1}{Sometimes clauses (or other parts of a sentence) can contain other clauses inside them. An example
+  of this is seen in \bibleref{Genesis}{1}{7} (Figure \ref{fig-\hebgr-text-e}). Here, you can see how the
+  clause \heb{וַיַּבְדֵּ֗ל בֵּ֤ין הַמַּ֨יִם֙ וּבֵ֣ין הַמַּ֔יִם} is split in two and contains the clause \heb{אֲשֶׁר֙ מִתַּ֣חַת לָרָקִ֔יעַ} inside it.
+  The split clause is marked by its missing left and right borders.
 
 \begin{figure}
   \begin{center}
-    \includegraphics[width=0.6\textwidth]{text_gen_4.png}
+    \includegraphics[width=0.6\textwidth]{fig-\hebgr-text-e.png}
   \end{center}
-  \caption{A split clause in \bibleref{Genesis}{1}{7}.}\label{fig-gen-d}
+  \caption{A split clause in \bibleref{Genesis}{1}{7}.}\label{fig-\hebgr-text-e}
+\end{figure}
+}{Some words may not belong to a particular clause, and a clause may be split into parts. In Figure
+  \ref{fig-gr-text-d} the word καὶ at the start of verse 3 is not a member of a clause; and the
+  clause in verse 1, the clause is split into two pars around the word δὲ, which is not part of the clause.
+  The split clause is marked by its missing left and right borders.}
+
+The different items you can select in the grammar selection box are detailed in section XXX, but
+\HOrG{#1}{a few items are}{one item is} worth mentioning here:
+
+In the grammar selection box, under \emph{Word} and \emph{Lexeme} you can enter a ``Word frequency
+color limit''. Setting this value to, for example, 50, means that the 50 most common
+\HOrG{#1}{Hebrew or Aramaic}{Greek} words in the \HOrG{#1}{Old}{New} Testament will be displayed in
+black, whereas rarer words will be display in blue. (See Figure \ref{fig-\hebgr-text-f}.) If you are
+learning \hebgrlong{}, you may find this feature useful when deciding if a word is worth memorizing.
+When determining how common words are, different morphological forms of the same word are counted as
+one. For more information about word frequency, see section XXX.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-text-f.png}
+  \end{center}
+  \caption{The 50 most common words are black, rarer words are blue.}\label{fig-\hebgr-text-f}
 \end{figure}
 
-The different items you can select in the grammar selection box are detailed in section XXX.
+\HOrG{#1}{In most cases, the information you find in the grammar information box will be the same as
+  what is shown between the lines using the ``MyView'' selector; but for glosses this is not the
+  case. For example, in the grammar information box of Figure \ref{fig-\hebgr-text-b} you can see
+  that the lexeme \heb{היה} is translated into English as ``be, happen, become, occur''. But if you
+  open the ``MyView'' selector and choose \emph{Word} and \emph{Glosses} and \emph{English}, only
+  the first gloss, ``be'', will be shown between the lines of Hebrew text. }{} } \FloatBlock
+
+\viewexampleI{h}
+
+\FloatBlock
+
+\viewexampleI{g}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -677,11 +742,11 @@ you a random sentence from the specified Bible passages, for example, the one yo
   \caption{The first sentence of a \hebgrlong{} exercise.}\label{fig-\hebgr-exer-i}
 \end{figure}
 At the top of the exercise you see a short description -- in this case ``\HOrG{#1}{Which gender is
-  this?}{Noun cases}'' If you click the button labelled ``Locate''\index{locate}, you will learn that this
-sentence is found in \HOrG{#1}{\bibleref{Genesis}{1}{2}}{\bibleref{John}{10}{38}}. As described in
-  Sections \ref{sec-viewing-text} and \ref{sec-grammar-selection}, you can see more information
-  about each word by pointing to it with your mouse (if you are using an ordinary computer), by
-  clicking on it, or by using the ``MyView'' feature.
+  this?}{Noun cases}'' If you click the button labelled ``Locate''\index{locate}, you will learn
+that this sentence is found in \HOrG{#1}{\bibleref{Genesis}{1}{2}}{\bibleref{John}{10}{38}}. As
+described in Section \ref{sec-\hebgr-grammar-info}, you can see more information about each word by
+pointing to it with your mouse (if you are using an ordinary computer), by clicking on it, or by
+using the ``MyView'' selector.
 
   In this example, the system has highlighted three nouns in purple. Your task is to identify the
 grammatical \HOrG{#1}{gender}{case} of each of these words.
@@ -731,6 +796,8 @@ causes the system to stores your result internally and indicates to the teacher 
 be used for grading your progress. ``SAVE outcome'' also stores your result internally, but
 indicates that you do not want your result to be used for grading.
 }
+
+\FloatBlock
 
 \exerciseexampleI{h}
 
@@ -848,13 +915,30 @@ correct gender, masculine.
   \begin{center}
     \includegraphics[width=0.7\textwidth]{fig-ambig.png}
   \end{center}
-  \caption{An ambiguous word form with a hint.}\label{fig-ambig'}
+  \caption{An ambiguous word form with a hint.}\label{fig-ambig}
 \end{figure}
 
 
 \subsection{Hidden Information}
 
-% Dvs. hidden features.
+When viewing text outside an exercise, you have access to a considerable amount of grammatical
+information. When doing an exercise, some of that information may be inaccessible, either because
+the information would give away the correct answer, or because the teacher has deliberately hidden
+some information.
+
+As an example, consider the exercise \emph{gender} presented in section \ref{sec-heb-exer-i}, in
+which you are required to provide the gender of a Hebrew noun. Gender information in normally
+available via the ``MyView'' selector, but as Figure \ref{fig-no-gender} shows, the ``person,
+gender, number'' button has been disabled. Also, hovering the mouse a word or clicking a word, will
+not display gender information.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-no-gender.png}
+  \end{center}
+  \caption{``Person, gender, number'' disabled.}\label{fig-no-gender}
+\end{figure}
+
 
 
 \begin{comment}
@@ -864,7 +948,7 @@ Several request features.
 Exercises about phrases and clauses.
 
 
-Specialities: Typing nothing; hidden features; entering glosses as answers; other value.
+Specialities: Typing nothing; entering glosses as answers; other value.
 
 \end{comment}
 
