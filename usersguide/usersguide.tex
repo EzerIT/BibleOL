@@ -240,6 +240,7 @@ pdftitle={Bible Online Learner: Users's Guide}
 
 \makeindex
 
+\settocdepth{subsection}
 
 \begin{document}
 \begin{titlingpage*}
@@ -362,7 +363,8 @@ Under ``Corpus'' in that dialog, you select the text database you want to use. Y
 \end{itemize}
 
 Section \ref{sec-heb-view-text} shows how to use Bible Online Learner to study a Hebrew text.
-Section \ref{sec-gr-view-text} shows how to study a Greek text.
+Section \ref{sec-gr-view-text} shows how to study a Greek text. (You only need to read one of these
+sections.)
 
 \newcommand{\viewexampleI}[1]{%
 %
@@ -689,8 +691,6 @@ that you can try out on the system.
 NOTE: You need not be logged in to try the code in this example, but you may see some warnings if
 you are not logged in.
 
-\section{Accessing an Exercise}
-
 Exercises are located in folders in much the same way files on a computer are located in folders.
 You can access the exercises by selecting \emph{Exercises} from the \emph{Text and exercises} menu.
 You will then see a list of folders that are found within the top level folder (Figure \ref{fig-top-level}).
@@ -705,11 +705,21 @@ folders here are marked ``Restricted''. These are folders that are only availabl
 are enrolled in certain classes. Students' access to folders is controlled by teachers as described
 in section XXX.
 
+Section \ref{sec-heb-exer} gives examples of how to run a Hewbrew exercise. Section
+\ref{sec-gr-exer} gives examples of how to run a Greek exercise. (You only need to read one of these
+sections.)
+
+
 \newcommand{\exerciseexampleI}[1]{%
 %
 \renewcommand{\hebgr}{\HOrG{#1}{heb}{gr}}
 \renewcommand{\hebgrlong}{\HOrG{#1}{Hebrew}{Greek}}
 %
+
+\FloatBlock
+
+\section{\HOrG{#1}{Hebrew}{Greek} Exercises}\label{sec-\hebgr-exer}
+
 \subsection{Example: First \HOrG{#1}{Hebrew}{Greek} Exercise}\label{sec-\hebgr-exer-i}
 
 (For a corresponding \HOrG{#1}{Greek}{Hebrew} exercise, see Section \HOrG{#1}{\ref{sec-gr-exer-i}}{\ref{sec-heb-exer-i}}.)
@@ -724,7 +734,7 @@ exercises found within that folder (Figure \ref{fig-\hebgr-folder}).
   \caption{The \HOrG{#1}{ETCBC4}{Nestle~1904}/demo exercise folder.}\label{fig-\hebgr-folder}
 \end{figure}
 
-We will now focus on the exercise called ``\HOrG{#1}{gender}{case}''. The person who created this exercise
+We will now focus on the exercise called ``demo1''. The person who created this exercise
 will have configured it with a set of Bible passages that should be used for this exercises. If you
 click on one of the numbers 5, 10, or 25 under the heading ``Select number of questions using preset
 passages'', you will start an exercise with 5, 10, or 25 questions take from the pre-configured
@@ -741,46 +751,55 @@ you a random sentence from the specified Bible passages, for example, the one yo
   \end{center}
   \caption{The first sentence of a \hebgrlong{} exercise.}\label{fig-\hebgr-exer-i}
 \end{figure}
-At the top of the exercise you see a short description -- in this case ``\HOrG{#1}{Which gender is
-  this?}{Noun cases}'' If you click the button labelled ``Locate''\index{locate}, you will learn
-that this sentence is found in \HOrG{#1}{\bibleref{Genesis}{1}{2}}{\bibleref{John}{10}{38}}. As
-described in Section \ref{sec-\hebgr-grammar-info}, you can see more information about each word by
-pointing to it with your mouse (if you are using an ordinary computer), by clicking on it, or by
-using the ``MyView'' selector.
+At the top of the exercise you see a short description -- in this case ``Please indicate
+  the gender and number of these nouns and pronouns.'' If you click the button labelled
+``Locate''\index{locate}, you will learn that this sentence is found in
+\HOrG{#1}{\bibleref{Genesis}{1}{6}}{\bibleref{Matthew}{8}{26}}. As described in Section
+\ref{sec-\hebgr-grammar-info}, you can see more information about each word by pointing to it with
+your mouse (if you are using an ordinary computer), by clicking on it, or by using the ``MyView''
+selector.
 
-  In this example, the system has highlighted three nouns in purple. Your task is to identify the
-grammatical \HOrG{#1}{gender}{case} of each of these words.
+  In this example, the system has highlighted three nouns or pronouns in purple. Your task is to identify the
+grammatical gender and number of each of these words.
 
 Below the text you see a green bar. This will show your progress through the five sentences of this
-exercise. Below the bar is a box in which you should provide your answers.
+exercise. Below the bar is a box in which you should provide your answers. This answer box provides
+some information about the noun: In this case it its the actual text and the English translation of
+the word. These items are known as the ``Display features'' (see Figure \ref{fig-\hebgr-exer-ia}).
+Below the display features is the information that you are expected to provide: In this case it is
+the gender and number of the word. These items are known as the ``Request features''.
 
-The first noun, \HOrG{#1}{\heb{אֱלֹהִ֔ים}}{ἔργοις}, is shown in the top line of the answer box, and you must identify its
-gender by clicking either \HOrG{#1}{``Masculine'', ``Feminine'', ``None'', ``Unknown'', or
-``Absent''.\footnote{``Unknown'' means that the gender cannot be determined from the information in the text; it does
-  not mean that the word has no gender. The values ``None'' and ``Absent'' are irrelevant in this exercise:
-  ``None'' means the word has no gender; this is, for example, the case for
-  prepositions, but since this exercise is only concerned with nouns, the answer is never ``None''.
-  A value of ``Absent'' can occur on gender suffixes, but it is never the main gender of a
-  noun.}}{``N/A'',\footnote{That is, ``Not applicable''. This means that the word has no case; this
-  is, for example, the case for prepositions, but since this exercise is only concerned with nouns,
-  the answer is never ``N/A''.} ``Nominative'', ``Accusative'', ``Genitive'', ``Dative'', or ``Vocative''.} 
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-exer-ia.png}
+  \end{center}
+  \caption{Display features and request features.}\label{fig-\hebgr-exer-ia}
+\end{figure}
 
-After clicking an answer, you may then check your answer by clicking ``Check answer''. Figure
+The first noun, \HOrG{#1}{\heb{רָקִ֖יעַ}}{ἀνέμοις}, is shown in the top line of the answer box, and you
+must identify its gender by clicking either \HOrG{#1}{``Masculine'', ``Feminine'', or ``Other
+  value'',\footnote{``Other value'' is not relevant in this exercise.}}{``N/A'',\footnote{That is,
+    ``Not applicable''. This means that the word has no gender, which is the case for pronouns such
+    as ``I'' and ``you''.} ``Masculine'', ``Feminine'', or ``Neuter''.} and its
+number by clicking either \HOrG{#1}{``Singular'', ``Plural'', ``Dual'', or ``Other
+  value''.}{``N/A'', ``Singular'', or ``Plural''.}
+
+After making your choices, you may then check your answer by clicking ``Check answer''. Figure
 \ref{fig-ans-\hebgr-i} shows you what a correct and a wrong answer looks like.
 \begin{figure}
   \begin{center}
-    \includegraphics[width=\textwidth]{fig-ans-\hebgr-i.png}
+    \includegraphics[width=0.7\textwidth]{fig-ans-\hebgr-i.png}
   \end{center}
   \caption{A correct and a wrong answer to a \hebgrlong{} exercise.}\label{fig-ans-\hebgr-i}
 \end{figure}
 If you don't know the answer, clicking the ``Show answer'' button will display the correct answer.
 
 In this sentence there are three nouns. We can move on to the next noun,
-\HOrG{#1}{\heb{פְּנֵ֥י}}{Πατὴρ}, by clicking the {\Large ⟩} symbol at the right side of the answer box.
-A {\Large ⟨} symbol will then appear at the left side of the answer box, allowing you to move back
+\HOrG{#1}{\heb{תֹ֣וךְ}}{θαλάσσῃ}, by clicking the \raisebox{-0.2\baselineskip}{\includegraphics[height=11pt]{right-angle.png}} symbol at the right side of the answer box.
+A \raisebox{-0.2\baselineskip}{\includegraphics[height=11pt]{left-angle.png}} symbol will then appear at the left side of the answer box, allowing you to move back
 to the previous word.
 
-When the last word in the sentence, \HOrG{#1}{\heb{מָּֽיִם׃}}{Πατρί}, is shown (Figure \ref{fig-\hebgr-exer-ii}), three
+When the last word in the sentence, \HOrG{#1}{\heb{מָּ֑יִם}}{γαλήνη}, is shown (Figure \ref{fig-\hebgr-exer-ii}), three
 buttons appear below the answer box.
 \begin{figure}
   \begin{center}
@@ -795,35 +814,23 @@ regardless of which of the two buttons you press. But if you \emph{are} logged i
 causes the system to stores your result internally and indicates to the teacher that your result may
 be used for grading your progress. ``SAVE outcome'' also stores your result internally, but
 indicates that you do not want your result to be used for grading.
-}
 
 \FloatBlock
 
-\exerciseexampleI{h}
-
-\FloatBlock
-
-\exerciseexampleI{g}
-
-\newcommand{\exerciseexampleII}[1]{%
-%
-\renewcommand{\hebgr}{\HOrG{#1}{heb}{gr}}
-\renewcommand{\hebgrlong}{\HOrG{#1}{Hebrew}{Greek}}
-%
 \subsection{Example: Second \HOrG{#1}{Hebrew}{Greek} Exercise}\label{sec-\hebgr-exer-ii}
 
 (For a corresponding \HOrG{#1}{Greek}{Hebrew} exercise, see Section \HOrG{#1}{\ref{sec-gr-exer-ii}}{\ref{sec-heb-exer-ii}}.)
 
-We will now look at the exercise called ``\HOrG{#1}{number\_state}{conjugate\_verb}'' in the
-``\HOrG{#1}{ETCBC4/demo}{Nestle~1904/demo}'' folder. Click on the number 5 under ``...preset passages''
-for that exercise. The system will show you a random sentence from the specified Bible
+We will now look at the exercise called ``demo2'' in the
+``\HOrG{#1}{ETCBC4/demo}{Nestle~1904/demo}'' folder. Click on the number 5 under ``...preset
+passages'' for that exercise. The system will show you a random sentence from the specified Bible
 passages, for example, the one you see in Figure \ref{fig-\hebgr-exer-iii}.
 
 \begin{figure}
   \begin{center}
     \includegraphics[width=0.7\textwidth]{fig-\hebgr-exer-iii.png}
   \end{center}
-  \caption{A sentence from the exercise ``\HOrG{#1}{ETCBC4/number\_state}{Nestle 1904/conjugate\_verb}''.}\label{fig-\hebgr-exer-iii}
+  \caption{A sentence from the exercise ``\HOrG{#1}{ETCBC4/demo2}{Nestle 1904/demo2}''.}\label{fig-\hebgr-exer-iii}
 \end{figure}
 
 
@@ -834,31 +841,32 @@ provide a word that is actually part of the text; therefore the word must not be
 window. The system has therefore replaced the interesting words with numbers.
 
 In this example, the answer box contains five lines labelled \HOrG{#1}{``Item number'', ``Lexeme
-  (with variant)'', ``Number'', ``Gender'', and ``State''}{``Item number'', ``Voice'', ``Lexeme'',
-  ``Mood'', ``Person'', ``Number'', and ``Tense''}. The item number refers to the number in
+  (with variant)'', ``Gender'', ``Number'', and ``State''}{``Item number'', ``Lexeme'', ``Tense'',
+  ``Mood'', ``Voice'', ``Person'', and ``Number''}. The item number refers to the number in
 parentheses in the sentence. \HOrG{#1}{In this case we have moved through the words to the third
   word.}{} The lexeme is the dictionary form of the word in question, and the \HOrG{#1}{number,
   gender, and state}{voice, mood, person, number, and tense} should help you create the word form
 that is actually in the text.
 
 Your task is to type the word form that is found in the text\HOrG{#1}{, but without the Hebrew
-  cantillation marks (which you rarely need to know in detail)}{ in lower case without accents}.
-Below the empty field for the text, you will see a few buttons labelled with \hebgrlong{}
-characters. You can use these buttons to spell the correct word form, which in this case is
-\HOrG{#1}{\heb{יְמֵי}}{εστιν}. The key marked \HOrG{#1}{$\rightarrow$}{$\leftarrow$} is a backspace
-key that deletes the last character you entered. The small characters in the upper
-\HOrG{#1}{right}{left} corner can be used to type the \hebgrlong{} character on you computer
-keyboard, if you prefer to do so rather than to click with your mouse.
+  cantillation marks (which you rarely need to know in detail).}{ in lower case without
+  accents.\footnote{The label ``Normalized'' refers to a version of the text without punctuation and
+    certain accents.}} Below the empty field
+  for the text, you will see a few buttons labelled with \hebgrlong{} characters. You can use these
+  buttons to spell the correct word form, which in this case is \HOrG{#1}{\heb{יְמֵי}}{εστιν}. The key
+  marked \HOrG{#1}{$\rightarrow$}{$\leftarrow$} is a backspace key that deletes the last character
+  you entered. The small characters in the upper \HOrG{#1}{right}{left} corner can be used to type
+  the \hebgrlong{} character on you computer keyboard, if you prefer to do so rather than to click
+  with your mouse. (More about this in Section XXX.)
 
 When you have entered your answer, you can use the ``Check answer'' button to verify that your
 answer is correct.
 }
 
-\exerciseexampleII{h}
+\exerciseexampleI{h}
+\exerciseexampleI{g}
 
 \FloatBlock
-
-\exerciseexampleII{g}
 
 
 \section{Variations to Exercises}\index{variations to exercises}\index{exercises!variations}
@@ -926,7 +934,7 @@ information. When doing an exercise, some of that information may be inaccessibl
 the information would give away the correct answer, or because the teacher has deliberately hidden
 some information.
 
-As an example, consider the exercise \emph{gender} presented in section \ref{sec-heb-exer-i}, in
+As an example, consider the Hebrew exercise \emph{demo1} presented in section \ref{sec-heb-exer-i}, in
 which you are required to provide the gender of a Hebrew noun. Gender information in normally
 available via the ``MyView'' selector, but as Figure \ref{fig-no-gender} shows, the ``person,
 gender, number'' button has been disabled. Also, hovering the mouse a word or clicking a word, will
@@ -944,11 +952,16 @@ not display gender information.
 \begin{comment}
 TODO:
 
-Several request features.
 Exercises about phrases and clauses.
+Timeout warning
 
+Tjek rækkefølge af display features i demo2. (Der kan være forskel på min og DBI's rækkefølge.)
 
-Specialities: Typing nothing; entering glosses as answers; other value.
+Specialities: Typing nothing; entering glosses as answers; gloss limits.
+
+Udskift billedet af filer i ETCBC4/demo or Nestle 1904/demo så man kan se øvelserne ``demo1'' og ``demo2''.
+
+Nej, det er IKKE hvad ``Normalized'' betyder.
 
 \end{comment}
 
