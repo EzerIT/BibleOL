@@ -625,6 +625,10 @@ div#greyspace {
   background-color: #f2f2f2;
   height: 15px;
 }
+div#quizdesc em {
+  font-style: italic;
+  color: #002A3A;
+}
 #cke_1_top,
 #cke_1_bottom {
   background-color: white;
