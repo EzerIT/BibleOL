@@ -180,9 +180,15 @@ class Mod_statistics extends CI_Model {
         // Get the total number of features for this quiz
         $tot_features=$this->quizRequestedFeatures($quizid);
         // Write the results to the DB
-        $query = $this->db->where('id',$quizid)->update('sta_quiz',array('end' => $time,
+        $query = $this->db
+            ->from('sta_question as sq')
+            ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer, rf.qono')
+            ->join('sta_requestfeature as rf','rf.questid = sq.id')
+            ->where('sq.quizid',$quizid)
+            ->get();
+        $this->db->where('id',$quizid)->update('sta_quiz',array('end' => $time,
                                                                          'grading' => $this->input->post('grading')=='true' ? 1 : 0,
-                                                                         'tot_questions' => $this->input->post('question_count') * $tot_features ));
+                                                                         'tot_questions' => sizeof($query->result()) ));
     }
 
     // Get the number of features requested by a quiz
