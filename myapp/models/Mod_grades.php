@@ -178,7 +178,7 @@ class Mod_grades extends CI_Model {
 
         /* Set end time and grading for quiz (MRCN: and the total number of questions) */
         // Get the total number of features for this quiz
-        $tot_features=$this->quizRequestedFeatures($quizid);
+        //$tot_features=$this->quizRequestedFeatures($quizid);
         // Write the results to the DB
         $query = $this->db
             ->from('sta_question as sq')
