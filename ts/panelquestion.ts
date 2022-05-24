@@ -23,20 +23,20 @@ class Foreign2Shortcut {
         switch (configuration.charSet) {
         case 'hebrew':
             Foreign2Shortcut.map['א'] = '>';
-            Foreign2Shortcut.map['ב'] = 'b'; 
-            Foreign2Shortcut.map['ג'] = 'g'; 
-            Foreign2Shortcut.map['ד'] = 'd'; 
-            Foreign2Shortcut.map['ה'] = 'h'; 
-            Foreign2Shortcut.map['ו'] = 'w'; 
-            Foreign2Shortcut.map['ז'] = 'z'; 
-            Foreign2Shortcut.map['ח'] = 'x'; 
-            Foreign2Shortcut.map['ט'] = 'v'; 
-            Foreign2Shortcut.map['י'] = 'j'; 
-            Foreign2Shortcut.map['ך'] = 'K'; 
-            Foreign2Shortcut.map['כ'] = 'k'; 
-            Foreign2Shortcut.map['ל'] = 'l'; 
-            Foreign2Shortcut.map['ם'] = 'M'; 
-            Foreign2Shortcut.map['מ'] = 'm'; 
+            Foreign2Shortcut.map['ב'] = 'b';
+            Foreign2Shortcut.map['ג'] = 'g';
+            Foreign2Shortcut.map['ד'] = 'd';
+            Foreign2Shortcut.map['ה'] = 'h';
+            Foreign2Shortcut.map['ו'] = 'w';
+            Foreign2Shortcut.map['ז'] = 'z';
+            Foreign2Shortcut.map['ח'] = 'x';
+            Foreign2Shortcut.map['ט'] = 'v';
+            Foreign2Shortcut.map['י'] = 'j';
+            Foreign2Shortcut.map['ך'] = 'K';
+            Foreign2Shortcut.map['כ'] = 'k';
+            Foreign2Shortcut.map['ל'] = 'l';
+            Foreign2Shortcut.map['ם'] = 'M';
+            Foreign2Shortcut.map['מ'] = 'm';
             Foreign2Shortcut.map['ן'] = 'N';
             Foreign2Shortcut.map['נ'] = 'n';
             Foreign2Shortcut.map['ס'] = 's';
@@ -52,73 +52,75 @@ class Foreign2Shortcut {
             Foreign2Shortcut.map['ש'] = '#';
             Foreign2Shortcut.map['ת'] = 't';
             Foreign2Shortcut.map['־'] = '&';  // Maqaf
-            Foreign2Shortcut.map['ֿ'] = '2';  // Rafe         
-            Foreign2Shortcut.map['ּ'] = '.';  // Dagesh       
-            Foreign2Shortcut.map['ֽ'] = '$';  // Meteg        
-            Foreign2Shortcut.map['ְ'] = ':';  // Sheva        
-            Foreign2Shortcut.map['ֳ'] = '+';  // Hataf qamats 
-            Foreign2Shortcut.map['ֲ'] = 'A';  // Hataf patah  
-            Foreign2Shortcut.map['ֱ'] = 'E';  // Hataf segol  
-            Foreign2Shortcut.map['ֵ'] = '1';  // Tsere        
-            Foreign2Shortcut.map['ָ'] = '@';  // Qamats       
-            Foreign2Shortcut.map['ַ'] = 'a';  // Patah        
-            Foreign2Shortcut.map['ֶ'] = 'e';  // Segol        
-            Foreign2Shortcut.map['ִ'] = 'I';  // Hiriq        
-            Foreign2Shortcut.map['ֹ'] = 'o';  // Holam        
-            Foreign2Shortcut.map['ֻ'] = 'u';  // Qubuts       
+            Foreign2Shortcut.map['ֿ'] = '2';  // Rafe
+            Foreign2Shortcut.map['ּ'] = '.';  // Dagesh
+            Foreign2Shortcut.map['ֽ'] = '$';  // Meteg
+            Foreign2Shortcut.map['ְ'] = ':';  // Sheva
+            Foreign2Shortcut.map['ֳ'] = '+';  // Hataf qamats
+            Foreign2Shortcut.map['ֲ'] = 'A';  // Hataf patah
+            Foreign2Shortcut.map['ֱ'] = 'E';  // Hataf segol
+            Foreign2Shortcut.map['ֵ'] = '1';  // Tsere
+            Foreign2Shortcut.map['ָ'] = '@';  // Qamats
+            Foreign2Shortcut.map['ַ'] = 'a';  // Patah
+            Foreign2Shortcut.map['ֶ'] = 'e';  // Segol
+            Foreign2Shortcut.map['ִ'] = 'I';  // Hiriq
+            Foreign2Shortcut.map['ֹ'] = 'o';  // Holam
+            Foreign2Shortcut.map['ֻ'] = 'u';  // Qubuts
+
+            Foreign2Shortcut.map['-'] = '-';  // Empty answer indicator
             break;
 
         case "greek":
             Foreign2Shortcut.map['α'] = 'a';
             Foreign2Shortcut.map['β'] = 'b';
             Foreign2Shortcut.map['γ'] = 'g';
-            Foreign2Shortcut.map['δ'] = 'd'; 
-            Foreign2Shortcut.map['ε'] = 'e'; 
-            Foreign2Shortcut.map['ζ'] = 'z'; 
-            Foreign2Shortcut.map['η'] = 'h'; 
-            Foreign2Shortcut.map['θ'] = 'q'; 
-            Foreign2Shortcut.map['ι'] = 'i'; 
-            Foreign2Shortcut.map['κ'] = 'k'; 
-            Foreign2Shortcut.map['λ'] = 'l'; 
-            Foreign2Shortcut.map['μ'] = 'm'; 
-            Foreign2Shortcut.map['ν'] = 'n'; 
-            Foreign2Shortcut.map['ξ'] = 'x'; 
-            Foreign2Shortcut.map['ο'] = 'o'; 
-            Foreign2Shortcut.map['π'] = 'p'; 
-            Foreign2Shortcut.map['ρ'] = 'r'; 
-            Foreign2Shortcut.map['ς'] = 'c'; 
-            Foreign2Shortcut.map['σ'] = 's'; 
-            Foreign2Shortcut.map['τ'] = 't'; 
-            Foreign2Shortcut.map['υ'] = 'u'; 
-            Foreign2Shortcut.map['φ'] = 'f'; 
-            Foreign2Shortcut.map['χ'] = 'j'; 
-            Foreign2Shortcut.map['ψ'] = 'q'; 
-            Foreign2Shortcut.map['ω'] = 'w'; 
+            Foreign2Shortcut.map['δ'] = 'd';
+            Foreign2Shortcut.map['ε'] = 'e';
+            Foreign2Shortcut.map['ζ'] = 'z';
+            Foreign2Shortcut.map['η'] = 'h';
+            Foreign2Shortcut.map['θ'] = 'q';
+            Foreign2Shortcut.map['ι'] = 'i';
+            Foreign2Shortcut.map['κ'] = 'k';
+            Foreign2Shortcut.map['λ'] = 'l';
+            Foreign2Shortcut.map['μ'] = 'm';
+            Foreign2Shortcut.map['ν'] = 'n';
+            Foreign2Shortcut.map['ξ'] = 'x';
+            Foreign2Shortcut.map['ο'] = 'o';
+            Foreign2Shortcut.map['π'] = 'p';
+            Foreign2Shortcut.map['ρ'] = 'r';
+            Foreign2Shortcut.map['ς'] = 'c';
+            Foreign2Shortcut.map['σ'] = 's';
+            Foreign2Shortcut.map['τ'] = 't';
+            Foreign2Shortcut.map['υ'] = 'u';
+            Foreign2Shortcut.map['φ'] = 'f';
+            Foreign2Shortcut.map['χ'] = 'j';
+            Foreign2Shortcut.map['ψ'] = 'q';
+            Foreign2Shortcut.map['ω'] = 'w';
 
             Foreign2Shortcut.map['Α'] = 'A';
             Foreign2Shortcut.map['Β'] = 'B';
             Foreign2Shortcut.map['Γ'] = 'G';
-            Foreign2Shortcut.map['Δ'] = 'D'; 
-            Foreign2Shortcut.map['Ε'] = 'E'; 
-            Foreign2Shortcut.map['Ζ'] = 'Z'; 
-            Foreign2Shortcut.map['Η'] = 'H'; 
-            Foreign2Shortcut.map['Θ'] = 'Q'; 
-            Foreign2Shortcut.map['Ι'] = 'I'; 
-            Foreign2Shortcut.map['Κ'] = 'K'; 
-            Foreign2Shortcut.map['Λ'] = 'L'; 
-            Foreign2Shortcut.map['Μ'] = 'M'; 
-            Foreign2Shortcut.map['Ν'] = 'N'; 
-            Foreign2Shortcut.map['Ξ'] = 'X'; 
-            Foreign2Shortcut.map['Ο'] = 'O'; 
-            Foreign2Shortcut.map['Π'] = 'P'; 
-            Foreign2Shortcut.map['Ρ'] = 'R'; 
-            Foreign2Shortcut.map['Σ'] = 'S'; 
-            Foreign2Shortcut.map['Τ'] = 'T'; 
-            Foreign2Shortcut.map['Υ'] = 'U'; 
-            Foreign2Shortcut.map['Φ'] = 'F'; 
-            Foreign2Shortcut.map['Χ'] = 'J'; 
-            Foreign2Shortcut.map['Ψ'] = 'Q'; 
-            Foreign2Shortcut.map['Ω'] = 'W'; 
+            Foreign2Shortcut.map['Δ'] = 'D';
+            Foreign2Shortcut.map['Ε'] = 'E';
+            Foreign2Shortcut.map['Ζ'] = 'Z';
+            Foreign2Shortcut.map['Η'] = 'H';
+            Foreign2Shortcut.map['Θ'] = 'Q';
+            Foreign2Shortcut.map['Ι'] = 'I';
+            Foreign2Shortcut.map['Κ'] = 'K';
+            Foreign2Shortcut.map['Λ'] = 'L';
+            Foreign2Shortcut.map['Μ'] = 'M';
+            Foreign2Shortcut.map['Ν'] = 'N';
+            Foreign2Shortcut.map['Ξ'] = 'X';
+            Foreign2Shortcut.map['Ο'] = 'O';
+            Foreign2Shortcut.map['Π'] = 'P';
+            Foreign2Shortcut.map['Ρ'] = 'R';
+            Foreign2Shortcut.map['Σ'] = 'S';
+            Foreign2Shortcut.map['Τ'] = 'T';
+            Foreign2Shortcut.map['Υ'] = 'U';
+            Foreign2Shortcut.map['Φ'] = 'F';
+            Foreign2Shortcut.map['Χ'] = 'J';
+            Foreign2Shortcut.map['Ψ'] = 'Q';
+            Foreign2Shortcut.map['Ω'] = 'W';
             break;
 
         case "transliterated_hebrew":
@@ -251,7 +253,7 @@ class Cursor {
     // Parameter:
     //     force: True if this fuction was called because of a manually set focus. In that case,
     //            only the cursor mark should be set.
-    
+
     private static show(force : boolean = false) {
         $(`#ptr_${Cursor.card}_${Cursor.row}`).show();
 
@@ -272,7 +274,7 @@ class Cursor {
             else
                 scrollToPos = bottom - window.innerHeight;
         }
-            
+
         if ($(`#keyinp_${Cursor.card}_${Cursor.row}`).length) {
             // Assign focus and make sure that keystrokes are not sent to other elements
             $(`#keyinp_${Cursor.card}_${Cursor.row}`).focus();
@@ -345,7 +347,7 @@ class PanelQuestion {
 
     private keytable : KeyTable = new KeyTable;
     private keyinps : string[] = [];
-    
+
 
     //------------------------------------------------------------------------------------------
     // charclass static method
@@ -481,7 +483,7 @@ class PanelQuestion {
 
         // Save the location for statistics
         this.question_stat.location = '';
-        
+
         for (let unix in configuration.universeHierarchy) {
             let unixi : number = +unix;
             if (isNaN(unixi)) continue; // Not numeric
@@ -504,7 +506,7 @@ class PanelQuestion {
         if ($('#locate_cb').prop('checked'))
             $('.location').html(this.location);
     }
-    
+
     //------------------------------------------------------------------------------------------
     // body_keydown handler
     //
@@ -632,7 +634,7 @@ class PanelQuestion {
     }
 
 
-    
+
     //------------------------------------------------------------------------------------------
     // Constructor method
     //
@@ -1025,6 +1027,25 @@ class PanelQuestion {
                             switch (l) {
                                 //////////////////////////////
                                 // Hebrew Regular consonants
+                                case '-':
+                                    // The correct answer is empty, so we propose a few random characters
+                                    if (configuration.charSet==='hebrew') {
+                                        additionalCons.push('י'); // yod
+                                        additionalCons.push('ם'); // mem
+                                        additionalCons.push('מ'); // final mem
+                                        additionalCons.push('ך'); // final kaf
+                                        additionalCons.push('ת'); // tav
+
+                                        additionalVowels.push('ְ');  // Sheva
+                                        additionalVowels.push('ֵ');  // Tsere
+                                        additionalVowels.push('ָ');  // Qamats
+                                        additionalVowels.push('ַ');  // Patah
+                                        additionalVowels.push('ֶ');  // Segol
+                                        additionalVowels.push('ִ');  // Hiriq
+                                        additionalVowels.push('ֹ');  // Holam
+                                        additionalVowels.push('ֻ');  // Qubuts
+                                    }
+                                    break;
                                 case 'א':                       // if alef
                                     additionalCons.push('ע');   // push ayin
                                     break;
@@ -1232,8 +1253,12 @@ class PanelQuestion {
 
                         // Make all letters unique and save them in showLetters
                         $.each(answerLettersRandom, (i: number, el: string) => {
-                                if($.inArray(el, showLetters) === -1) showLetters.push(el);
+                            if($.inArray(el, showLetters) === -1)
+                                showLetters.push(el);
                         });
+
+                        if (configuration.charSet==='hebrew' && $.inArray('-', showLetters) === -1)
+                            showLetters.push('-');  // An empty answer should always be an option in hebrew
 
                         // Sort letters alphabetically
                         showLetters.sort();
@@ -1254,17 +1279,16 @@ class PanelQuestion {
 
                         this.keytable.add(+qoid, headInd, 'Backspace', `bs_${quizItemID}`, 2);
 
-                        
+
                         // Set randomized letter buttons to be inputted in the input field
                         showLetters.forEach((letter: string, i: number) => {
-                            //let sc : string = String.fromCharCode(i+97); // a, b, c, etc.
                             let sc : string = Foreign2Shortcut.get(letter);
                             if (sc!='?') {
                                 let sc_id : string = 'sc' + sc.charCodeAt(0);
                                 letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" id="${sc_id}_${quizItemID}" data-letter="${letter}">${letter}<span class="shortcut keybutton">${sc}</span></div>`);
                                 this.keytable.add(+qoid, headInd, sc, `${sc_id}_${quizItemID}`, 2);
                             }
-                            else 
+                            else
                                 letterinput.append(`<div class="inputbutton ${PanelQuestion.charclass(featset)}" data-letter="${letter}">${letter}</div>`);
 
                         });
@@ -1530,7 +1554,7 @@ class PanelQuestion {
             .keydown(this, this.textfield_keydown)
             .focus(event => Cursor.set($(event.target).data('qoid'),$(event.target).data('row'),true))
             .blur(() => $('body').unbind('keydown').keydown(this, this.body_keydown));
-        
+
         $('body')
             .unbind('keydown')
             .keydown(this, // Will be stored in event.data when a key is pressed
@@ -1555,7 +1579,7 @@ class PanelQuestion {
             let prevsubquiz : JQuery = $('<div class="prev-next-btn prev" id="prevsubquiz">&#10094;</div>');
             quizContainer.prepend(prevsubquiz);
             prevsubquiz.hide();
-            
+
             quizContainer.append('<div class="prev-next-btn next" id="nextsubquiz">&#10095;</div>');
 
             // Hide "Next", "GRADE task" and "SAVE outcome" buttons
@@ -1563,7 +1587,7 @@ class PanelQuestion {
             $('button#finish').hide();
             $('button#finishNoStats').hide();
         }
-        
+
 
         $('div.inputbutton').click(function () {
             let letter: string = $(this).data('letter'); //String($(this).text());
