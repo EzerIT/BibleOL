@@ -73,7 +73,7 @@ class Quiz {
                 // After 28 seconds close the heartbeatDialog and remove the 'Next question' button
                 this.tHbClose = window.setTimeout(() => {
                     heartbeatDialog.modal('hide');
-                    $('#next_question').fadeOut();
+                    $('button#next_question').attr('disabled', 'disabled');
                 }, timeBeforeHbClose);
                 
             }, timeBeforeHbOpen);

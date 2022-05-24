@@ -2747,7 +2747,7 @@ var Quiz = (function () {
                 heartbeatDialog.modal('show');
                 _this.tHbClose = window.setTimeout(function () {
                     heartbeatDialog.modal('hide');
-                    $('#next_question').fadeOut();
+                    $('button#next_question').attr('disabled', 'disabled');
                 }, timeBeforeHbClose);
             }, timeBeforeHbOpen);
         };
