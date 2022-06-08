@@ -2736,26 +2736,6 @@ var Quiz = (function () {
         $('button#finishNoStats').on('click', function () { return _this.finishQuiz(false); });
     }
     Quiz.prototype.nextQuestion = function (first) {
-        var _this = this;
-        var timeBeforeHbOpen = 600000;
-        var timeBeforeHbClose = 28000;
-        var heartbeatDialog = $('#heartbeat-dialog');
-        var monitorUser = function () {
-            window.clearTimeout(_this.tHbOpen);
-            window.clearTimeout(_this.tHbClose);
-            _this.tHbOpen = window.setTimeout(function () {
-                heartbeatDialog.modal('show');
-                _this.tHbClose = window.setTimeout(function () {
-                    heartbeatDialog.modal('hide');
-                    $('button#next_question').attr('disabled', 'disabled');
-                }, timeBeforeHbClose);
-            }, timeBeforeHbOpen);
-        };
-        $('#heartbeat-dialog-go-on').on('click', function (event) {
-            heartbeatDialog.modal('hide');
-            window.setTimeout(monitorUser, 0);
-        });
-        monitorUser();
         if (this.currentPanelQuestion !== null)
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
         else if (quizdata.fixedquestions > 0) {
