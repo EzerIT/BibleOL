@@ -106,29 +106,6 @@
 </div>
 
 
-<?php if ($is_quiz && !(isset($is_exam) && $is_exam)): ?>
-    <!-- Dialog for test heartbeat -->
-    <div id="heartbeat-dialog" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header justify-content-between">
-                    <div><h4 class="modal-title"><?= $this->lang->line('done_practicing') ?></h4></div>
-                </div>
-                <div class="modal-body">
-                    <p><?= $this->lang->line('stop_practicing') ?></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="heartbeat-dialog-go-on" class="btn btn-primary"><?= $this->lang->line('go_on') ?></button>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php endif; ?>
-
-
-
-
-
 <script>
     var useTooltip = <?= $useTooltip_str ?>;
     var configuration = <?= $dbinfo_json ?>;

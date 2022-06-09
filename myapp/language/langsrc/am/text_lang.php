@@ -10,7 +10,6 @@ $lang['corpus_prompt'] = "የጽሁፎች ስብስብ";
 $lang['description'] = "መግለጫ";
 $lang['directory'] = "የስም ማውጫ";
 $lang['display'] = "አሳይ";
-$lang['done_practicing'] = "መለማመዣውን ሰርተሀል?";
 $lang['edit_quiz'] = "ፈተና መስተካከል";
 $lang['enter_filename_no_3et'] = " የማሕደር ስም አስገባ (መጨረሻ የለለው \".3et\" )";
 $lang['everything'] = "ሁሉ ነገር";

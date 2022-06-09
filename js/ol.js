@@ -1625,6 +1625,7 @@ var Foreign2Shortcut = (function () {
                 Foreign2Shortcut.map['ִ'] = 'I';
                 Foreign2Shortcut.map['ֹ'] = 'o';
                 Foreign2Shortcut.map['ֻ'] = 'u';
+                Foreign2Shortcut.map['-'] = '-';
                 break;
             case "greek":
                 Foreign2Shortcut.map['α'] = 'a';
@@ -2115,6 +2116,23 @@ var PanelQuestion = (function () {
                         for (var index = 0; index < answerLetters_1.length; index++) {
                             var l = answerLetters_1[index];
                             switch (l) {
+                                case '-':
+                                    if (configuration.charSet === 'hebrew') {
+                                        additionalCons.push('י');
+                                        additionalCons.push('ם');
+                                        additionalCons.push('מ');
+                                        additionalCons.push('ך');
+                                        additionalCons.push('ת');
+                                        additionalVowels.push('ְ');
+                                        additionalVowels.push('ֵ');
+                                        additionalVowels.push('ָ');
+                                        additionalVowels.push('ַ');
+                                        additionalVowels.push('ֶ');
+                                        additionalVowels.push('ִ');
+                                        additionalVowels.push('ֹ');
+                                        additionalVowels.push('ֻ');
+                                    }
+                                    break;
                                 case 'א':
                                     additionalCons.push('ע');
                                     break;
@@ -2308,6 +2326,8 @@ var PanelQuestion = (function () {
                             if ($.inArray(el, showLetters_1) === -1)
                                 showLetters_1.push(el);
                         });
+                        if (configuration.charSet === 'hebrew' && $.inArray('-', showLetters_1) === -1)
+                            showLetters_1.push('-');
                         showLetters_1.sort();
                         var vf = $("<div class=\"inputquizitem\"><span class=\"inputshow " + PanelQuestion.charclass(featset) + "\"></div>");
                         var letterinput_1 = $('<div class="letterinput"></div>');
@@ -2716,26 +2736,6 @@ var Quiz = (function () {
         $('button#finishNoStats').on('click', function () { return _this.finishQuiz(false); });
     }
     Quiz.prototype.nextQuestion = function (first) {
-        var _this = this;
-        var timeBeforeHbOpen = 600000;
-        var timeBeforeHbClose = 28000;
-        var heartbeatDialog = $('#heartbeat-dialog');
-        var monitorUser = function () {
-            window.clearTimeout(_this.tHbOpen);
-            window.clearTimeout(_this.tHbClose);
-            _this.tHbOpen = window.setTimeout(function () {
-                heartbeatDialog.modal('show');
-                _this.tHbClose = window.setTimeout(function () {
-                    heartbeatDialog.modal('hide');
-                    $('#next_question').fadeOut();
-                }, timeBeforeHbClose);
-            }, timeBeforeHbOpen);
-        };
-        $('#heartbeat-dialog-go-on').on('click', function (event) {
-            heartbeatDialog.modal('hide');
-            window.setTimeout(monitorUser, 0);
-        });
-        monitorUser();
         if (this.currentPanelQuestion !== null)
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
         else if (quizdata.fixedquestions > 0) {

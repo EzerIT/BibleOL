@@ -112,6 +112,9 @@ class Mod_statistics extends CI_Model {
         if ($row->userid != $this->mod_users->my_id())
             return; // Illegal user id
 
+        $data_display = array();
+        $data_request = array();
+
         foreach ($this->input->post('questions') as $question) {
             $time += $question['end_time'] - $question['start_time'];
             $this->db->insert('sta_question', array('quizid' => $quizid,
@@ -131,20 +134,18 @@ class Mod_statistics extends CI_Model {
             $featno = 0; // Feature number
 
             if (isset($show_feat['values'])) { // Check that the question was not empty
-                $data = array();
                 foreach ($show_feat['values'] as $val) {
-                    $data[] = array('questid' => $questid,
-                                    'qono' => $qono+1,
-                                    'name' => $show_feat['names'][$featno],
-                                    'value' => $val,
-                                    'userid' => $this->mod_users->my_id());
+                    $data_display[] = array('questid' => $questid,
+                                            'qono' => $qono+1,
+                                            'name' => $show_feat['names'][$featno],
+                                            'value' => $val,
+                                            'userid' => $this->mod_users->my_id());
                     if (++$featno === $maxFeatno) {
                         // Next question object
                         ++$qono;
                         $featno = 0;
                     }
                 }
-                $this->db->insert_batch('sta_displayfeature',$data);
             }
 
             // Update request feature information
@@ -156,15 +157,14 @@ class Mod_statistics extends CI_Model {
             $ix = 0; // Index into 'correct_answer', 'users_answer', and 'users_answer_was_correct'
 
             if (isset($req_feat['correct_answer'])) { // Check that the question was not empty
-                $data = array();
                 foreach ($req_feat['correct_answer'] as $val) {
-                    $data[] = array('questid' => $questid,
-                                    'qono' => $qono+1,
-                                    'name' => $req_feat['names'][$featno],
-                                    'value' => $val,
-                                    'answer' => $req_feat['users_answer'][$ix],
-                                    'correct' => $req_feat['users_answer_was_correct'][$ix]=='true',
-                                    'userid' => $this->mod_users->my_id());
+                    $data_request[] = array('questid' => $questid,
+                                            'qono' => $qono+1,
+                                            'name' => $req_feat['names'][$featno],
+                                            'value' => $val,
+                                            'answer' => $req_feat['users_answer'][$ix],
+                                            'correct' => $req_feat['users_answer_was_correct'][$ix]=='true',
+                                            'userid' => $this->mod_users->my_id());
                     ++$ix;
                     if (++$featno === $maxFeatno) {
                         // Next question object
@@ -172,10 +172,12 @@ class Mod_statistics extends CI_Model {
                         $featno = 0;
                     }
                 }
-                $this->db->insert_batch('sta_requestfeature',$data);
             }
         }
 
+        $this->db->insert_batch('sta_displayfeature',$data_display);
+        $this->db->insert_batch('sta_requestfeature',$data_request);
+        
         /* Set end time and grading for quiz (MRCN: and the total number of questions) */
         // Get the total number of features for this quiz
         //$tot_features=$this->quizRequestedFeatures($quizid);

@@ -17,8 +17,6 @@ class Quiz {
     private currentDictIx        : number = -1;          // Current index in the array of dictionaries provided by the server
     private currentPanelQuestion : PanelQuestion = null; // The current question panel
     private quiz_statistics      : QuizStatistics;       // Statistics about the execution of the exercise
-    private tHbOpen              : number;               // ID of timer for opening heartbeat dialog
-    private tHbClose             : number;               // ID of timer for closing heartbeat dialog
     private exam_mode            : boolean;              // Are we running an exam?
 
     //------------------------------------------------------------------------------------------
@@ -49,43 +47,6 @@ class Quiz {
     //    first: True for the first question in a quiz
     //
     public nextQuestion(first : boolean) : void {
-        const timeBeforeHbOpen  : number = 600000; // (600 seconds) Time before heartbeat dialog is shown to user
-        const timeBeforeHbClose : number = 28000;  // (28 seconds) Time before heartbeat dialog is automatically closed
-
-
-        //--------------------------------------------------------------------------------
-        // monitorUser function
-        //
-        // Sets up timeout mechanism to monitor student activity.
-        //
-
-        let heartbeatDialog = $('#heartbeat-dialog');
-
-        let monitorUser = () => {
-            // Reset timers from previous question
-            window.clearTimeout(this.tHbOpen);
-            window.clearTimeout(this.tHbClose);
-            
-            // After 10 minutes, show the heartbeatDialog
-            this.tHbOpen = window.setTimeout(() => {
-                heartbeatDialog.modal('show');
-
-                // After 28 seconds close the heartbeatDialog and remove the 'Next question' button
-                this.tHbClose = window.setTimeout(() => {
-                    heartbeatDialog.modal('hide');
-                    $('#next_question').fadeOut();
-                }, timeBeforeHbClose);
-                
-            }, timeBeforeHbOpen);
-        }
-
-        $('#heartbeat-dialog-go-on').on('click', (event : any) => {
-            heartbeatDialog.modal('hide');
-            window.setTimeout(monitorUser, 0); // Rerun monitorUser() asynchroneously
-        });
-
-        monitorUser();
-
         if (this.currentPanelQuestion!==null)
             // Update statistics.
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
