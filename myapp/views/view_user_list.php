@@ -1,12 +1,23 @@
 <h1><?= sprintf($this->lang->line('number_of_users'), $user_count) ?></h1>
 <h2><?= sprintf($this->lang->line('showing_per_page'), $users_per_page) ?></h1>
-<nav>
-  <ul class="pagination">
-    <?php for ($p=0; $p<$page_count; ++$p): ?>
-      <li class="<?= $p==$offset ? 'active' : '' ?> page-item"><a class="page-link" href="<?= site_url("users?offset=$p&orderby=$orderby&$sortorder") ?>"><?= $p+1 ?></a></li>
-    <?php endfor; ?>
-  </ul>
-</nav>
+
+    <nav style="margin-bottom: 1rem;">
+        <?php
+        $per_line = 10;
+        $line_num = ($page_count-1)/$per_line;
+        $pos = 0;
+        ?>
+        <?php for ($lin=0; $lin<$line_num; ++$lin): ?>
+            <ul class="pagination" style="margin-bottom: 2px;">
+            <?php for ($in_line=0; $in_line<$per_line; ++$in_line): ?>
+                <?php if ($pos < $page_count): ?>
+                    <li class="<?= $pos==$offset ? 'active' : '' ?> page-item" style="width:3em; text-align:center;"><a class="page-link" href="<?= site_url("users?offset=$pos&orderby=$orderby&$sortorder") ?>"><?= $pos+1 ?></a></li>
+                    <?php ++$pos; ?>
+                <?php endif; ?>
+            <?php endfor; ?>
+            </ul>
+        <?php endfor; ?>
+    </nav>
 
 <?php
   function make_user_header($me, $label, $field, $sortorder, $orderby) {
