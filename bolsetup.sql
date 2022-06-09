@@ -229,7 +229,7 @@ CREATE TABLE `bol_sta_quiztemplate` (
   `dbname` text,
   `dbpropname` text,
   `qoname` text,
-  `quizcode` text,
+  `quizcode` mediumtext,
   `quizcodehash` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ui` (`userid`),
