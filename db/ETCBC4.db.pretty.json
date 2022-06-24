@@ -29,6 +29,11 @@
                     "ignoreRequest": true,
                     "isRange": true
                 },
+                "fa_order": {
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
+                    "isRange": true
+                },
                 "number": {
                     "ignoreSelect": true,
                     "ignoreShow": true,

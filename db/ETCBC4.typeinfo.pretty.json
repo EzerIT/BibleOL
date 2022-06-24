@@ -25,6 +25,7 @@
             "functional_parent": "id_d",
             "self": "id_d",
             "frequency_rank": "integer",
+            "fa_order": "integer",
             "g_cons": "string",
             "g_cons_utf8": "string",
             "g_lex": "string",
