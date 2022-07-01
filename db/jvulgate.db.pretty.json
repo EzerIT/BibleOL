@@ -45,7 +45,7 @@
                 },
                 "lemma_variant": {
                     "ignoreShow": true,
-                    "ignoreRequest": true,
+                    "ignoreRequest": true
                 },
                 "lemma_with_variant": {
                     "foreignText": true
@@ -120,7 +120,7 @@
                         {
                             "mytype": "GrammarFeature",
                             "name": "inflection"
-                        },
+                        }
                     ]
                 },
                 {
