@@ -1,0 +1,219 @@
+{
+    "dbdescription": "Jerome's Vulgate (NT with omissions)",
+    "dbcopyright": "Based on data provided by Department of Philosophy, Classics, History of Arts and Ideas, PO Box 1020 Blindern, N-0315 Oslo, Norway. Licensed under a <a arget=\"_blank\" href=\"https:\/\/creativecommons.org\/licenses\/by-nc-sa\/4.0\/\">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license<\/a>",
+    "emdrosobject": {
+        "word": {
+            "_objname": "Word",
+            "frequency_rank": "Frequency rank",
+            "lexeme_occurrences": "Occurrences",
+            "surface": "Text",
+            "lemma": "Lexeme",
+            "lemma_variant": "Lexeme variant",
+            "lemma_with_variant": "Lexeme (with variant)",
+            "psp": "Part of speech",
+            "person": "Person",
+            "number": "Number",
+            "case": "Case",
+            "gender": "Gender",
+            "tense": "Tense",
+            "voice": "Voice",
+            "mood": "Mood",
+            "degree": "Degree",
+            "inflection": "Inflection"
+        },
+        "sentence": {
+            "_objname": "Sentence"
+        }
+    },
+    "emdrostype": {
+        "psp_t": {
+            "adjective": "Adjective",
+            "adverb": "Adverb",
+            "cardinal_numeral": "Cardinal numeral",
+            "conjunction": "Conjunction",
+            "demonstrative_pronoun": "Demonstrative pronoun",
+            "foreign_word": "Foreign word",
+            "indefinite_pronoun": "Indefinite pronoun",
+            "interjection": "Interjection",
+            "interrogative_adverb": "Interrogative adverb",
+            "interrogative_pronoun": "Interrogative pronoun",
+            "noun": "Noun",
+            "ordinal_numeral": "Ordinal numeral",
+            "personal_pronoun": "Personal pronoun",
+            "personal_reflexive_pronoun": "Personal reflexive pronoun",
+            "possessive_pronoun": "Possessive pronoun",
+            "possessive_reflexive_pronoun": "Possessive reflexive pronoun",
+            "preposition": "Preposition",
+            "proper_noun": "Proper noun",
+            "reciprocal_pronoun": "Reciprocal pronoun",
+            "relative_adverb": "Relative adverb",
+            "relative_pronoun": "Relative pronoun",
+            "subjunction": "Subjunction",
+            "verb": "Verb"
+        },
+        "person_t": {
+            "NA": "#1 N\/A",
+            "first_person": "#2 1st",
+            "second_person": "#3 2nd",
+            "third_person": "#4 3rd"
+        },
+        "number_t": {
+            "NA": "#1 N\/A",
+            "singular": "#2 Singular",
+            "plural": "#3 Plural"
+        },
+        "tense_t": {
+            "NA": "N\/A",
+            "future": "Future",
+            "future_perfect": "Future perfect",
+            "imperfect": "Imperfect",
+            "perfect": "Perfect",
+            "pluperfect": "Pluperfect",
+            "present": "Present"
+        },
+        "mood_t": {
+            "NA": "N\/A",
+            "indicative": "Indicative",
+            "subjunctive": "Subjunctive",
+            "imperative": "Imperative",
+            "infinitive": "Infinitive",
+            "participle": "Participle",
+            "gerund": "Gerund",
+            "gerundive": "Gerundive",
+            "supine": "Supine"
+        },
+        "voice_t": {
+            "NA": "N\/A",
+            "active": "Active",
+            "passive": "Passive"
+        },
+        "gender_t": {
+            "NA": "N\/A",
+            "masculine": "Masculine",
+            "feminine": "Feminine",
+            "neuter": "Neuter",
+            "masculine_or_feminine": "Masc.\/fem.",
+            "masculine_or_neuter": "Masc.\/neut.",
+            "feminine_or_neuter": "Fem.\/neut.",
+            "masculine_or_feminine_or_neuter": "Masc.\/fem.\/neut."
+        },
+        "case_t": {
+            "NA": "#1 N\/A",
+            "nominative": "#2 Nominative",
+            "accusative": "#3 Accusative",
+            "genitive": "#4 Genitive",
+            "dative": "#5 Dative",
+            "ablative": "#6 Ablative",
+            "vocative": "#7 Vocative"
+        },
+        "inflection_t": {
+            "non_inflecting": "Non-inflecting",
+            "inflecting": "Inflecting"
+        }
+    },
+    "grammargroup": {
+        "word": {
+            "lexeme": "Lexeme",
+            "morphology": "Morphology",
+            "glosses": "Glosses"
+        }
+    },
+    "grammarmetafeature": {
+        "word": {
+            "pgn": "Person, gender, number"
+        }
+    },
+    "grammarsubfeature": {
+        "word": {
+            "person": {
+                "first_person": "1",
+                "second_person": "2",
+                "third_person": "3",
+                "NA": "-"
+            },
+            "gender": {
+                "masculine": "M",
+                "feminine": "F",
+                "neuter": "N",
+                "masculine_or_feminine": "MF",
+                "masculine_or_neuter": "MN",
+                "feminine_or_neuter": "FN",
+                "masculine_or_feminine_or_neuter": "MFN",
+                "NA": "-"
+            },
+            "number": {
+                "plural": "Pl",
+                "singular": "Sg",
+                "NA": "-"
+            }
+        }
+    },
+    "universe": {
+        "book": {
+            "_label": "%s",
+            "Matthew": "Matthew",
+            "Mark": "Mark",
+            "Luke": "Luke",
+            "John": "John",
+            "Acts": "Acts",
+            "Romans": "Romans",
+            "I_Corinthians": "1 Corinthians",
+            "II_Corinthians": "2 Corinthians",
+            "Galatians": "Galatians",
+            "Ephesians": "Ephesians",
+            "Philippians": "Philippians",
+            "Colossians": "Colossians",
+            "I_Thessalonians": "1 Thessalonians",
+            "II_Thessalonians": "2 Thessalonians",
+            "I_Timothy": "1 Timothy",
+            "II_Timothy": "2 Timothy",
+            "Titus": "Titus",
+            "Philemon": "Philemon",
+            "Hebrews": "Hebrews",
+            "James": "James",
+            "I_Peter": "1 Peter",
+            "II_Peter": "2 Peter",
+            "I_John": "1 John",
+            "II_John": "2 John",
+            "III_John": "3 John",
+            "Jude": "Jude",
+            "Revelation": "Revelation"
+        },
+        "chapter": {
+            "_label": "Chapter %s"
+        },
+        "verse": {
+            "_label": "Verse %s"
+        },
+        "reference": {
+            "_label": "%s %d:%d",
+            "Matthew": "Mt",
+            "Mark": "Mk",
+            "Luke": "Lk",
+            "John": "Jn",
+            "Acts": "Acts",
+            "Romans": "Rom",
+            "I_Corinthians": "1 Cor",
+            "II_Corinthians": "2 Cor",
+            "Galatians": "Gal",
+            "Ephesians": "Eph",
+            "Philippians": "Phil",
+            "Colossians": "Col",
+            "I_Thessalonians": "1 Thess",
+            "II_Thessalonians": "2 Thess",
+            "I_Timothy": "1 Tim",
+            "II_Timothy": "2 Tim",
+            "Titus": "Titus",
+            "Philemon": "Philemon",
+            "Hebrews": "Heb",
+            "James": "Jas",
+            "I_Peter": "1 Pet",
+            "II_Peter": "2 Pet",
+            "I_John": "1 Jn",
+            "II_John": "2 Jn",
+            "III_John": "3 Jn",
+            "Jude": "Jude",
+            "Revelation": "Rev"
+        }
+    }
+}

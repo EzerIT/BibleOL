@@ -1,0 +1,185 @@
+{
+    "objTypes": [
+        "word",
+        "book",
+        "chapter",
+        "verse",
+        "sentence"
+    ],
+    "obj2feat": {
+        "word": {
+            "frequency_rank": "integer",
+            "lemma_variant": "integer",
+            "lexeme_occurrences": "integer",
+            "ref": "string",
+            "self": "id_d",
+            "suffix": "string",
+            "surface": "string",
+            "lemma": "string",
+            "lemma_with_variant": "string",
+            "psp": "psp_t",
+            "person": "person_t",
+            "number": "number_t",
+            "tense": "tense_t",
+            "mood": "mood_t",
+            "voice": "voice_t",
+            "gender": "gender_t",
+            "case": "case_t",
+            "degree": "degree_t",
+            "inflection": "inflection_t"
+        },
+        "book": {
+            "self": "id_d",
+            "book": "book_name_t"
+        },
+        "chapter": {
+            "chapter": "integer",
+            "self": "id_d",
+            "book": "book_name_t"
+        },
+        "verse": {
+            "chapter": "integer",
+            "verse": "integer",
+            "ref": "string",
+            "self": "id_d",
+            "book": "book_name_t"
+        },
+        "sentence": {
+            "self": "id_d"
+        }
+    },
+    "enumTypes": [
+        "book_name_t",
+        "psp_t",
+        "person_t",
+        "number_t",
+        "tense_t",
+        "mood_t",
+        "voice_t",
+        "gender_t",
+        "case_t",
+        "degree_t",
+        "inflection_t"
+    ],
+    "enum2values": {
+        "book_name_t": [
+            "Acts",
+            "Colossians",
+            "Ephesians",
+            "Galatians",
+            "Hebrews",
+            "III_John",
+            "II_Corinthians",
+            "II_John",
+            "II_Peter",
+            "II_Thessalonians",
+            "II_Timothy",
+            "I_Corinthians",
+            "I_John",
+            "I_Peter",
+            "I_Thessalonians",
+            "I_Timothy",
+            "James",
+            "John",
+            "Jude",
+            "Luke",
+            "Mark",
+            "Matthew",
+            "Philemon",
+            "Philippians",
+            "Revelation",
+            "Romans",
+            "Titus"
+        ],
+        "psp_t": [
+            "adjective",
+            "adverb",
+            "cardinal_numeral",
+            "conjunction",
+            "demonstrative_pronoun",
+            "foreign_word",
+            "indefinite_pronoun",
+            "interjection",
+            "interrogative_adverb",
+            "interrogative_pronoun",
+            "noun",
+            "ordinal_numeral",
+            "personal_pronoun",
+            "personal_reflexive_pronoun",
+            "possessive_pronoun",
+            "possessive_reflexive_pronoun",
+            "preposition",
+            "proper_noun",
+            "reciprocal_pronoun",
+            "relative_adverb",
+            "relative_pronoun",
+            "subjunction",
+            "verb"
+        ],
+        "person_t": [
+            "NA",
+            "first_person",
+            "second_person",
+            "third_person"
+        ],
+        "number_t": [
+            "NA",
+            "plural",
+            "singular"
+        ],
+        "tense_t": [
+            "NA",
+            "future",
+            "future_perfect",
+            "imperfect",
+            "perfect",
+            "pluperfect",
+            "present"
+        ],
+        "mood_t": [
+            "NA",
+            "gerund",
+            "gerundive",
+            "imperative",
+            "indicative",
+            "infinitive",
+            "participle",
+            "subjunctive",
+            "supine"
+        ],
+        "voice_t": [
+            "NA",
+            "active",
+            "passive"
+        ],
+        "gender_t": [
+            "NA",
+            "feminine",
+            "feminine_or_neuter",
+            "masculine",
+            "masculine_or_feminine",
+            "masculine_or_feminine_or_neuter",
+            "masculine_or_neuter",
+            "neuter"
+        ],
+        "case_t": [
+            "NA",
+            "ablative",
+            "accusative",
+            "dative",
+            "genitive",
+            "nominative",
+            "vocative"
+        ],
+        "degree_t": [
+            "NA",
+            "comparative",
+            "positive",
+            "superlative"
+        ],
+        "inflection_t": [
+            "inflecting",
+            "non_inflecting"
+        ]
+    }
+}
