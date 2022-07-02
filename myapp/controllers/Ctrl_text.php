@@ -251,6 +251,7 @@ class Ctrl_text extends MY_Controller {
                         break;
 
                   case 'transliterated_hebrew':
+                  case 'latin':
                         // Nothing for now
                         break;
                 }
@@ -399,6 +400,7 @@ class Ctrl_text extends MY_Controller {
                     break;
 
               case 'transliterated_hebrew':
+              case 'latin':
                     // Nothing for now
                     break;
             }
@@ -477,6 +479,7 @@ class Ctrl_text extends MY_Controller {
                     break;
 
               case 'transliterated_hebrew':
+              case 'latin':
                     // Nothing for now
                     break;
             }

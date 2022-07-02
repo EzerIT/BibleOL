@@ -26,6 +26,10 @@ function get_greeklex_translations() {
     return get_instance()->db->where('greeklex_enabled',true)->get('translation_languages')->result();
 }
 
+function get_latinlex_translations() {
+    return get_instance()->db->where('latinlex_enabled',true)->get('translation_languages')->result();
+}
+
 // Return an array where the langauge code is the index into the array
 function make_code_index(array $langs) {
     $result = array();

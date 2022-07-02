@@ -5,6 +5,7 @@ quizzes
 db/*.name
 db/ETCBC4
 db/nestle1904
+db/jvulgate
 .htaccess
 myapp/config/config.php
 myapp/config/database.php

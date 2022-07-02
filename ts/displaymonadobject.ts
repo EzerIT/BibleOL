@@ -294,7 +294,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
 
         let follow_space : string = '<span class="wordspace"> </span>'; // Enables line wrapping
 
-        if (charset.isHebrew) {
+        if (configuration.suffixFeature) {
             let suffix = smo.mo.features[configuration.suffixFeature];
             text += suffix;
             if (suffix==='' || suffix==='-' || suffix==='\u05be' /* maqaf */) {

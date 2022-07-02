@@ -451,8 +451,10 @@ class GrammarSelectionBox {
                 for (let i in sessionValue) {
                     if (i==='color-limit')
                         $('#color-limit').val(9999).trigger('change','manual');
-                    else
+                    else if (sessionValue[i]) { // sessionValue[i] is true if the box is checked
+                                                // sessionvalue[i] is false or absent if the box is not checked
                         $('#' + i).prop('checked',false).trigger('change','manual');
+                    }
                 }
                 sessionStorage.removeItem(configuration.propertiesName);
             }

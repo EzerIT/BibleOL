@@ -106,6 +106,7 @@ var util;
         }
         WordSpaceFollowerBox.prototype.implicit = function (val) {
             _super.prototype.implicit.call(this, val);
+            console.log("IMPLICIT", val, this.count, this);
             if (val && this.count == 1) {
                 $('.textblock').css('margin-left', '30px').removeClass('inline').addClass('inlineblock');
             }

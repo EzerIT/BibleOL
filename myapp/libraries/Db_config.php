@@ -197,6 +197,10 @@ class Db_config {
             $this->src_lang = array('greek');
             $this->glosslang = get_greeklex_translations();
         }
+        elseif ($dbf->emdros_db=='db/jvulgate') {
+            $this->src_lang = array('latin');
+            $this->glosslang = get_latinlex_translations();
+        }
 
         $this->dbinfo_json = $this->read_or_throw($dbf->dbinfo);
         $this->dbinfo = json_decode($this->dbinfo_json);

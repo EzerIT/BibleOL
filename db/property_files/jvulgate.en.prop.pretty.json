@@ -106,6 +106,12 @@
             "ablative": "#6 Ablative",
             "vocative": "#7 Vocative"
         },
+        "degree_t": {
+            "NA": "",
+            "positive": "#1 Positive",
+            "comparative": "#2 Comparative",
+            "superlative": "#3 Superlative"
+        },
         "inflection_t": {
             "non_inflecting": "Non-inflecting",
             "inflecting": "Inflecting"
