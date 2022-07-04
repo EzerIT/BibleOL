@@ -9,6 +9,7 @@ $lang['context_sentences'] = "Antal sætninger i kontekst: ";
 $lang['corpus_copyright'] = "<h3>Ophavsret til ETCBC4-databasen:</h3><p>%s</p>\n"
         . "     <h3>Ophavsret til Nestle 1904-databasen:</h3><p>%s</p>";
 $lang['corpus_copyright_title'] = "Ophavsret";
+$lang['corpus_database_colon'] = "Korpusdatabase:";
 $lang['corpus_prompt'] = "Korpus:";
 $lang['description'] = "Beskrivelse";
 $lang['directory'] = "Katalog";

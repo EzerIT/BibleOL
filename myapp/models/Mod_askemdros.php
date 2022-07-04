@@ -415,6 +415,7 @@ class Mod_askemdros extends CI_Model {
             $this->db_config->init_config_dbf($dbf, $this->language);
             $loc = json_decode($this->db_config->l10n_json);
             $db_books[] = array('name'=>$name,
+                                'databaseName'=> $this->db_config->dbinfo->databaseName,
                                 'loc_desc'=>$loc->dbdescription,
                                 'loc_copyright'=>isset($loc->dbcopyright) ? $loc->dbcopyright : null,
                                 'loc_books'=>$loc->universe->book,

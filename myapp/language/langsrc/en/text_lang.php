@@ -6,10 +6,9 @@ $lang['chapter'] = "Chapter";
 $lang['chapter_prompt'] = "Chapter:";
 $lang['click_folder'] = "Click on a folder to open it, or select the number of questions you want from a particular quiz and whether you want to use the preset passage selection or specify your own passages.";
 $lang['context_sentences'] = "Number of context sentences:";
-$lang['corpus_copyright'] = "<h3>Copyright for the ETCBC4 database:</h3><p>%s</p>\n"
-        . "     <h3>Copyright for the Nestle 1904 database:</h3><p>%s</p>";
 $lang['corpus_copyright_title'] = "Copyright";
 $lang['corpus_prompt'] = "Corpus:";
+$lang['corpus_database_colon'] = "Corpus database:";
 $lang['description'] = "Description";
 $lang['directory'] = "Directory";
 $lang['display'] = "Display";

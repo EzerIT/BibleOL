@@ -24,9 +24,9 @@ $comment['context_sentences'] = "";
 $format['context_sentences'] = "";
 $use_textarea['context_sentences'] = false;
 
-$comment['corpus_copyright'] = "HTML";
-$format['corpus_copyright'] = "keep_blanks";
-$use_textarea['corpus_copyright'] = true;
+$comment['corpus_database_colon'] = "HTML";
+$format['corpus_database_colon'] = "";
+$use_textarea['corpus_database_colon'] = false;
 
 $comment['corpus_copyright_title'] = "";
 $format['corpus_copyright_title'] = "";

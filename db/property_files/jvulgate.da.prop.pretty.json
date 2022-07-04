@@ -1,0 +1,225 @@
+{
+    "dbdescription": "Jeromes Vulgata (NT med udeladelser)",
+    "dbcopyright": "Baseret på data fra <a target=\"_blank\" href=\"https:\/\/www.hf.uio.no\/ifikk\/\">Institutt for filosofi, ide- og kunsthistorie og klassiske språk,<\/a> Oslo, Norge. Licenseret under en <a target=\"_blank\" href=\"https:\/\/creativecommons.org\/licenses\/by-nc-sa\/4.0\/\">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International licens<\/a>",
+    "emdrosobject": {
+        "word": {
+            "_objname": "Ord",
+            "frequency_rank": "Hyppighedsrang",
+            "lexeme_occurrences": "Forekomster",
+            "surface": "Tekst",
+            "lemma": "Leksem",
+            "lemma_variant": "Leksemvariant",
+            "lemma_with_variant": "Leksem (med variant)",
+            "psp": "Ordklasse",
+            "person": "Person",
+            "number": "Tal",
+            "case": "Kasus",
+            "gender": "Køn",
+            "tense": "Tid",
+            "voice": "Diatese",
+            "mood": "Modus",
+            "degree": "Grad",
+            "inflection": "Bøjelighed"
+        },
+        "sentence": {
+            "_objname": "Sætning"
+        }
+    },
+    "emdrostype": {
+        "psp_t": {
+            "adjective": "Adjektiv",
+            "adverb": "Adverbium",
+            "cardinal_numeral": "Kardinaltal",
+            "conjunction": "Konjunktion",
+            "demonstrative_pronoun": "Demonstrativt pronomen",
+            "foreign_word": "Fremmdord",
+            "indefinite_pronoun": "Ubestemt pronomen",
+            "interjection": "Interjektion",
+            "interrogative_adverb": "Interrogativt adverbium",
+            "interrogative_pronoun": "Interrogativt pronoun",
+            "noun": "Substantiv",
+            "ordinal_numeral": "Ordenstal",
+            "personal_pronoun": "Personligt pronomen",
+            "personal_reflexive_pronoun": "Personligt refleksivt pronomen",
+            "possessive_pronoun": "Possessivt pronomen",
+            "possessive_reflexive_pronoun": "Possessivt refleksivt pronomen",
+            "preposition": "Præposition",
+            "proper_noun": "Egennavn",
+            "reciprocal_pronoun": "Reciprokt pronomen",
+            "relative_adverb": "Relativt adverbium",
+            "relative_pronoun": "Relativt pronomen",
+            "subjunction": "Subjunktion",
+            "verb": "Verbum"
+        },
+        "person_t": {
+            "NA": "#1 -",
+            "first_person": "#2 1.",
+            "second_person": "#3 2.",
+            "third_person": "#4 3."
+        },
+        "number_t": {
+            "NA": "#1 -",
+            "singular": "#2 Singularis",
+            "plural": "#3 Pluralis"
+        },
+        "tense_t": {
+            "NA": "-",
+            "future": "Futurum",
+            "future_perfect": "Futurum perfektum",
+            "imperfect": "Imperfektum",
+            "perfect": "Perfektum",
+            "pluperfect": "Pluskvamperfektum",
+            "present": "Præsens"
+        },
+        "mood_t": {
+            "NA": "-",
+            "indicative": "Indikativ",
+            "subjunctive": "Konjunktiv",
+            "imperative": "Imperativ",
+            "infinitive": "Infinitiv",
+            "participle": "Participium",
+            "gerund": "Gerundium",
+            "gerundive": "Gerundiv",
+            "supine": "Supinum"
+        },
+        "voice_t": {
+            "NA": "-",
+            "active": "Activ",
+            "passive": "Passiv"
+        },
+        "gender_t": {
+            "NA": "-",
+            "masculine": "Maskulinum",
+            "feminine": "Femininum",
+            "neuter": "Neutrum",
+            "masculine_or_feminine": "Mask.\/fem.",
+            "masculine_or_neuter": "Mask.\/neut.",
+            "feminine_or_neuter": "Fem.\/neut.",
+            "masculine_or_feminine_or_neuter": "Mask.\/fem.\/neut."
+        },
+        "case_t": {
+            "NA": "#1 -",
+            "nominative": "#2 Nominativ",
+            "accusative": "#3 Akkusativ",
+            "genitive": "#4 Genitiv",
+            "dative": "#5 Dativ",
+            "ablative": "#6 Ablativ",
+            "vocative": "#7 Vokativ"
+        },
+        "degree_t": {
+            "NA": "",
+            "positive": "#1 Positiv",
+            "comparative": "#2 Komparativ",
+            "superlative": "#3 Superlativ"
+        },
+        "inflection_t": {
+            "non_inflecting": "Ubøjeligt",
+            "inflecting": "Bøjeligt"
+        }
+    },
+    "grammargroup": {
+        "word": {
+            "lexeme": "Leksem",
+            "morphology": "Morfologi",
+            "glosses": "Gloser"
+        }
+    },
+    "grammarmetafeature": {
+        "word": {
+            "pgn": "Person, køn, tal"
+        }
+    },
+    "grammarsubfeature": {
+        "word": {
+            "person": {
+                "first_person": "1",
+                "second_person": "2",
+                "third_person": "3",
+                "NA": "-"
+            },
+            "gender": {
+                "masculine": "M",
+                "feminine": "F",
+                "neuter": "N",
+                "masculine_or_feminine": "MF",
+                "masculine_or_neuter": "MN",
+                "feminine_or_neuter": "FN",
+                "masculine_or_feminine_or_neuter": "MFN",
+                "NA": "-"
+            },
+            "number": {
+                "plural": "Pl",
+                "singular": "Sg",
+                "NA": "-"
+            }
+        }
+    },
+    "universe": {
+        "book": {
+            "_label": "%s",
+            "Matthew": "Matthæus",
+            "Mark": "Markus",
+            "Luke": "Lukas",
+            "John": "Johannes",
+            "Acts": "Apostlenes Gerninger",
+            "Romans": "Romerbrevet",
+            "I_Corinthians": "1. Korintherbrev",
+            "II_Corinthians": "2. Korintherbrev",
+            "Galatians": "Galaterbrevet",
+            "Ephesians": "Efeserbrevet",
+            "Philippians": "Filipperbrevet",
+            "Colossians": "Kolossenserbrevet",
+            "I_Thessalonians": "1. Thessalonikerbrev",
+            "II_Thessalonians": "2. Thessalonikerbrev",
+            "I_Timothy": "1. Timotheusbrev",
+            "II_Timothy": "2. Timotheusbrev",
+            "Titus": "Titusbrevet",
+            "Philemon": "Filemonbrevet",
+            "Hebrews": "Hebræerbrevet",
+            "James": "Jakobsbrevet",
+            "I_Peter": "1. Petersbrev",
+            "II_Peter": "2. Petersbrev",
+            "I_John": "1. Johannesbrev",
+            "II_John": "2. Johannesbrev",
+            "III_John": "3. Johannesbrev",
+            "Jude": "Judasbrevet",
+            "Revelation": "Johannes' Åbenbaring"
+        },
+        "chapter": {
+            "_label": "Kapitel %s"
+        },
+        "verse": {
+            "_label": "Vers %s"
+        },
+        "reference": {
+            "_label": "%s %d,%d",
+            "Matthew": "Matt",
+            "Mark": "Mark",
+            "Luke": "Luk",
+            "John": "Joh",
+            "Acts": "ApG",
+            "Romans": "Rom",
+            "I_Corinthians": "1 Kor",
+            "II_Corinthians": "2 Kor",
+            "Galatians": "Gal",
+            "Ephesians": "Ef",
+            "Philippians": "Fil",
+            "Colossians": "Kol",
+            "I_Thessalonians": "1 Thess",
+            "II_Thessalonians": "2 Thess",
+            "I_Timothy": "1. Tim",
+            "II_Timothy": "2. Tim",
+            "Titus": "Tit",
+            "Philemon": "Filem",
+            "Hebrews": "Hebr",
+            "James": "Jak",
+            "I_Peter": "1 Pet",
+            "II_Peter": "2 Pet",
+            "I_John": "1 Joh",
+            "II_John": "2 Joh",
+            "III_John": "3 Joh",
+            "Jude": "Jud",
+            "Revelation": "Åb"
+        }
+    }
+}

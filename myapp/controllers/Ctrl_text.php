@@ -56,21 +56,22 @@ class Ctrl_text extends MY_Controller {
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
+            $copyrights = [];
+            $dbnames = [];
+            
             foreach ($db_books as $dbb) {
-                if ($dbb['name']==='ETCBC4')
-                    $copyright_ETCBC4 = $dbb['loc_copyright'];
-                elseif ($dbb['name']==='nestle1904')
-                    $copyright_nestle1904 = $dbb['loc_copyright'];
+                $dbnames[$dbb['name']] = $dbb['databaseName'];
+                $copyrights[$dbb['name']] = $dbb['loc_copyright'];
             }
 
             $center_text = $this->load->view('view_select_text',array('databases' => $db_books), true);
+            $right_text =  $this->load->view('view_copyrights',array('db_books' => $db_books), true);
 
             $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_a_passage_title'),
                                                       'left' => $this->lang->line('select_a_passage'),
                                                       'center' => $center_text,
                                                       'right_title' => $this->lang->line('corpus_copyright_title'),
-                                                      'right' => sprintf($this->lang->line('corpus_copyright'),
-                                                                         $copyright_ETCBC4, $copyright_nestle1904)));
+                                                      'right' => $right_text));
             $this->load->view('view_bottom');
         }
         catch (DataException $e) {

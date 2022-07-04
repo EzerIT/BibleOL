@@ -85,6 +85,7 @@
 <script>
   $(function() {
       var allSelectors = $('select[name^="book_"]');
+      var allCopyrights = $('.copyright');
 
       allSelectors.on('change', null, function(e) {
           var chaps = $($(this).find(":selected")[0]).data('chaps');
@@ -97,9 +98,13 @@
       $('input[name="db"]').on('change',null, function(e) {
           allSelectors.hide();
           $('select[name="book_' + $(this).prop('value') + '"]').show().trigger('change');
+          allCopyrights.hide();
+          $('.copyright_'+ $(this).prop('value')).show();
       });
 
       allSelectors.hide();
+      allCopyrights.hide();
       $('select[name="book_' + $('input[name="db"]:checked').prop('value') + '"]').show().trigger('change');
+      $('.copyright_'+ $('input[name="db"]:checked').prop('value')).show();
   });
 </script>
