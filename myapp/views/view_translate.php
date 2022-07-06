@@ -304,24 +304,38 @@ function make_trans_line_header($editing, $label, $field, $get_parms, $add_text)
                 break;
 
             case 'lexicon':
-                if ($get_parms['src_lang']=='greek') {
-                    echo '<th>',$this->lang->line('occurrences'),'</th>';
-                    echo '<th>',$this->lang->line('strongs'),'</th>';
-                    echo '<th>',$this->lang->line('lexeme'),'</th>';
-                    echo '<th>',$this->lang->line('first_occurrence'),'</th>';
-                    echo "<th>$language_selector $for_non_variant</th>";
-                    echo "<th>$long_target_lang $for_variant</th>";
-                    echo '<th>',$this->lang->line('modified'),'</th>';
-                }
-                else {
-                    echo '<th>',$this->lang->line('occurrences'),'</th>';
-                    echo '<th>',$this->lang->line('symbolic_lexeme'),'</th>';
-                    echo '<th>',$this->lang->line('lexeme'),'</th>';
-                    echo '<th>',$this->lang->line('stem'),'</th>';
-                    echo '<th>',$this->lang->line('first_occurrence'),'</th>';
-                    echo "<th>$language_selector $for_non_variant</th>";
-                    echo "<th>$long_target_lang $for_variant</th>";
-                    echo '<th>',$this->lang->line('modified'),'</th>';
+                switch ($get_parms['src_lang']) {
+                    case 'heb':
+                    case 'aram':
+                        echo '<th>',$this->lang->line('occurrences'),'</th>';
+                        echo '<th>',$this->lang->line('symbolic_lexeme'),'</th>';
+                        echo '<th>',$this->lang->line('lexeme'),'</th>';
+                        echo '<th>',$this->lang->line('stem'),'</th>';
+                        echo '<th>',$this->lang->line('first_occurrence'),'</th>';
+                        echo "<th>$language_selector $for_non_variant</th>";
+                        echo "<th>$long_target_lang $for_variant</th>";
+                        echo '<th>',$this->lang->line('modified'),'</th>';
+                        break;
+
+                    case 'greek':
+                        echo '<th>',$this->lang->line('occurrences'),'</th>';
+                        echo '<th>',$this->lang->line('strongs'),'</th>';
+                        echo '<th>',$this->lang->line('lexeme'),'</th>';
+                        echo '<th>',$this->lang->line('first_occurrence'),'</th>';
+                        echo "<th>$language_selector $for_non_variant</th>";
+                        echo "<th>$long_target_lang $for_variant</th>";
+                        echo '<th>',$this->lang->line('modified'),'</th>';
+                        break;
+
+                    case 'latin':
+                        echo '<th>',$this->lang->line('occurrences'),'</th>';
+                        echo '<th>',$this->lang->line('lexeme'),'</th>';
+                        echo '<th>',$this->lang->line('part_of_speech'),'</th>';
+                        echo '<th>',$this->lang->line('first_occurrence'),'</th>';
+                        echo "<th>$language_selector $for_non_variant</th>";
+                        echo "<th>$long_target_lang $for_variant</th>";
+                        echo '<th>',$this->lang->line('modified'),'</th>';
+                        break;
                 }
                 break;
         }
@@ -373,16 +387,10 @@ function make_trans_line_header($editing, $label, $field, $get_parms, $add_text)
         <?php break; ?>
 
         <?php case 'lexicon': ?>
-          <?php if ($get_parms['src_lang']=='greek'): ?>
-            <td class="centeralign"><?= $line->tally ?></td>
-            <td class="centeralign"><?= $line->strongs ?><?= $line->strongs_unreliable ? '?' : '' ?></td>
-            <td class="leftalign"><?= $line->lexeme ?></td>
-            <td class="leftalign">
-                 <a target="_blank" href="<?=
-                    site_url(sprintf("/text/show_text/nestle1904/%s/%d/%d",$line->firstbook,$line->firstchapter,$line->firstverse))
-                  ?>"><?= sprintf($books['_label'], $books[$line->firstbook],$line->firstchapter,$line->firstverse) ?></a>
-            </td>
-          <?php else: ?>
+
+          <?php switch ($get_parms['src_lang']):
+          case 'heb':
+          case 'aram': ?>
             <td class="centeralign"><?= $lastlex!=$line->lex ? $line->tally : '' ?></td>
             <td class="leftalign"><?= $lastlex!=$line->lex ? htmlspecialchars($line->lex) : '' ?></td>
             <td class="heb-default rtl"><?= $lastlex!=$line->lex ? $line->lexeme : '&nbsp;&nbsp;&#x2033;' ?></td>
@@ -393,7 +401,31 @@ function make_trans_line_header($editing, $label, $field, $get_parms, $add_text)
                     site_url(sprintf("/text/show_text/ETCBC4/%s/%d/%d",$line->firstbook,$line->firstchapter,$line->firstverse))
                   ?>"><?= sprintf($books['_label'], $books[$line->firstbook],$line->firstchapter,$line->firstverse) ?></a>
             </td>
-          <?php endif;  ?>
+            <?php break; ?>
+
+          <?php case 'greek': ?>
+            <td class="centeralign"><?= $line->tally ?></td>
+            <td class="centeralign"><?= $line->strongs ?><?= $line->strongs_unreliable ? '?' : '' ?></td>
+            <td class="leftalign"><?= $line->lexeme ?></td>
+            <td class="leftalign">
+                 <a target="_blank" href="<?=
+                    site_url(sprintf("/text/show_text/nestle1904/%s/%d/%d",$line->firstbook,$line->firstchapter,$line->firstverse))
+                  ?>"><?= sprintf($books['_label'], $books[$line->firstbook],$line->firstchapter,$line->firstverse) ?></a>
+            </td>
+            <?php break; ?>
+
+          <?php case 'latin': ?>
+            <td class="centeralign"><?= $line->tally ?></td>
+            <td class="leftalign"><?= $line->lexeme ?></td>
+            <td class="centeralign"><?= $line->part_of_speech ?></td>
+            <td class="leftalign">
+                 <a target="_blank" href="<?=
+                    site_url(sprintf("/text/show_text/jvulgate/%s/%d/%d",$line->firstbook,$line->firstchapter,$line->firstverse))
+                  ?>"><?= sprintf($books['_label'], $books[$line->firstbook],$line->firstchapter,$line->firstverse) ?></a>
+            </td>
+            <?php break; ?>
+
+          <?php endswitch;  ?>
 
           <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>
           <td class="leftalign">

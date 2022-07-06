@@ -135,6 +135,10 @@ a.nav-link:hover {
   font-family: "Gentium Plus Webfont" !important;
   font-size: 120% !important;
 }
+.latin-default {
+  font-family: "titillium" !important;
+  font-size: 120% !important;
+}
 div.hr-replacement {
   background-color: #adadad;
   height: 1px;
@@ -1231,6 +1235,8 @@ label {
   border: solid 2px #43B02A;
   color: #43B02A;
   background-color: white;
+  padding-left: 6px;
+  padding-right: 6px;
 }
 .btn.btn-gloss-selector-active {
   margin: 0;

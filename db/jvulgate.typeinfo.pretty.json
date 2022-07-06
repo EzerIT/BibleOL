@@ -14,7 +14,6 @@
             "ref": "string",
             "self": "id_d",
             "normalized": "string",
-            "raw_normalized": "string",
             "suffix": "string",
             "surface": "string",
             "lemma": "string",

@@ -5,6 +5,7 @@ function src_lang_short2long(string $srclang) {
       case 'heb':   return 'Hebrew';
       case 'aram':  return 'Aramaic';
       case 'greek': return 'greek';
+      case 'latin': return 'latin';
     }
     throw new DataException($this->lang->line('illegal_lang_code'));
   }

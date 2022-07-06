@@ -14,7 +14,7 @@ class Mod_translate extends CI_Model {
                          'ETCBC4-translit',
                          'nestle1904');
 
-    private $min_tally = 5;
+    private $min_tally = 5; // Only lexemes with a greater tally than this get into the frequency buttons
     
     public function __construct() {
         parent::__construct();
@@ -436,14 +436,15 @@ class Mod_translate extends CI_Model {
                 break;
 
           case 'latin':
-                $query = $this->db->select('lemma_with_variant lexeme,psp,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
+                $query = $this->db->select('lemma lexeme,part_of_speech,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
                     ->from('lexicon_latin c')
                     ->join("lexicon_latin_$lang_show s", 's.lex_id=c.id','left')
                     ->join("lexicon_latin_$lang_edit e", 'e.lex_id=c.id','left')
                     ->where('lemma >=',$from)
                     ->where('lemma <',$to)
-                    ->order_by('lexeme','psp')
+                    ->order_by('sortorder','part_of_speech')
                     ->get();
+                preprint("TESTED 1");
                 break;
         }
                 
@@ -563,8 +564,8 @@ class Mod_translate extends CI_Model {
                     ->get();
                 break;
 
-          case 'latin':
-                $query = $this->db->select('lemma_with_variant lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
+            case 'latin':
+                $query = $this->db->select('lemma lexeme,part_of_speech,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
                     ->from('lexicon_latin c')
                     ->join("lexicon_latin_$lang_show s", 's.lex_id=c.id','left')
                     ->join("lexicon_latin_$lang_edit e", 'e.lex_id=c.id','left')
@@ -572,6 +573,7 @@ class Mod_translate extends CI_Model {
                     ->order_by('tally DESC, sortorder ASC')
                     ->limit($gloss_count, $gloss_start)
                     ->get();
+                preprint("TESTED 2");
                 break;
         }
 
@@ -596,7 +598,7 @@ class Mod_translate extends CI_Model {
                 break;
                 
           case 'latin':
-                $query = $this->db->select('COUNT(`lemma_with_variant`) c')
+                $query = $this->db->select('COUNT(`lemma`) c')
                     ->where('tally >',$this->min_tally)
                     ->get("lexicon_latin");
                 break;
@@ -1093,10 +1095,10 @@ class Mod_translate extends CI_Model {
           case 'latin':
                 $header_array = array(array(null, 'Occurrences'),
                                       array(null, 'Lexeme'),
-                                      array(null, 'Variant'),
                                       array(null, "Part of speech"),
                                       array(null, 'Gloss'));
                 $header_array_old = array();
+                preprint("TESTED 4");
                 break;
 
           default:
@@ -1243,29 +1245,31 @@ class Mod_translate extends CI_Model {
                 $result[strlen($result)-1] = "\n"; // Replace final , with \n
 
                 if ($variant) {
-                    $query = $this->db->select('tally,lemma,lemma_variant,psp,gloss')
+                    $query = $this->db->select('tally,lemma,part_of_speech,gloss')
                         ->from("lexicon_{$src_language} c")
                         ->join("lexicon_{$src_language}_{$dst_lang}_{$variant}", 'lex_id=c.id')
-                        ->order_by('lemma,variant,psp')
+                        ->order_by('sortorder,part_of_speech')
                         ->get();
+                    preprint("TESTED 5");die;
                 }
                 else {
-                    $query = $this->db->select('tally,lemma,lemma_variant,psp,gloss')
+                    $query = $this->db->select('tally,lemma,part_of_speech,gloss')
                         ->from("lexicon_{$src_language} c")
                         ->join("lexicon_{$src_language}_{$dst_lang}", 'lex_id=c.id','left')
-                        ->order_by('lemma,lemma_variant,psp')
+                        ->order_by('sortorder,part_of_speech')
                         ->get();
+                    preprint("TESTED 6");
                 }
 
                 foreach ($query->result() as $row) {
                     $result .=
                         $row->tally .
                         ',"' . $row->lemma . '"' .
-                        ',' . $row->lemma_variant .
-                        ',"' . $row->psp . '"' .
+                        ',"' . $row->part_of_speech . '"' .
                         ',"' . str_replace('"', '""', $row->gloss) . '"' .
                         "\n";
-                }                    
+                }
+                preprint("TESTED 7");
                 break;
                 
         }
@@ -1360,13 +1364,13 @@ class Mod_translate extends CI_Model {
                     $query = $this->db
                         ->select('id')
                         ->where('lemma', $record[1])
-                        ->where('lemma_variant', $record[2])
-                        ->where('psp', $record[3])
+                        ->where('part_of_speech', $record[2])
                         ->get("lexicon_{$src_language}");
             
                     foreach ($query->result() as $row)
                         $toinsert[] = array('lex_id' => $row->id,
-                                            'gloss' => $record[4]);
+                                            'gloss' => $record[3]);
+                    preprint("TESTED 8");
                     break;
             }
         }
@@ -1415,6 +1419,7 @@ class Mod_translate extends CI_Model {
 
               case 'latinlex':
                     create_lexicon_table('latin', $lang_abb, null, true);
+                    preprint("TESTED 9");
                     break;
             }
         }

@@ -7,7 +7,7 @@ function stripSortIndex(string $s) {
 
 
 class Ctrl_translate extends MY_Controller {
-    public $gloss_count = 100;
+    public $gloss_count = 100;  // Number of glosses per frequency button
 
 
     public function __construct() {
@@ -227,7 +227,6 @@ class Ctrl_translate extends MY_Controller {
             $aram_glosses = $this->mod_translate->get_number_glosses('aram');
             $greek_glosses = $this->mod_translate->get_number_glosses('greek');
             $latin_glosses = $this->mod_translate->get_number_glosses('latin');
-
             
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_lex')));
@@ -659,8 +658,9 @@ class Ctrl_translate extends MY_Controller {
                 $trans_hebtgrammar_items[$t->abb] = array($this->mod_translate->count_grammar_translated('ETCBC4-translit',$t->abb),
                                                           $this->mod_translate->count_grammar_lines('ETCBC4-translit'));
                 $trans_greekgrammar_items[$t->abb] = array($this->mod_translate->count_grammar_translated('nestle1904',$t->abb),
-                $trans_latingrammar_items[$t->abb] = array($this->mod_translate->count_grammar_translated('jvulgate',$t->abb),
                                                            $this->mod_translate->count_grammar_lines('nestle1904'));
+                $trans_latingrammar_items[$t->abb] = array($this->mod_translate->count_grammar_translated('jvulgate',$t->abb),
+                                                           $this->mod_translate->count_grammar_lines('jvulgate'));
                 $trans_heblex_items[$t->abb] = array($this->mod_translate->count_lex_translated('Hebrew',$t->abb),
                                                      $this->mod_translate->count_lex_lines('Hebrew'));
                 $trans_aramlex_items[$t->abb] = array($this->mod_translate->count_lex_translated('Aramaic',$t->abb),
