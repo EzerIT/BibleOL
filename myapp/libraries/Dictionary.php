@@ -473,7 +473,7 @@ class Dictionary {
     }
  
  
-    /// Retrieves the text to display for a particular monad number. This excludes an optional suffix.
+    /// Retrieves the text to display for a particular monad number.
 	/// @param $monad The monad number.
 	/// @return The text to display for the specified monad number.
     public function getVisual($monad) {

@@ -40,6 +40,14 @@
                     "ignoreShow": true,
                     "ignoreRequest": true
                 },
+                "normalized": {
+                    "hideWord": true,
+                    "foreignText": true
+                },
+                "raw_normalized": {
+                    "hideWord": true,
+                    "foreignText": true
+                },
                 "lemma": {
                     "foreignText": true
                 },

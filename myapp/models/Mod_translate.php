@@ -25,7 +25,7 @@ class Mod_translate extends CI_Model {
 
         $this->load->helper(array('directory','translation'));
 
-        $this->lexicon_langs = array('heb'=>array(), 'aram'=>array(), 'greek'=>array());
+        $this->lexicon_langs = array('heb'=>array(), 'aram'=>array(), 'greek'=>array(), 'latin'=>array());
         $availtrans = get_available_translations();
         foreach ($availtrans as $t) {
             if ($t->heblex_enabled) {
@@ -34,6 +34,8 @@ class Mod_translate extends CI_Model {
             }
             if ($t->greeklex_enabled)
                 $this->lexicon_langs['greek'][$t->abb] = $this->lang->line($t->internal);
+            if ($t->latinlex_enabled)
+                $this->lexicon_langs['latin'][$t->abb] = $this->lang->line($t->internal);
         }
     }
 
@@ -432,6 +434,17 @@ class Mod_translate extends CI_Model {
                     ->order_by('sortorder')
                     ->get();
                 break;
+
+          case 'latin':
+                $query = $this->db->select('lemma_with_variant lexeme,psp,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
+                    ->from('lexicon_latin c')
+                    ->join("lexicon_latin_$lang_show s", 's.lex_id=c.id','left')
+                    ->join("lexicon_latin_$lang_edit e", 'e.lex_id=c.id','left')
+                    ->where('lemma >=',$from)
+                    ->where('lemma <',$to)
+                    ->order_by('lexeme','psp')
+                    ->get();
+                break;
         }
                 
         return $query->result();
@@ -499,6 +512,14 @@ class Mod_translate extends CI_Model {
         return array(array(), $l10n['universe']['reference']);
     }
 
+    public function get_localized_jvulgate() {
+        $this->load->library('db_config');
+
+        $this->db_config->init_config("jvulgate","jvulgate", $this->language, true);
+        $l10n = json_decode($this->db_config->l10n_json,true);
+        return array(array(), $l10n['universe']['reference']);
+    }
+
 
     public function get_frequent_glosses(string $src_lang, string $lang_edit, string $lang_show, int $gloss_start, int $gloss_count) {
         if (!empty($_SESSION['variant']))
@@ -541,6 +562,17 @@ class Mod_translate extends CI_Model {
                     ->limit($gloss_count, $gloss_start)
                     ->get();
                 break;
+
+          case 'latin':
+                $query = $this->db->select('lemma_with_variant lexeme,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
+                    ->from('lexicon_latin c')
+                    ->join("lexicon_latin_$lang_show s", 's.lex_id=c.id','left')
+                    ->join("lexicon_latin_$lang_edit e", 'e.lex_id=c.id','left')
+                    ->where('tally >',$this->min_tally)
+                    ->order_by('tally DESC, sortorder ASC')
+                    ->limit($gloss_count, $gloss_start)
+                    ->get();
+                break;
         }
 
         return $query->result();
@@ -561,6 +593,12 @@ class Mod_translate extends CI_Model {
                 $query = $this->db->select('COUNT(`lemma`) c')
                     ->where('tally >',$this->min_tally)
                     ->get("lexicon_greek");
+                break;
+                
+          case 'latin':
+                $query = $this->db->select('COUNT(`lemma_with_variant`) c')
+                    ->where('tally >',$this->min_tally)
+                    ->get("lexicon_latin");
                 break;
         }
         return $query->row()->c;
@@ -956,7 +994,7 @@ class Mod_translate extends CI_Model {
     }
 
     private function lex_common(string $src_lang, string &$src_language, array &$header_array, array &$header_array_old) {
-        // Creates $header_array as an array of arrays, where the first value is the Emdros name for
+        // Creates $header_array as an array of arrays. For Hebrew/Aramatic the first value is the Emdros name for
         // a verbal stem (or null), and the second value is the English heading for a column in the
         // CSV file
         $src_language = src_lang_short2long($src_lang);
@@ -1048,6 +1086,15 @@ class Mod_translate extends CI_Model {
                                       array(null, 'Lexeme'),
                                       array(null, "Strong's number"),
                                       array(null, "Strong's unreliable?"),
+                                      array(null, 'Gloss'));
+                $header_array_old = array();
+                break;
+
+          case 'latin':
+                $header_array = array(array(null, 'Occurrences'),
+                                      array(null, 'Lexeme'),
+                                      array(null, 'Variant'),
+                                      array(null, "Part of speech"),
                                       array(null, 'Gloss'));
                 $header_array_old = array();
                 break;
@@ -1190,6 +1237,37 @@ class Mod_translate extends CI_Model {
                 }                    
                 break;
                 
+          case 'latin':
+                foreach ($header_array as $h)
+                    $result .= '"' . $h[1] . '",';
+                $result[strlen($result)-1] = "\n"; // Replace final , with \n
+
+                if ($variant) {
+                    $query = $this->db->select('tally,lemma,lemma_variant,psp,gloss')
+                        ->from("lexicon_{$src_language} c")
+                        ->join("lexicon_{$src_language}_{$dst_lang}_{$variant}", 'lex_id=c.id')
+                        ->order_by('lemma,variant,psp')
+                        ->get();
+                }
+                else {
+                    $query = $this->db->select('tally,lemma,lemma_variant,psp,gloss')
+                        ->from("lexicon_{$src_language} c")
+                        ->join("lexicon_{$src_language}_{$dst_lang}", 'lex_id=c.id','left')
+                        ->order_by('lemma,lemma_variant,psp')
+                        ->get();
+                }
+
+                foreach ($query->result() as $row) {
+                    $result .=
+                        $row->tally .
+                        ',"' . $row->lemma . '"' .
+                        ',' . $row->lemma_variant .
+                        ',"' . $row->psp . '"' .
+                        ',"' . str_replace('"', '""', $row->gloss) . '"' .
+                        "\n";
+                }                    
+                break;
+                
         }
         return $result;
     }
@@ -1277,6 +1355,19 @@ class Mod_translate extends CI_Model {
                                                 'gloss' => $record[4]);
                     }
                     break;
+
+                case 'latin':
+                    $query = $this->db
+                        ->select('id')
+                        ->where('lemma', $record[1])
+                        ->where('lemma_variant', $record[2])
+                        ->where('psp', $record[3])
+                        ->get("lexicon_{$src_language}");
+            
+                    foreach ($query->result() as $row)
+                        $toinsert[] = array('lex_id' => $row->id,
+                                            'gloss' => $record[4]);
+                    break;
             }
         }
 
@@ -1321,6 +1412,10 @@ class Mod_translate extends CI_Model {
               case 'greeklex':
                     create_lexicon_table('greek', $lang_abb, null, true);
                     break;
+
+              case 'latinlex':
+                    create_lexicon_table('latin', $lang_abb, null, true);
+                    break;
             }
         }
         
@@ -1346,7 +1441,8 @@ class Mod_translate extends CI_Model {
                                                          'native'           => $native_name,
                                                          'iface_enabled'    => false,
                                                          'heblex_enabled'   => false,
-                                                         'greeklex_enabled' => false));
+                                                         'greeklex_enabled' => false,
+                                                         'latinlex_enabled' => false));
 
         if ($this->db->where('textgroup','users')->where('symbolic_name',$internal_name)->get('language_comment')->num_rows()==0)
             $this->db->insert('language_comment', array('textgroup'     => 'users',

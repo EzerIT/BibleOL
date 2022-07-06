@@ -343,7 +343,7 @@ class GrammarSelectionBox {
             if (leveli===0) { // Handling of words
 
                 // Set change handler for the checkbox for "word spacing".
-                // Although only Hebrew uses a word spacing checkbox, the mechanism is also used by Greek,
+                // Although only Hebrew uses a word spacing checkbox, the mechanism is also used by Greek and Latin
                 // because we use it to set up the inline-blocks for word grammar information.
                 this.wordSpaceBox = new util.WordSpaceFollowerBox(leveli);
 

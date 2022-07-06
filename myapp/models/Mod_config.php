@@ -8,12 +8,8 @@ class Mod_config extends CI_Model {
     public function alphabets() {
         $query = $this->db->select('id,name')->get('alphabet');
         $data = array();
-        foreach ($query->result() as $row) {
-            if ($row->name === 'latin')
-                continue;  // Currently, there is no Latin database
-
+        foreach ($query->result() as $row)
             $data[$row->id] = $row->name;
-        }
         return $data;
     }
 
@@ -55,6 +51,13 @@ class Mod_config extends CI_Model {
                 $data = array(array('Galatia SIL Webfont',true),
                               array('Gentium Plus Webfont',true),
                               array('Segoe UI', false),
+                              array('Times New Roman', false),
+                              array('Arial',false),
+                    );
+                break;
+
+          case 'latin':
+                $data = array(array('titillium',true),
                               array('Times New Roman', false),
                               array('Arial',false),
                     );

@@ -106,7 +106,6 @@ var util;
         }
         WordSpaceFollowerBox.prototype.implicit = function (val) {
             _super.prototype.implicit.call(this, val);
-            console.log("IMPLICIT", val, this.count, this);
             if (val && this.count == 1) {
                 $('.textblock').css('margin-left', '30px').removeClass('inline').addClass('inlineblock');
             }
@@ -405,7 +404,6 @@ function getSessionValue() {
 }
 function setSessionValue(sessionValue) {
     sessionStorage.setItem(configuration.propertiesName, JSON.stringify(sessionValue));
-    console.log("SETSESSIONVALUE", sessionValue);
 }
 function setOneSessionValue(key, value) {
     var sessionValue = getSessionValue();
@@ -656,16 +654,12 @@ var GrammarSelectionBox = (function () {
     GrammarSelectionBox.clearBoxes = function (force) {
         if (!inQuiz) {
             var sessionValue = getSessionValue();
-            console.log('SESSIONVALUE', sessionValue);
             if (force) {
                 for (var i in sessionValue) {
                     if (i === 'color-limit')
                         $('#color-limit').val(9999).trigger('change', 'manual');
-                    else {
-                        if (sessionValue[i]) {
-                            $('#' + i).prop('checked', false).trigger('change', 'manual');
-                            console.log('UNCHECK', i, sessionValue[i]);
-                        }
+                    else if (sessionValue[i]) {
+                        $('#' + i).prop('checked', false).trigger('change', 'manual');
                     }
                 }
                 sessionStorage.removeItem(configuration.propertiesName);
@@ -755,9 +749,8 @@ var Charset = (function () {
                 this.isRtl = false;
                 this.keyboardName = 'GR';
                 break;
-            default:
+            case 'latin':
                 this.foreignClass = 'latin';
-                this.transliteratedClass = 'latin';
                 this.isHebrew = false;
                 this.isRtl = false;
                 break;
@@ -2081,7 +2074,7 @@ var PanelQuestion = (function () {
                         .replace(/&gt;/g, '>')
                         .replace(/&quot;/g, '"')
                         .replace(/&amp;/g, '&');
-                    if (featset.foreignText || featset.transliteratedText) {
+                    if (configuration.charSet !== 'latin' && (featset.foreignText || featset.transliteratedText)) {
                         var answerArray = trimmedAnswer.split("");
                         var answerLetters_1 = [];
                         var additionalCons = [];

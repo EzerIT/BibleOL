@@ -16,7 +16,7 @@
 //      
 //         * One <span> element represents the word itself. It has the class "textdisplay" and a class
 //           representing the character set of the text. Additionally it may have classes representing
-//           Hebrew optional word spacing (see follow_class in the generateHtml method of the
+//           optional word spacing (see follow_class in the generateHtml method of the
 //           DisplaySingleMonadObject class below). The element also has a 'data-idd' attribute, whose
 //           value is the id_d of the object in the Emdros database.
 //
@@ -143,11 +143,12 @@ abstract class DisplayMonadObject {
 // lowest level, corresponding to a single monad in an Emdros database. This is typically a single
 // word.
 //
-// Hebrew is a special case here. In most languages, words are separated by spaces. In Hebrew, that
+// In Greek, words are separated by spaces, but in Hebrew and Latin, that
 // is not necessarily the case. The Hebrew Bible starts with the word "bereshit" ("in the
 // beginning"), but this is actually two words: "be" ("in") and "reshit" ("beginning"). When this
 // program shows the text without annotation, the words are strung together ("bereshit"), but when
-// annotation is included, the words are split ("be- reshit").
+// annotation is included, the words are split ("be- reshit"). Similarly, Latin "vobiscum" can be split
+// into "vobis-" and "cum".
 // 
 class DisplaySingleMonadObject extends DisplayMonadObject {
     // Is this DisplaySingleObject created as part of a quiz?

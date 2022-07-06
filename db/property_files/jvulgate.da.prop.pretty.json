@@ -7,6 +7,8 @@
             "frequency_rank": "Hyppighedsrang",
             "lexeme_occurrences": "Forekomster",
             "surface": "Tekst",
+            "normalized": "Normaliseret",
+            "raw_normalized": "Normaliseret, små bogstaver",
             "lemma": "Leksem",
             "lemma_variant": "Leksemvariant",
             "lemma_with_variant": "Leksem (med variant)",

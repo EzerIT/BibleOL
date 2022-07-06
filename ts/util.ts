@@ -262,7 +262,7 @@ namespace util {
     // WordSpaceFollowerBox class
     //
     // This is a subclass of FollowerBox which is used to show/not show spacing between all Hebrew
-    // words.
+    // and Latin words.
     //
     export class WordSpaceFollowerBox extends FollowerBox {
         

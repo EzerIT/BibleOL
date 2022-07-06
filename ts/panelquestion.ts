@@ -975,7 +975,7 @@ class PanelQuestion {
                         .replace(/&amp;/g, '&');   // Unescape HTML characters in correctAnswer
 
 
-                    if (featset.foreignText || featset.transliteratedText) {
+                    if (configuration.charSet!=='latin' && (featset.foreignText || featset.transliteratedText)) {
                         let answerArray           : string[] = trimmedAnswer.split(""); // Array of chars of the correct answer
                         let answerLetters         : string[] = [];                      // Array with only unique letters of correct answer
                         let additionalCons        : string[] = [];                      // Array with consonants to be added to answerLetters

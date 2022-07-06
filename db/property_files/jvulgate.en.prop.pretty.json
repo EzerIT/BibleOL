@@ -7,6 +7,8 @@
             "frequency_rank": "Frequency rank",
             "lexeme_occurrences": "Occurrences",
             "surface": "Text",
+            "normalized": "Normalized",
+            "raw_normalized": "Normalized, lower case",
             "lemma": "Lexeme",
             "lemma_variant": "Lexeme variant",
             "lemma_with_variant": "Lexeme (with variant)",

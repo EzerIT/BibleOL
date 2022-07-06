@@ -49,9 +49,8 @@ class Charset {
             this.keyboardName = 'GR';
             break;
 
-        default:
+        case 'latin':
             this.foreignClass = 'latin';
-            this.transliteratedClass = 'latin';
             this.isHebrew = false;
             this.isRtl = false;
             break;

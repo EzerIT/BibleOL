@@ -11,9 +11,31 @@ class Migration_Vulgate extends CI_Migration {
     }
 
 	public function up() {
-		$this->dbforge->add_column('translation_languages', array('latinlex_enabled' => array('type'=>'tinyint(1)',
-                                                                                              'null' => false,
-                                                                                              'default' => 0)));
+//    	$this->dbforge->add_column('translation_languages', array('latinlex_enabled' => array('type'=>'tinyint(1)',
+//                                                                                              'null' => false,
+//                                                                                              'default' => 0)));
+
+
+//        echo "Create {$this->db->dbprefix}lexicon_latin\n";
+// 
+//        $this->dbforge->add_field(['id'             => ['type' => 'INT',         'null' => false, 'auto_increment' => true ],
+//                                   'lex'            => ['type' => 'VARCHAR(45)', 'null' => false],
+//                                   'lex_variant'    => ['type' => 'INT',         'null' => false ],
+//                                   'part_of_speech' => ['type' => 'VARCHAR(35)', 'null' => false],
+//                                   'tally'          => ['type' => 'INT',         'null' => false ],
+//                                   'firstbook'      => ['type' => 'TINYTEXT',    'null' => false],
+//                                   'firstchapter'   => ['type' => 'INT',		 'null' => false],
+//    							   'firstverse'		=> ['type' => 'INT',		 'null' => false]]);
+//        $this->dbforge->add_key('id', true);
+//        $this->dbforge->add_key('lex');
+//        $this->dbforge->add_key('lex_variant');
+//        $this->dbforge->add_key('part_of_speech');
+//        $this->dbforge->create_table('lexicon_latin');
+
+
+        echo "Remember to add data to {$this->db->dbprefix}lexicon_latin\n";
+
+        
         die;
     }
     
