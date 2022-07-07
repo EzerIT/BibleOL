@@ -25,6 +25,10 @@
 
 // Modified for Hebrew and Greek by Claus Tøndering 2013-04-05
 
+// Modified to work in a <body> with display:flex. This has been done by
+// replacing getElementsByTagName("body") with getElementsByClassName("card-body").
+// Claus Tøndering 2022-07-07
+
 var Detector = function(lang) {
     // a font will be compared against all the three default fonts.
     // and if it doesn't match all 3 then that font is not available.
@@ -43,7 +47,8 @@ var Detector = function(lang) {
     //we test using 72px font size, we may use any size. I guess larger the better.
     var testSize = '72px';
 
-    var h = document.getElementsByTagName("body")[0];
+    //var h = document.getElementsByTagName("body")[0];
+    var h = document.getElementsByClassName("card-body")[0];
 
     // create a SPAN in the document to get the width of the text we use to test
     var s = document.createElement("span");
