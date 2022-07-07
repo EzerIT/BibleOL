@@ -40,7 +40,8 @@ fi
               $2_db_localize           \
               $2_lexicon_Aramaic       \
               $2_lexicon_Hebrew        \
-              $2_lexicon_greek
+              $2_lexicon_greek         \
+              $2_lexicon_latin
 
     # Tables for which some data should be dumped:
     mysqldump --lock-all-tables --quote-names --extended-insert --create-options --where='user_id=0' --events "$1" \
@@ -60,6 +61,7 @@ fi
     # $2_lexicon_Hebrew_de
     # $2_lexicon_Hebrew_en
     # $2_lexicon_greek_en
+    # $2_lexicon_latin_en
 
 ) | sed -e 's/ AUTO_INCREMENT=[0-9]*\b//g' > "$3"
 

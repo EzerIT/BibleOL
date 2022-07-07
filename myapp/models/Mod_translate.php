@@ -442,9 +442,8 @@ class Mod_translate extends CI_Model {
                     ->join("lexicon_latin_$lang_edit e", 'e.lex_id=c.id','left')
                     ->where('lemma >=',$from)
                     ->where('lemma <',$to)
-                    ->order_by('sortorder','part_of_speech')
+                    ->order_by('sortorder,lexeme,part_of_speech')
                     ->get();
-                preprint("TESTED 1");
                 break;
         }
                 
@@ -573,7 +572,6 @@ class Mod_translate extends CI_Model {
                     ->order_by('tally DESC, sortorder ASC')
                     ->limit($gloss_count, $gloss_start)
                     ->get();
-                preprint("TESTED 2");
                 break;
         }
 
@@ -1098,7 +1096,6 @@ class Mod_translate extends CI_Model {
                                       array(null, "Part of speech"),
                                       array(null, 'Gloss'));
                 $header_array_old = array();
-                preprint("TESTED 4");
                 break;
 
           default:
@@ -1248,17 +1245,15 @@ class Mod_translate extends CI_Model {
                     $query = $this->db->select('tally,lemma,part_of_speech,gloss')
                         ->from("lexicon_{$src_language} c")
                         ->join("lexicon_{$src_language}_{$dst_lang}_{$variant}", 'lex_id=c.id')
-                        ->order_by('sortorder,part_of_speech')
+                        ->order_by('sortorder,lemma,part_of_speech')
                         ->get();
-                    preprint("TESTED 5");die;
                 }
                 else {
                     $query = $this->db->select('tally,lemma,part_of_speech,gloss')
                         ->from("lexicon_{$src_language} c")
                         ->join("lexicon_{$src_language}_{$dst_lang}", 'lex_id=c.id','left')
-                        ->order_by('sortorder,part_of_speech')
+                        ->order_by('sortorder,lemma,part_of_speech')
                         ->get();
-                    preprint("TESTED 6");
                 }
 
                 foreach ($query->result() as $row) {
@@ -1269,7 +1264,6 @@ class Mod_translate extends CI_Model {
                         ',"' . str_replace('"', '""', $row->gloss) . '"' .
                         "\n";
                 }
-                preprint("TESTED 7");
                 break;
                 
         }
@@ -1370,7 +1364,6 @@ class Mod_translate extends CI_Model {
                     foreach ($query->result() as $row)
                         $toinsert[] = array('lex_id' => $row->id,
                                             'gloss' => $record[3]);
-                    preprint("TESTED 8");
                     break;
             }
         }
@@ -1419,7 +1412,6 @@ class Mod_translate extends CI_Model {
 
               case 'latinlex':
                     create_lexicon_table('latin', $lang_abb, null, true);
-                    preprint("TESTED 9");
                     break;
             }
         }

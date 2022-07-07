@@ -108,7 +108,7 @@
                   <?php foreach ($avail_fonts[$alph] as $font): ?>
                   {name:'<?= $font[0] ?>', webfont:<?= $font[1]?'true':'false' ?>},
                   <?php endforeach; ?>
-              ];console.log(fonts);
+              ];
               fs.detectFonts(fonts,
                              '<?= $personal_font[$alph] ?>',
                              '<?= get_radio_setting($alph.'choice', $choice_values[$alph]) ?>');

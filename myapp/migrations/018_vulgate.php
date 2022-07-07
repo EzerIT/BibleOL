@@ -11,9 +11,9 @@ class Migration_Vulgate extends CI_Migration {
     }
 
 	public function up() {
-//    	$this->dbforge->add_column('translation_languages', array('latinlex_enabled' => array('type'=>'tinyint(1)',
-//                                                                                              'null' => false,
-//                                                                                              'default' => 0)));
+		$this->dbforge->add_column('translation_languages', array('latinlex_enabled' => array('type'=>'tinyint(1)',
+																							  'null' => false,
+																							  'default' => 0)));
 
 
 		echo "Create {$this->db->dbprefix}lexicon_latin\n";
@@ -30,12 +30,17 @@ class Migration_Vulgate extends CI_Migration {
 		$this->dbforge->add_key('lemma');
 		$this->dbforge->add_key('part_of_speech');
 		$this->dbforge->create_table('lexicon_latin');
+ 
+ 
+		echo "Remember to add data to {$this->db->dbprefix}lexicon_latin\n";
 
 
-        echo "Remember to add data to {$this->db->dbprefix}lexicon_latin\n";
+		$this->db->where('name','latin')->update('alphabet',
+											 array('sample'=>'liber generationis Iesu Christi filii David filii Abraham'));
 
-        
-        die;
+
+        $this->db->where('user_id',0)->where('alphabet_id',4)->update('font',
+                                                                      array('font_family'=>'Titillium, Segoe UI, Arial, sans-serif'));
     }
     
 	public function down()

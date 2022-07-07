@@ -60,6 +60,10 @@ $comment['lang_greek'] = "";
 $format['lang_greek'] = "";
 $use_textarea['lang_greek'] = false;
 
+$comment['lang_latin'] = "";
+$format['lang_latin'] = "";
+$use_textarea['lang_latin'] = false;
+
 $comment['lang_heb'] = "";
 $format['lang_heb'] = "";
 $use_textarea['lang_heb'] = false;

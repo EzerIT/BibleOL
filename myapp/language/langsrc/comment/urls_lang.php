@@ -84,6 +84,10 @@ $comment['invalid_link'] = "";
 $format['invalid_link'] = "";
 $use_textarea['invalid_link'] = false;
 
+$comment['latin_glosses'] = "";
+$format['latin_glosses'] = "";
+$use_textarea['latin_glosses'] = false;
+
 $comment['lexeme'] = "";
 $format['lexeme'] = "";
 $use_textarea['lexeme'] = false;
@@ -107,6 +111,10 @@ $use_textarea['missing_link'] = false;
 $comment['no_greek'] = "";
 $format['no_greek'] = "";
 $use_textarea['no_greek'] = false;
+
+$comment['no_latin'] = "";
+$format['no_latin'] = "";
+$use_textarea['no_latin'] = false;
 
 $comment['select_gloss_range'] = "HTML";
 $format['select_gloss_range'] = "keep_blanks";

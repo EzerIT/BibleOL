@@ -71,7 +71,7 @@
                     "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i",
                     "indirdb": "mysql",
                     "sql_command": "SELECT gloss FROM {PRE}lexicon_latin la JOIN {PRE}lexicon_latin_LANG lang ON lang.lex_id=la.id WHERE lemma='%s' and part_of_speech='%s'",
-                    "sql_command_variant": "SELECT COALESCE(lang_var.gloss,lang.gloss) gloss FROM {PRE}lexicon_latin la JOIN {PRE}lexicon_latin_LANG lang ON lang.lex_id=la.id LEFT JOIN {PRE}lexicon_latin_LANG_VARIANT lang_var ON lang_var.lex_id=gr.id  WHERE lemma='%s' and part_of_speech='%s'",
+                    "sql_command_variant": "SELECT COALESCE(lang_var.gloss,lang.gloss) gloss FROM {PRE}lexicon_latin la JOIN {PRE}lexicon_latin_LANG lang ON lang.lex_id=la.id LEFT JOIN {PRE}lexicon_latin_LANG_VARIANT lang_var ON lang_var.lex_id=la.id  WHERE lemma='%s' and part_of_speech='%s'",
                     "sqlargs": [
                         "lemma_with_variant",
                         "psp"

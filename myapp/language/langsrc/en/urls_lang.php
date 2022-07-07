@@ -21,12 +21,14 @@ $lang['icon_l-icon-picture'] = "Picture";
 $lang['icon_l-icon-speaker'] = "Sound";
 $lang['illegal_lang_code'] = "Illegal language code";
 $lang['invalid_link'] = "Invalid link provided";
+$lang['latin_glosses'] = "Latin glosses";
 $lang['lexeme'] = "Lexeme";
 $lang['link'] = "Link";
 $lang['link_colon'] = "Link:";
 $lang['link_icon'] = "Icon:";
 $lang['missing_link'] = "No link provided";
 $lang['no_greek'] = "Sorry, no Greek at present.";
+$lang['no_latin'] = "Sorry, no Latin at present.";
 $lang['select_gloss_range'] = "<p>Select the language and the range of glosses for which you wish to add or modify URLs.</p>\n"
         . "<p>You can either select the %d most frequent glosses (they will be displayed sorted by frequency),\n"
         . "or you can select glosses alphabetically.</p>";

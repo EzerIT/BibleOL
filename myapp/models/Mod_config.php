@@ -57,7 +57,7 @@ class Mod_config extends CI_Model {
                 break;
 
           case 'latin':
-                $data = array(array('titillium',true),
+                $data = array(array('Titillium',true),
                               array('Times New Roman', false),
                               array('Arial',false),
                     );

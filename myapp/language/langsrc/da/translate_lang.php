@@ -16,6 +16,7 @@ $lang['items_text_group'] = "Antal emner i denne tekstgruppe: %d.";
 $lang['lang_aram'] = "Aramæisk";
 $lang['lang_greek'] = "Græsk";
 $lang['lang_heb'] = "Hebraisk";
+$lang['lang_latin'] = "Latin";
 $lang['lexeme'] = "Leksem";
 $lang['lex_variant'] = "(Variant: %s)";
 $lang['malformed_url'] = "Forkert URL";
