@@ -115,6 +115,8 @@ class Mod_statistics extends CI_Model {
         $data_display = array();
         $data_request = array();
 
+        $this->db->trans_start();
+
         foreach ($this->input->post('questions') as $question) {
             $time += $question['end_time'] - $question['start_time'];
             $this->db->insert('sta_question', array('quizid' => $quizid,
@@ -191,6 +193,7 @@ class Mod_statistics extends CI_Model {
         $this->db->where('id',$quizid)->update('sta_quiz',array('end' => $time,
                                                                          'grading' => $this->input->post('grading')=='true' ? 1 : 0,
                                                                          'tot_questions' => sizeof($query->result()) ));
+        $this->db->trans_complete();
     }
 
     // Get the number of features requested by a quiz
