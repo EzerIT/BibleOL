@@ -236,7 +236,7 @@ pdftitle={Bible Online Learner: Users's Guide}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering}
-\date{16 May 2022}
+\date{11 July 2022}
 
 \makeindex
 
@@ -269,7 +269,7 @@ The document is made available under a Creative Commons Attribution 4.0 Internat
 \textbf{You should read this chapter.}
 \plainbreak{3}
 
-Bible Online Learner (or ``Bible OL'' for short) is a web-based computer program that supports
+Bible Online Learner (or ``Bible~OL'' for short) is a web-based computer program that supports
 reading and learning biblical Hebrew and Greek. Bible Online Learner provides these features:
 
 
@@ -286,13 +286,13 @@ reading and learning biblical Hebrew and Greek. Bible Online Learner provides th
 %%%%%%%%%%%%%%%%%%%% How To Read This Document %%%%%%%%%%%%%%%%%%%%
 \section{How To Read This Document}
 
-This documents describes how to use Bible Online Learner (Bible OL). The document consists of three
+This documents describes how to use Bible Online Learner (Bible~OL). The document consists of three
 parts:
 
 \begin{itemize}
-\item General information for everyone who wants to use Bible OL.
-\item Information specifically for students who want to use the exercises provided in Bible OL.
-\item Information specifically for teachers who want to create exercises in Bible OL.
+\item General information for everyone who wants to use Bible~OL.
+\item Information specifically for students who want to use the exercises provided in Bible~OL.
+\item Information specifically for teachers who want to create exercises in Bible~OL.
 \end{itemize}
 
 At the start of most chapters you will find a line indicating if that chapter is relevant for you.
@@ -306,10 +306,10 @@ On page \pageref{sec-index} you will find an index, which may help you find your
 \textbf{You should read this chapter.}
 \plainbreak{3}
 
-You access Bible OL through a web browser using an appropriate
+You access Bible~OL through a web browser using an appropriate
 URL\footnote{Most users will use \url{https://bibleol.3bmoodle.dk}.}.
 
-When you access the Bible OL main web site using a computer, you will see an introductory page,
+When you access the Bible~OL main web site using a computer, you will see an introductory page,
 at the top of which there is a menu. If you are using a smartphone, you will see a small rectangle with
 three horizontal lines at the top right of the screen. Tap that rectangle to display the menu.
 
@@ -325,7 +325,7 @@ The menu has five items:
 \end{itemize}
 
 
-If you have a user account (see Section XXX), you can select Login from the User Access menu to
+If you have a user account (see Chapter \ref{chap-logging-in}), you can select Login from the User Access menu to
 access your personal features of the system. Once you have logged, in, a new menu item appears:
 
 \begin{itemize}
@@ -341,7 +341,7 @@ access your personal features of the system. Once you have logged, in, a new men
 \textbf{You should read this chapter.}
 \plainbreak{3}
 
-The most basic operation of Bible OL is that of viewing the Hebrew or Greek text of the Bible.
+The most basic operation of Bible~OL is that of viewing the Hebrew or Greek text of the Bible.
 From the \emph{Text and Exercises} menu select \emph{Display text.} This will take you to a web page
 displaying the dialog of Figure \ref{fig-selecttext}.
 \begin{figure}
@@ -381,7 +381,7 @@ To see \HOrG{#1}{\bibleref{Genesis}{1}{1-7}}{\bibleref{Luke}{2}{1-5}}, fill out 
 \item Chapter: \HOrG{#1}{1}{2}
 \item First verse: 1
 \item Last verse: \HOrG{#1}{7}{5}
-\item Show link icons: Don’t mark this. (See Section XXX.)
+\item Show link icons: Don’t mark this. (See Section \ref{sec-resource-web}.)
 \end{itemize}
 
 Finally, click the \emph{Display} button. This will show you \HOrG{#1}{\bibleref{Genesis}{1}{1-7}}{\bibleref{Luke}{2}{1-5}} in \hebgrlong. (See Figure \ref{fig-\hebgr-text-a}.)
@@ -393,7 +393,7 @@ Finally, click the \emph{Display} button. This will show you \HOrG{#1}{\bibleref
 \end{figure}
 
 \HOrG{#1}{The small icon to the right of the first verse is a link to the same text at the SHEBANQ website.
-(See Section XXX.)}
+(See Section \ref{sec-shebanq}.)}
 
 
 \subsection{Viewing \hebgrlong{} Grammar Information}\label{sec-\hebgr-grammar-info}
@@ -527,7 +527,26 @@ one. For more information about word frequency, see section XXX.
   case. For example, in the grammar information box of Figure \ref{fig-\hebgr-text-b} you can see
   that the lexeme \heb{היה} is translated into English as ``be, happen, become, occur''. But if you
   open the ``MyView'' selector and choose \emph{Word} and \emph{Glosses} and \emph{English}, only
-  the first gloss, ``be'', will be shown between the lines of Hebrew text. }{} } \FloatBlock
+  the first gloss, ``be'', will be shown between the lines of Hebrew text. }{}
+
+\HOrG{#1}{\subsection{Viewing a Transliterated Hebrew text}\label{sec-heb-translit}\index{transliterated
+    Hebrew|see {Hebrew, transliterated}}\index{Hebrew!transliterated}
+
+You can choose to view a Hebrew text in Latin letters rather Hebrew letters. You do this by
+specifying the corpus ``Hebrew (ETCBC4, Transliterated, OT)'' in the dialog in figure
+\ref{fig-selecttext}. The first two of Genesis~1 will look at show in Figure
+\ref{fig-heb-translit}. You will notice that this text uses a number of variations of Latin letters plus
+the special characters ʔ (not to be confused with a question mark) and ʕ. These two characters
+correspond to the Hebrew characters \heb{א} and \heb{ע}, respectively.
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-heb-translit.png}
+  \end{center}
+  \caption{\bibleref{Genesis}{1}{1-2} in transliterated Hebrew.}\label{fig-heb-translit}
+\end{figure}}{}
+}
+
+\FloatBlock
 
 \viewexampleI{h}
 
@@ -538,17 +557,17 @@ one. For more information about word frequency, see section XXX.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Logging In %%%%%%%%%%%%%%%%%%%%
-\chapter{Logging In}
+\chapter{Logging In}\label{chap-logging-in}
 
 \textbf{You should read this chapter.}
 \plainbreak{3}
 
-You can use Bible OL to display biblical text and run some exercises without logging in to the
+You can use Bible~OL to display biblical text and run some exercises without logging in to the
 system. But if you want to customize the way text is displayed and if you want to take full
-advantage of the system, you should have an account and log in when you use Bible OL.
+advantage of the system, you should have an account and log in when you use Bible~OL.
 
 %%%%%%%%%%%%%%%%%%%% Creating An Account %%%%%%%%%%%%%%%%%%%%
-\section{Creating An Account}\index{account}\index{creating an account|see {account, creating}}
+\section{Creating An Account}\index{account!creating}\index{creating an account|see {account, creating}}
 
 You can create an account yourself, or you can have your teacher create an account for you.
 
@@ -570,7 +589,7 @@ When you are logged in using an account, you get a number of extra possibilities
   and grade your progress.
 \end{itemize}
 
-When you are logged in, an extra menu item appears on the Bible OL website: ``My Data''. This menu
+When you are logged in, an extra menu item appears on the Bible~OL website: ``My Data''. This menu
 has these items:
 
 \begin{itemize}
@@ -996,15 +1015,242 @@ not display gender information.
 \end{figure}
 
 
+\subsection{Typing Nothing}
+
+Occasionally you come across a question whose answer is \emph{nothing}.
+
+Imagine, for example, a quiz about the English language in which you are required to type the plural
+ending of various words. What is the plural ending of the word ``cow''? It is, of course, ``s'' since
+the plural of ``cow'' is ``cows''. But what is the plural ending of the word ``sheep''? Since the plural
+of ``sheep'' is ``sheep'', the plural ending is ``~'' -- nothing!
+
+How do you type nothing? If you leave an input field empty, Bible~OL will think that you have not
+yet answered the question. The correct way to indicate that an answer is an empty text is to type a
+single dash (hyphen, minus) ``-'' in the answer field.
+
+As an example, consider question in Figure \ref{fig-empty-answer}. Here, Bible Ol asks for the
+pronominal suffix of the word \heb{כְבֹ֥וד}; but that word has no pronominal suffix, so the correct
+answer is an empty text, which you indicate by typing a dash by pressing the character button
+indicated by the red arrow in the illustration.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-empty-answer.png}
+  \end{center}
+  \caption{When the answer to a question is an empty text, type a dash.}\label{fig-empty-answer}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Extra chapters %%%%%%%%%%%%%%%%%%%%
+
+\chapter{Managing Exercises}\index{exercises!managing}\index{managing exercises|see {exercises, managing}}
+
+\textbf{Read this chapter if you are a teacher who needs to create and manage exercises for students.}
+\plainbreak{3}
+
+Note: In order to manage exercises, you must be logged in with a username that has ``facilitator''
+privileges.
+
+
+\section{Creating Exercises}\index{exercises!creating}\index{creating exercises|see {exercises, creating}}
+
+Before we get into the details of how to create exercises, we need to discuss two important concepts
+used by Bible~OL:
+
+\begin{description}
+\item[Sentence units] A sentence can be seen as consisting of a set of \emph{sentence units}. By far
+  the most common thing is to see a sentence as a set of words, but you could also see the sentence
+  as comprised of clauses or phrases. Thus a sentence unit can be a \emph{word}, a \emph{clause}, a
+  \emph{phrase}, or perhaps something else. As you read on, you will rarely go wrong if you assume
+  that ``sentence unit'' means ``word''.
+\item[Features] A sentence unit has various \emph{features.} A feature has a name and a value. For
+  example, a word can have a feature called \emph{part of speech} with the value \emph{noun} and a
+  feature called \emph{gender} with the value \emph{masculine.} An important feature is called \emph{text,}
+  which simply refers to the actual characters making up the word; for example, the \emph{text} feature may
+  have the value \emph{``elephant''.}
+\end{description}
+
+You should also realise that in the context of Bible~OL, an exercise is actually a description of
+how the program should generate questions. Internally, an exercise is stored in a file whose
+filename ends with ``.3et''.
+
+An exercise specifies:
+
+\begin{itemize}
+\item The database that is to be used (typically, the Old or the New Testament).
+\item The Bible passages from which the program chooses the exercise sentences (for example, the
+  minor prophets).
+\item The criteria that the program should use when choosing sentences.
+\item The criteria that the program should use when choosing the sentence units (typically, words)
+  that form the actual questions.
+\item The sentence unit features whose values are shown to the user.
+\item The sentence unit features whose values are requested from the user.
+\end{itemize}
+
+In the following examples, we shall create a few exercises. In order to do this, you must be logged
+in with a username that has ``facilitator'' privileges.
+
+
+\newcommand{\exerciseexampleII}[1]{%
+%
+\renewcommand{\hebgr}{\HOrG{#1}{heb}{gr}}
+\renewcommand{\hebgrlong}{\HOrG{#1}{Hebrew}{Greek}}
+%
+\section{Creating a Simple \hebgrlong{} Exercise}\label{sec-create-simple-\hebgr-exercise}
+
+We shall create an exercise in the conjugation of \hebgrlong{} verbs in the \HOrG{#1}{qal perfect
+  forms}{present tense}. We shall ask the user to identify the \HOrG{#1}{person, gender, and number of
+the perfect forms of various qal verbs.}{person and number of various present tense verb forms.}
+
+From the \emph{Administration} menu select \emph{Manage exercises} then navigate to a folder where
+you want to create your exercises. This should preferably be a folder used only by you and your
+team. At the bottom of the page, click the \emph{Create exercise} button. A dialog will appear in
+which you select the text database on which you want to base your exercise. Here, you should select
+``\HOrG{#1}{Hebrew (ETCBC4, OT)}{Greek (Nestle 1904, NT)}'' and press the \emph{OK} button.
+
+You will now se a web page that looks like Figure \ref{fig-\hebgr-create-i}. At the top you'll see
+five tabs, labelled ``Description'', ``Passages'', ``Sentences'', ``Sentence Units'', and
+``Features''. On the left, you can see the name of the text database you are using.
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-create-i.png}
+  \end{center}
+  \caption{Initial window when creating an exercise.}\label{fig-\hebgr-create-i}
+\end{figure}
+
+
+The ``Description'' tab is currently displayed, and below it you see a text editing field in which
+you can write information and instructions to the students who will be running this exercise. You
+may, for example, write something like what you see in Figure \ref{fig-\hebgr-create-ii}.
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-create-ii.png}
+  \end{center}
+  \caption{Filling out the ``Description'' field.}\label{fig-\hebgr-create-ii}
+\end{figure}
+}
+
+\exerciseexampleII{h}
+\exerciseexampleII{g}
+
+\FloatBlock
+
+
+
+
+\chapter{Viewing Statistics}
+\chapter{User and Class Management}
+\chapter{Creating Translations}
+\chapter{Exams}
+\chapter{User Preferences} % Profile and font prefs.
+\chapter{Variants}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Complementary Websites %%%%%%%%%%%%%%%%%%%%
+\chapter{Complementary Websites}
+
+\textbf{Read this chapter if you want to.}
+\plainbreak{3}
+
+
+A few additional websites complement the function of Bible~OL: The resource website and the SHEBANQ
+website.
+
+
+
+%%%%%%%%%%%%%%%%%%%% The Resource Website %%%%%%%%%%%%%%%%%%%%
+\section{The Resource Website}\label{sec-resource-web}\index{resource website|hyperit}
+
+The resource web site is a collection of photos from the Middle East. Many of them relate to events
+and places described in the Bible. The photos have descriptive texts that contain Bible references.
+The URL of the resource website is \url{https://resources.3bmoodle.dk}.
+
+Bible~OL can use information from the resource website to add picture links to Bible passages. If a
+photo in the resource website refers to, for example, \bibleref{Exodus}{3}{2}, and a user ticks the
+``Show link icons'' checkbox when displaying Exodus chapter 3, a green ``P'' icon will appear in the
+text next to verse 2 (see Figure \ref{fig-exodusiii}). Clicking on the icon will cause the web
+browser to display the relevant photo. If there are more than one photo, the icon will be blue
+rather than green.
+
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{exodus3.png}
+  \end{center}
+  \caption{The green P icon is a hyperlink to a photo that is relevant to \bibleref{Exodus}{3}{2}.}\label{fig-exodusiii}
+\end{figure}
+
 
 \begin{comment}
+
 TODO:
 
-Specialities: Typing nothing; entering glosses as answers; gloss limits.
+In addition to the pictures, the resource website may also provide URLs associated with various
+Bible verses. These URLs are configured in the resource website but are otherwise unrelated to the
+functioning of that website. The URLs are intended to identify videos, documents, or other resources
+that may relevant for studying a particular verse.
 
-Udskift billedet af filer i ETCBC4/demo or Nestle 1904/demo så man kan se øvelserne ``demo1'' og ``demo2''.
+Information about these URLs is also retrieved by the cron job above. By accessing the URL
+\url{https://resources.3bmoodle.dk/jsonurls.php}, the \emph{Ctrl\_pic2db} controller receives a JSON
+object from the resources website containing information about the URLs and the Bible verses to
+which they refer. Bible~OL stores this information in the \emph{bible\_urls}%
+\index{bible\_urls table}
+table in the user database\index{user database} (see Section \ref{sec-bible-urls}). Links to these
+urls are displayed as ``V'', ``D'', or ``U'' icons.
 
 \end{comment}
+
+
+%%%%%%%%%%%%%%%%%%%% The SHEBANQ Website %%%%%%%%%%%%%%%%%%%%
+\section{The SHEBANQ Website}\label{sec-shebanq}\index{SHEBANQ}
+
+SHEBANQ (System for HEBrew text: ANnotations for Queries and markup) is a website that uses the
+ETCBC4 database for displaying text and grammar information for the Hebrew Bible. The URL is
+\url{https://shebanq.ancient-data.org}.
+
+When Bible~OL displays a text from the Old Testament, an icon in the upper right corner of the text
+area provides a link to the same chapter at the SHEBANQ website. A similar link to Bible~OL is found
+on the SHEBANQ website. Also, when a teacher is creating an exercise in Bible~OL, they can import
+MQL queries from the SHEBANQ website (see Section XXX \textbackslash{}ref\{sec-shebanq-import\}).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Appendix: ETCBC4 Details %%%%%%%%%%%%%%%%%%%%
+\appendix
+\chapter{ETCBC4 Details}\label{app-etcbc}\index{ETCBC4|hyperit}
+
+The \emph{ETCBC4} Emdros database contains the Hebrew and Aramaic text for the Old
+Testament.\index{Old Testament}
+
+The database comes from the \emph{Eep Talstra Center for Bible and Computer}%
+\index{Eep Talstra Center for Bible and Computer}
+and is made available under a Creative Commons Attribution-NonCommercial 4.0 International
+License\index{license}.\footnote{\url{https://creativecommons.org/licenses/by-nc/4.0}.} When
+describing the database, a text similar to this one should be used: ``The database itself can be
+found through this persistent identifier: \texttt{urn:nbn:nl:ui:13-048i-71}.'' The identifier should
+be a hyperlink pointing to
+\url{https://www.persistent-identifier.nl/?identifier=urn:nbn:nl:ui:13-048i-71}.
+
+Prior to using this database in Bible~OL, I have added additional features to the information from
+its original creators. More details about this is given in Section XXX \textbackslash{}ref\{etcbc-origin\}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Appendix: Nestle1904 Details %%%%%%%%%%%%%%%%%%%%
+\chapter{Nestle1904 Details}\label{app-nestle}\index{nestle1904|hyperit}
+
+The \emph{nestle1904} database is in the public domain\index{license} and derives from the 1904
+version of Nestle's Greek New Testament\index{New Testament} text.
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Index %%%%%%%%%%%%%%%%%%%%
