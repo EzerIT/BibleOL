@@ -72,8 +72,7 @@ class Answer {
                 break;
             }
             
-            case COMPONENT_TYPE.comboBox1:
-            case COMPONENT_TYPE.comboBox2: {
+            case COMPONENT_TYPE.comboBox: {
                 // Define the correct answer
                 let correctAnswer: string = this['answerSws']['internal'];
                 let radios: JQuery = $(this.c).find('input');
@@ -173,8 +172,7 @@ class Answer {
                 }
                 break;
 
-            case COMPONENT_TYPE.comboBox1:
-            case COMPONENT_TYPE.comboBox2:
+            case COMPONENT_TYPE.comboBox:
                 // Check if the user selected the correct option
                 
                 // Note: At this point we use the intenal (language independent) name for the value.

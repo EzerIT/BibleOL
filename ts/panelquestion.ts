@@ -901,7 +901,7 @@ class PanelQuestion {
 
                         let quiz_div : JQuery             = $('<div class="quizitem"></div>'); // Used to ancor the checkbox buttons and to add additional data
                         let optArray : JQuery[]           = [];                                // All the multiple choice options
-                        let cwyn     : ComponentWithYesNo = new ComponentWithYesNo(quiz_div, COMPONENT_TYPE.comboBox2); // Result indicator
+                        let cwyn     : ComponentWithYesNo = new ComponentWithYesNo(quiz_div, COMPONENT_TYPE.comboBox); // Result indicator
                         let charSetClass : string         = configuration.charSet=='transliterated_hebrew' ? 'hebrew_translit' : configuration.charSet;
 
                         cwyn.addChangeListener();
@@ -1450,8 +1450,7 @@ class PanelQuestion {
 
                         let quiz_div : JQuery   = $('<div class="quizitem"></div>');
                         let optArray  : JQuery[] = []; // All the multiple choice options
-                        let cwyn      : ComponentWithYesNo = new ComponentWithYesNo(quiz_div, COMPONENT_TYPE.comboBox1); // Result indicator
-
+                        let cwyn      : ComponentWithYesNo = new ComponentWithYesNo(quiz_div, COMPONENT_TYPE.comboBox); // Result indicator
                         cwyn.addChangeListener();
 
                         let correctAnswerFriendly : string =          // Localized correct answer:

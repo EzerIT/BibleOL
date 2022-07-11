@@ -1342,9 +1342,8 @@ var COMPONENT_TYPE;
     COMPONENT_TYPE[COMPONENT_TYPE["textField"] = 0] = "textField";
     COMPONENT_TYPE[COMPONENT_TYPE["textFieldWithVirtKeyboard"] = 1] = "textFieldWithVirtKeyboard";
     COMPONENT_TYPE[COMPONENT_TYPE["textFieldForeign"] = 2] = "textFieldForeign";
-    COMPONENT_TYPE[COMPONENT_TYPE["comboBox1"] = 3] = "comboBox1";
-    COMPONENT_TYPE[COMPONENT_TYPE["comboBox2"] = 4] = "comboBox2";
-    COMPONENT_TYPE[COMPONENT_TYPE["checkBoxes"] = 5] = "checkBoxes";
+    COMPONENT_TYPE[COMPONENT_TYPE["comboBox"] = 3] = "comboBox";
+    COMPONENT_TYPE[COMPONENT_TYPE["checkBoxes"] = 4] = "checkBoxes";
 })(COMPONENT_TYPE || (COMPONENT_TYPE = {}));
 var ComponentWithYesNo = (function () {
     function ComponentWithYesNo(elem, elemType) {
@@ -1455,8 +1454,7 @@ var Answer = (function () {
                 $(this.c).find('.inputshow').text(this.answerString);
                 break;
             }
-            case COMPONENT_TYPE.comboBox1:
-            case COMPONENT_TYPE.comboBox2: {
+            case COMPONENT_TYPE.comboBox: {
                 var correctAnswer_1 = this['answerSws']['internal'];
                 var radios = $(this.c).find('input');
                 radios.each(function () {
@@ -1519,8 +1517,7 @@ var Answer = (function () {
                         isCorrect_1 = this.answerString.match(re) !== null;
                     }
                     break;
-                case COMPONENT_TYPE.comboBox1:
-                case COMPONENT_TYPE.comboBox2:
+                case COMPONENT_TYPE.comboBox:
                     var selectedOption = $(this.c).find("input:checked");
                     if (selectedOption.attr('value') != null) {
                         var userAnswerSws = $(this.c).find("input:checked").parent().data('sws');
@@ -2038,7 +2035,7 @@ var PanelQuestion = (function () {
                     else {
                         var quiz_div_1 = $('<div class="quizitem"></div>');
                         var optArray = [];
-                        var cwyn = new ComponentWithYesNo(quiz_div_1, COMPONENT_TYPE.comboBox2);
+                        var cwyn = new ComponentWithYesNo(quiz_div_1, COMPONENT_TYPE.comboBox);
                         var charSetClass = configuration.charSet == 'transliterated_hebrew' ? 'hebrew_translit' : configuration.charSet;
                         cwyn.addChangeListener();
                         for (var valix in suggestions) {
@@ -2416,7 +2413,7 @@ var PanelQuestion = (function () {
                     else {
                         var quiz_div_2 = $('<div class="quizitem"></div>');
                         var optArray = [];
-                        var cwyn = new ComponentWithYesNo(quiz_div_2, COMPONENT_TYPE.comboBox1);
+                        var cwyn = new ComponentWithYesNo(quiz_div_2, COMPONENT_TYPE.comboBox);
                         cwyn.addChangeListener();
                         var correctAnswerFriendly = getFeatureValueFriendlyName(featType, correctAnswer, false, false);
                         var hasAddedOther = false;

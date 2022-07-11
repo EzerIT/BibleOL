@@ -16,8 +16,7 @@ enum COMPONENT_TYPE {
     textField,                 // Text field
     textFieldWithVirtKeyboard, // Text field with virtual keyboard
     textFieldForeign,          // Text field with individual keys for typing foreign characters
-    comboBox1,                 // An ordinary combobox (for Latin text)
-    comboBox2,                 // A styled combobox (for Hebrew text)
+    comboBox,                  // A combobox
     checkBoxes,                // A collection of several checkboxes
 }
 
@@ -154,10 +153,7 @@ class ComponentWithYesNo {
     // Returns the component displayed with this object.
     //
     public getComp() : JQuery {
-//        if (this.elemType === COMPONENT_TYPE.comboBox2)
-//            return $(this.elem.children()[0]); // A comboBox2 is a <div> containing a <select>. We return the <select>.
-//        else
-            return this.elem;
+        return this.elem;
     }
 
     //------------------------------------------------------------------------------------------
