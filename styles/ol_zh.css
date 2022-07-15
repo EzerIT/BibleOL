@@ -865,9 +865,6 @@ span.inputshow.greek {
   font-family: 'titillium';
   font-weight: 600;
 }
-td span {
-  display: flex;
-}
 /* Slideshow container */
 #quizcontainer {
   max-width: 100%;
