@@ -234,9 +234,9 @@ pdftitle={Bible Online Learner: Users's Guide}
 \newcommand{\hebgrlong}{}   % Redefined in document
 
 %%% Front matter %%%
-\title{Bible Online Learner:\\Technical Documentation}
+\title{Bible Online Learner:\\Users' Guide}
 \author{Claus Tøndering}
-\date{11 July 2022}
+\date{15 July 2022}
 
 \makeindex
 
@@ -942,21 +942,13 @@ The exercises presented in the previous sections illustrate how most exercises w
 teacher can vary certain details about the way exercises look to the student. These details are
 listed in the following sections.
 
-\subsection{Fixed Exercises}\index{order of exercises}\index{exercises!fixed}\index{exercises!order}
 
-Normally, the sentences for exercises are chosen at random from a set of Bible passages. This means
-that every time you run an exercise, you may see new sentences.
+\subsection{Disabling ``Locate''}\label{sec-disabling-locate}\index{disabling locate}\index{locate}
 
-However, an exercise may be constructed to display a fixed set of questions in a fixed order. If
-that is the case, you will always see the same sentences every time you run the exercise.
+A teacher may disable the ``Locate'' button in an exercise.
 
-Furthermore, the student can normally choose between seeing 5, 10, or 25 questions in an exercise;
-but a teach may restrict this number so that only a fixed number of questions can be shown.
 
-If either the order of questions or the number of questions is fixed, the students cannot themselves
-choose the Bible passages for the exercise.
-
-\subsection{Sentence Context}\index{sentence context}\index{context}
+\subsection{Sentence Context}\label{sec-sentence-context}\index{sentence context}\index{context}
 
 Normally, an exercise will show you one sentence at a time. However, an exercise may be constructed
 to display a few sentences surrounding the sentence in question. For example, Figure
@@ -972,9 +964,19 @@ concerned with.
 \end{figure}
 
 
-\subsection{Disabling ``Locate''}\index{disabling locate}\index{locate}
+\subsection{Fixed Exercises}\label{sec-fixed-exercises}\index{order of exercises}\index{exercises!fixed}\index{exercises!order}
 
-A teacher may disable the ``Locate'' button in an exercise.
+Normally, the sentences for exercises are chosen at random from a set of Bible passages. This means
+that every time you run an exercise, you may see new sentences.
+
+However, an exercise may be constructed to display a fixed set of questions in a fixed order. If
+that is the case, you will always see the same sentences every time you run the exercise.
+
+Furthermore, the student can normally choose between seeing 5, 10, or 25 questions in an exercise;
+but a teacher may restrict this number so that only a fixed number of questions can be shown.
+
+If either the order of questions or the number of questions is fixed, the students cannot themselves
+choose the Bible passages for the exercise.
 
 
 \subsection{Hints}\index{hints}
@@ -1091,17 +1093,23 @@ An exercise specifies:
 In the following examples, we shall create a few exercises. In order to do this, you must be logged
 in with a username that has ``facilitator'' privileges.
 
+Section \ref{sec-create-heb-exercises} gives examples of how to create Hebrew exercises. Section
+\ref{sec-create-gr-exercises} gives examples of how to create Greek exercises. (You only need to read one
+of these sections.)
 
 \newcommand{\exerciseexampleII}[1]{%
 %
 \renewcommand{\hebgr}{\HOrG{#1}{heb}{gr}}
 \renewcommand{\hebgrlong}{\HOrG{#1}{Hebrew}{Greek}}
 %
-\section{Creating a Simple \hebgrlong{} Exercise}\label{sec-create-simple-\hebgr-exercise}
+\section{Creating \hebgrlong{} Exercises}\label{sec-create-\hebgr-exercises}
 
-We shall create an exercise in the conjugation of \hebgrlong{} verbs in the \HOrG{#1}{qal perfect
-  forms}{present tense}. We shall ask the user to identify the \HOrG{#1}{person, gender, and number of
-the perfect forms of various qal verbs.}{person and number of various present tense verb forms.}
+\subsection{A Simple \hebgrlong{} Exercise}\label{sec-create-simple-\hebgr-exercise}
+
+We shall create an exercise in the conjugation of \hebgrlong{} verbs in the \HOrG{#1}{qatal form of
+  the qal stem}{present tense}. We shall ask the user to identify the \HOrG{#1}{person, gender, and
+  number of the perfect forms of various qal verbs.}{person and number of various present tense verb
+  forms.}
 
 From the \emph{Administration} menu select \emph{Manage exercises} then navigate to a folder where
 you want to create your exercises. This should preferably be a folder used only by you and your
@@ -1119,19 +1127,211 @@ five tabs, labelled ``Description'', ``Passages'', ``Sentences'', ``Sentence Uni
   \caption{Initial window when creating an exercise.}\label{fig-\hebgr-create-i}
 \end{figure}
 
+\subsubsection{The ``Description'' Tab}\index{description tab@``Description'' tab}\index{tabs!``Description''}
 
-The ``Description'' tab is currently displayed, and below it you see a text editing field in which
-you can write information and instructions to the students who will be running this exercise. You
-may, for example, write something like what you see in Figure \ref{fig-\hebgr-create-ii}.
+The ``Description'' tab is displayed when you start editing an exercise. Below the row of tabs, you
+see a text editing field in which you can write information and instructions to the students who
+will be running this exercise. You may, for example, write something like what you see in Figure
+\ref{fig-\hebgr-description-tab}.
 \begin{figure}
   \begin{center}
-    \includegraphics[width=0.7\textwidth]{fig-\hebgr-create-ii.png}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-description-tab.png}
   \end{center}
-  \caption{Filling out the ``Description'' field.}\label{fig-\hebgr-create-ii}
+  \caption{Filling out the description field.}\label{fig-\hebgr-description-tab}
 \end{figure}
+
+\subsubsection{The ``Passages'' Tab}\index{passages tab@``Passages'' tab}\index{tabs!``Passages''}
+
+Select the ``Passages'' tab and indicate which part of the \HOrG{#1}{Old}{New} Testament you want to
+use for the exercise. (See Figure \ref{fig-\hebgr-passages-tab}.) When generation questions for a
+student, Bible OL will choose sentences from the passages you specify here. The more passages you
+select, the more sentences Bible OL can choose from; but the more sentences there are, the longer it will
+take the program to generate the exercise. Therefore it may be a good idea to limit the selection. On
+most computers a selection comprising the entire New Testament is no problem; but if the selection
+contains the entire Old Testament, the program may appear somewhat slow.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-passages-tab.png}
+  \end{center}
+  \caption{Chosing passages and other exercise options.}\label{fig-\hebgr-passages-tab}
+\end{figure}
+
+The passages you specify here are, in general, only a suggestion for the student; as we have seen in
+Section \ref{sec-\hebgr-exer-i}, the passage selection can normally be altered by the student when
+the exercise is run.
+
+You can click on the small plus signs next to the names of the books of the Bible. This will allow
+you to specify individual chapters or verses to use for the exercise.
+
+Below the passage selector, you can specify a few specialities about the exercise:
+
+\begin{itemize}
+\item Should the ``Locate'' button be shown or not? (See Section \ref{sec-disabling-locate}.)
+\item How many sentences of context should be shown before and after the relevant sentence? (See
+  Section \ref{sec-sentence-context}.)
+\item Should the number of questions be fixed, or should the student be able to choose? (See Section
+  \ref{sec-fixed-exercises}.)
+\item Should the order of questions be random or fixed? (See Section \ref{sec-fixed-exercises}.)
+\end{itemize}
+
+If either the number of questions or the order of questions is fixed, the students cannot themselves
+choose the Bible passages for the exercise.
+
+
+\subsubsection{The ``Sentences'' Tab}\index{sentences tab@``Sentences'' tab}\index{tabs!``Sentences''}
+
+Select the ``Sentences'' tab. You will see a dialog like the one in Figure
+\ref{fig-\hebgr-sentences-tab}. Here you can indicate the criteria which the program is to use when
+choosing sentences for the exercise.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-sentences-tab.png}
+  \end{center}
+  \caption{Specifying sentence units and their features.}\label{fig-\hebgr-sentences-tab}
+\end{figure}
+
+
+We shall return to the first two lines (``Use this for sentence unit selection'' and ``MQL statement
+to select sentences'') later. Make sure that ``Friendly feature selector'' is marked.
+
+Next to ``Sentence unit type'' there is a drop-down list where you can choose between the types of
+sentence units available for exercises in this database. These are ``Word'', ``Subphrase'', ``Phrase
+atom'', ``Phrase'', ``Clause atom'', and ``Clause''. Here you select the type of object that the
+exercise should be about. In most cases the value should be ``Word''.
+
+Next to ``Feature'' there is another drop-down list. Here you can choose between the various
+features available for the selected sentence unit type. For words, the features include ``Part of
+speech'', ``Gender'', ``Number'' etc. Try selecting various features and note how the rest of the
+window changes. When you choose a particular feature, Bible OL shows you the values that this
+feature may have. Finally press the ``Clear'' button.
+
+The ``Clear'' button erases all the criteria.
+
+\begin{samepage}
+For the exercise we are creating here, we need sentences containing words that...
+
+\begin{itemize}[\null]
+  \item ...are verbs,
+  \item ...have the stem qal,
+  \item ...are in the qatal tense.
+\end{itemize}
+\end{samepage}
+
+This can be specified thus:
+
+\begin{itemize}
+  \item Set ``Sentence unit type'' to ``Word''.
+  \item Select the feature ``Part of speech'' and tick ``Verb''.
+  \item Select the feature ``Stem'' and tick ``Qal''.
+  \item Select the feature ``Tense'' and tick ``Perfect''.
+\end{itemize}
+
+(Actually, in this example it is superfluous to require that the word should be a verb; if a word is
+marked as qal perfect, it is always a verb.)
+
+The window now looks like Figure \ref{fig-\hebgr-sentences-tab-ii}.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-sentences-tab-ii.png}
+  \end{center}
+  \caption{Specifying qatal tense.}\label{fig-\hebgr-sentences-tab-ii}
+\end{figure}
+
+
+(You may have noticed that as you chose feature values, the text next to ``MQL statement to select
+sentences'' changed automatically. MQL is a command language that is used to specify how to search
+the database, and the statement here is the one actually used for your search. But feel free to
+ignore this for now. You may later read more about MQL in section XXX.)
+
+Bible OL now knows how to find sentences for the exercises. It will choose the sentences
+based on the criteria we have just specified. But now things get a bit more complicated: When Bibel
+OL generates exercises, it actually has to make two choices: First it must choose some interesting
+sentences; thereafter it must choose some interesting sentence units (words) within the chosen
+sentences.
+
+Often, the criteria used for these two choices are the same. In the current example, this is indeed
+the case: First, we want to search the database for sentences that contain qal qatal verbs;
+thereafter, we want to search each sentence for words that are qal qatal verbs. So in this
+example, the words have to be chosen using exactly the same criteria as the sentences. The tick mark
+next to ``Use this for sentence unit selection'' instructs Bible OL to use the same criteria when
+selecting the interesting words. Try removing the tick next to ``Use this for sentence unit
+selection'' and the set it again; you will then see that the ``Sentence Units'' tab is only active
+when the tick mark is not set. (Be sure to leave the mark on.)
+
+
+\subsubsection{The ``Features'' Tab}\index{features tab@``Features'' tab}\index{tabs!``Features''}
+
+Select the ``Features'' tab. You will see a dialog like the one in Figure
+\ref{fig-\hebgr-features-tab}. Here you can indicate what information you will provide to the
+student, and what information the student should provide.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-features-tab-i.png}
+  \end{center}
+  \caption{Part of the contents of the ``Features'' tab.}\label{fig-\hebgr-features-tab-i}
+\end{figure}
+
+When you first open this tab, all the marks will be in the ``Don’t care'' column. In the rightmost
+column you will see all the features that are available for the sentence unit called ``Word'' in
+this database. The first feature is always ``Text'' and represents the actual word in the Bible
+verse.
+
+Here you can choose which features to show to the student and which features the student must
+provide. In this example we want to show the actual word and ask the student to identify its gender,
+person, and number. Place a mark in the column ``Show'' next to ``Text'' and in the column
+``Request'' next to ``Person'', ``Gender'', and ``Number'' as shown in Figure \ref{fig-\hebgr-features-tab-ii}.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-features-tab-ii.png}
+  \end{center}
+  \caption{Show the text and request the person, gender, and number.}\label{fig-\hebgr-features-tab-ii}
+\end{figure}
+
+
+When students run the exercise, they will be able to display all the features by pointing to the
+individual words with their mouse. If you want to prevent students from seeing certain features,
+indicate that in the ``Don’t show'' column. The ``Request'' features are never visible to the
+students.
+
+A few of the features allow you to tick the ``Multiple choice'' column. If you do so, Bible OL will
+provide the student with a menu of choices for that feature; if you remove the tick under ``Multiple
+choice'', the student must type the answer as text.
+
+The ``Features'' tab is described in more detail in section XXX.
+
+\subsubsection{Saving the Exercise}
+
+Click the ``Save'' button at the bottom of the page to save the exercise. You will be asked to
+provide a name for the exercise.
+
+\subsection{Running and Refining the Exercise}
+
+Go to the \emph{Text and Exercise} > \emph{Exercises} menu and find the exercise you just created.
+You can now run it by clicking, for example, on the number \emph{5} under the heading \emph{Select
+  number of questions using preset passages}. You may then, for example, get the sentence from
+\bibleref{Genesis}{3}{1} which is shown in Figure \ref{fig-\hebgr-run-exercise-i}.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{fig-\hebgr-run-exercise-i.png}
+  \end{center}
+  \caption{Show the text and request the person, gender, and number.}\label{fig-\hebgr-run-exercise-i}
+\end{figure}
+
+HERTIL
+
 }
 
+
+
+
 \exerciseexampleII{h}
+\FloatBlock
 \exerciseexampleII{g}
 
 \FloatBlock
