@@ -96,7 +96,7 @@ class PanelTemplQuizObjectSelector extends PanelTemplMql {
         // 2nd row: Contains the MQL selector radio button and the MQL <textarea>
         row = $('<tr></tr>');
         cell = $('<td></td>');
-        cell.append(this.rbMql, this.rbMqlLabel);
+        cell.append(this.rbMql, '&nbsp;', this.rbMqlLabel);
         row.append(cell);
         
         cell = $('<td></td>');
@@ -107,7 +107,7 @@ class PanelTemplQuizObjectSelector extends PanelTemplMql {
         // 3rd row: Contains the friendly feature selector radio button
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
-        cell.append(this.rbFriendly, this.rbFriendlyLabel);
+        cell.append(this.rbFriendly, '&nbsp;', this.rbFriendlyLabel);
         row.append(cell);
         table.append(row);
 

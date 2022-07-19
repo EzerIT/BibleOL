@@ -159,7 +159,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         // 1st row: Contains the 'Use for sentence unit selection' checkbox
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
-        cell.append(this.cbUseForQo, this.cbUseForQoLabel);
+        cell.append(this.cbUseForQo, '&nbsp;', this.cbUseForQoLabel);
         row.append(cell);
         table.append(row);
 
@@ -167,7 +167,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         row = $('<tr></tr>');
         cell = $('<td></td>');
        
-        cell.append(this.rbMql, this.rbMqlLabel);
+        cell.append(this.rbMql, '&nbsp;', this.rbMqlLabel);
         row.append(cell);
         
         cell = $('<td></td>');
@@ -187,7 +187,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         // 4th row: Contains the friendly feature selector radio button
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
-        cell.append(this.rbFriendly, this.rbFriendlyLabel);
+        cell.append(this.rbFriendly, '&nbsp;', this.rbFriendlyLabel);
         row.append(cell);
         table.append(row);
 

@@ -1355,7 +1355,7 @@ abstract class PanelTemplMql {
         }
 
         let sel : JQuery = $('<span></span>');
-        sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
+        sel.append(butEquals, '=', '&nbsp;', butDiffers, '&#x2260;', '&nbsp;', butMatches, '~');
         this.groups[key].append(sel);
 
         // Set handler for radio button changes
@@ -1566,7 +1566,7 @@ abstract class PanelTemplMql {
         }
 
         let sel : JQuery = $('<span></span>');
-        sel.append(butEquals, '=', butDiffers, '&#x2260;');
+        sel.append(butEquals, '=', '&nbsp;', butDiffers, '&#x2260;');
         this.groups[key].append(sel);
 
         // Set handler for radio button changes

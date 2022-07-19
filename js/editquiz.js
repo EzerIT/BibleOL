@@ -928,7 +928,7 @@ var PanelTemplMql = (function () {
                 break;
         }
         var sel = $('<span></span>');
-        sel.append(butEquals, '=', butDiffers, '&#x2260;', butMatches, '~');
+        sel.append(butEquals, '=', '&nbsp;', butDiffers, '&#x2260;', '&nbsp;', butMatches, '~');
         this.groups[key].append(sel);
         sel.on('click', sfh, function (e) {
             var v = $(e.target).val();
@@ -1020,7 +1020,7 @@ var PanelTemplMql = (function () {
                 break;
         }
         var sel = $('<span></span>');
-        sel.append(butEquals, '=', butDiffers, '&#x2260;');
+        sel.append(butEquals, '=', '&nbsp;', butDiffers, '&#x2260;');
         this.groups[key].append(sel);
         sel.on('click', efh, function (e) {
             var v = $(e.target).val();
@@ -1199,12 +1199,12 @@ var PanelTemplSentenceSelector = (function (_super) {
         var cell;
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
-        cell.append(this.cbUseForQo, this.cbUseForQoLabel);
+        cell.append(this.cbUseForQo, '&nbsp;', this.cbUseForQoLabel);
         row.append(cell);
         table.append(row);
         row = $('<tr></tr>');
         cell = $('<td></td>');
-        cell.append(this.rbMql, this.rbMqlLabel);
+        cell.append(this.rbMql, '&nbsp;', this.rbMqlLabel);
         row.append(cell);
         cell = $('<td></td>');
         cell.append(this.mqlText);
@@ -1219,7 +1219,7 @@ var PanelTemplSentenceSelector = (function (_super) {
         table.append(row);
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
-        cell.append(this.rbFriendly, this.rbFriendlyLabel);
+        cell.append(this.rbFriendly, '&nbsp;', this.rbFriendlyLabel);
         row.append(cell);
         table.append(row);
         row = $('<tr></tr>');
@@ -1298,7 +1298,7 @@ var PanelTemplQuizObjectSelector = (function (_super) {
         table.append(row);
         row = $('<tr></tr>');
         cell = $('<td></td>');
-        cell.append(this.rbMql, this.rbMqlLabel);
+        cell.append(this.rbMql, '&nbsp;', this.rbMqlLabel);
         row.append(cell);
         cell = $('<td></td>');
         cell.append(this.mqlText);
@@ -1306,7 +1306,7 @@ var PanelTemplQuizObjectSelector = (function (_super) {
         table.append(row);
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
-        cell.append(this.rbFriendly, this.rbFriendlyLabel);
+        cell.append(this.rbFriendly, '&nbsp;', this.rbFriendlyLabel);
         row.append(cell);
         table.append(row);
         row = $('<tr></tr>');
