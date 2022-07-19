@@ -6,92 +6,105 @@ function make_anchor1(string $url, string $txt) {
 }
 
 /* For dropdown menu item */
-function make_anchor2(string $url, string $txt) {
-    return anchor(site_url($url), get_instance()->lang->line($txt), 'class="dropdown-item"');
+function make_anchor2(string $url, string $txt, $attributes=[]) {
+    $attributes['class'] = 'dropdown-item';
+    return anchor(site_url($url), get_instance()->lang->line($txt), $attributes);
 }
 
 $this->lang->load('menu', $this->language);
 
 $ix = 0;
-$head[] = make_anchor1('', 'home');
+$head = [];
 
-if (!$this->mod_users->is_logged_in_noaccept()) {
-    // The user has not logged in, or has logged in and accepted policy
-    $ix = count($head);
-    $head[] = $this->lang->line('text_and_exercises');
-    $content[$ix][] = make_anchor2('text/select_text', 'display_text');
-    $content[$ix][] = make_anchor2('text/select_quiz', 'exercises');
-}
-
-if ($this->mod_users->is_logged_in()) {
-    // Logged in
-    $content[$ix][] = make_anchor2('exams/active_exams', 'exams');
-
-    $ix = count($head);
-    $head[] = $this->lang->line('my_data');
-    //$content[$ix][] = make_anchor2('statistics', 'statistics');
-    $content[$ix][] = make_anchor2('config', 'font_preferences');
-    $content[$ix][] = make_anchor2('users/profile', 'profile');
-    $content[$ix][] = make_anchor2('userclass/enroll', 'enroll_in_class');
-    $content[$ix][] = make_anchor2('statistics/student_time', 'my_progress');
-
-    if ($this->mod_users->is_teacher())
-        $content[$ix][] = make_anchor2('statistics/teacher_progress', 'students_progress');
-
-    if ($this->mod_users->is_teacher()) {
-      $content[$ix][] = make_anchor2('grades/teacher_grades', 'grades_quizzes');
-      $content[$ix][] = make_anchor2('grades/teacher_exam_grades', 'grades_exams');
-    }
-
-// This was part of the defunct "Learning Journey" it has been retained here for reference:
-//    if ($this->config->item('lj_enabled')) {
-//        $this->load->helper('lj_menu_helper');
-//        lj_menu_add($head, $content);
-//    }
-
-    if ($this->mod_users->is_teacher() || $this->mod_users->is_translator()) {
-        // Teacher or translator
+if (!isset($in_help) || !$in_help) {
+    $head[] = make_anchor1('', 'home');
+    if (!$this->mod_users->is_logged_in_noaccept()) {
+        // The user has not logged in, or has logged in and accepted policy
         $ix = count($head);
-        $head[] = $this->lang->line('administration');
-        if ($this->mod_users->is_teacher()) {
-            // Teacher
-            $content[$ix][] = make_anchor2('users', 'users');
-            $content[$ix][] = make_anchor2('classes', 'classes');
-            $content[$ix][] = make_anchor2('file_manager', 'manage_exercises');
-            $content[$ix][] = make_anchor2('exams', 'manage_exams');
-        }
-        if ($this->mod_users->is_translator()) {
-            $content[$ix][] = make_anchor2('translate/translate_if', 'translate_interface');
-            $content[$ix][] = make_anchor2('translate/translate_grammar', 'translate_grammar');
-            $content[$ix][] = make_anchor2('translate/translate_lex', 'translate_lexicon');
-            $content[$ix][] = make_anchor2('translate/select_download_lex', 'download_lexicon');
-            $content[$ix][] = make_anchor2('translate/list_translations', 'list_translations');
-        }
-        if ($this->mod_users->is_admin())
-            $content[$ix][] = make_anchor2('urls', 'manage_gloss_links');
+        $head[] = $this->lang->line('text_and_exercises');
+        $content[$ix][] = make_anchor2('text/select_text', 'display_text');
+        $content[$ix][] = make_anchor2('text/select_quiz', 'exercises');
     }
 
-    $ix = count($head);
-    $head[] = $this->lang->line('user_access');
-    $content[$ix][] = make_anchor2('login', 'logout');
-    $content[$ix][] = make_anchor2('privacy', 'privacy_policy');
-}
-elseif ($this->mod_users->is_logged_in_noaccept()) {
-    // The user did not accept policy.
-    $ix = count($head);
-    $head[] = $this->lang->line('user_access');
-    $content[$ix][] = make_anchor2('login', 'logout');
-    $content[$ix][] = make_anchor2('privacy', 'privacy_policy');
-}
-else {
-    // Not logged in
+    if ($this->mod_users->is_logged_in()) {
+        // Logged in
+        $content[$ix][] = make_anchor2('exams/active_exams', 'exams');
 
-    $ix = count($head);
-    $head[] = $this->lang->line('user_access');
-    $content[$ix][] = make_anchor2('login', 'login');
-    $content[$ix][] = make_anchor2('privacy', 'privacy_policy');
+        $ix = count($head);
+        $head[] = $this->lang->line('my_data');
+        //$content[$ix][] = make_anchor2('statistics', 'statistics');
+        $content[$ix][] = make_anchor2('config', 'font_preferences');
+        $content[$ix][] = make_anchor2('users/profile', 'profile');
+        $content[$ix][] = make_anchor2('userclass/enroll', 'enroll_in_class');
+        $content[$ix][] = make_anchor2('statistics/student_time', 'my_progress');
+
+        if ($this->mod_users->is_teacher())
+            $content[$ix][] = make_anchor2('statistics/teacher_progress', 'students_progress');
+
+        if ($this->mod_users->is_teacher()) {
+            $content[$ix][] = make_anchor2('grades/teacher_grades', 'grades_quizzes');
+            $content[$ix][] = make_anchor2('grades/teacher_exam_grades', 'grades_exams');
+        }
+
+        // This was part of the defunct "Learning Journey" it has been retained here for reference:
+        //    if ($this->config->item('lj_enabled')) {
+        //        $this->load->helper('lj_menu_helper');
+        //        lj_menu_add($head, $content);
+        //    }
+
+        if ($this->mod_users->is_teacher() || $this->mod_users->is_translator()) {
+            // Teacher or translator
+            $ix = count($head);
+            $head[] = $this->lang->line('administration');
+            if ($this->mod_users->is_teacher()) {
+                // Teacher
+                $content[$ix][] = make_anchor2('users', 'users');
+                $content[$ix][] = make_anchor2('classes', 'classes');
+                $content[$ix][] = make_anchor2('file_manager', 'manage_exercises');
+                $content[$ix][] = make_anchor2('exams', 'manage_exams');
+            }
+            if ($this->mod_users->is_translator()) {
+                $content[$ix][] = make_anchor2('translate/translate_if', 'translate_interface');
+                $content[$ix][] = make_anchor2('translate/translate_grammar', 'translate_grammar');
+                $content[$ix][] = make_anchor2('translate/translate_lex', 'translate_lexicon');
+                $content[$ix][] = make_anchor2('translate/select_download_lex', 'download_lexicon');
+                $content[$ix][] = make_anchor2('translate/list_translations', 'list_translations');
+            }
+            if ($this->mod_users->is_admin())
+                $content[$ix][] = make_anchor2('urls', 'manage_gloss_links');
+        }
+
+        $ix = count($head);
+        $head[] = $this->lang->line('user_access');
+        $content[$ix][] = make_anchor2('login', 'logout');
+        $content[$ix][] = make_anchor2('privacy', 'privacy_policy');
+    }
+    elseif ($this->mod_users->is_logged_in_noaccept()) {
+        // The user did not accept policy.
+        $ix = count($head);
+        $head[] = $this->lang->line('user_access');
+        $content[$ix][] = make_anchor2('login', 'logout');
+        $content[$ix][] = make_anchor2('privacy', 'privacy_policy');
+    }
+    else {
+        // Not logged in
+
+        $ix = count($head);
+        $head[] = $this->lang->line('user_access');
+        $content[$ix][] = make_anchor2('login', 'login');
+        $content[$ix][] = make_anchor2('privacy', 'privacy_policy');
+    }
 }
 
+$ix = count($head);
+$head[] = $this->lang->line('help');
+$content[$ix][] = make_anchor2('help', 'users_guide', array('target'=>'bolhelp'));
+
+if (isset($more_help_items)) {
+    foreach ($more_help_items as $mhi_url => $mhi_label)
+        $content[$ix][] = make_anchor2("help/$mhi_url", $mhi_label, array('target'=>'bolhelp'));
+}
+    
 $cols = $ix+1;
 
 ?>
@@ -135,7 +148,7 @@ $cols = $ix+1;
             </div>
           </li>
 
-          <?php if (!empty($this->config->item('variants'))): ?>
+          <?php if ((!isset($in_help) || !$in_help) && !empty($this->config->item('variants'))): ?>
             <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle pt-3 pb-3 pl-3 pr-3" href="#" id="navbarDropdownVar" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $this->lang->line('variant') ?></a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownVar">
