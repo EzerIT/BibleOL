@@ -493,11 +493,11 @@ class Ctrl_text extends MY_Controller {
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => false,
-                                                     'more_help_items' => array('show_help/edit_exercise_description' => 'description_tab',
-                                                                                'show_help/edit_exercise_passages' => 'passages_tab',
-                                                                                'show_help/edit_exercise_sentences' => 'sentences_tab',
-                                                                                'show_help/edit_exercise_sentence_units' => 'sentence_units_tab',
-                                                                                'show_help/edit_exercise_features' => 'features_tab')));
+                                                     'more_help_items' => array('show_help/description' => 'description_tab',
+                                                                                'show_help/passages' => 'passages_tab',
+                                                                                'show_help/sentences' => 'sentences_tab',
+                                                                                'show_help/sentence_units' => 'sentence_units_tab',
+                                                                                'show_help/features' => 'features_tab')));
             $this->load->view('view_alert_dialog');
 
             $center_text = $this->load->view('view_edit_quiz',

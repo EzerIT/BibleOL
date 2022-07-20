@@ -13,6 +13,8 @@ class Ctrl_help extends MY_Controller {
 	public function show_help() {
         try {
             $article = $this->uri->segment(3);
+            $sub_article = $this->uri->segment(4);
+            $full_article = $article . (!is_null($sub_article) ? "/$sub_article" : '');
 
             $filename = "usersguide/{$this->language}/{$article}.php";
 
@@ -23,13 +25,13 @@ class Ctrl_help extends MY_Controller {
             }
 
             // VIEW:
-            $this->load->vars(array('in_help' => true));
+            $this->load->vars(array('in_help' => true, 'sub_article' => $sub_article));
             $this->load->view('view_top1', array('title' => $this->lang->line('show_help')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
 
-            $left_text = $this->load->view('view_help_navigator',array('current'=>$article),true);
+            $left_text = $this->load->view('view_help_navigator',array('current'=>$full_article),true);
             $center_text = $this->load->file(FCPATH.$filename,true);
             
             $this->load->view('view_main_page', array('left_title' => 'Help pages',

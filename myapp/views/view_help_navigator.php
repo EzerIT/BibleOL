@@ -1,60 +1,83 @@
-<pre>VIEW HELP NAVIGATOR</pre>
+<?php
+$menu = array(
+    'User’s Guide' => array('intro' => array(0,'Introduction'),
+        ),
 
-<div class="accordion" id="accordionExample">
-  <div class="card">
-    <div class="card-header" id="headingOne">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          General info
-        </button>
-      </h2>
-    </div>
+    'Learner’s Guide' => array('learner'          => array(0,'<b>Instructions for learners</b>'),
+                               'firstex/he'  => array(0,'Hebrew: First example'),
+                               'secondex/he' => array(0,'Hebrew: Second example'),
+                               'thirdex/he'  => array(0,'Hebrew: Third example'),
+                               'firstex/gr'  => array(0,'Greek: First example'),
+                               'secondex/gr' => array(0,'Greek: Second example'),
+                               'thirdex/gr'  => array(0,'Greek: Third example'),
+                               'nothing'          => array(0,'How to type nothing (Hebrew)'),
+                               'gloss'            => array(0,'Translating words (Hebrew)'),
+                               'statistics'       => array(0,'How am I doning?'),
+        ),
 
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body">
-        Some placeholder content for the first accordion panel. This panel is shown by default, thanks to the <code>.show</code> class.
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header" id="headingTwo">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Tutorial
-        </button>
-      </h2>
-    </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body">
-        Some placeholder content for the second accordion panel. This panel is hidden by default.
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header" id="headingThree">
-      <h2 class="mb-0">
-        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          Reference Guide
-        </button>
-      </h2>
-    </div>
-    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-      <div class="card-body">
-     'Reference Guide' => array('modes.php'         => array(0,'Learner vs. Facilitator Mode'),
-                               'menus.php'         => array(0,'Menus'),
-                               'pref.php'          => array(0,'Program preferences'),
-                               'tabs.php'          => array(0,'Tabs'),
-                               'description.php'   => array(1,'The “Description” tab'),
-                               'universe.php'      => array(1,'The “Passages” tab'),
-                               'sentences.php'     => array(1,'The “Sentences” tab'),
-                               'featurechoice.php' => array(2,'Choosing features'),
-                               'mql.php'           => array(2,'MQL'),
-                               'quizobjects.php'   => array(1,'The “Sentence Units” tab'),
-                               'features.php'      => array(1,'The “Features” tab'),
-                               'qpanel.php'        => array(0,'Question window'),
-                               'greekkey.php'      => array(0,'Typing Greek'),
-                               'hebrewkey.php'     => array(0,'Typing Hebrew'),
-     </div>
-    </div>
-  </div>
+    'Facilitator’s Guide' => array('facilitator'      => array(0,'<b>Instructions for facilitators</b>'),
+                                   'create/he'   => array(0,'Hebrew: Create an Exercise'),
+                                   'create2/he'  => array(0,'Hebrew: Create an Advanced Exercise'),
+                                   'create/gr'   => array(0,'Greek: Create an Exercise'),
+                                   'create2/gr'  => array(0,'Greek: Create an Advanced Exercise'),
+                                   'moodle'           => array(0,'Exercises for Moodle'),
+        ),
+
+
+    'Reference Guide' => array('modes'         => array(0,'Learner vs. Facilitator Mode'),
+                               'menus'         => array(0,'Menus'),
+                               'pref'          => array(0,'Program preferences'),
+                               'tabs'          => array(0,'Tabs'),
+                               'description'   => array(1,'The “Description” tab'),
+                               'passages'      => array(1,'The “Passages” tab'),  
+                               'sentences'     => array(1,'The “Sentences” tab'), 
+                               'featurechoice' => array(2,'Choosing features'),
+                               'mql'           => array(2,'MQL'),
+                               'sentence_units'=> array(1,'The “Sentence Units” tab'),
+                               'features'      => array(1,'The “Features” tab'),
+                               'qpanel'        => array(0,'Question window'),
+                               'greekkey'      => array(0,'Typing Greek'),
+                               'hebrewkey'     => array(0,'Typing Hebrew'),
+        ),
+
+    'Installation and License' => array('installation' => array(0,'System requirements and installation'),
+                                        'license'      => array(0,'License and acknowledgements'),
+        ),
+
+    'Contact' => array('contact' => array(0,'Email addresses'),
+        ),
+    );
+?>
+<style>
+    .level0 {
+        padding-left: 0;
+    }
+
+    .level1 {
+        padding-left: 25px;
+    }
+
+    .level2 {
+        padding-left: 50px;
+    }
+</style>
+
+<div class="accordion" id="accordionExample2">
+
+    <?php $ix = 0; ?>
+    <?php foreach ($menu as $heading => $submenu): ?>
+        <button class="ml-0 btn btn-block text-left" type="button" data-toggle="collapse" data-target="#target-<?= $ix ?>"  ><?= $heading ?></button>
+        <div class="pl-1 collapse <?= array_key_exists($current,$submenu) ? 'show' : '' ?>" id="target-<?= $ix ?>" data-parent="#accordionExample2">
+            <?php foreach ($submenu as $article => $disp): ?>
+                <?php list($level, $text) = $disp; ?>
+                <p class="mb-0 level<?=$level?>"><?php
+                                                 if ($article!=$current)
+                                                     echo anchor(site_url("help/show_help/$article"),$text);
+                                                 else
+                                                     echo $text;
+                                                 ?></p>
+            <?php endforeach; ?>
+        </div>
+        <?php ++$ix; ?>
+    <?php endforeach; ?>
 </div>
