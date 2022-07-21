@@ -1,21 +1,23 @@
 <?php
 $menu = array(
     'User’s Guide' => array('intro' => array(0,'Introduction'),
+                            'user_interface' => array(0,'User interface'),
+                            'viewing_text' => array(0,'Viewing text'),
         ),
 
-    'Learner’s Guide' => array('learner'          => array(0,'<b>Instructions for learners</b>'),
-                               'firstex/he'  => array(0,'Hebrew: First example'),
-                               'secondex/he' => array(0,'Hebrew: Second example'),
-                               'thirdex/he'  => array(0,'Hebrew: Third example'),
-                               'firstex/gr'  => array(0,'Greek: First example'),
-                               'secondex/gr' => array(0,'Greek: Second example'),
-                               'thirdex/gr'  => array(0,'Greek: Third example'),
-                               'nothing'          => array(0,'How to type nothing (Hebrew)'),
-                               'gloss'            => array(0,'Translating words (Hebrew)'),
-                               'statistics'       => array(0,'How am I doning?'),
+    'Student’s Guide' => array('student'         => array(0,'<b>Instructions for students</b>'),
+                               'firstex/he'      => array(0,'Hebrew: First example'),
+                               'secondex/he'     => array(0,'Hebrew: Second example'),
+                               'thirdex/he'      => array(0,'Hebrew: Third example'),
+                               'firstex/gr'      => array(0,'Greek: First example'),
+                               'secondex/gr'     => array(0,'Greek: Second example'),
+                               'thirdex/gr'      => array(0,'Greek: Third example'),
+                               'nothing'         => array(0,'How to type nothing (Hebrew)'),
+                               'gloss'           => array(0,'Translating words (Hebrew)'),
+                               'statistics'      => array(0,'How am I doning?'),
         ),
 
-    'Facilitator’s Guide' => array('facilitator'      => array(0,'<b>Instructions for facilitators</b>'),
+    'Teacher’s Guide' => array('teacher'      => array(0,'<b>Instructions for teachers</b>'),
                                    'create/he'   => array(0,'Hebrew: Create an Exercise'),
                                    'create2/he'  => array(0,'Hebrew: Create an Advanced Exercise'),
                                    'create/gr'   => array(0,'Greek: Create an Exercise'),
@@ -48,19 +50,6 @@ $menu = array(
         ),
     );
 ?>
-<style>
-    .level0 {
-        padding-left: 0;
-    }
-
-    .level1 {
-        padding-left: 25px;
-    }
-
-    .level2 {
-        padding-left: 50px;
-    }
-</style>
 
 <div class="accordion" id="accordionExample2">
 

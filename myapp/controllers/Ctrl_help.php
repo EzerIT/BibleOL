@@ -16,16 +16,23 @@ class Ctrl_help extends MY_Controller {
             $sub_article = $this->uri->segment(4);
             $full_article = $article . (!is_null($sub_article) ? "/$sub_article" : '');
 
-            $filename = "usersguide/{$this->language}/{$article}.php";
+            $dir = "usersguide/{$this->language}";
+            $filename = "$dir/{$article}.php";
 
             if (!file_exists($filename)) {
-                $filename = "usersguide/en/{$article}.php";
+                $dir = "usersguide/en";
+                $filename = "$dir/{$article}.php";
                 if (!file_exists($filename))
                     throw new DataException("There is no help article about '$article'");
             }
 
             // VIEW:
-            $this->load->vars(array('in_help' => true, 'sub_article' => $sub_article));
+            $this->load->helper('help_dir_helper');
+
+            $this->load->vars(array('in_help' => true,
+                                    'hdir' => new HelpDir($dir, $sub_article),
+                                    'sub_article' => $sub_article));
+            
             $this->load->view('view_top1', array('title' => $this->lang->line('show_help')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));

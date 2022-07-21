@@ -1435,3 +1435,16 @@ footer .row {
 .logopanel h2 {
   margin: auto;
 }
+.level0 {
+  padding-left: 0;
+}
+.level1 {
+  padding-left: 25px;
+}
+.level2 {
+  padding-left: 50px;
+}
+.help.hebrew {
+  font-family: Ezra SIL Webfont;
+  direction: rtl;
+}
