@@ -1,8 +1,11 @@
 <?php
 $menu = array(
-    'User’s Guide' => array('intro' => array(0,'Introduction'),
-                            'user_interface' => array(0,'User interface'),
-                            'viewing_text' => array(0,'Viewing text'),
+    'User’s Guide' => array('intro'              => array(0,'Introduction'),
+                            'user_interface'     => array(0,'User interface'),
+                            'viewing_text'       => array(0,'Viewing text'),
+                            'viewing_text2/heb'  => array(1,'Viewing Hebrew text'),
+                            'viewing_text2/gr'   => array(1,'Viewing Greek text'),
+                            'logging_in'         => array(0,'Logging in'),
         ),
 
     'Student’s Guide' => array('student'         => array(0,'<b>Instructions for students</b>'),
@@ -18,8 +21,8 @@ $menu = array(
         ),
 
     'Teacher’s Guide' => array('teacher'      => array(0,'<b>Instructions for teachers</b>'),
-                                   'create/he'   => array(0,'Hebrew: Create an Exercise'),
-                                   'create2/he'  => array(0,'Hebrew: Create an Advanced Exercise'),
+                                   'create/heb'   => array(0,'Hebrew: Create an Exercise'),
+                                   'create2/heb'  => array(0,'Hebrew: Create an Advanced Exercise'),
                                    'create/gr'   => array(0,'Greek: Create an Exercise'),
                                    'create2/gr'  => array(0,'Greek: Create an Advanced Exercise'),
                                    'moodle'           => array(0,'Exercises for Moodle'),

@@ -4,17 +4,17 @@
 
 <p>To see <?= $hdir->heb_gr('Genesis 1:1-7','Luke 2:1-5') ?> fill out the text selection dialog thus:</p>
 
-<?= $hdir->disp("selecttext-$sub_article.png") ?>
+<a name="select-dialog"></a><?= $hdir->disp("selecttext-$sub_article.png") ?>
 
 <p>Then click the <i>Display</i> button. This will show you <?= $hdir->heb_gr('Genesis 1:1-7','Luke 2:1-5') ?> in <?= $hg ?>:</p>
 
 <?= $hdir->disp("$sub_article-text-a.png") ?>
 
-
-<?= $hdir->heb('<p>The small icon to the right of the first verse is a link to the same text at the '
-             . anchor(site_url('help/show_help/shebanq'), 'SHEBANQ')
-             . 'website.') ?>
-
+<?php if ($sub_article=='heb'): ?>
+    <p>The small icon to the right of the first verse is a link to the same text at the
+        <?= anchor(site_url('help/show_help/shebanq'), 'SHEBANQ') ?>
+        website.</p>
+<?php endif; ?>
 
 <h2>Viewing <?= $hg ?> Grammar Information</h2>
 
@@ -33,7 +33,7 @@
   mouse &ldquo;hover&rdquo; over a word). You will then see a so-called <i>grammar information
     box.</i> to the right of the text:</p>
 
-<?= $hdir->disp("$sub_article-text-b.png") ?>
+<a name="grammar-info-box"></a><?= $hdir->disp("$sub_article-text-b.png") ?>
 
 <p>In the grammar information box you will see detailed information about the word your mouse points
 to. When you move the mouse, the grammar information box disappears. You may find this inconvenient,
@@ -88,55 +88,59 @@ border of a particular Clause (or, alternatively, clicking the word &ldquo;<?= $
 
 <?= $hdir->disp("$sub_article-text-d.png") ?>
 
-<?= $hdir->heb('<p>Sometimes clauses (or other parts of a sentence) can contain other clauses inside them. An
-    example of this is seen in Genesis 1:7:</p>'
-. $hdir->disp("$sub_article-text-e.png")
-. '<p>Here, you can see how the clause <span class="help hebrew">וַיַּבְדֵּ֗ל בֵּ֤ין הַמַּ֨יִם֙ וּבֵ֣ין הַמַּ֔יִם</span> is split in two and contains the clause
-<span class="help hebrew">אֲשֶׁר֙ מִתַּ֣חַת לָרָקִ֔יעַ</span> inside it. The split clause is marked by its missing left and right borders.</p>') ?>
+<?php if ($sub_article=='heb'): ?>
+    <p>Sometimes clauses (or other parts of a sentence) can contain other clauses inside them. An
+        example of this is seen in Genesis 1:7:</p>
 
-<?= $hdir->gr('<p>Some words may not belong to a particular clause, and a clause may be split into
-  parts. In the figure above, the word καὶ at the start of verse 3 is not a member of a
-  clause; and the clause in verse 1, the clause is split into two pars around the word δὲ, which is
-    not part of the clause. The split clause is marked by its missing left and right borders.</p>') ?>
+    <?= $hdir->disp("heb-text-e.png") ?>
 
-The different items you can select in the grammar selection box are detailed in section XXX, but
-\HOrG{#1}{a few items are}{one item is} worth mentioning here:
+    <p>Here, you can see how the clause <span class="help hebrew">וַיַּבְדֵּ֗ל בֵּ֤ין הַמַּ֨יִם֙ וּבֵ֣ין הַמַּ֔יִם</span> is split
+        in two and contains the clause <span class="help hebrew">אֲשֶׁר֙ מִתַּ֣חַת לָרָקִ֔יעַ</span> inside
+        it. The split clause is marked by its missing left and right borders.</p>
+<?php endif; ?>
 
-In the grammar selection box, under <i>Word</i> and <i>Lexeme</i> you can enter a &ldquo;Word frequency
+<?php if ($sub_article=='gr'): ?>
+    <p>Some words may not belong to a particular clause, and a clause may be split into parts. In
+    the figure above, the word καὶ at the start of verse 3 is not a member of a clause; and the
+    clause in verse 1, the clause is split into two pars around the word δὲ, which is not part of
+    the clause. The split clause is marked by its missing left and right borders.</p>
+<?php endif; ?>
+
+<p>The different items you can select in the grammar selection box are detailed
+    <?= anchor(site_url("help/show_help/all_features/$sub_article"), 'here') ?>, but
+    <?= $hdir->heb_gr('a few items are','one item is') ?> worth mentioning here:</p>
+
+<p>In the grammar selection box, under <i>Word</i> and <i>Lexeme</i> you can enter a &ldquo;Word frequency
 color limit&rdquo;. Setting this value to, for example, 50, means that the 50 most common
-\HOrG{#1}{Hebrew or Aramaic}{Greek} words in the \HOrG{#1}{Old}{New} Testament will be displayed in
-black, whereas rarer words will be display in blue. (See Figure \ref{fig-\hebgr-text-f}.) If you are
-learning <?= $hg ?>, you may find this feature useful when deciding if a word is worth memorizing.
-When determining how common words are, different morphological forms of the same word are counted as
-one. For more information about word frequency, see section XXX.
+<?= $hdir->heb_gr('Hebrew or Aramaic','Greek') ?> words in the <?= $hdir->heb_gr('Old','New') ?>
+    Testament will be displayed in black, whereas rarer words will be displayed in blue:</p>
 
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{fig-\hebgr-text-f.png}
-  \end{center}
-  \caption{The 50 most common words are black, rarer words are blue.}\label{fig-\hebgr-text-f}
-\end{figure}
+<?= $hdir->disp("$sub_article-text-f.png") ?>
 
-\HOrG{#1}{In most cases, the information you find in the grammar information box will be the same as
-  what is shown between the lines using the &ldquo;MyView&rdquo; selector; but for glosses this is not the
-  case. For example, in the grammar information box of Figure \ref{fig-\hebgr-text-b} you can see
-  that the lexeme \heb{היה} is translated into English as &ldquo;be, happen, become, occur&rdquo;. But if you
-  open the &ldquo;MyView&rdquo; selector and choose <i>Word</i> and <i>Glosses</i> and <i>English</i>, only
-  the first gloss, &ldquo;be&rdquo;, will be shown between the lines of Hebrew text. }{}
+<p>If you are learning <?= $hg ?>, you may find this feature useful when deciding if a word is worth memorizing.
+When determining how common words are, different morphological forms of the same word are counted as one.</p>
 
-\HOrG{#1}{\subsection{Viewing a Transliterated Hebrew text}\label{sec-heb-translit}\index{transliterated
-    Hebrew|see {Hebrew, transliterated}}\index{Hebrew!transliterated}
+<?php if ($sub_article=='heb'): ?>
+    <p>In most cases, the information you find in the grammar information box will be the same as
+        what is shown between the lines using the &ldquo;MyView&rdquo; selector; but for glosses this is not the
+        case. For example, in the grammar information box show in <a href="#grammar-info-box">one of the figures above</a>
+        you can see that the lexeme <span class="help hebrew">היה</span> is translated into English as &ldquo;be,
+        happen, become, occur&rdquo;. But if you open the &ldquo;MyView&rdquo; selector and choose
+        <i>Word</i> and <i>Glosses</i> and <i>English</i>, only
+        the first gloss, &ldquo;be&rdquo;, will be shown between the lines of Hebrew text.</p>
 
-You can choose to view a Hebrew text in Latin letters rather Hebrew letters. You do this by
-specifying the corpus &ldquo;Hebrew (ETCBC4, Transliterated, OT)&rdquo; in the dialog in figure
-\ref{fig-selecttext}. The first two of Genesis~1 will look at show in Figure
-\ref{fig-heb-translit}. You will notice that this text uses a number of variations of Latin letters plus
-the special characters ʔ (not to be confused with a question mark) and ʕ. These two characters
-correspond to the Hebrew characters \heb{א} and \heb{ע}, respectively.
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{fig-heb-translit.png}
-  \end{center}
-  \caption{\bibleref{Genesis}{1}{1-2} in transliterated Hebrew.}\label{fig-heb-translit}
-\end{figure}}{}
-}
+    <h2>Viewing a Transliterated Hebrew text</h2>
+
+    <p>You can choose to view a Hebrew text in Latin letters rather Hebrew letters. You do this by
+        specifying the corpus &ldquo;Hebrew (ETCBC4, Transliterated, OT)&rdquo; in the
+        <a href="#select-dialog">text selection dialog</a>.
+        The first two verses of Genesis 1 will look like this:</p>
+
+    <?= $hdir->disp("heb-translit.png") ?>
+
+    <p>You will notice that this text uses a number of variations of Latin letters plus
+        the special characters <span class="help hebrew_translit">ʔ</span> (not to be
+        confused with a question mark) and <span class="help hebrew_translit">ʕ</span>.
+        These two characters correspond to the Hebrew characters <span class="help hebrew">א</span> and
+        <span class="help hebrew">ע</span>, respectively.</p>
+<?php endif; ?>
