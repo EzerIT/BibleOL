@@ -6,12 +6,12 @@
 <p>If you access the Bible OL main web site using a computer, you will see an introductory page,
     at the top of which there is a menu:</p>
 
-<?= $hdir->disp("menu1.png") ?>
+<?= $hdir->img("menu1.png") ?>
 
 <p>If you are using a smartphone, you will see a small rectangle with
     three horizontal lines at the top right of the screen. Tap that rectangle to display the menu:</p>
 
-<?= $hdir->disp("menu2.png") ?>
+<?= $hdir->img("menu2.png") ?>
 
 <p>The menu has five items:</p>
 

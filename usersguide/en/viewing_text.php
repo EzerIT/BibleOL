@@ -4,7 +4,7 @@
     From the <i>Text and Exercises</i> menu select <i>Display text.</i> This will take you to a web page
     displaying this dialog:</p>
 
-<?= $hdir->disp("selecttext.png") ?>
+<?= $hdir->img("selecttext.png") ?>
 
 Under &ldquo;Corpus&rdquo; in that dialog, you select the text database you want to use. You have four options:
 

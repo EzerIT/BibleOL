@@ -4,11 +4,11 @@
 
 <p>To see <?= $hdir->heb_gr('Genesis 1:1-7','Luke 2:1-5') ?> fill out the text selection dialog thus:</p>
 
-<a name="select-dialog"></a><?= $hdir->disp("selecttext-$sub_article.png") ?>
+<a name="select-dialog"></a><?= $hdir->img("selecttext-$sub_article.png") ?>
 
 <p>Then click the <i>Display</i> button. This will show you <?= $hdir->heb_gr('Genesis 1:1-7','Luke 2:1-5') ?> in <?= $hg ?>:</p>
 
-<?= $hdir->disp("$sub_article-text-a.png") ?>
+<?= $hdir->img("$sub_article-text-a.png") ?>
 
 <?php if ($sub_article=='heb'): ?>
     <p>The small icon to the right of the first verse is a link to the same text at the
@@ -16,7 +16,7 @@
         website.</p>
 <?php endif; ?>
 
-<h2>Viewing <?= $hg ?> Grammar Information</h2>
+<a name="view_grammar"></a><h2>Viewing <?= $hg ?> Grammar Information</h2>
 
 <p>If you are viewing the text on a computer, you will have three ways to display grammar information;
     if you are using a tablet or a smartphone, you will have two ways to display grammar information.
@@ -33,7 +33,7 @@
   mouse &ldquo;hover&rdquo; over a word). You will then see a so-called <i>grammar information
     box.</i> to the right of the text:</p>
 
-<a name="grammar-info-box"></a><?= $hdir->disp("$sub_article-text-b.png") ?>
+<a name="grammar-info-box"></a><?= $hdir->img("$sub_article-text-b.png") ?>
 
 <p>In the grammar information box you will see detailed information about the word your mouse points
 to. When you move the mouse, the grammar information box disappears. You may find this inconvenient,
@@ -54,7 +54,7 @@ to. When you move the mouse, the grammar information box disappears. You may fin
     If you click the eye icon, the system will show the so-called <i>grammar selection box.</i> At the same
     time the eye icon turns into a × icon. The grammar selection box looks like this:</p>
 
-<?= $hdir->disp("$sub_article-gram-sel-a.png") ?>
+<?= $hdir->img("$sub_article-gram-sel-a.png") ?>
 
 <p>The <?= $hg ?> grammar selection box contains four buttons, identifying the four levels of the
     grammar hierarchy used by the <?= $hg ?> text: The text contains <i>sentences,</i> which contain
@@ -65,12 +65,12 @@ to. When you move the mouse, the grammar information box disappears. You may fin
 <p>If, for example, you click the <i>Word</i> button and then the <i>Lexeme</i> button, the grammar
     selection box looks like this:</p>
 
-<?= $hdir->disp("$sub_article-gram-sel-b.png") ?>
+<?= $hdir->img("$sub_article-gram-sel-b.png") ?>
 
 <p>If you now click the <i>Part of speech</i> button, the <?= $hg ?> text changes to look as in the figure
     below, where you can see the part of speech of each word of the text.</p>
 
-<?= $hdir->disp("$sub_article-text-c.png") ?>
+<?= $hdir->img("$sub_article-text-c.png") ?>
 
 <p>You can add additional information by clicking the relevant buttons in the grammar selection box.</p>
 
@@ -86,13 +86,13 @@ or sentences, as well as grammatical information about each of these. If, for ex
 border of a particular Clause (or, alternatively, clicking the word &ldquo;<?= $hdir->heb_gr('Clause','Clause1') ?>&rdquo;),
     a grammar information box for the particular clause will be shown:</p>
 
-<?= $hdir->disp("$sub_article-text-d.png") ?>
+<?= $hdir->img("$sub_article-text-d.png") ?>
 
 <?php if ($sub_article=='heb'): ?>
     <p>Sometimes clauses (or other parts of a sentence) can contain other clauses inside them. An
         example of this is seen in Genesis 1:7:</p>
 
-    <?= $hdir->disp("heb-text-e.png") ?>
+    <?= $hdir->img("heb-text-e.png") ?>
 
     <p>Here, you can see how the clause <span class="help hebrew">וַיַּבְדֵּ֗ל בֵּ֤ין הַמַּ֨יִם֙ וּבֵ֣ין הַמַּ֔יִם</span> is split
         in two and contains the clause <span class="help hebrew">אֲשֶׁר֙ מִתַּ֣חַת לָרָקִ֔יעַ</span> inside
@@ -115,7 +115,7 @@ color limit&rdquo;. Setting this value to, for example, 50, means that the 50 mo
 <?= $hdir->heb_gr('Hebrew or Aramaic','Greek') ?> words in the <?= $hdir->heb_gr('Old','New') ?>
     Testament will be displayed in black, whereas rarer words will be displayed in blue:</p>
 
-<?= $hdir->disp("$sub_article-text-f.png") ?>
+<?= $hdir->img("$sub_article-text-f.png") ?>
 
 <p>If you are learning <?= $hg ?>, you may find this feature useful when deciding if a word is worth memorizing.
 When determining how common words are, different morphological forms of the same word are counted as one.</p>
@@ -136,7 +136,7 @@ When determining how common words are, different morphological forms of the same
         <a href="#select-dialog">text selection dialog</a>.
         The first two verses of Genesis 1 will look like this:</p>
 
-    <?= $hdir->disp("heb-translit.png") ?>
+    <?= $hdir->img("heb-translit.png") ?>
 
     <p>You will notice that this text uses a number of variations of Latin letters plus
         the special characters <span class="help hebrew_translit">ʔ</span> (not to be

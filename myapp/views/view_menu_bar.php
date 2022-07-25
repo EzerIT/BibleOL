@@ -98,7 +98,7 @@ if (!isset($in_help) || !$in_help) {
 
 $ix = count($head);
 $head[] = $this->lang->line('help');
-$content[$ix][] = make_anchor2('help', 'users_guide', array('target'=>'bolhelp'));
+$content[$ix][] = make_anchor2('help', 'help_pages', array('target'=>'bolhelp'));
 
 if (isset($more_help_items)) {
     foreach ($more_help_items as $mhi_url => $mhi_label)

@@ -1426,3 +1426,6 @@ footer .row {
 .help.hebrew_translit {
   font-family: Doulos SIL Webfont;
 }
+.tooltip-inner {
+  text-align: left;
+}

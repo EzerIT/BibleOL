@@ -15,7 +15,7 @@ class HelpDir {
     // Function to display a centered image. For use in the help pages.
     // Parameter:
     //    $src   Image file relative to "$this->dir/images"
-    public function disp(string $src) {
+    public function img(string $src) {
         return "<p><a href=\"$this->dir/images/$src\" target=\"_blank\"><img class=\"mx-auto img-fluid d-block border border-info\" alt=\"Bible OL\" src=\"$this->dir/images/$src\"></a></p>\n";
     }
 
@@ -42,3 +42,6 @@ class HelpDir {
     }
 }
 
+function make_footnote($text,$note) {
+    return "<a href=\"#\" data-toggle=\"tooltip\" title=\"$note\">$text</a>";
+}

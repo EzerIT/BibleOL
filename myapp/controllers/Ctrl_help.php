@@ -7,12 +7,16 @@ class Ctrl_help extends MY_Controller {
     }
 
 	public function index() {
-        $this->users_guide();
+        $this->show_help();
 	}
 
 	public function show_help() {
         try {
             $article = $this->uri->segment(3);
+
+            if (is_null($article))
+                $article = 'intro';
+            
             $sub_article = $this->uri->segment(4);
             $full_article = $article . (!is_null($sub_article) ? "/$sub_article" : '');
 
