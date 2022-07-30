@@ -440,10 +440,10 @@ class Mod_translate extends CI_Model {
                     ->from('lexicon_latin c')
                     ->join("lexicon_latin_$lang_show s", 's.lex_id=c.id','left')
                     ->join("lexicon_latin_$lang_edit e", 'e.lex_id=c.id','left')
-                    ->where('lemma >=',$from)
-                    ->where('lemma <',$to)
+                    ->where('sortorder >=',$from)
+                    ->where('sortorder <',$to)
                     ->order_by('sortorder,lexeme,part_of_speech')
-                    ->get();
+                              ->get();
                 break;
         }
                 
