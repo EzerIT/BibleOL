@@ -443,7 +443,7 @@ class Mod_translate extends CI_Model {
                     ->where('sortorder >=',$from)
                     ->where('sortorder <',$to)
                     ->order_by('sortorder,lexeme,part_of_speech')
-                              ->get();
+                    ->get();
                 break;
         }
                 

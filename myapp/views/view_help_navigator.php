@@ -15,8 +15,8 @@ $menu = array(
                                'firstex/gr'        => array(1,'Greek: First example'),
                                'secondex/gr'       => array(1,'Greek: Second example'),
                                'thirdex/gr'        => array(1,'Greek: Third example'),
-                               'nothing'           => array(0,'How to type nothing (Hebrew)'),
-                               'gloss'             => array(0,'Translating words (Hebrew)'),
+                               'variations'        => array(0,'Variations to exercises'),
+                               'answering_glosses' => array(0,'Answering gloss requests'),
                                'statistics'        => array(0,'How am I doning?'),
         ),
 
