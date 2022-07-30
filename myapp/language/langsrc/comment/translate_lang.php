@@ -92,6 +92,10 @@ $comment['occurrences'] = "";
 $format['occurrences'] = "";
 $use_textarea['occurrences'] = false;
 
+$comment['part_of_speech'] = "";
+$format['part_of_speech'] = "";
+$use_textarea['part_of_speech'] = false;
+
 $comment['revert'] = "";
 $format['revert'] = "";
 $use_textarea['revert'] = false;

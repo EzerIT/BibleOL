@@ -23,6 +23,7 @@ $lang['malformed_url'] = "Forkert URL";
 $lang['modified'] = "Modificeret?";
 $lang['name_prefix'] = "Navnepræfiks";
 $lang['occurrences'] = "Forekomster";
+$lang['part_of_speech'] = "Ordklasse";
 $lang['revert'] = "Fortryd";
 $lang['revert_all'] = "Fortryd alt";
 $lang['select_gloss_translate_range'] = "<p>Vælg det sprog og de gloser hvis oversættelse du ønsker at ændre.</p> <p>Du kan enten vælge de %d hyppigste gloser (de vil blive vist sorteret efter hyppighed), eller du kan vælge gloserne alfabetisk.</p>";
