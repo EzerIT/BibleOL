@@ -24,15 +24,15 @@
 <ul>
     <li>Examples of Hebrew exercises:</li>
     <ul>
-        <li><?= anchor(site_url('help/show_help/firstex/heb'), 'First Hebrew exercise') ?>.</li>
-        <li><?= anchor(site_url('help/show_help/secondex/heb'), 'Second Hebrew exercise') ?>.</li>
-        <li><?= anchor(site_url('help/show_help/thirdex/heb'), 'Third Hebrew exercise') ?>.</li>
+        <li><?= anchor('help/show_help/firstex/heb', 'First Hebrew exercise') ?>.</li>
+        <li><?= anchor('help/show_help/secondex/heb', 'Second Hebrew exercise') ?>.</li>
+        <li><?= anchor('help/show_help/thirdex/heb', 'Third Hebrew exercise') ?>.</li>
     </ul>
     <li>Examples of Greek exercises:</li>
     <ul>
-        <li><?= anchor(site_url('help/show_help/firstex/gr'), 'First Greek exercise') ?>.</li>
-        <li><?= anchor(site_url('help/show_help/secondex/gr'), 'Second Greek exercise') ?>.</li>
-        <li><?= anchor(site_url('help/show_help/thirdex/gr'), 'Third Greek exercise') ?>.</li>
+        <li><?= anchor('help/show_help/firstex/gr', 'First Greek exercise') ?>.</li>
+        <li><?= anchor('help/show_help/secondex/gr', 'Second Greek exercise') ?>.</li>
+        <li><?= anchor('help/show_help/thirdex/gr', 'Third Greek exercise') ?>.</li>
     </ul>
 </ul>
 

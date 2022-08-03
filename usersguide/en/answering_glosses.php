@@ -8,7 +8,7 @@
 
 <?= $hdir->img("ans_gloss1.png") ?>
 
-<p>As you can see from the tick mark, Bible OL has accepted the answer &ldquo;spirit&rdquo;. If you click
+<p>As you can see from the check mark, Bible OL has accepted the answer &ldquo;spirit&rdquo;. If you click
   “Show answer”, all the correct answers appear:</p>
 
 <?= $hdir->img("ans_gloss2.png") ?>

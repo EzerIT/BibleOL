@@ -2,8 +2,8 @@
 
 <h1>Example: First <?= $hg ?> Exercise</h1>
 
-<p>(You may be interested in a <?= anchor(site_url('help/show_help/firstex/' .
-    $hdir->heb_gr('gr','heb')), 'corresponding '. $hdir->heb_gr('Greek','Hebrew') . ' exercise')
+<p>(You may be interested in a <?= anchor('help/show_help/firstex/' . $hdir->heb_gr('gr','heb'),
+                                          'corresponding '. $hdir->heb_gr('Greek','Hebrew') . ' exercise')
     ?>.)</p>
 
 
@@ -81,6 +81,8 @@ the correct answer.</p>
     regardless of which of the two buttons you press. But if you <i>are</i> logged in, &ldquo;GRADE task&rdquo;
     causes the system to stores your result internally and indicates to the teacher that your result may
     be used for grading your progress. &ldquo;SAVE outcome&rdquo; also stores your result internally, but
-    indicates that you do not want your result to be used for grading.</p>
+    indicates that you do not want your result to be used for grading. (More information about this
+    is available under <?= anchor('help/show_help/enroll#control_monitoring','&ldquo;Controlling
+    Teacher&rsquo;s Monitoring&rdquo;') ?>.)</p>
 
 <p>Go to <?= anchor("help/show_help/secondex/$sub_article","next example") ?>.</p>

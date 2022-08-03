@@ -25,7 +25,7 @@ simple search criteria.</p>
 
 <p>The &ldquo;Sentences&rdquo; tab may look like this:</p>
 
-<p><a name="choice"></a><img alt="Bible OL" src="<?= site_url('usersguide/en/images/heb-sentences-tab1.png') ?>" class="img-fluid" /></p>
+<?= $hdir->img('heb-sentences-tab1.png') ?>
 
 <p>By choosing either &ldquo;MQL statement to select sentences&rdquo; or &ldquo;Friendly
   feature selector&rdquo;, you indicate if you want to specify the search criteria
@@ -43,7 +43,7 @@ simple search criteria.</p>
 <p>The &ldquo;Clear&rdquo; button erases all criteria on this page.</p>
 
 <p>You may often want to use the same criteria for choosing sentence units as for choosing
-  sentences. The tick mark next to &ldquo;Use this for sentence unit selection&rdquo; indicates
+  sentences. The check mark next to &ldquo;Use this for sentence unit selection&rdquo; indicates
   that sentence units should be chosen based on the same criteria as the ones specified here. This
   option is only available if the friendly feature selector is being used.</p>
 

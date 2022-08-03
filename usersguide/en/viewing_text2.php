@@ -12,7 +12,7 @@
 
 <?php if ($sub_article=='heb'): ?>
     <p>The small icon to the right of the first verse is a link to the same text at the
-        <?= anchor(site_url('help/show_help/shebanq'), 'SHEBANQ') ?>
+        <?= anchor('help/show_help/shebanq', 'SHEBANQ') ?>
         website.</p>
 <?php endif; ?>
 
@@ -107,7 +107,7 @@ border of a particular Clause (or, alternatively, clicking the word &ldquo;<?= $
 <?php endif; ?>
 
 <p>The different items you can select in the grammar selection box are detailed
-    <?= anchor(site_url("help/show_help/all_features/$sub_article"), 'here') ?>, but
+    <?= anchor("help/show_help/all_features/$sub_article", 'here') ?>, but
     <?= $hdir->heb_gr('a few items are','one item is') ?> worth mentioning here:</p>
 
 <p>In the grammar selection box, under <i>Word</i> and <i>Lexeme</i> you can enter a &ldquo;Word frequency

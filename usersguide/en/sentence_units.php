@@ -8,15 +8,15 @@
   Units&rdquo; tab is not available.</p>
 
 <p>The appearance and use of this tab is much like the
-    &ldquo;<a href="<?= site_url('help/show_help/edit_exercise_sentences') ?>">Sentences</a>&rdquo;
+    &ldquo;<?= anchor('help/show_help/sentences','Sentences') ?>&rdquo;
     tab, so much information about that tab is not repeated here.</p>
 
 <p>The &ldquo;Sentence Units&rdquo; tab may look like this:</p>
 
-<p><img alt="Bible OL" src="<?= site_url('usersguide/en/images/heb-sentence-units-tab1.png') ?>" class="img-fluid" /></p>
+<?= $hdir->img('heb-sentence-units-tab1.png') ?>
 
 <p>This image is almost identical to
-  the <a href="<?= site_url('help/show_help/edit_exercise_sentences#choice') ?>">corresponding</a> one in the &ldquo;Sentences&rdquo;
+  the <?= anchor('help/show_help/sentences#choice','corresponding') ?> one in the &ldquo;Sentences&rdquo;
   tab. There are two important differences, however:</p>
 
 <ul>
@@ -24,7 +24,7 @@
         This is because the sentence unit type here serves a triple purpose:
         Firstly, as in the &ldquo;Sentences&rdquo; tab, it indicates the kind of sentence unit
         to look for. Secondly, it is used by the feature selector in the final tab,
-        &ldquo;<a href="<?= site_url('help/show_help/edit_exercise_features') ?>">Features</a>&rdquo;.
+        &ldquo;<?= anchor('help/show_help/features','Features') ?>&rdquo;.
         Thirdly, it is used when constructing MQL statements (see below). This means that the
         sentence unit type selector remains active even if you select &ldquo;MQL feature
         selector&rdquo;.</li>

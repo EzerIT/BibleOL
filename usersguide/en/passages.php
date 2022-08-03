@@ -3,7 +3,7 @@
 <p>On the &ldquo;Passages&rdquo; tab you indicate which part of the Bible you want to use for the
     exercise:</p>
 
-<p><img alt="Bible OL" src="<?= site_url('usersguide/en/images/heb-passages-tab.png') ?>" class="img-fluid"/></p>
+<?= $hdir->img('heb-passages-tab.png') ?>
 
 <p>When generating questions for a student, Bible OL will choose sentences from the passages you
     specify here. You can click on the small plus signs next to the names of the books of the Bible.
