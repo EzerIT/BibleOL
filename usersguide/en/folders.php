@@ -67,7 +67,7 @@
         XML file with a file extension of &ldquo;.3et&rdquo;. You can use the downloaded exercise to
         upload to another folder or to another server.</li>
     <li><i>Edit</i> allows you to edit the exercise as described in the section
-        &ldquo;<?= anchor('help/show_help/edit_exercise','Editing an Exercise') ?>&ldquo;.</li>
+        &ldquo;<?= anchor('help/show_help/exercise_mgmt','Exercise management') ?>&ldquo;.</li>
     <li><i>Rename</i> allows you to change the name of the exercise.</li>
     <li><i>Copy passages</i> reads the list of passages used for the exercise. After pressing this
         key, a new button labelled &ldquo;Insert passages into marked files&rdquo; will appear at the
@@ -98,4 +98,4 @@
     folder.</p>
 
 <p>To create a new exercise, click &ldquo;Create exercise&rdquo; and proceed as described in section 
-    &ldquo;<?= anchor('help/show_help/edit_exercise','Editing an Exercise') ?>&ldquo;.</p>
+    &ldquo;<?= anchor('help/show_help/exercise_mgmt','Exercise management') ?>&ldquo;.</p>
