@@ -110,10 +110,10 @@
             "vocative": "#7 Vokativ"
         },
         "degree_t": {
-            "NA": "",
-            "positive": "#1 Positiv",
-            "comparative": "#2 Komparativ",
-            "superlative": "#3 Superlativ"
+            "NA": "#1 -",
+            "positive": "#2 Positiv",
+            "comparative": "#3 Komparativ",
+            "superlative": "#4 Superlativ"
         },
         "conjugation_t": {
             "NA": "#1 -",

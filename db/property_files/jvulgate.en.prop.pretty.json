@@ -110,7 +110,7 @@
             "vocative": "#7 Vocative"
         },
         "degree_t": {
-            "NA": "",
+            "NA": "#1 N\/A",
             "positive": "#1 Positive",
             "comparative": "#2 Comparative",
             "superlative": "#3 Superlative"
