@@ -20,7 +20,9 @@
             "voice": "Voice",
             "mood": "Mood",
             "degree": "Degree",
-            "inflection": "Inflection"
+            "conjugation": "Conjugation",
+            "declension": "Declension",
+            "stem": "Stem"
         },
         "sentence": {
             "_objname": "Sentence"
@@ -113,9 +115,47 @@
             "comparative": "#2 Comparative",
             "superlative": "#3 Superlative"
         },
-        "inflection_t": {
-            "non_inflecting": "Non-inflecting",
-            "inflecting": "Inflecting"
+        "conjugation_t": {
+            "NA": "#1 N\/A",
+            "first_c": "#2 1st",
+            "second_c": "#3 2nd",
+            "third_c": "#4 3rd",
+            "third_c_io": "#5 3rd (-io)",
+            "fourth_c": "#6 4th",
+            "irregular": "#7 Irregular"
+        },
+        "declension_t": {
+            "NA": "#1 N\/A",
+            "first_d": "#2 1st",
+            "first_or_second_d": "#3 1st/2nd",
+            "second_d": "#4 2nd",
+            "second_d_er": "#5 2nd (-er)",
+            "third_d": "#6 3rd",
+            "fourth_d": "#7 4th",
+            "fifth_d": "#8 5th",
+            "indeclinable": "#9 Indeclinable",
+            "irregular": "#10 Irregular"
+        },
+        "stem_t": {
+            "NA": "#1 N\/A",
+            "a": "#2 a stem",
+            "b": "#3 b stem",
+            "c": "#4 c stem",
+            "d": "#5 d stem",
+            "e": "#6 e stem",
+            "g": "#7 g stem",
+            "i": "#8 i stem",
+            "l": "#9 l stem",
+            "n": "#10 n stem",
+            "o": "#11 o stem",
+            "o_or_a": "#12 o/a stem",
+            "p": "#13 p stem",
+            "r": "#14 r stem",
+            "t": "#15 t stem",
+            "u": "#16 u stem",
+            "v": "#17 v stem",
+            "indeclinable": "#18 Indeclinable",
+            "irregular": "#19 Irregular"
         }
     },
     "grammargroup": {

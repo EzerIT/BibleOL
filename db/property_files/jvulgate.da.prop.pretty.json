@@ -20,7 +20,9 @@
             "voice": "Diatese",
             "mood": "Modus",
             "degree": "Grad",
-            "inflection": "Bøjelighed"
+            "conjugation": "Konjugation",
+            "declension": "Deklination",
+            "stem": "Stamme"
         },
         "sentence": {
             "_objname": "Sætning"
@@ -113,9 +115,47 @@
             "comparative": "#2 Komparativ",
             "superlative": "#3 Superlativ"
         },
-        "inflection_t": {
-            "non_inflecting": "Ubøjeligt",
-            "inflecting": "Bøjeligt"
+        "conjugation_t": {
+            "NA": "#1 -",
+            "first_c": "#2 1.",
+            "second_c": "#3 2.",
+            "third_c": "#4 3.",
+            "third_c_io": "#5 3. (-io)",
+            "fourth_c": "#6 4.",
+            "irregular": "#7 Uregelmæssig"
+        },
+        "declension_t": {
+            "NA": "#1 -",
+            "first_d": "#2 1.",
+            "first_or_second_d": "#3 1./2.",
+            "second_d": "#4 2.",
+            "second_d_er": "#5 2. (-er)",
+            "third_d": "#6 3.",
+            "fourth_d": "#7 4.",
+            "fifth_d": "#8 5.",
+            "indeclinable": "#9 Ubøjeligt",
+            "irregular": "#10 Uregelmæssigt"
+        },
+        "stem_t": {
+            "NA": "#1 -",
+            "a": "#2 a-stamme",
+            "b": "#3 b-stamme",
+            "c": "#4 c-stamme",
+            "d": "#5 d-stamme",
+            "e": "#6 e-stamme",
+            "g": "#7 g-stamme",
+            "i": "#8 i-stamme",
+            "l": "#9 l-stamme",
+            "n": "#10 n-stamme",
+            "o": "#11 o-stamme",
+            "o_or_a": "#12 o-/a-stamme",
+            "p": "#13 p-stamme",
+            "r": "#14 r-stamme",
+            "t": "#15 t-stamme",
+            "u": "#16 u-stamme",
+            "v": "#17 v-stamme",
+            "indeclinable": "#18 Ubøjeligt",
+            "irregular": "#19 Uregelmæssig"
         }
     },
     "grammargroup": {
