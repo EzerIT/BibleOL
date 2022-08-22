@@ -4,12 +4,12 @@
     teacher can vary certain details about the way exercises look to the student. These details are
     listed in the following sections.</p>
 
-<h2>Disabling &ldquo;Locate&rdquo;</h2>
+<h2><a name="disabling_locate"></a>Disabling &ldquo;Locate&rdquo;</h2>
 
 <p>A teacher may disable the &ldquo;Locate&rdquo; button in an exercise.</p>
 
 
-<h2>Sentence Context</h2>
+<h2><a name="sentence_context"></a>Sentence Context</h2>
 
 <p>Normally, an exercise will show you one sentence at a time. However, an exercise may be
     constructed to display a few sentences surrounding the sentence in question. For example, the
@@ -19,7 +19,7 @@
 <?= $hdir->img('context.png') ?>
 
 
-<h2>Fixed Exercises</h2>
+<h2><a name="fixed_exercises"></a>Fixed Exercises</h2>
 
 <p>Normally, the sentences for exercises are chosen at random from a set of Bible passages. This
     means that every time you run an exercise, you may see new sentences.</p>
