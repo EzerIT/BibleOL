@@ -27,7 +27,10 @@
             "gender": "gender_t",
             "case": "case_t",
             "degree": "degree_t",
-            "inflection": "inflection_t"
+            "inflection": "inflection_t",
+            "conjugation": "conjugation_t",
+            "declension": "declension_t",
+            "stem": "stem_t"
         },
         "book": {
             "self": "id_d",
@@ -60,7 +63,10 @@
         "gender_t",
         "case_t",
         "degree_t",
-        "inflection_t"
+        "inflection_t",
+        "conjugation_t",
+        "declension_t",
+        "stem_t"
     ],
     "enum2values": {
         "book_name_t": [
@@ -181,6 +187,48 @@
         "inflection_t": [
             "inflecting",
             "non_inflecting"
+        ],
+        "conjugation_t": [
+            "NA",
+            "first_c",
+            "fourth_c",
+            "irregular",
+            "second_c",
+            "third_c",
+            "third_c_io"
+        ],
+        "declension_t": [
+            "NA",
+            "fifth_d",
+            "first_d",
+            "first_or_second_d",
+            "fourth_d",
+            "indeclinable",
+            "irregular",
+            "second_d",
+            "second_d_er",
+            "third_d"
+        ],
+        "stem_t": [
+            "NA",
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "g",
+            "i",
+            "indeclinable",
+            "irregular",
+            "l",
+            "n",
+            "o",
+            "o_or_a",
+            "p",
+            "r",
+            "t",
+            "u",
+            "v"
         ]
     }
 }

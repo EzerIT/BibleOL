@@ -100,6 +100,9 @@
                     "ignoreShow": true,
                     "ignoreRequest": true
                 },
+                "verb_type": {},
+                "noun_stem": {},
+                "noun_declension": {},
                 "gloss": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i",
@@ -159,10 +162,21 @@
                             "mytype": "GrammarFeature",
                             "name": "frequency_rank"
                         },
-
                         {
                             "mytype": "GrammarFeature",
                             "name": "psp"
+                        },
+                        {
+                            "mytype": "GrammarFeature",
+                            "name": "verb_type"
+                        },
+                        {
+                            "mytype": "GrammarFeature",
+                            "name": "noun_declension"
+                        },
+                        {
+                            "mytype": "GrammarFeature",
+                            "name": "noun_stem"
                         }
                     ]
                 },

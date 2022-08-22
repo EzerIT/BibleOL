@@ -20,7 +20,9 @@
             "voice": "",
             "mood": "",
             "degree": "",
-            "inflection": ""
+            "conjugation": "",
+            "declension": "",
+            "stem": ""
         },
         "sentence": {
             "_objname": ""
@@ -113,9 +115,47 @@
             "comparative": "",
             "superlative": ""
         },
-        "inflection_t": {
-            "non_inflecting": "",
-            "inflecting": ""
+        "conjugation_t": {
+            "NA": "",
+            "first_c": "",
+            "second_c": "",
+            "third_c": "",
+            "third_c_io": "",
+            "fourth_c": "",
+            "irregular": ""
+        },
+        "declension_t": {
+            "NA": "",
+            "first_d": "",
+            "first_or_second_d": "",
+            "second_d": "",
+            "second_d_er": "",
+            "third_d": "",
+            "fourth_d": "",
+            "fifth_d": "",
+            "indeclinable": "",
+            "irregular": ""
+        },
+        "stem_t": {
+            "NA": "",
+            "a": "",
+            "b": "",
+            "c": "",
+            "d": "",
+            "e": "",
+            "g": "",
+            "i": "",
+            "l": "",
+            "n": "",
+            "o": "",
+            "o_or_a": "",
+            "p": "",
+            "r": "",
+            "t": "",
+            "u": "",
+            "v": "",
+            "indeclinable": "",
+            "irregular": ""
         }
     },
     "grammargroup": {

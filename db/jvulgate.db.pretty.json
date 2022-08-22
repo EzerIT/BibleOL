@@ -65,7 +65,14 @@
                 "voice": {},
                 "mood": {},
                 "degree" : {},
-                "inflection" : {},
+                "inflection" : {
+                    "ignoreSelect": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true
+                },
+                "conjugation" : {},
+                "declension" : {},
+                "stem" : {},
                 "gloss": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i",
@@ -123,7 +130,15 @@
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "inflection"
+                            "name": "conjugation"
+                        },
+                        {
+                            "mytype": "GrammarFeature",
+                            "name": "declension"
+                        },
+                        {
+                            "mytype": "GrammarFeature",
+                            "name": "stem"
                         }
                     ]
                 },

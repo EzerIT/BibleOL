@@ -23,6 +23,7 @@ $lang['malformed_url'] = "Malformed URL";
 $lang['modified'] = "Modified?";
 $lang['name_prefix'] = "Name prefix";
 $lang['occurrences'] = "Occurrences";
+$lang['part_of_speech'] = "Part of speech";
 $lang['revert'] = "Revert";
 $lang['revert_all'] = "Revert all";
 $lang['select_gloss_translate_range'] = "<p>Select the language and the range of glosses for which you wish to modify the translation.</p> <p>You can either select the %d most frequent glosses (they will be displayed sorted by frequency), or you can select glosses alphabetically.</p>";
