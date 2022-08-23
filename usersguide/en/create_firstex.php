@@ -178,7 +178,7 @@ For the exercise we are creating here, we need sentences containing words that..
 <p>Here you can indicate what information you will provide to the student, and what information the
     student should provide.</p>
 
-<p>When you first open this tab, all the marks will be in the &ldquo;Don’t care&rdquo; column. In the
+<p>When you first open this tab, all the marks will be in the &ldquo;Don&rsquo;t care&rdquo; column. In the
     rightmost column you will see all the features that are available for the sentence unit called
     &ldquo;Word&rdquo; in this database. The first feature is always &ldquo;Text&rdquo; and represents
     the actual word in the Bible verse.</p>
@@ -193,7 +193,7 @@ For the exercise we are creating here, we need sentences containing words that..
 
 <p>When students run the exercise, they will be able to display all the features by pointing to the
     individual words with their mouse. If you want to prevent students from seeing certain features,
-    indicate that in the &ldquo;Don’t show&rdquo; column. The &ldquo;Request&rdquo; features are never
+    indicate that in the &ldquo;Don&rsquo;t show&rdquo; column. The &ldquo;Request&rdquo; features are never
     visible to the students.</p>
 
 <?php if ($sub_article=='heb'): ?>
