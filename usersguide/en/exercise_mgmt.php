@@ -4,26 +4,14 @@
     <i>facilitator</i> privileges. You should also be familiar with <?=
     anchor('help/show_help/folders','folder management') ?>.</p>
 
-<p>Before we describe how to create exercises, we need to discuss two important concepts used by
-Bible OL:</p>
+<p>Before we describe how to create exercises, you must be familiar with three important terms
+    from the <?= anchor('help/show_help/terminology','terminology') ?> page:</p>
 
-<dl>
-    <dt>Sentence units</dt>
-    <dd>A sentence can be seen as consisting of a set of <i>sentence units</i>. By
-        far the most common thing is to see a sentence as a set of <i>words</i>, but you
-        could also see the sentence as comprised of <i>clauses</i> or <i>phrases</i>. Thus
-        a <i>sentence unit</i> can be a <i>word,</i> a <i>clause,</i>
-        a <i>phrase,</i> or perhaps something else. As you read on, you will rarely
-        go wrong if you assume that &ldquo;sentence unit&rdquo; means &ldquo;word&rdquo;.</dd>
-    
-    <dt>Features</dt>
-    <dd>A sentence unit has various <i>features.</i> A feature has a name and a
-        value. For example, a word can have a feature called <i>part of speech</i>
-        with the value <i>noun</i> and a feature called <i>gender</i> with the value
-        <i>masculine.</i> An important feature is called <i>text,</i> which simply
-        refers to the actual characters making up the word; for example, the
-        <i>text</i> feature may have the value <i>&ldquo;elephant&rdquo;.</i></dd>
-</dl>
+<ul>
+    <li><?= anchor('help/show_help/terminology#sentence_unit','sentence units') ?></li>
+    <li><?= anchor('help/show_help/terminology#feature','features') ?></li>
+    <li><?= anchor('help/show_help/terminology#question_object','question objects') ?></li>
+</ul>
 
 <p>You should also realise that in the context of Bible OL, an <i>exercise</i> is
   actually a description of how the program should generate questions. An exercise is stored
@@ -31,7 +19,7 @@ Bible OL:</p>
 
 <p>An exercise specifies:</p>
 
-<ul class="notspaced">
+<ul>
   <li>The database that is to be used (typically, the Old or the New Testament).</li>
   <li>The <i>passages</i> from which the program chooses the exercise sentences
       (for example, the minor prophets or the Gospels).</li>

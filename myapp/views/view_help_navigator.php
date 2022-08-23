@@ -34,7 +34,8 @@ $menu = array(
         ),
 
 
-    'Reference Guide' => array('modes'         => array(0,'Learner vs. Facilitator Mode'),
+    'Reference Guide' => array('terminology'   => array(0,'Terminology'),
+                               'modes'         => array(0,'Learner vs. Facilitator Mode'),
                                'menus'         => array(0,'Menus'),
                                'pref'          => array(0,'Program preferences'),
                                'tabs'          => array(0,'Tabs'),
@@ -50,6 +51,7 @@ $menu = array(
                                'hebrewkey'     => array(0,'Typing Hebrew'),
         ),
 
+    
     'Installation and License' => array('installation' => array(0,'System requirements and installation'),
                                         'license'      => array(0,'License and acknowledgements'),
         ),

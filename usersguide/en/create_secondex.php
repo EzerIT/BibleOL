@@ -161,3 +161,6 @@
   between the masculine and feminine 3rd person plural form of the verb.)',
   '(The chosen sentence units are still all verbs in the present indicative; therefore the program
   also asks about <span class="greek">ἐστιν</span> which is third person singular.)') ?></p>
+
+<p>The Reference Guide contains more information about
+    <?=anchor('help/show_help/sentence_units','the &ldquo;Sentence Units&rdquo; tab') ?>.</p>

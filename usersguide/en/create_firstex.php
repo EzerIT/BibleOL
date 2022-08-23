@@ -35,6 +35,10 @@
 
 <?= $hdir->img("$sub_article-description-tab.png") ?>
 
+<p>The Reference Guide contains more information about
+    <?=anchor('help/show_help/description','the &ldquo;Description&rdquo; tab') ?>.</p>
+
+
 <h2>The &ldquo;Passages&rdquo; Tab</h2>
 
 <p>Select the &ldquo;Passages&rdquo; tab and indicate which part of the <?= $hdir->heb_gr('Old','New') ?> Testament
@@ -57,22 +61,8 @@
 <p>You can click on the small plus signs next to the names of the books of the Bible. This will allow
     you to specify individual chapters or verses to use for the exercise.</p>
 
-<p>Below the passage selector, you can specify a few specialities about the exercise:</p>
-
-<ul>
-    <li> Should the &ldquo;Locate&rdquo; button be shown or not?
-        (See <?= anchor('help/show_help/variations#disabling_locate','Disabling &ldquo;Locate&rdquo;') ?>.)</li>
-    <li> How many sentences of context should be shown before and after the relevant sentence? (See
-        <?= anchor('help/show_help/variations#sentence_context','Sentence Context') ?>.)</li>
-    <li> Should the number of questions be fixed or should the student be able to choose? (See 
-        <?= anchor('help/show_help/variations#fixed_exercises','Fixed Exercises') ?>.)</li>
-    <li> Should the order of questions be random or fixed? (See
-        <?= anchor('help/show_help/variations#fixed_exercises','Fixed Exercises') ?>.)</li>
-</ul>
-
-<p>If either the number of questions or the order of questions is fixed, the students cannot themselves
-    choose the Bible passages for the exercise.</p>
-
+<p>The Reference Guide contains more information about
+    <?=anchor('help/show_help/passages','the &ldquo;Passages&rdquo; tab') ?>.</p>
 
 <h2>The &ldquo;Sentences&rdquo; Tab</h2>
 
@@ -169,6 +159,9 @@ For the exercise we are creating here, we need sentences containing words that..
     the &ldquo;Sentence Units&rdquo; tab is only active when the check mark is not set. (Be sure to
     leave the mark on.)</p>
 
+<p>The Reference Guide contains more information about
+    <?=anchor('help/show_help/sentences','the &ldquo;Sentences&rdquo; tab') ?>.</p>
+
 <h2>The &ldquo;Features&rdquo; Tab</h2>
 
 <p>Select the &ldquo;Features&rdquo; tab. You will see a dialog like this one:</p>
@@ -206,7 +199,9 @@ For the exercise we are creating here, we need sentences containing words that..
     <p>The &ldquo;Multiple choice&rdquo; column is not used for Greek exercises.</p>
 <?php endif; ?>
 
-<p>The &ldquo;Features&rdquo; tab is described in more detail in section XXX.</p>
+
+<p>The Reference Guide contains more information about
+    <?=anchor('help/show_help/features','the &ldquo;Features&rdquo; tab') ?>.</p>
 
 <h2>Saving the Exercise</h2>
 
