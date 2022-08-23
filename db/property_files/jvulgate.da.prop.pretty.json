@@ -127,7 +127,7 @@
         "declension_t": {
             "NA": "#1 -",
             "first_d": "#2 1.",
-            "first_or_second_d": "#3 1./2.",
+            "first_or_second_d": "#3 1.\/2.",
             "second_d": "#4 2.",
             "second_d_er": "#5 2. (-er)",
             "third_d": "#6 3.",
@@ -148,7 +148,7 @@
             "l": "#9 l-stamme",
             "n": "#10 n-stamme",
             "o": "#11 o-stamme",
-            "o_or_a": "#12 o-/a-stamme",
+            "o_or_a": "#12 o-\/a-stamme",
             "p": "#13 p-stamme",
             "r": "#14 r-stamme",
             "t": "#15 t-stamme",

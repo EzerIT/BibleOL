@@ -199,7 +199,7 @@
             "irregular": "#21 Irregular",
             "indeclinable": "#22 Indeclinable"
         },
-        "noun_declension_t" : {
+        "noun_declension_t": {
             "NA": "#1 N\/A",
             "first_eta": "#2 1st (-η)",
             "first_alpha_breve": "#3 1st (-ᾰ)",

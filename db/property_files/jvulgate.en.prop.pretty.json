@@ -127,7 +127,7 @@
         "declension_t": {
             "NA": "#1 N\/A",
             "first_d": "#2 1st",
-            "first_or_second_d": "#3 1st/2nd",
+            "first_or_second_d": "#3 1st\/2nd",
             "second_d": "#4 2nd",
             "second_d_er": "#5 2nd (-er)",
             "third_d": "#6 3rd",
@@ -148,7 +148,7 @@
             "l": "#9 l stem",
             "n": "#10 n stem",
             "o": "#11 o stem",
-            "o_or_a": "#12 o/a stem",
+            "o_or_a": "#12 o\/a stem",
             "p": "#13 p stem",
             "r": "#14 r stem",
             "t": "#15 t stem",

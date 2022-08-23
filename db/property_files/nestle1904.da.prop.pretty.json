@@ -8,7 +8,7 @@
             "frequency_rank": "Hyppighedsrang",
             "person": "Person",
             "voice": "Diatese",
-            "tense": "Tid",
+            "tense": "Aspekt-tid",
             "mood": "Modus",
             "lemma": "Leksem",
             "raw_lemma": "Leksem (små bogstaver, ingen accenter)",
@@ -51,17 +51,17 @@
             "true": "ja"
         },
         "tense_t": {
-            "pluperfect": "Pluskvamperfektum",
-            "imperfect": "Imperfektum",
+            "pluperfect": "Perfektiv (præteritum)",
+            "imperfect": "Imperfektiv (præteritum)",
             "second_future": "Anden futurum",
-            "present": "Præsens",
-            "aorist": "Aorist",
-            "second_aorist": "Anden aorist",
-            "second_pluperfect": "Anden puskvamperfektum",
+            "present": "Imperfektiv (præsens)",
+            "aorist": "Aorist (præteritum)",
+            "second_aorist": "Anden aorist (præteritum)",
+            "second_pluperfect": "Anden perfektiv (præteritum)",
             "future": "Futurum",
-            "second_perfect": "Anden perfektum",
+            "second_perfect": "Anden perfektiv (præteritum)",
             "NA": "-",
-            "perfect": "Perfektum"
+            "perfect": "Perfektiv (præsens)"
         },
         "suffix_t": {
             "crasis": "Crasis",
@@ -199,7 +199,7 @@
             "irregular": "#21 Uregelmæssigt",
             "indeclinable": "#22 Ubøjeligt"
         },
-        "noun_declension_t" : {
+        "noun_declension_t": {
             "NA": "#1 -",
             "first_eta": "#2 1. (-η)",
             "first_alpha_breve": "#3 1. (-ᾰ)",
