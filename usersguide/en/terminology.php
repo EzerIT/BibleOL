@@ -35,8 +35,7 @@
 
 <h2><a name="sentence_unit"></a>Sentence Unit</h2>
 
-<p>A sentence can be seen as consisting of a set of <i>sentence units</i>. By far the most common thing
-    is to see a sentence as a set of <i>words</i>, but you could also see the sentence as comprised of
-    <i>clauses</i> or <i>phrases</i>. Thus a <i>sentence unit</i> can be a <i>word,</i> a <i>clause,</i>
-    a <i>phrase,</i> or perhaps something else.</p>
+<p>A <i>sentence unit</i> is a part of a sentence. Thus a sentence unit can be a <i>word,</i> a <i>clause,</i>
+    a <i>phrase,</i> or perhaps something else. A Bible OL exercise asks questions about specific
+    sentence units. By far the most common sentence unit in exercises is a <i>word.</i></p>
     
