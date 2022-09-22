@@ -103,6 +103,11 @@
                 "verb_type": {},
                 "noun_stem": {},
                 "noun_declension": {},
+                "monad_num": {
+                    "ignoreSelect": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true
+                },
                 "gloss": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i",

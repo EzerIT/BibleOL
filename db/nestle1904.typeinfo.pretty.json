@@ -35,7 +35,8 @@
             "suffix": "suffix_t",
             "verb_type": "verb_type_t",
             "noun_stem": "noun_stem_t",
-            "noun_declension": "noun_declension_t"
+            "noun_declension": "noun_declension_t",
+            "monad_num": "integer"
         },
         "book": {
             "self": "id_d",
