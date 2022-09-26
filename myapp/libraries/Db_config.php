@@ -197,7 +197,7 @@ class Db_config {
             $this->src_lang = array('greek');
             $this->glosslang = get_greeklex_translations();
         }
-        elseif ($dbf->emdros_db=='db/jvulgate') {
+        elseif ($dbf->emdros_db=='db/jvulgate' || $dbf->emdros_db=='db/VC') {
             $this->src_lang = array('latin');
             $this->glosslang = get_latinlex_translations();
         }

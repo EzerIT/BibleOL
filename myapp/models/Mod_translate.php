@@ -521,6 +521,14 @@ class Mod_translate extends CI_Model {
         return array(array(), $l10n['universe']['reference']);
     }
 
+    public function get_localized_VC() {
+        $this->load->library('db_config');
+
+        $this->db_config->init_config("VC","VC", $this->language, true);
+        $l10n = json_decode($this->db_config->l10n_json,true);
+        return array(array(), $l10n['universe']['reference']);
+    }
+
 
     public function get_frequent_glosses(string $src_lang, string $lang_edit, string $lang_show, int $gloss_start, int $gloss_count) {
         if (!empty($_SESSION['variant']))

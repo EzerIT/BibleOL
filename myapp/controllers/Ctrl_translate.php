@@ -304,6 +304,11 @@ class Ctrl_translate extends MY_Controller {
                     list($stems,$books) = $this->mod_translate->get_localized_jvulgate();
                     break;
 
+                case 'latin_vc':
+                    $buttons = $this->mod_urls->get_latin_vc_buttons_long();
+                    list($stems,$books) = $this->mod_translate->get_localized_VC();
+                    break;
+
                 default:
                     throw new DataException($this->lang->line('illegal_lang_code'));
             }

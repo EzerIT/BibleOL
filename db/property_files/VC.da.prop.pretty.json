@@ -1,6 +1,6 @@
 {
-    "dbdescription": "Jeromes Vulgata (NT med udeladelser)",
-    "dbcopyright": "Baseret på data fra <a target=\"_blank\" href=\"https:\/\/www.hf.uio.no\/ifikk\/\">Institutt for filosofi, ide- og kunsthistorie og klassiske språk,<\/a> Oslo, Norge. Licenseret under en <a target=\"_blank\" href=\"https:\/\/creativecommons.org\/licenses\/by-nc-sa\/4.0\/\">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International licens<\/a>",
+    "dbdescription": "Villa Claudiae EKSPERIMENTEL",
+    "dbcopyright": "Materialerne kan anvendes frit så længe forfatteren nævnes. Forfatteren er <a href=\"http:\/\/old.thisted-gymnasium.dk\/klassiker\/In%20angulo%20cum%20libello.htm\" target=\"_blank\">Henrik Bolt-Jørgensen<\/a>.",
     "emdrosobject": {
         "word": {
             "_objname": "Ord",
@@ -198,33 +198,7 @@
     "universe": {
         "book": {
             "_label": "%s",
-            "Matthew": "Matthæus",
-            "Mark": "Markus",
-            "Luke": "Lukas",
-            "John": "Johannes",
-            "Acts": "Apostlenes Gerninger",
-            "Romans": "Romerbrevet",
-            "I_Corinthians": "1. Korintherbrev",
-            "II_Corinthians": "2. Korintherbrev",
-            "Galatians": "Galaterbrevet",
-            "Ephesians": "Efeserbrevet",
-            "Philippians": "Filipperbrevet",
-            "Colossians": "Kolossenserbrevet",
-            "I_Thessalonians": "1. Thessalonikerbrev",
-            "II_Thessalonians": "2. Thessalonikerbrev",
-            "I_Timothy": "1. Timotheusbrev",
-            "II_Timothy": "2. Timotheusbrev",
-            "Titus": "Titusbrevet",
-            "Philemon": "Filemonbrevet",
-            "Hebrews": "Hebræerbrevet",
-            "James": "Jakobsbrevet",
-            "I_Peter": "1. Petersbrev",
-            "II_Peter": "2. Petersbrev",
-            "I_John": "1. Johannesbrev",
-            "II_John": "2. Johannesbrev",
-            "III_John": "3. Johannesbrev",
-            "Jude": "Judasbrevet",
-            "Revelation": "Johannes' Åbenbaring"
+            "Villa_Claudiae": "Villa Claudiae"
         },
         "chapter": {
             "_label": "Kapitel %s"
@@ -234,33 +208,7 @@
         },
         "reference": {
             "_label": "%s %d,%d",
-            "Matthew": "Matt",
-            "Mark": "Mark",
-            "Luke": "Luk",
-            "John": "Joh",
-            "Acts": "ApG",
-            "Romans": "Rom",
-            "I_Corinthians": "1 Kor",
-            "II_Corinthians": "2 Kor",
-            "Galatians": "Gal",
-            "Ephesians": "Ef",
-            "Philippians": "Fil",
-            "Colossians": "Kol",
-            "I_Thessalonians": "1 Thess",
-            "II_Thessalonians": "2 Thess",
-            "I_Timothy": "1. Tim",
-            "II_Timothy": "2. Tim",
-            "Titus": "Tit",
-            "Philemon": "Filem",
-            "Hebrews": "Hebr",
-            "James": "Jak",
-            "I_Peter": "1 Pet",
-            "II_Peter": "2 Pet",
-            "I_John": "1 Joh",
-            "II_John": "2 Joh",
-            "III_John": "3 Joh",
-            "Jude": "Jud",
-            "Revelation": "Åb"
+            "Villa_Claudiae": "VC"
         }
     }
 }

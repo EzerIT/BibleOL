@@ -279,7 +279,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
                                           
                                           if ((configuration.databaseName=="ETCBC4" && fs.isGloss)
                                               || (configuration.databaseName=="nestle1904" && (featName=="swahili" || featName=="danish"))
-                                              || (configuration.databaseName=="jvulgate" && (featName=="swahili" || featName=="danish"))) {
+                                              || ((configuration.databaseName=="jvulgate" || configuration.databaseName=="VC") && (featName=="swahili" || featName=="danish"))) {
                                               featValLoc = featValLoc.replace(/(&[gl]t);/,'$1Q')  // Remove ';' from "&gt;" and "&lt;" 
                                                                      .replace(/([^,;(]+).*/,'$1') // Remove everything after ',' or ';' or '('
                                                                      .replace(/(&[gl]t)Q/,'$1;'); // Reinsert ';' in "&gt;" and "&lt;" 
