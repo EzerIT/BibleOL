@@ -76,6 +76,7 @@ case 'all-no-greek':    /* Also excludes Latin */ ?>
 <?php if ($get_parms['src_lang']=='all-with-greek'): ?>
     <?php show_buttons($this->lang->line('greek_glosses'), array('src_lang'=>'greek') + $get_parms, $greek_buttons, $greek_glosses, 'greek-default',$gloss_count); ?>
     <?php show_buttons($this->lang->line('latin_glosses'), array('src_lang'=>'latin') + $get_parms, $latin_buttons, $latin_glosses, 'latin-default',$gloss_count); ?>
+    <?php show_buttons($this->lang->line('latin2_glosses'), array('src_lang'=>'latin2') + $get_parms, $latin2_buttons, $latin2_glosses, 'latin-default',$gloss_count); ?>
 <?php else: ?>
 
     <div class="card mb-3">
@@ -86,6 +87,12 @@ case 'all-no-greek':    /* Also excludes Latin */ ?>
     </div><!--card-->
     <div class="card mb-3">
         <h5 class="card-header bg-info text-light"><?= $this->lang->line('latin_glosses') ?></h5>
+        <div class="card-body">
+            <?= $this->lang->line('no_latin') ?>
+        </div><!--card-body-->
+    </div><!--card-->
+    <div class="card mb-3">
+        <h5 class="card-header bg-info text-light"><?= $this->lang->line('latin2_glosses') ?></h5>
         <div class="card-body">
             <?= $this->lang->line('no_latin') ?>
         </div><!--card-body-->
@@ -124,6 +131,15 @@ case 'all-no-greek':    /* Also excludes Latin */ ?>
 <?php case 'latin': ?>
 <?php show_buttons($this->lang->line('latin_glosses'),
                    array('src_lang'=>'latin') + $get_parms,
+                   $buttons,
+                   $num_glosses,
+                   'latin-default',
+                   $gloss_count); ?>
+<?php break; ?>
+
+<?php case 'latin2': ?>
+<?php show_buttons($this->lang->line('latin2_glosses'),
+                   array('src_lang'=>'latin2') + $get_parms,
                    $buttons,
                    $num_glosses,
                    'latin-default',
