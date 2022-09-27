@@ -22,7 +22,10 @@
             "strongs_unreliable": "",
             "gender": "",
             "case": "",
-            "psp": ""
+            "psp": "",
+            "verb_type": "",
+            "noun_stem": "",
+            "noun_declension": ""
         },
         "clause1": {
             "_objname": "",
