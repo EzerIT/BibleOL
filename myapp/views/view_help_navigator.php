@@ -16,7 +16,7 @@ $menu = array(
                                      'secondex/gr'       => array(1,'Example: Second Greek exercise'),
                                      'thirdex/gr'        => array(1,'Example: Third Greek exercise'), 
                                      'variations'        => array(0,'Variations to exercises'),
-                                     'answering_glosses' => array(0,'Answering gloss requests'),
+                                     'answer_types'      => array(0,'Answering various types of questions'),
                                      'statistics'        => array(0,'How am I doing?'),
                                      'enroll'            => array(0,'Class membership'),
         ),
@@ -35,8 +35,7 @@ $menu = array(
 
 
     'Reference Guide' => array('terminology'   => array(0,'Terminology'),
-                               'modes'         => array(0,'Learner vs. Facilitator Mode'),
-                               'menus'         => array(0,'Menus'),
+                               //'menus'         => array(0,'Menus'),
                                'pref'          => array(0,'Program preferences'),
                                'tabs'          => array(0,'Tabs'),
                                'description'   => array(1,'The “Description” tab'),
@@ -47,17 +46,9 @@ $menu = array(
                                'sentence_units'=> array(1,'The “Sentence Units” tab'),
                                'features'      => array(1,'The “Features” tab'),
                                'qpanel'        => array(0,'Question window'),
-                               'greekkey'      => array(0,'Typing Greek'),
-                               'hebrewkey'     => array(0,'Typing Hebrew'),
         ),
 
     
-    'Installation and License' => array('installation' => array(0,'System requirements and installation'),
-                                        'license'      => array(0,'License and acknowledgements'),
-        ),
-
-    'Contact' => array('contact' => array(0,'Email addresses'),
-        ),
     );
 ?>
 

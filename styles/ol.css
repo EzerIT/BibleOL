@@ -3,7 +3,7 @@
   text-align: right;
 }
 .ltr {
-  direction: ltr;
+  direction: ltr !important;
 }
 html,
 body {
@@ -1436,4 +1436,7 @@ footer .row {
 }
 .tooltip-inner {
   text-align: left;
+}
+.shortcuts {
+  margin-left: 25%;
 }
