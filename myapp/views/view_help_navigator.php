@@ -45,7 +45,6 @@ $menu = array(
                                'mql'           => array(2,'MQL'),
                                'sentence_units'=> array(1,'The “Sentence Units” tab'),
                                'features'      => array(1,'The “Features” tab'),
-                               'qpanel'        => array(0,'Question window'),
                                'shortcuts'     => array(0,'How to use shortcuts'),
         ),
 
