@@ -5,7 +5,7 @@
 
 <div class="shortcuts">
     <h5 class="card-header bg-info text-light">Using shortcuts</h5>
-    <div class="card-body border border-info">
+    <div class="card-body border border-info mb-4">
         <p>If you are using a computer, you can perform a number of functions from your keyboard. See
             <?= anchor('help/show_help/shortcuts', '&ldquo;How to use shortcuts&rdquo;') ?> for more
             information.</p>
@@ -23,7 +23,7 @@
 
 <div class="shortcuts">
     <h5 class="card-header bg-info text-light">Using shortcuts</h5>
-    <div class="card-body border border-info">
+    <div class="card-body border border-info mb-4">
         <p>If you are using a computer, you can press the key for the first letter of a value to select
             it. For example, in the figure above, you can press &ldquo;p&rdquo; on your keyboard to
             select the value &ldquo;Plural&rdquo;. If more that one value starts with the same letter,
@@ -56,7 +56,7 @@
 
 <div class="shortcuts">
     <h5 class="card-header bg-info text-light">Using shortcuts</h5>
-    <div class="card-body border border-info">
+    <div class="card-body border border-info mb-4">
         <p>If you are using a computer, you can use your keyboard to select and deselect options. Press
             the key shown in the small square at the top left of each option to select that option;
             press the key again to deselect it. For example, in the figure above, you can press
@@ -78,14 +78,20 @@
 <?= $hdir->img("qtype-heb.png") ?>
 
 <p>To provide the answer <span class="help hebrew">בֶּן</span>, click the buttons marked with the
-    Hebrew letters <i>bet, dagesh, segol,</i> and <i>final nun.</i></p>
+    Hebrew letters <i>bet, dagesh, segol,</i> and <i>final nun.</i> You can click
+    &ldquo;&rarr;&rdquo; to erase the last character in your answer.</p>
 
 <div class="shortcuts">
     <h5 class="card-header bg-info text-light">Using shortcuts</h5>
-    <div class="card-body border border-info">
+    <div class="card-body border border-info mb-4">
         <p>If you are using a computer, you can type each key by typing the letter in the square
             at the top right of each Hebrew character. For example, in the figure above, you can type
             &ldquo;b.eN&rdquo; on your keyboard to produce the answer <span class="help hebrew">בֶּן</span>.</p>
+        <p>You can use the backspace key to erase the last character in your answer.<p>
+        <p>Note that there is a difference between upper and lower case shortcuts; in the example above, &ldquo;n&rdquo; is
+            <span class="help hebrew">נ</span> and &ldquo;N&rdquo; is <span class="help hebrew">ן</span>.
+            Also note that that the shortcut is not necessarily the Latin equivalent of the Hebrew
+            letter.</p>
     </div>
 </div>
 
@@ -93,17 +99,25 @@
 
 <?= $hdir->img("qtype-gr.png") ?>
 
-<p>To provide the answer κύριος, click the buttons marked with the
-    greek letters <i>κ, ύ, ρ, ι, ο,</i> and <i>ς.</i></p>
+<p>To provide the answer κύριος, click the buttons marked with the greek letters
+    <i>κ, ύ, ρ, ι, ο,</i> and <i>ς.</i> You can click &ldquo;&larr;&rdquo; to erase
+    the last character in your answer.</p>
 
 <div class="shortcuts">
     <h5 class="card-header bg-info text-light">Using shortcuts</h5>
-    <div class="card-body border border-info">
+    <div class="card-body border border-info mb-4">
         <p>If you are using a computer, you can type each key by typing the letter in the square at
             the top left of each Greek character. For example, in the figure above, you can type
             &ldquo;k&rdquo; &ndash; then use your mouse to click ύ &ndash; the type &ldquo;rioc&rdquo; to produce
             the answer κύριος. Note that accented Greek letters do not have a corresponding shortcut
             keystroke and you must use your mouse to click the character.</p>
+        <p>You can use the backspace key to erase the last character in your answer.</p>
+        <p>Note that there is a difference between upper and lower case shortcuts. Upper case
+            shortcuts are used for Greek upper case letters, lower case shortcuts are used for
+            Greek lower case letters.</p>
+        <p>Also note that that the shortcut is not necessarily the Latin equivalent of the Greek
+            letter; in the example above, the keystroke &ldquo;c&rdquo; generates the Greek
+            character ς.</p>
     </div>
 </div>
 

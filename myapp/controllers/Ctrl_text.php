@@ -54,7 +54,8 @@ class Ctrl_text extends MY_Controller {
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('select_text')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('show_help/viewing_text' => 'help_this_page')));
 
             $copyrights = [];
             $dbnames = [];
@@ -110,8 +111,15 @@ class Ctrl_text extends MY_Controller {
                                                  'js_list'=>array('js/ol.js')));
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
-            $this->load->view('view_text_display', array('is_quiz' => false,
+
+            $help_page = $db==='ETCBC4' ? 'show_help/viewing_text2/heb' :
+                         ($db==='nestle1904' ? 'show_help/viewing_text2/gr' :
+                         'show_help/viewing_text');
+            
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array($help_page => 'help_this_page')));
+                
+                $this->load->view('view_text_display', array('is_quiz' => false,
                                                          'mql_list' => $this->mql->mql_list,
                                                          'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
                                                          'quizData_json' => 'null',
@@ -140,7 +148,8 @@ class Ctrl_text extends MY_Controller {
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('directory')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('show_help/running_exercises' => 'help_this_page')));
             $center_text = $this->load->view('view_quizdir',
                                              array('dirlist' => $dirlist,
                                                    'curdir' => set_or_default($_GET['dir'],''),
@@ -412,7 +421,10 @@ class Ctrl_text extends MY_Controller {
                                                  'js_list' => $javascripts));
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => false));
+            $this->load->view('view_menu_bar', array('langselect' => false,
+                                                     'more_help_items' => array('show_help/tabs' => 'help_this_page')));
+
+            
             $this->load->view('view_alert_dialog');
 
             $center_text = $this->load->view('view_edit_quiz',
@@ -493,11 +505,7 @@ class Ctrl_text extends MY_Controller {
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => false,
-                                                     'more_help_items' => array('show_help/description' => 'description_tab',
-                                                                                'show_help/passages' => 'passages_tab',
-                                                                                'show_help/sentences' => 'sentences_tab',
-                                                                                'show_help/sentence_units' => 'sentence_units_tab',
-                                                                                'show_help/features' => 'features_tab')));
+                                                     'more_help_items' => array('show_help/tabs' => 'help_this_page')));
             $this->load->view('view_alert_dialog');
 
             $center_text = $this->load->view('view_edit_quiz',

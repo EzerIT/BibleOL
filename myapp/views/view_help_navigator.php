@@ -17,7 +17,7 @@ $menu = array(
                                      'thirdex/gr'        => array(1,'Example: Third Greek exercise'), 
                                      'variations'        => array(0,'Variations to exercises'),
                                      'answer_types'      => array(0,'Answering various types of questions'),
-                                     'statistics'        => array(0,'How am I doing?'),
+//                                     'statistics'        => array(0,'How am I doing?'),
                                      'enroll'            => array(0,'Class membership'),
         ),
 
@@ -29,14 +29,14 @@ $menu = array(
                                       'create_secondex/heb' => array(2, 'Example: Create an advanced Hebrew exercise'),
                                       'create_firstex/gr' => array(2, 'Example: Create a simple Greek exercise'),
                                       'create_secondex/gr' => array(2, 'Example: Create an advanced Greek exercise'),
-                                      'monitor_students' => array(1,'Monitor students'),
-                                      'create_exams'     => array(1,'Exam management'),
+  //                                    'monitor_students' => array(1,'Monitor students'),
+  //                                    'create_exams'     => array(1,'Exam management'),
         ),
 
 
     'Reference Guide' => array('terminology'   => array(0,'Terminology'),
                                //'menus'         => array(0,'Menus'),
-                               'pref'          => array(0,'Program preferences'),
+//                               'pref'          => array(0,'Program preferences'),
                                'tabs'          => array(0,'Tabs'),
                                'description'   => array(1,'The “Description” tab'),
                                'passages'      => array(1,'The “Passages” tab'),  
@@ -46,6 +46,7 @@ $menu = array(
                                'sentence_units'=> array(1,'The “Sentence Units” tab'),
                                'features'      => array(1,'The “Features” tab'),
                                'qpanel'        => array(0,'Question window'),
+                               'shortcuts'     => array(0,'How to use shortcuts'),
         ),
 
     

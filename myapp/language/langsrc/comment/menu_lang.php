@@ -32,6 +32,18 @@ $comment['font_preferences'] = "";
 $format['font_preferences'] = "";
 $use_textarea['font_preferences'] = false;
 
+$comment['help'] = "";
+$format['help'] = "";
+$use_textarea['help'] = false;
+
+$comment['help_pages'] = "";
+$format['help_pages'] = "";
+$use_textarea['help_pages'] = false;
+
+$comment['help_this_page'] = "";
+$format['help_this_page'] = "";
+$use_textarea['help_this_page'] = false;
+
 $comment['home'] = "";
 $format['home'] = "";
 $use_textarea['home'] = false;

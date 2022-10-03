@@ -1,8 +1,9 @@
 <?php
 
 /* For top level menu item */
-function make_anchor1(string $url, string $txt) {
-    return anchor(site_url($url), get_instance()->lang->line($txt), 'class="nav-link pt-3 pb-3 pl-3 pr-3"');
+function make_anchor1(string $url, string $txt, $attributes=[]) {
+    $attributes['class'] = 'nav-link pt-3 pb-3 pl-3 pr-3';
+    return anchor(site_url($url), get_instance()->lang->line($txt), $attributes);
 }
 
 /* For dropdown menu item */
@@ -94,18 +95,25 @@ if (!isset($in_help) || !$in_help) {
         $content[$ix][] = make_anchor2('login', 'login');
         $content[$ix][] = make_anchor2('privacy', 'privacy_policy');
     }
-}
 
-$ix = count($head);
-$head[] = $this->lang->line('help');
-$content[$ix][] = make_anchor2('help', 'help_pages', array('target'=>'bolhelp'));
+    $ix = count($head);
 
-if (isset($more_help_items)) {
-    foreach ($more_help_items as $mhi_url => $mhi_label)
-        $content[$ix][] = make_anchor2("help/$mhi_url", $mhi_label, array('target'=>'bolhelp'));
-}
+//    $head[] = make_anchor1('help', 'help', array('target'=>'bolhelp'));
+
+    // Uncomment these lines to enable $more_help_items
     
-$cols = $ix+1;
+    $head[] = $this->lang->line('help');
+    $content[$ix][] = make_anchor2('help', 'help_pages', array('target'=>'bolhelp'));
+     
+    if (isset($more_help_items)) {
+        foreach ($more_help_items as $mhi_url => $mhi_label)
+            $content[$ix][] = make_anchor2("help/$mhi_url", $mhi_label, array('target'=>'bolhelp'));
+    }
+    
+    $cols = $ix+1;
+}
+else
+    $cols = 0; // No menus on help pages
 
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light pt-0 pb-0 mb-3">
@@ -135,7 +143,7 @@ $cols = $ix+1;
           <?php endif; ?>
         <?php endfor; ?>
 
-        <?php if ($langselect): ?>
+        <?php if ((!isset($in_help) || !$in_help) && $langselect): /* No language selection on help pages */ ?>
           <?php
                 usort($this->if_translations, function($a, $b) { return $a->native <=> $b->native; });
           ?>
