@@ -10,13 +10,13 @@ Under &ldquo;Corpus&rdquo; in that dialog, you select the text database you want
 
 <ul>
     <li><i>Hebrew (ETCBC4, OT):</i> This is the Hebrew text of the Old Testament as provided by the ETCBC4
-        database (see Appendix XXX).</li>
+        database.</li>
     <li><i>Hebrew (ETCBC4, Transliterated, OT):</i> This is the Hebrew text of the Old Testament as provided by
         the ETCBC4 database, but written with Latin letters.</li>
     <li><i>Greek (Nestle 1904,NT):</i> This is the Greek text of the New Testament as provided by the Nestle
-        1904 database (see Appendix XXX).</li>
+        1904 database.</li>
     <li><i>Jerome&rsquo;s Vulgate (NT with omissions):</i> This is the Latin text of the Vulgate translation of
-        the New Testament (see Appendix XXX).</li>
+        the New Testament.</li>
 </ul>
 
 <p>You should read at least one of these sections:</p>

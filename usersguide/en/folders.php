@@ -34,7 +34,7 @@
     &ldquo;Exercise 11-20&rdquo;. Below the folders there are two exercises, &ldquo;Ex 1&rdquo; and
     &ldquo;Qal Verbs&rdquo;.</p>
 
-<h2>Folder Visibility</h2>
+<h2><a name="folder_visibility"></a>Folder Visibility</h2>
 
 <p>Each folder has a specific <i>visibility</i>. This means that only users enrolled in certain
     classes can see the contents of the folder. When you create a new folder, nobody is allowed to

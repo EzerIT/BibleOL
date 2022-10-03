@@ -14,10 +14,9 @@
 <?= $hdir->img('toplevel.png') ?>
 
 <p>The contents of some folders are available to all students, but you will see that some of the
-    folders here are marked &ldquo;Restricted&rdquo;. These are folders that are only available to students that
-    are enrolled in certain classes. Students&rsquo; access to folders is controlled by teachers as described
-    in <a href="XXX">section XXX</a>.</p>
-
+    folders here are marked &ldquo;Restricted&rdquo;. These are folders that are only available to
+    students that are enrolled in certain classes. Students&rsquo; access to folders is
+    <?= anchor('help/show_help/folders#folder_visibility','controlled by teachers') ?>.</p>
 
 <p>You should study at least one of these sets of examples:</p>
 

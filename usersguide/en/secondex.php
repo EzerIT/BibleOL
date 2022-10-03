@@ -35,9 +35,9 @@
     with <?= $hg ?> characters. You can use these buttons to spell the correct word form, which in
     this case is <?= $hdir->heb_gr('<span class="help hebrew">יְמֵי</span>','εστιν') ?>. The key marked
     <?= $hdir->heb_gr('&rarr;','&larr;') ?> is a backspace key that deletes the last character
-    you entered. The small characters in the upper <?= $hdir->heb_gr('right','left') ?> corner can be used to type
-    the <?= $hg ?> character on you computer keyboard, if you prefer to do so rather than to click
-    with your mouse. (More about this in Section XXX.)</p>
+    you entered. The small characters in the upper <?= $hdir->heb_gr('right','left') ?> corner can be used to
+    <?= anchor("help/show_help/shortcuts","type the $hg character on you computer keyboard") ?>, if you
+    prefer to do so rather than to click with your mouse.</p>
 
 <p>When you have entered your answer, you can use the &ldquo;Check answer&rdquo; button to verify that your
     answer is correct.</p>
