@@ -87,3 +87,4 @@ $lang['valid_chapters'] = "Gyldige kapitler:";
 $lang['warning'] = "Advarsel:";
 $lang['shortcut_heading'] = 'Genvejstaster';
 $lang['shortcut_text'] = 'Du kan benytte genvejstaster. En engelsk beskrivelse af hvordan de benyttes, kan <a target="_blank" href="/ShortcutKeyDescriptionA4.pdf">downloades her</a>.<br>De vigtigste taster til at gå rundt i øvelsen er:<ul><li><i>Pil ned</i> og <i>Pil op</i> flytter mellem linjer i det nuværende underspørgsmål</li><li><i>Page Down</i> og <i>Page Up</i> flytter til det næste/foregående underspørgsmål.</li><li><i>Ctrl-Pil ned</i> (i Windows) eller <i>Command-Pil ned</i> (på en Mac) flytter til det næste spørgsmål.</li><li><i>Ctrl-G</i> (i Windows) eller <i>Command-G</i> (på en Mac) svarer til at klikke på »Tjek svar«.</li><li><i>Ctrl-J</i> (i Windows) eller <i>Command-J</i> (på en Mac) svarer til at klikke på »Vis svar«.</li></ul>';
+$lang['show_help'] = "Hjælp for Bible OL";

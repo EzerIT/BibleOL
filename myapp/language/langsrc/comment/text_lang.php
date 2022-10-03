@@ -335,3 +335,8 @@ $use_textarea['shortcut_heading'] = false;
 $comment['shortcut_text'] = "HTML";
 $format['shortcut_text'] = "";
 $use_textarea['shortcut_text'] = true;
+
+$comment['show_help'] = "Menu bar text";
+$format['show_help'] = "";
+$use_textarea['show_help'] = false;
+
