@@ -140,7 +140,7 @@ For the exercise we are creating here, we need sentences containing words that..
 <p>(You may have noticed that as you chose feature values, the text next to &ldquo;MQL statement to
     select sentences&rdquo; changed automatically. MQL is a command language that is used to specify how
     to search the database, and the statement here is the one actually used for your search. But feel
-    free to ignore this for now. You may later read more about MQL in section XXX.)</p>
+    free to ignore this for now. You may later read <?= anchor('help/show_help/mql','more about MQL') ?>.)</p>
 
 <p>Bible OL now knows how to find sentences for the exercises. It will choose the sentences based on
     the criteria we have just specified. But now things get a bit more complicated: When Bibel OL
