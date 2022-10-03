@@ -388,25 +388,32 @@ class Mod_urls extends CI_Model {
             );
     }
 
-    /// Gets Latin buttons
-    public function get_latin_buttons() {
-        return array(
-            //     Label   Sortorder range
-            array('aa-ar','aa','as'),
-            array('as-cn','as','co'),
-            array('co-de','co','di'),
-            array('di-fa','di','fe'),
-            array('fe-il','fe','im'),
-            array('im-lo','im','lu'),
-            array('lu-nu','lu','o'),
-            array('o-po','o','pr'),
-            array('pr-ra','pr','re'),
-            array('re-sq','re','st'),
-            array('st-us','st','ut'),
-            array('ut-zo','ut','zz'),
-        );
-    }
+    // Gets Latin buttons
+    // Not used
+    //public function get_latin_buttons() {
+    //    return array(
+    //        //     Label   Sortorder range
+    //        array('aa-ar','aa','as'),
+    //        array('as-cn','as','co'),
+    //        array('co-de','co','di'),
+    //        array('di-fa','di','fe'),
+    //        array('fe-il','fe','im'),
+    //        array('im-lo','im','lu'),
+    //        array('lu-nu','lu','o'),
+    //        array('o-po','o','pr'),
+    //        array('pr-ra','pr','re'),
+    //        array('re-sq','re','st'),
+    //        array('st-us','st','ut'),
+    //        array('ut-zo','ut','zz'),
+    //    );
+    //}
 
+    // Gets Latin2 buttons
+    // Not used
+    //public function get_latin2_buttons() {
+    //    return $this->get_latin_buttons();
+    //}
+    
     public function get_latin_buttons_long() {
         return array(
             //     Label    Sortorder range
@@ -505,6 +512,15 @@ class Mod_urls extends CI_Model {
         );
     }
 
+    public function get_latin2_buttons_long() {
+        return array(
+            //     Label    Sortorder range
+            array('a-i','a','l'),
+            array('l-z','l','zz'),
+        );
+    }
+
+    
     public function get_glosses(string $language, string $from, string $to) {
         $query = $this->db->from("lexicon_{$language} he")->join("lexicon_{$language}_en en",'en.lex_id=he.id')
             ->where('sortorder >=',$from)

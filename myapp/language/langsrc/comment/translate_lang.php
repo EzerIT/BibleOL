@@ -64,6 +64,10 @@ $comment['lang_latin'] = "";
 $format['lang_latin'] = "";
 $use_textarea['lang_latin'] = false;
 
+$comment['lang_latin2'] = "";
+$format['lang_latin2'] = "";
+$use_textarea['lang_latin2'] = false;
+
 $comment['lang_heb'] = "";
 $format['lang_heb'] = "";
 $use_textarea['lang_heb'] = false;

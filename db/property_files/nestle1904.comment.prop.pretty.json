@@ -22,7 +22,10 @@
             "strongs_unreliable": "",
             "gender": "",
             "case": "",
-            "psp": ""
+            "psp": "",
+            "verb_type": "",
+            "noun_stem": "",
+            "noun_declension": ""
         },
         "clause1": {
             "_objname": "",
@@ -196,7 +199,7 @@
             "irregular": "",
             "indeclinable": ""
         },
-        "noun_declension_t" : {
+        "noun_declension_t": {
             "NA": "",
             "first_eta": "",
             "first_alpha_breve": "",

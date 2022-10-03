@@ -1,122 +1,87 @@
 {
-    "version": 6,
-    "databaseName": "nestle1904",
-    "propertiesName": "nestle1904",
+    "version": 1,
+    "databaseName": "VC",
+    "propertiesName": "VC",
     "databaseVersion": "1.0.0",
     "granularity": "sentence",
     "surfaceFeature": "surface",
     "objHasSurface": "word",
-    "suffixFeature": null,
-    "charSet": "greek",
+    "suffixFeature": "suffix",
+    "charSet": "latin",
     "objectSettings": {
         "chapter": {},
         "verse": {},
         "book": {},
-        "clause2": {
-            "mayselect": true,
-            "featuresetting": {
-                "typ": {
-                    "isDefault": true
-                }
-            }
-        },
-        "clause1": {
-            "mayselect": true,
-            "featuresetting": {
-                "typ": {
-                    "isDefault": true
-                }
-            }
-        },
         "sentence": {},
         "word": {
             "mayselect": true,
             "featuresetting": {
-                "lexeme_occurrences": {
-                    "ignoreShow": true,
-                    "ignoreRequest": true,
-                    "isRange": true
-                },
                 "frequency_rank": {
                     "ignoreShow": true,
                     "ignoreRequest": true,
                     "isRange": true
                 },
+                "lexeme_occurrences": {
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
+                    "isRange": true
+                },
+                "ref" : {
+                    "ignoreSelect": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true
+                },
                 "surface": {
                     "hideWord": true,
                     "foreignText": true
                 },
-                "psp": {
-                    "isDefault": true
-                },
-                "lemma": {
-                    "foreignText": true
-                },
-                "raw_lemma": {
-                    "foreignText": true
+                "suffix" : {
+                    "ignoreSelect": true,
+                    "ignoreShow": true,
+                    "ignoreRequest": true
                 },
                 "normalized": {
                     "hideWord": true,
                     "foreignText": true
                 },
-                "raw_normalized": {
-                    "hideWord": true,
+                "lemma": {
                     "foreignText": true
                 },
-                "tense": {},
-                "mood": {},
-                "voice": {},
+                "lemma_variant": {
+                    "ignoreShow": true,
+                    "ignoreRequest": true
+                },
+                "lemma_with_variant": {
+                    "foreignText": true
+                },
+                "psp": {
+                    "isDefault": true
+                },
                 "person": {},
-                "gender": {},
                 "number": {},
-                "possessor_number": {},
                 "case": {},
-                "suffix": {},
-                "strongs": {
-                    "ignoreShow": true,
-                    "ignoreRequest": true
-                },
-                "strongs_unreliable": {
-                    "ignoreShow": true,
-                    "ignoreRequest": true
-                },
-                "self": {
+                "gender": {},
+                "tense": {},
+                "voice": {},
+                "mood": {},
+                "degree" : {},
+                "inflection" : {
                     "ignoreSelect": true,
                     "ignoreShow": true,
                     "ignoreRequest": true
                 },
-                "functional_tag": {
-                    "ignoreSelect": true,
-                    "ignoreShow": true,
-                    "ignoreRequest": true
-                },
-                "form_tag": {
-                    "ignoreSelect": true,
-                    "ignoreShow": true,
-                    "ignoreRequest": true
-                },
-                "ref": {
-                    "ignoreSelect": true,
-                    "ignoreShow": true,
-                    "ignoreRequest": true
-                },
-                "verb_type": {},
-                "noun_stem": {},
-                "noun_declension": {},
-                "monad_num": {
-                    "ignoreSelect": true,
-                    "ignoreShow": true,
-                    "ignoreRequest": true
-                },
+                "conjugation" : {},
+                "declension" : {},
+                "stem" : {},
                 "gloss": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i",
                     "indirdb": "mysql",
-                    "sql_command": "SELECT gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_LANG lang ON lang.lex_id=gr.id WHERE strongs=%d AND strongs_unreliable=('%s'='true')",
-                    "sql_command_variant": "SELECT COALESCE(lang_var.gloss,lang.gloss) gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_LANG lang ON lang.lex_id=gr.id LEFT JOIN {PRE}lexicon_greek_LANG_VARIANT lang_var ON lang_var.lex_id=gr.id WHERE strongs=%d AND strongs_unreliable=('%s'='true')",
+                    "sql_command": "SELECT gloss FROM {PRE}lexicon_latin2 la JOIN {PRE}lexicon_latin2_LANG lang ON lang.lex_id=la.id WHERE lemma='%s' and part_of_speech='%s'",
+                    "sql_command_variant": "SELECT COALESCE(lang_var.gloss,lang.gloss) gloss FROM {PRE}lexicon_latin2 la JOIN {PRE}lexicon_latin2_LANG lang ON lang.lex_id=la.id LEFT JOIN {PRE}lexicon_latin2_LANG_VARIANT lang_var ON lang_var.lex_id=la.id  WHERE lemma='%s' and part_of_speech='%s'",
                     "sqlargs": [
-                        "strongs",
-                        "strongs_unreliable"
+                        "lemma_with_variant",
+                        "psp"
                     ],
                     "multiple": false
                 }
@@ -149,15 +114,7 @@
                     "items": [
                         {
                             "mytype": "GrammarFeature",
-                            "name": "lemma"
-                        },
-                        {
-                            "mytype": "GrammarFeature",
-                            "name": "strongs"
-                        },
-                        {
-                            "mytype": "GrammarFeature",
-                            "name": "strongs_unreliable"
+                            "name": "lemma_with_variant"
                         },
                         {
                             "mytype": "GrammarFeature",
@@ -173,15 +130,15 @@
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "verb_type"
+                            "name": "conjugation"
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "noun_declension"
+                            "name": "declension"
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "noun_stem"
+                            "name": "stem"
                         }
                     ]
                 },
@@ -213,10 +170,6 @@
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "possessor_number"
-                        },
-                        {
-                            "mytype": "GrammarFeature",
                             "name": "tense"
                         },
                         {
@@ -229,7 +182,7 @@
                         },
                         {
                             "mytype": "GrammarFeature",
-                            "name": "suffix"
+                            "name": "degree"
                         }
                     ]
                 },
@@ -237,26 +190,6 @@
                     "mytype": "GrammarGroupGlosses",
                     "name": "glosses",
                     "items": []
-                }
-            ]
-        },
-        {
-            "mytype": "SentenceGrammar",
-            "objType": "clause2",
-            "items": [
-                {
-                    "mytype": "GrammarFeature",
-                    "name": "typ"
-                }
-            ]
-        },
-        {
-            "mytype": "SentenceGrammar",
-            "objType": "clause1",
-            "items": [
-                {
-                    "mytype": "GrammarFeature",
-                    "name": "typ"
                 }
             ]
         },

@@ -328,6 +328,7 @@ function make_trans_line_header($editing, $label, $field, $get_parms, $add_text)
                         break;
 
                     case 'latin':
+                    case 'latin2':
                         echo '<th>',$this->lang->line('occurrences'),'</th>';
                         echo '<th>',$this->lang->line('lexeme'),'</th>';
                         echo '<th>',$this->lang->line('part_of_speech'),'</th>';
@@ -421,6 +422,17 @@ function make_trans_line_header($editing, $label, $field, $get_parms, $add_text)
             <td class="leftalign">
                  <a target="_blank" href="<?=
                     site_url(sprintf("/text/show_text/jvulgate/%s/%d/%d",$line->firstbook,$line->firstchapter,$line->firstverse))
+                  ?>"><?= sprintf($books['_label'], $books[$line->firstbook],$line->firstchapter,$line->firstverse) ?></a>
+            </td>
+            <?php break; ?>
+
+          <?php case 'latin2': ?>
+            <td class="centeralign"><?= $line->tally ?></td>
+            <td class="leftalign"><?= $line->lexeme ?></td>
+            <td class="centeralign"><?= $line->part_of_speech ?></td>
+            <td class="leftalign">
+                 <a target="_blank" href="<?=
+                    site_url(sprintf("/text/show_text/VC/%s/%d/%d",$line->firstbook,$line->firstchapter,$line->firstverse))
                   ?>"><?= sprintf($books['_label'], $books[$line->firstbook],$line->firstchapter,$line->firstverse) ?></a>
             </td>
             <?php break; ?>

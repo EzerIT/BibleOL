@@ -13,7 +13,8 @@ class Mod_translate extends CI_Model {
     private $dbs = array('ETCBC4',
                          'ETCBC4-translit',
                          'nestle1904',
-                         'jvulgate');
+                         'jvulgate',
+                         'VC');
 
     private $min_tally = 5; // Only lexemes with a greater tally than this get into the frequency buttons
     
@@ -26,7 +27,7 @@ class Mod_translate extends CI_Model {
 
         $this->load->helper(array('directory','translation'));
 
-        $this->lexicon_langs = array('heb'=>array(), 'aram'=>array(), 'greek'=>array(), 'latin'=>array());
+        $this->lexicon_langs = array('heb'=>array(), 'aram'=>array(), 'greek'=>array(), 'latin'=>array(), 'latin2'=>array());
         $availtrans = get_available_translations();
         foreach ($availtrans as $t) {
             if ($t->heblex_enabled) {
@@ -37,6 +38,8 @@ class Mod_translate extends CI_Model {
                 $this->lexicon_langs['greek'][$t->abb] = $this->lang->line($t->internal);
             if ($t->latinlex_enabled)
                 $this->lexicon_langs['latin'][$t->abb] = $this->lang->line($t->internal);
+            if ($t->latin2lex_enabled)
+                $this->lexicon_langs['latin2'][$t->abb] = $this->lang->line($t->internal);
         }
     }
 
@@ -446,6 +449,17 @@ class Mod_translate extends CI_Model {
                     ->order_by('sortorder,lexeme,part_of_speech')
                     ->get();
                 break;
+
+          case 'latin2':
+                $query = $this->db->select('lemma lexeme,part_of_speech,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
+                    ->from('lexicon_latin2 c')
+                    ->join("lexicon_latin2_$lang_show s", 's.lex_id=c.id','left')
+                    ->join("lexicon_latin2_$lang_edit e", 'e.lex_id=c.id','left')
+                    ->where('sortorder >=',$from)
+                    ->where('sortorder <',$to)
+                    ->order_by('sortorder,lexeme,part_of_speech')
+                              ->get();
+                break;
         }
                 
         return $query->result();
@@ -521,6 +535,14 @@ class Mod_translate extends CI_Model {
         return array(array(), $l10n['universe']['reference']);
     }
 
+    public function get_localized_VC() {
+        $this->load->library('db_config');
+
+        $this->db_config->init_config("VC","VC", $this->language, true);
+        $l10n = json_decode($this->db_config->l10n_json,true);
+        return array(array(), $l10n['universe']['reference']);
+    }
+
 
     public function get_frequent_glosses(string $src_lang, string $lang_edit, string $lang_show, int $gloss_start, int $gloss_count) {
         if (!empty($_SESSION['variant']))
@@ -574,6 +596,17 @@ class Mod_translate extends CI_Model {
                     ->limit($gloss_count, $gloss_start)
                     ->get();
                 break;
+                
+            case 'latin2':
+                $query = $this->db->select('lemma lexeme,part_of_speech,firstbook,firstchapter,firstverse,s.gloss text_show, e.gloss text_edit,tally,c.id lex_id')
+                    ->from('lexicon_latin2 c')
+                    ->join("lexicon_latin2_$lang_show s", 's.lex_id=c.id','left')
+                    ->join("lexicon_latin2_$lang_edit e", 'e.lex_id=c.id','left')
+                    ->where('tally >',$this->min_tally)
+                    ->order_by('tally DESC, sortorder ASC')
+                    ->limit($gloss_count, $gloss_start)
+                    ->get();
+                break;
         }
 
         return $query->result();
@@ -600,6 +633,12 @@ class Mod_translate extends CI_Model {
                 $query = $this->db->select('COUNT(`lemma`) c')
                     ->where('tally >',$this->min_tally)
                     ->get("lexicon_latin");
+                break;
+                
+          case 'latin2':
+                $query = $this->db->select('COUNT(`lemma`) c')
+                    ->where('tally >',$this->min_tally)
+                    ->get("lexicon_latin2");
                 break;
         }
         return $query->row()->c;
@@ -1092,6 +1131,7 @@ class Mod_translate extends CI_Model {
                 break;
 
           case 'latin':
+          case 'latin2':
                 $header_array = array(array(null, 'Occurrences'),
                                       array(null, 'Lexeme'),
                                       array(null, "Part of speech"),
@@ -1238,6 +1278,7 @@ class Mod_translate extends CI_Model {
                 break;
                 
           case 'latin':
+          case 'latin2':
                 foreach ($header_array as $h)
                     $result .= '"' . $h[1] . '",';
                 $result[strlen($result)-1] = "\n"; // Replace final , with \n
@@ -1356,6 +1397,7 @@ class Mod_translate extends CI_Model {
                     break;
 
                 case 'latin':
+                case 'latin2':
                     $query = $this->db
                         ->select('id')
                         ->where('lemma', $record[1])
@@ -1414,6 +1456,10 @@ class Mod_translate extends CI_Model {
               case 'latinlex':
                     create_lexicon_table('latin', $lang_abb, null, true);
                     break;
+
+                case 'latin2lex':
+                    create_lexicon_table('latin2', $lang_abb, null, true);
+                    break;
             }
         }
         
@@ -1440,7 +1486,8 @@ class Mod_translate extends CI_Model {
                                                          'iface_enabled'    => false,
                                                          'heblex_enabled'   => false,
                                                          'greeklex_enabled' => false,
-                                                         'latinlex_enabled' => false));
+                                                         'latinlex_enabled' => false,
+                                                         'latin2lex_enabled' => false));
 
         if ($this->db->where('textgroup','users')->where('symbolic_name',$internal_name)->get('language_comment')->num_rows()==0)
             $this->db->insert('language_comment', array('textgroup'     => 'users',
@@ -1448,5 +1495,34 @@ class Mod_translate extends CI_Model {
                                                         'comment'       => 'Name of language',
                                                         'format'        => null,
                                                         'use_textarea'  => false));
+    }
+
+    // Copies latin glosses from lexicon_latin_LANG to lexicon_latin2_LANG
+    function copy_latin(string $lang) {
+        $query = $this->db
+                      ->select('lemma,part_of_speech,gloss')
+                      ->from('lexicon_latin a')
+                      ->join("lexicon_latin_{$lang} b", 'a.id=b.lex_id')
+                      ->get();
+        
+        foreach ($query->result() as $row) {
+            $query2 = $this->db
+                           ->select('a.id,lemma,part_of_speech')
+                           ->from('lexicon_latin2 a')
+                           ->join("lexicon_latin2_{$lang} b", 'a.id=b.lex_id', 'left')
+                           ->where('(gloss is null or gloss="")')
+                           ->where('lemma',$row->lemma)
+                           ->where('part_of_speech',$row->part_of_speech)
+                           ->get();
+
+            if ($query2->num_rows()==1) {
+                $row2 = $query2->row();
+                $this->db->insert("lexicon_latin2_{$lang}", array('lex_id' => $row2->id,
+                                                                  'gloss' => $row->gloss));
+                echo "INSERTED: $row2->lemma/$row2->part_of_speech = $row->gloss\n";
+            }
+        }
+
+        
     }
   }

@@ -399,7 +399,8 @@ class Mod_askemdros extends CI_Model {
     private static $sort_order = array("ETCBC4" => 1,
                                        "ETCBC4-translit" => 2,
                                        "nestle1904" => 3,
-                                       "jvulgate" => 4);
+                                       "jvulgate" => 4,
+                                       "VC" => 5);
 
     public static function comp_books(array $a, array $b) {
         return self::$sort_order[$a['name']] > self::$sort_order[$b['name']];

@@ -1,6 +1,6 @@
 {
-    "dbdescription": "Jerome's Vulgate (NT with omissions)",
-    "dbcopyright": "Based on data provided by <a target=\"_blank\" href=\"https:\/\/www.hf.uio.no\/ifikk\/english\/\">Department of Philosophy, Classics, History of Arts and Ideas,<\/a> Oslo, Norway. Licensed under a <a target=\"_blank\" href=\"https:\/\/creativecommons.org\/licenses\/by-nc-sa\/4.0\/\">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license<\/a>",
+    "dbdescription": "Villa Claudiae EXPERIMENTAL",
+    "dbcopyright": "The material can be freely used, provided the author is mentioned. The author is <a href=\"http:\/\/old.thisted-gymnasium.dk\/klassiker\/In%20angulo%20cum%20libello.htm\" target=\"_blank\">Henrik Bolt-Jørgensen<\/a>.",
     "emdrosobject": {
         "word": {
             "_objname": "Word",
@@ -198,33 +198,7 @@
     "universe": {
         "book": {
             "_label": "%s",
-            "Matthew": "Matthew",
-            "Mark": "Mark",
-            "Luke": "Luke",
-            "John": "John",
-            "Acts": "Acts",
-            "Romans": "Romans",
-            "I_Corinthians": "1 Corinthians",
-            "II_Corinthians": "2 Corinthians",
-            "Galatians": "Galatians",
-            "Ephesians": "Ephesians",
-            "Philippians": "Philippians",
-            "Colossians": "Colossians",
-            "I_Thessalonians": "1 Thessalonians",
-            "II_Thessalonians": "2 Thessalonians",
-            "I_Timothy": "1 Timothy",
-            "II_Timothy": "2 Timothy",
-            "Titus": "Titus",
-            "Philemon": "Philemon",
-            "Hebrews": "Hebrews",
-            "James": "James",
-            "I_Peter": "1 Peter",
-            "II_Peter": "2 Peter",
-            "I_John": "1 John",
-            "II_John": "2 John",
-            "III_John": "3 John",
-            "Jude": "Jude",
-            "Revelation": "Revelation"
+            "Villa_Claudiae": "Villa Claudiae"
         },
         "chapter": {
             "_label": "Chapter %s"
@@ -234,33 +208,7 @@
         },
         "reference": {
             "_label": "%s %d:%d",
-            "Matthew": "Mt",
-            "Mark": "Mk",
-            "Luke": "Lk",
-            "John": "Jn",
-            "Acts": "Acts",
-            "Romans": "Rom",
-            "I_Corinthians": "1 Cor",
-            "II_Corinthians": "2 Cor",
-            "Galatians": "Gal",
-            "Ephesians": "Eph",
-            "Philippians": "Phil",
-            "Colossians": "Col",
-            "I_Thessalonians": "1 Thess",
-            "II_Thessalonians": "2 Thess",
-            "I_Timothy": "1 Tim",
-            "II_Timothy": "2 Tim",
-            "Titus": "Titus",
-            "Philemon": "Philemon",
-            "Hebrews": "Heb",
-            "James": "Jas",
-            "I_Peter": "1 Pet",
-            "II_Peter": "2 Pet",
-            "I_John": "1 Jn",
-            "II_John": "2 Jn",
-            "III_John": "3 Jn",
-            "Jude": "Jude",
-            "Revelation": "Rev"
+            "Villa_Claudiae": "VC"
         }
     }
 }
