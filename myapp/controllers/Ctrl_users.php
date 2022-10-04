@@ -468,7 +468,8 @@ class Ctrl_users extends MY_Controller {
                    // VIEW:
                    $this->load->view('view_top1', array('title' => $this->lang->line('display_user')));
                    $this->load->view('view_top2');
-                   $this->load->view('view_menu_bar', array('langselect' => true));
+                   $this->load->view('view_menu_bar', array('langselect' => true,
+                                                            'more_help_items' => array('show_help/uprof' => 'help_this_page')));
                    $this->load->view('view_confirm_dialog');
             
                    $left_text = $this->load->view('view_oauth2_profile_left',
@@ -519,7 +520,8 @@ class Ctrl_users extends MY_Controller {
                    // VIEW:
                    $this->load->view('view_top1', array('title' => $this->lang->line('edit_user')));
                    $this->load->view('view_top2');
-                   $this->load->view('view_menu_bar', array('langselect' => true));
+                   $this->load->view('view_menu_bar', array('langselect' => true,
+                                                            'more_help_items' => array('show_help/uprof' => 'help_this_page')));
                    $this->load->view('view_confirm_dialog');
 
                    $left_text = $this->load->view('view_edit_profile_left', null, true);

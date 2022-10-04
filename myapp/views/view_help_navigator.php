@@ -36,7 +36,8 @@ $menu = array(
 
     'Reference Guide' => array('terminology'   => array(0,'Terminology'),
                                //'menus'         => array(0,'Menus'),
-//                               'pref'          => array(0,'Program preferences'),
+                               'fontpref'      => array(0,'Font preferences'),
+                               'uprof'         => array(0,'User profile'),
                                'tabs'          => array(0,'Tabs'),
                                'description'   => array(1,'The “Description” tab'),
                                'passages'      => array(1,'The “Passages” tab'),  
@@ -46,6 +47,7 @@ $menu = array(
                                'sentence_units'=> array(1,'The “Sentence Units” tab'),
                                'features'      => array(1,'The “Features” tab'),
                                'shortcuts'     => array(0,'How to use shortcuts'),
+                               'variant'       => array(0,'Translation variants'),
         ),
 
     

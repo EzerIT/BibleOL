@@ -12,7 +12,7 @@
 <p>&ldquo;Restricted access&rdquo; means that you have to be enrolled in a particular class to
     access the exercises in that folder.</p>
 
-<h2>Enrolling in a Class</h2>
+<h2><a name="enroll_in_class"></a>Enrolling in a Class</h2>
 
 <p>In order to enroll in a class you must be <?=
     anchor('help/show_help/logging_in','logged into Bible OL') ?>. Once you are logged in,

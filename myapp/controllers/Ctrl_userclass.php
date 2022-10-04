@@ -182,7 +182,8 @@ class Ctrl_userclass extends MY_Controller {
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('enroll_in_class')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('show_help/enroll' => 'help_this_page')));
             $this->load->view('view_confirm_dialog');
                 
             $center_text = $this->load->view('view_enroll_in_class',

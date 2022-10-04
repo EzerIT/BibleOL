@@ -20,7 +20,7 @@
 <li><i>Text and Exercises</i> &ndash; This allows you to view the Hebrew and Greek biblical texts and to run exercises.</li>
 <li><i>User Access</i> &ndash; Here you can log in to the system and view the privacy policy.</li>
 <li><i>Language</i> &ndash; This lets you select the language of the user interface.</li>
-<li><i>Variant</i> &ndash; Here you can select between different variants of the terms and translations used. (See Section XXX.)</li>
+<li><i>Variant</i> &ndash; Here you can select between different <?= anchor('help/show_help/variant','variants') ?> of the terms and translations used.</li>
 </ul>
 
 
@@ -28,6 +28,8 @@
     access your personal features of the system. Once you have logged, in, a new menu item appears:</p>
 
 <ul>
-<li><i>My Data</i> &ndash; This menu item lets you change your user profile, setup font preferences, enroll in
-    classes, and view how you are doing on the exercises.</li>
+    <li><i>My Data</i> &ndash; This menu item lets you change your <?= anchor('help/show_help/uprof', 'user profile') ?>,
+        set up <?= anchor('help/show_help/fontpref','font preferences') ?>,
+        <?= anchor('help/show_help/enroll#enroll_in_class', 'enroll in classes') ?>,
+        and view how you are doing on the exercises.</li>
 </ul>
