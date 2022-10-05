@@ -172,7 +172,7 @@
       $student_captions = array();
       $ix = 0;
       foreach ($students as $id => $name) {
-          $student_captions[$ix] = "'<input type=\"checkbox\" checked name=\"users\" value=\"$ix\">"
+          $student_captions[$ix] = "'<input type=\"checkbox\" checked name=\"users\" value=\"$ix\">&nbsp;"
               . anchor(build_get('grades/student_exercise',
                                  array('userid' => $id,
                                        'templ' => $quiz,

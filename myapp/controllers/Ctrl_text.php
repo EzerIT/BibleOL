@@ -55,7 +55,7 @@ class Ctrl_text extends MY_Controller {
             $this->load->view('view_top1', array('title' => $this->lang->line('select_text')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true,
-                                                     'more_help_items' => array('show_help/viewing_text' => 'help_this_page')));
+                                                     'more_help_items' => array('viewing_text' => 'help_this_page')));
 
             $copyrights = [];
             $dbnames = [];
@@ -112,9 +112,9 @@ class Ctrl_text extends MY_Controller {
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
 
-            $help_page = $db==='ETCBC4' ? 'show_help/viewing_text2/heb' :
-                         ($db==='nestle1904' ? 'show_help/viewing_text2/gr' :
-                         'show_help/viewing_text');
+            $help_page = $db==='ETCBC4' ? 'viewing_text2/heb' :
+                         ($db==='nestle1904' ? 'viewing_text2/gr' :
+                         'viewing_text');
             
             $this->load->view('view_menu_bar', array('langselect' => true,
                                                      'more_help_items' => array($help_page => 'help_this_page')));
@@ -149,7 +149,7 @@ class Ctrl_text extends MY_Controller {
             $this->load->view('view_top1', array('title' => $this->lang->line('directory')));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true,
-                                                     'more_help_items' => array('show_help/running_exercises' => 'help_this_page')));
+                                                     'more_help_items' => array('running_exercises' => 'help_this_page')));
             $center_text = $this->load->view('view_quizdir',
                                              array('dirlist' => $dirlist,
                                                    'curdir' => set_or_default($_GET['dir'],''),
@@ -422,7 +422,7 @@ class Ctrl_text extends MY_Controller {
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => false,
-                                                     'more_help_items' => array('show_help/tabs' => 'help_this_page')));
+                                                     'more_help_items' => array('tabs' => 'help_this_page')));
 
             
             $this->load->view('view_alert_dialog');
@@ -505,7 +505,7 @@ class Ctrl_text extends MY_Controller {
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => false,
-                                                     'more_help_items' => array('show_help/tabs' => 'help_this_page')));
+                                                     'more_help_items' => array('tabs' => 'help_this_page')));
             $this->load->view('view_alert_dialog');
 
             $center_text = $this->load->view('view_edit_quiz',

@@ -82,7 +82,7 @@
       $student_captions = array();
       $ix = 0;
       foreach ($students as $id => $name) {
-          $student_captions[$ix] = "'<input type=\"checkbox\" checked name=\"users\" value=\"$ix\">"
+          $student_captions[$ix] = "'<input type=\"checkbox\" checked name=\"users\" value=\"$ix\">&nbsp;"
               . anchor(build_get('statistics/student_time',
                                  array('userid' => $id,
                                        'start_date' => $start_date,

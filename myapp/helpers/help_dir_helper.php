@@ -45,3 +45,7 @@ class HelpDir {
 function make_footnote($text,$note) {
     return "<a href=\"#\" data-toggle=\"tooltip\" title=\"$note\">$text</a>";
 }
+
+function help_anchor($subject, $title, $attributes = '') {
+	return anchor("help/show_help/$subject",$title,$attributes);
+}

@@ -107,7 +107,7 @@ if (!isset($in_help) || !$in_help) {
      
     if (isset($more_help_items)) {
         foreach ($more_help_items as $mhi_url => $mhi_label)
-            $content[$ix][] = make_anchor2("help/$mhi_url", $mhi_label, array('target'=>'bolhelp'));
+            $content[$ix][] = make_anchor2("help/show_help/$mhi_url", $mhi_label, array('target'=>'bolhelp'));
     }
     
     $cols = $ix+1;

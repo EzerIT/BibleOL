@@ -56,7 +56,7 @@ class Ctrl_config extends MY_Controller {
                                              'js_list' => array('js/fontdetect.js','js/fontselector.js')));
         $this->load->view('view_top2');
         $this->load->view('view_menu_bar', array('langselect' => true,
-                                                 'more_help_items' => array('show_help/fontpref' => 'help_this_page')));
+                                                 'more_help_items' => array('fontpref' => 'help_this_page')));
         $center_text = $this->load->view('view_font_settings',array('l10n_js_json' => $this->mod_localize->get_json(),
                                                                     'alphabets' => $alphabets,
                                                                     'font_setting' => $font_setting,

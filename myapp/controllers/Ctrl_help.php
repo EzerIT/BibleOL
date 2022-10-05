@@ -27,7 +27,7 @@ class Ctrl_help extends MY_Controller {
                 $dir = "usersguide/en";
                 $filename = "$dir/{$article}.php";
                 if (!file_exists($filename))
-                    throw new DataException("There is no help article about '$article'");
+                    throw new DataException("There is no help article named '$article'");
             }
 
             // VIEW:

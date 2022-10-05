@@ -17,20 +17,19 @@ $menu = array(
                                      'thirdex/gr'        => array(1,'Example: Third Greek exercise'), 
                                      'variations'        => array(0,'Variations to exercises'),
                                      'answer_types'      => array(0,'Answering various types of questions'),
-//                                     'statistics'        => array(0,'How am I doing?'),
+                                     'mystat'            => array(0,'How am I doing?'),
                                      'enroll'            => array(0,'Class membership'),
         ),
 
     'Teacher&rsquo;s Guide'  => array('teacher'          => array(0,'Features for teachers'),
-                                      'classes'          => array(1,'Class management'),
-                                      'folders'          => array(1,'Folder management'),
-                                      'exercise_mgmt'    => array(1,'Exercise management'),
-                                      'create_firstex/heb' => array(2, 'Example: Create a simple Hebrew exercise'),
-                                      'create_secondex/heb' => array(2, 'Example: Create an advanced Hebrew exercise'),
-                                      'create_firstex/gr' => array(2, 'Example: Create a simple Greek exercise'),
-                                      'create_secondex/gr' => array(2, 'Example: Create an advanced Greek exercise'),
-  //                                    'monitor_students' => array(1,'Monitor students'),
-  //                                    'create_exams'     => array(1,'Exam management'),
+                                      'classes'          => array(0,'Class management'),
+                                      'folders'          => array(0,'Folder management'),
+                                      'exercise_mgmt'    => array(0,'Exercise management'),
+                                      'create_firstex/heb'  => array(1, 'Example: Create a simple Hebrew exercise'),
+                                      'create_secondex/heb' => array(1, 'Example: Create an advanced Hebrew exercise'),
+                                      'create_firstex/gr'   => array(1, 'Example: Create a simple Greek exercise'),
+                                      'create_secondex/gr'  => array(1, 'Example: Create an advanced Greek exercise'),
+                                      'studentstat'      => array(0,'How are my students doing?'),
         ),
 
 
@@ -64,7 +63,7 @@ $menu = array(
                 <?php list($level, $text) = $disp; ?>
                 <p class="mb-0 level<?=$level?>"><?php
                                                  if ($article!=$current)
-                                                     echo anchor(site_url("help/show_help/$article"),$text);
+                                                     echo help_anchor($article,$text);
                                                  else
                                                      echo $text;
                                                  ?></p>

@@ -33,7 +33,7 @@
         and password. (If you are logged in via Google or Facebook, you can only change your preferred
         interface language.)</li>
     <li><i>Enroll/unenroll in class</i> &ndash; Use this to join or leave a
-        <?= anchor("help/show_help/classes",'class') ?>.</li>
+        <?= anchor("help/show_help/enroll",'class') ?>.</li>
     <li><i>My performance</i> &ndash; See how you are doing solving the exercises.</li>
 </ul>
 

@@ -188,7 +188,8 @@ class Ctrl_statistics extends MY_Controller {
                                                                     'js/datepicker_period.js',
                                                                     'js/graphing.js')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('mystat' => 'help_this_page')));
 
             $center_text = $this->load->view('view_progress_student_time', array('classid' => $classid,
                                                                                  'classlist' => $myclasses,
@@ -303,7 +304,8 @@ class Ctrl_statistics extends MY_Controller {
                                                                     'js/graphing.js')));
 
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('mystat' => 'help_this_page')));
 
             $center_text = $this->load->view('view_progress_student_exercises', array('resscore' => $resscore,
                                                                                       'resfeat' => $resfeat,
@@ -344,7 +346,8 @@ class Ctrl_statistics extends MY_Controller {
 
             $this->load->view('view_top1', array('title' => $this->lang->line('teacher_graphs_title')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('studentstat' => 'help_this_page')));
 
             $center_text = $this->load->view('view_progress_teacher_classes', array('classes' => $classes), true);
 
@@ -458,7 +461,8 @@ class Ctrl_statistics extends MY_Controller {
                                                                     'js/graphing.js',
                                                                     'js/handle_legend.js')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('studentstat' => 'help_this_page')));
 
             $center_text = $this->load->view('view_progress_teacher_time', array('status' => $status,
                                                                                  'classid' => $classid,
@@ -604,7 +608,8 @@ class Ctrl_statistics extends MY_Controller {
                                                                     'js/handle_legend.js')));
 
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('studentstat' => 'help_this_page')));
 
             $center_text = $this->load->view('view_progress_teacher_exercises', array('classid' => $classid,
                                                                                       'classname' => $class->classname,
