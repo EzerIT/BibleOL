@@ -16,22 +16,22 @@
 <p>The contents of some folders are available to all students, but you will see that some of the
     folders here are marked &ldquo;Restricted&rdquo;. These are folders that are only available to
     students that are enrolled in certain classes. Students&rsquo; access to folders is
-    <?= anchor('help/show_help/folders#folder_visibility','controlled by teachers') ?>.</p>
+    <?= help_anchor('folders#folder_visibility','controlled by teachers') ?>.</p>
 
 <p>You should study at least one of these sets of examples:</p>
 
 <ul>
     <li>Examples of Hebrew exercises:</li>
     <ul>
-        <li><?= anchor('help/show_help/firstex/heb', 'First Hebrew exercise') ?>.</li>
-        <li><?= anchor('help/show_help/secondex/heb', 'Second Hebrew exercise') ?>.</li>
-        <li><?= anchor('help/show_help/thirdex/heb', 'Third Hebrew exercise') ?>.</li>
+        <li><?= help_anchor('firstex/heb', 'First Hebrew exercise') ?>.</li>
+        <li><?= help_anchor('secondex/heb', 'Second Hebrew exercise') ?>.</li>
+        <li><?= help_anchor('thirdex/heb', 'Third Hebrew exercise') ?>.</li>
     </ul>
     <li>Examples of Greek exercises:</li>
     <ul>
-        <li><?= anchor('help/show_help/firstex/gr', 'First Greek exercise') ?>.</li>
-        <li><?= anchor('help/show_help/secondex/gr', 'Second Greek exercise') ?>.</li>
-        <li><?= anchor('help/show_help/thirdex/gr', 'Third Greek exercise') ?>.</li>
+        <li><?= help_anchor('firstex/gr', 'First Greek exercise') ?>.</li>
+        <li><?= help_anchor('secondex/gr', 'Second Greek exercise') ?>.</li>
+        <li><?= help_anchor('thirdex/gr', 'Third Greek exercise') ?>.</li>
     </ul>
 </ul>
 

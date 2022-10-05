@@ -2,7 +2,7 @@
 
 <h1>Example: Create a Simple <?= $hg ?> Exercise</h1>
 
-<p>(You may be interested in a <?= anchor('help/show_help/create_firstex/' . $hdir->heb_gr('gr','heb'),
+<p>(You may be interested in a <?= help_anchor('create_firstex/' . $hdir->heb_gr('gr','heb'),
                                           'corresponding '. $hdir->heb_gr('Greek','Hebrew') . ' exercise')
     ?>.)</p>
 
@@ -36,7 +36,7 @@
 <?= $hdir->img("$sub_article-description-tab.png") ?>
 
 <p>The Reference Guide contains more information about
-    <?=anchor('help/show_help/description','the &ldquo;Description&rdquo; tab') ?>.</p>
+    <?=help_anchor('description','the &ldquo;Description&rdquo; tab') ?>.</p>
 
 
 <h2>The &ldquo;Passages&rdquo; Tab</h2>
@@ -62,7 +62,7 @@
     you to specify individual chapters or verses to use for the exercise.</p>
 
 <p>The Reference Guide contains more information about
-    <?=anchor('help/show_help/passages','the &ldquo;Passages&rdquo; tab') ?>.</p>
+    <?=help_anchor('passages','the &ldquo;Passages&rdquo; tab') ?>.</p>
 
 <h2>The &ldquo;Sentences&rdquo; Tab</h2>
 
@@ -140,7 +140,7 @@ For the exercise we are creating here, we need sentences containing words that..
 <p>(You may have noticed that as you chose feature values, the text next to &ldquo;MQL statement to
     select sentences&rdquo; changed automatically. MQL is a command language that is used to specify how
     to search the database, and the statement here is the one actually used for your search. But feel
-    free to ignore this for now. You may later read <?= anchor('help/show_help/mql','more about MQL') ?>.)</p>
+    free to ignore this for now. You may later read <?= help_anchor('mql','more about MQL') ?>.)</p>
 
 <p>Bible OL now knows how to find sentences for the exercises. It will choose the sentences based on
     the criteria we have just specified. But now things get a bit more complicated: When Bibel OL
@@ -160,7 +160,7 @@ For the exercise we are creating here, we need sentences containing words that..
     leave the mark on.)</p>
 
 <p>The Reference Guide contains more information about
-    <?=anchor('help/show_help/sentences','the &ldquo;Sentences&rdquo; tab') ?>.</p>
+    <?=help_anchor('sentences','the &ldquo;Sentences&rdquo; tab') ?>.</p>
 
 <h2>The &ldquo;Features&rdquo; Tab</h2>
 
@@ -201,7 +201,7 @@ For the exercise we are creating here, we need sentences containing words that..
 
 
 <p>The Reference Guide contains more information about
-    <?=anchor('help/show_help/features','the &ldquo;Features&rdquo; tab') ?>.</p>
+    <?=help_anchor('features','the &ldquo;Features&rdquo; tab') ?>.</p>
 
 <h2>Saving the Exercise</h2>
 

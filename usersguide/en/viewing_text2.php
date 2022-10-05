@@ -12,7 +12,7 @@
 
 <?php if ($sub_article=='heb'): ?>
     <p>The small icon to the right of the first verse is a link to the same text at the
-        <?= anchor('help/show_help/shebanq', 'SHEBANQ') ?>
+        <?= help_anchor('shebanq', 'SHEBANQ') ?>
         website.</p>
 <?php endif; ?>
 

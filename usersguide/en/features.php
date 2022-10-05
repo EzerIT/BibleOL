@@ -4,7 +4,7 @@
     what information you want them to provide as answers.</p>
 
 <p>When running an exercise, the program will display a table of information about each <?=
-    anchor('help/show_help/terminology#question_object','question object') ?> below the green
+    help_anchor('terminology#question_object','question object') ?> below the green
     progress bar under the chosen sentence. For example, thus:</p>
 
 <?= $hdir->img("features1.png") ?>
@@ -27,7 +27,7 @@ this:</p>
 <?= $hdir->img("features3.png") ?>
 
 <p>&ldquo;Word&rdquo;, &rdquo;Phrase&rdquo;, and &rdquo;Clause&rdquo; are the most important <?=
-    anchor('help/show_help/terminology#sentence_unit','sentence units') ?> available in the Hebrew
+    help_anchor('terminology#sentence_unit','sentence units') ?> available in the Hebrew
     part of Bible OL. If you work with Greek instead, you will see buttons labelled
     &ldquo;Word&rdquo;, &rdquo;Clause level 2&rdquo;, and &rdquo;Clause level 1&rdquo;. The topmost
     sentence unit (in this example &ldquo;Word&rdquo;) is the one specified in the &rdquo;Sentence

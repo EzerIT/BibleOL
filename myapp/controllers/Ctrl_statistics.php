@@ -94,8 +94,6 @@ class Ctrl_statistics extends MY_Controller {
         $this->load->library('statistics_timeperiod',array('default_period'=>'long'));
 
         try {
-//            $this->db->set_dbprefix('bol_');
-
             $this->load->helper('form');
             $this->load->library('form_validation');
 
@@ -215,8 +213,6 @@ class Ctrl_statistics extends MY_Controller {
 
 
     public function student_exercise() {
-//        $this->db->set_dbprefix('bol_');
-
 		$this->load->model('mod_users');
 		$this->load->model('mod_statistics');
         $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
@@ -339,10 +335,7 @@ class Ctrl_statistics extends MY_Controller {
         try {
             $this->mod_users->check_teacher();
 
-//            $this->db->set_dbprefix('bol_');
-
             $classes = $this->mod_classes->get_named_classes_owned(false);
-//            $classes = $this->mod_classes->get_named_classes_owned(!false);
 
             $this->load->view('view_top1', array('title' => $this->lang->line('teacher_graphs_title')));
             $this->load->view('view_top2');
@@ -371,8 +364,6 @@ class Ctrl_statistics extends MY_Controller {
         try {
             $this->mod_users->check_teacher();
 
-//            $this->db->set_dbprefix('bol_');
-
             $this->load->helper('form');
             $this->load->library('form_validation');
 
@@ -380,7 +371,6 @@ class Ctrl_statistics extends MY_Controller {
 
             $classid = (int)$this->input->get('classid');
             $class = $this->mod_classes->get_class_by_id($classid);
-//			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
 			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
 				throw new DataException($this->lang->line('illegal_class_id'));
 
@@ -499,9 +489,6 @@ class Ctrl_statistics extends MY_Controller {
         try {
             $this->mod_users->check_teacher();
 
-//            $this->db->set_dbprefix('bol_');
-
-
             $this->load->helper('form');
             $this->load->library('form_validation');
             $this->load->library('db_config');
@@ -510,7 +497,6 @@ class Ctrl_statistics extends MY_Controller {
 
             $classid = (int)$this->input->get('classid');
             $class = $this->mod_classes->get_class_by_id($classid);
-//			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
 			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
 				throw new DataException($this->lang->line('illegal_class_id'));
 

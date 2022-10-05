@@ -2,7 +2,7 @@
 
 <h1>Example: Create an Advanced <?= $hg ?> Exercise</h1>
 
-<p>(You may be interested in a <?= anchor('help/show_help/create_secondex/' . $hdir->heb_gr('gr','heb'),
+<p>(You may be interested in a <?= help_anchor('create_secondex/' . $hdir->heb_gr('gr','heb'),
                                           'corresponding '. $hdir->heb_gr('Greek','Hebrew') . ' exercise')
     ?>.)</p>
 
@@ -69,7 +69,7 @@
   language MQL.</p>
 
 <p>If you are not interested in more complex sentence choices using MQL, you can skip the rest of
-    this example. But if you want a small taste of how <?= anchor('help/show_help/mql','MQL') ?>
+    this example. But if you want a small taste of how <?= help_anchor('mql','MQL') ?>
     is used, you may return to the &ldquo;Sentences&rdquo; tab and select the option &ldquo;MQL
     statement to select sentences&rdquo;:</p>
 
@@ -163,4 +163,4 @@
   also asks about <span class="greek">ἐστιν</span> which is third person singular.)') ?></p>
 
 <p>The Reference Guide contains more information about
-    <?=anchor('help/show_help/sentence_units','the &ldquo;Sentence Units&rdquo; tab') ?>.</p>
+    <?=help_anchor('sentence_units','the &ldquo;Sentence Units&rdquo; tab') ?>.</p>

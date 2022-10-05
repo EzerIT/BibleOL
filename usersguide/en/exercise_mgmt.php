@@ -2,15 +2,15 @@
 
 <p>In order to create and modify exercises, you need to be logged in to an account with
     <i>facilitator</i> privileges. You should also be familiar with <?=
-    anchor('help/show_help/folders','folder management') ?>.</p>
+    help_anchor('folders','folder management') ?>.</p>
 
 <p>Before we describe how to create exercises, you must be familiar with three important terms
-    from the <?= anchor('help/show_help/terminology','terminology') ?> page:</p>
+    from the <?= help_anchor('terminology','terminology') ?> page:</p>
 
 <ul>
-    <li><?= anchor('help/show_help/terminology#sentence_unit','sentence units') ?></li>
-    <li><?= anchor('help/show_help/terminology#feature','features') ?></li>
-    <li><?= anchor('help/show_help/terminology#question_object','question objects') ?></li>
+    <li><?= help_anchor('terminology#sentence_unit','sentence units') ?></li>
+    <li><?= help_anchor('terminology#feature','features') ?></li>
+    <li><?= help_anchor('terminology#question_object','question objects') ?></li>
 </ul>
 
 <p>You should also realise that in the context of Bible OL, an <i>exercise</i> is
@@ -39,12 +39,12 @@
 <ul>
     <li>Examples of Hebrew exercises:</li>
     <ul>
-        <li><?= anchor('help/show_help/create_firstex/heb', 'Create a simple Hebrew exercise') ?>.</li>
-        <li><?= anchor('help/show_help/create_secondex/heb', 'Create an advanced Hebrew exercise') ?>.</li>
+        <li><?= help_anchor('create_firstex/heb', 'Create a simple Hebrew exercise') ?>.</li>
+        <li><?= help_anchor('create_secondex/heb', 'Create an advanced Hebrew exercise') ?>.</li>
     </ul>
     <li>Examples of Greek exercises:</li>
     <ul>
-        <li><?= anchor('help/show_help/create_firstex/gr', 'Create a simple Greek exercise') ?>.</li>
-        <li><?= anchor('help/show_help/create_secondex/gr', 'Create an advanced Greek exercise') ?>.</li>
+        <li><?= help_anchor('create_firstex/gr', 'Create a simple Greek exercise') ?>.</li>
+        <li><?= help_anchor('create_secondex/gr', 'Create an advanced Greek exercise') ?>.</li>
     </ul>
 </ul>

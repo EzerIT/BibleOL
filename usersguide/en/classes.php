@@ -52,7 +52,7 @@
 <h2>Enrolling Students</h2>
 
 <p>There are two ways to enroll students in a class: The <?=
-    anchor('help/show_help/enroll','students can enroll themselves') ?>, or the
+    help_anchor('enroll','students can enroll themselves') ?>, or the
     teacher can enroll them.</p>
 
 <p>If you want to prevent students from enrolling themselves, you have two options:</p>

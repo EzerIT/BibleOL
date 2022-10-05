@@ -26,4 +26,4 @@ Shortcut indicators are small squares containing the shortcut key. They are disp
 of a rectangle containing an option. By default, shortcut indicators are shown on large screen
 (typically, computers) and they are not shown on small screens (phones or tablets).</p>
 
-<p>Information about how to use shortcut keys to answer various questions is found under &ldquo;<?= anchor('help/show_help/answer_types', '&ldquo;Answering various typtes of questions.&rdquo;')?></p>
+<p>Information about how to use shortcut keys to answer various questions is found under &ldquo;<?= help_anchor('answer_types', '&ldquo;Answering various typtes of questions.&rdquo;')?></p>

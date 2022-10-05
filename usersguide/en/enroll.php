@@ -15,7 +15,7 @@
 <h2><a name="enroll_in_class"></a>Enrolling in a Class</h2>
 
 <p>In order to enroll in a class you must be <?=
-    anchor('help/show_help/logging_in','logged into Bible OL') ?>. Once you are logged in,
+    help_anchor('logging_in','logged into Bible OL') ?>. Once you are logged in,
     there are a number of methods you can use to enroll in a class:</p>
 
 <p><i>Method 1: Teacher enrolls student.</i> If your teacher knows that you want to participate in a

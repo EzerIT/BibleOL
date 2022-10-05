@@ -8,7 +8,7 @@
   Units&rdquo; tab is not available.</p>
 
 <p>The appearance and use of this tab is much like the
-    &ldquo;<?= anchor('help/show_help/sentences','Sentences') ?>&rdquo;
+    &ldquo;<?= help_anchor('sentences','Sentences') ?>&rdquo;
     tab, so much information about that tab is not repeated here.</p>
 
 <p>The &ldquo;Sentence Units&rdquo; tab may look like this:</p>
@@ -16,7 +16,7 @@
 <?= $hdir->img('heb-sentence-units-tab1.png') ?>
 
 <p>This image is almost identical to
-  the <?= anchor('help/show_help/sentences#choice','corresponding') ?> one in the &ldquo;Sentences&rdquo;
+  the <?= help_anchor('sentences#choice','corresponding') ?> one in the &ldquo;Sentences&rdquo;
   tab. There are two important differences, however:</p>
 
 <ul>
@@ -24,7 +24,7 @@
         This is because the sentence unit type here serves a triple purpose:
         Firstly, as in the &ldquo;Sentences&rdquo; tab, it indicates the kind of sentence unit
         to look for. Secondly, it is used by the feature selector in the final tab,
-        &ldquo;<?= anchor('help/show_help/features','Features') ?>&rdquo;.
+        &ldquo;<?= help_anchor('features','Features') ?>&rdquo;.
         Thirdly, it is used when constructing MQL statements (see below). This means that the
         sentence unit type selector remains active even if you select &ldquo;MQL feature
         selector&rdquo;.</li>

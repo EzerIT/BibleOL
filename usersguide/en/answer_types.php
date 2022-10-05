@@ -7,7 +7,7 @@
     <h5 class="card-header bg-info text-light">Using shortcuts</h5>
     <div class="card-body border border-info mb-4">
         <p>If you are using a computer, you can perform a number of functions from your keyboard. See
-            <?= anchor('help/show_help/shortcuts', '&ldquo;How to use shortcuts&rdquo;') ?> for more
+            <?= help_anchor('shortcuts', '&ldquo;How to use shortcuts&rdquo;') ?> for more
             information.</p>
     </div>
 </div>

@@ -22,6 +22,6 @@ Under &ldquo;Corpus&rdquo; in that dialog, you select the text database you want
 <p>You should read at least one of these sections:</p>
 
 <ul>
-    <li><?= anchor('help/show_help/viewing_text2/heb', 'How to use Bible Online Learner to study a Hebrew text') ?>.</li>
-    <li><?= anchor('help/show_help/viewing_text2/gr', 'How to use Bible Online Learner to study a Greek text') ?>.</li>
+    <li><?= help_anchor('viewing_text2/heb', 'How to use Bible Online Learner to study a Hebrew text') ?>.</li>
+    <li><?= help_anchor('viewing_text2/gr', 'How to use Bible Online Learner to study a Greek text') ?>.</li>
 </ul>

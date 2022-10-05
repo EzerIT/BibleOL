@@ -2,7 +2,7 @@
 
 <h1>Example: Second <?= $hg ?> Exercise</h1>
 
-<p>(You may be interested in a <?= anchor('help/show_help/secondex/' . $hdir->heb_gr('gr','heb'),
+<p>(You may be interested in a <?= help_anchor('secondex/' . $hdir->heb_gr('gr','heb'),
                                'corresponding '. $hdir->heb_gr('Greek','Hebrew') . ' exercise')
     ?>.)</p>
 

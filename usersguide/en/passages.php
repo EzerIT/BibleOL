@@ -21,12 +21,12 @@ appear somewhat slow.</p>
 <p>Below the passage selector, you can specify a few specialities about the exercise:</p>
 
 <ul>
-    <li> Should the &ldquo;Locate&rdquo; button be <?= anchor('help/show_help/variations#disabling_locate','shown or not') ?>?</li>
-    <li> How many <?= anchor('help/show_help/variations#sentence_context','sentence of context') ?> should be
+    <li> Should the &ldquo;Locate&rdquo; button be <?= help_anchor('variations#disabling_locate','shown or not') ?>?</li>
+    <li> How many <?= help_anchor('variations#sentence_context','sentence of context') ?> should be
         shown before and after the relevant sentence?</li>
-    <li> Should the number of questions be <?= anchor('help/show_help/variations#fixed_exercises','fixed') ?>
+    <li> Should the number of questions be <?= help_anchor('variations#fixed_exercises','fixed') ?>
         or should the student be able to choose?</li>
-    <li> Should the order of questions be random or <?= anchor('help/show_help/variations#fixed_exercises','fixed') ?>?</li>
+    <li> Should the order of questions be random or <?= help_anchor('variations#fixed_exercises','fixed') ?>?</li>
 </ul>
 
 <p>If either the number of questions or the order of questions is fixed, the students cannot themselves
