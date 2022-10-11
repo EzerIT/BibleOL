@@ -51,9 +51,9 @@
 
 <h2>Enrolling Students</h2>
 
-<p>There are two ways to enroll students in a class: The <?=
-    help_anchor('enroll','students can enroll themselves') ?>, or the
-    teacher can enroll them.</p>
+<p>There are three ways to enroll students in a class: The <?=
+    help_anchor('enroll','students can enroll themselves') ?>, or the teacher can enroll them
+    through the Class Management menu discussed here or through the <?= help_anchor('usermgmt','User Management') ?> menu.</p>
 
 <p>If you want to prevent students from enrolling themselves, you have two options:</p>
 
@@ -65,7 +65,7 @@
         will not be able to see that your class is available.</li>
 </ul>
 
-<p>To enroll students in your class, press the &ldquo;Assign users&rdquo; button. This will show you a list of all
-    users. (This can be a very long list indeed.) Here you can add or remove students from your
-    class. The &ldquo;Enroll before&rdquo; date does not affect your ability to enroll students in
-    your own class.</p>
+<p>To enroll students in your class using the menu we are discussing here, press the &ldquo;Assign
+    users&rdquo; button. This will show you a list of all users. (This can be a very long list
+    indeed.) Here you can add or remove students from your class. The &ldquo;Enroll before&rdquo;
+    date does not affect your ability to enroll students in your own class.</p>

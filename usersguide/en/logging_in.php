@@ -28,13 +28,12 @@
     has these items:</p>
 
 <ul>
-    <li><i>Font preferences</i> &ndash; Use this to change the fonts used to display Hebrew, Greek, or Latin.</li>
-    <li><i>Profile</i> &ndash; Here you can change your name, e-mail address, preferred interface language,
+    <li><?= help_anchor('fontpref','<i>Font preferences</i>') ?> &ndash; Use this to change the fonts used to display Hebrew, Greek, or Latin.</li>
+    <li><?= help_anchor('uprof','<i>Profile</i>') ?> &ndash; Here you can change your name, e-mail address, preferred interface language,
         and password. (If you are logged in via Google or Facebook, you can only change your preferred
         interface language.)</li>
-    <li><i>Enroll/unenroll in class</i> &ndash; Use this to join or leave a
-        <?= anchor("help/show_help/enroll",'class') ?>.</li>
-    <li><i>My performance</i> &ndash; See how you are doing solving the exercises.</li>
+    <li><?= help_anchor('enroll','<i>Enroll/unenroll in class</i>') ?> &ndash; Use this to join or leave a class.</li>
+    <li><?= help_anchor('mystat','<i>My performance</i>') ?> &ndash; See how you are doing solving the exercises.</li>
 </ul>
 
 <p>To log out, select <i>Logout</i> from the <i>User Access</i> menu.</p>
@@ -71,7 +70,7 @@
 <p>When you are logged in with facilitator privileges, additional items appears in the &ldquo;My Data&rdquo; menu:</p>
 
 <ul>
-    <li><i>Students&rsquo; performance</i> &ndash; See how your students are doing solving the exercises.</li>
+    <li><?= help_anchor('studentstat','<i>Students&rsquo; performance</i>') ?> &ndash; See how your students are doing solving the exercises.</li>
     <li><i>Grade Quizzes</i> &ndash; Grade students&rsquo; quizzes.</li>
     <li><i>Grade Exams</i> &ndash; Grade students&rsquo; quizzes.</li>
 </ul>
@@ -79,9 +78,9 @@
 <p>Additionally, you will see a new menu item &ldquo;Administration&rdquo; with these items:</p>
 
 <ul>
-    <li><i>Users</i> &ndash; Manage user accounts.</li>
+    <li><?= help_anchor('usermgmt','<i>Users</i>') ?> &ndash; Manage user accounts.</li>
     <li><i>Classes</i> &ndash; Manage classes.</li>
-    <li><i>Manage exercises.</i></li>
+    <li><?= help_anchor('exercise_mgmt','<i>Manage exercises.</i>') ?></li>
     <li><i>Manage exams.</i></li>
 </ul>
 

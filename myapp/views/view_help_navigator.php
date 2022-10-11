@@ -22,6 +22,7 @@ $menu = array(
         ),
 
     'Teacher&rsquo;s Guide'  => array('teacher'          => array(0,'Features for teachers'),
+                                      'usermgmt'         => array(0,'User management'),
                                       'classes'          => array(0,'Class management'),
                                       'folders'          => array(0,'Folder management'),
                                       'exercise_mgmt'    => array(0,'Exercise management'),
