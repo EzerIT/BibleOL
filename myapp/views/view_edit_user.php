@@ -124,8 +124,6 @@
             </td>
             <td class="nolb"></td>
           </tr>
-        <?php endif; ?>
-        <?php if ($isteacher): ?>
           <tr>
             <td><?= $this->lang->line('teacher') ?></td>
             <td class="norb">
@@ -134,8 +132,6 @@
             </td>
             <td class="nolb"></td>
           </tr>
-        <?php endif; ?>
-        <?php if ($istranslator): ?>
           <tr>
             <td><?= $this->lang->line('translator') ?></td>
             <td class="norb">
