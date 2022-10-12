@@ -33,6 +33,12 @@ $menu = array(
                                       'studentstat'      => array(0,'How are my students doing?'),
         ),
 
+    'Translator&rsquo;s Guide' => array('translator'   => array(0,'Introduction for translators'),
+                                        'avail_trans'  => array(0,'Available translations'),
+                                        'tr_interface' => array(0,'Interface translation'),
+                                        'tr_grammar'   => array(0,'Grammar translation'),
+                                        'tr_lex'       => array(0,'Lexicon translation'),
+        ),
 
     'Reference Guide' => array('terminology'   => array(0,'Terminology'),
                                //'menus'         => array(0,'Menus'),
