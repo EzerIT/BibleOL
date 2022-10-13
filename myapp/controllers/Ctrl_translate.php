@@ -75,7 +75,8 @@ class Ctrl_translate extends MY_Controller {
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_user_interface')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('tr_ifgr/if' => 'help_this_page')));
 
             $get_parms = array('offset'    => $offset,
                                'sortorder' => $sortorder,
@@ -166,7 +167,8 @@ class Ctrl_translate extends MY_Controller {
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_grammar_terms')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('tr_ifgr/gr' => 'help_this_page')));
 
             $get_parms = array('group'     => $grammargroup,
                                'db'        => $db,
@@ -689,7 +691,8 @@ class Ctrl_translate extends MY_Controller {
             // VIEW:
             $this->load->view('view_top1', array('title' => 'Available localizations'));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('avail_trans' => 'help_this_page')));
             $center_text = $this->load->view('view_language_list',
                                              array('avail_translations'       => $avail_translations,
                                                    'trans_if_items'           => $trans_if_items,

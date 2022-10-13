@@ -35,8 +35,8 @@ $menu = array(
 
     'Translator&rsquo;s Guide' => array('translator'   => array(0,'Introduction for translators'),
                                         'avail_trans'  => array(0,'Available translations'),
-                                        'tr_interface' => array(0,'Interface translation'),
-                                        'tr_grammar'   => array(0,'Grammar translation'),
+                                        'tr_ifgr/if'   => array(0,'Interface translation'),
+                                        'tr_ifgr/gr'   => array(0,'Grammar translation'),
                                         'tr_lex'       => array(0,'Lexicon translation'),
         ),
 
