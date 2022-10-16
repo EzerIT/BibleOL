@@ -611,6 +611,7 @@ class Mod_grades extends CI_Model {
                 $perdate[$day] = array('duration' => 0,
                                              'correct' => 0,
                                              'userid' => $row->userid,
+                                             'quizzid' => $row->id,
                                              'count' => 0,
                                              'original_count' => 0);
             $perdate[$day]['duration'] += $row->duration;
