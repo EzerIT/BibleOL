@@ -441,11 +441,19 @@ class Mod_grades extends CI_Model {
 
     // Find all user IDs and template IDs that match the specified exercise pathname
     // The result is sorted by user ID
-    public function get_users_and_templ(string $path) {
-        $query = $this->db
-            ->select('id,userid')
-            ->where('pathname',"$this->quizzespath/$path.3et")
-            ->get('sta_quiztemplate');
+    public function get_users_and_templ(string $path, int $myid=-1) {
+        if ($myid==-1){
+          $query = $this->db
+          ->select('id,userid')
+          ->where('pathname',"$this->quizzespath/$path.3et")
+          ->get('sta_quiztemplate');
+        }
+        else {
+          $query = $this->db
+          ->select('id,userid')
+          ->where('userid',$myid)
+          ->get('sta_quiztemplate');
+        }
 
         $users_templ = array();
         foreach ($query->result() as $row) {
