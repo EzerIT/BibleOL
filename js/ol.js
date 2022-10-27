@@ -1974,19 +1974,19 @@ var PanelQuestion = (function () {
                 if (sf === 'visual')
                     featType = 'string';
                 if (featType == 'hint') {
-                    var sp = val.split(/[,=]/);
-                    if (sp.length == 2) {
-                        val = getFeatureFriendlyName(oType, sp[0]) + "=" +
-                            getFeatureValueFriendlyName(featuresHere[sp[0]], sp[1], false, true);
+                    var sp = val.split(/([,=≠])/);
+                    if (sp.length == 3) {
+                        val = getFeatureFriendlyName(oType, sp[0]) + sp[1] +
+                            getFeatureValueFriendlyName(featuresHere[sp[0]], sp[2], false, true);
                     }
-                    else if (sp.length == 4) {
+                    else if (sp.length == 7) {
                         val = getFeatureFriendlyName(oType, sp[0])
-                            + "="
-                            + getFeatureValueFriendlyName(featuresHere[sp[0]], sp[1], false, true)
+                            + sp[1]
+                            + getFeatureValueFriendlyName(featuresHere[sp[0]], sp[2], false, true)
                             + ", "
-                            + getFeatureFriendlyName(oType, sp[2])
-                            + "="
-                            + getFeatureValueFriendlyName(featuresHere[sp[2]], sp[3], false, true);
+                            + getFeatureFriendlyName(oType, sp[4])
+                            + sp[5]
+                            + getFeatureValueFriendlyName(featuresHere[sp[4]], sp[6], false, true);
                     }
                     else if (val === '*')
                         val = '-';

@@ -12,6 +12,7 @@
         "word": {
             "frequency_rank": "integer",
             "lexeme_occurrences": "integer",
+            "hint": "hint",
             "strongs": "integer",
             "self": "id_d",
             "form_tag": "string",
