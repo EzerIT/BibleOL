@@ -444,7 +444,7 @@ class Mod_askemdros extends CI_Model {
 
         foreach ($sh->get_straws() as $str)
             foreach ($str->get_matched_objects() as $mo)
-            $mset->addSet($mo->get_monadset());
+                $mset->addSet($mo->get_monadset());
 
         return $mset;
     }

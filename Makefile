@@ -53,5 +53,8 @@ docs:
 	cd myapp; doxygen
 
 
-TAGS:
-	find myapp -name '*.php' | etags --lang=php --regex='/.*\(public\|private\) .*function.*/' -
+TAGS:	FORCE
+	find myapp -name '*.php' | etags --lang=php --regex="/[ \t]*\(static\)?[ \t]*\(public\|private\)?[ \t]*\(static\)?[ \t]*function[ \t]+\([^(]+\)(/\4/" -
+	etags -o TSTAGS --regex="/[ \t]*\(public\|private\)[ \t]*\(static\)?[ \t]+\([^(]+\)(/\3/" --regex="/[ \t]*function[ \t]+\([^(]+\)(/\1/" --regex="/[ \t]*\(abstract[ \t]*\)?\(class\|interface\)[ \t]+\([a-zA-Z0-9_]+\)/\3/" ts/*.ts
+
+FORCE:
