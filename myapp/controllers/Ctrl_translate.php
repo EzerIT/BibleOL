@@ -235,7 +235,8 @@ class Ctrl_translate extends MY_Controller {
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_lex')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('tr_lex' => 'help_this_page')));
 
             $get_parms = array('src_lang' => 'all-with-greek',  // all-with-greek implies also Latin
                                'buttonix' => null);
@@ -328,7 +329,8 @@ class Ctrl_translate extends MY_Controller {
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_lex')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('tr_lex' => 'help_this_page')));
 
             $get_parms = array('src_lang'  => $src_lang,
                                'lang_show' => $lang_show,
@@ -533,7 +535,8 @@ class Ctrl_translate extends MY_Controller {
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('download_lex')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('down_lex' => 'help_this_page')));
 
             $center_text = $this->load->view('view_download_lex',
                                              array('all_lex' => $all_lex),true);
