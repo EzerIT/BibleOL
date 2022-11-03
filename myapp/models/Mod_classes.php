@@ -76,7 +76,7 @@ class Mod_classes extends CI_Model {
       ->from('class c')
       //
       ->select('c.classname, c.id',false)
-      ->join('userclass uc','c.id=uc.id')
+      ->join('userclass uc','c.id=uc.classid')
       ->where('uc.userid',$this->mod_users->my_id())->get();
 
       return $query->result();

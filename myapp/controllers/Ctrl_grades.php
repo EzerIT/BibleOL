@@ -391,7 +391,14 @@ class Ctrl_grades extends MY_Controller {
         $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
 
         try {
-            $this->mod_users->check_teacher();
+            // Check if user is enrollwed in the class
+            $classid = (int)$this->input->get('classid');
+            $is_enrolled=$this->mod_grades->check_if_enrolled($classid);
+            print_r($is_enrolled);
+            if ( !$is_enrolled ) {
+              // Check for admin if not enrolled
+              $this->mod_users->check_teacher();
+            }
 
 
 
@@ -405,10 +412,9 @@ class Ctrl_grades extends MY_Controller {
 
             $this->form_validation->set_data($_GET);
 
-            $classid = (int)$this->input->get('classid');
             $class = $this->mod_classes->get_class_by_id($classid);
       //			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
-			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
+			if ($classid<=0 || ( !$is_enrolled && $class->ownerid!=$this->mod_users->my_id() ))
 				throw new DataException($this->lang->line('illegal_class_id'));
 
             $exercise_list = $this->mod_grades->get_pathnames_for_class($classid);

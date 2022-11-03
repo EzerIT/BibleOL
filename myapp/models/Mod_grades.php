@@ -379,6 +379,30 @@ class Mod_grades extends CI_Model {
         return $result;
     }
 
+    // Check if the ustand is enrolled in that specific class
+    public function check_if_enrolled($classid) {
+      if ($classid <=0) {
+        return false;
+      }
+      $query = $this->db
+      ->from('class c')
+      //
+      ->select('c.classname, c.id',false)
+      ->join('userclass uc','c.id=uc.classid')
+      ->where('uc.userid',$this->mod_users->my_id())
+      ->where('c.id',$classid)->get();
+
+      $result = $query->row();
+
+      if ( !$result ) {
+        return false;
+      }
+      else {
+        return $query->result();
+      }
+
+    }
+
     // Get IDs of all classes to which $exercise belongs
     private function get_classes_for_pathname(string $exercise) {
         $query = $this->db
