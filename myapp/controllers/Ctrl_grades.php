@@ -394,7 +394,6 @@ class Ctrl_grades extends MY_Controller {
             // Check if user is enrollwed in the class
             $classid = (int)$this->input->get('classid');
             $is_enrolled=$this->mod_grades->check_if_enrolled($classid);
-            print_r($is_enrolled);
             if ( !$is_enrolled ) {
               // Check for admin if not enrolled
               $this->mod_users->check_teacher();
@@ -453,33 +452,36 @@ class Ctrl_grades extends MY_Controller {
                     $resfeatall = array();
                     $real_students = array(); // Will be used as a set
 
+                    $is_teacher=$this->mod_users->is_teacher();
                     foreach ($users_and_templs as $uid => $templs) {
+                      if ( $is_teacher || $this->mod_users->my_id()==$uid ) {
                         $see_nongraded = $nongraded && $this->mod_grades->may_see_nongraded($uid, $ex);
 
                         $res = $this->mod_grades->get_score_by_date_user_templ($uid,
-                                                                                   $templs,
-                                                                                   $this->statistics_timeperiod->start_timestamp(),
-                                                                                   $this->statistics_timeperiod->end_timestamp(),
-                                                                                   $see_nongraded,$calculate_percentages=true);
+                        $templs,
+                        $this->statistics_timeperiod->start_timestamp(),
+                        $this->statistics_timeperiod->end_timestamp(),
+                        $see_nongraded,$calculate_percentages=true);
 
                         $res_ind = $this->mod_grades->get_score_by_user_templ($uid,
-                                                                                   $templs,
-                                                                                   $this->statistics_timeperiod->start_timestamp(),
-                                                                                   $this->statistics_timeperiod->end_timestamp(),
-                                                                                   $see_nongraded,$calculate_percentages=true);
+                        $templs,
+                        $this->statistics_timeperiod->start_timestamp(),
+                        $this->statistics_timeperiod->end_timestamp(),
+                        $see_nongraded,$calculate_percentages=true);
 
                         $resfeat = $this->mod_grades->get_features_by_date_user_templ($uid,
-                                                                                          $templs,
-                                                                                          $this->statistics_timeperiod->start_timestamp(),
-                                                                                          $this->statistics_timeperiod->end_timestamp(),
-                                                                                          $see_nongraded,$highest_score_first=true);
+                        $templs,
+                        $this->statistics_timeperiod->start_timestamp(),
+                        $this->statistics_timeperiod->end_timestamp(),
+                        $see_nongraded,$highest_score_first=true);
 
                         if (empty($res))
-                            continue;
+                        continue;
                         $resall[] = $res;
                         $resall_ind[] = $res_ind;
                         $resfeatall[] = $resfeat;
                         $real_students[$uid] = $see_nongraded;
+                      }
                     }
 
                     $status = empty($resall) ? 0 : 1;  // 0=no data, 1=data
@@ -751,13 +753,17 @@ class Ctrl_grades extends MY_Controller {
       // $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
 
         try {
-            $this->mod_users->check_teacher();
-
-            $this->load->helper('calc_grades_helper');
-
             // Get parameters
             $quizzid = $this->uri->segment(6, 0);
             $userid  = $this->uri->segment(8, 0);
+
+            //check if is the same user
+            if ( $userid != $this->mod_users->my_id() ) {
+              $this->mod_users->check_teacher();
+            }
+
+            $this->load->helper('calc_grades_helper');
+
 
 
 
