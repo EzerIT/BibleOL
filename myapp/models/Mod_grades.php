@@ -379,6 +379,30 @@ class Mod_grades extends CI_Model {
         return $result;
     }
 
+    // Check if the ustand is enrolled in that specific class
+    public function check_if_enrolled($classid) {
+      if ($classid <=0) {
+        return false;
+      }
+      $query = $this->db
+      ->from('class c')
+      //
+      ->select('c.classname, c.id',false)
+      ->join('userclass uc','c.id=uc.classid')
+      ->where('uc.userid',$this->mod_users->my_id())
+      ->where('c.id',$classid)->get();
+
+      $result = $query->row();
+
+      if ( !$result ) {
+        return false;
+      }
+      else {
+        return $query->result();
+      }
+
+    }
+
     // Get IDs of all classes to which $exercise belongs
     private function get_classes_for_pathname(string $exercise) {
         $query = $this->db
@@ -441,11 +465,19 @@ class Mod_grades extends CI_Model {
 
     // Find all user IDs and template IDs that match the specified exercise pathname
     // The result is sorted by user ID
-    public function get_users_and_templ(string $path) {
-        $query = $this->db
-            ->select('id,userid')
-            ->where('pathname',"$this->quizzespath/$path.3et")
-            ->get('sta_quiztemplate');
+    public function get_users_and_templ(string $path, int $myid=-1) {
+        if ($myid==-1){
+          $query = $this->db
+          ->select('id,userid')
+          ->where('pathname',"$this->quizzespath/$path.3et")
+          ->get('sta_quiztemplate');
+        }
+        else {
+          $query = $this->db
+          ->select('id,userid')
+          ->where('userid',$myid)
+          ->get('sta_quiztemplate');
+        }
 
         $users_templ = array();
         foreach ($query->result() as $row) {
@@ -611,6 +643,7 @@ class Mod_grades extends CI_Model {
                 $perdate[$day] = array('duration' => 0,
                                              'correct' => 0,
                                              'userid' => $row->userid,
+                                             'quizzid' => $row->id,
                                              'count' => 0,
                                              'original_count' => 0);
             $perdate[$day]['duration'] += $row->duration;

@@ -43,7 +43,7 @@ class Mod_classes extends CI_Model {
     public function get_classes_by_ids(array $classids) {
         if (empty($classids))
             return array();
-        
+
         $query = $this->db->where_in('id',$classids)->get('class');
         return $query->result();
     }
@@ -60,7 +60,7 @@ class Mod_classes extends CI_Model {
 
         return $res;
     }
-     
+
     public function get_named_classes_owned($all=true) {
         if ($all && $this->mod_users->is_admin())
             $query = $this->db->select('id,classname')->get('class');
@@ -69,7 +69,19 @@ class Mod_classes extends CI_Model {
 
         return $query->result();
     }
-     
+
+    // Get clases the ustand is enrolled in
+    public function get_named_classes_enrolled($all=true) {
+      $query = $this->db
+      ->from('class c')
+      //
+      ->select('c.classname, c.id',false)
+      ->join('userclass uc','c.id=uc.classid')
+      ->where('uc.userid',$this->mod_users->my_id())->get();
+
+      return $query->result();
+    }
+
     public function set_class(stdClass $class_info) {
         if (empty($class_info->password))
             $class_info->password = null;

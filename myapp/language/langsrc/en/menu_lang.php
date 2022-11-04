@@ -35,4 +35,5 @@ $lang['detail'] = "Details";
 $lang['hide_detail'] = "Hide Det.";
 $lang['exams'] = "Exams";
 $lang['grades_quizzes'] = "Grade Quizzes";
+$lang['grades_my_quizzes'] = "Grade My Quizzes";
 $lang['grades_exams'] = "Grade Exams";

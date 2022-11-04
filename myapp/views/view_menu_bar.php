@@ -38,7 +38,8 @@ if (!isset($in_help) || !$in_help) {
         $content[$ix][] = make_anchor2('users/profile', 'profile');
         $content[$ix][] = make_anchor2('userclass/enroll', 'enroll_in_class');
         $content[$ix][] = make_anchor2('statistics/student_time', 'my_progress');
-
+        $content[$ix][] = make_anchor2('grades/student_grades', 'grades_my_quizzes');
+        
         if ($this->mod_users->is_teacher())
             $content[$ix][] = make_anchor2('statistics/teacher_progress', 'students_progress');
 

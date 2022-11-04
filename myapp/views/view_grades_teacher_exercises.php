@@ -245,7 +245,8 @@
           <!-- <td class="text-center"><?= Statistics_timeperiod::format_date($time) ?></td> -->
           <td class="text-center"><?= Statistics_timeperiod::format_time($time) ?></td>
           <td class="text-center"><?= round($result['percentage']) ?>%</td>
-          <td class="text-center"><?= (round(60/$result['featpermin'])<=$max_time)?calculateGrade($grade_system, $result['percentage']):calculateGrade($grade_system, 0) ?></td>
+          <!-- <td class="text-center"><?= (round(60/$result['featpermin'])<=$max_time)?calculateGrade($grade_system, $result['percentage']):calculateGrade($grade_system, 0) ?></td> -->
+          <td class="text-center"><?= anchor(build_get('grades/teacher_quizz_detail/classid/' . $classid . '/quizzid/'.$result["quizzid"] . '/userid/'.$result["userid"], array() ),(round(60/$result['featpermin'])<=$max_time)?calculateGrade($grade_system, $result['percentage']):calculateGrade($grade_system, 0)) ?></td>
           <!-- <td class="text-center"><?= $result['count'] ?></td> -->
           <td class="text-center"><?= $result["duration"] ?></td>
           <td class="text-center"><?= sprintf("%.1f",round(60/$result['featpermin'])) ?></td>
