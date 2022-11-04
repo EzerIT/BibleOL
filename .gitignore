@@ -12,6 +12,7 @@ myapp/config/config.php
 myapp/config/database.php
 myapp/config/ol.php
 TAGS
+TSTAGS
 myapp/third_party/*
 dumpdb.sh
 loaddb.sh
