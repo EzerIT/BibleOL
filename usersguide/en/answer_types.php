@@ -99,7 +99,7 @@
 
 <?= $hdir->img("qtype-gr.png") ?>
 
-<p>To provide the answer κύριος, click the buttons marked with the greek letters
+<p>To provide the answer κύριος, click the buttons marked with the Greek letters
     <i>κ, ύ, ρ, ι, ο,</i> and <i>ς.</i> You can click &ldquo;&larr;&rdquo; to erase
     the last character in your answer.</p>
 

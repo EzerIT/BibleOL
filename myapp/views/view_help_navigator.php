@@ -10,6 +10,7 @@ $menu = array(
                                   'fontpref'           => array(0,'Font preferences'),
                                   'uprof'              => array(0,'User profile'),
                                   'variant'            => array(0,'Translation variants'),
+                                  'link_icons'         => array(0,'Link icons'),
     ),
 
     'Student&rsquo;s Guide' => array('running_exercises' => array(0,'Running exercises'),
@@ -44,6 +45,7 @@ $menu = array(
                                       'sentence_units'      => array(1,'The “Sentence Units” tab'),
                                       'features'            => array(1,'The “Features” tab'),
                                       'studentstat'         => array(0,'How are my students doing?'),
+                                      'gloss_links'         => array(0,'Gloss links'),
         ),
 
     'Translator&rsquo;s Guide' => array('translator'   => array(0,'Introduction for translators'),

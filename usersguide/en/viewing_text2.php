@@ -6,6 +6,8 @@
 
 <a name="select-dialog"></a><?= $hdir->img("selecttext-$sub_article.png") ?>
 
+<p>(For information about the &ldquo;Show link icons&rdquo; checkbox, see the article <?= help_anchor('link_icons','&ldquo;Link icons&rdquo;.') ?>)</p>
+
 <p>Then click the <i>Display</i> button. This will show you <?= $hdir->heb_gr('Genesis 1:1-7','Luke 2:1-5') ?> in <?= $hg ?>:</p>
 
 <?= $hdir->img("$sub_article-text-a.png") ?>

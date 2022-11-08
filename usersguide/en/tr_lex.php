@@ -16,7 +16,7 @@
     Hebrew words with a frequency ranking between 101 and 200. Alternatively, you can look up the
     word alphabetically.</p>
 
-<p>Once you have clicke a button for the word range you wish to see, you will be taken to a web page
+<p>Once you have click a button for the word range you wish to see, you will be taken to a web page
     that looks similar to this one:</p>
 
 <?= $hdir->img("tr_lex2.png") ?>
