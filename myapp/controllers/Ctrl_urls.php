@@ -23,7 +23,8 @@ class Ctrl_urls extends MY_Controller {
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('urls')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('gloss_links' => 'help_this_page')));
 
             $get_parms = array('src_lang' => 'all-no-greek',
                                'buttonix' => null);
@@ -78,7 +79,8 @@ class Ctrl_urls extends MY_Controller {
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('urls')));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('gloss_links' => 'help_this_page')));
 
             $get_parms = array('src_lang' => $language,
                                'buttonix' => $button_index);
