@@ -863,7 +863,7 @@ class Mod_grades extends CI_Model {
 
         $query = $this->db
             ->from('sta_question as sq')
-            ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer, rf.qono')
+            ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer, rf.qono, sq.txt')
             ->join('sta_requestfeature as rf','rf.questid = sq.id')
             ->where('sq.quizid',$quizzid)
             ->get();

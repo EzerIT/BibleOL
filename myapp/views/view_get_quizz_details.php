@@ -15,6 +15,7 @@
     <tr>
       <th><?= $this->lang->line('qest_numbr') ?></th>
       <th><?= $this->lang->line('feat_location') ?></th>
+      <th><?= $this->lang->line('txt') ?></th>
       <th class="text-center"><?= $this->lang->line('right_wrong') ?></th>
       <th class="text-center"><?= $this->lang->line('correct_anser') ?></th>
       <th class="text-center"><?= $this->lang->line('answer_by_stud') ?></th>
@@ -27,6 +28,7 @@
     <tr class="<?php echo 'headerDet';  ?>">
       <td class="text-center"><?= $ra->qono ?></td>
       <td class="text-center"><?= $ra->location ?></td>
+      <td class="text-center"><?= $ra->txt ?></td>
       <td class="text-center"><?= $ra->correct  ?></td>
       <td class="text-center"><?= $ra->value  ?></td>
       <td class="text-center"><?= $ra->answer  ?></td>
