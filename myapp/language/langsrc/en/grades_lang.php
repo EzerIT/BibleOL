@@ -117,3 +117,4 @@ $lang['feat_location'] = "Feature Location";
 $lang['right_wrong'] = "Right/Wrong";
 $lang['correct_anser'] = "Correct Answer";
 $lang['answer_by_stud'] = "Student's Answer";
+$lang['txt'] = "Text";
