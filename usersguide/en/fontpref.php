@@ -1,7 +1,7 @@
 <h1>Font Preferences</h1>
 
 <p>If you are logged in to Bible OL, you can specify what fonts the system should use for Hebrew,
-    Greek and Latin texts. You&rsquo;ll find the settings under the menu <i>My Data &gt; Font
+    Greek, and Latin texts. You&rsquo;ll find the settings under the menu <i>My Data &gt; Font
     preferences</i>.</p>
 
 <p>At the top of the page, you select whether you want to specify the font for Hebrew,

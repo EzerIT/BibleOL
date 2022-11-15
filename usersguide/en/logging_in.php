@@ -14,7 +14,7 @@
 
 <h2>Advantages of Having An Account</h2>
 
-<p>When you are logged in using an account, you get a number of extra possibilities:</p>
+<p>When you are logged in, you get a number of extra possibilities:</p>
 
 <ul>
     <li>You can customize the fonts used for displaying text.</li>
@@ -64,7 +64,6 @@
     <li>Create and manage exams.</li>
     <li>Create and manage classes.</li>
     <li>Monitor how the students in your classes are doing in the exercises.</li>
-    <li>Assign or remove facilitator privileges to other accounts.</li>
 </ul>
 
 <p>When you are logged in with facilitator privileges, additional items appears in the &ldquo;My Data&rdquo; menu:</p>
@@ -79,7 +78,7 @@
 
 <ul>
     <li><?= help_anchor('usermgmt','<i>Users</i>') ?> &ndash; Manage user accounts.</li>
-    <li><i>Classes</i> &ndash; Manage classes.</li>
+    <li><?= help_anchor('classes','<i>Classes</i>') ?> &ndash; Manage classes.</li>
     <li><?= help_anchor('exercise_mgmt','<i>Manage exercises.</i>') ?></li>
     <li><i>Manage exams.</i></li>
 </ul>
@@ -100,11 +99,11 @@
     &ldquo;Administration&rdquo; with these items:</p>
 
 <ul>
-    <li><i>Translate interface</i> &ndash; Translate the user interface.</li>
-    <li><i>Translate grammar items</i> &ndash; Translate the names for Hebrew, Greek, and Latin grammatical terms.</li>
-    <li><i>Translate lexicon</i> &ndash; Translate the Hebrew, Greek, and Latin lexicons.</li>
-    <li><i>Download lexicon</i> &ndash; Download a translation of a Hebrew, Greek, or Latin lexicon.</li>
-    <li><i>Available translations</i> &ndash; View the available translations and add new languages.</li>
+    <li><?= help_anchor('tr_ifgr/if','<i>Translate interface</i>') ?> &ndash; Translate the user interface.</li>
+    <li><?= help_anchor('tr_ifgr/gr','<i>Translate grammar items</i>') ?> &ndash; Translate the names for Hebrew, Greek, and Latin grammatical terms.</li>
+    <li><?= help_anchor('tr_lex','<i>Translate lexicon</i>') ?> &ndash; Translate the Hebrew, Greek, and Latin lexicons.</li>
+    <li><?= help_anchor('down_lex','<i>Download lexicon</i>') ?> &ndash; Download a translation of a Hebrew, Greek, or Latin lexicon.</li>
+    <li><?= help_anchor('avail_trans','<i>Available translations</i>') ?> &ndash; View the available translations and add new languages.</li>
 </ul>
 
 <h3>Sysadmin</h3>
@@ -114,7 +113,7 @@
 
 <ul>
     <li>Add, modify, or delete user accounts (including facilitator, translator, or sysadmin accounts).</li>
-    <li>Manage gloss links (see Section XXX).</li>
+    <li>Manage <?= help_anchor('gloss_links','gloss links') ?>.</li>
     <li>Change ownership of exercises.</li>
     <li>Manage exercises created by other facilitators.</li>
     <li>Manage exams created by other facilitators.</li>
@@ -124,6 +123,6 @@
 <p>The &ldquo;Administration&rdquo; menu will have one additional item:</p>
 
 <ul>
-    <li><i>Gloss links</i> &ndash; See Section XXX.</li>
+    <li><?= help_anchor('gloss_links','<i>Gloss links</i>') ?>.</li>
 </ul>
 

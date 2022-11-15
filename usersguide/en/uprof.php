@@ -7,6 +7,7 @@
 
 <ul>
     <li>Modify your name.</li>
+    <li>Modify your name order. (In Chinese the family name comes before the personal name.)</li>
     <li>Modify your email address.</li>
     <li>Specify a preferred interface language. This language will then be automatically selected
         each time you log in.</li>

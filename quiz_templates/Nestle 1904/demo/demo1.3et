@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="6">
+  <desc><![CDATA[<p>Please indicate the gender and number of these nouns and pronouns.</p>
+]]></desc>
+  <database>nestle1904</database>
+  <properties>nestle1904</properties>
+  <path></path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="3">
+      <enumfeature version="1">
+        <name>psp</name>
+        <comparator>equals</comparator>
+        <value>noun</value>
+        <value>personal_pronoun</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="6">
+    <show>visual</show>
+    <show>english</show>
+    <request>gender</request>
+    <request>number</request>
+    <glosslimit>0</glosslimit>
+  </quizfeatures>
+  <maylocate>true</maylocate>
+  <sentbefore>0</sentbefore>
+  <sentafter>0</sentafter>
+  <fixedquestions>0</fixedquestions>
+  <randomize>true</randomize>
+</questiontemplate>

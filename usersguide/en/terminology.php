@@ -24,8 +24,8 @@
 <p>When an exercise is being run, the system selects certain <a href="#sentence_unit">sentence units</a>
     (typically words) and asks the student about them. These selected sentence units are the
     &ldquo;question objects&rdquo;. For example, in the following illustration, there are three
-    question objects, namely νοεῖτε, χωρεῖ, and ἐκβάλλεται, and student move between the question
-    objects by clicking the &#10094; and &#10095; symbols.</p>
+    question objects, namely νοεῖτε, χωρεῖ, and ἐκβάλλεται. The question objects are written in
+    purple letters, and students move between them by clicking the &#10094; and &#10095; symbols.</p>
 
 <?= $hdir->img("qo.png") ?>
 

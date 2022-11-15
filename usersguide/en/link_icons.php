@@ -1,6 +1,6 @@
 <h1>Link Icons</h1>
 
-<p>When you specify that you select the <i>Text and exercises &gt; Display text</i> menu item, you
+<p>When you select the <i>Text and exercises &gt; Display text</i> menu item, you
     are shown this dialog:</p>
 
 <?= $hdir->img("selecttext.png") ?>

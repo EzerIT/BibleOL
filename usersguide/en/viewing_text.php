@@ -6,7 +6,7 @@
 
 <?= $hdir->img("selecttext.png") ?>
 
-Under &ldquo;Corpus&rdquo; in that dialog, you select the text database you want to use. You have four options:
+Under &ldquo;Corpus&rdquo; in that dialog you select the text database you want to use. You have four options:
 
 <ul>
     <li><i>Hebrew (ETCBC4, OT):</i> This is the Hebrew text of the Old Testament as provided by the ETCBC4

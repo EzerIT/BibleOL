@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="6">
+  <desc><![CDATA[<p>Conjugate the verbs.</p>
+]]></desc>
+  <database>nestle1904</database>
+  <properties>nestle1904</properties>
+  <path></path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="3">
+      <enumfeature version="1">
+        <name>psp</name>
+        <comparator>equals</comparator>
+        <value>verb</value>
+      </enumfeature>
+      <enumfeature version="1">
+        <name>mood</name>
+        <comparator>equals</comparator>
+        <value>indicative</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="6">
+    <show>lemma</show>
+    <show>tense</show>
+    <show>mood</show>
+    <show>voice</show>
+    <show>person</show>
+    <show>number</show>
+    <request>raw_normalized</request>
+    <glosslimit>0</glosslimit>
+  </quizfeatures>
+  <maylocate>true</maylocate>
+  <sentbefore>0</sentbefore>
+  <sentafter>0</sentafter>
+  <fixedquestions>0</fixedquestions>
+  <randomize>true</randomize>
+</questiontemplate>

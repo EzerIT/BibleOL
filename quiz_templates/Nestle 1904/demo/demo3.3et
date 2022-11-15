@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="6">
+  <desc><![CDATA[<p>The clauses in this exercise are either <em>object, indirect object, </em>or <em>second object. </em>Your task is to determine which it is.</p>
+]]></desc>
+  <database>nestle1904</database>
+  <properties>nestle1904</properties>
+  <path></path>
+  <sentenceselection version="1">
+    <questionobject>clause1</questionobject>
+    <featurehandlers version="3">
+      <enumfeature version="1">
+        <name>typ</name>
+        <comparator>equals</comparator>
+        <value>IO</value>
+        <value>O</value>
+        <value>O2</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="6">
+    <show>visual</show>
+    <request hidefeatures="ADV,CL,S,V,VC,P">typ</request>
+    <glosslimit>0</glosslimit>
+  </quizfeatures>
+  <maylocate>true</maylocate>
+  <sentbefore>0</sentbefore>
+  <sentafter>0</sentafter>
+  <fixedquestions>0</fixedquestions>
+  <randomize>true</randomize>
+</questiontemplate>

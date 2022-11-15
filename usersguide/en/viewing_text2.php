@@ -14,15 +14,13 @@
 
 <?php if ($sub_article=='heb'): ?>
     <p>The small icon to the right of the first verse is a link to the same text at the
-        <?= help_anchor('shebanq', 'SHEBANQ') ?>
+        <?= anchor('https://shebanq.ancient-data.org/','SHEBANQ',['target'=>'_blank']) ?>
         website.</p>
 <?php endif; ?>
 
 <a name="view_grammar"></a><h2>Viewing <?= $hg ?> Grammar Information</h2>
 
-<p>If you are viewing the text on a computer, you will have three ways to display grammar information;
-    if you are using a tablet or a smartphone, you will have two ways to display grammar information.
-    They are:</p>
+<p>There are different ways to display grammar information:</p>
 
 <ul>
   <li>Hovering the mouse over a word or sentence part. (This is not available on tablets or
@@ -38,7 +36,8 @@
 <a name="grammar-info-box"></a><?= $hdir->img("$sub_article-text-b.png") ?>
 
 <p>In the grammar information box you will see detailed information about the word your mouse points
-to. When you move the mouse, the grammar information box disappears. You may find this inconvenient,
+    to. When you move the mouse, the grammar information box disappears. Also, the grammar information box may
+    be too tall to fit on your computer screen. You may find this inconvenient,
     so instead you can use the following method:</p>
 
 <p>On a computer, table, or smartphone, you can click or tap on a word. In that case, a dialog box will
@@ -76,10 +75,10 @@ to. When you move the mouse, the grammar information box disappears. You may fin
 
 <p>You can add additional information by clicking the relevant buttons in the grammar selection box.</p>
 
-<p>You can use the <i>Clear grammar</i> all the selected grammar information, and you can use the ×
+<p>You can use the <i>Clear grammar</i> button to remove all the selected grammar information, and you can use the ×
     icon to hide the grammar selection box.</p>
 
-<p>The grammar selection box also allows you to see borders between <?= $hdir->heb_gr('phrases, clauses,','clauses') ?>
+<p>The grammar selection box also allows you to see borders between <?= $hdir->heb_gr('phrases, clauses, ','clauses ') ?>
 or sentences, as well as grammatical information about each of these. If, for example, you click
 <?= $hdir->heb_gr('Clause','Clause level 1') ?>, and then select
     <i>Show border</i>, you will see the borders of each clause.</p>
@@ -104,13 +103,13 @@ border of a particular Clause (or, alternatively, clicking the word &ldquo;<?= $
 <?php if ($sub_article=='gr'): ?>
     <p>Some words may not belong to a particular clause, and a clause may be split into parts. In
     the figure above, the word καὶ at the start of verse 3 is not a member of a clause; and the
-    clause in verse 1, the clause is split into two pars around the word δὲ, which is not part of
-    the clause. The split clause is marked by its missing left and right borders.</p>
+    clause in verse 1 is split into two parts around the word δὲ, which is not part of
+    the clause. The split clause is marked by its missing right and left borders.</p>
 <?php endif; ?>
 
-<p>The different items you can select in the grammar selection box are detailed
+<!--<p>The different items you can select in the grammar selection box are detailed
     <?= anchor("help/show_help/all_features/$sub_article", 'here') ?>, but
-    <?= $hdir->heb_gr('a few items are','one item is') ?> worth mentioning here:</p>
+    <?= $hdir->heb_gr('a few items are','one item is') ?> worth mentioning here:</p>-->
 
 <p>In the grammar selection box, under <i>Word</i> and <i>Lexeme</i> you can enter a &ldquo;Word frequency
 color limit&rdquo;. Setting this value to, for example, 50, means that the 50 most common
@@ -125,7 +124,7 @@ When determining how common words are, different morphological forms of the same
 <?php if ($sub_article=='heb'): ?>
     <p>In most cases, the information you find in the grammar information box will be the same as
         what is shown between the lines using the &ldquo;MyView&rdquo; selector; but for glosses this is not the
-        case. For example, in the grammar information box show in <a href="#grammar-info-box">one of the figures above</a>
+        case. For example, in the grammar information box shown in <a href="#grammar-info-box">one of the figures above</a>
         you can see that the lexeme <span class="help hebrew">היה</span> is translated into English as &ldquo;be,
         happen, become, occur&rdquo;. But if you open the &ldquo;MyView&rdquo; selector and choose
         <i>Word</i> and <i>Glosses</i> and <i>English</i>, only

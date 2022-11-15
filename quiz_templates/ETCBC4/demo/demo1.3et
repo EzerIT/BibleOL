@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="6">
+  <desc><![CDATA[<p>Please indicate the gender and number of these nouns and pronouns.</p>
+]]></desc>
+  <database>ETCBC4</database>
+  <properties>ETCBC4</properties>
+  <path>Genesis:1</path>
+  <path>Genesis:2</path>
+  <path>Genesis:3</path>
+  <sentenceselection version="1">
+    <questionobject>word</questionobject>
+    <featurehandlers version="3">
+      <enumfeature version="1">
+        <name>gn</name>
+        <comparator>differs</comparator>
+        <value>NA</value>
+        <value>unknown</value>
+      </enumfeature>
+      <enumfeature version="1">
+        <name>sp</name>
+        <comparator>equals</comparator>
+        <value>subs</value>
+        <value>prps</value>
+      </enumfeature>
+    </featurehandlers>
+    <useforquizobjects>true</useforquizobjects>
+  </sentenceselection>
+  <quizfeatures version="6">
+    <show>visual</show>
+    <show>english</show>
+    <request hidefeatures="unknown,absent,NA">gn</request>
+    <request hidefeatures="NA,unknown,absent">nu</request>
+    <glosslimit>0</glosslimit>
+  </quizfeatures>
+  <maylocate>true</maylocate>
+  <sentbefore>0</sentbefore>
+  <sentafter>0</sentafter>
+  <fixedquestions>0</fixedquestions>
+  <randomize>true</randomize>
+</questiontemplate>

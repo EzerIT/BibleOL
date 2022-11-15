@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<questiontemplate version="6">
+  <desc><![CDATA[<p>The clauses in this exercise are either <em>nominal clauses </em>(NmCl), <em>adjectival clauses </em>(AjCl), or <em>participle clause</em>s (Ptcp). Your task is to determine which it is.</p>
+]]></desc>
+  <database>ETCBC4</database>
+  <properties>ETCBC4</properties>
+  <path>Genesis</path>
+  <path>Exodus</path>
+  <path>Leviticus</path>
+  <path>Numeri</path>
+  <path>Deuteronomium</path>
+  <sentenceselection version="1">
+    <questionobject>clause</questionobject>
+    <mql>[clause NORETRIEVE typ IN (AjCl,NmCl,Ptcp) get typ][clause NORETRIEVE NOT typ IN (AjCl,NmCl,Ptcp) get typ][clause NORETRIEVE typ IN (AjCl,NmCl,Ptcp) get typ]</mql>
+    <useforquizobjects>false</useforquizobjects>
+  </sentenceselection>
+  <quizobjectselection version="1">
+    <questionobject>clause</questionobject>
+    <featurehandlers version="3">
+      <enumfeature version="1">
+        <name>typ</name>
+        <comparator>equals</comparator>
+        <value>AjCl</value>
+        <value>NmCl</value>
+        <value>Ptcp</value>
+      </enumfeature>
+    </featurehandlers>
+  </quizobjectselection>
+  <quizfeatures version="6">
+    <show>visual</show>
+    <request hidefeatures="WQtX,XPos,CPen,WxI0,xQt0,Ellp,WXIm,XQtl,InfA,WxIX,xQtX,InfC,WxQ0,xYq0,MSyn,WXQt,XYqt,WxQX,xYqX,WxY0,ZIm0,Reop,WXYq,ZImX,Voct,WxYX,ZQt0,Way0,WYq0,ZQtX,WayX,WYqX,ZYq0,WIm0,xIm0,ZYqX,WImX,XImp,WQt0,xImX">typ</request>
+    <glosslimit>0</glosslimit>
+  </quizfeatures>
+  <maylocate>true</maylocate>
+  <sentbefore>0</sentbefore>
+  <sentafter>0</sentafter>
+  <fixedquestions>0</fixedquestions>
+  <randomize>true</randomize>
+</questiontemplate>
