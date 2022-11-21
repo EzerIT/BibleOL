@@ -2,10 +2,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -71,16 +73,16 @@ var util;
     var BorderFollowerBox = (function (_super) {
         __extends(BorderFollowerBox, _super);
         function BorderFollowerBox(level) {
-            return _super.call(this, level, "#lev" + level + "_sb_cb") || this;
+            return _super.call(this, level, "#lev".concat(level, "_sb_cb")) || this;
         }
         BorderFollowerBox.prototype.setit = function (val) {
             if (val) {
-                $(".lev" + this.level + " > .gram").removeClass('dontshowit').addClass('showit');
-                $(".lev" + this.level).removeClass('dontshowborder').addClass('showborder');
+                $(".lev".concat(this.level, " > .gram")).removeClass('dontshowit').addClass('showit');
+                $(".lev".concat(this.level)).removeClass('dontshowborder').addClass('showborder');
             }
             else {
-                $(".lev" + this.level + " > .gram").removeClass('showit').addClass('dontshowit');
-                $(".lev" + this.level).removeClass('showborder').addClass('dontshowborder');
+                $(".lev".concat(this.level, " > .gram")).removeClass('showit').addClass('dontshowit');
+                $(".lev".concat(this.level)).removeClass('showborder').addClass('dontshowborder');
             }
         };
         return BorderFollowerBox;
@@ -89,12 +91,12 @@ var util;
     var SeparateLinesFollowerBox = (function (_super) {
         __extends(SeparateLinesFollowerBox, _super);
         function SeparateLinesFollowerBox(level) {
-            return _super.call(this, level, "#lev" + level + "_seplin_cb") || this;
+            return _super.call(this, level, "#lev".concat(level, "_seplin_cb")) || this;
         }
         SeparateLinesFollowerBox.prototype.setit = function (val) {
             var oldSepLin = val ? 'noseplin' : 'seplin';
             var newSepLin = val ? 'seplin' : 'noseplin';
-            $(".notdummy.lev" + this.level).removeClass(oldSepLin).addClass(newSepLin);
+            $(".notdummy.lev".concat(this.level)).removeClass(oldSepLin).addClass(newSepLin);
         };
         return SeparateLinesFollowerBox;
     }(FollowerBox));
@@ -360,8 +362,8 @@ var GrammarFeature = (function () {
                 else {
                     var res2 = '';
                     for (var i = 0; i < res.length; ++i)
-                        res2 += "<a style=\"padding-right:1px;padding-left:1px;\" href=\"" + res[i]['url'] + "\" target=\"_blank\">"
-                            + ("<span class=\"" + this.icon2class(res[i]['icon']) + "\" aria-hidden=\"true\"></span></a>");
+                        res2 += "<a style=\"padding-right:1px;padding-left:1px;\" href=\"".concat(res[i]['url'], "\" target=\"_blank\">")
+                            + "<span class=\"".concat(this.icon2class(res[i]['icon']), "\" aria-hidden=\"true\"></span></a>");
                     res = res2;
                 }
                 break;
@@ -421,7 +423,7 @@ var GrammarSelectionBox = (function () {
         this.seenFreqRank = false;
     }
     GrammarSelectionBox.adjustDivLevWidth = function (level) {
-        $(".showborder.lev" + level).each(function (index) {
+        $(".showborder.lev".concat(level)).each(function (index) {
             $(this).css('width', 'auto');
             var w = $(this).find('> .gram').width();
             if ($(this).width() < w + 10)
@@ -435,15 +437,15 @@ var GrammarSelectionBox = (function () {
                     this.hasSeenGrammarGroup = true;
                     this.subgroupgrammartabs += "<div id=\"grammargroup\"><ul>";
                 }
-                this.subgroupgrammartabs += "<li><a class=\"grammargroup\" href=\"#" + getHtmlAttribFriendlyName(featName) + "\"><h3>" + featNameLoc + "</h3></a></li>";
-                this.subgroupgrammardivs += "<div id=\"" + getHtmlAttribFriendlyName(featName) + "\">";
+                this.subgroupgrammartabs += "<li><a class=\"grammargroup\" href=\"#".concat(getHtmlAttribFriendlyName(featName), "\"><h3>").concat(featNameLoc, "</h3></a></li>");
+                this.subgroupgrammardivs += "<div id=\"".concat(getHtmlAttribFriendlyName(featName), "\">");
                 this.subgroupgrammardivs += "<div id=\"grammarbuttongroup\">";
                 this.addBr.reset();
                 break;
             case WHAT.groupend:
                 this.subgroupgrammardivs += '</div>';
                 if (this.seenFreqRank && !inQuiz) {
-                    this.subgroupgrammardivs += "<div class=\"color-limit\"><span class=\"color-limit-prompt\">" + localize('word_frequency_color_limit') + "</span><input id=\"color-limit\" type=\"number\" style=\"width:5em\"></div>";
+                    this.subgroupgrammardivs += "<div class=\"color-limit\"><span class=\"color-limit-prompt\">".concat(localize('word_frequency_color_limit'), "</span><input id=\"color-limit\" type=\"number\" style=\"width:5em\"></div>");
                     this.seenFreqRank = false;
                 }
                 this.subgroupgrammardivs += '</div>';
@@ -454,10 +456,10 @@ var GrammarSelectionBox = (function () {
                 if (this.hasSeenGrammarGroup) {
                     if (objType === "word" && featName === "frequency_rank")
                         this.seenFreqRank = true;
-                    this.subgroupgrammardivs += "<div class=\"selectbutton\"><input id=\"" + objType + "_" + featName + "_cb\" type=\"checkbox\" " + disabled + "><label class=\"" + disabled + "\" for=\"" + objType + "_" + featName + "_cb\">" + featNameLoc + "</label></div>";
+                    this.subgroupgrammardivs += "<div class=\"selectbutton\"><input id=\"".concat(objType, "_").concat(featName, "_cb\" type=\"checkbox\" ").concat(disabled, "><label class=\"").concat(disabled, "\" for=\"").concat(objType, "_").concat(featName, "_cb\">").concat(featNameLoc, "</label></div>");
                 }
                 else {
-                    this.checkboxes += "<div class=\"selectbutton\"><input id=\"" + objType + "_" + featName + "_cb\" type=\"checkbox\" " + disabled + "><label class=\"" + disabled + "\" for=\"" + objType + "_" + featName + "_cb\">" + featNameLoc + "</label></div>";
+                    this.checkboxes += "<div class=\"selectbutton\"><input id=\"".concat(objType, "_").concat(featName, "_cb\" type=\"checkbox\" ").concat(disabled, "><label class=\"").concat(disabled, "\" for=\"").concat(objType, "_").concat(featName, "_cb\">").concat(featNameLoc, "</label></div>");
                 }
                 break;
         }
@@ -466,16 +468,16 @@ var GrammarSelectionBox = (function () {
         if (level == 0) {
             if (charset.isHebrew) {
                 return "<div class=\"selectbutton\"><input id=\"ws_cb\" type=\"checkbox\">" +
-                    ("<label for=\"ws_cb\">" + localize('word_spacing') + "</label></div>");
+                    "<label for=\"ws_cb\">".concat(localize('word_spacing'), "</label></div>");
             }
             else
                 return '';
         }
         else {
-            return "<div class=\"selectbutton\"><input id=\"lev" + level + "_seplin_cb\" type=\"checkbox\">" +
-                ("<label for=\"lev" + level + "_seplin_cb\">" + localize('separate_lines') + "</label></div>") +
-                ("<div class=\"selectbutton\"><input id=\"lev" + level + "_sb_cb\" type=\"checkbox\">") +
-                ("<label for=\"lev" + level + "_sb_cb\">" + localize('show_border') + "</label></div>");
+            return "<div class=\"selectbutton\"><input id=\"lev".concat(level, "_seplin_cb\" type=\"checkbox\">") +
+                "<label for=\"lev".concat(level, "_seplin_cb\">").concat(localize('separate_lines'), "</label></div>") +
+                "<div class=\"selectbutton\"><input id=\"lev".concat(level, "_sb_cb\" type=\"checkbox\">") +
+                "<label for=\"lev".concat(level, "_sb_cb\">").concat(localize('show_border'), "</label></div>");
         }
     };
     GrammarSelectionBox.prototype.generateHtml = function () {
@@ -486,7 +488,7 @@ var GrammarSelectionBox = (function () {
             if (isNaN(leveli))
                 continue;
             var objType = configuration.sentencegrammar[leveli].objType;
-            this.checkboxes += "<li><a class=\"gramtabs\" href=\"#" + getHtmlAttribFriendlyName(objType) + "\"><h3>" + getObjectFriendlyName(objType) + "</h3></a></li>";
+            this.checkboxes += "<li><a class=\"gramtabs\" href=\"#".concat(getHtmlAttribFriendlyName(objType), "\"><h3>").concat(getObjectFriendlyName(objType), "</h3></a></li>");
         }
         this.checkboxes += "</ul>";
         for (var level in configuration.sentencegrammar) {
@@ -494,7 +496,7 @@ var GrammarSelectionBox = (function () {
             if (isNaN(leveli))
                 continue;
             var objType = configuration.sentencegrammar[leveli].objType;
-            this.checkboxes += "<div id=\"" + getHtmlAttribFriendlyName(objType) + "\">";
+            this.checkboxes += "<div id=\"".concat(getHtmlAttribFriendlyName(objType), "\">");
             this.checkboxes += "<div class=\"objectlevel\">";
             this.checkboxes += "<div id=\"grammarbuttongroup\">";
             this.checkboxes += this.makeInitCheckBoxForObj(leveli);
@@ -508,7 +510,7 @@ var GrammarSelectionBox = (function () {
             this.subgroupgrammardivs = '';
             this.checkboxes += '</div></div>';
         }
-        this.checkboxes += "<button class=\"btn btn-clear\" id=\"cleargrammar\">" + localize('clear_grammar') + "</button>";
+        this.checkboxes += "<button class=\"btn btn-clear\" id=\"cleargrammar\">".concat(localize('clear_grammar'), "</button>");
         return this.checkboxes;
     };
     GrammarSelectionBox.prototype.setHandlerCallback = function (whattype, objType, featName, featNameLoc, leveli) {
@@ -516,7 +518,7 @@ var GrammarSelectionBox = (function () {
         if (whattype != WHAT.feature && whattype != WHAT.metafeature)
             return;
         if (leveli === 0) {
-            $("#" + objType + "_" + featName + "_cb").change(function (e) {
+            $("#".concat(objType, "_").concat(featName, "_cb")).change(function (e) {
                 var isManual = [];
                 for (var _i = 1; _i < arguments.length; _i++) {
                     isManual[_i - 1] = arguments[_i];
@@ -525,14 +527,14 @@ var GrammarSelectionBox = (function () {
                     if (!inQuiz && isManual[0] != 'manual') {
                         setOneSessionValue($(e.currentTarget).prop('id'), true);
                     }
-                    $(".wordgrammar." + featName).removeClass('dontshowit').addClass('showit');
+                    $(".wordgrammar.".concat(featName)).removeClass('dontshowit').addClass('showit');
                     _this.wordSpaceBox.implicit(true);
                 }
                 else {
                     if (!inQuiz && isManual[0] != 'manual') {
                         setOneSessionValue($(e.currentTarget).prop('id'), false);
                     }
-                    $(".wordgrammar." + featName).removeClass('showit').addClass('dontshowit');
+                    $(".wordgrammar.".concat(featName)).removeClass('showit').addClass('dontshowit');
                     _this.wordSpaceBox.implicit(false);
                 }
                 for (var lev = 1; lev < configuration.maxLevels - 1; ++lev)
@@ -540,7 +542,7 @@ var GrammarSelectionBox = (function () {
             });
         }
         else {
-            $("#" + objType + "_" + featName + "_cb").change(function (e) {
+            $("#".concat(objType, "_").concat(featName, "_cb")).change(function (e) {
                 var isManual = [];
                 for (var _i = 1; _i < arguments.length; _i++) {
                     isManual[_i - 1] = arguments[_i];
@@ -549,7 +551,7 @@ var GrammarSelectionBox = (function () {
                     if (!inQuiz && isManual[0] != 'manual') {
                         setOneSessionValue($(e.currentTarget).prop('id'), true);
                     }
-                    $(".xgrammar." + objType + "_" + featName).removeClass('dontshowit').addClass('showit');
+                    $(".xgrammar.".concat(objType, "_").concat(featName)).removeClass('dontshowit').addClass('showit');
                     if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
                         _this.separateLinesBoxes[leveli].implicit(true);
                         $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left', indentation_width + 'px').css('text-indent', -indentation_width + 'px');
@@ -561,7 +563,7 @@ var GrammarSelectionBox = (function () {
                     if (!inQuiz && isManual[0] != 'manual') {
                         setOneSessionValue($(e.currentTarget).prop('id'), false);
                     }
-                    $(".xgrammar." + objType + "_" + featName).removeClass('showit').addClass('dontshowit');
+                    $(".xgrammar.".concat(objType, "_").concat(featName)).removeClass('showit').addClass('dontshowit');
                     if (configuration.databaseName == 'ETCBC4' && leveli == 2 && objType == "clause_atom" && featName == "tab") {
                         _this.separateLinesBoxes[leveli].implicit(false);
                         $('.lev2').css(charset.isRtl ? 'padding-right' : 'padding-left', '0').css('text-indent', '0');
@@ -605,7 +607,7 @@ var GrammarSelectionBox = (function () {
             }
             else {
                 this_1.separateLinesBoxes[leveli] = new util.SeparateLinesFollowerBox(leveli);
-                $("#lev" + leveli + "_seplin_cb").change(leveli, function (e) {
+                $("#lev".concat(leveli, "_seplin_cb")).change(leveli, function (e) {
                     var isManual = [];
                     for (var _i = 1; _i < arguments.length; _i++) {
                         isManual[_i - 1] = arguments[_i];
@@ -624,7 +626,7 @@ var GrammarSelectionBox = (function () {
                     }
                 });
                 this_1.borderBoxes[leveli] = new util.BorderFollowerBox(leveli);
-                $("#lev" + leveli + "_sb_cb").change(leveli, function (e) {
+                $("#lev".concat(leveli, "_sb_cb")).change(leveli, function (e) {
                     var isManual = [];
                     for (var _i = 1; _i < arguments.length; _i++) {
                         isManual[_i - 1] = arguments[_i];
@@ -861,10 +863,10 @@ var DisplaySingleMonadObject = (function (_super) {
         var textDisplayClass = '';
         if (qd && qd.monad2Id[this.monad] && containsMonad(quizMonads, this.monad)) {
             if (qd.quizFeatures.dontShow)
-                text = "(" + ++DisplaySingleMonadObject.itemIndex + ")";
+                text = "(".concat(++DisplaySingleMonadObject.itemIndex, ")");
             else
                 text = this.displayedMo.mo.features[configuration.surfaceFeature];
-            text = "<em>" + text + "</em>";
+            text = "<em>".concat(text, "</em>");
             textDisplayClass = ' text-danger';
         }
         else {
@@ -872,19 +874,19 @@ var DisplaySingleMonadObject = (function (_super) {
             if (!containsMonad(quizMonads, this.monad))
                 textDisplayClass = ' text-muted';
         }
-        var chapterstring = chapter == null ? '' : "<span class=\"chapter\">" + chapter + "</span>&#x200a;";
-        var versestring = verse == null ? '' : "<span class=\"verse\">" + verse + "</span>";
+        var chapterstring = chapter == null ? '' : "<span class=\"chapter\">".concat(chapter, "</span>&#x200a;");
+        var versestring = verse == null ? '' : "<span class=\"verse\">".concat(verse, "</span>");
         var refstring;
         if (refs === null)
             refstring = '';
         else if (refs.length === 4)
-            refstring = "<a target=\"_blank\" title=\"" + localize('click_for_picture') + "\" href=\"http://resources.3bmoodle.dk/link.php?picno=" + refs[3] + "\"><img src=\"" + site_url + "images/p.png\"></a>";
+            refstring = "<a target=\"_blank\" title=\"".concat(localize('click_for_picture'), "\" href=\"http://resources.3bmoodle.dk/link.php?picno=").concat(refs[3], "\"><img src=\"").concat(site_url, "images/p.png\"></a>");
         else
-            refstring = "<a target=\"_blank\" title=\"" + localize('click_for_pictures') + "\" href=\"http://resources.3bmoodle.dk/img.php?book=" + refs[0] + "&chapter=" + refs[1] + "&verse=" + refs[2] + "\"><img src=\"" + site_url + "images/pblue.png\"></a>";
+            refstring = "<a target=\"_blank\" title=\"".concat(localize('click_for_pictures'), "\" href=\"http://resources.3bmoodle.dk/img.php?book=").concat(refs[0], "&chapter=").concat(refs[1], "&verse=").concat(refs[2], "\"><img src=\"").concat(site_url, "images/pblue.png\"></a>");
         var urlstring = '';
         if (urls !== null)
             for (var uix = 0; uix < urls.length; ++uix)
-                urlstring += "<a target=\"_blank\" title=\"" + localize(urlTypeString[urls[uix][1]]) + "\" href=\"" + urls[uix][0] + "\"><img src=\"" + site_url + "images/" + urls[uix][1] + ".png\"></a>";
+                urlstring += "<a target=\"_blank\" title=\"".concat(localize(urlTypeString[urls[uix][1]]), "\" href=\"").concat(urls[uix][0], "\"><img src=\"").concat(site_url, "images/").concat(urls[uix][1], ".png\"></a>");
         var grammar = '';
         configuration.sentencegrammar[0]
             .walkFeatureValues(smo, 0, this.objType, false, function (whattype, objType, origObjType, featName, featValLoc) {
@@ -907,10 +909,10 @@ var DisplaySingleMonadObject = (function (_super) {
                             .replace(/([^,;(]+).*/, '$1')
                             .replace(/(&[gl]t)Q/, '$1;');
                     }
-                    grammar += "<span class=\"wordgrammar dontshowit " + featName + " " + wordclass + "\">" + featValLoc + "</span>";
+                    grammar += "<span class=\"wordgrammar dontshowit ".concat(featName, " ").concat(wordclass, "\">").concat(featValLoc, "</span>");
                     break;
                 case WHAT.metafeature:
-                    grammar += "<span class=\"wordgrammar dontshowit " + featName + " ltr\">" + featValLoc + "</span>";
+                    grammar += "<span class=\"wordgrammar dontshowit ".concat(featName, " ltr\">").concat(featValLoc, "</span>");
                     break;
             }
         });
@@ -928,7 +930,7 @@ var DisplaySingleMonadObject = (function (_super) {
         }
         else
             sentenceTextArr[0] += text + ' ';
-        return $("<span class=\"textblock inline\"><span class=\"textdisplay " + (charset.foreignClass + textDisplayClass) + "\" data-idd=\"" + smo.mo.id_d + "\">" + versestring + refstring + urlstring + text + "</span>" + grammar + "</span>" + follow_space);
+        return $("<span class=\"textblock inline\"><span class=\"textdisplay ".concat(charset.foreignClass + textDisplayClass, "\" data-idd=\"").concat(smo.mo.id_d, "\">").concat(versestring).concat(refstring).concat(urlstring).concat(text, "</span>").concat(grammar, "</span>").concat(follow_space));
     };
     return DisplaySingleMonadObject;
 }(DisplayMonadObject));
@@ -958,7 +960,7 @@ var DisplayMultipleMonadObject = (function (_super) {
         return _this;
     }
     DisplayMultipleMonadObject.prototype.generateHtml = function (qd, sentenceTextArr, quizMonads) {
-        var spanclass = "lev" + this.level + " dontshowborder noseplin";
+        var spanclass = "lev".concat(this.level, " dontshowborder noseplin");
         if (this.hasPredecessor)
             spanclass += ' hasp';
         if (this.hasSuccessor)
@@ -972,30 +974,30 @@ var DisplayMultipleMonadObject = (function (_super) {
                     if (configuration.databaseName == 'ETCBC4' && objType == "clause_atom" && featName == "tab")
                         indent = +featValLoc;
                     else
-                        grammar += "<span class=\"xgrammar dontshowit " + objType + "_" + featName + "\">:" + featValLoc + "</span>";
+                        grammar += "<span class=\"xgrammar dontshowit ".concat(objType, "_").concat(featName, "\">:").concat(featValLoc, "</span>");
                 }
             });
         }
         var jq;
         if (this.isPatriarch) {
-            jq = $("<span class=\"" + spanclass + "\"></span>");
+            jq = $("<span class=\"".concat(spanclass, "\"></span>"));
         }
         else if (this.displayedMo.mo.name == "dummy") {
-            jq = $("<span class=\"" + spanclass + "\"><span class=\"nogram dontshowit\" data-idd=\"" + this.displayedMo.mo.id_d + "\" data-mix=\"0\"></span></span>");
+            jq = $("<span class=\"".concat(spanclass, "\"><span class=\"nogram dontshowit\" data-idd=\"").concat(this.displayedMo.mo.id_d, "\" data-mix=\"0\"></span></span>"));
         }
         else if (configuration.databaseName == 'ETCBC4' && this.level == 2) {
-            jq = $("<span class=\"notdummy " + spanclass + "\">"
-                + ("<span class=\"gram dontshowit\" data-idd=\"" + this.displayedMo.mo.id_d + "\" data-mix=\"" + this.mix + "\">")
+            jq = $("<span class=\"notdummy ".concat(spanclass, "\">")
+                + "<span class=\"gram dontshowit\" data-idd=\"".concat(this.displayedMo.mo.id_d, "\" data-mix=\"").concat(this.mix, "\">")
                 + getObjectShortFriendlyName(this.objType)
                 + grammar
                 + '</span>'
-                + ("<span class=\"xgrammar clause_atom_tab dontshowit indentation\" data-indent=\"" + indent + "\">")
+                + "<span class=\"xgrammar clause_atom_tab dontshowit indentation\" data-indent=\"".concat(indent, "\">")
                 + '</span>'
                 + '</span>');
         }
         else {
-            jq = $("<span class=\"notdummy " + spanclass + "\">"
-                + ("<span class=\"gram dontshowit\" data-idd=\"" + this.displayedMo.mo.id_d + "\" data-mix=\"" + this.mix + "\">")
+            jq = $("<span class=\"notdummy ".concat(spanclass, "\">")
+                + "<span class=\"gram dontshowit\" data-idd=\"".concat(this.displayedMo.mo.id_d, "\" data-mix=\"").concat(this.mix, "\">")
                 + getObjectShortFriendlyName(this.objType)
                 + grammar
                 + '</span>'
@@ -1092,7 +1094,7 @@ function mayShowFeature(oType, origOtype, feat, sgiObj) {
     }
     var regex_feat = new RegExp((sgiObj.mytype === 'GrammarFeature' && getFeatureSetting(oType, feat).isGloss !== undefined)
         ? '\\bglosses\\b'
-        : "\\b" + feat + "\\b");
+        : "\\b".concat(feat, "\\b"));
     for (var _b = 0, _c = qf.dontShowObjects; _b < _c.length; _b++) {
         var dso = _c[_b];
         if (dso.content === origOtype)
@@ -1291,10 +1293,10 @@ var Dictionary = (function () {
         var sengram = configuration.sentencegrammar[level];
         var res = '<table>';
         if (set_head) {
-            res += "<tr>\n                        <td colspan=\"2\" class=\"tooltiphead\">" + getObjectFriendlyName(sengram.objType) + "</td>\n                    </tr>";
+            res += "<tr>\n                        <td colspan=\"2\" class=\"tooltiphead\">".concat(getObjectFriendlyName(sengram.objType), "</td>\n                    </tr>");
         }
         if (level === 0 && !this.hideWord) {
-            res += "<tr>\n                        <td>" + localize('visual') + "</td>\n                        <td class=\"bol-tooltip leftalign " + charset.foreignClass + "\">" + monob.mo.features[configuration.surfaceFeature] + "</td>\n                    </tr>";
+            res += "<tr>\n                        <td>".concat(localize('visual'), "</td>\n                        <td class=\"bol-tooltip leftalign ").concat(charset.foreignClass, "\">").concat(monob.mo.features[configuration.surfaceFeature], "</td>\n                    </tr>");
         }
         var map = {};
         sengram.walkFeatureNames(sengram.objType, function (whattype, objType, origObjType, featName, featNameLoc, sgiObj) {
@@ -1318,16 +1320,16 @@ var Dictionary = (function () {
                             wordclass = charset.transliteratedClass;
                         else
                             wordclass = '';
-                        res += "<tr>\n                                                           <td>" + map[featName] + "</td>\n                                                           <td class=\"bol-tooltip leftalign " + wordclass + "\">" + featValLoc + "</td>\n                                                       </tr>";
+                        res += "<tr>\n                                                           <td>".concat(map[featName], "</td>\n                                                           <td class=\"bol-tooltip leftalign ").concat(wordclass, "\">").concat(featValLoc, "</td>\n                                                       </tr>");
                     }
                     break;
                 case WHAT.metafeature:
                     if (mayShowFeature(objType, origObjType, featName, sgiObj)) {
-                        res += "<tr>\n                                                           <td>" + map[featName] + "</td>\n                                                           <td class=\"bol-tooltip leftalign\">" + featValLoc + "</td>\n                                                       </tr>";
+                        res += "<tr>\n                                                           <td>".concat(map[featName], "</td>\n                                                           <td class=\"bol-tooltip leftalign\">").concat(featValLoc, "</td>\n                                                       </tr>");
                     }
                     break;
                 case WHAT.groupstart:
-                    res += "<tr>\n                                                       <td><b>" + map[featName] + ":</b></td>\n                                                       <td class=\"leftalign\"></td>\n                                                   </tr>";
+                    res += "<tr>\n                                                       <td><b>".concat(map[featName], ":</b></td>\n                                                       <td class=\"leftalign\"></td>\n                                                   </tr>");
                     break;
             }
         });
@@ -1350,9 +1352,9 @@ var ComponentWithYesNo = (function () {
     function ComponentWithYesNo(elem, elemType) {
         this.elem = elem;
         this.elemType = elemType;
-        this.yesIcon = $("<img src=\"" + site_url + "/images/ok.png\" alt=\"Yes\">");
-        this.noIcon = $("<img src=\"" + site_url + "/images/notok.png\" alt=\"No\">");
-        this.noneIcon = $("<img src=\"" + site_url + "/images/none.png\" alt=\"None\">");
+        this.yesIcon = $("<img src=\"".concat(site_url, "/images/ok.png\" alt=\"Yes\">"));
+        this.noIcon = $("<img src=\"".concat(site_url, "/images/notok.png\" alt=\"No\">"));
+        this.noneIcon = $("<img src=\"".concat(site_url, "/images/none.png\" alt=\"None\">"));
     }
     ComponentWithYesNo.prototype.getJQuery = function () {
         var spn = $('<td class="qbox"></td>').append([this.yesIcon, this.noIcon, this.noneIcon, this.elem]);
@@ -1743,25 +1745,25 @@ var Cursor = (function () {
         Cursor.row = minrow;
     };
     Cursor.hide = function () {
-        $("#ptr_" + Cursor.card + "_" + Cursor.row).hide();
+        $("#ptr_".concat(Cursor.card, "_").concat(Cursor.row)).hide();
     };
     Cursor.show = function (force) {
         if (force === void 0) { force = false; }
-        $("#ptr_" + Cursor.card + "_" + Cursor.row).show();
+        $("#ptr_".concat(Cursor.card, "_").concat(Cursor.row)).show();
         if (force)
             return;
         var questiontop = $('#quizdesc').offset().top;
         var scrollToPos;
-        var top = $("#row_" + Cursor.card + "_" + Cursor.row).offset().top;
-        var bottom = top + $("#row_" + Cursor.card + "_" + Cursor.row).height() + 10;
+        var top = $("#row_".concat(Cursor.card, "_").concat(Cursor.row)).offset().top;
+        var bottom = top + $("#row_".concat(Cursor.card, "_").concat(Cursor.row)).height() + 10;
         if (bottom - window.scrollY >= window.innerHeight || top - window.scrollY < 0) {
             if (questiontop + window.innerHeight >= bottom)
                 scrollToPos = questiontop;
             else
                 scrollToPos = bottom - window.innerHeight;
         }
-        if ($("#keyinp_" + Cursor.card + "_" + Cursor.row).length) {
-            $("#keyinp_" + Cursor.card + "_" + Cursor.row).focus();
+        if ($("#keyinp_".concat(Cursor.card, "_").concat(Cursor.row)).length) {
+            $("#keyinp_".concat(Cursor.card, "_").concat(Cursor.row)).focus();
             $('body').unbind('keydown');
         }
         $('html, body').animate({
@@ -1835,26 +1837,26 @@ var PanelQuestion = (function () {
                                 for (var i in ids) {
                                     if (isNaN(+i))
                                         continue;
-                                    if ($("#" + ids[i]).prop('checked')) {
+                                    if ($("#".concat(ids[i])).prop('checked')) {
                                         var i1 = +i + 1;
                                         if (i1 == ids.length)
                                             i1 = 0;
-                                        $("#" + ids[i1]).prop('checked', true);
-                                        $("#" + ids[i1]).change();
+                                        $("#".concat(ids[i1])).prop('checked', true);
+                                        $("#".concat(ids[i1])).change();
                                         return false;
                                     }
                                 }
                             }
-                            $("#" + ids[0]).prop('checked', true);
-                            $("#" + ids[0]).change();
+                            $("#".concat(ids[0])).prop('checked', true);
+                            $("#".concat(ids[0])).change();
                             break;
                         case 2:
-                            $("#" + ids[0]).click();
-                            $("#" + ids[0]).change();
+                            $("#".concat(ids[0])).click();
+                            $("#".concat(ids[0])).change();
                             break;
                         case 3:
-                            $("#" + ids[0]).prop('checked', !$("#" + ids[0]).prop('checked'));
-                            $("#" + ids[0]).change();
+                            $("#".concat(ids[0])).prop('checked', !$("#".concat(ids[0])).prop('checked'));
+                            $("#".concat(ids[0])).change();
                     }
                 }
                 else
@@ -1957,7 +1959,7 @@ var PanelQuestion = (function () {
             quizContainer.append(quizCard_1);
             var fvals = qoFeatures[+qoid];
             if (dontShow) {
-                quizTab.append("<tr><td>&nbsp;</td>" + questionheaders[headInd] + "<td>" + (+qoid + 1) + "</td></tr>");
+                quizTab.append("<tr><td>&nbsp;</td>".concat(questionheaders[headInd], "<td>").concat(+qoid + 1, "</td></tr>"));
                 ++headInd;
                 this_2.question_stat.show_feat.values.push("" + (+qoid + 1));
             }
@@ -1970,7 +1972,7 @@ var PanelQuestion = (function () {
                 var featset = getFeatureSetting(oType, sf);
                 this_2.question_stat.show_feat.values.push(val);
                 if (featType == null && sf !== 'visual')
-                    alert("Unexpected (1) featType==null in panelquestion.ts; sf=\"" + sf + "\"");
+                    alert("Unexpected (1) featType==null in panelquestion.ts; sf=\"".concat(sf, "\""));
                 if (sf === 'visual')
                     featType = 'string';
                 if (featType == 'hint') {
@@ -2000,12 +2002,12 @@ var PanelQuestion = (function () {
                 if (val == null)
                     alert('Unexpected val==null in panelquestion.ts');
                 if (featType === 'string' || featType == 'ascii') {
-                    quizTab.append("<tr><td>&nbsp;</td>" + questionheaders[headInd]
-                        + ("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + (val === '' ? '-' : val) + "</td></tr>"));
+                    quizTab.append("<tr><td>&nbsp;</td>".concat(questionheaders[headInd])
+                        + "<td class=\"".concat(PanelQuestion.charclass(featset), "\">").concat(val === '' ? '-' : val, "</td></tr>"));
                     ++headInd;
                 }
                 else {
-                    quizTab.append("<tr><td>&nbsp;</td>" + questionheaders[headInd] + "<td>" + val + "</td></tr>");
+                    quizTab.append("<tr><td>&nbsp;</td>".concat(questionheaders[headInd], "<td>").concat(val, "</td></tr>"));
                     ++headInd;
                 }
             }
@@ -2032,7 +2034,7 @@ var PanelQuestion = (function () {
                 if (featset.alternateshowrequestDb != null && usedropdown) {
                     var suggestions = fvals[rf + '!suggest!'];
                     if (suggestions == null)
-                        v = $("<td class=\"" + PanelQuestion.charclass(featset) + "\">" + correctAnswer + "</td></tr>");
+                        v = $("<td class=\"".concat(PanelQuestion.charclass(featset), "\">").concat(correctAnswer, "</td></tr>"));
                     else {
                         var quiz_div_1 = $('<div class="quizitem"></div>');
                         var optArray = [];
@@ -2045,12 +2047,12 @@ var PanelQuestion = (function () {
                             var s = suggestions[+valix];
                             var item = new StringWithSort(s, s);
                             var option = $('<div class="selectbutton multiple_choice">'
-                                + ("<input type=\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
-                                + ("<label class=\"" + charSetClass + "\" for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "<span class=\"shortcut multichoice\"></span></label>")
+                                + "<input type=\"radio\" id=\"".concat(item.getInternal(), "_").concat(quizItemID, "\" name=\"quizitem_").concat(quizItemID, "\" value=\"").concat(item.getInternal(), "\">")
+                                + "<label class=\"".concat(charSetClass, "\" for=\"").concat(item.getInternal(), "_").concat(quizItemID, "\">").concat(item.getString(), "<span class=\"shortcut multichoice\"></span></label>")
                                 + '</div>');
                             option
                                 .data('sws', item)
-                                .data('id', item.getInternal() + "_" + quizItemID);
+                                .data('id', "".concat(item.getInternal(), "_").concat(quizItemID));
                             optArray.push(option);
                             if (s === correctAnswer)
                                 this_2.vAnswers.push(new Answer(cwyn, item, s, null));
@@ -2327,23 +2329,23 @@ var PanelQuestion = (function () {
                         if (configuration.charSet === 'hebrew' && $.inArray('-', showLetters_1) === -1)
                             showLetters_1.push('-');
                         showLetters_1.sort();
-                        var vf = $("<div class=\"inputquizitem\"><span class=\"inputshow " + PanelQuestion.charclass(featset) + "\"></div>");
+                        var vf = $("<div class=\"inputquizitem\"><span class=\"inputshow ".concat(PanelQuestion.charclass(featset), "\"></div>"));
                         var letterinput_1 = $('<div class="letterinput"></div>');
                         vf.append(letterinput_1);
                         if (charset.isRtl)
-                            letterinput_1.append("<div class=\"delbutton\" id=\"bs_" + quizItemID + "\">&rarr;</div>");
+                            letterinput_1.append("<div class=\"delbutton\" id=\"bs_".concat(quizItemID, "\">&rarr;</div>"));
                         else
-                            letterinput_1.append("<div class=\"delbutton\" id=\"bs_" + quizItemID + "\">&larr;</div>");
-                        this_2.keytable.add(+qoid, headInd, 'Backspace', "bs_" + quizItemID, 2);
+                            letterinput_1.append("<div class=\"delbutton\" id=\"bs_".concat(quizItemID, "\">&larr;</div>"));
+                        this_2.keytable.add(+qoid, headInd, 'Backspace', "bs_".concat(quizItemID), 2);
                         showLetters_1.forEach(function (letter, i) {
                             var sc = Foreign2Shortcut.get(letter);
                             if (sc != '?') {
                                 var sc_id = 'sc' + sc.charCodeAt(0);
-                                letterinput_1.append("<div class=\"inputbutton " + PanelQuestion.charclass(featset) + "\" id=\"" + sc_id + "_" + quizItemID + "\" data-letter=\"" + letter + "\">" + letter + "<span class=\"shortcut keybutton\">" + sc + "</span></div>");
-                                _this.keytable.add(+qoid, headInd, sc, sc_id + "_" + quizItemID, 2);
+                                letterinput_1.append("<div class=\"inputbutton ".concat(PanelQuestion.charclass(featset), "\" id=\"").concat(sc_id, "_").concat(quizItemID, "\" data-letter=\"").concat(letter, "\">").concat(letter, "<span class=\"shortcut keybutton\">").concat(sc, "</span></div>"));
+                                _this.keytable.add(+qoid, headInd, sc, "".concat(sc_id, "_").concat(quizItemID), 2);
                             }
                             else
-                                letterinput_1.append("<div class=\"inputbutton " + PanelQuestion.charclass(featset) + "\" data-letter=\"" + letter + "\">" + letter + "</div>");
+                                letterinput_1.append("<div class=\"inputbutton ".concat(PanelQuestion.charclass(featset), "\" data-letter=\"").concat(letter, "\">").concat(letter, "</div>"));
                         });
                         hasForeignInput = true;
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textFieldForeign);
@@ -2352,8 +2354,8 @@ var PanelQuestion = (function () {
                         v = cwyn.getJQuery();
                     }
                     else {
-                        var vf = $("<div class=\"inputquizitem\"><input id=\"keyinp_" + +qoid + "_" + headInd + "\" data-qoid=\"" + +qoid + "\" data-row=\"" + headInd + "\" type=\"text\"></div>");
-                        this_2.keyinps.push("keyinp_" + +qoid + "_" + headInd);
+                        var vf = $("<div class=\"inputquizitem\"><input id=\"keyinp_".concat(+qoid, "_").concat(headInd, "\" data-qoid=\"").concat(+qoid, "\" data-row=\"").concat(headInd, "\" type=\"text\"></div>"));
+                        this_2.keyinps.push("keyinp_".concat(+qoid, "_").concat(headInd));
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
                         cwyn.addKeypressListener();
                         cwyn.addChangeListener();
@@ -2375,9 +2377,9 @@ var PanelQuestion = (function () {
                     for (var i = 0, len = values.length; i < len; ++i)
                         swsValues.push(new StringWithSort(getFeatureValueFriendlyName(subFeatType, values[i], false, false), values[i]));
                     swsValues.sort(function (a, b) { return StringWithSort.compare(a, b); });
-                    swsValues.push(new StringWithSort("<i>" + localize('none_of_these') + "</i>", 'none_of_these'));
+                    swsValues.push(new StringWithSort("<i>".concat(localize('none_of_these'), "</i>"), 'none_of_these'));
                     var selections = $('<table class="list-of"></table>');
-                    selections.append("<tr><td colspan=\"3\">" + localize('select_1_or_more') + "</td></tr>");
+                    selections.append("<tr><td colspan=\"3\">".concat(localize('select_1_or_more'), "</td></tr>"));
                     var numberOfItems = swsValues.length;
                     var numberOfRows = Math.floor((numberOfItems + 2) / 3);
                     for (var r = 0; r < numberOfRows; ++r) {
@@ -2387,10 +2389,10 @@ var PanelQuestion = (function () {
                             if (ix < numberOfItems) {
                                 var sc = String.fromCharCode(ix + 97);
                                 row.append('<td style="text-align:left"><div class="selectbutton">'
-                                    + ("<input type=\"checkbox\" id=\"" + swsValues[ix].getInternal() + "_" + quizItemID + "\" value=\"" + swsValues[ix].getInternal() + "\">")
-                                    + ("<label for=\"" + swsValues[ix].getInternal() + "_" + quizItemID + "\">" + swsValues[ix].getString() + "<span class=\"shortcut multioption\">" + sc + "</span></label>")
+                                    + "<input type=\"checkbox\" id=\"".concat(swsValues[ix].getInternal(), "_").concat(quizItemID, "\" value=\"").concat(swsValues[ix].getInternal(), "\">")
+                                    + "<label for=\"".concat(swsValues[ix].getInternal(), "_").concat(quizItemID, "\">").concat(swsValues[ix].getString(), "<span class=\"shortcut multioption\">").concat(sc, "</span></label>")
                                     + '</div></td>');
-                                this_2.keytable.add(+qoid, headInd, sc, swsValues[ix].getInternal() + "_" + quizItemID, 3);
+                                this_2.keytable.add(+qoid, headInd, sc, "".concat(swsValues[ix].getInternal(), "_").concat(quizItemID), 3);
                             }
                             else
                                 row.append('<td></td>');
@@ -2432,13 +2434,13 @@ var PanelQuestion = (function () {
                                     hasAddedOther = true;
                                     var item = new StringWithSort('#1000 ' + localize('other_value'), 'othervalue');
                                     var option = $('<div class="selectbutton">'
-                                        + ("<input type=\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
-                                        + ("<label for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
+                                        + "<input type=\"radio\" id=\"".concat(item.getInternal(), "_").concat(quizItemID, "\" name=\"quizitem_").concat(quizItemID, "\" value=\"").concat(item.getInternal(), "\">")
+                                        + "<label for=\"".concat(item.getInternal(), "_").concat(quizItemID, "\">").concat(item.getString(), "</label>")
                                         + '</div>');
                                     option
                                         .data('sws', item)
                                         .data('char', item.getString()[0].toLowerCase())
-                                        .data('id', item.getInternal() + "_" + quizItemID);
+                                        .data('id', "".concat(item.getInternal(), "_").concat(quizItemID));
                                     optArray.push(option);
                                     if (correctIsOther)
                                         this_2.vAnswers.push(new Answer(cwyn, item, localize('other_value'), null));
@@ -2448,13 +2450,13 @@ var PanelQuestion = (function () {
                                 var sFriendly = getFeatureValueFriendlyName(featType, s, false, false);
                                 var item = new StringWithSort(sFriendly, s);
                                 var option = $('<div class="selectbutton">'
-                                    + ("<input type=\"radio\" id=\"" + item.getInternal() + "_" + quizItemID + "\" name=\"quizitem_" + quizItemID + "\" value=\"" + item.getInternal() + "\">")
-                                    + ("<label for=\"" + item.getInternal() + "_" + quizItemID + "\">" + item.getString() + "</label>")
+                                    + "<input type=\"radio\" id=\"".concat(item.getInternal(), "_").concat(quizItemID, "\" name=\"quizitem_").concat(quizItemID, "\" value=\"").concat(item.getInternal(), "\">")
+                                    + "<label for=\"".concat(item.getInternal(), "_").concat(quizItemID, "\">").concat(item.getString(), "</label>")
                                     + '</div>');
                                 option
                                     .data('sws', item)
                                     .data('char', item.getString()[0].toLowerCase())
-                                    .data('id', item.getInternal() + "_" + quizItemID);
+                                    .data('id', "".concat(item.getInternal(), "_").concat(quizItemID));
                                 optArray.push(option);
                                 if (sFriendly === correctAnswerFriendly)
                                     this_2.vAnswers.push(new Answer(cwyn, item, s, null));
@@ -2468,8 +2470,8 @@ var PanelQuestion = (function () {
                         v = cwyn.getJQuery();
                     }
                 }
-                var quizRow = $("<tr id=\"row_" + +qoid + "_" + headInd + "\"></tr>");
-                quizRow.append("<td><span style=\"display:none\" id=\"ptr_" + +qoid + "_" + headInd + "\">&gt;</span></td>");
+                var quizRow = $("<tr id=\"row_".concat(+qoid, "_").concat(headInd, "\"></tr>"));
+                quizRow.append("<td><span style=\"display:none\" id=\"ptr_".concat(+qoid, "_").concat(headInd, "\">&gt;</span></td>"));
                 quizRow.append(questionheaders[headInd]);
                 quizRow.append(v);
                 quizTab.append(quizRow);
@@ -2487,7 +2489,7 @@ var PanelQuestion = (function () {
         }
         for (var _i = 0, _a = this.keyinps; _i < _a.length; _i++) {
             var keyi = _a[_i];
-            $("#" + keyi)
+            $("#".concat(keyi))
                 .keydown(this, this.textfield_keydown)
                 .focus(function (event) { return Cursor.set($(event.target).data('qoid'), $(event.target).data('row'), true); })
                 .blur(function () { return $('body').unbind('keydown').keydown(_this, _this.body_keydown); });
@@ -2499,8 +2501,8 @@ var PanelQuestion = (function () {
         var quizCard = $('.quizcard');
         if (!exam_mode) {
             quizCard.append('<div class="buttonlist1">'
-                + ("<button class=\"btn btn-quiz\" id=\"check_answer\" type=\"button\">" + localize('check_answer') + "</button>")
-                + ("<button class=\"btn btn-quiz\" id=\"show_answer\" type=\"button\">" + localize('show_answer') + "</button>")
+                + "<button class=\"btn btn-quiz\" id=\"check_answer\" type=\"button\">".concat(localize('check_answer'), "</button>")
+                + "<button class=\"btn btn-quiz\" id=\"show_answer\" type=\"button\">".concat(localize('show_answer'), "</button>")
                 + '</div>');
         }
         if (quizCardNum > 1) {
@@ -2801,7 +2803,7 @@ var Quiz = (function () {
                         $('#textcontainer')
                             .removeClass('textcontainer-background')
                             .addClass('alert alert-danger')
-                            .html("<h1>" + localize('error_response') + "</h1><p>" + errorThrow + "</p>");
+                            .html("<h1>".concat(localize('error_response'), "</h1><p>").concat(errorThrow, "</p>"));
                     });
                 }
             })
@@ -2809,7 +2811,7 @@ var Quiz = (function () {
                 $('#textcontainer')
                     .removeClass('textcontainer-background')
                     .addClass('alert alert-danger')
-                    .html("<h1>" + localize('error_response') + "</h1><p>" + errorThrow + "</p>");
+                    .html("<h1>".concat(localize('error_response'), "</h1><p>").concat(errorThrow, "</p>"));
             });
         }
     };

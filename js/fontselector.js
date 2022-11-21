@@ -2,10 +2,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -71,16 +73,16 @@ var util;
     var BorderFollowerBox = (function (_super) {
         __extends(BorderFollowerBox, _super);
         function BorderFollowerBox(level) {
-            return _super.call(this, level, "#lev" + level + "_sb_cb") || this;
+            return _super.call(this, level, "#lev".concat(level, "_sb_cb")) || this;
         }
         BorderFollowerBox.prototype.setit = function (val) {
             if (val) {
-                $(".lev" + this.level + " > .gram").removeClass('dontshowit').addClass('showit');
-                $(".lev" + this.level).removeClass('dontshowborder').addClass('showborder');
+                $(".lev".concat(this.level, " > .gram")).removeClass('dontshowit').addClass('showit');
+                $(".lev".concat(this.level)).removeClass('dontshowborder').addClass('showborder');
             }
             else {
-                $(".lev" + this.level + " > .gram").removeClass('showit').addClass('dontshowit');
-                $(".lev" + this.level).removeClass('showborder').addClass('dontshowborder');
+                $(".lev".concat(this.level, " > .gram")).removeClass('showit').addClass('dontshowit');
+                $(".lev".concat(this.level)).removeClass('showborder').addClass('dontshowborder');
             }
         };
         return BorderFollowerBox;
@@ -89,12 +91,12 @@ var util;
     var SeparateLinesFollowerBox = (function (_super) {
         __extends(SeparateLinesFollowerBox, _super);
         function SeparateLinesFollowerBox(level) {
-            return _super.call(this, level, "#lev" + level + "_seplin_cb") || this;
+            return _super.call(this, level, "#lev".concat(level, "_seplin_cb")) || this;
         }
         SeparateLinesFollowerBox.prototype.setit = function (val) {
             var oldSepLin = val ? 'noseplin' : 'seplin';
             var newSepLin = val ? 'seplin' : 'noseplin';
-            $(".notdummy.lev" + this.level).removeClass(oldSepLin).addClass(newSepLin);
+            $(".notdummy.lev".concat(this.level)).removeClass(oldSepLin).addClass(newSepLin);
         };
         return SeparateLinesFollowerBox;
     }(FollowerBox));
@@ -191,43 +193,43 @@ var FontSelector = (function () {
         this.text_align = direction == 'rtl' ? 'right' : 'left';
         this.detector = new Detector(alphabet);
         this.inputName = alphabet + 'choice';
-        this.tableSelector = $("#" + alphabet + "font");
+        this.tableSelector = $("#".concat(alphabet, "font"));
     }
     FontSelector.prototype.familyChange = function () {
         var val = $('input:radio[name="' + this.alphabet + 'choice"]:checked').attr('data-family');
         if (val === 'XXmineXX') {
             val = this.myfont_text.prop('value');
-            $("#" + this.alphabet + "_mysample").css('font-family', val);
+            $("#".concat(this.alphabet, "_mysample")).css('font-family', val);
         }
-        $("." + this.alphabet + "sample").css('font-family', val);
+        $(".".concat(this.alphabet, "sample")).css('font-family', val);
     };
     FontSelector.prototype.personalChange = function () {
-        $("input:radio[value=\"" + this.alphabet + "_mine\"]").prop('checked', true);
+        $("input:radio[value=\"".concat(this.alphabet, "_mine\"]")).prop('checked', true);
         this.familyChange();
     };
     FontSelector.prototype.detectFonts = function (fontlist, personal_font, default_val) {
         var _this = this;
         for (var i = 0, len = fontlist.length; i < len; ++i) {
             if (fontlist[i].webfont || this.detector.detect(fontlist[i].name)) {
-                var radio_button = $("<input name=\"" + this.inputName + "\" type=\"radio\" data-family=\"" + fontlist[i].name + "\" value=\"" + this.alphabet + "_" + i + "\">");
+                var radio_button = $("<input name=\"".concat(this.inputName, "\" type=\"radio\" data-family=\"").concat(fontlist[i].name, "\" value=\"").concat(this.alphabet, "_").concat(i, "\">"));
                 var td1_1 = $('<td>').append(fontlist[i].name);
-                var td2_1 = $("<td class=\"sample\" style=\"direction:" + this.direction + "; text-align:" + this.text_align + "; font-family:" + fontlist[i].name + "; font-size:16pt;\">")
+                var td2_1 = $("<td class=\"sample\" style=\"direction:".concat(this.direction, "; text-align:").concat(this.text_align, "; font-family:").concat(fontlist[i].name, "; font-size:16pt;\">"))
                     .append(this.sample);
                 var td3_1 = $('<td class="centeralign">').append(radio_button);
                 var tr_1 = $('<tr>').append(td1_1).append(td2_1).append(td3_1);
                 this.tableSelector.append(tr_1);
             }
         }
-        this.myfont_text = $("<input type=\"text\" name=\"" + this.alphabet + "_myfont\" value=\"" + personal_font + "\">");
-        this.myfont_radio_button = $("<input name=\"" + this.inputName + "\" type=\"radio\" data-family=\"XXmineXX\" value=\"" + this.alphabet + "_mine\">");
+        this.myfont_text = $("<input type=\"text\" name=\"".concat(this.alphabet, "_myfont\" value=\"").concat(personal_font, "\">"));
+        this.myfont_radio_button = $("<input name=\"".concat(this.inputName, "\" type=\"radio\" data-family=\"XXmineXX\" value=\"").concat(this.alphabet, "_mine\">"));
         var td1 = $('<td>').append(localize('or_write_preferred') + '<br>').append(this.myfont_text);
-        var td2 = $("<td class=\"sample\" id=\"" + this.alphabet + "_mysample\" style=\"direction:" + this.direction + "; text-align:" + this.text_align + "; font-family:" + personal_font + "; font-size:16pt;\">")
+        var td2 = $("<td class=\"sample\" id=\"".concat(this.alphabet, "_mysample\" style=\"direction:").concat(this.direction, "; text-align:").concat(this.text_align, "; font-family:").concat(personal_font, "; font-size:16pt;\">"))
             .append(this.sample);
         var td3 = $('<td class="centeralign">').append(this.myfont_radio_button);
         var tr = $('<tr>').append(td1).append(td2).append(td3);
         this.tableSelector.append(tr);
-        $("input:radio[value=\"" + default_val + "\"]").prop('checked', true);
-        $("input:radio[name=\"" + this.inputName + "\"]").on('change', function () { return _this.familyChange(); });
+        $("input:radio[value=\"".concat(default_val, "\"]")).prop('checked', true);
+        $("input:radio[name=\"".concat(this.inputName, "\"]")).on('change', function () { return _this.familyChange(); });
         this.familyChange();
         this.myfont_text.on('input', function (e) { return _this.personalChange(); });
     };
