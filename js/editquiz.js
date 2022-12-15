@@ -1559,7 +1559,7 @@ var PanelForOneOtype = (function () {
             + "<th class=\"leftalign\">".concat(localize('feature'), "</th>")
             + '<th></th>'
             + '</tr>');
-        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && Boolean(getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql), true, configuration.objHasSurface === otype, false);
+        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && Boolean(getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql), true, configuration.objHasSurface === otype, true);
         table.append(this.visualBAL.getRow());
         var hasSurfaceFeature = otype === configuration.objHasSurface;
         var sg = getSentenceGrammarFor(otype);
@@ -1771,6 +1771,8 @@ var PanelTemplQuizFeatures = (function () {
             qf.showFeatures.push('visual');
         else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST))
             qf.requestFeatures.push({ name: 'visual', usedropdown: this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures: null });
+        else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.DONT_SHOW))
+            qf.dontShowFeatures.push('visual');
         for (var i = 0; i < this.visiblePanel.allBAL.length; ++i) {
             var bal = this.visiblePanel.allBAL[i];
             if (bal.isSelected(ButtonSelection.SHOW))

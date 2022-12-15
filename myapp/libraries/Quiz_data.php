@@ -11,19 +11,13 @@ function getFeatureSetting(string $otype, string $feature) {
     return $dbinfo->objectSettings->$otype->featuresetting->$feature;
 }
 
-function getFeatureHideWord(string $otype, string $feature) {
-    $gfs = getFeatureSetting($otype, $feature);
-    return !empty($gfs->hideWord);
-}
-
-
 class ExtendedQuizFeatures {
 	public $showFeatures; // Vector
 	public $requestFeatures; //Vector<Pair<DoubleName,Boolean>> 
     public $dontShowFeatures; //Vector<String> 
     public $dontShowObjects; //Vector<map<string,string>> 
     public $objectType;
-	public $dontShow;
+	public $hideWord;
     public $glosslimit;
     public $useVirtualKeyboard;
     public $useDropdown = false;
@@ -40,7 +34,7 @@ class ExtendedQuizFeatures {
         $this->dontShowFeatures = $dsf;
         $this->dontShowObjects = $dso;
         $this->objectType = $oType;
-        $this->dontShow = false;
+        $this->hideWord = false;
         $this->glosslimit = $glosslim;
         $this->useVirtualKeyboard = false;
 
@@ -69,7 +63,7 @@ class ExtendedQuizFeatures {
                 $all[$f->name] = $f->name;
 
             if (!empty($gfs->hideWord))
-                $this->dontShow = true;
+                $this->hideWord = true;
             if (!empty($gfs->foreignText))
                 $this->useVirtualKeyboard = true;
 
@@ -77,6 +71,11 @@ class ExtendedQuizFeatures {
                 $this->useDropdown = true;
         }
 
+        if (in_array('visual',$dsf))
+            // If 'visual' is set to dontShow, the we must replace text by (number)
+            $this->hideWord = true;
+
+        
         if (isset($dbinfo->objectSettings->$oType->additionalfeatures)) {
             $this->additionalFeatures = $dbinfo->objectSettings->$oType->additionalfeatures;
             foreach ($this->additionalFeatures as $f)

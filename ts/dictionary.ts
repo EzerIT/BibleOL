@@ -93,7 +93,7 @@ class Dictionary {
         this.sentenceSetQuiz = dictif.sentenceSetsQuiz==null ? this.sentenceSet : dictif.sentenceSetsQuiz[index];
         this.monadObjects1 = dictif.monadObjects[index];
         this.bookTitle = dictif.bookTitle;
-        this.hideWord = (qd!=null && qd.quizFeatures.dontShow);
+        this.hideWord = (qd!=null && qd.quizFeatures.hideWord);
 
         // Generate the 'singleMonads', 'monads' and 'level' maps.
         for (let level in this.monadObjects1) {

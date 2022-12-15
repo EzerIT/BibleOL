@@ -219,7 +219,7 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         let textDisplayClass : string = ''; // HTML element class for text
         if (qd && qd.monad2Id[this.monad] && containsMonad(quizMonads,this.monad)) {
             // This is a quiz object
-            if (qd.quizFeatures.dontShow)
+            if (qd.quizFeatures.hideWord)
                 text = `(${++DisplaySingleMonadObject.itemIndex})`;
             else
                 text = this.displayedMo.mo.features[configuration.surfaceFeature] ;

@@ -34,7 +34,7 @@ interface ExtendedQuizFeatures {
     dontShowFeatures   : string[];
     dontShowObjects    : { content : string; show? : string; } [];
     objectType         : string;
-    dontShow           : boolean;
+    hideWord           : boolean;
     glosslimit         : number;
     useVirtualKeyboard : boolean;
 }

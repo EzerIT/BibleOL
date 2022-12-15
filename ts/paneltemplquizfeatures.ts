@@ -410,7 +410,7 @@ class PanelForOneOtype  {
                                              configuration.objHasSurface===otype && Boolean(getFeatureSetting(otype,configuration.surfaceFeature).alternateshowrequestSql), // Can multiple choice be used?
                                              true,                                // Can this be a display feature?
                                              configuration.objHasSurface===otype, // Can this be a request feature?
-                                             false);                              // Can this be a "don't show" feature?
+                                             true);                               // Can this be a "don't show" feature?
 
         table.append(this.visualBAL.getRow());
 
@@ -837,6 +837,8 @@ class PanelTemplQuizFeatures {
 	    qf.showFeatures.push('visual');
 	else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST))
 	    qf.requestFeatures.push({name : 'visual', usedropdown : this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures : null});
+        else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.DONT_SHOW))
+	    qf.dontShowFeatures.push('visual');
 
         // Store informaiton about other features for the question object
         for (let i=0; i<this.visiblePanel.allBAL.length; ++i) {

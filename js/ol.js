@@ -862,7 +862,7 @@ var DisplaySingleMonadObject = (function (_super) {
         var text;
         var textDisplayClass = '';
         if (qd && qd.monad2Id[this.monad] && containsMonad(quizMonads, this.monad)) {
-            if (qd.quizFeatures.dontShow)
+            if (qd.quizFeatures.hideWord)
                 text = "(".concat(++DisplaySingleMonadObject.itemIndex, ")");
             else
                 text = this.displayedMo.mo.features[configuration.surfaceFeature];
@@ -1119,7 +1119,7 @@ var Dictionary = (function () {
         this.sentenceSetQuiz = dictif.sentenceSetsQuiz == null ? this.sentenceSet : dictif.sentenceSetsQuiz[index];
         this.monadObjects1 = dictif.monadObjects[index];
         this.bookTitle = dictif.bookTitle;
-        this.hideWord = (qd != null && qd.quizFeatures.dontShow);
+        this.hideWord = (qd != null && qd.quizFeatures.hideWord);
         for (var level in this.monadObjects1) {
             var leveli = +level;
             if (isNaN(leveli))
@@ -1916,7 +1916,7 @@ var PanelQuestion = (function () {
         Foreign2Shortcut.init();
         this.location_info(dict);
         this.question_stat.text = dict.generateSentenceHtml(qd);
-        var dontShow = qd.quizFeatures.dontShow;
+        var hideWord = qd.quizFeatures.hideWord;
         var showFeatures = qd.quizFeatures.showFeatures;
         var requestFeatures = qd.quizFeatures.requestFeatures;
         var oType = qd.quizFeatures.objectType;
@@ -1926,7 +1926,7 @@ var PanelQuestion = (function () {
         var quizItemID = 0;
         var questionheaders = [];
         var headInd = 0;
-        if (dontShow) {
+        if (hideWord) {
             questionheaders.push('<th>' + localize('item_number') + '</th>');
             this.question_stat.show_feat.names.push('item_number');
         }
@@ -1958,7 +1958,7 @@ var PanelQuestion = (function () {
             quizCard_1.append(quizTab);
             quizContainer.append(quizCard_1);
             var fvals = qoFeatures[+qoid];
-            if (dontShow) {
+            if (hideWord) {
                 quizTab.append("<tr><td>&nbsp;</td>".concat(questionheaders[headInd], "<td>").concat(+qoid + 1, "</td></tr>"));
                 ++headInd;
                 this_2.question_stat.show_feat.values.push("" + (+qoid + 1));

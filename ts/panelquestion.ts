@@ -657,7 +657,7 @@ class PanelQuestion {
         // Generate table of question items
 
         // Cache a few variables for easy access
-        let dontShow        : boolean  = qd.quizFeatures.dontShow;   // Display (number) instead of text of the quizobject
+        let hideWord        : boolean  = qd.quizFeatures.hideWord;   // Display (number) instead of text of the quizobject
         let showFeatures    : string[] = qd.quizFeatures.showFeatures;
         let requestFeatures : {name : string; usedropdown : boolean; hideFeatures : string[];}[]
                                        = qd.quizFeatures.requestFeatures;
@@ -680,8 +680,8 @@ class PanelQuestion {
         /////////////////////////////
         // Define question headers //
 
-        // Define headers for dontShow items
-        if (dontShow) {
+        // Define headers for hideWord items
+        if (hideWord) {
             questionheaders.push('<th>' + localize('item_number') + '</th>');
             this.question_stat.show_feat.names.push('item_number');
         }
@@ -761,8 +761,8 @@ class PanelQuestion {
             //     <td>Feature value</td>
             // </tr>
 
-            // Extra "display feature" for quiz objects that are marked by 'dontShow'
-            if (dontShow) {
+            // Extra "display feature" for quiz objects that are marked by 'hideWord'
+            if (hideWord) {
                 quizTab.append(`<tr><td>&nbsp;</td>${questionheaders[headInd]}<td>${+qoid + 1}</td></tr>`);
                 ++headInd;
                 this.question_stat.show_feat.values.push("" + (+qoid + 1));  // Save feature value for statistics
