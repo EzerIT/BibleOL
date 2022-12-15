@@ -410,7 +410,7 @@ class PanelForOneOtype  {
                                              configuration.objHasSurface===otype && Boolean(getFeatureSetting(otype,configuration.surfaceFeature).alternateshowrequestSql), // Can multiple choice be used?
                                              true,                                // Can this be a display feature?
                                              configuration.objHasSurface===otype, // Can this be a request feature?
-                                             true);                               // Can this be a "don't show" feature?
+                                             configuration.objHasSurface===otype);// Can this be a "don't show" feature?
 
         table.append(this.visualBAL.getRow());
 

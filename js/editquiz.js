@@ -1559,7 +1559,7 @@ var PanelForOneOtype = (function () {
             + "<th class=\"leftalign\">".concat(localize('feature'), "</th>")
             + '<th></th>'
             + '</tr>');
-        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && Boolean(getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql), true, configuration.objHasSurface === otype, true);
+        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && Boolean(getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql), true, configuration.objHasSurface === otype, configuration.objHasSurface === otype);
         table.append(this.visualBAL.getRow());
         var hasSurfaceFeature = otype === configuration.objHasSurface;
         var sg = getSentenceGrammarFor(otype);
