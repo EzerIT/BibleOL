@@ -1,6 +1,6 @@
 <h1>Class Management</h1>
 
-<p>Classes serve a double purpose in Bible OL: Firstly, class control access to collections of
+<p>Classes serve a double purpose in Bible OL: Firstly, class membership controls access to collections of
     exercises. Exersizes are stored in a hierarchy of folders, and access the contents of a folder
     can be restricted to students enrolled in a particular class. Secondly, teachers can monitor the
     students enrolled in a class and gather statistics about how each student is progressing.</p>
@@ -52,7 +52,7 @@
 <h2>Enrolling Students</h2>
 
 <p>There are three ways to enroll students in a class: The <?=
-    help_anchor('enroll','students can enroll themselves') ?>, or the teacher can enroll them
+    help_anchor('enroll#enroll_in_class','students can enroll themselves') ?>, or the teacher can enroll them
     through the Class Management menu discussed here or through the <?= help_anchor('usermgmt','User Management') ?> menu.</p>
 
 <p>If you want to prevent students from enrolling themselves, you have two options:</p>

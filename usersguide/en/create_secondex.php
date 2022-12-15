@@ -42,7 +42,7 @@
   specifying any requirements about the Person feature. In this way you allow the program to ask
   about third person verbs if they happen to occur in the chosen sentences.</p>
 
-<p>You can no run the exercise again, and you might get this sentence from
+<p>You can now run the exercise again, and you might get this sentence from
   <?= $hdir->heb_gr('Genesis&nbsp;3:12','Luke&nbsp;11:8') ?>:</p>
 
 <?= $hdir->img("$sub_article-run-exercise3.png") ?>
@@ -81,7 +81,7 @@
   '[word NORETRIEVE psp IN (verb) AND tense IN (present) AND mood IN (indicative) AND NOT person IN (third_person)]'
    ) ?></code>.<?= make_footnote('*','You may need to move the small triangle at the lower right corner of the edit field
    in order to see the entire text') ?>
-  This statement begins with the word &ldquo;word&rdquo; which indicates the type of sentence unit
+  This statement begins with the word &ldquo;word&rdquo; which indicates the type of sentence units
   we are looking for. The word &ldquo;NORETRIEVE&rdquo; has no effect on the choice, but it makes
   the request run faster. The rest of the command contains our four selection criteria:</p>
 
@@ -162,5 +162,5 @@
   '(The chosen sentence units are still all verbs in the present indicative; therefore the program
   also asks about <span class="greek">ἐστιν</span> which is third person singular.)') ?></p>
 
-<p>The Reference Guide contains more information about
-    <?=help_anchor('sentence_units','the &ldquo;Sentence Units&rdquo; tab') ?>.</p>
+<p>You can read more about the sentence units tab <?=help_anchor('sentence_units','here') ?>.</p>
+

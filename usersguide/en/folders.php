@@ -50,7 +50,7 @@
     all users can see the contents of the folder. Alternatively, you can check specific classes in
     the list of classes. Only users enrolled in those classes can see the contents.</p>
 
-<p>The class list server a double purpose. As specified in the previous paragraph, you can limit
+<p>The class list serves a double purpose. As specified in the previous paragraph, you can limit
     visibility of a folder to only a specific set of classes. Furthermore, only selected classes
     have access to the grading functionality. The class selection allows enrolled users to track
     their progress under <i>My data &gt My performance</i>. Note that this means that even if you

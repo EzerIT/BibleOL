@@ -23,16 +23,16 @@
 
 <p><i>Method 2: Enroll through menu.</i> If you select the menu <i>My data &gt; Enroll/unenroll in
     class</i>, you will see a list of the available classes and the classes in which you already
-    particpate. For example, thus:</p>
+    participate. For example, thus:</p>
 
 <?= $hdir->img('enroll1.png') ?>
 
 <p>You can enroll in a class by clicking the blue &ldquo;Enroll&rdquo; button next to a class name.
-    The teach may have assigned a password to the class. In that case you will be asked to provide
-    to password when you enroll.</p>
+    The teacher may have assigned a password to the class. In that case you will be asked to provide
+    the password when you enroll.</p>
 
 <p>If you are already enrolled in a class, you can withdraw from the class by clicking the yellow
-    &ldquo;Uneroll&rdquo; button next to the class name.</p>
+    &ldquo;Unenroll&rdquo; button next to the class name.</p>
 
 <p><i>Method 3: Access restricted folder.</i> If you try to access a folder marked &ldquo;Restricted
     access&rdquo; you will be offered the option to enroll in a class that has access to the folder,

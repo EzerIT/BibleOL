@@ -1,10 +1,11 @@
 <h1>How Am I Doing?</h1>
 
-<p>Every time you run an exercise, statistics about that exercise is stored in the system. If you
+<p>Every time you run an exercise, statistics about that exercise are stored in the system. If you
     terminated the exercise by pressing &ldquo;GRADE task&rdquo;, your results will be available to
-    your teacher. If you terminated the execise by pressing &ldquo;SAVE outcome&rdquo;, only the
-    time you spent on the exercise will be available to your teacher, and only if you granted the
-    teacher access when you <?= help_anchor('enroll#enroll_in_class','enrolled in the relevant class') ?>.</p>
+    your teacher for use in grading your performance. If you terminated the exercise by pressing
+    &ldquo;SAVE outcome&rdquo;, your results will not be used for grading your performance, and your
+    results will only be available to your teacher if you granted the teacher access when you
+    <?= help_anchor('enroll#enroll_in_class','enrolled in the relevant class') ?>.</p>
 
 <p>You can always check the status of your own progress. If you select the menu <i>My Data &gt; My
     performance</i> you will see a bar graph similar to this one:</p>

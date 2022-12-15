@@ -17,7 +17,7 @@
     exercise will have configured it with a set of Bible passages that should be used for this
     exercises. If you click on one of the numbers 5, 10, or 25 under the heading &ldquo;Select
     number of questions using preset passages&rdquo;, you will start an exercise with 5, 10, or 25
-    questions take from the pre-configured Bible passages. If instead you click on one of the
+    questions taken from the pre-configured Bible passages. If instead you click on one of the
     numbers 5, 10, or 25 under the heading &ldquo;Select number of questions and specify your own
     passages&rdquo;, you will be allowed to specify the Bible passages yourself.</p>
 

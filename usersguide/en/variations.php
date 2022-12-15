@@ -37,7 +37,7 @@
 
 <h2>Hints</h2>
 
-<p>Sometimes a Hebrew word form, taken on its own, may have multiple interpretations. For example,
+<p>Sometimes a word form, taken on its own, may have multiple interpretations. For example,
     the word form <span class="help hebrew">תֶחֱזֶה</span> can be both 2nd person masculine and 3rd
     person feminine. A teacher may configure an exercise to provide hints to the correct
     interpretation. The following figure shows a sentence where the student is asked to provide the
@@ -61,7 +61,7 @@
     gender, number&rdquo; button has been disabled. Also, hovering the mouse over a word or clicking
     a word, will not display gender information.</p>
 
-<?= $hdir->img('ambig.png') ?>
+<?= $hdir->img('no-gender.png') ?>
 
 
 <h2>Typing Nothing</h2>

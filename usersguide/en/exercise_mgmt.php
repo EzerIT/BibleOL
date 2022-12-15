@@ -20,7 +20,7 @@
 <p>An exercise specifies:</p>
 
 <ul>
-  <li>The database that is to be used (typically, the Old or the New Testament).</li>
+  <li>The database (corpus) that is to be used (typically, the Old or the New Testament).</li>
   <li>The <i>passages</i> from which the program chooses the exercise sentences
       (for example, the minor prophets or the Gospels).</li>
   <li>The criteria that the program should use when choosing sentences.</li>
@@ -29,10 +29,10 @@
   <li>The sentence unit features whose values are shown to the user.</li>
   <li>The sentence unit features whose values are requested from the user.</li>
   <li>The sentence unit features we don&rsquo;t want the user to see because it may give hints to
-  solve the exercise.</li>
+  solving the exercise.</li>
 </ul>
 
-<p>In the following examples, we shall create new exercises or modify existing ones.</p>
+<p>In the following examples we shall create new exercises or modify existing ones.</p>
 
 <p>You should study at least one of these sets of examples:</p>
 

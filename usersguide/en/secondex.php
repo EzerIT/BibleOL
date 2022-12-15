@@ -23,7 +23,7 @@
 <p>In this example, the answer box contains five lines labelled
     <?= $hdir->heb_gr('&ldquo;Item number&rdquo;, &ldquo;Lexeme (with variant)&rdquo;, &ldquo;Gender&rdquo;, &ldquo;Number&rdquo;, and &ldquo;State&rdquo;',
                       '&ldquo;Item number&rdquo;, &ldquo;Lexeme&rdquo;, &ldquo;Tense&rdquo;, &ldquo;Mood&rdquo;, &ldquo;Voice&rdquo;, &ldquo;Person&rdquo;, and &ldquo;Number&rdquo;') ?>.
-    The item number refers to the number in parentheses in the sentence. <?= $hdir->heb('In this case we
+    The item number refers to the number in parentheses in the sentence. <?= $hdir->heb('In the figure above, we
     have moved through the words to the third word.') ?> The lexeme is the dictionary form of the word
     in question, and the <?= $hdir->heb_gr('number, gender, and state','voice, mood, person, number, and tense') ?>
     should help you create the word form that is actually in the text.</p>

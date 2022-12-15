@@ -15,17 +15,17 @@
 <p>Select the menu <i>Administration &gt; Manage exercises,</i> then navigate to a folder where
     you want to create your exercises. This should preferably be a folder used only by you and your
     team. At the bottom of the page, click the <i>Create exercise</i> button. A dialog will appear in
-    which you select the text database on which you want to base your exercise. Here, you should select
+    which you select the text database (corpus) on which you want to base your exercise. Here, you should select
     &ldquo;<?= $hdir->heb_gr('Hebrew (ETCBC4, OT)','Greek (Nestle 1904, NT)') ?>&rdquo; and press
     the <i>OK</i> button.</p>
 
-<p>You will now se a web page that looks like this:</p>
+<p>You will now see a web page that looks like this:</p>
 
 <?= $hdir->img("$sub_article-create1.png") ?>
 
-<p>At the top you'll see five tabs, labelled &ldquo;Description&rdquo;, &ldquo;Passages&rdquo;,
+<p>At the top you&rsquo;ll see five tabs, labelled &ldquo;Description&rdquo;, &ldquo;Passages&rdquo;,
     &ldquo;Sentences&rdquo;, &ldquo;Sentence Units&rdquo;, and &ldquo;Features&rdquo;. On the left, you
-    can see the name of the text database you are using.</p>
+    can see the name of the text database you&rsquo;re using.</p>
 
 <h2>The &ldquo;Description&rdquo; Tab</h2>
 
@@ -35,8 +35,7 @@
 
 <?= $hdir->img("$sub_article-description-tab.png") ?>
 
-<p>The Reference Guide contains more information about
-    <?=help_anchor('description','the &ldquo;Description&rdquo; tab') ?>.</p>
+<p>You can read more about the description tab <?=help_anchor('description','here') ?>.</p>
 
 
 <h2>The &ldquo;Passages&rdquo; Tab</h2>
@@ -61,8 +60,7 @@
 <p>You can click on the small plus signs next to the names of the books of the Bible. This will allow
     you to specify individual chapters or verses to use for the exercise.</p>
 
-<p>The Reference Guide contains more information about
-    <?=help_anchor('passages','the &ldquo;Passages&rdquo; tab') ?>.</p>
+<p>You can read more about the passages tab <?=help_anchor('passages','here') ?>.</p>
 
 <h2>The &ldquo;Sentences&rdquo; Tab</h2>
 
@@ -92,7 +90,9 @@
     
 <p>The &ldquo;Clear&rdquo; button erases all the criteria.</p>
 
-For the exercise we are creating here, we need sentences containing words that...
+<hr>
+
+<p>For the exercise we are creating here, we need sentences containing words that...</p>
 
 <?php if ($sub_article=='heb'): ?>
 
@@ -159,8 +159,7 @@ For the exercise we are creating here, we need sentences containing words that..
     the &ldquo;Sentence Units&rdquo; tab is only active when the check mark is not set. (Be sure to
     leave the mark on.)</p>
 
-<p>The Reference Guide contains more information about
-    <?=help_anchor('sentences','the &ldquo;Sentences&rdquo; tab') ?>.</p>
+<p>You can read more about the sentences tab <?=help_anchor('sentences','here') ?>.</p>
 
 <h2>The &ldquo;Features&rdquo; Tab</h2>
 
@@ -200,8 +199,7 @@ For the exercise we are creating here, we need sentences containing words that..
 <?php endif; ?>
 
 
-<p>The Reference Guide contains more information about
-    <?=help_anchor('features','the &ldquo;Features&rdquo; tab') ?>.</p>
+<p>You can read more about the features tab <?=help_anchor('features','here') ?>.</p>
 
 <h2>Saving the Exercise</h2>
 

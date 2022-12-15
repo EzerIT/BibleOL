@@ -1,7 +1,8 @@
 <h1>Answering Various Types of Questions</h1>
 
-<p>Different types of questions may require different types of answers. Below you will find an
-    overview of the different possibilities.</p>
+<p>Different types of questions may require different types of answers. In the following sections you will find an
+    overview of the different possibilities. Also, in special text boxes like the following one, information
+    about keyboard shortcuts are provided:</p>
 
 <div class="shortcuts">
     <h5 class="card-header bg-info text-light">Using shortcuts</h5>
@@ -124,7 +125,7 @@
 
 <h2>Glosses</h2>
 
-<p>In a gloss request an exercise asks you to provide the English translation of a foreign word
+<p>In a gloss request, an exercise asks you to provide the English translation of a foreign word
 &ndash; the <i>gloss</i>.</p>
 
 <p>Very often, a foreign word has several translations into English. For example, the
