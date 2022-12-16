@@ -234,7 +234,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering}
-\date{26 April 2022}
+\date{16 December 2022}
 
 \makeindex
 
@@ -3902,7 +3902,7 @@ interface ExtendedQuizFeatures {%\index{ExtendedQuizFeatures TypeScript interfac
     dontShowFeatures : string[];
     dontShowObjects : { content : string; show? : string; } [];
     objectType : string;
-    dontShow : boolean;
+    hideWord : boolean;
     useVirtualKeyboard : boolean;
 }
 \end{lstlisting}
@@ -3929,7 +3929,7 @@ class ExtendedQuizFeatures {%\index{ExtendedQuizFeatures PHP class@\emph{Extende
     public $dontShowFeatures; // An array of strings
     public $dontShowObjects;  // An array of string/string pairs
     public $objectType;
-    public $dontShow;
+    public $hideWord;
     public $useVirtualKeyboard;
 }
 \end{lstlisting}
@@ -4029,7 +4029,7 @@ interface has these members:
 
     objectType & The Emdros type of the quiz objects.\\
 
-    dontShow & \emph{True} if the quiz objects should be replaced with (1), (2), (3), etc. in the
+    hideWord & \emph{True} if the quiz objects should be replaced with (1), (2), (3), etc. in the
     displayed text.\\
 
     useVirtualKeyboard & \emph{True} if the client should display a virtual keyboard%
