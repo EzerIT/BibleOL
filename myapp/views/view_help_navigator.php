@@ -40,7 +40,6 @@ $menu = array(
                                       'description'         => array(1,'The “Description” tab'),
                                       'passages'            => array(1,'The “Passages” tab'),  
                                       'sentences'           => array(1,'The “Sentences” tab'), 
-                                      'featurechoice'       => array(2,'Choosing features'),
                                       'mql'                 => array(2,'MQL'),
                                       'sentence_units'      => array(1,'The “Sentence Units” tab'),
                                       'features'            => array(1,'The “Features” tab'),

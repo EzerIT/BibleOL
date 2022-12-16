@@ -9,7 +9,7 @@
 
 <p>The appearance and use of this tab is much like the
     &ldquo;<?= help_anchor('sentences','Sentences') ?>&rdquo;
-    tab, so much information about that tab is not repeated here.</p>
+    tab; therefore much information about that tab is not repeated here.</p>
 
 <p>The &ldquo;Sentence Units&rdquo; tab may look like this:</p>
 
@@ -34,11 +34,9 @@
 </ul>
 
 <p>The friendly feature selector is used in exactly the same manner as in the
-  &ldquo;Sentences&rdquo; tab. But if you want to specify an MQL statement, you will
-  notice a difference:</p>
-
-<p>If you choose to type the search criteria as an MQL statement, the program will surround the
-    statement by <code>[ttt ...]</code>, where
+    &ldquo;Sentences&rdquo; tab. But if you want to specify an MQL statement, you will notice a
+    difference: If you choose to type the search criteria as an MQL statement, the program will
+    surround the statement by <code>[ttt ...]</code>, where
     <code>ttt</code> is the type of the sentence unit and the three dots are replaced by the
     statement you provide. This means that Bible OL will look in the chosen sentence for sentence
     units that can be described as specified in the MQL statement. Here, the MQL statement must not

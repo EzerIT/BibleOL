@@ -11,7 +11,7 @@
 <p>The icons below some of the words are hyperlinks. If users click on them, they will be taken to a
     website that, hopefully, provides additional information about that lexeme.</p>
 
-<p>In order to change or add these gloss links you need <i>Administrator</i> privileges on the
+<p>In order to change or add these gloss links you need <i>Sysadmin</i> privileges on the
     system. If you have that, selecting the <i>Administrator &gt; Gloss link</i> menu will take you
     to a page where you can edit the links. It looks like this:</p>
 
