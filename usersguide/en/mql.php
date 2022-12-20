@@ -1,7 +1,7 @@
 <h1>MQL</h1>
 
 <p>Bible OL is based on <?= anchor('https://www.emdros.org','Emdros',['target'=>'_blank']) ?>,
-    a database engine for handling analysed or annotated text. Emdros was
+    a database engine for handling analyzed or annotated text. Emdros was
     developed by Ulrik Sandborg-Petersen of Aalborg University.</p>
 
 <p>An important part of Emdros is an advanced query language, MQL, which makes

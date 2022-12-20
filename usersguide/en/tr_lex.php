@@ -16,7 +16,7 @@
     Hebrew words with a frequency ranking between 101 and 200. Alternatively, you can look up the
     word alphabetically.</p>
 
-<p>Once you have click a button for the word range you wish to see, you will be taken to a web page
+<p>Once you have clicked a button for the word range you wish to see, you will be taken to a web page
     that looks similar to this one:</p>
 
 <?= $hdir->img("tr_lex2.png") ?>
@@ -24,7 +24,7 @@
 
 <p>Above this table, you will find buttons for selecting other word ranges.</p>
 
-<p>Under &ldquo;Target language&rdquo; you select the language of the tanslation you are creating.
+<p>Under &ldquo;Target language&rdquo; you select the language of the translation you are creating.
     In the figure above this is Danish. Note that if you want to modify a special translation
     <?= help_anchor('variant','variant') ?>, you must select that variant from the <i>Variant</i>
     menu at the very top of the page (not shown in the figure above).</p>

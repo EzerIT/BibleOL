@@ -7,7 +7,7 @@
 
 <p>If you select the menu <i>Administration &gt; Manage exercises</i> you will be taken to the top
     level of the folder hierarchy. Here you will see a list of folders and, perhaps, some exercises
-    (although exercises should really not bestore at the top level):</p>
+    (although exercises should really not be stored at the top level):</p>
 
 <?= $hdir->img('folder1.png') ?>
 

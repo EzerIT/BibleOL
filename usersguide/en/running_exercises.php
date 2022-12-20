@@ -1,4 +1,4 @@
-<h1>Running Exercises</h1>
+ <h1>Running Exercises</h1>
 
 
 <p>In this section we will look at how you run an exercise. We will go through a couple of examples

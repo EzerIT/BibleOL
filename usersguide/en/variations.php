@@ -13,7 +13,7 @@
 
 <p>Normally, an exercise will show you one sentence at a time. However, an exercise may be
     constructed to display a few sentences surrounding the sentence in question. For example, the
-    following figure shows one sentence in grey before and after the sentence that the exercise is
+    following figure shows one sentence in gray before and after the sentence that the exercise is
     concerned with.</p>
 
 <?= $hdir->img('context.png') ?>
@@ -82,7 +82,7 @@
 
 <?= $hdir->img('empty-answer.png') ?>
 
-<p>Here, Bible Ol asks for the pronominal suffix of the word <span class="help hebrew">כְבֹ֥וד</span>;
+<p>Here, Bible OL asks for the pronominal suffix of the word <span class="help hebrew">כְבֹ֥וד</span>;
     but that word has no pronominal suffix, so the correct answer is an empty text, which you
     indicate by typing a dash by pressing the character button indicated by the red arrow in the
     illustration.</p>

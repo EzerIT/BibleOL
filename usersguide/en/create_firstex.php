@@ -143,7 +143,7 @@
     free to ignore this for now. You may later read <?= help_anchor('mql','more about MQL') ?>.)</p>
 
 <p>Bible OL now knows how to find sentences for the exercises. It will choose the sentences based on
-    the criteria we have just specified. But now things get a bit more complicated: When Bibel OL
+    the criteria we have just specified. But now things get a bit more complicated: When Bible OL
     generates exercises, it actually has to make two choices: First it must choose some interesting
     sentences; thereafter it must choose some interesting sentence units (words) within the chosen
     sentences.</p>

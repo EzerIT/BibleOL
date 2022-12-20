@@ -69,7 +69,7 @@ this:</p>
 <p>When creating an exercise, you can choose to make the exercise easier for the student by limiting
     the number of possible answers for certain features. Consider, for example, the question at the
     top of this page. For &ldquo;Person&rdquo; the student can choose between <i>1st, 2nd, 3rd,
-    None, Unknown,</i> and <i>Absent</i>; and for &ldquo;Number&rdquo; the studen can choose between
+    None, Unknown,</i> and <i>Absent</i>; and for &ldquo;Number&rdquo; the student can choose between
     <i>Singular, Plural, Dual, None, Unknown,</i> and <i>Absent</i>. Some of these values may
     confuse the student, and therefore a teacher can limit the options.</p>
 
@@ -108,7 +108,7 @@ dialog will appear:</p>
 
 <p>In this illustration we are working with a Hebrew exercise whose primary sentence unit is a
     <i>Word</i>, and we have clicked on the &ldquo;Phrase&ldquo; button. Here, the only possible
-    choices are <i>Don&rsquo;t care</i> and <i>Dont&rsquo;t show</i>. The blue buttons labelled
+    choices are <i>Don&rsquo;t care</i> and <i>Don&rsquo;t show</i>. The blue buttons labelled
     &ldquo;Set all&rdquo; can be used to quickly specify a choice for all features.</p>
 
 <p>Below all the secondary sentence units you will find a button labelled &ldquo;Gloss limit&rdquo;.

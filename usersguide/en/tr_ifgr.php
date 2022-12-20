@@ -15,14 +15,14 @@
 
 
 <p>If you have <i>translator</i> privileges, you can add or modify the translations of
-    <?= $hdir->if_gr('the terms used in the Bible OL user interface','grammar terms used in the Bible OL') ?>
+    <?= $hdir->if_gr('the terms used in the Bible OL user interface','grammar terms used in the Bible OL') ?>.
     Select the <i>Administration &gt; Translate <?= $hdir->if_gr('interface','grammar terms') ?></i> menu.
     This will bring up a web page with a list of the <?= $hdir->if_gr('interface','grammar') ?> terms that
     must have a translation Bible OL. It may look like this:</p>
 
 <?= $hdir->img("tr_" . $hdir->if_gr("if","gr") . "1.png") ?>
 
-<p>Under &ldquo;Target language&rdquo; you select the language of the tanslation you are creating.
+<p>Under &ldquo;Target language&rdquo; you select the language of the translation you are creating.
     In the figure above this is Danish. Note that if you want to modify a special translation
     <?= help_anchor('variant','variant') ?>, you must select that variant from the <i>Variant</i>
     menu at the very top of the page (not shown in the figure above).</p>
@@ -55,7 +55,7 @@
     <li><b>Symbolic name</b> is used internally in Bible OL to identify the term.
         <?php if ($sub_article==='if'): ?>
             The small triangle
-            &#x23f6; next to the heading indicates that the table is currenly sorted by ascending
+            &#x23f6; next to the heading indicates that the table is currently sorted by ascending
             symbolic name. If you click on &ldquo;Symbolic name&rdquo;, the triangle changes to &#x23f7; and
             the table will be sorted by descending symbolic name. You can click on the other blue
             heading (&ldquo;Danish&rdquo; in this example) to sort the table by that value.

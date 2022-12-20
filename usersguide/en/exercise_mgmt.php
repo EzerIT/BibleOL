@@ -13,7 +13,7 @@
     <li><?= help_anchor('terminology#question_object','question objects') ?></li>
 </ul>
 
-<p>You should also realise that in the context of Bible OL, an <i>exercise</i> is
+<p>You should also realize that in the context of Bible OL, an <i>exercise</i> is
   actually a description of how the program should generate questions. An exercise is stored
   in the folder hierarchy.</p>
 

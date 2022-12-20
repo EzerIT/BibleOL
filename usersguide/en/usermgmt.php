@@ -1,6 +1,6 @@
 <h1>User Management</h1>
 
-<p>Users with <i>facilitator</i> priviliges can add, modify, and delete user accounts, except
+<p>Users with <i>facilitator</i> privileges can add, modify, and delete user accounts, except
     accounts belonging to system administrators and other facilitators.</p>
 
 <p>To open user management, select <i>Administration &gt; Users</i>. You will then see a table
@@ -20,7 +20,7 @@ is wider than your browser window, you can drag the bar indicated by the arrow b
     page.</p>
 
 <p>The small triangle &#x23f6; next to the heading &ldquo;User name&rdquo; indicates that the table
-    is currenly sorted by ascending user name. If you click on &ldquo;User name&rdquo;, the triangle
+    is currently sorted by ascending user name. If you click on &ldquo;User name&rdquo;, the triangle
     changes to &#x23f7; and the table will be sorted by descending user name. You can click on any
     of the other blue headings to sort the table by that value.</p>
 
