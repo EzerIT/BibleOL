@@ -16,6 +16,8 @@
       <th><?= $this->lang->line('qest_numbr') ?></th>
       <th><?= $this->lang->line('feat_location') ?></th>
       <th><?= $this->lang->line('txt') ?></th>
+      <th><?= $this->lang->line('question_object') ?></th>
+      <th><?= $this->lang->line('object_type') ?></th>
       <th class="text-center"><?= $this->lang->line('right_wrong') ?></th>
       <th class="text-center"><?= $this->lang->line('correct_anser') ?></th>
       <th class="text-center"><?= $this->lang->line('answer_by_stud') ?></th>
@@ -29,6 +31,8 @@
       <td class="text-center"><?= $ra->qono ?></td>
       <td class="text-center"><?= $ra->location ?></td>
       <td class="text-center"><?= $ra->txt ?></td>
+      <td class="text-center"><?= $ra->disp_type ?></td>
+      <td class="text-center"><?= $ra->disp_value ?></td>
       <td class="text-center"><?= $ra->correct  ?></td>
       <td class="text-center"><?= $ra->value  ?></td>
       <td class="text-center"><?= $ra->answer  ?></td>
