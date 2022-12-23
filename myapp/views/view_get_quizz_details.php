@@ -48,7 +48,7 @@
         $cell_val = explode(",", $ra->disp_value) ;
         $table_row="";
         foreach ($header as $header_index => $header_value) {
-          echo "<td class=\"text-center\">" . ($header_value=='item_number'?$this->lang->line('item_number'):$data['emdrosobject']['word'][$header_value])  . "</td>";
+          echo "<td class=\"text-center\">" . ($header_value=='item_number'?$this->lang->line('item_number'):($header_value=='visual'?$this->lang->line('visual'):$data['emdrosobject']['word'][$header_value]))  . "</td>";
           $table_row = $table_row  . '  <td class="text-center">' . $cell_val[$header_index] .'</td>';
         }
         echo "<tr>$table_row</tr>";

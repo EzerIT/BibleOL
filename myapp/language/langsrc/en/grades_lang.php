@@ -121,3 +121,4 @@ $lang['txt'] = "Text";
 $lang['question_object'] = "Question Object";
 $lang['object_type'] = "Object Type";
 $lang['item_number'] = "Item number";
+$lang['visual'] = "As in text";
