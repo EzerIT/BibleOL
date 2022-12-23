@@ -120,3 +120,4 @@ $lang['answer_by_stud'] = "Student's Answer";
 $lang['txt'] = "Text";
 $lang['question_object'] = "Question Object";
 $lang['object_type'] = "Object Type";
+$lang['item_number'] = "Item number";

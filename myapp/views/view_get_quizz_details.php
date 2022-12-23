@@ -6,6 +6,14 @@
     // echo " <p>$quizzid</P>";
     //
     // print_r($resall);
+    //load the language file for the translation of features
+    $data = json_decode(file_get_contents('db/property_files/ETCBC4.'  . $this->session->userdata['language'] . '.prop.pretty.json'), true);
+// print_r($data);
+// print_r($data['emdrosobject']['word']);
+// var_dump($data->emdrosobject->word->g_voc_lex_utf8_variant);
+
+// echo ($data['emdrosobject']['word']['g_voc_lex_utf8_variant'])
+
 ?>
 <p><a href="javascript:history.back()" title="<?= $this->lang->line('back_hooverover_txt') ?>"><?= $this->lang->line('go_back') ?></a></p>
 <div class="table-responsive" id="table1" style="display:block">
@@ -33,14 +41,14 @@
       <td class="text-center"><?= $ra->txt ?></td>
       <!-- <td class="text-center"><?= $ra->disp_value ?></td>
       <td class="text-center"><?= $ra->disp_type ?></td> -->
-      <td class="text-center"><table>
+      <td class="text-center"><table border="2px">
         <tr>
         <?php
         $header   = explode(",", $ra->disp_type) ;
         $cell_val = explode(",", $ra->disp_value) ;
         $table_row="";
         foreach ($header as $header_index => $header_value) {
-          echo "<td class=\"text-center\">$header_value</td>";
+          echo "<td class=\"text-center\">" . ($header_value=='item_number'?$this->lang->line('item_number'):$data['emdrosobject']['word'][$header_value])  . "</td>";
           $table_row = $table_row  . '  <td class="text-center">' . $cell_val[$header_index] .'</td>';
         }
         echo "<tr>$table_row</tr>";
