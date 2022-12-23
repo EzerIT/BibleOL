@@ -119,3 +119,5 @@ $lang['correct_anser'] = "Correct Answer";
 $lang['answer_by_stud'] = "Student's Answer";
 $lang['txt'] = "Text";
 $lang['question_object'] = "Question Object";
+$lang['disp_value'] = "Question Object";
+$lang['disp_type'] = "Object Type";
