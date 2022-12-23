@@ -17,7 +17,7 @@
       <th><?= $this->lang->line('feat_location') ?></th>
       <th><?= $this->lang->line('txt') ?></th>
       <th><?= $this->lang->line('question_object') ?></th>
-      <th><?= $this->lang->line('object_type') ?></th>
+      <!-- <th><?= $this->lang->line('object_type') ?></th> -->
       <th class="text-center"><?= $this->lang->line('right_wrong') ?></th>
       <th class="text-center"><?= $this->lang->line('correct_anser') ?></th>
       <th class="text-center"><?= $this->lang->line('answer_by_stud') ?></th>
@@ -31,8 +31,22 @@
       <td class="text-center"><?= $ra->qono ?></td>
       <td class="text-center"><?= $ra->location ?></td>
       <td class="text-center"><?= $ra->txt ?></td>
-      <td class="text-center"><?= $ra->disp_value ?></td>
-      <td class="text-center"><?= $ra->disp_type ?></td>
+      <!-- <td class="text-center"><?= $ra->disp_value ?></td>
+      <td class="text-center"><?= $ra->disp_type ?></td> -->
+      <td class="text-center"><table>
+        <tr>
+        <?php
+        $header   = explode(",", $ra->disp_type) ;
+        $cell_val = explode(",", $ra->disp_value) ;
+        $table_row="";
+        foreach ($header as $header_index => $header_value) {
+          echo "<td class=\"text-center\">$header_value</td>";
+          $table_row = $table_row  . '  <td class="text-center">' . $cell_val[$header_index] .'</td>';
+        }
+        echo "<tr>$table_row</tr>";
+        ?>
+      </tr>
+    </table></td>
       <td class="text-center"><?= $ra->correct  ?></td>
       <td class="text-center"><?= $ra->value  ?></td>
       <td class="text-center"><?= $ra->answer  ?></td>
