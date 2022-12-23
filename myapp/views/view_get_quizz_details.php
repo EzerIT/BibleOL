@@ -31,8 +31,8 @@
       <td class="text-center"><?= $ra->qono ?></td>
       <td class="text-center"><?= $ra->location ?></td>
       <td class="text-center"><?= $ra->txt ?></td>
-      <td class="text-center"><?= $ra->disp_type ?></td>
       <td class="text-center"><?= $ra->disp_value ?></td>
+      <td class="text-center"><?= $ra->disp_type ?></td>
       <td class="text-center"><?= $ra->correct  ?></td>
       <td class="text-center"><?= $ra->value  ?></td>
       <td class="text-center"><?= $ra->answer  ?></td>
