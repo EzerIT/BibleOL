@@ -849,7 +849,7 @@ class Mod_grades extends CI_Model {
                   // ->group_by('q.id, rfname')
                   // // ->group_by('q.id, rfname')
                   // ->order_by('pct desc')
-                  ->get();
+                  ->compile();
         }
 
         return $query->result();
@@ -858,15 +858,35 @@ class Mod_grades extends CI_Model {
 
     // Get answers for quizzes by quizzid
     public function get_quizz_detail(int $uid,int $quizzid) {
+//       $this->db->select('distinct value,  qono, questid')->from('sta_displayfeature');
+//       $subQ = $this->db->get_compiled_select();
+//       // $selectQ = "SELECT q.*, rf.qono, rf.answer, rf.correct,rf.name,rf.value, df.value disp_value FROM sta_quiz q
+//       $selectQ = "SELECT * FROM sta_quiz q
+// join sta_question quest ON quest.quizid=q.id
+// join sta_requestfeature rf ON quest.id=rf.questid
+// join (SELECT distinct value,  qono, questid FROM sta_displayfeature) df ON rf.questid=df.questid
+// where q.id=$quizzid";
         if (empty($quizzid))
             return array();
 
+        // $query = $this->db
+        //     ->select($selectQ)
+        //     ->get();
         $query = $this->db
-            ->from('sta_question as sq')
-            ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer, rf.qono, sq.txt')
+            ->from('sta_quiz as q')
+            ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer, rf.qono, sq.txt, GROUP_CONCAT(df.name) disp_type, GROUP_CONCAT(df.value) disp_value')
+            ->join('sta_question as sq','sq.quizid=q.id')
             ->join('sta_requestfeature as rf','rf.questid = sq.id')
+            ->join('sta_displayfeature as df','rf.questid=df.questid and rf.qono=df.qono')
             ->where('sq.quizid',$quizzid)
+            ->group_by('rf.id, rf.questid, rf.qono')
             ->get();
+        // $query = $this->db
+        //     ->from('sta_question as sq')
+        //     ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer, rf.qono, sq.txt')
+        //     ->join('sta_requestfeature as rf','rf.questid = sq.id')
+        //     ->where('sq.quizid',$quizzid)
+        //     ->get();
 
         return $query->result();
     }
