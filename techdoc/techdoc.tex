@@ -34,6 +34,7 @@
 \newfontfamily{\mainnolig}{Linux Libertine O}
 \newcommand{\q}{{\mainnolig '}}
 
+\newfontfamily{\dvsm}{DejaVu Sans Mono}
 
 %%% Page layout %%%
 \settypeblocksize{247mm}{160mm}{*}
@@ -193,6 +194,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 
 \newcommand{\headii}[2]{\textbf{#1} & \textbf{#2}}
 \newcommand{\headiii}[3]{\textbf{#1} & \textbf{#2} & \textbf{#3}}
+\newcommand{\headiv}[4]{\textbf{#1} & \textbf{#2} & \textbf{#3} & \textbf{#4}}
 
 
 % my-longtabu without \midrule
@@ -234,7 +236,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering}
-\date{16 December 2022}
+\date{18 January 2023}
 
 \makeindex
 
@@ -244,7 +246,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \maketitle
 
 \begin{center}
-Copyright © 2022 by Claus Tøndering, claus@tondering.dk
+Copyright © 2023 by Claus Tøndering, claus@tondering.dk
 
 \vspace{5mm}
 
@@ -274,7 +276,7 @@ server and developers who need to modify or expand the way Bible OL works.
 \section{License and Copyright}\index{license}\index{copyright}
 
 Except where otherwise noted, the Bible OL source code is distributed under an MIT
-License\footnote{\url{https://opensource.org/licenses/MIT}}. The code is Copyright © 2022 by Claus
+License\footnote{\url{https://opensource.org/licenses/MIT}}. The code is Copyright © 2023 by Claus
 Tøndering, claus@tondering.dk and its other authors.
 
 The present document is made available under a Creative Commons Attribution 4.0 International
@@ -6360,7 +6362,7 @@ specified, then that variant will be updated.
 (In earlier versions of Bible OL, the \texttt{gram\_prop2db} command did not take a
 \emph{source-directory} parameter; instead the \texttt{db/propterty\_files} directory was always used.)
 
-\subsection{Lexicon}
+\subsection{Lexicon}\label{sec-lexicon}
 
 Sections \ref{sec-lexicon-heb}, \ref{sec-lexicon-heb-lang}, \ref{sec-lexicon-greek}, and
 \ref{sec-lexicon-greek-lang} describe how localized versions of the dictionaries are stored.
@@ -6406,6 +6408,7 @@ above. This means that the imported CSV file must have the same number of fields
 headings as the generated file.  If \emph{variant} is
 specified, then that variant will be updated.
 
+Appendix \ref{app-lex} gives details about the structure of the CSV files used for lexicons.
 
 
 
@@ -7542,6 +7545,155 @@ The text and the lexicon are also available from \url{https://github.com/biblica
 
 The Emdros database has been created based on these sources using my program
 \emph{nestle2mql,}\index{nestle2mql} which is currently not published or documented.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Appendix: Lexicon Files %%%%%%%%%%%%%%%%%%%%
+\chapter{Lexicon Files}\label{app-lex}\index{lexicon|hyperit}\index{lexicon files|hyperit}
+
+As described in Section \ref{sec-lexicon} the lexicons containing glosses for various source and
+target languages can be uploaded to and downloaded from the server. The files are CSV files, that
+is, files containing lines of comma separated values. Virtually all spreadsheet programs are able to
+export and import this file format.
+
+The following sections detail the layout of the lexicon files for each of the source language.
+
+\section{Hebrew}
+
+The first few lines of a lexicon file for the Hebrew ETCBC4 database may look like this:
+
+
+% I'm using the DejaVu Sans Mono font because it supports IPA characters.
+
+\begin{lstlisting}[basicstyle={\footnotesize\dvsm}]
+"Occurrences","lex","Lexeme","Transliterated","None","Qal","Nifal","Piel","Pual",%\ldots%
+1217,">B/","%\heb{אָב}% I","ʔāv","father",,,,,,,,,,,,,,,,
+2,">B=/","%\heb{אֵב}% II","ʔēv","bud, shoot",,,,,,,,,,,,,,,,
+1,">BGT>/","%\heb{אֲבַגְתָא}% ","ʔᵃvagtāˀ","Abagtha",,,,,,,,,,,,,,,,
+186,">BD[","%\heb{אבד}% ","ʔVD",,"perish",,"destroy",,,"exterminate",,,,,,,,,,
+\end{lstlisting}
+
+The columns of this spreadsheet have these meanings:
+
+\begin{my-tabu}{llll}{ \headiv{Heading}{Contents}{Heading}{Contents} }
+Occurrences    & Number of occurences in Bible     & Hofal       & Translation of verb in Hofal       \\ 
+lex            & Lexeme in the transcibed alphabet & Hishtafal   & Translation of verb in Hishtafal   \\ 
+Lexeme         & Lexeme with variant               & Passive Qal & Translation of verb in Passive Qal \\ 
+Transliterated & Transliterated lexeme             & Etpaal      & Translation of verb in Etpaal      \\ 
+None           & Translation for non-verb          & Nitpael     & Translation of verb in Nitpael     \\ 
+Qal            & Translation of verb in Qal        & Hotpaal     & Translation of verb in Hotpaal     \\ 
+Nifal          & Translation of verb in Nifal      & Tifal       & Translation of verb in Tifal       \\ 
+Piel           & Translation of verb in Piel       & Hitpoal     & Translation of verb in Hitpoal     \\ 
+Pual           & Translation of verb in Pual       & Poal        & Translation of verb in Poal        \\ 
+Hitpael        & Translation of verb in Hitpael    & Poel        & Translation of verb in Poel        \\ 
+Hifil          & Translation of verb in Hifil      & &  \\ 
+\end{my-tabu}
+
+When downloading a lexicon, the columns ``Occurrences'', ``Lexeme'', and ``Transliterated'' are
+set by the system. When uploading a lexicon, these columns are ignored.
+
+\section{Aramaic}
+
+The first few lines of a lexicon file for the Aramaic ETCBC4 database may look like this:
+
+
+% I'm using the DejaVu Sans Mono font because it supports IPA characters.
+
+\begin{lstlisting}[basicstyle={\footnotesize\dvsm}]
+"Occurrences","lex","Lexeme","Transliterated","None","Peal","Peil","Pael","Hafel",%\ldots%
+9,">B/","%\heb{אַב}% I","ʔav","father",,,,,,,,,,,,
+3,">B=/","%\heb{אֵב}% II","ʔēv","fruit",,,,,,,,,,,,
+7,">BD[","%\heb{אבד}% ","ʔVD",,"perish",,,"slay, destroy",,,"be destroyed",,,,,
+8,">BN/","%\heb{אֶבֶן}% ","ʔeven","stone",,,,,,,,,,,,
+\end{lstlisting}
+
+
+The columns of this spreadsheet have these meanings:
+
+\begin{my-tabu}{llll}{ \headiv{Heading}{Contents}{Heading}{Contents} }
+Occurrences    & Number of occurences in Bible     & Afel      & Translation of verb in Afel      \\ 
+lex            & Lexeme in the transcibed alphabet & Shafel    & Translation of verb in Shafel    \\ 
+Lexeme         & Lexeme with variant               & Hofal     & Translation of verb in Hofal     \\ 
+Transliterated & Transliterated lexeme             & Hitpeel   & Translation of verb in Hitpeel   \\ 
+None           & Translation for non-verb          & Hitpaal   & Translation of verb in Hitpaal   \\ 
+Peal           & Translation of verb in Peal       & Hishtafal & Translation of verb in Hishtafal \\ 
+Peil           & Translation of verb in Peil       & Etpeel    & Translation of verb in Etpeel    \\
+Pael           & Translation of verb in Pael       & Etpaal    & Translation of verb in Etpaal    \\ 
+Hafel          & Translation of verb in Hafel      &           &                                  \\
+\end{my-tabu}
+
+When downloading a lexicon, the columns ``Occurrences'', ``Lexeme'', and ``Transliterated'' are
+set by the system. When uploading a lexicon, these columns are ignored.
+
+
+\section{Greek}
+
+The first few lines of a lexicon file for the Greek nestle1904 database may look like this:
+
+% I'm using the DejaVu Sans Mono font because it supports Greek characters.
+
+\begin{lstlisting}[basicstyle={\footnotesize\dvsm}]
+"Occurrences","Lexeme","Strong's number","Strong's unreliable?","Gloss"
+5,"%Ἀαρών%",2,"no","Aaron"
+1,"%Ἀβαδδών%",3,"no","Abaddon"
+1,"%ἀβαρής%",4,"no","not burdensome"
+\end{lstlisting}
+
+
+The columns of this spreadsheet have these meanings:
+
+\begin{my-tabu}{ll}{ \headii{Heading}{Contents} }
+Occurrences          & Number of occurences in Bible                    \\ 
+Lexeme               & Lexeme                                           \\ 
+Strong's number      & Strong's number for the lexeme                   \\ 
+Strong's unreliable? & Is Strong's number unliable (``yes'' or ``no'')? \\ 
+Gloss                & Translation                                      \\ 
+\end{my-tabu}
+
+When downloading a lexicon, the column ``Occurrences'' is set by the system. When uploading a
+lexicon, this column is ignored.
+
+\section{Latin}
+
+The first few lines of a lexicon file for the Latin jvulgate database may look like this:
+
+% I'm using the DejaVu Sans Mono font because I've done it above
+
+\begin{lstlisting}[basicstyle={\footnotesize\dvsm}]
+"Occurrences","Lexeme","Part of speech","Gloss"
+2,"Aaron","proper_noun","Aron"
+776,"ab","preposition","from"
+1,"Abaddon","proper_noun","Abaddon"
+3,"Abba","proper_noun","Abba"
+\end{lstlisting}
+
+The columns of this spreadsheet have these meanings:
+
+\begin{my-tabu}{ll}{ \headii{Heading}{Contents} }
+Occurrences    & Number of occurences in Bible \\ 
+Lexeme         & Lexeme                        \\ 
+Part of speech & Part of speech (see below)    \\ 
+Gloss          & Translation                   \\ 
+\end{my-tabu}
+
+When downloading a lexicon, the column ``Occurrences'' is set by the system. When uploading a
+lexicon, this column is ignored.
+
+The ``Part of speech'' column must contain one of these words:
+
+\begin{center}
+  \begin{tabular}{lll}
+    adjective              & interrogative\_adverb          & preposition         \\ 
+    adverb                 & interrogative\_pronoun         & proper\_noun        \\ 
+    cardinal\_numeral      & noun                           & reciprocal\_pronoun \\ 
+    conjunction            & ordinal\_numeral               & relative\_adverb    \\ 
+    demonstrative\_pronoun & personal\_pronoun              & relative\_pronoun   \\ 
+    foreign\_word          & personal\_reflexive\_pronoun   & subjunction         \\ 
+    indefinite\_pronoun    & possessive\_pronoun            & verb                \\ 
+    interjection           & possessive\_reflexive\_pronoun &                     \\ 
+  \end{tabular}
+\end{center}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Index %%%%%%%%%%%%%%%%%%%%
