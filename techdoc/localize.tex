@@ -1,24 +1,9 @@
 \documentclass[11pt,oneside,a4paper]{memoir}
 \usepackage{fontspec}
-\usepackage{tabu}
+\usepackage{xltabular}
 \usepackage{graphicx}
-\usepackage{longtable}
-\usepackage{multirow}
-\usepackage{capt-of}
-\usepackage[final]{listings}
 \usepackage[unicode=true,xetex,colorlinks=true,linkcolor=blue,urlcolor=blue,bookmarksnumbered=true,bookmarksdepth=3]{hyperref}
 \usepackage{bidi} % Must be last
-
-% Fix for new version of longtable.
-% Taken from https://github.com/tabu-issues-for-future-maintainer/tabu/issues/26
-\makeatletter
-\def\tabuendlongtrial{%
-    \LT@echunk  \global\setbox\LT@gbox \hbox{\unhbox\LT@gbox}\kern\wd\LT@gbox
-                \LT@get@widths
-}%
-
-\makeatother
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -52,25 +37,6 @@ pdftitle={Bible Online Learner: Localization Guide}
 %%% Lists %%%
 \tightlists
 
-%%% listings %%%
-\lstset{frame=tb,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  keepspaces=true,
-  columns=flexible,
-  basicstyle={\footnotesize\ttfamily},
-  numbers=none,
-  numberstyle=\tiny\color{gray},
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=3,
-  captiondirection=LTR  % Required by bidi package (although its documentation says otherwise)
-}
-
-\renewcommand{\lstlistingname}{\textsc{Listing}}
-
-
 %%% Chapter style %%%
 
 % My own version of the ell chapter style:
@@ -101,42 +67,30 @@ pdftitle={Bible Online Learner: Localization Guide}
 \renewcommand*{\chaptitlefont}{\normalfont\huge\sffamily}
 
 
-%%% Auxiliary tabu environments %%%
-\tabulinesep=_2mm %Works together with the \addlinespace[...] values below
-
-\newenvironment{my-longtabu}[2]{
-%\begin{center}
-\begin{longtabu*}{@{}#1@{}}
+\newenvironment{my-longtabx}[2]{
+  \xltabular{\textwidth}{@{}#1@{}}
   \toprule
-  #2\\\addlinespace[-1mm]
+  #2\\
+  \midrule
+  \endfirsthead
+
+  \toprule
+  #2\\
   \midrule
   \endhead
-
+  
   \emph{\rmfamily\normalsize(Continued...)} & \\
   \endfoot
 
-  \addlinespace[-1mm]\bottomrule
+  \bottomrule
   \endlastfoot
 }{%
-\end{longtabu*}
-%\end{center}%
+\endxltabular
 }
+
 
 \newcommand{\headii}[2]{\textbf{#1} & \textbf{#2}}
 \newcommand{\headiii}[3]{\textbf{#1} & \textbf{#2} & \textbf{#3}}
-
-
-\newenvironment{my-tabu}[2]{%
-\begin{center}
-\begin{tabu}{@{}#1@{}}
-  \toprule
-  #2\\\addlinespace[-1mm]
-  \midrule
-}{%
-\addlinespace[-1mm]\bottomrule
-\end{tabu}
-\end{center}%
-}
 
 
 %%% Allow extra space between words %%%
@@ -343,7 +297,7 @@ must consider which form to use in your translations, and use it consistently.
 The following table lists the text groups and gives a little information about which parts
 of the program use the translations is each file.
 
-\begin{my-longtabu}{>{\footnotesize\ttfamily}lX}{ \headii{\normalsize\textrm{Text group}}{Examples of use} }
+\begin{my-longtabx}{>{\footnotesize\ttfamily} l X}{ \headii{\normalsize\textrm{Text group}}{Examples of use} }
 class & Class management under the ``Classes'' menu item.\\
 
 common & Strings used in many different parts of the system.\\
@@ -380,7 +334,7 @@ userclass & Management of a user's membership of a class.\\
 
 users & User management under the ``Users'' menu item.\\
 
-\end{my-longtabu}
+\end{my-longtabx}
 
 The listed examples of use are not exhaustive.
 
@@ -470,7 +424,11 @@ Be aware that the preferred sorting order in English may not be the preferred so
 
 The following table gives an overview of the name prefixes and their use.
 
-\begin{my-tabu}{>{\footnotesize\ttfamily}lX}{ \headii{\normalsize\textrm{Name prefix}}{Use} }
+\begin{tabularx}{\textwidth}{@{}>{\footnotesize\ttfamily} l X @{}}
+  \toprule
+  \headii{\normalsize\textrm{Name prefix}}{Use}\\
+  \midrule
+  
   info & Database name and copyright information. \\
   emdrosobject\ldots & Grammatical units (such as word, phrase, clause) and their attributes.\\
   emdrostype\ldots & Possible values of the grammatical attributes (for example, the gender
@@ -483,7 +441,10 @@ The following table gives an overview of the name prefixes and their use.
   universe.chapter, universe.verse & How to identify a chapter and a verse. \\
   universe.reference & How to format a Bible reference, plus a list of abbreviations of the books of
   the Bible.\\
-\end{my-tabu}
+  
+  \bottomrule
+\end{tabularx}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Translating a Lexicon %%%%%%%%%%%%%%%%%%%%
