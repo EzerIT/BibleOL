@@ -1,6 +1,7 @@
 \documentclass[11pt,oneside,a4paper]{memoir}
 \usepackage{fontspec}
 \usepackage{xltabular}
+\usepackage{environ}
 \usepackage{graphicx}
 \usepackage[unicode=true,xetex,colorlinks=true,linkcolor=blue,urlcolor=blue,bookmarksnumbered=true,bookmarksdepth=3]{hyperref}
 \usepackage{bidi} % Must be last
@@ -67,25 +68,39 @@ pdftitle={Bible Online Learner: Localization Guide}
 \renewcommand*{\chaptitlefont}{\normalfont\huge\sffamily}
 
 
-\newenvironment{my-longtabx}[2]{
-  \xltabular{\textwidth}{@{}#1@{}}
-  \toprule
-  #2\\
-  \midrule
-  \endfirsthead
+\NewEnviron{my-tabx}[2]{%
+  \begin{tabularx}{\textwidth}{@{}#1@{}}
+    \toprule
+    #2\\
+    \midrule
 
-  \toprule
-  #2\\
-  \midrule
-  \endhead
+    \BODY
   
-  \emph{\rmfamily\normalsize(Continued...)} & \\
-  \endfoot
+    \bottomrule
+  \end{tabularx}
+}
 
-  \bottomrule
-  \endlastfoot
-}{%
-\endxltabular
+
+\NewEnviron{my-longtabx}[2]{%
+  \begin{xltabular}{\textwidth}{@{}#1@{}}
+    \toprule
+    #2\\
+    \midrule
+    \endfirsthead
+
+    \toprule
+    #2\\
+    \midrule
+    \endhead
+  
+    \emph{\rmfamily\normalsize(Continued...)} & \\
+    \endfoot
+
+    \bottomrule
+    \endlastfoot
+
+    \BODY
+  \end{xltabular}
 }
 
 
@@ -424,11 +439,7 @@ Be aware that the preferred sorting order in English may not be the preferred so
 
 The following table gives an overview of the name prefixes and their use.
 
-\begin{tabularx}{\textwidth}{@{}>{\footnotesize\ttfamily} l X @{}}
-  \toprule
-  \headii{\normalsize\textrm{Name prefix}}{Use}\\
-  \midrule
-  
+\begin{my-tabx}{>{\footnotesize\ttfamily} l X}{\headii{\normalsize\textrm{Name prefix}}{Use}}
   info & Database name and copyright information. \\
   emdrosobject\ldots & Grammatical units (such as word, phrase, clause) and their attributes.\\
   emdrostype\ldots & Possible values of the grammatical attributes (for example, the gender
@@ -441,9 +452,7 @@ The following table gives an overview of the name prefixes and their use.
   universe.chapter, universe.verse & How to identify a chapter and a verse. \\
   universe.reference & How to format a Bible reference, plus a list of abbreviations of the books of
   the Bible.\\
-  
-  \bottomrule
-\end{tabularx}
+\end{my-tabx}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
