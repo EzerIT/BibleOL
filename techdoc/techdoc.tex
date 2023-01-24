@@ -4,6 +4,7 @@
 \usepackage{tabu}
 \usepackage{graphicx}
 \usepackage{longtable}
+\usepackage{environ}
 \usepackage{multirow}
 \usepackage{capt-of}
 \usepackage[final]{listings}
@@ -216,6 +217,34 @@ pdftitle={Bible Online Learner: Technical Documentation}
 \end{center}%
 }
 
+\NewEnviron{my-tab}[2]{%
+\begin{center}
+  \begin{tabular}{@{}#1@{}}
+    \toprule
+    #2\\
+    \midrule
+
+    \BODY
+  
+    \bottomrule
+  \end{tabular}
+\end{center}%
+}
+
+\NewEnviron{my-tabx}[3][\textwidth]{%
+\begin{center}
+  \begin{tabularx}{#1}{@{}#2@{}}
+    \toprule
+    #3\\
+    \midrule
+
+    \BODY
+  
+    \bottomrule
+  \end{tabularx}
+\end{center}%
+}
+
 \newenvironment{my-tabu}[2]{%
 \begin{center}
 \begin{tabu}{@{}#1@{}}
@@ -235,7 +264,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering}
-\date{18 January 2023}
+\date{24 January 2023}
 
 \makeindex
 
@@ -7574,7 +7603,7 @@ The first few lines of a lexicon file for the Hebrew ETCBC4 database may look li
 
 The columns of this spreadsheet have these meanings:
 
-\begin{my-tabu}{llll}{ \headiv{Heading}{Contents}{Heading}{Contents} }
+\begin{my-tab}{ll|ll}{ \headiv{Heading}{Contents}{Heading}{Contents} }
 Occurrences    & Number of occurences in Bible     & Hofal       & Translation of verb in Hofal       \\ 
 lex            & Lexeme in the transcibed alphabet & Hishtafal   & Translation of verb in Hishtafal   \\ 
 Lexeme         & Lexeme with variant               & Passive Qal & Translation of verb in Passive Qal \\ 
@@ -7586,7 +7615,7 @@ Piel           & Translation of verb in Piel       & Hitpoal     & Translation o
 Pual           & Translation of verb in Pual       & Poal        & Translation of verb in Poal        \\ 
 Hitpael        & Translation of verb in Hitpael    & Poel        & Translation of verb in Poel        \\ 
 Hifil          & Translation of verb in Hifil      & &  \\ 
-\end{my-tabu}
+\end{my-tab}
 
 When downloading a lexicon, the columns ``Occurrences'', ``Lexeme'', and ``Transliterated'' are
 set by the system. When uploading a lexicon, these columns are ignored.
@@ -7595,9 +7624,8 @@ set by the system. When uploading a lexicon, these columns are ignored.
 
 The first few lines of a lexicon file for the Aramaic ETCBC4 database may look like this:
 
-
+\Needspace*{4\baselineskip}
 % I'm using the DejaVu Sans Mono font because it supports IPA characters.
-
 \begin{lstlisting}[basicstyle={\footnotesize\dvsm}]
 "Occurrences","lex","Lexeme","Transliterated","None","Peal","Peil","Pael","Hafel",%\ldots%
 9,">B/","%\heb{אַב}% I","%ʔav%","father",,,,,,,,,,,,
@@ -7606,10 +7634,9 @@ The first few lines of a lexicon file for the Aramaic ETCBC4 database may look l
 8,">BN/","%\heb{אֶבֶן}% ","%ʔeven%","stone",,,,,,,,,,,,
 \end{lstlisting}
 
-
 The columns of this spreadsheet have these meanings:
 
-\begin{my-tabu}{llll}{ \headiv{Heading}{Contents}{Heading}{Contents} }
+\begin{my-tab}{ll|ll}{ \headiv{Heading}{Contents}{Heading}{Contents} }
 Occurrences    & Number of occurences in Bible     & Afel      & Translation of verb in Afel      \\ 
 lex            & Lexeme in the transcibed alphabet & Shafel    & Translation of verb in Shafel    \\ 
 Lexeme         & Lexeme with variant               & Hofal     & Translation of verb in Hofal     \\ 
@@ -7619,7 +7646,7 @@ Peal           & Translation of verb in Peal       & Hishtafal & Translation of 
 Peil           & Translation of verb in Peil       & Etpeel    & Translation of verb in Etpeel    \\
 Pael           & Translation of verb in Pael       & Etpaal    & Translation of verb in Etpaal    \\ 
 Hafel          & Translation of verb in Hafel      &           &                                  \\
-\end{my-tabu}
+\end{my-tab}
 
 When downloading a lexicon, the columns ``Occurrences'', ``Lexeme'', and ``Transliterated'' are
 set by the system. When uploading a lexicon, these columns are ignored.
@@ -7641,13 +7668,13 @@ The first few lines of a lexicon file for the Greek nestle1904 database may look
 
 The columns of this spreadsheet have these meanings:
 
-\begin{my-tabu}{ll}{ \headii{Heading}{Contents} }
-Occurrences          & Number of occurences in Bible                    \\ 
-Lexeme               & Lexeme                                           \\ 
-Strong's number      & Strong's number for the lexeme                   \\ 
-Strong's unreliable? & Is Strong's number unliable (``yes'' or ``no'')? \\ 
-Gloss                & Translation                                      \\ 
-\end{my-tabu}
+\begin{my-tab}{ll}{ \headii{Heading}{Contents} }
+Occurrences          & Number of occurences in Bible                      \\ 
+Lexeme               & Lexeme                                             \\ 
+Strong's number      & Strong's number for the lexeme                     \\ 
+Strong's unreliable? & Is Strong's number unreliable (``yes'' or ``no'')? \\ 
+Gloss                & Translation                                        \\ 
+\end{my-tab}
 
 When downloading a lexicon, the column ``Occurrences'' is set by the system. When uploading a
 lexicon, this column is ignored.
@@ -7668,12 +7695,12 @@ The first few lines of a lexicon file for the Latin jvulgate database may look l
 
 The columns of this spreadsheet have these meanings:
 
-\begin{my-tabu}{ll}{ \headii{Heading}{Contents} }
+\begin{my-tab}{ll}{ \headii{Heading}{Contents} }
 Occurrences    & Number of occurences in Bible \\ 
 Lexeme         & Lexeme                        \\ 
 Part of speech & Part of speech (see below)    \\ 
 Gloss          & Translation                   \\ 
-\end{my-tabu}
+\end{my-tab}
 
 When downloading a lexicon, the column ``Occurrences'' is set by the system. When uploading a
 lexicon, this column is ignored.
