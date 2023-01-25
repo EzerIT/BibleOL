@@ -402,11 +402,6 @@ class Mod_askemdros extends CI_Model {
                                        "jvulgate" => 4,
                                        "VC" => 5);
 
-    public static function comp_books(array $a, array $b) {
-        return self::$sort_order[$a['name']] > self::$sort_order[$b['name']] ? 1 :
-              (self::$sort_order[$a['name']] < self::$sort_order[$b['name']] ?-1 : 0);
-    }
-
     public function db_and_books() {
         $this->load->library('db_config');
         $db_books = array();
@@ -423,7 +418,7 @@ class Mod_askemdros extends CI_Model {
                                 'loc_books'=>$loc->universe->book,
                                 'order'=>$this->db_config->bookorder);
         }
-        usort($db_books, 'Mod_askemdros::comp_books');
+        usort($db_books, function(array $a, array $b) {return self::$sort_order[$a['name']] <=> self::$sort_order[$b['name']];});
         return $db_books;
     }
 
