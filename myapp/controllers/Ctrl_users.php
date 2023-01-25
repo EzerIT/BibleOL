@@ -809,4 +809,21 @@ class Ctrl_users extends MY_Controller {
             echo "\n";
         }
     }
+
+    // Generates an administrator entry in the user database.
+    // Must only be run from the command line
+    public function generate_administrator() {
+        if (!is_cli()) {
+            echo '<pre>This command can only be run from the command line</pre>';
+            die;
+        }
+
+        if ($_SERVER['argc']!=7)
+			die("Usage: php index.php users generate_administrator <username> <first_name> <last_name> <password>\n");
+
+        $id = $this->mod_users->generate_administrator($_SERVER['argv'][3],$_SERVER['argv'][4],$_SERVER['argv'][5],$_SERVER['argv'][6]);
+
+        echo "Administrator with user ID $id created.\n";
+        echo "Note: It may be advisable to add an email address for this user through\nthe web interface\n";
+    }
   }

@@ -436,5 +436,24 @@ class Mod_users extends CI_Model {
         $items = explode(' ',$http_response_header[0]);
         return $items[1]; // $items[1] is the HTTP error code
     }
-    
-  }
+
+    // Generates an administrator entry in the user database.
+    // Can only be run from the command line.
+    public function generate_administrator(string $username, string $first_name, string $last_name, string $password) {
+        $this->me = make_dummy_user();
+		$this->me->id = null; // Indicates new user
+		$this->me->first_name = $first_name;
+		$this->me->last_name = $last_name;
+		$this->me->family_name_first = false;
+		$this->me->username = $username;
+		$this->me->password = md5($this->config->item('pw_salt') . $password);
+		$this->me->created_time = time();
+		$this->me->last_login = time();
+		$this->me->preflang = 'none';
+		$this->me->prefvariant = 'none';
+
+        $query = $this->db->insert('user', $this->me);
+
+        return $this->db->insert_id();
+    }
+}
