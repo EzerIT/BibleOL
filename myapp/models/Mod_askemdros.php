@@ -403,7 +403,8 @@ class Mod_askemdros extends CI_Model {
                                        "VC" => 5);
 
     public static function comp_books(array $a, array $b) {
-        return self::$sort_order[$a['name']] > self::$sort_order[$b['name']];
+        return self::$sort_order[$a['name']] > self::$sort_order[$b['name']] ? 1 :
+              (self::$sort_order[$a['name']] < self::$sort_order[$b['name']] ?-1 : 0);
     }
 
     public function db_and_books() {

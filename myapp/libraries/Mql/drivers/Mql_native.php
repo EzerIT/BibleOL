@@ -1,6 +1,9 @@
 <?php
 
-if (version_compare(PHP_VERSION, '7.0', '>=')) {
+if (version_compare(PHP_VERSION, '8.0', '>=')) {
+    // No include file required
+}
+elseif (version_compare(PHP_VERSION, '7.0', '>=')) {
     if (file_exists('/usr/local/lib/x86_64-linux-gnu/emdros/EmdrosPHP7.php'))
         require_once('/usr/local/lib/x86_64-linux-gnu/emdros/EmdrosPHP7.php');
     else

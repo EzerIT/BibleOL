@@ -288,11 +288,20 @@ class CI_Migration {
 				$this->_error_string = sprintf($this->lang->line('migration_class_doesnt_exist'), $class);
 				return FALSE;
 			}
-			elseif ( ! is_callable(array($class, $method)))
-			{
-				$this->_error_string = sprintf($this->lang->line('migration_missing_'.$method.'_method'), $class);
-				return FALSE;
+            // Fix for PHP 8:
+			else{
+                $class = new $class;
+                if ( ! is_callable(array($class, $method))) {
+				    $this->_error_string = sprintf($this->lang->line('migration_missing_'.$method.'_method'), $class);
+				    return FALSE;
+                }
 			}
+			//elseif ( ! is_callable(array($class, $method)))
+			//{
+			//    $this->_error_string = sprintf($this->lang->line('migration_missing_'.$method.'_method'), $class);
+			//    return FALSE;
+			//}
+            // End fix
 
 			$pending[$number] = array($class, $method);
 		}
@@ -302,7 +311,9 @@ class CI_Migration {
 		{
 			log_message('debug', 'Migrating '.$method.' from version '.$current_version.' to version '.$number);
 
-			$migration[0] = new $migration[0];
+            // Fix for PHP 8:
+			//$migration[0] = new $migration[0];
+            // End fix
 			call_user_func($migration);
 			$current_version = $number;
 			$this->_update_version($current_version);

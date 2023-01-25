@@ -329,16 +329,19 @@ class OlMonadSet implements Iterator {
     private $current_pair = null; ///< The MonadPair for the current iteration loop
 
     /// Part of the Iterator interface.
+    #[\ReturnTypeWillChange]
     public function current() {
         return $this->last;
     }
 
     /// Part of the Iterator interface.
+    #[\ReturnTypeWillChange]
     public function key() {
         return $this->last;
     }
 
     /// Part of the Iterator interface.
+    #[\ReturnTypeWillChange]
     public function next() {
         assert($this->current_pair!=null);
         assert($this->last!=PHP_INT_MAX);
@@ -368,11 +371,13 @@ class OlMonadSet implements Iterator {
     }
 
     /// Part of the Iterator interface.
+    #[\ReturnTypeWillChange]
     public function valid() {
         return $this->last!=PHP_INT_MAX;
     }
 
     /// Part of the Iterator interface.
+    #[\ReturnTypeWillChange]
     public function rewind() {
         $min=PHP_INT_MAX;
 
