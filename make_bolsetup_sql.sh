@@ -52,6 +52,7 @@ dump_struct_and_data lexicon_Aramaic
 dump_struct_and_data lexicon_Hebrew
 dump_struct_and_data lexicon_greek
 dump_struct_and_data lexicon_latin
+dump_struct_and_data lexicon_latin2
 dump_font font
 dump_struct_and_data translation_languages
 dump_struct exam

@@ -229,7 +229,7 @@ CREATE TABLE `bol_sta_quiztemplate` (
   `dbname` text,
   `dbpropname` text,
   `qoname` text,
-  `quizcode` mediumtext,
+  `quizcode` mediumtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
   `quizcodehash` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ui` (`userid`),
@@ -335,7 +335,7 @@ CREATE TABLE `bol_migrations` (
 
 
 LOCK TABLES `bol_migrations` WRITE;
-INSERT INTO `bol_migrations` VALUES (18);
+INSERT INTO `bol_migrations` VALUES (19);
 UNLOCK TABLES;
 
 
@@ -463,6 +463,31 @@ UNLOCK TABLES;
 
 
 
+DROP TABLE IF EXISTS `bol_lexicon_latin2`;
+CREATE TABLE `bol_lexicon_latin2` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `lemma` varchar(45) NOT NULL,
+  `part_of_speech` varchar(35) NOT NULL,
+  `tally` int NOT NULL,
+  `sortorder` varchar(45) NOT NULL,
+  `firstbook` tinytext NOT NULL,
+  `firstchapter` int NOT NULL,
+  `firstverse` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `lemma` (`lemma`),
+  KEY `part_of_speech` (`part_of_speech`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+
+LOCK TABLES `bol_lexicon_latin2` WRITE;
+INSERT INTO `bol_lexicon_latin2` VALUES (1,'Campania','noun',7,'campania','Villa_Claudiae',1,4),(2,'Claudia','noun',8,'claudia','Villa_Claudiae',1,1),(3,'Graecus','adjective',2,'graecus','Villa_Claudiae',1,17),(4,'Hilda','noun',3,'hilda','Villa_Claudiae',1,15),(5,'Italia','noun',2,'italia','Villa_Claudiae',1,3),(6,'Nuceria','noun',1,'nuceria','Villa_Claudiae',1,11),(7,'Roma','noun',1,'roma','Villa_Claudiae',1,7),(8,'Sicilia','noun',2,'sicilia','Villa_Claudiae',1,2),(9,'Sophia','noun',4,'sophia','Villa_Claudiae',1,15),(10,'Thyra','noun',1,'thyra','Villa_Claudiae',1,16),(11,'ab','preposition',1,'ab','Villa_Claudiae',1,25),(12,'ad','preposition',2,'ad','Villa_Claudiae',1,25),(13,'albus','adjective',1,'albus','Villa_Claudiae',1,23),(14,'ancilla','noun',6,'ancilla','Villa_Claudiae',1,15),(15,'ante','preposition',1,'ante','Villa_Claudiae',1,12),(16,'aqua','noun',1,'aqua','Villa_Claudiae',1,13),(17,'aut','conjunction',1,'aut','Villa_Claudiae',1,27),(18,'bonus','adjective',3,'bonus','Villa_Claudiae',1,7),(19,'calidus','adjective',1,'calidus','Villa_Claudiae',1,26),(20,'cena','noun',1,'cena','Villa_Claudiae',1,27),(21,'cirum','preposition',1,'cirum','Villa_Claudiae',1,28),(22,'corbula','noun',1,'corbula','Villa_Claudiae',1,23),(23,'curiosus','adjective',1,'curiosus','Villa_Claudiae',1,18),(24,'destino','verb',1,'destino','Villa_Claudiae',1,27),(25,'domina','noun',2,'domina','Villa_Claudiae',1,10),(26,'et','conjunction',8,'et','Villa_Claudiae',1,5),(27,'familia','noun',1,'familia','Villa_Claudiae',1,14),(28,'fecundus','adjective',2,'fecundus','Villa_Claudiae',1,5),(29,'femina','noun',3,'femina','Villa_Claudiae',1,8),(30,'frigidus','adjective',1,'frigidus','Villa_Claudiae',1,13),(31,'habeo','verb',3,'habeo','Villa_Claudiae',1,6),(32,'hora','noun',5,'hora','Villa_Claudiae',1,25),(33,'iaceo','verb',2,'iaceo','Villa_Claudiae',1,23),(34,'in','preposition',6,'in','Villa_Claudiae',1,4),(35,'industria','noun',1,'industria','Villa_Claudiae',1,25),(36,'insula','noun',1,'insula','Villa_Claudiae',1,2),(37,'lana','noun',2,'lana','Villa_Claudiae',1,23),(38,'latus','adjective',1,'latus','Villa_Claudiae',1,12),(39,'lingua','noun',1,'lingua','Villa_Claudiae',1,19),(40,'longus','noun',1,'longus','Villa_Claudiae',1,20),(41,'magnus','adjective',4,'magnus','Villa_Claudiae',1,3),(42,'marmoreus','adjective',1,'marmoreus','Villa_Claudiae',1,28),(43,'mensa','noun',1,'mensa','Villa_Claudiae',1,28),(44,'meridianus','adjective',1,'meridianus','Villa_Claudiae',1,26),(45,'multus','adjective',1,'multus','Villa_Claudiae',1,6),(46,'natus','adjective',1,'natus','Villa_Claudiae',1,16),(47,'neo','verb',1,'neo','Villa_Claudiae',1,24),(48,'novus','adjective',1,'novus','Villa_Claudiae',1,24),(49,'paeninsula','noun',1,'paeninsula','Villa_Claudiae',1,3),(50,'parvus','adjective',1,'parvus','Villa_Claudiae',1,21),(51,'peregrinus','adjective',1,'peregrinus','Villa_Claudiae',1,8),(52,'piscina','noun',2,'piscina','Villa_Claudiae',1,12),(53,'post','preposition',1,'post','Villa_Claudiae',1,12),(54,'pretiosus','adjective',1,'pretiosus','Villa_Claudiae',1,19),(55,'prope','preposition',2,'prope','Villa_Claudiae',1,11),(56,'propter','preposition',1,'propter','Villa_Claudiae',1,19),(57,'pulcher','adjective',1,'pulcher','Villa_Claudiae',1,9),(58,'rusticus','adjective',1,'rusticus','Villa_Claudiae',1,10),(59,'saepe','adverb',1,'saepe','Villa_Claudiae',1,8),(60,'scientia','noun',2,'scientia','Villa_Claudiae',1,18),(61,'sedeo','verb',1,'sedeo','Villa_Claudiae',1,22),(62,'septimus','adjective',2,'septimus','Villa_Claudiae',1,27),(63,'sextus','adjective',2,'sextus','Villa_Claudiae',1,25),(64,'situs','adjective',2,'situs','Villa_Claudiae',1,4),(65,'sum','verb',17,'sum','Villa_Claudiae',1,2),(66,'tela','noun',1,'tela','Villa_Claudiae',1,22),(67,'terra','noun',1,'terra','Villa_Claudiae',1,5),(68,'tertius','adjective',1,'tertius','Villa_Claudiae',1,25),(69,'tunica','noun',2,'tunica','Villa_Claudiae',1,20),(70,'unio','verb',1,'unio','Villa_Claudiae',1,7),(71,'venio','verb',1,'venio','Villa_Claudiae',1,8),(72,'vestio','verb',2,'vestio','Villa_Claudiae',1,20),(73,'via','noun',2,'via','Villa_Claudiae',1,7),(74,'video','verb',3,'video','Villa_Claudiae',1,9),(75,'villa','noun',7,'villa','Villa_Claudiae',1,1),(76,'vinea','noun',1,'vinea','Villa_Claudiae',1,12);
+UNLOCK TABLES;
+
+
+
+
+
+
 DROP TABLE IF EXISTS `bol_font`;
 CREATE TABLE `bol_font` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -503,14 +528,15 @@ CREATE TABLE `bol_translation_languages` (
   `iface_enabled` tinyint(1) NOT NULL,
   `heblex_enabled` tinyint(1) NOT NULL,
   `greeklex_enabled` tinyint(1) NOT NULL,
-  `latinlex_enabled` tinyint(1) NOT NULL,
+  `latinlex_enabled` tinyint(1) NOT NULL DEFAULT '0',
+  `latin2lex_enabled` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `abb` (`abb`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 
-LOCK TABLES `bol_translation_languages` WRITE;
-INSERT INTO `bol_translation_languages` VALUES (1,'da','danish','Dansk',1,1,0,0),(2,'en','english','English',1,1,1,1),(3,'de','german','Deutsch',1,1,0,0),(4,'fr','french','Français',1,0,0,0),(5,'nl','dutch','Nederlands',1,1,1,0),(6,'pt','portuguese','Português',1,0,0,0),(7,'es','spanish','Español',1,1,1,0),(8,'zh-Hans','simp_chinese','中文（简体）',1,0,0,0),(9,'zh-Hant','trad_chinese','中文（繁體）',1,0,0,0),(10,'am','amharic','አማርኛ',1,1,1,0),(11,'sw','swahili','Kiswahili',0,1,1,0);
+
+INSERT INTO `bol_translation_languages` VALUES (1,'da','danish','Dansk',1,1,1,1,1),(2,'en','english','English',1,1,1,1,1),(3,'de','german','Deutsch',1,1,0,0,0),(4,'fr','french','Français',1,0,0,0,0),(5,'nl','dutch','Nederlands',1,1,1,0,0),(6,'pt','portuguese','Português',1,1,1,0,0),(7,'es','spanish','Español',1,1,1,0,0),(8,'zh-Hans','simp_chinese','中文（简体）',1,0,0,0,0),(9,'zh-Hant','trad_chinese','中文（繁體）',1,0,0,0,0),(10,'am','amharic','አማርኛ',1,1,1,0,0),(11,'sw','swahili','Kiswahili',1,1,1,0,0);
 UNLOCK TABLES;
 
 
@@ -525,7 +551,7 @@ CREATE TABLE `bol_exam` (
   `ownerid` int NOT NULL COMMENT 'ID of the owner of the exercise (from the Users table)',
   `examcode` text COMMENT 'The actual XML text of the Exam template. Going forward, we may create more columns to capture elemnts of the XML code that need to be used all the time to make decoding the XML text unnecessary in most cases.',
   `examcodehash` text NOT NULL COMMENT 'A hash value of the examcode field. It can be used to speed up the comparison of the examcode field from different entries in this table: If the examcodehash values are different, then the examcode values will also be different.',
-  `archived` int DEFAULT 0,
+  `archived` int DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `ownerid` (`ownerid`),
   CONSTRAINT `bol_exam_ibfk_1` FOREIGN KEY (`ownerid`) REFERENCES `bol_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -599,3 +625,6 @@ CREATE TABLE `bol_exam_status` (
   KEY `activeexamid` (`activeexamid`),
   CONSTRAINT `bol_exam_status_ibfk_1` FOREIGN KEY (`activeexamid`) REFERENCES `bol_exam_active` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+
+
