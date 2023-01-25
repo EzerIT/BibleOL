@@ -447,6 +447,7 @@ class Mod_users extends CI_Model {
 		$this->me->family_name_first = false;
 		$this->me->username = $username;
 		$this->me->password = md5($this->config->item('pw_salt') . $password);
+        $this->me->isadmin = 1;
 		$this->me->created_time = time();
 		$this->me->last_login = time();
 		$this->me->preflang = 'none';
