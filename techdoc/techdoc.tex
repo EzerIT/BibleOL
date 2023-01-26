@@ -264,7 +264,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering}
-\date{24 January 2023}
+\date{26 January 2023}
 
 \makeindex
 
@@ -516,38 +516,31 @@ software packages; you should not see the versions mentioned above as minimum re
 You must install the Emdros database system. This is probably the most complex part of
 the installation process since Emdros is not a standard component in any operating system.
 
-I use Emdros version 3.5.23. Emdros can be downloaded from
-\url{https://emdros.org/download.html}.
+Emdros version 3.8.0 can be downloaded from \url{https://emdros.org/download.html}.
 
-Follow the instructions that come with Emdros to compile and install it on your computer. You will
-need a C++\index{C++} compiler and the Gnu make%
-\index{make}\index{Gnu make|see {make}}\index{gmake|see {make}}
-system (and probably a few other things as well -- check the Emdros documentation).
+Follow the instructions in the \texttt{INSTALL} file that comes with Emdros to compile and install it on your
+computer. You will need a C++\index{C++} compiler and several other software tools -- check the
+Emdros documentation.
 
-When you compile Emdros, be sure to include support for PHP~7\index{PHP}. I use this
-\emph{configure}\index{configure} command to set up the Emdros compilation:
+When you compile Emdros, be sure to include support for PHP~7 or PHP~8\index{PHP}, depending on what
+version of PHP you are running.
 
-% Do not set language=bash in the following line lest "local" be printed in blue
-\begin{lstlisting}
-./configure --with-sqlite3=local --with-mysql=yes --with-default-backend=sqlite3 \
-    --with-swig-language-php=yes --with-swig-language-java=no --with-swig-language-python=no \
-    --with-swig-language-perl=no --with-wx=no --with-swig-language-ruby=no \
-    --with-swig-language-php7=yes --with-swig-language-nodejs=no
-\end{lstlisting}
+One way to compile and install Emdros on an Ubuntu Linux system is to create a \texttt{.deb}
+installation package. This process will automatically include the proper PHP support. See the Emdros
+\texttt{INSTALL} file for details.
 
-If you want to include support for other programming languages, you
-will need to change this command.
-
-When you have compiled and installed Emdros (using the ``make'' and ``sudo make install'' commands,
-respectively) you need to enable access to Emdros in PHP. The correct way to do this depends on your
-Apache\index{Apache} and PHP installation. In my case, I had to copy the file
-\texttt{EmdrosPHP7.ini} to the directory \texttt{/etc/php/7.1/mods-available} and then run the
-command
+When you have compiled and installed Emdros, you need to enable access to it in PHP. The correct way
+to do this depends on your Apache\index{Apache} and PHP installation. The Emdros installation
+process should have placed a file called
+\texttt{EmdrosPHP7.ini} or \texttt{EmdrosPHP8.ini} in the directory
+\texttt{/etc/php/*/mods-available}. In order to enable Emdros, you will need to run this command
+(replacing 7.1 and PHP7 with the appropriate PHP version):
 
 \begin{lstlisting}[language=bash]
   sudo phpenmod -v 7.1 EmdrosPHP7
-  sudo service apache2 restart
+  sudo systemctl restart apache2
 \end{lstlisting}
+
 
 If you cannot or do not want to enhance PHP with Emdros support, you can configure Bible OL to use
 the \emph{mql}\index{MQL} command line tool instead, but this is not recommended. More information
@@ -555,7 +548,7 @@ about that is given in Section \ref{sec-mql-extern}.
 
 If you already have Emdros installed on a development system, and if your runtime system uses the
 same operating system as your development system, you can simply copy the Emdros files to your
-runtime systems. The files to copy will be typically found in \texttt{/usr/local/bin} and
+runtime system. The files to copy will be typically found in \texttt{/usr/local/bin} and
 \texttt{/usr/local/lib/emdros}. (I have never actually done this, and I suspect that you may need to
 run \emph{ldconfig}\index{ldconfig} after copying the files to your runtime system.)
 
