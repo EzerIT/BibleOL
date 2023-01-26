@@ -707,29 +707,25 @@ Populate the database with the available translations by issuing this command:
 
 \subsection{Step 7. Add Administrator\index{administrator}}
 
-You must manually add an administrator to the MySQL database. You do this by adding an entry to the
-table \emph{bol\_user}\index{bol\_user table|see {user table}}\index{user table} (see Section \ref{sec-user-table}).
-The entry should have the \emph{isadmin} field set to 1 (\emph{true}). The
-\emph{password}\index{password} should be set to the value of this PHP function:
-
-\begin{lstlisting}[language=PHP]
-md5($config['pw_salt'] . 'xxxxx');%\index{md5}%
-\end{lstlisting}
-
-\noindent
-where \emph{\$config[\q pw\_salt\q]}\index{salt} is configured in \texttt{myapp/config/ol.php}, and
-\emph{xxxxx} is the user's desired password.
-
-You can also find the correct value of the password by executing this shell command:
+You must add an administrator login to Bible OL. You do this by issuing this command:
 
 \begin{lstlisting}[language=bash]
-echo -n sssssxxxxx | md5sum%\index{md5sum}%
+php index.php users generate_administrator %\textrm{\textit{username}}% %\textrm{\textit{first-name}}% %\textrm{\textit{last-name}}% %\textrm{\textit{password}}%
 \end{lstlisting}
 
-\noindent
-where \emph{sssss} is the value of \emph{\$config[\q pw\_salt\q]} and \emph{xxxxx} is the user's
-desired password.
+The words on the command line can only contain these characters:
 
+\begin{itemize}
+\item a-z
+\item A-Z
+\item 0-9
+\item \~{} \% . : \_ -
+\end{itemize}
+
+If you need to use any other character in the name or password, you can change it using the web
+interface once Bible OL is up and running.
+
+The first time this user logs in to Bible OL he or she will be asked to accept the Privacy Policy.
 
 \subsection{Step 8. Apache Configuration}\index{Apache!Configuration}
 
