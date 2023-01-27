@@ -274,11 +274,10 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
                                           else
                                               wordclass = 'ltr';
 
-                                          // For ETCBC4, show only the first gloss
-                                          // For nestle1904 with Swahili, show only the first gloss
+                                          // For certain databases and translations, show only the first gloss
                                           
                                           if ((configuration.databaseName=="ETCBC4" && fs.isGloss)
-                                              || (configuration.databaseName=="nestle1904" && (featName=="swahili" || featName=="danish"))
+                                              || (configuration.databaseName=="nestle1904" && (featName=="swahili" || featName=="danish" || featName=="portuguese"))
                                               || ((configuration.databaseName=="jvulgate" || configuration.databaseName=="VC") && (featName=="swahili" || featName=="danish"))) {
                                               featValLoc = featValLoc.replace(/(&[gl]t);/,'$1Q')  // Remove ';' from "&gt;" and "&lt;" 
                                                                      .replace(/([^,;(]+).*/,'$1') // Remove everything after ',' or ';' or '('
