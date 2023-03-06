@@ -827,6 +827,8 @@ class Mod_grades extends CI_Model {
         if (!$nongraded)
             $query = $query->where('(grading is null OR grading=1)');
 
+        //TODO: To make the following if statement work as intended
+
         if (!$highest_score_first) {
           $query = $query
                 ->where_in('er.activeexamid',$exams)
@@ -849,7 +851,7 @@ class Mod_grades extends CI_Model {
                   // ->group_by('q.id, rfname')
                   // // ->group_by('q.id, rfname')
                   // ->order_by('pct desc')
-                  ->compile();
+                  ->get();
         }
 
         return $query->result();
