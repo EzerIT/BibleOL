@@ -157,8 +157,8 @@ class Answer {
                     .replace(/\u03cd/g, '\u1f7b')  // GREEK SMALL LETTER UPSILON WITH TONOS -> OXIA
                     .replace(/\u03ce/g, '\u1f7d')  // GREEK SMALL LETTER OMEGA WITH TONOS -> OXIA
                     .replace(/\u0390/g, '\u1fd3')  // GREEK SMALL LETTER IOTA WITH DIALYTIKA AND TONOS -> OXIA
-                    .replace(/\u03b0/g, '\u1fe3'); // GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND TONOS -> OXIA
-
+                    .replace(/\u03b0/g, '\u1fe3')  // GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND TONOS -> OXIA
+                    .replace(/  +/g, ' ');          // Remove extra spaces
 
                 if (this.matchRegexp==null) {
                     isCorrect = userAnswer==this.answerString; // Not === for one may be a number

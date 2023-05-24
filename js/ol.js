@@ -1509,7 +1509,8 @@ var Answer = (function () {
                         .replace(/\u03cd/g, '\u1f7b')
                         .replace(/\u03ce/g, '\u1f7d')
                         .replace(/\u0390/g, '\u1fd3')
-                        .replace(/\u03b0/g, '\u1fe3');
+                        .replace(/\u03b0/g, '\u1fe3')
+                        .replace(/  +/g, ' ');
                     if (this.matchRegexp == null) {
                         isCorrect_1 = userAnswer_1 == this.answerString;
                         if (!isCorrect_1)
