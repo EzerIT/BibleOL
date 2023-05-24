@@ -120,7 +120,7 @@
                 },
                 "gloss": {
                     "ignoreSelect": true,
-                    "matchregexp": "\/^(.+[;,] +)?{0}([,;].+)?$\/i",
+                    "matchregexp": "\/^(.+[;,] +)?(\\([^\\)]+\\))? *{0}([,;].+)?$\/i",
                     "indirdb": "mysql",
                     "sql_command": "SELECT gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_LANG lang ON lang.lex_id=gr.id WHERE strongs=%d AND strongs_unreliable=('%s'='true')",
                     "sql_command_variant": "SELECT COALESCE(lang_var.gloss,lang.gloss) gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_LANG lang ON lang.lex_id=gr.id LEFT JOIN {PRE}lexicon_greek_LANG_VARIANT lang_var ON lang_var.lex_id=gr.id WHERE strongs=%d AND strongs_unreliable=('%s'='true')",
