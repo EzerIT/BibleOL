@@ -1302,7 +1302,7 @@ class PanelQuestion {
                         v = cwyn.getJQuery();
                     }
                     else {
-                        let vf : JQuery = $(`<div class="inputquizitem"><input id="keyinp_${+qoid}_${headInd}" data-qoid="${+qoid}" data-row="${headInd}" type="text"></div>`);
+                        let vf : JQuery = $(`<div class="inputquizitem"><input id="keyinp_${+qoid}_${headInd}" data-qoid="${+qoid}" data-row="${headInd}" autocomplete="off" type="text"></div>`);
                         this.keyinps.push(`keyinp_${+qoid}_${headInd}`);
 
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);

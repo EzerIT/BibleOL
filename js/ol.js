@@ -2355,7 +2355,7 @@ var PanelQuestion = (function () {
                         v = cwyn.getJQuery();
                     }
                     else {
-                        var vf = $("<div class=\"inputquizitem\"><input id=\"keyinp_".concat(+qoid, "_").concat(headInd, "\" data-qoid=\"").concat(+qoid, "\" data-row=\"").concat(headInd, "\" type=\"text\"></div>"));
+                        var vf = $("<div class=\"inputquizitem\"><input id=\"keyinp_".concat(+qoid, "_").concat(headInd, "\" data-qoid=\"").concat(+qoid, "\" data-row=\"").concat(headInd, "\" autocomplete=\"off\" type=\"text\"></div>"));
                         this_2.keyinps.push("keyinp_".concat(+qoid, "_").concat(headInd));
                         cwyn = new ComponentWithYesNo(vf, COMPONENT_TYPE.textField);
                         cwyn.addKeypressListener();
