@@ -755,6 +755,10 @@ class Mod_grades extends CI_Model {
 
         foreach ($perdate as $k => &$v) {
             $v['percentage'] = 100*$v['correct'] / $v['count'];
+            if ($v['duration'] <= 0) {
+              $v['featpermin'] = 0;
+              continue;
+            }
             $v['featpermin'] = 60*$v['count'] / $v['duration'];
         }
 
