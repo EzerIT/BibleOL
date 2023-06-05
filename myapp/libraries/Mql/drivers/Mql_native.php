@@ -141,9 +141,12 @@ class Mql_native extends CI_Driver {
         $ti = $emdrosTable->iterator();
         while ($ti->hasNext()) {
             if (version_compare(PHP_VERSION, '8.0', '>=')) {
+                // This is the correct way to do things
                 $tri = $ti->next()->iterator();
             }
             elseif (version_compare(PHP_VERSION, '7.0', '>=')) {
+                // This code is a workaround for an error in Emdros on PHP 7.
+                // (The iterator() method is not available on table rows in PHP 7.)
                 $tr_object = new TableRow($ti->next());
                 $tri = $tr_object->iterator();
             }
