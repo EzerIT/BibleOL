@@ -10,7 +10,8 @@ elseif (version_compare(PHP_VERSION, '7.0', '>=')) {
         require_once('/usr/local/lib/emdros/EmdrosPHP7.php');
 }
 else
-    require_once('/usr/local/lib/emdros/EmdrosPHP.php');
+    throw new MqlException("Unsupported PHP Version (" . PHP_VERSION . ")", null);
+
 
 class Mql_native extends CI_Driver {
     private $emdros_env;
@@ -139,9 +140,18 @@ class Mql_native extends CI_Driver {
 
         $ti = $emdrosTable->iterator();
         while ($ti->hasNext()) {
+            if (version_compare(PHP_VERSION, '8.0', '>=')) {
+                $tri = $ti->next()->iterator();
+            }
+            elseif (version_compare(PHP_VERSION, '7.0', '>=')) {
+                $tr_object = new TableRow($ti->next());
+                $tri = $tr_object->iterator();
+            }
+            else {
+                throw new MqlException("Unsupported PHP Version (" . PHP_VERSION . ")", null);
+            }
+
             $currentrow = array();
-            $tr_object = new TableRow($ti->next());
-            $tri = $tr_object->iterator();
             while ($tri->hasNext())
                 $currentrow[] = $tri->next();
 
