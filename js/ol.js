@@ -1434,7 +1434,7 @@ var Answer = (function () {
         this.c = comp.getComp();
         this.cType = comp.getCompType();
         this.answerSws = answerSws;
-        this.answerString = my_normalize(answerString);
+        this.answerString = answerString.normalize('NFC');
         this.matchRegexp = matchRegexp;
         if (this.cType == COMPONENT_TYPE.checkBoxes) {
             if (this.answerString[0] == "(") {
@@ -1497,12 +1497,12 @@ var Answer = (function () {
                 case COMPONENT_TYPE.textFieldForeign:
                 case COMPONENT_TYPE.textFieldWithVirtKeyboard:
                     if (this.cType == COMPONENT_TYPE.textFieldForeign)
-                        userAnswer_1 = my_normalize($(this.c).find('.inputshow').text());
+                        userAnswer_1 = $(this.c).find('.inputshow').text();
                     else
-                        userAnswer_1 = my_normalize($(this.c).find('input').val());
-                    userAnswer_1 = userAnswer_1.trim()
+                        userAnswer_1 = $(this.c).find('input').val();
+                    userAnswer_1 = userAnswer_1.normalize('NFC')
+                        .trim()
                         .replace(/  +/g, ' ');
-                    console.log(userAnswer_1);
                     if (this.matchRegexp == null) {
                         isCorrect_1 = userAnswer_1 == this.answerString;
                         if (!isCorrect_1)

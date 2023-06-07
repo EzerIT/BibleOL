@@ -3,7 +3,6 @@
 
 // Representation of a correct answer
 
-declare function my_normalize(str: string): string;
 
 //****************************************************************************************************
 // Answer class
@@ -42,7 +41,7 @@ class Answer {
         this.c            = comp.getComp();
         this.cType        = comp.getCompType();
         this.answerSws    = answerSws;
-        this.answerString = my_normalize(answerString);
+        this.answerString = answerString.normalize('NFC');
         this.matchRegexp  = matchRegexp;
 
         if (this.cType == COMPONENT_TYPE.checkBoxes) {
@@ -142,14 +141,14 @@ class Answer {
                 // TODO: Normalize Unicode characters (relevant only in Greek)
 
                 if (this.cType==COMPONENT_TYPE.textFieldForeign)
-                    userAnswer = my_normalize($(this.c).find('.inputshow').text() as string);
+                    userAnswer = ($(this.c).find('.inputshow').text() as string);
                 else
-                    userAnswer = my_normalize($(this.c).find('input').val() as string);
+                    userAnswer = ($(this.c).find('input').val() as string);
                 
-                userAnswer = userAnswer.trim()
+                userAnswer = userAnswer.normalize('NFC')
+                    .trim()
                     .replace(/  +/g, ' ');          // Remove extra spaces
 
-                console.log(userAnswer);
                 if (this.matchRegexp==null) {
                     isCorrect = userAnswer==this.answerString; // Not === for one may be a number
                     if (!isCorrect)

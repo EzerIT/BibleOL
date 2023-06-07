@@ -108,7 +108,7 @@ class Ctrl_text extends MY_Controller {
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->mod_askemdros->book_title,
-                                                 'js_list'=>array('js/normalize.js','js/ol.js')));
+                                                 'js_list'=>array('js/ol.js')));
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
 
@@ -249,7 +249,7 @@ class Ctrl_text extends MY_Controller {
             $this->load->model('mod_localize');
 
             // VIEW:
-            $javascripts = array('js/normalize.js','js/ol.js');
+            $javascripts = array('js/ol.js');
             if ($this->quiz_data->quizFeatures->useVirtualKeyboard) {
                 switch ($this->db_config->dbinfo->charSet) {
                   case 'hebrew':
