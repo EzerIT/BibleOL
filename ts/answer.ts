@@ -3,6 +3,7 @@
 
 // Representation of a correct answer
 
+declare function my_normalize(str: string): string;
 
 //****************************************************************************************************
 // Answer class
@@ -41,7 +42,7 @@ class Answer {
         this.c            = comp.getComp();
         this.cType        = comp.getCompType();
         this.answerSws    = answerSws;
-        this.answerString = answerString;
+        this.answerString = my_normalize(answerString);
         this.matchRegexp  = matchRegexp;
 
         if (this.cType == COMPONENT_TYPE.checkBoxes) {
@@ -141,25 +142,14 @@ class Answer {
                 // TODO: Normalize Unicode characters (relevant only in Greek)
 
                 if (this.cType==COMPONENT_TYPE.textFieldForeign)
-                    userAnswer = ($(this.c).find('.inputshow').text() as string);
+                    userAnswer = my_normalize($(this.c).find('.inputshow').text() as string);
                 else
-                    userAnswer = ($(this.c).find('input').val() as string);
+                    userAnswer = my_normalize($(this.c).find('input').val() as string);
                 
-                // Fix Greek accents (see "A Note on Greek Accents in Unicode" in the technical documentation)
                 userAnswer = userAnswer.trim()
-                  //.replace(/\u003b/g, '\u037e')  // SEMICOLON -> GREEK QUESTION MARK
-                  //.replace(/\u00b7/g, '\u0387')  // MIDDLE DOT -> GREEK ANO TELEIA
-                    .replace(/\u03ac/g, '\u1f71')  // GREEK SMALL LETTER ALPHA WITH TONOS -> OXIA
-                    .replace(/\u03ad/g, '\u1f73')  // GREEK SMALL LETTER EPSILON WITH TONOS -> OXIA
-                    .replace(/\u03ae/g, '\u1f75')  // GREEK SMALL LETTER ETA WITH TONOS -> OXIA
-                    .replace(/\u03af/g, '\u1f77')  // GREEK SMALL LETTER IOTA WITH TONOS -> OXIA
-                    .replace(/\u03cc/g, '\u1f79')  // GREEK SMALL LETTER OMICRON WITH TONOS -> OXIA
-                    .replace(/\u03cd/g, '\u1f7b')  // GREEK SMALL LETTER UPSILON WITH TONOS -> OXIA
-                    .replace(/\u03ce/g, '\u1f7d')  // GREEK SMALL LETTER OMEGA WITH TONOS -> OXIA
-                    .replace(/\u0390/g, '\u1fd3')  // GREEK SMALL LETTER IOTA WITH DIALYTIKA AND TONOS -> OXIA
-                    .replace(/\u03b0/g, '\u1fe3')  // GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND TONOS -> OXIA
                     .replace(/  +/g, ' ');          // Remove extra spaces
 
+                console.log(userAnswer);
                 if (this.matchRegexp==null) {
                     isCorrect = userAnswer==this.answerString; // Not === for one may be a number
                     if (!isCorrect)

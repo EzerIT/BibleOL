@@ -1434,7 +1434,7 @@ var Answer = (function () {
         this.c = comp.getComp();
         this.cType = comp.getCompType();
         this.answerSws = answerSws;
-        this.answerString = answerString;
+        this.answerString = my_normalize(answerString);
         this.matchRegexp = matchRegexp;
         if (this.cType == COMPONENT_TYPE.checkBoxes) {
             if (this.answerString[0] == "(") {
@@ -1497,20 +1497,12 @@ var Answer = (function () {
                 case COMPONENT_TYPE.textFieldForeign:
                 case COMPONENT_TYPE.textFieldWithVirtKeyboard:
                     if (this.cType == COMPONENT_TYPE.textFieldForeign)
-                        userAnswer_1 = $(this.c).find('.inputshow').text();
+                        userAnswer_1 = my_normalize($(this.c).find('.inputshow').text());
                     else
-                        userAnswer_1 = $(this.c).find('input').val();
+                        userAnswer_1 = my_normalize($(this.c).find('input').val());
                     userAnswer_1 = userAnswer_1.trim()
-                        .replace(/\u03ac/g, '\u1f71')
-                        .replace(/\u03ad/g, '\u1f73')
-                        .replace(/\u03ae/g, '\u1f75')
-                        .replace(/\u03af/g, '\u1f77')
-                        .replace(/\u03cc/g, '\u1f79')
-                        .replace(/\u03cd/g, '\u1f7b')
-                        .replace(/\u03ce/g, '\u1f7d')
-                        .replace(/\u0390/g, '\u1fd3')
-                        .replace(/\u03b0/g, '\u1fe3')
                         .replace(/  +/g, ' ');
+                    console.log(userAnswer_1);
                     if (this.matchRegexp == null) {
                         isCorrect_1 = userAnswer_1 == this.answerString;
                         if (!isCorrect_1)
