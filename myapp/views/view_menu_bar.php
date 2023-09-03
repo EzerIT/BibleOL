@@ -117,6 +117,21 @@ else
     $cols = 0; // No menus on help pages
 
 ?>
+<?php if (!is_null($this->uri->segment(1))): ?>
+    <div class="card bg-warning">
+        <?php
+         !is_null($this->uri->segment(1));
+        switch ($this->language) {
+            case 'da':
+                echo "<h2>ADVARSEL: Tab af data efter 8. september. <a target=\"_blank\" href=\"", site_url('flytning.html'), "\">Læs mere.</a><h2>";
+                break;
+            default:
+                echo "<h2>WARNING: Data loss after 8 September. <a target=\"_blank\" href=\"", site_url('moving.html'), "\">Read more.</a><h2>";
+                break;
+        }
+        ?>
+    </div>
+<?php endif; ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light pt-0 pb-0 mb-3">
   <div class="divnavbar">
   <a class="navbar-brand d-block d-lg-none" href="<?= site_url('/') ?>"><img alt="" src="<?= site_url("/images/BibleOL_logo.png") ?>" style="max-width: 100%; height: 60px; padding: 8px"></a>
