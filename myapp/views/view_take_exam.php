@@ -1,5 +1,6 @@
 
 <div id="exam-info" style="display: flex; flex-direction: row;">
+  Deadline: <p><?= $deadline ?></p>
   <div id="timer" class="cke_editable cke_editable_themed cke_contents_ltr cke_show_borders">
     Time Left: <p id="timeLeft"></p>
   </div>

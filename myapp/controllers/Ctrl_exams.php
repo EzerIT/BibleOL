@@ -565,26 +565,31 @@ class Ctrl_exams extends MY_Controller
           $active_exam = $this->mod_exams->get_active_exam($active_exam_id);
           $exam_id = $active_exam->exam_id;
 
-          $now = time();
-          if ($active_exam->exam_length == 0 || $this->mod_users->is_teacher()) {
-            $deadline = $active_exam->exam_end_time;
-          }
-          else {
-            $deadline = $now + ($active_exam->exam_length * 60);
-          }
-
+          // check if there is already an entry for this exam instance and users
           $query_status = $this->db->get_where('exam_status', array('userid' => $user_id, 'activeexamid' => $active_exam_id));
           $status_row = $query_status->row();
           if ($status_row) {
+            // the user already started taking the exam
+
             $deadline = $status_row->deadline;
-          }
-          else {
+          } else {
+            // the user is starting the exam_mgmt
+
+            $now = time();
+            // If the user is a teacher the deadline is the exam instance end time
+            // otherwise the deadline looks at the exam duration and exam end time
+            // and uses whichever comes first.
+            $deadline = $this->mod_users->is_teacher() ? $active_exam->exam_end_time : min($active_exam->exam_end_time, $now + ($active_exam->exam_length * 60));
+
             $data = array(
               'userid' => $user_id,
               'activeexamid' => $active_exam_id,
               'start_time' => $now,
               'deadline' => $deadline
             );
+
+            // Add a record to exam_status indicating that the user started
+            // taking the exam. This helps keep track of the deadline.
             $this->db->insert('exam_status', $data);
           }
 
