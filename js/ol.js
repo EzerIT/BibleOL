@@ -880,9 +880,9 @@ var DisplaySingleMonadObject = (function (_super) {
         if (refs === null)
             refstring = '';
         else if (refs.length === 4)
-            refstring = "<a target=\"_blank\" title=\"".concat(localize('click_for_picture'), "\" href=\"http://resources.3bmoodle.dk/link.php?picno=").concat(refs[3], "\"><img src=\"").concat(site_url, "images/p.png\"></a>");
+            refstring = "<a target=\"_blank\" title=\"".concat(localize('click_for_picture'), "\" href=\"https://resources.learner.bible/link.php?picno=").concat(refs[3], "\"><img src=\"").concat(site_url, "images/p.png\"></a>");
         else
-            refstring = "<a target=\"_blank\" title=\"".concat(localize('click_for_pictures'), "\" href=\"http://resources.3bmoodle.dk/img.php?book=").concat(refs[0], "&chapter=").concat(refs[1], "&verse=").concat(refs[2], "\"><img src=\"").concat(site_url, "images/pblue.png\"></a>");
+            refstring = "<a target=\"_blank\" title=\"".concat(localize('click_for_pictures'), "\" href=\"https://resources.learner.bible/img.php?book=").concat(refs[0], "&chapter=").concat(refs[1], "&verse=").concat(refs[2], "\"><img src=\"").concat(site_url, "images/pblue.png\"></a>");
         var urlstring = '';
         if (urls !== null)
             for (var uix = 0; uix < urls.length; ++uix)

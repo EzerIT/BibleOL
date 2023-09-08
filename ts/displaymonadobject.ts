@@ -244,9 +244,9 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         if (refs===null)
             refstring = '';
         else if (refs.length===4) // Only one reference
-            refstring = `<a target="_blank" title="${localize('click_for_picture')}" href="http://resources.3bmoodle.dk/link.php?picno=${refs[3]}"><img src="${site_url}images/p.png"></a>`;
+            refstring = `<a target="_blank" title="${localize('click_for_picture')}" href="https://resources.learner.bible/link.php?picno=${refs[3]}"><img src="${site_url}images/p.png"></a>`;
         else // More than one reference
-            refstring = `<a target="_blank" title="${localize('click_for_pictures')}" href="http://resources.3bmoodle.dk/img.php?book=${refs[0]}&chapter=${refs[1]}&verse=${refs[2]}"><img src="${site_url}images/pblue.png"></a>`;
+            refstring = `<a target="_blank" title="${localize('click_for_pictures')}" href="https://resources.learner.bible/img.php?book=${refs[0]}&chapter=${refs[1]}&verse=${refs[2]}"><img src="${site_url}images/pblue.png"></a>`;
         
         let urlstring : string = ''; // String of icons representing URLs
         if (urls!==null)
