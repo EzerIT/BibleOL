@@ -668,7 +668,7 @@ class Mod_translate extends CI_Model {
                                                '',
                                                '\\n',
                                                "\\n\"\n        . \""),
-                                         $row2->comment);
+                                         $row2->comment ?? '');
                     if (fwrite($ofile, '$comment[\'' . $row2->symbolic_name . '\'] = "' . $text . "\";\n")===false ||
                         fwrite($ofile, '$format[\'' . $row2->symbolic_name . '\'] = "' . $row2->format . "\";\n")===false ||
                         fwrite($ofile, '$use_textarea[\'' . $row2->symbolic_name . '\'] = ' . ($row2->use_textarea?'true':'false') . ";\n\n")===false)
@@ -685,7 +685,7 @@ class Mod_translate extends CI_Model {
                                                '',
                                                '\\n',
                                                "\\n\"\n        . \""),
-                                         $row2->text);
+                                         $row2->text ?? '');
                     if (fwrite($ofile, '$lang[\'' . $row2->symbolic_name . '\'] = "' . $text . "\";\n")===false)
                         die("Cannot write to file \"$dest/$lang/{$row->textgroup}_lang.php\"\n");
                 }
@@ -1303,7 +1303,7 @@ class Mod_translate extends CI_Model {
                         $row->tally .
                         ',"' . $row->lemma . '"' .
                         ',"' . $row->part_of_speech . '"' .
-                        ',"' . str_replace('"', '""', $row->gloss) . '"' .
+                        ',"' . str_replace('"', '""', $row->gloss ?? '') . '"' .
                         "\n";
                 }
                 break;
