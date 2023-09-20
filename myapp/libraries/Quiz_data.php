@@ -121,6 +121,8 @@ class Quiz_data {
 
 
     private function normalize(string $s) {
+        if (is_null($s))
+            $s = '';
         if ($this->CI->db_config->dbinfo->charSet==='greek') {
             if (extension_loaded('intl'))
                 $s = Normalizer::normalize($s, Normalizer::FORM_C);

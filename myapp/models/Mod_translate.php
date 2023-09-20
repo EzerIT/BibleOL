@@ -1272,7 +1272,7 @@ class Mod_translate extends CI_Model {
                         ',"' . $row->lemma . '"' .
                         ',' . $row->strongs .
                         ',' . ($row->strongs_unreliable ? '"yes"' : '"no"')  .
-                        ',"' . str_replace('"', '""', $row->gloss) . '"' .
+                        ',"' . str_replace('"', '""', $row->gloss ?? '') . '"' .
                         "\n";
                 }                    
                 break;
