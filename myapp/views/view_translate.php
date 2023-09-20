@@ -15,7 +15,7 @@ function build_url($editing,$get_parms)
 }
 
 function replace_quot($s) {
-    return preg_replace(array('/&/', '/"/'), array('&amp;','&quot;'),$s);
+    return preg_replace(array('/&/', '/"/'), array('&amp;','&quot;'),$s ?? "");
 }
 
 $short_target_lang = $get_parms['lang_edit'];
@@ -349,8 +349,8 @@ function make_trans_line_header($editing, $label, $field, $get_parms, $add_text)
       <?php switch ($editing):
         case 'interface': ?>
           <td class="leftalign"><?= $line->symbolic_name ?></td>
-        <td class="leftalign"><?= htmlspecialchars($line->comment) ?></td>
-          <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>
+        <td class="leftalign"><?= htmlspecialchars($line->comment ?? "") ?></td>
+          <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show ?? "")) ?></td>
 
           <td class="leftalign">
             <?php if ($line->use_textarea): ?>
@@ -371,7 +371,7 @@ function make_trans_line_header($editing, $label, $field, $get_parms, $add_text)
           <td class="leftalign"><?= $get_parms['group']=='info' ? $line->symbolic_name : substr($line->symbolic_name,strlen($get_parms['group'])+1) ?></td>
           <td class="leftalign"><?= htmlspecialchars(substr($line->comment,0,2)=="f:" ?
                                                      substr(strstr($line->comment," "),1) : $line->comment) ?></td>
-          <td class="leftalign"><?= htmlspecialchars($line->text_show) ?></td>
+          <td class="leftalign"><?= htmlspecialchars($line->text_show ?? "") ?></td>
 
           <td class="leftalign">
             <?php if (substr($line->comment,0,10)=='f:textarea'): ?>
@@ -439,7 +439,7 @@ function make_trans_line_header($editing, $label, $field, $get_parms, $add_text)
 
           <?php endswitch;  ?>
 
-          <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show)) ?></td>
+          <td class="leftalign"><?= preg_replace('/\n/','<br>',htmlspecialchars($line->text_show ?? "")) ?></td>
           <td class="leftalign">
             <input type="text" class="textinput" name="<?= $line->lex_id ?>" size="40" value="<?= replace_quot($line->text_edit) ?>">
           </td>
