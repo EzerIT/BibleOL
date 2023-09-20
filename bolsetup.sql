@@ -536,7 +536,7 @@ CREATE TABLE `bol_translation_languages` (
 
 
 
-INSERT INTO `bol_translation_languages` VALUES (1,'da','danish','Dansk',1,1,1,1,1),(2,'en','english','English',1,1,1,1,1),(3,'de','german','Deutsch',1,1,0,0,0),(4,'fr','french','Français',1,0,0,0,0),(5,'nl','dutch','Nederlands',1,1,1,0,0),(6,'pt','portuguese','Português',1,0,1,0,0),(7,'es','spanish','Español',1,1,1,0,0),(8,'zh-Hans','simp_chinese','中文（简体）',1,0,0,0,0),(9,'zh-Hant','trad_chinese','中文（繁體）',1,0,0,0,0),(10,'am','amharic','አማርኛ',1,1,1,0,0),(11,'sw','swahili','Kiswahili',1,1,1,0,0);
+INSERT INTO `bol_translation_languages` VALUES (1,'da','danish','Dansk',1,1,1,1,1),(2,'en','english','English',1,1,1,1,1),(3,'de','german','Deutsch',1,1,0,0,0),(4,'fr','french','Français',1,0,0,0,0),(5,'nl','dutch','Nederlands',1,1,1,0,0),(6,'pt','portuguese','Português',1,1,1,0,0),(7,'es','spanish','Español',1,1,1,0,0),(8,'zh-Hans','simp_chinese','中文（简体）',1,0,0,0,0),(9,'zh-Hant','trad_chinese','中文（繁體）',1,0,0,0,0),(10,'am','amharic','አማርኛ',1,1,1,0,0),(11,'sw','swahili','Kiswahili',1,1,1,0,0);
 UNLOCK TABLES;
 
 
