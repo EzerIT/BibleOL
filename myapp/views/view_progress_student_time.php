@@ -163,8 +163,8 @@
       <caption><?= sprintf($this->lang->line('time_per_exercise_caption'),htmlspecialchars($user_full_name)) ?></caption>
       <?php foreach ($totaltemp as $name => $value): ?>
         <tr>
-          <td><?= htmlspecialchars($name) ?></td>
-          <td><?= sprintf("%d:%02d:%02d",floor($value),($value*60)%60,($value*3600)%60) ?></td>
+            <td><?= htmlspecialchars($name) ?></td>
+            <td><?= sprintf("%d:%02d:%02d",floor($value),floor($value*60)%60,floor($value*3600)%60) ?></td>
         </tr>
       <?php endforeach; ?>
     </table>
