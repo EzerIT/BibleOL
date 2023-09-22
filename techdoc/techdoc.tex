@@ -264,7 +264,7 @@ pdftitle={Bible Online Learner: Technical Documentation}
 %%% Front matter %%%
 \title{Bible Online Learner:\\Technical Documentation}
 \author{Claus Tøndering}
-\date{26 January 2023}
+\date{22 September 2023}
 
 \makeindex
 
@@ -455,8 +455,8 @@ used in quiz template files.
 \section{PLOTLearner\index{PLOTLearner}: A EuroPLOT Product (2011-2013)}
 
 In 2011 3ET became part of an EU project about \emph{Persuasive Learning Objects and Technologies},
-PLOT. The project became known as EuroPLOT\index{EuroPLOT},\footnote{\url{http://www.eplot.eu}.} and
-3ET changed its name to \emph{PLOTLearner.}
+PLOT. The project became known as EuroPLOT\index{EuroPLOT}, and 3ET changed its name to
+\emph{PLOTLearner.}
 
 Since PLOTLearner was part of an EU project the source code was made open under an MIT
 License.\footnote{\url{https://opensource.org/licenses/MIT}.} PLOTLearner was the last Java-based
@@ -498,59 +498,66 @@ following instructions are aimed at people with a computer running the Linux ope
 The following software must be installed on your server:
 
 \begin{itemize}
-\item Apache\index{Apache} (web server\index{web server}). I use version 2.4.18.
-\item MySQL\index{MySQL} (database system). I use version 5.7.33.
-\item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.11.0.
-\item PHP\index{PHP}. I use version 7.1.
-\item git\index{Git}. I use version 2.7.4.
+\item Apache\index{Apache} (web server\index{web server}). I use version 2.4.52.
+\item MySQL\index{MySQL} (database system). I use version 8.0.34.
+\item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.37.2.
+\item PHP\index{PHP}. I use version 8.1.
+\item git\index{Git}. I use version 2.34.1.
 \end{itemize}
 
-All of this can be installed on an Ubuntu Linux system using the usual \emph{apt-get} installation
+All of this can be installed on an Ubuntu Linux system using the usual \emph{apt} installation
 program. I have not done a thorough investigation into the minimum required versions of these
 software packages; you should not see the versions mentioned above as minimum requirements.
 
+On an Ubuntu system, at least the following software packages should be installed:
 
+\begin{center}
+\begin{tabu}{l@{\hspace{1cm}}l@{\hspace{1cm}}l}
+apache2      & php-curl & php-mbstring \\ 
+mysql-client & php-dev  & php-mysql    \\ 
+mysql-server & php-intl & php-sqlite3  \\ 
+php          & php-json & git          \\ 
+\end{tabu}
+\end{center}
+
+Additionally, the server must be able to handle outgoing mail. Bible OL will send mail to users, and
+there must be a way for the server to handle this. There are several ways to configure this, and it
+probably requires information from a mail service provider. The details are therefore beyond the
+scope of this document.
 
 \subsection{Step 2. Install Emdros\index{Emdros}}\label{sec-install-emdros}
 
 You must install the Emdros database system. This is probably the most complex part of
 the installation process since Emdros is not a standard component in any operating system.
 
-Emdros version 3.8.0 can be downloaded from \url{https://emdros.org/download.html}.
+Emdros version 3.8.0 can be downloaded from \url{https://emdros.org/download.html}. After
+downloading a tar file from this location, unpack it and make a copy of the \texttt{INSTALL} file.
+Unfortunately, the \texttt{INSTALL} file is overwritten during the build process, so you will need a
+copy of it.
 
-Follow the instructions in the \texttt{INSTALL} file that comes with Emdros to compile and install it on your
-computer. You will need a C++\index{C++} compiler and several other software tools -- check the
-Emdros documentation.
-
-When you compile Emdros, be sure to include support for PHP~7 or PHP~8\index{PHP}, depending on what
-version of PHP you are running.
-
-One way to compile and install Emdros on an Ubuntu Linux system is to create a \texttt{.deb}
-installation package. This process will automatically include the proper PHP support. See the Emdros
-\texttt{INSTALL} file for details.
-
-When you have compiled and installed Emdros, you need to enable access to it in PHP. The correct way
-to do this depends on your Apache\index{Apache} and PHP installation. The Emdros installation
-process should have placed a file called
-\texttt{EmdrosPHP7.ini} or \texttt{EmdrosPHP8.ini} in the directory
-\texttt{/etc/php/*/mods-available}. In order to enable Emdros, you will need to run this command
-(replacing 7.1 and PHP7 with the appropriate PHP version):
+There are several ways to build Emdros. The simplest for an Ubuntu system is to follow the
+instructions under the heading ``Building a .deb from an Emdros tarball'' in the \texttt{INSTALL}
+file. Briefly, the steps involved are:
 
 \begin{lstlisting}[language=bash]
-  sudo phpenmod -v 7.1 EmdrosPHP7
-  sudo systemctl restart apache2
+tar -xvf emdros-3.8.0.tar.gz
+sudo apt install -y g++ make binutils zlib1g zlib1g-dev
+sudo apt install -y build-essential fakeroot debhelper pkg-config python3
+cd emdros-3.8.0
+dpkg-buildpackage -rfakeroot -d -us -uc
+cd ..
+sudo dpkg -i emdros_3.8.0_amd64.deb
+sudo phpenmod EmdrosPHP8
+sudo systemctl reload apache2
 \end{lstlisting}
 
+The ``dpkg-buildpackage'' command takes about 15 minutes on my computer.
+
+The ``phpenmod'' command enables PHP access to Emdros.
 
 If you cannot or do not want to enhance PHP with Emdros support, you can configure Bible OL to use
 the \emph{mql}\index{MQL} command line tool instead, but this is not recommended. More information
 about that is given in Section \ref{sec-mql-extern}.
-
-If you already have Emdros installed on a development system, and if your runtime system uses the
-same operating system as your development system, you can simply copy the Emdros files to your
-runtime system. The files to copy will be typically found in \texttt{/usr/local/bin} and
-\texttt{/usr/local/lib/emdros}. (I have never actually done this, and I suspect that you may need to
-run \emph{ldconfig}\index{ldconfig} after copying the files to your runtime system.)
 
 
 \subsection{Step 3. Download Bible OL}\label{sec-download-bol}\index{download Bible OL}
@@ -565,7 +572,7 @@ git clone --recursive https://github.com/EzerIT/BibleOL
 This will fetch all the Bible OL software, including a couple of submodules needed by Bible OL. The
 \emph{git}\index{Git} command will create a directory called \texttt{BibleOL} under the current directory.
 
-\emph{Note:} If you have forked\index{fork GitHub} Bible OL on GitHub you should replace the URL in the ``git clone''
+\emph{Note:} If you have forked\index{fork GitHub} Bible OL on GitHub you should replace the URL in the ``git''
 command above with a URL that points to your repository on GitHub. (See section
 \ref{sec-fork-github} for more information.)
 
@@ -681,9 +688,10 @@ following line in the copy:
 $config['base_url'] = 'https://example.com';%\index{base URL}%
 \end{lstlisting}
 
-Replace `https://example.com' with the top URL of the web site for your Bible OL installation. NOTE:
-It is highly recommended that your installation runs HTTPS. If it doesn't, you should change
-\texttt{\$config['cookie\_secure']} to \texttt{false}; but then some parts of the system may not work reliably.
+Replace `https://example.com' with the top URL of the website for your Bible OL installation. NOTE:
+It is highly recommended that your installation runs HTTPS\index{HTTPS}. If it doesn't, you should
+change \texttt{\$config['cookie\_secure']} to \texttt{false}; but then some parts of the system may
+not work reliably.
 
 
 \subsection{Step 6. Initialize MySQL\index{MySQL}}
@@ -729,12 +737,57 @@ The first time this user logs in to Bible OL he or she will be asked to accept t
 
 \subsection{Step 8. Apache Configuration}\index{Apache!Configuration}
 
+\subsubsection*{Substep 1}
+
 Set up the Apache web server to access Bible OL. Make sure that Apache is configured to allow
 \texttt{.htaccess}\index{htaccess@.htaccess} files. This is controlled by the Apache
 \emph{AllowOverride}\index{AllowOverride, Apache directive} directive.
 
-Copy the file \texttt{.htaccess-dist} to \texttt{.htaccess} and modify the following line in the
-copy:
+Briefly, setting up a website involves creating a file named, for example, ``bibleol.conf'' in
+\texttt{/etc/apache2/sites-available} with this contents:
+
+\begin{lstlisting}
+<VirtualHost *:80>
+    ServerName %\textrm{\emph{website name}}%
+    DocumentRoot %\textrm{\emph{installation directory}}%
+    ErrorLog ${APACHE_LOG_DIR}/bibleol-error.log
+    CustomLog ${APACHE_LOG_DIR}/bible-access.log combined
+ 
+    <Directory %\textrm{\emph{installation directory}}%>
+        AllowOverride All
+    </Directory>
+ 
+    <Directorymatch "%\textrm{\^{}}%/.*/\.git/">
+        Order deny,allow
+        Deny from all
+    </Directorymatch>
+</VirtualHost>
+\end{lstlisting}
+
+Execute the commands
+
+\begin{lstlisting}
+  a2ensite bibleol
+  systemctl reload apache2
+\end{lstlisting}
+
+This will enable HTTP\index{HTTP} access to the website.
+
+\subsubsection*{Substep 2}
+
+Enable the ``rewrite'' and (if you are using HTTPS\index{HTTPS}) the ``ssl'' module in Apache. This can be done
+using these commands:
+
+\begin{lstlisting}
+  a2enmod ssl rewrite
+  systemctl restart apache2
+\end{lstlisting}
+
+
+\subsubsection*{Substep 3}
+
+In Bible OL installation directory, copy the file \texttt{.htaccess-dist} to \texttt{.htaccess} and
+modify the following line in the copy:
 
 \begin{lstlisting}
 RewriteBase /%\index{RewriteBase, Apache directive}%
@@ -750,6 +803,20 @@ RewriteBase /alpha/beta%\index{RewriteBase, Apache directive}%
 If you have a dedicated hostname for Bible OL (for example, \texttt{https://example.com}), you should
 leave \emph{RewriteBase} as it is: a single slash.
 
+\subsubsection*{Substep 4}
+
+Enable HTTPS\index{HTTPS} access. Although this is not a requirement, it is highly recommended.
+
+There are various ways to do this. One possibility is to use the ``certbot''\index{certbot} program
+from \url{https://certbot.eff.org}. The following commands can be used:
+
+\begin{lstlisting}[language=bash]
+sudo apt install snapd
+sudo snap install --classic certbot
+sudo certbot --apache
+\end{lstlisting}
+
+
 \subsection{Step 9. Set Up Quiz Template Directory}
 
 Create a directory called \texttt{quizzes} in the installation directory. Quiz template files will
@@ -760,6 +827,28 @@ Make sure that the permissions on the \texttt{quizzes} directory and its content
 the web server to modify the files.
 
 \subsection{Step 10. Additional PHP Configuration}\index{PHP!Configuration}
+
+This step involves making changes to the PHP configuration file. That file is found at
+\texttt{/etc/php/8.1/apache2/php.ini} (where 8.1 should be replaced by your PHP version number).
+
+After making changes to the configuration file, reload the Apache configuration; for example, thus:
+
+\begin{lstlisting}[language=bash]
+sudo systemctl reload apache2
+\end{lstlisting}
+
+
+\subsubsection*{Substep 1}
+
+Enable upload of files of at least 10 MB: In the PHP configuration file, ensure that the
+configuration variables have at least these values:
+
+\begin{lstlisting}
+post_max_size = 10M
+upload_max_filesize = 10M
+\end{lstlisting}
+
+\subsubsection*{Substep 2}
 
 Unfortunately, the default PHP configuration on some Linux distributions has problems with login
 session timeouts. This affects the system session folder\index{PHP!system session folder} and the session garbage
@@ -784,21 +873,39 @@ drwx-wx-wt 2 www-data www-data 32768 jul  1 11:02 /var/lib/php/sessions
 
 
 The garbage collection probability is controlled by the configuration variables
-\emph{session.gc\_probability} and \emph{session.gc\_divisor}. As superuser, you must edit the PHP
-configuration file \texttt{/etc/php/7.2/apache2/php.ini} (where 7.2 should be replaced by your PHP
-version number). In that file you must ensure that the configuration variables have these values:
+\emph{session.gc\_probability} and \emph{session.gc\_divisor} in the PHP configuration file. You
+must ensure that the configuration variables have these values:
 
 \begin{lstlisting}
 session.gc_probability = 1
 session.gc_divisor = 100
 \end{lstlisting}
 
-After making these changes, reload the Apache configuration; for example, thus:
+\subsection{Step 11. Cron Jobs}\index{cron}
 
-\begin{lstlisting}[language=bash]
-sudo service apache2 reload
+You must set up the following cron jobs as superuser:
+
+1) A command to expire users should run daily:
+
+\begin{lstlisting}
+cd %\textrm{\emph{installation directory}}%; php index.php users expire_users
 \end{lstlisting}
 
+For details see Section \ref{sec-account-expiry}.
+
+\vspace{2mm}
+2) If your system is interfacing to the resources website\index{resources website|hyperit} (see
+Section \ref{sec-resources-web}) the following command should run once an hour:
+
+\begin{lstlisting}
+cd %\textrm{\emph{installation directory}}%; php index.php pic2db > /dev/null
+\end{lstlisting}
+
+And, optionally, the following command should run once a week:
+
+\begin{lstlisting}
+cd %\textrm{\emph{installation directory}}%; echo Checking URLs; php index.php urls check_urls; echo Check finished
+\end{lstlisting}
 
 
 %%%%%%%%%%%%%%%%%%%% Bible OL Development System Setup %%%%%%%%%%%%%%%%%%%%
@@ -828,23 +935,19 @@ instructions about how to do it here.
 The following should be installed:
 
 \begin{itemize}
-\item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.31.1.
-\item PHP\index{PHP}. I use version 7.4.\footnote{The current main installation on
-    \texttt{https://bibleol.3bmoodle.dk} uses PHP version 7.1, so it is probably a good
-    idea to avoid using PHP features added since that version.}
-\item nodejs\index{nodejs} (JavaScript runtime, used for compiling TypeScript and Less). I use version
-  10.19.0.
-\item npm\index{npm} (package manager for nodejs). I use version 6.14.4.
-  This package may not strictly be required, but it is useful for installing nodejs modules.
-\item git\index{Git}. I use version 2.25.1.
+\item SQLite3\index{SQLite3} (database system used by Emdros). I use version 3.37.2.
+\item PHP\index{PHP}. The current main installation on \texttt{https://learner.bible} uses PHP
+  version 8.1, so it is probably a good idea to avoid using PHP features added since that version.
+\item git\index{Git}. I use version 2.34.1.
+\item The GNU \emph{make}\index{make} program. I use version 4.3.
 \end{itemize}
 
-All of this can be installed on an Ubuntu system using the usual \emph{apt-get} installation
+All of this can be installed on an Ubuntu system using the usual \emph{apt} installation
 program. I have not done a thorough investigation into the minimum required versions of these
 software packages; you should not see the versions mentioned above as minimum requirements.
 
 You will also need to install the Emdros database system, a Less compiler, and a TypeScript
-compiler. This is detailed in Sections \ref{sec-install-start}-\ref{sec-install-end}.
+compiler. This is detailed in the following subsections.
 
 \subsection{Forking\index{fork GitHub} Bible OL on GitHub\index{GitHub}}\label{sec-fork-github}
 
@@ -897,64 +1000,40 @@ zocial           \index{zocial}          & EzerIT/css-social-buttons  & samcolli
 jstree           \index{jstree}          & EzerIT/jstree              & vakata/jstree \\
 \end{my-tabu}
 
-Previous versions of Bible OL also used submodules called CodeIgniter, bootstrap, ckeditor, and
+(Previous versions of Bible OL also used submodules called CodeIgniter, bootstrap, ckeditor, and
 virtualkeyboard. They are no longer submodules but an integrated part of the Bible OL software tree;
 they are located in the directories \texttt{CodeIgniter\_Local}, \texttt{bootstrap\_local},
 \texttt{ckeditor}, and \texttt{VirtualKeyboard.full.3.7.2},
-respectively.
+respectively.)
 
 \subsection{Installing Emdros\index{Emdros!installation}}\label{sec-install-start}
  
 In order to install Emdros, you should follow the instructions given in in Section
 \ref{sec-install-emdros}.
  
- 
-\subsection{Installing Lessc\index{lessc!installation}}\label{sec-installing-lessc}
- 
-\emph{Lessc}\index{lessc} is the Less\index{Less} compiler. It runs under \emph{nodejs}\index{nodejs}, which is
-a stand-alone JavaScript\index{JavaScript} runtime system.
 
-For information about how to use the Less compiler, see \url{https://lesscss.org}.
+\subsection{Installing Lessc\index{lessc!installation} and Tsc\index{tsc!installation}\index{TypeScript!compiler|see {tsc}}}\label{sec-installing-lessc-tsc}
 
-The \emph{lessc} command can be installed using this shell command:
- 
+\emph{Lessc}\index{lessc} is the Less\index{Less} compiler, \emph{tsc}\index{tsc} is the
+TypeScript\index{TypeScript} compiler. Both of these run under \emph{nodejs},\index{nodejs} which is a
+stand-alone JavaScript\index{JavaScript} runtime system.
+
+For information about how to use these two programs, see \url{https://lesscss.org} and
+\url{https://www.typescriptlang.org}, respectively.
+
+\emph{Nodejs} comes with its own software package manager, \emph{npm.} Unfortunately, \emph{npm} and
+Ubuntu's package manager, \emph{apt,} don't always play well together. On an Ubuntu system, I will
+therefore recommend using the following commands to install the software:
+
 \begin{lstlisting}[language=bash]
-sudo npm install -g less
-\end{lstlisting}
- 
-The ``-g'' option means the software is installed globally and can be used by all users of the
-computer. Alternatively, the ``-g'' option and the ``sudo'' can be omitted, which will install
-\emph{lessc} only for the local user; but in that case the \emph{lessc} command must be executed using
-the pathname \mbox{\emph{node\_modules/.bin/lessc}} (this pathname is relative to the installation directory).
- 
-I use version 3.11.3 of \emph{lessc}.
-
-\subsection{Installing Tsc\index{tsc!installation}\index{TypeScript!compiler|see {tsc}}}\label{sec-installing-tsc}\label{sec-install-end}
- 
-\emph{Tsc}\index{tsc} is the TypeScript\index{TypeScript} compiler. It
-runs under \emph{nodejs},\index{nodejs} which is a stand-alone JavaScript\index{JavaScript} runtime
-system. For information about how to use the TypeScript compiler, see
-\url{https://www.typescriptlang.org}.
-
-The \emph{tsc} command can be installed using these shell commands:
- 
-\begin{lstlisting}[language=bash]
-sudo npm install -g typescript
-npm install @types/bootstrap@4.5.0 @types/jquery @types/jqueryui
+  sudo apt install nodejs npm node-lessc node-typescript
+  npm install @types/bootstrap@4.5.0 @types/jquery @types/jqueryui
 \end{lstlisting}
 
-The ``-g'' option means the software is installed globally and can be used by all users of the
-computer. Alternatively, the ``-g'' option and the ``sudo'' can be omitted, which will install
-typescript only for the local user; but in that case the \emph{tsc} command must be executed using
-the pathname \mbox{\emph{node\_modules/.bin/tsc}} (this pathname is relative to the installation directory).
-
-Note that there is no ``sudo'' and no ``-g'' option on the second ``npm'' command.
-
-I use version 3.9.6 of \emph{tsc}.
-
-Note: If you are building an older version of Bible OL (that is, on in which the file
-\mbox{\emph{ts/jquery/jquery.d.ts}} exists), you must not install the modules \emph{@types/bootstrap,
-  @types/jquery,} and \emph{@types/jqueryui} mentioned above.
+An alternative to installing \emph{node-lessc} and \emph{node-typescript} in this manner would be to
+use \emph{npm} to install them.\footnote{You can use the commands ``sudo npm install -g less'' and
+  ``sudo npm install -g typescript''.} This may give you a newer version of \emph{lessc} and
+\emph{tsc,} but they may be incompatible with the version of \emph{nodejs} on your system.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1353,7 +1432,7 @@ License: A choice between MIT and GPL.\\
 myapp & The server code. Chapter \ref{chap-server-code} gives more information.
 
 License: MIT, except for the file
-\texttt{myapp/\allowbreak{}controllers/\allowbreak{}ctrl\_upload.php}, which contains code taken from
+\texttt{myapp/\allowbreak{}controllers/\allowbreak{}Ctrl\_upload.php}, which contains code taken from
 \texttt{valums-\allowbreak{}file-\allowbreak{}uploader-\allowbreak{}b3b20b1} mentioned below.\\
 
 quizzes & Quiz templates\index{quiz template} available for the user. This directory
@@ -1852,7 +1931,8 @@ will write the data in ugly format to standard output.
 The directory \texttt{db} contains JSON files in both the ugly and the pretty format. For example,
 the file \texttt{ETCBC4.db.json} is the ugly version of \texttt{ETCBC4.db.pretty.json}. The
 developer should only modify the \texttt{.pretty.json} files and then use the
-\emph{Makefile} in the top source directory, which will generate the corresponding ugly JSON files.
+\emph{make}\index{make} program and the \emph{Makefile} in the top source directory, which will
+generate the corresponding ugly JSON files.
 
 
 
@@ -1949,8 +2029,8 @@ The Database Specification File is a JSON file containing the following key/valu
   Note that in several locations, code in Bible OL is hard-coded to rely on the book/chapter/verse
   structure used in the Bible.\\
 
-  picDb & The URL of the resource website\index{resource website} (see Section
-  \ref{sec-resource-web}). This value may be \emph{null.}\\
+  picDb & The URL of the resources website\index{resources website} (see Section
+  \ref{sec-resources-web}). This value may be \emph{null.}\\
 
   sentencegrammar & An array containing information about the grammar items available to the user.
   This is detailed in Section \ref{sentencegrammar}.\\
@@ -2604,7 +2684,7 @@ Its structure is described in TypeScript as the \emph{TypeInfo} interface%
 in the file \texttt{ts/configuration.ts}.
 
 The Database Type Information file is a JSON file. Its contents can be automatically generated from
-the Emdros database itself. The PHP script \texttt{myapp/controllers/ctrl\_maketypeinfo.php}
+the Emdros database itself. The PHP script \texttt{myapp/controllers/Ctrl\_maketypeinfo.php}
 contains code to do that. Running the command
 
 \begin{lstlisting}
@@ -3255,12 +3335,11 @@ as with this word:
 %%%%%%%%%%%%%%%%%%%% Multiple-Choice Questions %%%%%%%%%%%%%%%%%%%%
 \chapter{Hints}\label{chap-hints}\index{hints}
 
-\textbf{Read this chapter if you need to understand or modify the way Bible OL hinting for some
-  Hebrew verbs.}
-\plainbreak{3}
+\textbf{Read this chapter if you need to understand or modify the way Bible OL provides hints for
+  some words.} \plainbreak{3}
 
 
-In some cases, a Hebrew verb form may have several interpretations depending on the context. For
+In some cases, a Hebrew or Greek word form may have several interpretations depending on the context. For
 example, the word \heb{תֵרָאֶה} (\bibleref{Genesis}{1}{9}) can be either 2nd person, singular,
 masculine or 3rd person, singular, feminine. A student looking merely at the word form, will not be
 able to determine the correct interpretation. In the context of \bibleref{Genesis}{1}{9} the word is
@@ -3272,14 +3351,15 @@ displayed thus in an exercise:
   \includegraphics[width=0.6\textwidth]{hint.png}
 \end{center}
 
-A separate ``Hints Database''\index{Hints Database|hyperit} exists with the information necessary
-for this to work.
+A separate ``Hints Database''\index{Hints Database|hyperit} exists for Hebrew and Greek with the
+information necessary for this to work.
 
-The Hints Database is an SQLite3\index{SQLite3} database containing all possible values for the
-relevant feature. For a detailed description of the Hints Database see Appendix \ref{app-hintsdb}.
+The Hints Databases are SQLite3\index{SQLite3} databases containing all possible values for the
+relevant feature. For a detailed description of the Hints Database see Appendixes
+\ref{app-hintsdb-heb} and \ref{app-hintsdb-gr}
 
 The \emph{hint} feature is implemented as a pseudofeature (see Section \ref{sec-pseudofeature}).
-Hints are only available for verbs, and only in situations where the verb form is ambiguous.
+Hints are only available for some word classes, and only in situations where the word form is ambiguous.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3315,8 +3395,8 @@ The \emph{dsfname} in the URLs is the primary name of the Database Specification
 server will access the Database Specification File \texttt{ETCBC4-translit.db.json}.
 
 So, for example, to retrieve \bibleref{Genesis}{1}{2-5} from ETCBC4-translit on the
-server with hostname \texttt{bibleol.3bmoodle.dk}, you can use this URL:
-\url{https://bibleol.3bmoodle.dk/text/show_text/ETCBC4-translit/Genesis/1/2/5}.
+server with hostname \texttt{learner.bible}, you can use this URL:
+\url{https://learner.bible/text/show_text/ETCBC4-translit/Genesis/1/2/5}.
 
 The server will always expand the requested range of verses to contain a complete set of sentences;
 so a request for \bibleref{Genesis}{1}{16-17} will automatically be expanded to include verse 18,
@@ -3352,7 +3432,7 @@ headers, HTML code to lay out the menu, and these JavaScript variables:
 
   site\_url & The base part of the URL of the website.
 
-  (For example, \texttt{https://bibleol.3bmoodle.dk/}.)\\
+  (For example, \texttt{https://learner.bible/}.)\\
 
   dictionaries\hmmindex{dictionaries JavaScript variable@\string\emph{dictionaries} JavaScript variable} &
   The text to display, including grammar information. This is a JavaScript object in
@@ -3398,9 +3478,9 @@ the exercise.\footnote{If \texttt{count} is omitted or if the number is illegal,
   be asked.}
 
 So, for example, to run an exercise consisting of ten questions from the quiz template file
-\texttt{Nestle~1904/demo/case.3et} on the server with hostname \texttt{bibleol.3bmoodle.dk}, you can
+\texttt{Nestle~1904/demo/case.3et} on the server with hostname \texttt{learner.bible}, you can
 use this URL:
-\url{https://bibleol.3bmoodle.dk/text/show_quiz?quiz=Nestle\%201904/demo/case.3et&count=10}. This
+\url{https://learner.bible/text/show_quiz?quiz=Nestle\%201904/demo/case.3et&count=10}. This
 will use the pre-defined set of Bible passages stored in the quiz template file.
 
 If the user chooses the second variant of the URL, the server will display a tree of books of the
@@ -3808,9 +3888,9 @@ the previous word; \emph{sameAsPrev[2]} is \emph{true} if this word belongs to t
 previous word. For the first word in a collection, all three Booleans are
 \emph{false.}\\
 
-pics & An array of integers identifying pictures on the resource website\index{resource website} (see Section
-\ref{sec-resource-web}) that are relevant for this word. The first three values in the array are the book
-number, chapter number, and verse number. The remaining elements are IDs of pictures on the resource
+pics & An array of integers identifying pictures on the resources website\index{resources website} (see Section
+\ref{sec-resources-web}) that are relevant for this word. The first three values in the array are the book
+number, chapter number, and verse number. The remaining elements are IDs of pictures on the resources
 website.\\
 
 urls & An array of references to URLs that are relevant for the word. Each entry in the array is
@@ -3818,7 +3898,7 @@ itself an array with two elements: the URL and a string identifying the icon to 
 for example an element in \emph{url} has the value [~``https://example.com/here.html'',~``v''~],
 Bible OL will show a hyperlink to \texttt{https://example.com/here.html} in the form of a V icon.
 For more information see Section
-\ref{sec-resource-web}.\\
+\ref{sec-resources-web}.\\
 \end{my-longtabu}
 
 In addition to the fields mentioned above, a \emph{MultipleMonadObject} has this member:
@@ -4086,7 +4166,7 @@ CodeIgniter can do for the programmer.
 
 When a user accesses a URL such as, for example, \texttt{https://website/aaaaa/bbb}, this will cause
 CodeIgniter to call the PHP function \emph{bbb} in the class \emph{Ctrl\_aaaaa}, which is located in
-the file \emph{ctrl\_aaaaa.php}.
+the file \emph{Ctrl\_aaaaa.php}.
 
 It is also possible to access these functions from the shell command line on the server. The shell command
 
@@ -4130,7 +4210,7 @@ $this->mod_users->get_user_by_id(8);
 \end{lstlisting}
 
 \noindent
-the model class \emph{Mod\_users} is loaded from the file \emph{mod\_users.php} and the function
+the model class \emph{Mod\_users} is loaded from the file \emph{Mod\_users.php} and the function
 \emph{get\_\-user\_\-by\_\-id(8)} is called in that class. The \emph{Mod\_users} class handles the data
 exchange with the underlying user database\index{user database}.
 
@@ -4235,8 +4315,8 @@ migrate & Handles upgrading from one version of Bible OL to another.\\
 oauth2 & Handles login using a Google or Facebook\index{login!Google}\index{login!Facebook} account.\\
 
 pic2db & This controller can only be accessed from the command line, not through the web interface.
-It is used to retrieve information from the resource website\index{resource website} (see Section
-\ref{sec-resource-web}).\\
+It is used to retrieve information from the resources website\index{resources website} (see Section
+\ref{sec-resources-web}).\\
 
 privacy & Displays the privacy policy.\\
 
@@ -4263,20 +4343,20 @@ users & Manages users.\\
 The following models\index{model} exist:
 
 \begin{my-longtabu}{lX}{ \headii{Name}{Function} }
-mod\_askemdros & Retrieves Emdros-related data.\\
-mod\_classdir & Manages class permissions for an exercise directory.\\
-mod\_classes & Manages classes (that is, groups of users).\\
-mod\_config & Manages users' font\index{font} preferences.\\
-mod\_exams & Manages exams\index{exam}.\\
-mod\_grades & Handles grading of exams.\\
-mod\_intro\_text & Generates the text on the front page.\\
-mod\_localize & Generates localization information for JavaScript code (see Section \ref{sec-localize-javascript}).\\
-mod\_quizpath & Exercise directory operations.\\
-mod\_statistics & Manages user statistics.\index{statistics}\\
-mod\_translate & Manages translating Bible OL into different languages.\\
-mod\_urls & Manages hyperlinks associated with lexemes.\\
-mod\_userclass & Manages a user's relationship to a class.\\
-mod\_users & Manages users.\\
+Mod\_askemdros & Retrieves Emdros-related data.\\
+Mod\_classdir & Manages class permissions for an exercise directory.\\
+Mod\_classes & Manages classes (that is, groups of users).\\
+Mod\_config & Manages users' font\index{font} preferences.\\
+Mod\_exams & Manages exams\index{exam}.\\
+Mod\_grades & Handles grading of exams.\\
+Mod\_intro\_text & Generates the text on the front page.\\
+Mod\_localize & Generates localization information for JavaScript code (see Section \ref{sec-localize-javascript}).\\
+Mod\_quizpath & Exercise directory operations.\\
+Mod\_statistics & Manages user statistics.\index{statistics}\\
+Mod\_translate & Manages translating Bible OL into different languages.\\
+Mod\_urls & Manages hyperlinks associated with lexemes.\\
+Mod\_userclass & Manages a user's relationship to a class.\\
+Mod\_users & Manages users.\\
 \end{my-longtabu}
 
 There is no reason to go through the various views\index{view} here. Their function is best learned
@@ -4321,8 +4401,8 @@ command.\\
 libraries/Mql/drivers/Mql\_native.php & Driver for executing MQL commands through an MQL
 library\index{MQL driver!native} in PHP.\\
 
-libraries/picdb.php & Class for retrieving picture references and URL references from the resource
-website\index{resource website} (see Section \ref{sec-resource-web}).\\
+libraries/picdb.php & Class for retrieving picture references and URL references from the resources
+website\index{resources website} (see Section \ref{sec-resources-web}).\\
 
 libraries/Quiz\_data.php & The \emph{Quiz\_data}%
 \hmmindex{Quiz PHP class@\string\emph{Quiz} PHP class}
@@ -4367,7 +4447,7 @@ $this->load->driver('mql',array('db' => $this->db_config->emdros_db,
                                 'driver' => $this->config->item('mql_driver')));
 \end{lstlisting}
 
-This is typically done in the \emph{setup} function of the \emph{mod\_askemdros} module. Here,
+This is typically done in the \emph{setup} function of the \emph{Mod\_askemdros} module. Here,
 \emph{\$this->db\_config\allowbreak{}->emdros\_db} is the name of the Emdros database.
 
 After this, MQL requests can be executed like in this example:
@@ -4450,7 +4530,7 @@ Google's description of how their OAuth implementation works can be found here:
 in a similar manner.
 
 The following is a brief description of the mechanism as it is set up on the Bible OL installation
-that runs at \url{https://bibleol.3bmoodle.dk}.
+that runs at \url{https://learner.bible}.
 
 \subsection*{Step 1. The Browser Sends Authentication Request to Google or Facebook}
 
@@ -4463,7 +4543,7 @@ to \texttt{https://accounts.google.com/o/oauth2/auth} with the following GET par
 response\_type & \texttt{'code'}\\
 client\_id     & Our Google client ID\index{Google!client ID}, configured in the file
                  \texttt{myapp/\allowbreak{}config/\allowbreak{}ol.php}\index{ol.php}.\\
-redirect\_uri  & \texttt{'https://bibleol.3bmoodle.dk/oauth2/google\_callback'}\\
+redirect\_uri  & \texttt{'https://learner.bible/oauth2/google\_callback'}\\
 scope          & \texttt{'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'}\\
 state          & A random value, stored in CodeIgniter's session mechanism.\\
 \end{my-tabu}
@@ -4477,7 +4557,7 @@ to \texttt{https://www.facebook.com/dialog/oauth} with the following GET paramet
 response\_type & \texttt{'code'}\\
 client\_id     & Our Facebook app ID\index{Facebook!app ID}, configured in the file
                  \texttt{myapp/\allowbreak{}config/\allowbreak{}ol.php}\index{ol.php}.\\
-redirect\_uri  & \texttt{'https://bibleol.3bmoodle.dk/oauth2/facebook\_callback'}\\
+redirect\_uri  & \texttt{'https://learner.bible/oauth2/facebook\_callback'}\\
 scope          & \texttt{'email'}\\
 state          & A random value, stored in CodeIgniter's session mechanism.\\
 \end{my-tabu}
@@ -4493,7 +4573,7 @@ above. The parameters for the new GET request depend on whether Google/Facebook 
 \subsection*{Step 3. Browser Sends Authentication Information to the Bible OL Server}
 
 As directed by the response from Google or Facebook, the browser sends an HTTP GET request to
-\texttt{https://bibleol.3bmoodle.dk/oauth2/*\_callback} with the following GET parameters:
+\texttt{https://learner.bible/oauth2/*\_callback} with the following GET parameters:
 
 \begin{my-tabu}{ll}{ \headii{Name}{Value} }
 error & Error information if access is denied. If access is approved, this parameter is not present.\\
@@ -4505,7 +4585,7 @@ code & An authentication code generated by Google/Facebook.\\
 \subsection*{Step 4. The Bible OL Server Requests an Access Token from Google/Facebook}
 
 In Bible OL, the request from the browser is handled by the function \emph{callback} in the
-\emph{Ctrl\_oauth2} controller (in the file \texttt{myapp/controllers/ctrl\_oauth2.php}). 
+\emph{Ctrl\_oauth2} controller (in the file \texttt{myapp/controllers/Ctrl\_oauth2.php}). 
 
 \subsubsection*{Google:}
 
@@ -4518,7 +4598,7 @@ code           & The authentication code received in the \emph{code} parameter i
 client\_id     & Our Google client ID\index{Google!client ID}, configured in the file
                  \texttt{myapp/config/ol.php}\index{ol.php}.\\
 client\_secret & Our Google client secret\index{Google!client secret}, configured in the file \texttt{myapp/config/ol.php}.\\
-redirect\_uri  & \texttt{'https://bibleol.3bmoodle.dk/oauth2/google\_callback'}\\
+redirect\_uri  & \texttt{'https://learner.bible/oauth2/google\_callback'}\\
 grant\_type    & \texttt{'authorization\_code'}\\
 \end{my-tabu}
 
@@ -4536,7 +4616,7 @@ code           & The authentication code received in the \emph{code} parameter i
 client\_id     & Our Facebook app ID\index{Facebook!app ID}, configured in the file
                  \texttt{myapp/config/ol.php}\index{ol.php}.\\
 client\_secret & Our Facebook app secret\index{Facebook!app secret}, configured in the file \texttt{myapp/config/ol.php}.\\
-redirect\_uri  & \texttt{'https://bibleol.3bmoodle.dk/oauth2/facebook\_callback'}\\
+redirect\_uri  & \texttt{'https://learner.bible/oauth2/facebook\_callback'}\\
 \end{my-tabu}
 
 In response to the HTTP GET request, Google replies with a JSON string containing an
@@ -4585,7 +4665,7 @@ concatenating the string ``fcb\_'' with the user \emph{id} received from Faceboo
 The Bible OL server now responds to the request sent by the browser in Step 3. The response consists
 of web page informing the user that they are now logged in to the system.
 
-\section{Account Expiry}
+\section{Account Expiry}\label{sec-account-expiry}
 
 A cron\index{cron job} job must be set up to run daily. The cron entry must execute this command:
 
@@ -4594,7 +4674,7 @@ php index.php users expire_users
 \end{lstlisting}
 
 This command calls the \emph{expire\_users} function in the \emph{Ctrl\_users} controller (in the
-file \texttt{myapp/\allowbreak{}controllers/\allowbreak{}ctrl\_users.php}). The function does four
+file \texttt{myapp/\allowbreak{}controllers/\allowbreak{}Ctrl\_users.php}). The function does four
 things:
 
 \begin{itemize}
@@ -4868,19 +4948,19 @@ ownerid    & Integer & The \emph{id} field from an entry in the \emph{user} tabl
 %%%%%%%%%%%%%%%%%%%% The bible_refs Table %%%%%%%%%%%%%%%%%%%%
 \section{The \emph{bible\_refs} Table}\label{sec-bible-refs}\index{bible\_refs table|hyperit}
 
-The \emph{bible\_refs} table contains links between Bible verses and pictures on the resource
-website\index{resource website} (see Section \ref{sec-resource-web}) that are relevant for the
+The \emph{bible\_refs} table contains links between Bible verses and pictures on the resources
+website\index{resources website} (see Section \ref{sec-resources-web}) that are relevant for the
 verse. The table contains these fields:
 
 \begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
 id         & Integer & Unique number identifying this entry.\\
 book       & Text & The name of the book. (This is the name used internally in the Emdros database.)\\
 booknumber & Integer & The number of the book. This is the same information held in the \emph{book}
-             field. The file \texttt{myapp/controllers/ctrl\_pic2db.php} contains an array that
+             field. The file \texttt{myapp/controllers/Ctrl\_pic2db.php} contains an array that
              translates between book name and book number.\\
 chapter    & Integer & The chapter.\\
 verse      & Integer & The verse.\\
-picture    & Integer & The number of a picture on the resource website.\\
+picture    & Integer & The number of a picture on the resources website.\\
 \end{my-longtabu}
 
 
@@ -4888,14 +4968,14 @@ picture    & Integer & The number of a picture on the resource website.\\
 \section{The \emph{bible\_urls} Table}\label{sec-bible-urls}\index{bible\_urls table}
 
 The \emph{bible\_urls} table contains links between Bible verses and URLs.\footnote{Currently, the
-  URLs are configured on the resource website\index{resource website} (see Section
-  \ref{sec-resource-web}), but they could come from other sources.} The table contains these fields:
+  URLs are configured on the resources website\index{resources website} (see Section
+  \ref{sec-resources-web}), but they could come from other sources.} The table contains these fields:
 
 \begin{my-longtabu}{>{\itshape}llX}{ \headiii{\textup{Column}}{Type}{Contents} }
 id         & Integer & Unique number identifying this entry.\\
 book       & Text & The name of the book. (This is the name used internally in the Emdros database.)\\
 booknumber & Integer & The number of the book. This is the same information held in the \emph{book}
-             field. The file \texttt{myapp/controllers/ctrl\_pic2db.php} contains an array that
+             field. The file \texttt{myapp/controllers/Ctrl\_pic2db.php} contains an array that
              translates between book name and book number.\\
 chapter    & Integer & The chapter.\\
 verse      & Integer & The verse.\\
@@ -5370,7 +5450,7 @@ Compare, for example, the CSS code in the left column below with the Less code i
 \lstset{frame=tb} % Restore value set above
 
 
-Section \ref{sec-installing-lessc} describes how to install the Less compiler
+Section \ref{sec-installing-lessc-tsc} describes how to install the Less compiler
 \emph{lessc}\index{lessc}. Details of the Less language can be found at \url{https://lesscss.org}.
 
 Although Less style files can be compiled when used in a browser, the Bible OL implementation
@@ -5410,7 +5490,7 @@ TypeScript is a superset of JavaScript that adds strong typing and proper classe
 The website \url{https://www.typescriptlang.org} contains a tutorial and the formal specification of
 the language.
 
-Section \ref{sec-installing-tsc} describes how to install the TypeScript compiler \emph{tsc}.\index{tsc}
+Section \ref{sec-installing-lessc-tsc} describes how to install the TypeScript compiler \emph{tsc}.\index{tsc}
 
 The Bible OL implementation compiles TypeScript files only once and stores the resulting JavaScript
 files. This is achieved through the Makefile\index{Makefile} in the top directory. The command ``make all'' (or
@@ -5702,7 +5782,7 @@ When editing a quiz template on Bible OL, a user can request the client code to 
 from SHEBANQ.
 
 The \emph{editquiz} client code sends a request to the \emph{import\_shebanq} function in the
-\emph{ctrl\_shebanq} controller. This in turn sends a request to
+\emph{Ctrl\_shebanq} controller. This in turn sends a request to
 \url{https://shebanq.ancient-data.org/hebrew/query.json?id=799} which returns a JSON representation
 of the MQL query.
 
@@ -6481,7 +6561,7 @@ if ($this->config->item('xxx_enabled')) {
 }
 \end{lstlisting}
 
-This ensures that URLs such as, for example, \texttt{'https://bibleol.3bmoodle.dk/xxx/XXX\_foobar} is
+This ensures that URLs such as, for example, \texttt{'https://learner.bible/xxx/XXX\_foobar} is
 sent to the controller at \texttt{myapp/third\_party/xxx/controllers/Ctrl\_XXX\_foobar}. Thus, all
 URLs directed at plug-in ``xxx'' should start with the string ``/xxx/'' after the hostname.
 
@@ -6503,20 +6583,20 @@ if ($this->config->item('xxx_enabled')) {
 \plainbreak{3}
 
 
-A few additional websites complement the function of Bible OL: The resource website and the SHEBANQ
+A few additional websites complement the function of Bible OL: The resources website and the SHEBANQ
 website.
 
 
 
-%%%%%%%%%%%%%%%%%%%% The Resource Website %%%%%%%%%%%%%%%%%%%%
-\section{The Resource Website}\label{sec-resource-web}\index{resource website|hyperit}
+%%%%%%%%%%%%%%%%%%%% The Resources Website %%%%%%%%%%%%%%%%%%%%
+\section{The Resources Website}\label{sec-resources-web}\index{resources website|hyperit}
 
-The resource web site is a collection of photos from the Middle East. Many of them relate to events
+The resources website is a collection of photos from the Middle East. Many of them relate to events
 and places described in the Bible. The photos have descriptive texts that contain Bible references.
-The URL of the resource website is \url{https://resources.3bmoodle.dk}.
+The URL of the resources website is \url{https://resources.learner.bible}.
 
-Bible OL can use information from the resource website to add picture links to Bible passages. If a
-photo in the resource website refers to, for example, \bibleref{Exodus}{3}{2}, and a user ticks the
+Bible OL can use information from the resources website to add picture links to Bible passages. If a
+photo in the resources website refers to, for example, \bibleref{Exodus}{3}{2}, and a user ticks the
 ``Show link icons'' checkbox when displaying Exodus chapter 3, a green ``P'' icon will appear in the
 text next to verse 2:
 
@@ -6527,29 +6607,30 @@ text next to verse 2:
 Clicking on the icon will cause the web browser to display the relevant photo. If there are more
 than one photo, the icon will be blue rather than green.
 
-Bible OL gathers information about the photos on the resource web site by executing the command
+Bible OL gathers information about the photos on the resources website by executing the command
 
 \begin{lstlisting}[language=bash,frame=,basicstyle={\ttfamily}]
 php index.php pic2db
 \end{lstlisting}
 
 \noindent
-in a cron\index{cron job} job. This command calls Bible OL's \emph{Ctrl\_pic2db} controller (in the file
-\texttt{myapp/\allowbreak{}controllers/\allowbreak{}ctrl\_pic2db.php}), which requests information from the resource database.
+in a cron\index{cron job} job. This command calls Bible OL's \emph{Ctrl\_pic2db} controller (in the
+file \texttt{myapp/\allowbreak{}controllers/\allowbreak{}Ctrl\_pic2db.php}), which requests
+information from the resources database.
 
-By accessing the URL \url{https://resources.3bmoodle.dk/jsonrefs.php}, the \emph{Ctrl\_pic2db}
+By accessing the URL \url{https://resources.learner.bible/jsonrefs.php}, the \emph{Ctrl\_pic2db}
 controller receives a JSON object from the resources website containing information about the photos
 and the Bible verses to which they refer. Bible OL stores this information in the
 \emph{bible\_refs}\index{bible\_refs table} table in the user database\index{user database} (see Section
 \ref{sec-bible-refs}).
 
-In addition to the pictures, the resource website may also provide URLs associated with various
-Bible verses. These URLs are configured in the resource website but are otherwise unrelated to the
+In addition to the pictures, the resources website may also provide URLs associated with various
+Bible verses. These URLs are configured in the resources website but are otherwise unrelated to the
 functioning of that website. The URLs are intended to identify videos, documents, or other resources
 that may relevant for studying a particular verse.
 
 Information about these URLs is also retrieved by the cron job above. By accessing the URL
-\url{https://resources.3bmoodle.dk/jsonurls.php}, the \emph{Ctrl\_pic2db} controller receives a JSON
+\url{https://resources.learner.bible/jsonurls.php}, the \emph{Ctrl\_pic2db} controller receives a JSON
 object from the resources website containing information about the URLs and the Bible verses to
 which they refer. Bible OL stores this information in the \emph{bible\_urls}%
 \index{bible\_urls table}
@@ -7249,7 +7330,7 @@ is available at \url{https://github.com/EzerIT/ETCBC4BibleOL}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Appendix: ETCBC4 Hints Database %%%%%%%%%%%%%%%%%%%%
-\chapter{ETCBC4 Hints Database}\label{app-hintsdb}\index{Hints Database}
+\chapter{ETCBC4 Hints Database}\label{app-hintsdb-heb}\index{Hints Database}
 
 The Hints Database (see Chapter \ref{chap-hints}) for the ETCBC4 Emdros database has the name
 \texttt{ETCBC4\_hints.db}. Its structure is defined by this SQL statement:
@@ -7260,16 +7341,16 @@ CREATE TABLE hints (self integer primary key, hint text);
 
 The \emph{self} column contains a monad\index{monad} (see Chapter \ref{chap-emdros-use}) which
 identifies the ambiguous word within the ETCBC4 database. The \emph{hint} column contains the hint
-string in the form \emph{``feature=value''} or \emph{``feature=value,\thinspace{}feature=value'',} where
+string in the form of combinations of \emph{``feature=value''} or \emph{``feature≠value'',} where
 \emph{feature} and \emph{value} must be localized before they are displayed to the user.
 
 
 %%%%%%%%%%%%%%%%%%%% The Origin of the ETCBC4 Hints Database %%%%%%%%%%%%%%%%%%%%
 \section{The Origin of the ETCBC4 Hints Database}\index{Hints Database}
 
-The Hints Database is generated by the program \emph{emdros\_updater}\index{emdros\_updater} which
-is available at \url{https://github.com/EzerIT/ETCBC4BibleOL}. The data was collected by Dr Oliver
-Glanz\index{Glanz, Oliver} of Andrews University.
+The Hints Database is generated by the programs available at
+\url{https://github.com/EzerIT/ETCBC4BibleOL}. The data was collected by Dr Oliver Glanz\index{Glanz,
+  Oliver} of Andrews University.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -7562,6 +7643,31 @@ The text and the lexicon are also available from \url{https://github.com/biblica
 
 The Emdros database has been created based on these sources using my program
 \emph{nestle2mql,}\index{nestle2mql} which is currently not published or documented.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Appendix: Nestle1904 Hints Database %%%%%%%%%%%%%%%%%%%%
+\chapter{Nestle1904 Hints Database}\label{app-hintsdb-gr}\index{Hints Database}
+
+The Hints Database (see Chapter \ref{chap-hints}) for the Nestle1904 Emdros database has the name
+\texttt{nestle1904\_hints.db}. Its structure is defined by this SQL statement:
+
+\begin{lstlisting}[language=SQL]
+CREATE TABLE hints (self integer primary key, hint text);
+\end{lstlisting}
+
+The \emph{self} column contains a monad\index{monad} (see Chapter \ref{chap-emdros-use}) which
+identifies the ambiguous word within the Nestle1904 database. The \emph{hint} column contains the hint
+string in the form of combinations of \emph{``feature=value''} or \emph{``feature≠value'',} where
+\emph{feature} and \emph{value} must be localized before they are displayed to the user.
+
+
+%%%%%%%%%%%%%%%%%%%% The Origin of the Nestle1904 Hints Database %%%%%%%%%%%%%%%%%%%%
+\section{The Origin of the Nestle1904 Hints Database}\index{Hints Database}
+
+The Hints Database is generated by the programs available at
+\url{https://github.com/EzerIT/nestle1904}. The data was collected by Dr Oliver Glanz\index{Glanz,
+  Oliver} of Andrews University.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
