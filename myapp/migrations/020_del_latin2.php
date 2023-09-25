@@ -43,6 +43,11 @@ class Migration_Del_latin2 extends CI_Migration {
 		echo "Drop table {$dbprefix}lexicon_latin2\n";
 		$this->dbforge->drop_table("{$dbprefix}lexicon_latin2");
         $this->db->set_dbprefix($dbprefix);
+
+        echo "Delete files db/VC and db/VC.name\n";
+        unlink("db/VC");
+        unlink("db/VC.name");
+
     }
     
 	public function down()
