@@ -6,7 +6,7 @@
             "_objname": "Palavra",
             "lexeme_occurrences": "Ocorrências",
             "frequency_rank": "Classificação de Frequência",
-            "hint": "Hint",
+            "hint": "Diva",
             "person": "Pessoa",
             "voice": "Voz",
             "tense": "Tempo",
@@ -16,31 +16,34 @@
             "normalized": "Normalizado",
             "raw_normalized": "Normalizado (caixa baixa, sem acentos)",
             "number": "Número",
-            "possessor_number": "Número do possuidor",
+            "possessor_number": "Número do Possuidor",
             "suffix": "Extra",
             "surface": "Texto",
             "strongs": "Número da concordância de Strong",
             "strongs_unreliable": "Strong não é confiável?",
             "gender": "Gênero",
             "case": "Caso",
-            "psp": "Classe de palavra"
+            "psp": "Classe de Palavra",
+            "verb_type": "Tipo de Verbo",
+            "noun_stem": "Raiz do Substantivo",
+            "noun_declension": "Declinação do Substantivo"
         },
         "clause1": {
-            "_objname": "Clausula de nível 1",
+            "_objname": "Oração de Nível 1",
             "typ": "Função"
         },
         "clause1_abbrev": {
-            "_objname": "Cláusula1"
+            "_objname": "Oração1"
         },
         "clause2": {
-            "_objname": "Cláusula Nível 2",
+            "_objname": "Oração de Nível 2",
             "typ": "Função"
         },
         "clause2_abbrev": {
-            "_objname": "Cláusula2"
+            "_objname": "Oração2"
         },
         "sentence": {
-            "_objname": "Sentença"
+            "_objname": "Período"
         }
     },
     "emdrostype": {
@@ -49,13 +52,13 @@
             "true": "sim"
         },
         "tense_t": {
-            "pluperfect": "Pluperfeito",
+            "pluperfect": "Mais-que-perfeito",
             "imperfect": "Imperfeito",
             "second_future": "Segundo futuro",
             "present": "Presente",
             "aorist": "Aoristo",
             "second_aorist": "Segundo aoristo",
-            "second_pluperfect": "Segundo pluperfeito",
+            "second_pluperfect": "Segundo mais-que-perfeito",
             "future": "Futuro",
             "second_perfect": "Segundo perfeito",
             "NA": "N\/A",
@@ -68,8 +71,8 @@
             "negative": "Negativo",
             "NA": "N\/A",
             "superlative": "Superlativo",
-            "attic": "Attico",
-            "particle_attached": "Partícula anexada"
+            "attic": "Ático",
+            "particle_attached": "Partícula Anexada"
         },
         "mood_t": {
             "optative": "Optativo",
@@ -148,8 +151,8 @@
         },
         "clause_type_t_abbrev": {
             "ADV": "ADV",
-            "CL": "CL",
-            "IO": "IO",
+            "CL": "OR",
+            "IO": "OI",
             "O": "O",
             "O2": "O2",
             "P": "P",
@@ -158,15 +161,78 @@
             "VC": "VC"
         },
         "clause_type_t": {
-            "ADV": "Adverbial",
-            "CL": "Cláusula",
-            "IO": "Objeto Indireto",
-            "O": "Objeto",
-            "O2": "Segundo Objeto",
-            "P": "Predicado",
-            "S": "Sujeito",
-            "V": "Verbal",
-            "VC": "Cópula Verbal"
+            "ADV": "Subordinada Adverbial",
+            "CL": "Oração (Verbal)",
+            "IO": "Subordinada Substantiva Objetiva Indireta",
+            "O": "Subordinada Substantiva Objetiva Direta",
+            "O2": "Subordinada Substantiva Objetiva Segunda",
+            "P": "Subordinada Substantiva Predicativa",
+            "S": "Subordinada Substantiva Subjetiva",
+            "V": "Oração",
+            "VC": "Copulativa"
+        },
+        "verb_type_t": {
+            "NA": "#1 N\/A",
+            "alpha": "#2 raiz α",
+            "beta": "#3 raiz β",
+            "gamma": "#4 raiz γ",
+            "delta": "#5 raiz δ",
+            "epsilon": "#6 raiz ε",
+            "epsilon_upsilon": "#7 raiz ευ",
+            "zeta": "#8 raiz ζ",
+            "eta": "#9 raiz η",
+            "theta": "#10 raiz θ",
+            "iota": "#11 raiz ι",
+            "kappa": "#12 raiz κ",
+            "lambda": "#13 raiz λ",
+            "mu": "#14 raiz μ",
+            "mu_iota": "#15 verbo em μι",
+            "nu": "#16 raiz ν",
+            "omicron": "#17 raiz ο",
+            "pi": "#18 raiz π",
+            "rho": "#19 raiz ρ",
+            "sigma_kappa": "#20 raiz σκ",
+            "tau": "#21 raiz τ",
+            "upsilon": "#22 raiz υ",
+            "phi": "#23 raiz φ",
+            "khi": "#24 raiz χ",
+            "irregular": "#25 raiz Irregular"
+        },
+        "noun_stem_t": {
+            "NA": "#1 N\/A",
+            "alpha": "#2 raiz α",
+            "beta": "#3 raiz β",
+            "gamma": "#4 raiz γ",
+            "delta": "#5 raiz δ",
+            "epsilon_upsilon": "#6 raiz ευ",
+            "iota": "#7 raiz ι",
+            "kappa": "#8 raiz κ",
+            "kappa_tau": "#9 raiz κτ",
+            "nu": "#10 raiz ν",
+            "nu_tau": "#11 raiz ντ",
+            "omicron": "#12 raiz ο",
+            "omicron_upsilon": "#13 raiz ου",
+            "pi": "#14 raiz π",
+            "rho": "#15 raiz ρ",
+            "sigma": "#16 raiz ς",
+            "tau": "#17 raiz τ",
+            "upsilon": "#18 raiz υ",
+            "khi": "#19 raiz χ",
+            "omega": "#20 raiz ω",
+            "irregular": "#21 Irregular",
+            "indeclinable": "#22 Indeclinável"
+        },
+        "noun_declension_t": {
+            "NA": "#1 N\/A",
+            "first_eta": "#2 1a (-η)",
+            "first_alpha_breve": "#3 1a (-ᾰ)",
+            "first_alpha_macron": "#4 1a (-ᾱ)",
+            "first_alpha_macron_doric": "#5 1a (-ᾱ; Genitivo Dórico)",
+            "second_d": "#6 2a",
+            "second_attic": "#7 2a (Ática)",
+            "third_d": "#8 3a",
+            "irregular": "#9 Irregular",
+            "indeclinable": "#10 Indeclinável"
         }
     },
     "grammargroup": {

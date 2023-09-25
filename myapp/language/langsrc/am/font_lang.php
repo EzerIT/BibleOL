@@ -2,15 +2,15 @@
 
 $lang['alphabet_greek'] = "ግሪክ";
 $lang['alphabet_hebrew'] = "እብራይስጥ";
-$lang['alphabet_hebrew_translit'] = "  በሌላ ቋንቋ ፊደል የተጻፈ እብራይስጥ";
+$lang['alphabet_hebrew_translit'] = " በሌላ ቋንቋ ፊደል የተጻፈ እብራይስጥ";
 $lang['alphabet_latin'] = "ላቲን";
 $lang['bold'] = " ማድመቅ";
-$lang['configure_font'] = "የፊደል ቅርጽ  ምርጫዎችህን አቀናጅ";
+$lang['configure_font'] = "የፊደል ቅርጽ ምርጫዎችህን አቀናጅ";
 $lang['font_settings'] = "የፊደል ቅርጽ መጠን መገኛ";
 $lang['italic'] = "ሰያፍ ጽሁፍ";
 $lang['name'] = "ስም";
 $lang['sample'] = "ናሙና";
-$lang['scrolling'] = "(ምሉእ  ሰንጠረዥ ለማየት ወደ ቀኝ ወይም ወደ ግራ ያንቀሳቅሱ)";
+$lang['scrolling'] = "(ምሉእ ሰንጠረዥ ለማየት ወደ ቀኝ ወይም ወደ ግራ ያንቀሳቅሱ)";
 $lang['selected'] = " የተመረጠ";
 $lang['select_attributes'] = "የፊደል ቅርጽ ዓይነቶችን ምረጥ";
 $lang['select_font_family'] = "የፊደል ቅርጽ ዝርያ ምረጥ";

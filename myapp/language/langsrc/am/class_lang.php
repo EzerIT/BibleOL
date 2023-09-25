@@ -2,7 +2,7 @@
 
 $lang['add_class'] = "አዲስ ክፍል ይጀምሩ";
 $lang['assign_users'] = "ተጠቃሚ ይመድቡ";
-$lang['change_owner_class'] = "በባለቤት ይቀይሩ";
+$lang['change_owner_class'] = "ባለቤት ይቀይሩ";
 $lang['classes'] = "ክፍሎች";
 $lang['class_delete'] = "ሰርዝ";
 $lang['class_edit'] = "አርም";

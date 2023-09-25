@@ -84,13 +84,13 @@ $comment['invalid_link'] = "";
 $format['invalid_link'] = "";
 $use_textarea['invalid_link'] = false;
 
-$comment['latin_glosses'] = "";
-$format['latin_glosses'] = "";
-$use_textarea['latin_glosses'] = false;
-
 $comment['latin2_glosses'] = "";
 $format['latin2_glosses'] = "";
 $use_textarea['latin2_glosses'] = false;
+
+$comment['latin_glosses'] = "";
+$format['latin_glosses'] = "";
+$use_textarea['latin_glosses'] = false;
 
 $comment['lexeme'] = "";
 $format['lexeme'] = "";

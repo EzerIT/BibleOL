@@ -8,6 +8,10 @@ $comment['classes'] = "";
 $format['classes'] = "";
 $use_textarea['classes'] = false;
 
+$comment['detail'] = "";
+$format['detail'] = "";
+$use_textarea['detail'] = false;
+
 $comment['display_text'] = "";
 $format['display_text'] = "";
 $use_textarea['display_text'] = false;
@@ -32,6 +36,18 @@ $comment['font_preferences'] = "";
 $format['font_preferences'] = "";
 $use_textarea['font_preferences'] = false;
 
+$comment['grades_exams'] = "";
+$format['grades_exams'] = "";
+$use_textarea['grades_exams'] = false;
+
+$comment['grades_my_quizzes'] = "";
+$format['grades_my_quizzes'] = "";
+$use_textarea['grades_my_quizzes'] = false;
+
+$comment['grades_quizzes'] = "";
+$format['grades_quizzes'] = "";
+$use_textarea['grades_quizzes'] = false;
+
 $comment['help'] = "";
 $format['help'] = "";
 $use_textarea['help'] = false;
@@ -43,6 +59,10 @@ $use_textarea['help_pages'] = false;
 $comment['help_this_page'] = "";
 $format['help_this_page'] = "";
 $use_textarea['help_this_page'] = false;
+
+$comment['hide_detail'] = "";
+$format['hide_detail'] = "";
+$use_textarea['hide_detail'] = false;
 
 $comment['home'] = "";
 $format['home'] = "";
@@ -60,13 +80,13 @@ $comment['logout'] = "";
 $format['logout'] = "";
 $use_textarea['logout'] = false;
 
-$comment['manage_exercises'] = "";
-$format['manage_exercises'] = "";
-$use_textarea['manage_exercises'] = false;
-
 $comment['manage_exams'] = "";
 $format['manage_exams'] = "";
 $use_textarea['manage_exams'] = false;
+
+$comment['manage_exercises'] = "";
+$format['manage_exercises'] = "";
+$use_textarea['manage_exercises'] = false;
 
 $comment['manage_gloss_links'] = "";
 $format['manage_gloss_links'] = "";
@@ -119,3 +139,4 @@ $use_textarea['users'] = false;
 $comment['user_access'] = "";
 $format['user_access'] = "";
 $use_textarea['user_access'] = false;
+

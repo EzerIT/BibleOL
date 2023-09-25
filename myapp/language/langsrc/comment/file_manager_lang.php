@@ -12,6 +12,10 @@ $comment['already_exists'] = "";
 $format['already_exists'] = "";
 $use_textarea['already_exists'] = false;
 
+$comment['cancel'] = "";
+$format['cancel'] = "";
+$use_textarea['cancel'] = false;
+
 $comment['cancel_copy'] = "";
 $format['cancel_copy'] = "";
 $use_textarea['cancel_copy'] = false;
@@ -95,6 +99,18 @@ $use_textarea['copy_or_delete_files'] = false;
 $comment['copy_passages'] = "";
 $format['copy_passages'] = "";
 $use_textarea['copy_passages'] = false;
+
+$comment['create_exam'] = "";
+$format['create_exam'] = "";
+$use_textarea['create_exam'] = false;
+
+$comment['create_exam_marked'] = "";
+$format['create_exam_marked'] = "";
+$use_textarea['create_exam_marked'] = false;
+
+$comment['create_exam_name'] = "";
+$format['create_exam_name'] = "";
+$use_textarea['create_exam_name'] = false;
 
 $comment['create_exercise_button'] = "";
 $format['create_exercise_button'] = "";
@@ -407,3 +423,4 @@ $use_textarea['visible_to_class'] = false;
 $comment['wrong_database'] = "";
 $format['wrong_database'] = "";
 $use_textarea['wrong_database'] = false;
+

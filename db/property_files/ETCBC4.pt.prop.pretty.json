@@ -452,7 +452,8 @@
         "word": {
             "form_in_text": "Forma no Texto",
             "lexeme": "Lexema",
-            "morphology": "Morfologia"
+            "morphology": "Morfologia",
+            "glosses": "Glosas"
         }
     },
     "grammarfeature": {

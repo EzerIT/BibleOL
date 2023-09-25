@@ -224,15 +224,15 @@
             "VC": "VC"
         },
         "clause_type_t": {
-            "ADV": "Adverbial",
-            "CL": "Clause",
-            "IO": "Indirect object",
-            "O": "Object",
-            "O2": "Second object",
-            "P": "Predicate",
-            "S": "Subject",
-            "V": "Verbal",
-            "VC": "Verbal copula"
+            "ADV": "adverbial",
+            "CL": "clause",
+            "IO": "indirect object",
+            "O": "object",
+            "O2": "second object",
+            "P": "nominal predicate (predicate complement)",
+            "S": "subject",
+            "V": "verbal predicate",
+            "VC": "verbal copula"
         }
     },
     "grammargroup": {

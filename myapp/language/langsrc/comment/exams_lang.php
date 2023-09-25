@@ -60,6 +60,10 @@ $comment['end_time'] = "";
 $format['end_time'] = "";
 $use_textarea['end_time'] = false;
 
+$comment['exams_per_page'] = "";
+$format['exams_per_page'] = "";
+$use_textarea['exams_per_page'] = false;
+
 $comment['exam_mgmt'] = "";
 $format['exam_mgmt'] = "";
 $use_textarea['exam_mgmt'] = false;
@@ -71,10 +75,6 @@ $use_textarea['exam_mgmt_description'] = false;
 $comment['exam_name'] = "";
 $format['exam_name'] = "";
 $use_textarea['exam_name'] = false;
-
-$comment['exams_per_page'] = "";
-$format['exams_per_page'] = "";
-$use_textarea['exams_per_page'] = false;
 
 $comment['finish'] = "";
 $format['finish'] = "";
@@ -131,3 +131,4 @@ $use_textarea['time'] = false;
 $comment['user_operations'] = "";
 $format['user_operations'] = "";
 $use_textarea['user_operations'] = false;
+
