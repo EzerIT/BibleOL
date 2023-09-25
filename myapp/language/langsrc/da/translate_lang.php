@@ -17,7 +17,6 @@ $lang['lang_aram'] = "Aramæisk";
 $lang['lang_greek'] = "Græsk";
 $lang['lang_heb'] = "Hebraisk";
 $lang['lang_latin'] = "Latin (Vulgata)";
-$lang['lang_latin2'] = "Latin (Villa Claudiae)";
 $lang['lexeme'] = "Leksem";
 $lang['lex_variant'] = "(Variant: %s)";
 $lang['malformed_url'] = "Forkert URL";

@@ -224,13 +224,11 @@ class Ctrl_translate extends MY_Controller {
             $aram_buttons = $this->mod_urls->get_aram_buttons_long();
             $greek_buttons = $this->mod_urls->get_greek_buttons_long();
             $latin_buttons = $this->mod_urls->get_latin_buttons_long();
-            $latin2_buttons = $this->mod_urls->get_latin2_buttons_long();
 
             $heb_glosses = $this->mod_translate->get_number_glosses('heb');
             $aram_glosses = $this->mod_translate->get_number_glosses('aram');
             $greek_glosses = $this->mod_translate->get_number_glosses('greek');
             $latin_glosses = $this->mod_translate->get_number_glosses('latin');
-            $latin2_glosses = $this->mod_translate->get_number_glosses('latin2');
             
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('translate_lex')));
@@ -246,12 +244,10 @@ class Ctrl_translate extends MY_Controller {
                                                    'aram_buttons'  => $aram_buttons,
                                                    'greek_buttons' => $greek_buttons,
                                                    'latin_buttons' => $latin_buttons,
-                                                   'latin2_buttons'=> $latin2_buttons,
                                                    'heb_glosses'   => $heb_glosses,
                                                    'aram_glosses'  => $aram_glosses,
                                                    'greek_glosses' => $greek_glosses,
                                                    'latin_glosses' => $latin_glosses,
-                                                   'latin2_glosses'=> $latin2_glosses,
                                                    'gloss_count'   => $this->gloss_count,
                                                    'editing'       => 'lexicon',
                                                    'get_parms'     => $get_parms),
@@ -309,11 +305,6 @@ class Ctrl_translate extends MY_Controller {
                 case 'latin':
                     $buttons = $this->mod_urls->get_latin_buttons_long();
                     list($stems,$books) = $this->mod_translate->get_localized_jvulgate();
-                    break;
-
-                case 'latin2':
-                    $buttons = $this->mod_urls->get_latin2_buttons_long();
-                    list($stems,$books) = $this->mod_translate->get_localized_VC();
                     break;
 
                 default:
@@ -660,12 +651,10 @@ class Ctrl_translate extends MY_Controller {
             $trans_hebtgrammar_items = array();
             $trans_greekgrammar_items = array();
             $trans_latingrammar_items = array();
-            $trans_latin2grammar_items = array();
             $trans_heblex_items = array();
             $trans_aramlex_items = array();
             $trans_greeklex_items = array();
             $trans_latinlex_items = array();
-            $trans_latin2lex_items = array();
             foreach ($avail_translations as $t) {
                 $trans_if_items[$t->abb] = array($this->mod_translate->count_if_translated($t->abb),
                                                  $this->mod_translate->count_if_lines(null));
@@ -677,8 +666,6 @@ class Ctrl_translate extends MY_Controller {
                                                            $this->mod_translate->count_grammar_lines('nestle1904'));
                 $trans_latingrammar_items[$t->abb] = array($this->mod_translate->count_grammar_translated('jvulgate',$t->abb),
                                                            $this->mod_translate->count_grammar_lines('jvulgate'));
-                $trans_latin2grammar_items[$t->abb] = array($this->mod_translate->count_grammar_translated('VC',$t->abb),
-                                                            $this->mod_translate->count_grammar_lines('VC'));
                 $trans_heblex_items[$t->abb] = array($this->mod_translate->count_lex_translated('Hebrew',$t->abb),
                                                      $this->mod_translate->count_lex_lines('Hebrew'));
                 $trans_aramlex_items[$t->abb] = array($this->mod_translate->count_lex_translated('Aramaic',$t->abb),
@@ -687,8 +674,6 @@ class Ctrl_translate extends MY_Controller {
                                                        $this->mod_translate->count_lex_lines('greek'));
                 $trans_latinlex_items[$t->abb] = array($this->mod_translate->count_lex_translated('latin',$t->abb),
                                                        $this->mod_translate->count_lex_lines('latin'));
-                $trans_latin2lex_items[$t->abb] = array($this->mod_translate->count_lex_translated('latin2',$t->abb),
-                                                        $this->mod_translate->count_lex_lines('latin2'));
             }
             
             // VIEW:
@@ -703,12 +688,10 @@ class Ctrl_translate extends MY_Controller {
                                                    'trans_hebtgrammar_items'  => $trans_hebtgrammar_items,
                                                    'trans_greekgrammar_items' => $trans_greekgrammar_items,
                                                    'trans_latingrammar_items' => $trans_latingrammar_items,
-                                                   'trans_latin2grammar_items'=> $trans_latin2grammar_items,
                                                    'trans_heblex_items'       => $trans_heblex_items,
                                                    'trans_aramlex_items'      => $trans_aramlex_items,
                                                    'trans_greeklex_items'     => $trans_greeklex_items,
                                                    'trans_latinlex_items'     => $trans_latinlex_items,
-                                                   'trans_latin2lex_items'    => $trans_latin2lex_items,
                                              ),
                                              true);
             $this->load->view('view_main_page', array('left_title' => 'Available Languages',
@@ -729,11 +712,11 @@ class Ctrl_translate extends MY_Controller {
                 throw new DataException($this->lang->line('malformed_url'));
 
             $enable = strtolower($this->uri->segment(3))=='enable';
-            $loc_type = strtolower($this->uri->segment(4)); // 'iface', 'heblex', 'greeklex', 'latinlex', or 'latin2lex'
+            $loc_type = strtolower($this->uri->segment(4)); // 'iface', 'heblex', 'greeklex', or 'latinlex'
             $lang_abb = strtolower($this->uri->segment(5));
 
 
-            if ($loc_type!='iface' && $loc_type!='heblex' && $loc_type!='greeklex' && $loc_type!='latinlex' && $loc_type!='latin2lex')
+            if ($loc_type!='iface' && $loc_type!='heblex' && $loc_type!='greeklex' && $loc_type!='latinlex')
                 throw new DataException($this->lang->line('malformed_url'));
             
             $this->mod_translate->modify_localization($enable,$loc_type,$lang_abb);
@@ -766,20 +749,4 @@ class Ctrl_translate extends MY_Controller {
             $this->error_view($e->getMessage(), 'Create language');
         }
     }
-
-    // Copies latin glosses from lexicon_latin_LANG to lexicon_latin2_LANG
-    function copy_latin() {
-        if (!is_cli()) {
-            echo '<pre>This command can only be run from the command line</pre>';
-            die;
-        }
-
-		if ($_SERVER['argc']!=4)
-			die("Usage: php index.php translate copy_latin <language code>\n");
-
-        $lang = $_SERVER['argv'][3];
-
-        $this->mod_translate->copy_latin($lang);
-    }
-
 }

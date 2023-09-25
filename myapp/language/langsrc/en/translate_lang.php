@@ -17,7 +17,6 @@ $lang['lang_aram'] = "Aramaic";
 $lang['lang_greek'] = "Greek";
 $lang['lang_heb'] = "Hebrew";
 $lang['lang_latin'] = "Latin (Vulgate)";
-$lang['lang_latin2'] = "Latin (Villa Claudiae)";
 $lang['lexeme'] = "Lexeme";
 $lang['lex_variant'] = "(Variant: %s)";
 $lang['malformed_url'] = "Malformed URL";

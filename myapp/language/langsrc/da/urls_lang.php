@@ -21,7 +21,6 @@ $lang['icon_l-icon-picture'] = "Billede";
 $lang['icon_l-icon-speaker'] = "Lyd";
 $lang['illegal_lang_code'] = "Ulovlig sprogkode";
 $lang['invalid_link'] = "Ulovligt link angivet";
-$lang['latin2_glosses'] = "Latinske gloser (Villa Claudiae)";
 $lang['latin_glosses'] = "Latinske gloser (Vulgata)";
 $lang['lexeme'] = "Leksem";
 $lang['link'] = "Link";
