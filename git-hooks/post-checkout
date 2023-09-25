@@ -1,6 +1,6 @@
 #!/bin/bash
 
-files="db/ETCBC4 db/nestle1904 db/jvulgate db/VC"
+files="db/ETCBC4 db/nestle1904 db/jvulgate"
 
 for f in $files; do
 
