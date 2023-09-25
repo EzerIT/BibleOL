@@ -40,7 +40,7 @@
                <tr><td class="text-nowrap">Hebrew/Aramaic grammar</td><td class="text-nowrap"><?= format_frac($trans_hebgrammar_items[$trans->abb]) ?></td></tr>
                <tr><td class="text-nowrap">H/A transliterated grammar</td><td class="text-nowrap"><?= format_frac($trans_hebtgrammar_items[$trans->abb]) ?></td></tr>
                <tr><td class="text-nowrap">Greek grammar</td><td class="text-nowrap"><?= format_frac($trans_greekgrammar_items[$trans->abb]) ?></td></tr>
-               <tr><td class="text-nowrap">Latin(Vulgate) grammar</td><td class="text-nowrap"><?= format_frac($trans_latingrammar_items[$trans->abb]) ?></td></tr>
+               <tr><td class="text-nowrap">Latin grammar</td><td class="text-nowrap"><?= format_frac($trans_latingrammar_items[$trans->abb]) ?></td></tr>
              <?php else: ?>
                <tr><td>&nbsp;</td></tr>
                <tr><td>&nbsp;</td></tr>
@@ -57,7 +57,7 @@
              <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
              <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
              <tr><td>Greek</td><td><?= make_button($trans->greeklex_enabled,"greeklex/{$trans->abb}") ?></td></tr>
-             <tr><td>Latin(Vulgate)</td><td><?= make_button($trans->latinlex_enabled,"latinlex/{$trans->abb}") ?></td></tr>
+             <tr><td>Latin</td><td><?= make_button($trans->latinlex_enabled,"latinlex/{$trans->abb}") ?></td></tr>
            </table>
          </td>
          <td>
