@@ -408,12 +408,6 @@ class Mod_urls extends CI_Model {
     //    );
     //}
 
-    // Gets Latin2 buttons
-    // Not used
-    //public function get_latin2_buttons() {
-    //    return $this->get_latin_buttons();
-    //}
-    
     public function get_latin_buttons_long() {
         return array(
             //     Label    Sortorder range
@@ -509,14 +503,6 @@ class Mod_urls extends CI_Model {
             array('ven-vig','ven','vil'),
             array('vil-voc','vil','vol'),
             array('vol-zor','vol','zzz')
-        );
-    }
-
-    public function get_latin2_buttons_long() {
-        return array(
-            //     Label    Sortorder range
-            array('a-i','a','l'),
-            array('l-z','l','zz'),
         );
     }
 

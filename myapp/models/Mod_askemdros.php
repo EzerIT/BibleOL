@@ -399,8 +399,7 @@ class Mod_askemdros extends CI_Model {
     private static $sort_order = array("ETCBC4" => 1,
                                        "ETCBC4-translit" => 2,
                                        "nestle1904" => 3,
-                                       "jvulgate" => 4,
-                                       "VC" => 5);
+                                       "jvulgate" => 4);
 
     public function db_and_books() {
         $this->load->library('db_config');

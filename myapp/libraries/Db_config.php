@@ -201,10 +201,6 @@ class Db_config {
             $this->src_lang = array('latin');
             $this->glosslang = get_latinlex_translations();
         }
-        elseif ($dbf->emdros_db=='db/VC') {
-            $this->src_lang = array('latin2');
-            $this->glosslang = get_latin2lex_translations();
-        }
 
         $this->dbinfo_json = $this->read_or_throw($dbf->dbinfo);
         $this->dbinfo = json_decode($this->dbinfo_json);
