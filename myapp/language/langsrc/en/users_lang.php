@@ -11,14 +11,14 @@ $lang['account_created_message2t'] = "You have been granted facilitator privileg
 $lang['account_created_message3'] = "Please visit %s, and log in;\n"
         . "then change your password by selecting 'Profile' from the 'My data' menu.\n";
 $lang['account_created_subject'] = "Bible Online Learner account created";
-$lang['account_you_created_message1'] = "Dear %s,\n"
+$lang['account_you_created_message1a'] = "Dear user,\n"
         . "\n"
         . "You have created an account at the Bible Online Learner website.\n"
         . "\n"
         . "Your user name is: %s\n"
         . "Your password is: %s\n\n";
-$lang['account_you_created_message3'] = "Please visit %s, and log in;\n"
-        . "then change your password by selecting 'Profile' from the 'My data' menu.\n"
+$lang['account_you_created_message3a'] = "Please visit %s, and log in;\n"
+        . "then specify your personal name and change your password by selecting 'Profile' from the 'My data' menu.\n"
         . "\n"
         . "If you do not log in within 48 hours, your account will be deleted.\n"
         . "\n"

@@ -46,35 +46,37 @@
               <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
             <?php endif; ?>
           <?php endif; ?>
-      </tr>
-        <tr>
-          <td><?= $this->lang->line('first_name') ?></td>
-          <?php if (!empty($user_info->oauth2_login)): ?>
-            <td class="norb"><?= $user_info->first_name ?></td>
-            <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
-          <?php else: ?>
-            <td class="norb"><input type="text" name="first_name" value="<?= set_value('first_name',$user_info->first_name) ?>"></td>
-            <td class="nolb"><?= $this->lang->line('field_required') ?></td>
+        </tr>
+          <?php if ($userid!=-2): ?>
+            <tr>
+              <td><?= $this->lang->line('first_name') ?></td>
+              <?php if (!empty($user_info->oauth2_login)): ?>
+                <td class="norb"><?= $user_info->first_name ?></td>
+                <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
+              <?php else: ?>
+                <td class="norb"><input type="text" name="first_name" value="<?= set_value('first_name',$user_info->first_name) ?>"></td>
+                <td class="nolb"><?= $this->lang->line('field_required') ?></td>
+              <?php endif; ?>
+            </tr>
+            <tr>
+              <td><?= $this->lang->line('last_name') ?></td>
+              <?php if (!empty($user_info->oauth2_login)): ?>
+                <td class="norb"><?= $user_info->last_name ?></td>
+                <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
+              <?php else: ?>
+                <td class="norb"><input type="text" name="last_name" value="<?= set_value('last_name',$user_info->last_name) ?>"></td>
+                <td class="nolb"><?= $this->lang->line('field_required') ?></td>
+              <?php endif; ?>
+            </tr>
+            <tr>
+              <td><?= $this->lang->line('chinese_name_order') ?></td>
+              <td class="norb">
+                <input class="narrow" type="radio" name="family_name_first" value="yes" <?= set_radio('family_name_first', 'yes', !!$user_info->family_name_first) ?>><?= $this->lang->line('yes') ?>
+                <input class="narrow" type="radio" name="family_name_first" value="no" <?= set_radio('family_name_first', 'no', !$user_info->family_name_first) ?>><?= $this->lang->line('no') ?>
+              </td>
+              <td id="fullname" class="nolb"></td>
+            </tr>
           <?php endif; ?>
-        </tr>
-        <tr>
-          <td><?= $this->lang->line('last_name') ?></td>
-          <?php if (!empty($user_info->oauth2_login)): ?>
-            <td class="norb"><?= $user_info->last_name ?></td>
-            <td class="nolb"><?= $this->lang->line('cannot_change') ?></td>
-          <?php else: ?>
-            <td class="norb"><input type="text" name="last_name" value="<?= set_value('last_name',$user_info->last_name) ?>"></td>
-            <td class="nolb"><?= $this->lang->line('field_required') ?></td>
-          <?php endif; ?>
-        </tr>
-        <tr>
-          <td><?= $this->lang->line('chinese_name_order') ?></td>
-          <td class="norb">
-            <input class="narrow" type="radio" name="family_name_first" value="yes" <?= set_radio('family_name_first', 'yes', !!$user_info->family_name_first) ?>><?= $this->lang->line('yes') ?>
-            <input class="narrow" type="radio" name="family_name_first" value="no" <?= set_radio('family_name_first', 'no', !$user_info->family_name_first) ?>><?= $this->lang->line('no') ?>
-          </td>
-          <td id="fullname" class="nolb"></td>
-        </tr>
         <tr>
           <td><?= $this->lang->line('email') ?></td>
           <?php if (!empty($user_info->oauth2_login)): ?>
@@ -167,36 +169,7 @@
         <?php endif; ?>
       </table>
 
-      <?php if ($userid==-2): ?>
-        <div class="card mb-3">
-          <div class="card-body">
-            <?php
-               $this->lang->load('privacy', $this->language);
-               // Detect language of privacy policy
-               if (preg_match('/^\(([^)]*)\)(.*)/s', $this->lang->line('privacy_text'), $matches)) {
-                   $policy_lang = $matches[1];
-                   echo $matches[2];
-               }
-               else {
-                   $policy_lang = 'Unknown';
-                   echo $this->lang->line('privacy_text');
-               }
-            ?>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <h6 class="card-header bg-light text-dark"><?= $this->lang->line('do_you_accept') ?></h6>
-
-          <div class="card-body">
-            <input type="hidden" name="policy_lang" value="<?= $policy_lang ?>" />
-            <p><input class="btn btn-primary" type="button" onclick="$('#thisform').submit()" name="emulsubmit" value="<?= $this->lang->line('yes') ?>">
-              <a class="btn btn-outline-dark" href="<?= site_url('/') ?>"><?= $this->lang->line('no') ?></a></p>
-          </div>
-        </div>
-      <?php else: ?>
-        <p style="height:2px">&nbsp;</p>
-        <p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
-          <a class="btn btn-outline-dark" href="<?= site_url("users?$extras") ?>"><?= $this->lang->line('cancel_button') ?></a></p>
-      <?php endif; ?>
+      <p style="height:2px">&nbsp;</p>
+      <p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">
+          <a class="btn btn-outline-dark" href="<?= site_url($userid==-2 ? "/" : "users?$extras") ?>"><?= $this->lang->line('cancel_button') ?></a></p>
     </form>

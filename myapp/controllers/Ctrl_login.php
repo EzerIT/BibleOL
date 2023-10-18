@@ -30,8 +30,11 @@ class Ctrl_login extends MY_Controller {
             $this->mod_users->clear_login_session();
 
         unset($_SESSION['new_oauth2']);
-        
-        redirect("/");
+
+        if (empty($user_info->oauth2_login) && $this->mod_users->no_name())
+            redirect("/users/profile");
+        else
+            redirect("/");
     } 
 
     public function accept_policy_no() {
@@ -69,6 +72,8 @@ class Ctrl_login extends MY_Controller {
                 // Successful login
                 $this->mod_users->update_login_stat();
                 $this->mod_users->set_login_session();
+                if ($this->mod_users->no_name())
+                    redirect("/users/profile");
             }
             else {
                 // User needs to accept new policy, so don't log anything yet

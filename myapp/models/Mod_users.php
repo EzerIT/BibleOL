@@ -95,6 +95,10 @@ class Mod_users extends CI_Model {
         return make_full_name($this->me);
     }
 
+    public function no_name() {
+        return empty($this->me->first_name) || empty($this->me->last_name);
+    }
+    
     public function user_full_name(int $uid) {
         $query = $this->db->select('first_name,last_name,family_name_first')->where('id',$uid)->get('user');
         $user = $query->row();
