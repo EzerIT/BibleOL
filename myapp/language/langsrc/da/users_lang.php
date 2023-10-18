@@ -11,15 +11,14 @@ $lang['account_created_message2t'] = "Du har fået tildelt facilitator-rettighed
 $lang['account_created_message3'] = "Gå til %s, og log ind;\n"
         . "derefter kan du ændre din adgangskode ved at vælge 'Profil' fra menuen 'Mine data'.\n";
 $lang['account_created_subject'] = "Bible Online Learner - konto oprettet";
-$lang['account_you_created_message1'] = "Kære %s,\n"
+$lang['account_you_created_message1a'] = "Kære bruger,\n"
         . "\n"
         . "Du har oprettet en konto på webstedet Bible Online Learner.\n"
         . "\n"
         . "Dit brugernavn er: %s\n"
         . "Din adgangskode er: %s\n\n";
-$lang['account_you_created_message3'] = "Gå til %s, og log ind;\n"
-        . "derefter kan du ændre din adgangskode ved at vælge 'Profil'\n"
-        . "fra menuen 'Mine data'.\n"
+$lang['account_you_created_message3a'] = "Gå til %s, og log ind;\n"
+        . "derefter skal du angive dit navn og ændre din adgangskode ved at vælge 'Profil' fra menuen 'Mine data'.\n"
         . "\n"
         . "Hvis du ikke logger ind inden der er gået 48 timer, vil din\n"
         . "konto blive slettet.\n"

@@ -1,6 +1,6 @@
 <?php
 
-$comment['account_created_message1'] = "The first two %s's will be the user's first and last name";
+$comment['account_created_message1'] = "The first %s will be the user's first and last name";
 $format['account_created_message1'] = "keep_blanks";
 $use_textarea['account_created_message1'] = true;
 
@@ -20,13 +20,13 @@ $comment['account_created_subject'] = "";
 $format['account_created_subject'] = "";
 $use_textarea['account_created_subject'] = false;
 
-$comment['account_you_created_message1'] = "The first two %s's will be the user's first and last name";
-$format['account_you_created_message1'] = "keep_blanks";
-$use_textarea['account_you_created_message1'] = true;
+$comment['account_you_created_message1a'] = "";
+$format['account_you_created_message1a'] = "keep_blanks";
+$use_textarea['account_you_created_message1a'] = true;
 
-$comment['account_you_created_message3'] = "The %s will be a URL";
-$format['account_you_created_message3'] = "keep_blanks";
-$use_textarea['account_you_created_message3'] = true;
+$comment['account_you_created_message3a'] = "The %s will be a URL";
+$format['account_you_created_message3a'] = "keep_blanks";
+$use_textarea['account_you_created_message3a'] = true;
 
 $comment['add_user'] = "";
 $format['add_user'] = "";

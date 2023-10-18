@@ -188,20 +188,14 @@ class Ctrl_users extends MY_Controller {
             // fields appear in the form
 
             $this->form_validation->set_message('is_unique', sprintf($this->lang->line('user_name_used'), $this->input->post('username')));
-            $this->form_validation->set_rules('username', $this->lang->line('user_name'), 'trim|required|strip_tags|is_unique[user.username]');
+            $this->form_validation->set_rules('username', $this->lang->line('user_name'), 'trim|required|max_length[20]|alpha_numeric|is_unique[user.username]');
 
             // Common validation rules
-            $this->form_validation->set_rules('first_name', $this->lang->line('first_name'), 'trim|required|strip_tags');
-            $this->form_validation->set_rules('last_name', $this->lang->line('last_name'), 'trim|required|strip_tags');
-            $this->form_validation->set_rules('family_name_first', '', '');
-            $this->form_validation->set_rules('email', $this->lang->line('email'), 'trim|required|valid_email|strip_tags');
+            $this->form_validation->set_rules('email', $this->lang->line('email'), 'trim|required|valid_email');
             $this->form_validation->set_rules('preflang', '', '');
             $this->form_validation->set_rules('prefvariant', '', '');
             
             if ($this->form_validation->run()) {
-                $user_info->first_name = $this->input->post('first_name');
-                $user_info->last_name = $this->input->post('last_name');
-                $user_info->family_name_first = $this->input->post('family_name_first')==='yes';
                 $user_info->isadmin = false;
                 $user_info->isteacher = false;
                 $user_info->istranslator = false;
@@ -212,8 +206,6 @@ class Ctrl_users extends MY_Controller {
                 $user_info->warning_sent = 0;
                 $user_info->preflang = $this->input->post('preflang');
                 $user_info->prefvariant = $this->input->post('prefvariant');
-                $user_info->accept_policy = time();
-                $user_info->policy_lang =  $this->input->post('policy_lang');
 
                 $pw = $this->generate_pw();
                 $query = $this->mod_users->set_user($user_info, $pw);
@@ -225,11 +217,10 @@ class Ctrl_users extends MY_Controller {
                 $this->email->from($this->config->item('mail_sender_address'), $this->config->item('mail_sender_name'));
                 $this->email->to($user_info->email); 
                 $this->email->subject($this->lang->line_secondary('account_created_subject'));
-                $this->email->message(sprintf($this->lang->line_secondary('account_you_created_message1'),
-                                              make_full_name($user_info),
+                $this->email->message(sprintf($this->lang->line_secondary('account_you_created_message1a'),
                                               $user_info->username,
                                               $pw)
-                                      . sprintf($this->lang->line_secondary('account_you_created_message3'), site_url('login')));
+                                      . sprintf($this->lang->line_secondary('account_you_created_message3a'), site_url('login')));
                 $this->email->send();
 
                 // VIEW:
