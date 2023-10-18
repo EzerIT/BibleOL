@@ -290,7 +290,7 @@ class Ctrl_users extends MY_Controller {
             if ($userid<0) {
                 // Extra validation when creating a new user
                 $this->form_validation->set_message('is_unique', sprintf($this->lang->line('user_name_used'), $this->input->post('username')));
-                $this->form_validation->set_rules('username', $this->lang->line('user_name'), 'trim|required|strip_tags|is_unique[user.username]');
+                $this->form_validation->set_rules('username', $this->lang->line('user_name'), 'trim|required|max_length[20]|alpha_numeric|is_unique[user.username]');
             }
 
             if (!empty($user_info->oauth2_login)) {
