@@ -182,7 +182,7 @@ class Mod_statistics extends CI_Model {
 
         /* Set end time and grading for quiz (MRCN: and the total number of questions) */
         // Get the total number of features for this quiz
-        //$tot_features=$this->quizRequestedFeatures($quizid);
+        $tot_features=$this->quizRequestedFeatures($quizid);
         // Write the results to the DB
         $query = $this->db
             ->from('sta_question as sq')
@@ -192,7 +192,7 @@ class Mod_statistics extends CI_Model {
             ->get();
         $this->db->where('id',$quizid)->update('sta_quiz',array('end' => $time,
                                                                          'grading' => $this->input->post('grading')=='true' ? 1 : 0,
-                                                                         'tot_questions' => $this->input->post('question_count') ));
+                                                                         'tot_questions' => $this->input->post('question_count') * $tot_features ));
                                                                          // 'tot_questions' => sizeof($query->result()) ));
         $this->db->trans_complete();
     }
