@@ -352,6 +352,10 @@ $comment['select_database_prompt'] = "";
 $format['select_database_prompt'] = "";
 $use_textarea['select_database_prompt'] = false;
 
+$comment['set_number_of_questions_in_exam'] = "";
+$format['set_number_of_questions_in_exam'] = "";
+$use_textarea['set_number_of_questions_in_exam'] = false;
+
 $comment['upload_exercises_button'] = "";
 $format['upload_exercises_button'] = "";
 $use_textarea['upload_exercises_button'] = false;
