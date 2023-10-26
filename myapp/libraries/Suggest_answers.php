@@ -44,7 +44,7 @@ class Suggest_answers {
         
         $results = array();
 
-        foreach ($query->result() as $row)
+        foreach ($query->result_array() as $row)
             $results[] = empty(current($row)) ? '-' : current($row);
 
         if (count($results)<$lower_limit)

@@ -39,7 +39,7 @@
        make_css('bootstrap_local/css/bootstrap.min.css');
 
        if (!isset($in_help) || !$in_help)
-           make_css('jquery-ui-1.10.2.custom/css/sunny/jquery-ui-1.10.2.custom.min.css');
+           make_css('jquery-ui-1.13.2.custom/jquery-ui.min.css');
     
        make_css('styles/fonts.css');
        if ($this->language=='zh-Hans' || $this->language=='zh-Hant')
@@ -54,11 +54,11 @@
        foreach ($css_list as $css)
            make_css($css);
 
-       make_js('js/jquery-1.9.1.min.js');
+       make_js('js/jquery-3.7.0.min.js');
 
        if (!isset($in_help) || !$in_help) {
            make_js('bootstrap_local/js/bootstrap.min.js');
-           make_js('jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js');
+           make_js('jquery-ui-1.13.2.custom/jquery-ui.min.js');
        }
        else {
            // Enable bootstrap tooltips on help pages

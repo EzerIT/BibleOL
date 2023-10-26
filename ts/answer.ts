@@ -41,7 +41,7 @@ class Answer {
         this.c            = comp.getComp();
         this.cType        = comp.getCompType();
         this.answerSws    = answerSws;
-        this.answerString = answerString;
+        this.answerString = answerString.normalize('NFC');
         this.matchRegexp  = matchRegexp;
 
         if (this.cType == COMPONENT_TYPE.checkBoxes) {
@@ -145,19 +145,8 @@ class Answer {
                 else
                     userAnswer = ($(this.c).find('input').val() as string);
                 
-                // Fix Greek accents (see "A Note on Greek Accents in Unicode" in the technical documentation)
-                userAnswer = userAnswer.trim()
-                  //.replace(/\u003b/g, '\u037e')  // SEMICOLON -> GREEK QUESTION MARK
-                  //.replace(/\u00b7/g, '\u0387')  // MIDDLE DOT -> GREEK ANO TELEIA
-                    .replace(/\u03ac/g, '\u1f71')  // GREEK SMALL LETTER ALPHA WITH TONOS -> OXIA
-                    .replace(/\u03ad/g, '\u1f73')  // GREEK SMALL LETTER EPSILON WITH TONOS -> OXIA
-                    .replace(/\u03ae/g, '\u1f75')  // GREEK SMALL LETTER ETA WITH TONOS -> OXIA
-                    .replace(/\u03af/g, '\u1f77')  // GREEK SMALL LETTER IOTA WITH TONOS -> OXIA
-                    .replace(/\u03cc/g, '\u1f79')  // GREEK SMALL LETTER OMICRON WITH TONOS -> OXIA
-                    .replace(/\u03cd/g, '\u1f7b')  // GREEK SMALL LETTER UPSILON WITH TONOS -> OXIA
-                    .replace(/\u03ce/g, '\u1f7d')  // GREEK SMALL LETTER OMEGA WITH TONOS -> OXIA
-                    .replace(/\u0390/g, '\u1fd3')  // GREEK SMALL LETTER IOTA WITH DIALYTIKA AND TONOS -> OXIA
-                    .replace(/\u03b0/g, '\u1fe3')  // GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND TONOS -> OXIA
+                userAnswer = userAnswer.normalize('NFC')
+                    .trim()
                     .replace(/  +/g, ' ');          // Remove extra spaces
 
                 if (this.matchRegexp==null) {
