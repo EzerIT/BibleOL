@@ -471,7 +471,7 @@ class Mod_statistics extends CI_Model {
 
         foreach ($perdate as $k => &$v) {
             $v['percentage'] = 100*$v['correct'] / $v['count'];
-            $v['featpermin'] = 60*$v['count'] / $v['duration'];
+            $v['featpermin'] = 60*$v['count'] / ($v['duration']==0 ? 1 : $v['duration']);
         }
 
         return $perdate;
