@@ -96,6 +96,7 @@ $lang['rename'] = "Rename";
 $lang['rename_exercise'] = "Rename Exercise";
 $lang['rename_file_heading'] = "Rename File";
 $lang['select_database_prompt'] = "Select database:";
+$lang['set_number_of_questions_in_exam'] = "At this time, the \"Fixed number of questions\" for each exercise used in an exam must be set to 0 in order for the exam duration to be enforced properly.";
 $lang['upload_exercises_button'] = "Upload exercises";
 $lang['upload_exercise_files1'] = "Upload Exercise Files";
 $lang['upload_exercise_files3_other'] = "Here, you can upload the exercise template files to the '%s' folder of this web site.";
