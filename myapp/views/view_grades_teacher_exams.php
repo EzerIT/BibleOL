@@ -248,7 +248,7 @@
             $startTime = $time;
           }
           $tot_duration += $result["duration"];
-          $tot_featpMin += 60/$result['featpermin'];
+          $tot_featpMin += $result['featpermin'] <= 0 ? -1 : 60/$result['featpermin'];
           $tot_weight += $result['weight'];
           $tot_percent += $result['percentage'];
           $tot_percWeighted += $result['percentage'] * $result['weight'];
@@ -266,7 +266,7 @@
           <!-- <td class="text-center"><?php echo calculateGrade($grade_system, ($tot_percWeighted/$tot_weight));?></td> -->
           <td class="text-center"><?= anchor(build_get('grades/teacher_quizz_detail/classid/' . $classid . '/quizzid/'.$result["quizzid"] . '/userid/'.$result["userid"], array() ), (round(60/$result['featpermin'])<=$max_time)?calculateGrade($grade_system, ($tot_percWeighted/$tot_weight)):calculateGrade($grade_system, 0)) ?></td>
           <td class="text-center"><?= $result["duration"] ?></td>
-          <td class="text-center"><?= sprintf("%.1f",round(60/($tot_featpMin/$ncounter))) ?></td>
+          <td class="text-center"><?= $tot_featpMin > 0 ? sprintf("%.1f",round(60/($tot_featpMin/$ncounter))) : "" ?></td>
           <td class="text-center">
               <a id="det_<?php echo $stk;?>" class="badge badge-primary" href="#"><?= $this->lang->line('detail') ?></a>
           </td>
