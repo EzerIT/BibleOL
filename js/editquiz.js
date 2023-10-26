@@ -2,12 +2,10 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -226,8 +224,8 @@ var GrammarFeature = (function () {
                 else {
                     var res2 = '';
                     for (var i = 0; i < res.length; ++i)
-                        res2 += "<a style=\"padding-right:1px;padding-left:1px;\" href=\"".concat(res[i]['url'], "\" target=\"_blank\">")
-                            + "<span class=\"".concat(this.icon2class(res[i]['icon']), "\" aria-hidden=\"true\"></span></a>");
+                        res2 += "<a style=\"padding-right:1px;padding-left:1px;\" href=\"" + res[i]['url'] + "\" target=\"_blank\">"
+                            + ("<span class=\"" + this.icon2class(res[i]['icon']) + "\" aria-hidden=\"true\"></span></a>");
                     res = res2;
                 }
                 break;
@@ -577,9 +575,9 @@ var ListValuesHandler = (function () {
     ListValuesHandler.prototype.toMql = function (featName) {
         var stringValues = [];
         for (var ix = 0; ix < this.yes_values.length; ++ix)
-            stringValues.push("".concat(featName, " HAS ").concat(this.yes_values[+ix]));
+            stringValues.push(featName + " HAS " + this.yes_values[+ix]);
         for (var ix = 0; ix < this.no_values.length; ++ix)
-            stringValues.push("NOT ".concat(featName, " HAS ").concat(this.no_values[+ix]));
+            stringValues.push("NOT " + featName + " HAS " + this.no_values[+ix]);
         if (stringValues.length === 1)
             return stringValues[0];
         return '(' + stringValues.join(' AND ') + ')';
@@ -622,20 +620,20 @@ var PanelTemplMql = (function () {
                 this.fname2fh[vh.name] = vh;
             }
         }
-        this.fpan = $("<div id=\"".concat(this.name_prefix, "_fpan\"></div>"));
-        this.rbMql = $("<input type=\"radio\" name=\"".concat(this.name_prefix, "_usemql\" value=\"yes\">"));
+        this.fpan = $("<div id=\"" + this.name_prefix + "_fpan\"></div>");
+        this.rbMql = $("<input type=\"radio\" name=\"" + this.name_prefix + "_usemql\" value=\"yes\">");
         this.rbMql.click(function () {
             if (_this.rbMql.is(':checked'))
                 _this.switchToMql(true);
         });
-        this.rbFriendly = $("<input type=\"radio\" name=\"".concat(this.name_prefix, "_usemql\" value=\"no\">"));
+        this.rbFriendly = $("<input type=\"radio\" name=\"" + this.name_prefix + "_usemql\" value=\"no\">");
         this.rbFriendly.click(function () {
             if (_this.rbFriendly.is(':checked')) {
                 _this.switchToMql(false);
                 _this.updateMql();
             }
         });
-        this.mqlText = $("<textarea id=\"".concat(this.name_prefix, "_mqltext\" cols=\"45\" rows=\"2\">"));
+        this.mqlText = $("<textarea id=\"" + this.name_prefix + "_mqltext\" cols=\"45\" rows=\"2\">");
         this.featureCombo = $('<select></select>');
         this.featureCombo.on('change', function () {
             _this.currentBox.hide();
@@ -646,15 +644,15 @@ var PanelTemplMql = (function () {
         var selObject = (initialMd != null && initialMd.object != null) ? initialMd.object : configuration.objHasSurface;
         for (var s in configuration.objectSettings) {
             if (configuration.objectSettings[s].mayselect) {
-                this.objectTypeCombo.append("<option value=\"".concat(s, "\"")
+                this.objectTypeCombo.append("<option value=\"" + s + "\""
                     + (s === selObject ? ' selected="selected"' : '')
                     + (s === configuration.objHasSurface ? ' data-reset="yes"' : '')
-                    + ">".concat(getObjectFriendlyName(s), "</option>"));
+                    + (">" + getObjectFriendlyName(s) + "</option>"));
             }
         }
         this.objectTypeCombo.on('change', function () {
             $('#virtualkbid').appendTo('#virtualkbcontainer');
-            _this.fpan.html("<div id=\"".concat(_this.name_prefix, "_fpan\"></div>"));
+            _this.fpan.html("<div id=\"" + _this.name_prefix + "_fpan\"></div>");
             _this.currentBox = null;
             _this.featureCombo.html('<select></select>');
             _this.objectSelectionUpdated(_this.objectTypeCombo.val(), null);
@@ -666,7 +664,7 @@ var PanelTemplMql = (function () {
             _this.rbFriendly.prop('checked', true);
             _this.objectTypeCombo.find(':selected').prop('selected', false);
             _this.objectTypeCombo.find('[data-reset]').prop('selected', true);
-            _this.fpan.html("<div id=\"".concat(_this.name_prefix, "_fpan\"></div>"));
+            _this.fpan.html("<div id=\"" + _this.name_prefix + "_fpan\"></div>");
             _this.currentBox = null;
             _this.featureCombo.html('<select></select>');
             _this.objectSelectionUpdated(configuration.objHasSurface, null);
@@ -780,7 +778,7 @@ var PanelTemplMql = (function () {
                 group.hide();
                 selectString = '';
             }
-            this.featureCombo.append("<option value=\"".concat(key, "\" ").concat(selectString, ">").concat(getFeatureFriendlyName(otype, key), "</option>"));
+            this.featureCombo.append("<option value=\"" + key + "\" " + selectString + ">" + getFeatureFriendlyName(otype, key) + "</option>");
             switch (valueType) {
                 case 'integer':
                     if (featset.isRange)
@@ -819,22 +817,22 @@ var PanelTemplMql = (function () {
         jtf = $('<input type="text" size="8">');
         if (rfh.isSetLow())
             jtf.val(String(rfh.value_low));
-        var err_id = "err_".concat(key, "_low");
+        var err_id = "err_" + key + "_low";
         jtf.on('keyup', null, { rfh: rfh, i: 'value_low', err_id: err_id }, $.proxy(this.rangeIntegerTextModifiedListener, this));
         cellLab = $('<td>' + localize('low_value_prompt') + '</td>');
         cellInput = $('<td></td>');
         cellInput.append(jtf);
-        cellErr = $("<td id=\"".concat(err_id, "\"></td>"));
+        cellErr = $("<td id=\"" + err_id + "\"></td>");
         rowLow.append(cellLab, cellInput, cellErr);
         jtf = $('<input type="text" size="8">');
         if (rfh.isSetHigh())
             jtf.val(String(rfh.value_high));
-        err_id = "err_".concat(key, "_high");
+        err_id = "err_" + key + "_high";
         jtf.on('keyup', null, { rfh: rfh, i: 'value_high', err_id: err_id }, $.proxy(this.rangeIntegerTextModifiedListener, this));
         cellLab = $('<td>' + localize('high_value_prompt') + '</td>');
         cellInput = $('<td></td>');
         cellInput.append(jtf);
-        cellErr = $("<td id=\"".concat(err_id, "\"></td>"));
+        cellErr = $("<td id=\"" + err_id + "\"></td>");
         rowHigh.append(cellLab, cellInput, cellErr);
         group2.append(rowLow, rowHigh);
         this.groups[key].append(group2);
@@ -843,8 +841,8 @@ var PanelTemplMql = (function () {
     PanelTemplMql.prototype.generateIntegerPanel = function (key, fhs) {
         var _this = this;
         var ifh = (fhs && fhs[key]) ? fhs[key] : new IntegerFeatureHandler(key);
-        var butEquals = $("<input type=\"radio\" name=\"".concat(this.name_prefix, "_").concat(key, "_comp\" value=\"equals\">"));
-        var butDiffers = $("<input type=\"radio\" name=\"".concat(this.name_prefix, "_").concat(key, "_comp\" value=\"differs\">"));
+        var butEquals = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"equals\">");
+        var butDiffers = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"differs\">");
         switch (ifh.comparator) {
             case 'equals':
                 butEquals.prop('checked', true);
@@ -871,13 +869,13 @@ var PanelTemplMql = (function () {
             var jtf = $('<input type="text" size="8">');
             if (ifh.values[i])
                 jtf.val(String(ifh.values[i]));
-            var err_id = "err_".concat(key, "_").concat(i);
+            var err_id = "err_" + key + "_" + i;
             jtf.on('keyup', null, { ifh: ifh, i: i, err_id: err_id }, $.proxy(this.integerTextModifiedListener, this));
             var row = $('<tr></tr>');
             var cell = $('<td></td>');
             cell.append(jtf);
             row.append(cell);
-            row.append("<td id=\"".concat(err_id, "\"></td>"));
+            row.append("<td id=\"" + err_id + "\"></td>");
             group2.append(row);
         }
         this.groups[key].append(group2);
@@ -890,13 +888,13 @@ var PanelTemplMql = (function () {
             sfh.values.push(null);
         }
         var jtf = isForeign
-            ? $("<input class=\"".concat(charset.foreignClass, "\" type=\"text\" size=\"20\" id=\"").concat(this.name_prefix, "_").concat(key, "_input").concat(+i + 1, "\">"))
+            ? $("<input class=\"" + charset.foreignClass + "\" type=\"text\" size=\"20\" id=\"" + this.name_prefix + "_" + key + "_input" + (+i + 1) + "\">")
             : $('<input type="text" size="20">');
         if (sfh.values[i])
             jtf.val(sfh.values[i]);
         var kbdRowId;
         if (isForeign) {
-            kbdRowId = "".concat(this.name_prefix, "_").concat(key, "_row").concat(+i + 1);
+            kbdRowId = this.name_prefix + "_" + key + "_row" + (+i + 1);
             jtf.on('focus', null, { kbdRowId: kbdRowId, sfh: sfh, i: i }, function (e) {
                 $('#virtualkbid').appendTo('#' + e.data.kbdRowId);
                 WirtualKeyboard.attachInput(e.currentTarget);
@@ -910,14 +908,14 @@ var PanelTemplMql = (function () {
         row.append(cell);
         group2.append(row);
         if (isForeign)
-            group2.append("<tr><td id=\"".concat(kbdRowId, "\" style=\"text-align:right;\"></td></tr>"));
+            group2.append("<tr><td id=\"" + kbdRowId + "\" style=\"text-align:right;\"></td></tr>");
     };
     PanelTemplMql.prototype.generateStringPanel = function (key, fhs, isForeign) {
         var _this = this;
         var sfh = (fhs && fhs[key]) ? fhs[key] : new StringFeatureHandler(key);
-        var butEquals = $("<input type=\"radio\" name=\"".concat(this.name_prefix, "_").concat(key, "_comp\" value=\"equals\">"));
-        var butDiffers = $("<input type=\"radio\" name=\"".concat(this.name_prefix, "_").concat(key, "_comp\" value=\"differs\">"));
-        var butMatches = $("<input type=\"radio\" name=\"".concat(this.name_prefix, "_").concat(key, "_comp\" value=\"matches\">"));
+        var butEquals = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"equals\">");
+        var butDiffers = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"differs\">");
+        var butMatches = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"matches\">");
         switch (sfh.comparator) {
             case 'equals':
                 butEquals.prop('checked', true);
@@ -958,7 +956,7 @@ var PanelTemplMql = (function () {
     PanelTemplMql.prototype.generateQerePanel = function (key, fhs) {
         var _this = this;
         var qfh = (fhs && fhs[key]) ? fhs[key] : new QereFeatureHandler(key);
-        var butOmitqere = $("<input type=\"checkbox\" name=\"".concat(this.name_prefix, "_").concat(key, "_sel\" value=\"omit\">"));
+        var butOmitqere = $("<input type=\"checkbox\" name=\"" + this.name_prefix + "_" + key + "_sel\" value=\"omit\">");
         if (qfh.omit)
             butOmitqere.prop('checked', true);
         var sel = $('<span></span>');
@@ -975,10 +973,10 @@ var PanelTemplMql = (function () {
         var _this = this;
         var enumValues = typeinfo.enum2values[stripped_valueType];
         if (!enumValues) {
-            console.log('Unknown valueType', "list of ".concat(stripped_valueType));
+            console.log('Unknown valueType', "list of " + stripped_valueType);
         }
         var elfh = (fhs && fhs[key]) ? fhs[key] : new EnumListFeatureHandler(key);
-        var group_tabs = $("<div id=\"list_tabs_".concat(key, "\"></div>"));
+        var group_tabs = $("<div id=\"list_tabs_" + key + "\"></div>");
         var group_ul = $('<ul></ul>');
         group_tabs.append(group_ul);
         var tab_labels = [localize('1st_choice'),
@@ -986,10 +984,10 @@ var PanelTemplMql = (function () {
             localize('3rd_choice'),
             localize('4th_choice')];
         for (var tabno = 0; tabno < 4; ++tabno) {
-            group_ul.append("<li><a href=\"#tab_".concat(key, "_").concat(tabno, "\">").concat(tab_labels[tabno], "</a></li>"));
+            group_ul.append("<li><a href=\"#tab_" + key + "_" + tabno + "\">" + tab_labels[tabno] + "</a></li>");
             var lv = elfh.listvalues[tabno];
-            var tab_contents = $("<div id=\"tab_".concat(key, "_").concat(tabno, "\"></div>"));
-            var vc_choice = new PanelForOneVcChoice(enumValues, stripped_valueType, "".concat(this.name_prefix, "_").concat(otype, "_").concat(key, "_").concat(tabno), lv);
+            var tab_contents = $("<div id=\"tab_" + key + "_" + tabno + "\"></div>");
+            var vc_choice = new PanelForOneVcChoice(enumValues, stripped_valueType, this.name_prefix + "_" + otype + "_" + key + "_" + tabno, lv);
             tab_contents.append(vc_choice.getPanel());
             group_tabs.append(tab_contents);
             tab_contents.on('click', lv, function (e) {
@@ -1011,8 +1009,8 @@ var PanelTemplMql = (function () {
             return;
         }
         var efh = (fhs && fhs[key]) ? fhs[key] : new EnumFeatureHandler(key);
-        var butEquals = $("<input type=\"radio\" name=\"".concat(this.name_prefix, "_").concat(key, "_comp\" value=\"equals\">"));
-        var butDiffers = $("<input type=\"radio\" name=\"".concat(this.name_prefix, "_").concat(key, "_comp\" value=\"differs\">"));
+        var butEquals = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"equals\">");
+        var butDiffers = $("<input type=\"radio\" name=\"" + this.name_prefix + "_" + key + "_comp\" value=\"differs\">");
         switch (efh.comparator) {
             case 'equals':
                 butEquals.prop('checked', true);
@@ -1131,10 +1129,10 @@ var PanelTemplSentenceSelector = (function (_super) {
         _this.qoselTab = qoselTab;
         _this.featureTab = featureTab;
         _this.cbUseForQo = $('<input type="checkbox" name="useforqol">');
-        _this.cbUseForQoLabel = $("<span>".concat(localize('use_for_qosel'), "</span>"));
-        _this.questObjTypeLab = $("<span>".concat(localize('sentence_unit_type_prompt'), "</span>"));
-        _this.featSelLab = $("<span>".concat(localize('feature_prompt'), "</span>"));
-        _this.importShebanq = $("<button type=\"button\">".concat(localize('import_shebanq'), "</button>"));
+        _this.cbUseForQoLabel = $("<span>" + localize('use_for_qosel') + "</span>");
+        _this.questObjTypeLab = $("<span>" + localize('sentence_unit_type_prompt') + "</span>");
+        _this.featSelLab = $("<span>" + localize('feature_prompt') + "</span>");
+        _this.importShebanq = $("<button type=\"button\">" + localize('import_shebanq') + "</button>");
         _this.dirty = false;
         _this.cbUseForQo.click(function () {
             if (_this.cbUseForQo.is(':checked'))
@@ -1144,8 +1142,8 @@ var PanelTemplSentenceSelector = (function (_super) {
             _this.populateFeatureTab(null);
             _this.dirty = true;
         });
-        _this.rbMqlLabel = $("<span>".concat(localize('mql_qosel_prompt'), "</span>"));
-        _this.rbFriendlyLabel = $("<span>".concat(localize('friendly_featsel_prompt'), "</span>"));
+        _this.rbMqlLabel = $("<span>" + localize('mql_qosel_prompt') + "</span>");
+        _this.rbFriendlyLabel = $("<span>" + localize('friendly_featsel_prompt') + "</span>");
         _this.doLayout(where);
         if (_this.initialMd == null || _this.initialMd.useForQo) {
             _this.cbUseForQo.prop('checked', true);
@@ -1187,7 +1185,7 @@ var PanelTemplSentenceSelector = (function (_super) {
         this.populateFeatureTab(null);
     };
     PanelTemplSentenceSelector.prototype.makeMql = function () {
-        return "[".concat(this.getOtype(), " NORETRIEVE ").concat(_super.prototype.makeMql.call(this), "]");
+        return "[" + this.getOtype() + " NORETRIEVE " + _super.prototype.makeMql.call(this) + "]";
     };
     PanelTemplSentenceSelector.prototype.getUseForQo = function () {
         return this.cbUseForQo.prop('checked');
@@ -1265,10 +1263,10 @@ var PanelTemplQuizObjectSelector = (function (_super) {
     __extends(PanelTemplQuizObjectSelector, _super);
     function PanelTemplQuizObjectSelector(md, where, featureTab) {
         var _this = _super.call(this, md, 'qosel') || this;
-        _this.featSelLab = $("<span>".concat(localize('feature_prompt'), "</span>"));
+        _this.featSelLab = $("<span>" + localize('feature_prompt') + "</span>");
         _this.featureTab = featureTab;
-        _this.rbMqlLabel = $("<span>".concat(localize('mql_featsel_prompt'), "</span>"));
-        _this.rbFriendlyLabel = $("<span>".concat(localize('friendly_featsel_prompt'), "</span>"));
+        _this.rbMqlLabel = $("<span>" + localize('mql_featsel_prompt') + "</span>");
+        _this.rbFriendlyLabel = $("<span>" + localize('friendly_featsel_prompt') + "</span>");
         _this.doLayout(where);
         _this.finish_construct();
         return _this;
@@ -1292,7 +1290,7 @@ var PanelTemplQuizObjectSelector = (function (_super) {
         var row;
         var cell;
         row = $('<tr></tr>');
-        cell = $("<td>".concat(localize('sentence_unit_type_prompt'), "</td>"));
+        cell = $("<td>" + localize('sentence_unit_type_prompt') + "</td>");
         row.append(cell);
         cell = $('<td></td>');
         cell.append(this.objectTypeCombo);
@@ -1358,11 +1356,11 @@ var ButtonsAndLabel = (function () {
         this.canRequest = canRequest;
         this.canDisplayGrammar = canDisplayGrammar;
         ++ButtonsAndLabel.buttonNumber;
-        this.showFeat = canShow ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"show\">")) : $('<span></span>');
-        this.reqFeat = canRequest ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"request\">")) : $('<span></span>');
-        this.dcFeat = $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontcare\">"));
-        this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontshowfeat\">")) : $('<span></span>');
-        this.feat = $("<span>".concat(lab, "</span>"));
+        this.showFeat = canShow ? $("<input type=\"radio\" name=\"feat_" + ButtonsAndLabel.buttonNumber + "\" value=\"show\">") : $('<span></span>');
+        this.reqFeat = canRequest ? $("<input type=\"radio\" name=\"feat_" + ButtonsAndLabel.buttonNumber + "\" value=\"request\">") : $('<span></span>');
+        this.dcFeat = $("<input type=\"radio\" name=\"feat_" + ButtonsAndLabel.buttonNumber + "\" value=\"dontcare\">");
+        this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_" + ButtonsAndLabel.buttonNumber + "\" value=\"dontshowfeat\">") : $('<span></span>');
+        this.feat = $("<span>" + lab + "</span>");
         this.limitter = $('<span></span>');
         switch (select) {
             case ButtonSelection.SHOW:
@@ -1380,7 +1378,7 @@ var ButtonsAndLabel = (function () {
                 break;
         }
         if (useDropDown) {
-            this.ddCheck = $("<input type=\"checkbox\" name=\"dd_".concat(ButtonsAndLabel.buttonNumber, "\">"));
+            this.ddCheck = $("<input type=\"checkbox\" name=\"dd_" + ButtonsAndLabel.buttonNumber + "\">");
             this.ddCheck.prop('checked', select != ButtonSelection.REQUEST);
         }
         else
@@ -1474,15 +1472,15 @@ var LimitDialog = (function () {
     function LimitDialog(valueType, featset, hideFeatures, callback) {
         var _this = this;
         this.callback = callback;
-        var butSetAll = $("<a class=\"badge badge-success\" style=\"margin:0 5px 5px 0\" href=\"#\">".concat(localize('set_all'), "</a>"));
-        var butClearAll = $("<a class=\"badge badge-success\" style=\"margin:0 5px 5px 0\" href=\"#\">".concat(localize('clear_all'), "</a>"));
+        var butSetAll = $("<a class=\"badge badge-success\" style=\"margin:0 5px 5px 0\" href=\"#\">" + localize('set_all') + "</a>");
+        var butClearAll = $("<a class=\"badge badge-success\" style=\"margin:0 5px 5px 0\" href=\"#\">" + localize('clear_all') + "</a>");
         butSetAll.click(function () { return $('input[type=checkbox][name=hideFeatures]').prop('checked', true); });
         butClearAll.click(function () { return $('input[type=checkbox][name=hideFeatures]').prop('checked', false); });
         var setclear = $('<div></div>');
         setclear.append(butSetAll).append(butClearAll);
         if (configuration.databaseName == 'ETCBC4' && valueType == 'verbal_stem_t') {
-            var butHebrew = $("<a class=\"badge badge-success\" style=\"margin:0 5px 5px 0\" href=\"#\">".concat(localize('set_hebrew'), "</a>"));
-            var butAramaic = $("<a class=\"badge badge-success\" style=\"margin:0 5px 5px 0\" href=\"#\">".concat(localize('set_aramaic'), "</a>"));
+            var butHebrew = $("<a class=\"badge badge-success\" style=\"margin:0 5px 5px 0\" href=\"#\">" + localize('set_hebrew') + "</a>");
+            var butAramaic = $("<a class=\"badge badge-success\" style=\"margin:0 5px 5px 0\" href=\"#\">" + localize('set_aramaic') + "</a>");
             var hebrewStems_1 = ['NA', 'etpa', 'hif', 'hit', 'hof', 'hotp', 'hsht', 'htpo', 'nif', 'nit',
                 'pasq', 'piel', 'poal', 'poel', 'pual', 'qal', 'tif'];
             var aramaicStems_1 = ['NA', 'afel', 'etpa', 'etpe', 'haf ', 'hof ', 'hsht', 'htpa', 'htpe',
@@ -1548,15 +1546,15 @@ var PanelForOneOtype = (function () {
         this.allObjBAL = {};
         var useSavedFeatures = otype === ptqf.initialOtype;
         ++PanelForOneOtype.accordionNumber;
-        this.panel = $("<div class=\"accordion\" id=\"accordion".concat(PanelForOneOtype.accordionNumber, "\"></div>"));
+        this.panel = $("<div class=\"accordion\" id=\"accordion" + PanelForOneOtype.accordionNumber + "\"></div>");
         var table = $('<table class="striped featuretable"></table>');
         table.append('<tr>'
-            + "<th>".concat(localize('show'), "</th>")
-            + "<th>".concat(localize('request'), "</th>")
-            + "<th>".concat(localize('dont_care'), "</th>")
-            + "<th>".concat(localize('dont_show'), "</th>")
-            + "<th>".concat(localize('multiple_choice'), "</th>")
-            + "<th class=\"leftalign\">".concat(localize('feature'), "</th>")
+            + ("<th>" + localize('show') + "</th>")
+            + ("<th>" + localize('request') + "</th>")
+            + ("<th>" + localize('dont_care') + "</th>")
+            + ("<th>" + localize('dont_show') + "</th>")
+            + ("<th>" + localize('multiple_choice') + "</th>")
+            + ("<th class=\"leftalign\">" + localize('feature') + "</th>")
             + '<th></th>'
             + '</tr>');
         this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && Boolean(getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql), true, configuration.objHasSurface === otype, configuration.objHasSurface === otype);
@@ -1581,7 +1579,7 @@ var PanelForOneOtype = (function () {
             this.allBAL.push(bal);
             table.append(bal.getRow());
         }
-        this.panel.append(this.wrapInCard(getObjectFriendlyName(otype), table, true, "accordion".concat(PanelForOneOtype.accordionNumber)));
+        this.panel.append(this.wrapInCard(getObjectFriendlyName(otype), table, true, "accordion" + PanelForOneOtype.accordionNumber));
         var _loop_1 = function (level) {
             var leveli = +level;
             if (isNaN(leveli))
@@ -1591,16 +1589,16 @@ var PanelForOneOtype = (function () {
                 table = $('<table class="striped featuretable"></table>');
                 table.append('<tr>'
                     + '<td colspan="2"></td>'
-                    + "<th>".concat(localize('dont_care'), "</th>")
-                    + "<th>".concat(localize('dont_show'), "</th>")
+                    + ("<th>" + localize('dont_care') + "</th>")
+                    + ("<th>" + localize('dont_show') + "</th>")
                     + '<td colspan="3"></td>'
                     + '</tr>');
                 this_1.allObjBAL[otherOtype] = [];
                 var buttonrow = $('<tr><td colspan="2"></td></tr>');
                 var td_dcb = $('<td></td>');
                 var td_dsb = $('<td></td>');
-                var setAllDontCareButton = $("<a href=\"#\" style=\"color:white\" class=\"badge badge-primary\">".concat(localize('set_all'), "</a>"));
-                var setAllDontShowButton = $("<a href=\"#\" style=\"color:white\" class=\"badge badge-primary\">".concat(localize('set_all'), "</a>"));
+                var setAllDontCareButton = $("<a href=\"#\" style=\"color:white\" class=\"badge badge-primary\">" + localize('set_all') + "</a>");
+                var setAllDontShowButton = $("<a href=\"#\" style=\"color:white\" class=\"badge badge-primary\">" + localize('set_all') + "</a>");
                 td_dcb.append(setAllDontCareButton);
                 td_dsb.append(setAllDontShowButton);
                 buttonrow.append(td_dcb).append(td_dsb).append('<td colspan="3"></td>');
@@ -1639,23 +1637,23 @@ var PanelForOneOtype = (function () {
                     }
                     return false;
                 });
-                this_1.panel.append(this_1.wrapInCard(getObjectFriendlyName(otherOtype), table, false, "accordion".concat(PanelForOneOtype.accordionNumber)));
+                this_1.panel.append(this_1.wrapInCard(getObjectFriendlyName(otherOtype), table, false, "accordion" + PanelForOneOtype.accordionNumber));
             }
         };
         var this_1 = this;
         for (var level in configuration.sentencegrammar) {
             _loop_1(level);
         }
-        this.panel.append(this.wrapInCard(localize('gloss_limit'), $("<div><span class=\"gloss-limit-prompt\">".concat(localize('gloss_limit_prompt'), " </span><input id=\"gloss-limit-").concat(otype, "\" type=\"number\" value=\"").concat(ptqf.getGlossLimit(), "\" style=\"width:5em\"></span>")), false, "accordion".concat(PanelForOneOtype.accordionNumber)));
+        this.panel.append(this.wrapInCard(localize('gloss_limit'), $("<div><span class=\"gloss-limit-prompt\">" + localize('gloss_limit_prompt') + " </span><input id=\"gloss-limit-" + otype + "\" type=\"number\" value=\"" + ptqf.getGlossLimit() + "\" style=\"width:5em\"></span>"), false, "accordion" + PanelForOneOtype.accordionNumber));
     }
     PanelForOneOtype.prototype.wrapInCard = function (heading, contents, open, accordionId) {
         ++PanelForOneOtype.collapseNumber;
         var cardBody = $('<div class="card-body"></div>');
-        var cardBodyWrapper = $("<div id=\"accbody".concat(PanelForOneOtype.collapseNumber, "\" class=\"collapse ").concat(open ? "show" : "", "\" data-parent=\"#").concat(accordionId, "\"></div>"));
+        var cardBodyWrapper = $("<div id=\"accbody" + PanelForOneOtype.collapseNumber + "\" class=\"collapse " + (open ? "show" : "") + "\" data-parent=\"#" + accordionId + "\"></div>");
         cardBody.append(contents);
         cardBodyWrapper.append(cardBody);
         var cardHeader = $('<div class="card-header">' +
-            "<button class=\"btn text-left\" type=\"button\" aria-expanded=\"".concat(open, "\" data-toggle=\"collapse\" data-target=\"#accbody").concat(PanelForOneOtype.collapseNumber, "\">") +
+            ("<button class=\"btn text-left\" type=\"button\" aria-expanded=\"" + open + "\" data-toggle=\"collapse\" data-target=\"#accbody" + PanelForOneOtype.collapseNumber + "\">") +
             heading +
             '</button>' +
             '</div>');
@@ -1721,7 +1719,7 @@ var PanelTemplQuizFeatures = (function () {
                 return this.initialQf.requestFeatures[i].hideFeatures;
     };
     PanelTemplQuizFeatures.prototype.getObjectSelector = function (otype, featName) {
-        var regex_feat = new RegExp("\\b".concat(featName, "\\b"));
+        var regex_feat = new RegExp("\\b" + featName + "\\b");
         if (this.initialQf && this.initialQf.dontShowObjects) {
             for (var i = 0; i < this.initialQf.dontShowObjects.length; ++i) {
                 if (this.initialQf.dontShowObjects[i].content === otype) {
@@ -1804,7 +1802,7 @@ var PanelTemplQuizFeatures = (function () {
                     qf.dontShowObjects.push({ content: otherOtype, show: showstring.trim() });
             }
         }
-        qf.glosslimit = +$("#gloss-limit-".concat(this.oldOtype)).val();
+        qf.glosslimit = +$("#gloss-limit-" + this.oldOtype).val();
         return qf;
     };
     PanelTemplQuizFeatures.prototype.isDirty = function () {
@@ -1856,10 +1854,10 @@ var VerbClassSelection;
 ;
 var VerbClassButtonsAndLabel = (function () {
     function VerbClassButtonsAndLabel(lab, name, dataName, select) {
-        this.yes = $("<input type=\"radio\" name=\"".concat(name, "\" value=\"yes\"      data-name=\"").concat(dataName, "\">"));
-        this.no = $("<input type=\"radio\" name=\"".concat(name, "\" value=\"no\"       data-name=\"").concat(dataName, "\">"));
-        this.dontcare = $("<input type=\"radio\" name=\"".concat(name, "\" value=\"dontcare\" data-name=\"").concat(dataName, "\">"));
-        this.label = $("<span>".concat(lab, "</span>"));
+        this.yes = $("<input type=\"radio\" name=\"" + name + "\" value=\"yes\"      data-name=\"" + dataName + "\">");
+        this.no = $("<input type=\"radio\" name=\"" + name + "\" value=\"no\"       data-name=\"" + dataName + "\">");
+        this.dontcare = $("<input type=\"radio\" name=\"" + name + "\" value=\"dontcare\" data-name=\"" + dataName + "\">");
+        this.label = $("<span>" + lab + "</span>");
         switch (select) {
             case VerbClassSelection.YES:
                 this.yes.prop('checked', true);
@@ -1892,10 +1890,10 @@ var PanelForOneVcChoice = (function () {
         this.allBAL = [];
         this.panel = $('<table class="striped featuretable"></table>');
         this.panel.append('<tr>'
-            + "<th>".concat(localize('verb_class_yes'), "</th>")
-            + "<th>".concat(localize('verb_class_no'), "</th>")
-            + "<th>".concat(localize('verb_class_dont_care'), "</th>")
-            + "<th class=\"leftalign\">".concat(localize('verb_class'), "</th>")
+            + ("<th>" + localize('verb_class_yes') + "</th>")
+            + ("<th>" + localize('verb_class_no') + "</th>")
+            + ("<th>" + localize('verb_class_dont_care') + "</th>")
+            + ("<th class=\"leftalign\">" + localize('verb_class') + "</th>")
             + '</tr>');
         var swsValues = [];
         for (var ix = 0; ix < enumValues.length; ++ix)
@@ -1908,7 +1906,7 @@ var PanelForOneVcChoice = (function () {
                 vcsel = VerbClassSelection.YES;
             else if (lv.no_values.indexOf(vc) != -1)
                 vcsel = VerbClassSelection.NO;
-            var bal = new VerbClassButtonsAndLabel(swsValues[ix].getString(), "".concat(prefix, "_").concat(vc), vc, vcsel);
+            var bal = new VerbClassButtonsAndLabel(swsValues[ix].getString(), prefix + "_" + vc, vc, vcsel);
             this.allBAL.push(bal);
             this.panel.append(bal.getRow());
         }
@@ -1961,7 +1959,7 @@ var StringWithSort = (function () {
 var SortingCheckBox = (function () {
     function SortingCheckBox(name, value, text) {
         this.sws = new StringWithSort(text);
-        this.checkbox = $("<input type=\"checkbox\" name=\"".concat(name, "\" value=\"").concat(value, "\">"));
+        this.checkbox = $("<input type=\"checkbox\" name=\"" + name + "\" value=\"" + value + "\">");
         this.jq = $('<span></span>');
         this.jq.append(this.checkbox, this.sws.getString());
     }
@@ -2036,16 +2034,16 @@ var util;
     var BorderFollowerBox = (function (_super) {
         __extends(BorderFollowerBox, _super);
         function BorderFollowerBox(level) {
-            return _super.call(this, level, "#lev".concat(level, "_sb_cb")) || this;
+            return _super.call(this, level, "#lev" + level + "_sb_cb") || this;
         }
         BorderFollowerBox.prototype.setit = function (val) {
             if (val) {
-                $(".lev".concat(this.level, " > .gram")).removeClass('dontshowit').addClass('showit');
-                $(".lev".concat(this.level)).removeClass('dontshowborder').addClass('showborder');
+                $(".lev" + this.level + " > .gram").removeClass('dontshowit').addClass('showit');
+                $(".lev" + this.level).removeClass('dontshowborder').addClass('showborder');
             }
             else {
-                $(".lev".concat(this.level, " > .gram")).removeClass('showit').addClass('dontshowit');
-                $(".lev".concat(this.level)).removeClass('showborder').addClass('dontshowborder');
+                $(".lev" + this.level + " > .gram").removeClass('showit').addClass('dontshowit');
+                $(".lev" + this.level).removeClass('showborder').addClass('dontshowborder');
             }
         };
         return BorderFollowerBox;
@@ -2054,12 +2052,12 @@ var util;
     var SeparateLinesFollowerBox = (function (_super) {
         __extends(SeparateLinesFollowerBox, _super);
         function SeparateLinesFollowerBox(level) {
-            return _super.call(this, level, "#lev".concat(level, "_seplin_cb")) || this;
+            return _super.call(this, level, "#lev" + level + "_seplin_cb") || this;
         }
         SeparateLinesFollowerBox.prototype.setit = function (val) {
             var oldSepLin = val ? 'noseplin' : 'seplin';
             var newSepLin = val ? 'seplin' : 'noseplin';
-            $(".notdummy.lev".concat(this.level)).removeClass(oldSepLin).addClass(newSepLin);
+            $(".notdummy.lev" + this.level).removeClass(oldSepLin).addClass(newSepLin);
         };
         return SeparateLinesFollowerBox;
     }(FollowerBox));
@@ -2208,7 +2206,7 @@ function save_quiz() {
             show_error('#filename-error', localize('missing_filename'));
         else {
             quiz_name = $('#filename-name').val().trim();
-            $.ajax("".concat(check_url, "?dir=").concat(encodeURIComponent(dir_name), "&quiz=").concat(encodeURIComponent(quiz_name)))
+            $.ajax(check_url + "?dir=" + encodeURIComponent(dir_name) + "&quiz=" + encodeURIComponent(quiz_name))
                 .done(function (data, textStatus, jqXHR) {
                 switch (data.trim()) {
                     case 'OK':
@@ -2228,7 +2226,7 @@ function save_quiz() {
                 }
             })
                 .fail(function (jqXHR, textStatus, errorThrown) {
-                show_error('#filename-error', "".concat(localize('error_response'), " ").concat(errorThrown));
+                show_error('#filename-error', localize('error_response') + " " + errorThrown);
             });
         }
     });
@@ -2260,14 +2258,14 @@ function save_quiz2() {
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
-    var form = $("<form action=\"".concat(submit_to, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                           </form>"));
+    var form = $("<form action=\"" + submit_to + "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"" + encodeURIComponent(dir_name) + "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"" + encodeURIComponent(quiz_name) + "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"" + encodeURIComponent(JSON.stringify(decoded_3et)) + "\">\n                           </form>");
     $('body').append(form);
     isSubmitting = true;
     form.submit();
 }
 function shebanq_to_qo(qo, mql) {
     if (qo === null) {
-        $('#qo-dialog-text').html("<p>".concat(localize('sentence_selection_imported'), "</p><p>").concat(localize('no_focus'), "</p>"));
+        $('#qo-dialog-text').html("<p>" + localize('sentence_selection_imported') + "</p><p>" + localize('no_focus') + "</p>");
         $('#qo-yesbutton').hide();
         $('#qo-nobutton').hide();
         $('#qo-okbutton').show();
@@ -2275,9 +2273,9 @@ function shebanq_to_qo(qo, mql) {
     }
     else {
         var msg = mql.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        msg = "<br><code>[".concat(qo, " ").concat(msg, "]</code><br>");
+        msg = "<br><code>[" + qo + " " + msg + "]</code><br>";
         msg = localize('use_qo_selection').format(msg);
-        msg = "<p>".concat(localize('sentence_selection_imported'), "</p><p>").concat(msg, "</p>");
+        msg = "<p>" + localize('sentence_selection_imported') + "</p><p>" + msg + "</p>";
         $('#qo-dialog-text').html(msg);
         $('#qo-yesbutton').show();
         $('#qo-nobutton').show();
@@ -2299,7 +2297,7 @@ function import_from_shebanq() {
         $('.ui-dialog *').css('cursor', 'wait');
         var shebanq_id = encodeURIComponent($('#import-shebanq-qid').val()).trim();
         var shebanq_dbvers = encodeURIComponent($('#import-shebanq-dbvers').val()).trim();
-        $.ajax("".concat(import_shebanq_url, "?id=").concat(shebanq_id, "&version=").concat(shebanq_dbvers))
+        $.ajax(import_shebanq_url + "?id=" + shebanq_id + "&version=" + shebanq_dbvers)
             .done(function (data, textStatus, jqXHR) {
             $('.ui-dialog *').css('cursor', 'auto');
             var result = JSON.parse(data);
@@ -2314,7 +2312,7 @@ function import_from_shebanq() {
         })
             .fail(function (jqXHR, textStatus, errorThrown) {
             $('.ui-dialog *').css('cursor', 'auto');
-            show_error('#import-shebanq-error', "".concat(localize('error_response'), " ").concat(errorThrown));
+            show_error('#import-shebanq-error', localize('error_response') + " " + errorThrown);
         });
     });
     $('#import-shebanq-dialog').modal('show');

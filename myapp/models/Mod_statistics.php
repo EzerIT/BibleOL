@@ -212,7 +212,6 @@ class Mod_statistics extends CI_Model {
         $matches=array();
         if ( preg_match_all('/<request.*>(.*)<\/request>/',$quizSrc[0]->quizcode, $matches) ) {
           $tot_features = sizeof($matches[0]);
-          error_log("DEBUG: tot_features=$tot_features");
         }
 
       }
