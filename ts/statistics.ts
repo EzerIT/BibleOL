@@ -60,6 +60,7 @@ class QuizStatistics {
         private quizid : number // The server's identification of statistics for this exercise execution
     ) {
       // Capture the total number of questions (MRCN)
-      this.question_count = Object.keys(quizdata.monad2Id).length; // Get total number of questions (not only the number of questions answered)
+      // this.question_count = Object.keys(quizdata.monad2Id).length; // Get total number of questions (not only the number of questions answered)
+      this.question_count = Object.keys(quizdata.id2FeatVal).length; // Get total number of questions (not only the number of questions answered)
     }
 }

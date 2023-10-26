@@ -436,6 +436,8 @@
           <div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
         </div>
         <div class="modal-body">
+          <em><?= $this->lang->line('set_number_of_questions_in_exam') ?></em>
+          <br/>
           <span><?= $this->lang->line('create_exam_name') ?></span>
           <input type="text" id="exam_name" name="exam_name">
         </div>
