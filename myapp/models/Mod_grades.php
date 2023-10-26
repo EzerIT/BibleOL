@@ -580,7 +580,7 @@ class Mod_grades extends CI_Model {
 
         foreach ($perdate as $k => &$v) {
             $v['percentage'] = 100*$v['correct'] / $v['count'];
-            $v['featpermin'] = 60*$v['count'] / $v['duration'];
+            $v['featpermin'] = 60*$v['count'] / ($v['duration']==0 ? 1 : $v['duration']); 
         }
 
         return $perdate;
@@ -656,7 +656,7 @@ class Mod_grades extends CI_Model {
 
         foreach ($perdate as $k => &$v) {
             $v['percentage'] = 100*$v['correct'] / $v['count'];
-            $v['featpermin'] = 60*$v['count'] / $v['duration'];
+            $v['featpermin'] = 60*$v['count'] / ($v['duration']==0 ? 1 : $v['duration']);
         }
 
         return $perdate;
@@ -759,7 +759,7 @@ class Mod_grades extends CI_Model {
               $v['featpermin'] = 0;
               continue;
             }
-            $v['featpermin'] = 60*$v['count'] / $v['duration'];
+            $v['featpermin'] = 60*$v['count'] / ($v['duration']==0 ? 1 : $v['duration']);
         }
 
         return $perdate;
