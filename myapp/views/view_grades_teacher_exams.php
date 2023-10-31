@@ -209,6 +209,7 @@
         <caption><?= $this->lang->line('grds_exam_by_student_caption') ?></caption>
         <tr>
           <th><?= $this->lang->line('student') ?></th>
+          <th class="text-center"><?= $this->lang->line('email')?></th>
           <th class="text-center"><?= $this->lang->line('date') ?></th>
           <th class="text-center"><?= $this->lang->line('correct') ?></th>
           <th class="text-center"><?= $this->lang->line('quiz_grade') ?></th>
@@ -218,6 +219,7 @@
         </tr>
         <?php reset($students);
               $st = current($students);
+              $email_i = current($user_emails);
               if ( empty($max_time) ) {
                 $max_time = 3600; // Sets to 1h, which virtually disables the feature
               }
@@ -261,6 +263,7 @@
         <?php endforeach; ?>
         <tr class="<?php echo 'headerDet';  ?>">
           <td><?= $st ?></td>
+          <td><?= $email_i ?></td>
           <td class="text-center"><?= Statistics_timeperiod::format_time($startTime) ?></td>
           <td class="text-center"><?= round($tot_percWeighted/$tot_weight) . "% (" .  round($tot_percent/$ncounter)  ?>%)</td>
           <!-- <td class="text-center"><?php echo calculateGrade($grade_system, ($tot_percWeighted/$tot_weight));?></td> -->
@@ -286,7 +289,7 @@
           <td class="text-center"></td>
         </tr>
         <?php endforeach; ?>
-        <?php $st = next($students); ?>
+        <?php $st = next($students); $email_i = next($user_emails); ?>
         <?php endforeach; ?>
       </table>
       <?php if ($nongraded): ?>
@@ -322,14 +325,14 @@
         </tr>
         <?php foreach ($featpct as $fn => $fp): ?>
         <?php reset($students);
-              $st = current($students); ?>
+              $st = current($students); $email_i = current($user_emails);?>
         <?php foreach ($fp as $pct): ?>
         <tr>
           <td><?= isset($featloc->{$fn}) ? $featloc->{$fn} : $fn ?></td>
           <td><?= $st ?></td>
           <td class="text-center"><?= round($pct) ?>%</td>
         </tr>
-        <?php $st = next($students); ?>
+        <?php $st = next($students); $email_i = next($user_emails);?>
         <?php endforeach; ?>
         <?php endforeach; ?>
       </table>
