@@ -13,6 +13,7 @@ $lang['correct_colon'] = "Correct:";
 $lang['date'] = "Date";
 $lang['date_colon'] = "Date:";
 $lang['duration'] = "Duration";
+$lang['email'] = "Email";
 $lang['exam_grades_for_class'] = "Exam Grades for the class “%s”";
 $lang['Exam_grades_per_class_heading'] = "Exam Grades per Class";
 $lang['exam_prompt'] = "Select Exam: ";
