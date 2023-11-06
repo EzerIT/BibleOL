@@ -247,11 +247,11 @@ class Mod_users extends CI_Model {
     //          Array of user information structures if more than one user found
     public function get_user_by_name_or_email(string $username, string $email) {
         if ($username!='') {
-            $query = $this->db->where('username',$username)->where('oauth2_login',null)->get('user'); //TODO: Test this
+            $query = $this->db->where('username',$username)->where('oauth2_login !=','google')->where('oauth2_login !=','facebook')->get('user'); //TODO: Test this
             return $query->row();
         }
         
-        $query = $this->db->where('email',$email)->where('oauth2_login',null)->get('user'); //TODO: Test this
+        $query = $this->db->where('email',$email)->where('oauth2_login !=','google')->where('oauth2_login !=','facebook')->get('user'); //TODO: Test this
         $count = $query->num_rows();
 
         if ($count===1)
