@@ -39,7 +39,8 @@ if (!isset($in_help) || !$in_help) {
         $content[$ix][] = make_anchor2('userclass/enroll', 'enroll_in_class');
         $content[$ix][] = make_anchor2('statistics/student_time', 'my_progress');
         $content[$ix][] = make_anchor2('grades/student_grades', 'grades_my_quizzes');
-        
+        $content[$ix][] = make_anchor2('grades/student_exam_grades', 'grades_my_exams');
+
         if ($this->mod_users->is_teacher())
             $content[$ix][] = make_anchor2('statistics/teacher_progress', 'students_progress');
 
@@ -102,15 +103,15 @@ if (!isset($in_help) || !$in_help) {
 //    $head[] = make_anchor1('help', 'help', array('target'=>'bolhelp'));
 
     // Uncomment these lines to enable $more_help_items
-    
+
     $head[] = $this->lang->line('help');
     $content[$ix][] = make_anchor2('help', 'help_pages', array('target'=>'bolhelp'));
-     
+
     if (isset($more_help_items)) {
         foreach ($more_help_items as $mhi_url => $mhi_label)
             $content[$ix][] = make_anchor2("help/show_help/$mhi_url", $mhi_label, array('target'=>'bolhelp'));
     }
-    
+
     $cols = $ix+1;
 }
 else
