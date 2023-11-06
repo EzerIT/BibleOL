@@ -238,7 +238,7 @@
           <?PHP $lineId = 0; $stk = str_replace(" ", "__", $st); $hiddenStyles["$stk"] = ".{$stk}_hiddenDetails {
            visibility: collapse;
           }
-          "
+          ";
           $tot_featpMin = 0; ?>
         <?php foreach ($ra as $time => $result): ?>
           <?php $tot_featpMin += $result['featpermin'] <= 0 ? -1 : 60/$result['featpermin'] ?>
