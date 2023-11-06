@@ -178,7 +178,7 @@ class Ctrl_grades extends MY_Controller {
     //     }
     // }
 
-    // Show the main page to check grades of quizzes
+    // Show the main page for the teacher to check grades of quizzes
     public function teacher_grades() {
     	$this->load->model('mod_users');
     	$this->load->model('mod_classes');
@@ -203,6 +203,31 @@ class Ctrl_grades extends MY_Controller {
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('teacher_graphs_title'));
         }
+    }
+
+    // Show the main page for the student to check grades of exams
+    public function student_exam_grades() {
+    	$this->load->model('mod_users');
+    	$this->load->model('mod_classes');
+
+
+      try {
+        $classes = $this->mod_classes->get_named_classes_enrolled(false);
+
+        $this->load->view('view_top1', array('title' => $this->lang->line('teacher_graphs_title')));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => true));
+
+        $center_text = $this->load->view('view_grades_teacher_exam_classes', array('classes' => $classes, "student"=>true), true);
+
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line('select_class_heading'),
+        'left' => $this->lang->line('select_exam_class_description'),
+        'center' => $center_text));
+        $this->load->view('view_bottom');
+      }
+      catch (DataException $e) {
+        $this->error_view($e->getMessage(), $this->lang->line('teacher_graphs_title'));
+      }
     }
 
     // Show the main page to check grades of exams
@@ -807,7 +832,13 @@ class Ctrl_grades extends MY_Controller {
         $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
 
         try {
-            $this->mod_users->check_teacher();
+            // Check if user is enrollwed in the class
+            $classid = (int)$this->input->get('classid');
+            $is_enrolled=$this->mod_grades->check_if_enrolled($classid);
+            if ( !$is_enrolled ) {
+              // Check for admin if not enrolled
+              $this->mod_users->check_teacher();
+            }
 
             $this->load->helper('form');
             $this->load->helper('form');
@@ -821,7 +852,7 @@ class Ctrl_grades extends MY_Controller {
             $classid = (int)$this->input->get('classid');
             $class = $this->mod_classes->get_class_by_id($classid);
       //			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
-			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
+			if ($classid<=0 || (!$is_enrolled && $class->ownerid!=$this->mod_users->my_id()))
 				throw new DataException($this->lang->line('illegal_class_id'));
 
             $exam_list = $this->mod_grades->get_exams_for_class($classid);
@@ -861,35 +892,38 @@ class Ctrl_grades extends MY_Controller {
                     $real_students = array(); // Will be used as a set
 
                     // foreach ($users_and_templs as $uid => $templs) {
+                    $is_teacher=$this->mod_users->is_teacher();
                     foreach ($users_and_templs as $uid => $exams) {
-                        $see_nongraded = $nongraded && $this->mod_grades->may_see_nongraded($uid, $ex);
+                        if ( $is_teacher || $this->mod_users->my_id()==$uid ) {
+                          $see_nongraded = $nongraded && $this->mod_grades->may_see_nongraded($uid, $ex);
 
-                        // $res = $this->mod_grades->get_score_by_date_user_templ($uid,
-                        $res = $this->mod_grades->get_score_by_user_active_exam($uid,
-                                                                                   $exams,
-                                                                                   // $this->statistics_timeperiod->start_timestamp(),
-                                                                                   // $this->statistics_timeperiod->end_timestamp(),
-                                                                                   $see_nongraded,$calculate_percentages=true);
+                          // $res = $this->mod_grades->get_score_by_date_user_templ($uid,
+                          $res = $this->mod_grades->get_score_by_user_active_exam($uid,
+                          $exams,
+                          // $this->statistics_timeperiod->start_timestamp(),
+                          // $this->statistics_timeperiod->end_timestamp(),
+                          $see_nongraded,$calculate_percentages=true);
 
-                        // $res_ind = $this->mod_grades->get_score_by_user_templ($uid,
-                        $res_ind = $this->mod_grades->get_score_by_user_active_exam($uid,
-                                                                                   $exams,
-                                                                                   // $this->statistics_timeperiod->start_timestamp(),
-                                                                                   // $this->statistics_timeperiod->end_timestamp(),
-                                                                                   $see_nongraded,$calculate_percentages=true);
+                          // $res_ind = $this->mod_grades->get_score_by_user_templ($uid,
+                          $res_ind = $this->mod_grades->get_score_by_user_active_exam($uid,
+                          $exams,
+                          // $this->statistics_timeperiod->start_timestamp(),
+                          // $this->statistics_timeperiod->end_timestamp(),
+                          $see_nongraded,$calculate_percentages=true);
 
-                        $resfeat = $this->mod_grades->get_features_by_date_exam_result($uid,
-                                                                                          $exams,
-                                                                                          // $this->statistics_timeperiod->start_timestamp(),
-                                                                                          // $this->statistics_timeperiod->end_timestamp(),
-                                                                                          $see_nongraded,$highest_score_first=true);
+                          $resfeat = $this->mod_grades->get_features_by_date_exam_result($uid,
+                          $exams,
+                          // $this->statistics_timeperiod->start_timestamp(),
+                          // $this->statistics_timeperiod->end_timestamp(),
+                          $see_nongraded,$highest_score_first=true);
 
-                        if (empty($res))
-                            continue;
-                        $resall[] = $res;
-                        $resall_ind[] = $res_ind;
-                        $resfeatall[] = $resfeat;
-                        $real_students[$uid] = $see_nongraded;
+                          if (empty($res))
+                          continue;
+                          $resall[] = $res;
+                          $resall_ind[] = $res_ind;
+                          $resfeatall[] = $resfeat;
+                          $real_students[$uid] = $see_nongraded;
+                        }
                     }
 
                     $status = empty($resall) ? 0 : 1;  // 0=no data, 1=data
