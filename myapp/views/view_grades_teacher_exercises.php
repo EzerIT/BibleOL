@@ -238,9 +238,10 @@
           <?PHP $lineId = 0; $stk = str_replace(" ", "__", $st); $hiddenStyles["$stk"] = ".{$stk}_hiddenDetails {
            visibility: collapse;
           }
-          "?>
+          ";
+          $tot_featpMin = 0; ?>
         <?php foreach ($ra as $time => $result): ?>
-          <?php $tot_featpMin = $result['featpermin'] <= 0 ? -1 : 60/$result['featpermin'] ?>
+          <?php $tot_featpMin += $result['featpermin'] <= 0 ? -1 : 60/$result['featpermin'] ?>
         <tr class="<?php echo $lineId==0?'headerDet':"{$stk}_hiddenDetails";  ?>">
           <td><?= $lineId==0?$st . " (" . $this->lang->line('hgst_grade') .")":$st ?></td>
           <!-- <td class="text-center"><?= Statistics_timeperiod::format_date($time) ?></td> -->
