@@ -215,7 +215,15 @@
           <th class="text-center"><?= $this->lang->line('quiz_grade') ?></th>
           <th class="text-center"><?= $this->lang->line('best_total_time') ?></th>
           <th class="text-center"><?= $this->lang->line('hgst_avr_per_qi') ?></th>
-          <th></th>
+          
+          <th>
+            <a id="csv_download" class="badge badge-primary" href="#">
+              <?='CSV';?>
+            </a>
+            <a id="excel_download" class="badge badge-primary" href="#">
+              <?='EXCEL';?>
+            </a>
+          </th>
         </tr>
         <?php reset($students);
               $st = current($students);
@@ -370,7 +378,7 @@
           <?php if (count($students)<2): ?>
             $('#allkey').hide();
           <?php endif; ?>
-
+          
           <?php
           // one function for each button
           foreach ($hiddenStyles as $key => $value) {
@@ -395,7 +403,7 @@
             ";
           }
           ?>
-
+          
           $('#show1').click(
               function() {
                   $('#table1').show();
@@ -441,6 +449,16 @@
 
                   return false;
               }
+              );
+          $('#csv_download').click(
+              function(){
+                  console.log('CSV');
+                }
+              );
+          $('#excel_download').click(
+              function(){
+                  console.log('EXCEL');
+                }
               );
 
           var dataorig = <?= $resx ?>;
