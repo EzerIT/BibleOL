@@ -6,6 +6,10 @@
     $this->load->helper('calc_grades_helper');
 ?>
 
+<?php 
+  make_js('js/table2csv.min.js');
+?>
+
 <?php if ($status!=2): ?>
     <p style="margin-top:10px">
       <a id="showsel" class="badge badge-primary" href="#"><?= $this->lang->line('show_selector') ?></a>
