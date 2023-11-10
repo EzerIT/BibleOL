@@ -209,7 +209,7 @@
     <BR>
     <div class="table-responsive" id="table1" style="display:block">
       <h2><?= sprintf($this->lang->line('grades_for_exam'),htmlspecialchars($quiz)) ?></h2>
-      <table class="type2 table table-striped autowidth">
+      <table id="grading_table" class="type2 table table-striped autowidth">
         <caption><?= $this->lang->line('grds_exam_by_student_caption') ?></caption>
         <tr>
           <th><?= $this->lang->line('student') ?></th>
@@ -220,13 +220,12 @@
           <th class="text-center"><?= $this->lang->line('best_total_time') ?></th>
           <th class="text-center"><?= $this->lang->line('hgst_avr_per_qi') ?></th>
           
-          <th>
+          <th id="download_buttons">
+            
             <a id="csv_download" class="badge badge-primary" href="#">
               <?='CSV';?>
             </a>
-            <a id="excel_download" class="badge badge-primary" href="#">
-              <?='EXCEL';?>
-            </a>
+            
           </th>
         </tr>
         <?php reset($students);
@@ -282,7 +281,7 @@
           <td class="text-center"><?= anchor(build_get('grades/teacher_quizz_detail/classid/' . $classid . '/quizzid/'.$result["quizzid"] . '/userid/'.$result["userid"], array() ), (round($tot_featpMin)<=$max_time)?calculateGrade($grade_system, ($tot_percWeighted/$tot_weight)):calculateGrade($grade_system, 0)) ?></td>
           <td class="text-center"><?= $result["duration"] ?></td>
           <td class="text-center"><?= $tot_featpMin > 0 ? sprintf("%.1f",round(60/($tot_featpMin/$ncounter))) : "" ?></td>
-          <td class="text-center">
+          <td class="text-center" id="detail_data">
               <a id="det_<?php echo $stk;?>" class="badge badge-primary" href="#"><?= $this->lang->line('detail') ?></a>
           </td>
         </tr>
@@ -290,7 +289,7 @@
         <?php
         // Print the exercise pieces
         foreach ($ra as $time => $result): ?>
-        <tr class="<?php echo "{$stk}_hiddenDetails";  ?>">
+        <tr class="<?php echo "{$stk}_hiddenDetails exercise_data";  ?>">
           <td>>>> <?= $result["exercise_name"] ?></td>
           <td class="text-center"><?= Statistics_timeperiod::format_time($time) ?></td>
           <td class="text-center"><?= round($result['percentage']) ?>%</td>
@@ -456,15 +455,18 @@
               );
           $('#csv_download').click(
               function(){
-                  console.log('CSV');
+                  let outfile = "<?php echo $classname; ?>" + ".csv";
+                  let table_csv = $("#grading_table").table2csv('return', {'excludeColumns':'#download_buttons', 'excludeRows':'.exercise_data', 'quoteFields':false});
+                  let pattern = 'Details,'
+                  table_csv = table_csv.replaceAll(pattern,'');                  
+                  const blob = new Blob([table_csv], { type: 'text/csv;charset=utf-8,' });
+                  const objUrl = URL.createObjectURL(blob);
+                  this.setAttribute('href', objUrl);
+                  this.setAttribute('download', outfile);
+                  
                 }
               );
-          $('#excel_download').click(
-              function(){
-                  console.log('EXCEL');
-                }
-              );
-
+          
           var dataorig = <?= $resx ?>;
           var dataorigspf = <?= $resxspf ?>;
 
