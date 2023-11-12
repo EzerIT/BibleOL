@@ -472,8 +472,9 @@
               );
           $('#excel_download').click(
               function(){
-                  console.log('EXCEL');
-                  let table_excel = $('#grading_table').table2excel({exclude: '.exercise_data, #download_buttons, #detail_data', name: 'blank', filename: 'outfile', filext: '.xls'});
+                  let extension = '.xls'
+                  let outfile = "<?php echo $classname; ?>";
+                  let table_excel = $('#grading_table').table2excel({exclude: '.exercise_data, #download_buttons, #detail_data', name: 'blank', filename: outfile, filext: extension});
                 }
               );
           
