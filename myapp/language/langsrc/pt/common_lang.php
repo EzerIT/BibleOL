@@ -3,6 +3,7 @@
 $lang['already_logged_in'] = "Você já está logado";
 $lang['cancel_button'] = "Cancelar";
 $lang['cannot_open_file'] = "O arquivo %s não pode ser aberto";
+$lang['check_all'] = "Verifique tudo";
 $lang['close_button'] = "Fechar";
 $lang['date_time_format'] = "d M Y H:i";
 $lang['error_colon'] = "Erro:";

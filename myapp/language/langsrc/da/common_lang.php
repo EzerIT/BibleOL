@@ -4,6 +4,7 @@ $lang['already_logged_in'] = "Du er allerede logget ind";
 $lang['cancel_button'] = "Annullér";
 $lang['cannot_open_file'] = "Kan ikke åbne filen: %s";
 $lang['close_button'] = "Luk";
+$lang['check_all'] = "Tjek alle";
 $lang['date_time_format'] = "d.m.Y H:i";
 $lang['error_colon'] = "Fejl:";
 $lang['facebook_no_valid_reply'] = "Intet gyldigt svar fra Facebook";

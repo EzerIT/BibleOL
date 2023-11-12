@@ -4,6 +4,7 @@ $lang['already_logged_in'] = "You are already logged in";
 $lang['cancel_button'] = "Cancel";
 $lang['cannot_open_file'] = "Cannot open file: %s";
 $lang['close_button'] = "Close";
+$lang['check_all'] = "Check all";
 $lang['date_time_format'] = "d M Y H:i";
 $lang['error_colon'] = "Error:";
 $lang['facebook_no_valid_reply'] = "No valid reply from Facebook";
