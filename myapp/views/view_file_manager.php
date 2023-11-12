@@ -117,7 +117,6 @@
       $('input[name="file[]"]:checked').prop('checked',false);
     }
     function checkAll() {
-      console.log('checkAll()');
       $('input[name="file[]"]:not(:checked)').prop('checked',true);
     }
   </script>
