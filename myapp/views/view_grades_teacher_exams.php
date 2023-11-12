@@ -8,6 +8,7 @@
 
 <?php 
   make_js('js/table2csv.min.js');
+  make_js('js/table2excel.js');
 ?>
 
 <?php if ($status!=2): ?>
@@ -472,6 +473,7 @@
           $('#excel_download').click(
               function(){
                   console.log('EXCEL');
+                  let table_excel = $('#grading_table').table2excel({exclude: '.exercise_data, #download_buttons, #detail_data', name: 'blank', filename: 'outfile', filext: '.xls'});
                 }
               );
           
