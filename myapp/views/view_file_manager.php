@@ -58,7 +58,10 @@
     <input type="hidden" name="examname" value="">
     <table class="type2 table table-striped table-sm">
       <tr>
-        <th><?= $this->lang->line('mark') ?><br><a class="badge badge-primary" href="#" onclick="uncheckAll(); return false;"><?= $this->lang->line('uncheck_all') ?></a></th>
+        <th>
+          <?= $this->lang->line('mark') ?><br><a class="badge badge-primary" href="#" onclick="uncheckAll(); return false;"><?= $this->lang->line('uncheck_all') ?></a>
+          <a class="badge badge-primary" href="#" onclick="checkAll(); return false;"><?= 'Check all' ?></a>        
+        </th>
         <th><?= $this->lang->line('name') ?></th>
         <th><?= $this->lang->line('owner_name') ?></th>
         <th><?= $this->lang->line('operations') ?></th>
@@ -111,7 +114,11 @@
 
   <script>
     function uncheckAll() {
-        $('input[name="file[]"]:checked').prop('checked',false);
+      $('input[name="file[]"]:checked').prop('checked',false);
+    }
+    function checkAll() {
+      console.log('checkAll()');
+      $('input[name="file[]"]:not(:checked)').prop('checked',true);
     }
   </script>
 
