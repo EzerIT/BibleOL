@@ -60,7 +60,7 @@
       <tr>
         <th>
           <?= $this->lang->line('mark') ?><br><a class="badge badge-primary" href="#" onclick="uncheckAll(); return false;"><?= $this->lang->line('uncheck_all') ?></a>
-          <a class="badge badge-primary" href="#" onclick="checkAll(); return false;"><?= 'Check all' ?></a>        
+          <a class="badge badge-primary" href="#" onclick="checkAll(); return false;"><?= $this->lang->line('check_all') ?></a>        
         </th>
         <th><?= $this->lang->line('name') ?></th>
         <th><?= $this->lang->line('owner_name') ?></th>
