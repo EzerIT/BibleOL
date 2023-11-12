@@ -225,6 +225,9 @@
             <a id="csv_download" class="badge badge-primary" href="#">
               <?='CSV';?>
             </a>
+            <a id="excel_download" class="badge badge-primary" href="#">
+              <?='EXCEL';?>
+            </a>
             
           </th>
         </tr>
@@ -464,6 +467,11 @@
                   this.setAttribute('href', objUrl);
                   this.setAttribute('download', outfile);
                   
+                }
+              );
+          $('#excel_download').click(
+              function(){
+                  console.log('EXCEL');
                 }
               );
           
