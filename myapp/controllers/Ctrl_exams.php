@@ -601,22 +601,46 @@ class Ctrl_exams extends MY_Controller
 
           $exercise_parameters = array();
 
+          $totalNumberOfQuestions = 0;
+          $totalNumberOfExercises = 0;
+          $numberOfQuestionsCompleted = 0;
+          $numberOfExercisesCompleted = 0;
+
+          $numberOfQuestionsByExercise = "";
+
           $exercises = array();
           foreach ($xml->exercise as $exercise) {
+            $totalNumberOfExercises++;
+            $totalNumberOfQuestions += $exercise->numq;
+
             $name = str_replace("+", "%2B", $exercise->exercisename);
-            if (!in_array($name, $completed)) {
-              $name = trim($name);
-              array_push($exercises, $name);
-                $exercise_parameters[$name] = array();
-              $array = json_decode(json_encode((array) $exercise), TRUE);
-              # Iterate through the features of the exercise.
-          		foreach ($array as $key => $value){
-          		# If the current feature is not exercisename.
-          		  if($key != "exercisename"){
-          				$exercise_parameters[$name][$key] = $value;
-          		 	}
-          		}
+
+            $numberOfQuestionsByExercise .= "\nExercise "
+              . $totalNumberOfExercises
+              . ": "
+              . $exercise->numq;
+
+            // Check if the exercise was already completed
+            if (in_array($name, $completed)) {
+                $numberOfExercisesCompleted++;
+                $numberOfQuestionsCompleted += $exercise->numq;
+
+                continue;
             }
+
+            // If the exercise was not already completed, add
+            // it to the exercises array
+            $name = trim($name);
+            array_push($exercises, $name);
+              $exercise_parameters[$name] = array();
+            $array = json_decode(json_encode((array) $exercise), TRUE);
+            // Iterate through the features of the exercise.
+        		foreach ($array as $key => $value){
+        		// If the current feature is not exercisename.
+        		  if($key != "exercisename"){
+        				$exercise_parameters[$name][$key] = $value;
+        		 	}
+        		}
           }
 
           $this->session->set_userdata('exam_parameters', $exercise_parameters);
@@ -628,6 +652,8 @@ class Ctrl_exams extends MY_Controller
                 'exam_id' => $active_exam_id,
                 'exercises' => $exercises,
                 'exercise_parameters' => $exercise_parameters,
+                'number_of_exercises_completed' => $numberOfExercisesCompleted,
+                'total_number_of_exercises' => $totalNumberOfExercises,
                 'xml' => $xml,
               ),
               true
@@ -641,11 +667,21 @@ class Ctrl_exams extends MY_Controller
           }
         }
 
+        $leftText = $xml->description
+          . "\n\nTotal number of questions: "
+          . $totalNumberOfQuestions
+          . "\nTotal number of exercises: "
+          . $totalNumberOfExercises
+          . "\n"
+          . $numberOfQuestionsByExercise;
+
         $this->load->view(
           'view_main_page',
           array(
-            'left_title' => $this->lang->line('take_exam'),
-            'left' => $this->lang->line('take_exam_description'),
+            'left_title' => 'Exam Description',
+            'left' => nl2br($leftText),
+            'right_title' => $this->lang->line('take_exam'),
+            'right' => $this->lang->line('take_exam_description'),
             'center' => $center_text
           )
         );
