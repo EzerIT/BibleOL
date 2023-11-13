@@ -11,6 +11,7 @@ $lang['exercises'] = "Exercises";
 $lang['font_preferences'] = "Font preferences";
 $lang['grades_exams'] = "Grade Exams";
 $lang['grades_my_quizzes'] = "Grade My Quizzes";
+$lang['grades_my_exams'] = "Grade My Exams";
 $lang['grades_quizzes'] = "Grade Quizzes";
 $lang['help'] = "Help";
 $lang['help_pages'] = "Help pages";
