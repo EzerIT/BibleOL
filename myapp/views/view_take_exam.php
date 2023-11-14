@@ -1,11 +1,18 @@
 
-<div id="exam-info" style="display: flex; flex-direction: row;">
-  <div id="timer" class="cke_editable cke_editable_themed cke_contents_ltr cke_show_borders">
-    Time Left: <p id="timeLeft"></p>
-  </div>
-  <div id="exam-description" class="cke_editable cke_editable_themed cke_contents_ltr cke_show_borders" style="flex-grow:2;">
-    Description:
-    <?= $xml->description ?>
+<div id="exam-info" style="
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+">
+  <div
+    id="timer"
+    class="bg-secondary text-light"
+    style="
+      flex-grow: 0;
+      padding: 10px 20px;
+    "
+  >
+    <h5><?= $this->lang->line('time_left') ?>:</h5> <span id="timeLeft"></span>
   </div>
 </div>
 
