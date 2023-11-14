@@ -60,6 +60,10 @@ $comment['end_time'] = "";
 $format['end_time'] = "";
 $use_textarea['end_time'] = false;
 
+$comment['exam_description'] = "";
+$format['exam_description'] = "";
+$use_textarea['exam_description'] = false;
+
 $comment['exams_per_page'] = "";
 $format['exams_per_page'] = "";
 $use_textarea['exams_per_page'] = false;
@@ -108,6 +112,10 @@ $comment['please_choose_exercises'] = "";
 $format['please_choose_exercises'] = "";
 $use_textarea['please_choose_exercises'] = false;
 
+$comment['questions'] = "";
+$format['questions'] = "";
+$use_textarea['questions'] = false;
+
 $comment['start_date'] = "";
 $format['start_date'] = "";
 $use_textarea['start_date'] = false;
@@ -128,7 +136,18 @@ $comment['time'] = "";
 $format['time'] = "";
 $use_textarea['time'] = false;
 
+$comment['time_left'] = "";
+$format['time_left'] = "";
+$use_textarea['time_left'] = false;
+
+$comment['total_number_of_exercises'] = "";
+$format['total_number_of_exercises'] = "";
+$use_textarea['total_number_of_exercises'] = false;
+
+$comment['total_number_of_questions'] = "";
+$format['total_number_of_questions'] = "";
+$use_textarea['total_number_of_questions'] = false;
+
 $comment['user_operations'] = "";
 $format['user_operations'] = "";
 $use_textarea['user_operations'] = false;
-
