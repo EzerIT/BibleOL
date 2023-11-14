@@ -618,7 +618,9 @@ class Ctrl_exams extends MY_Controller
             $numberOfQuestionsByExercise .= "\nExercise "
               . $totalNumberOfExercises
               . ": "
-              . $exercise->numq;
+              . $exercise->numq
+              . " "
+              . $this->lang->line('questions');
 
             // Check if the exercise was already completed
             if (in_array($name, $completed)) {
@@ -668,9 +670,13 @@ class Ctrl_exams extends MY_Controller
         }
 
         $leftText = $xml->description
-          . "\n\nTotal number of questions: "
+          . "\n\n"
+          . $this->lang->line('total_number_of_questions')
+          . ": "
           . $totalNumberOfQuestions
-          . "\nTotal number of exercises: "
+          . "\n"
+          . $this->lang->line('total_number_of_exercises')
+          . ": "
           . $totalNumberOfExercises
           . "\n"
           . $numberOfQuestionsByExercise;
@@ -678,7 +684,7 @@ class Ctrl_exams extends MY_Controller
         $this->load->view(
           'view_main_page',
           array(
-            'left_title' => 'Exam Description',
+            'left_title' => $this->lang->line('exam_description'),
             'left' => nl2br($leftText),
             'right_title' => $this->lang->line('take_exam'),
             'right' => $this->lang->line('take_exam_description'),

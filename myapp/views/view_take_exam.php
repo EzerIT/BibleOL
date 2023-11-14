@@ -12,7 +12,7 @@
       padding: 10px 20px;
     "
   >
-    <h5>Time Left:</h5> <span id="timeLeft"></span>
+    <h5><?= $this->lang->line('time_left') ?>:</h5> <span id="timeLeft"></span>
   </div>
 </div>
 
