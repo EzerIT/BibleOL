@@ -1,0 +1,24 @@
+MYSQL_ROOT_PASSWORD=pwd
+MYSQL_USER=tim
+MYSQL_PASSWORD=pwd
+MYSQL_DATABASE=bibleol
+
+MAIL_SENDER_ADDRESS=ulrikp@scripturesys.com
+MAIL_SENDER_NAME="Bible Online Learner"
+
+GOOGLE_LOGIN_ENABLED=false
+GOOGLE_APPS_ID=""
+GOOGLE_CLIENT_SECRET=""
+
+FACEBOOK_LOGIN_ENABLED=false
+FACEBOOK_CLIENT_ID=""
+FACEBOOK_CLIENT_SECRET=""
+
+# The base URL of the site
+BASE_URL=http://localhost
+
+# If you are not using https, you should set COOKIE_SECURE to "false"
+COOKIE_SECURE=false
+#COOKIE_SECURE=true
+
+APACHE_CONFIG_FILE=bibleol.conf
