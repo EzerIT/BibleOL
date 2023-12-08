@@ -10,9 +10,6 @@ COPY emdros_pkg /home
 ADD build_emdros.sh /
 RUN chmod +x /build_emdros.sh
 
-ADD unzip_emdros.sh /
-RUN chmod +x /unzip_emdros.sh
-
 ADD config.sh /
 RUN chmod +x /config.sh
 
