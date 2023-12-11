@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:latest
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN apt-get update && apt-get upgrade -y 
@@ -14,5 +14,7 @@ ADD config.sh /
 RUN chmod +x /config.sh
 
 ADD bibleol.conf /
+
+EXPOSE 8000
 
 CMD '/bin/bash'
