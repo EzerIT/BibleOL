@@ -1,0 +1,35 @@
+Format: 1.8
+Date: Tue, 3 Jan 2023 21:05:41 +0000
+Source: emdros
+Binary: emdros
+Built-For-Profiles: noudeb
+Architecture: source amd64
+Version: 3.8.0
+Distribution: unstable
+Urgency: low
+Maintainer: Ulrik Sandborg-Petersen <ulrikp@emdros.org>
+Changed-By: Ulrik Sandborg-Petersen <ulrikp@emdros.org>
+Description:
+ emdros     - Emdros is a text database engine for analyzed or annotated text
+Changes:
+ emdros (3.8.0) unstable; urgency=low
+ .
+   * Upgrade to 3.8.0
+Checksums-Sha1:
+ dad58151eca5566df41e6983de6dcfeb919a69d4 562 emdros_3.8.0.dsc
+ 840f15ba69192d8a942e1a8a0107dee28063c715 8856212 emdros_3.8.0.tar.xz
+ f5339393217fdcc74aa62d3d375098185efffbd6 19081670 emdros-dbgsym_3.8.0_amd64.ddeb
+ 6985a41b2408f595fb25569599243fd200a34039 6180 emdros_3.8.0_amd64.buildinfo
+ 726fe56d9f6efe7c4ef1b68612fcc674e51a1032 3851418 emdros_3.8.0_amd64.deb
+Checksums-Sha256:
+ ad2dc824fd0e48e938becf52c472358ff74e898503709e3cce10adaf714c04df 562 emdros_3.8.0.dsc
+ c2f59043365cd7d9a4a23323f2b4bdcb909549e68b6382942244e73b90f36dee 8856212 emdros_3.8.0.tar.xz
+ 674e4b5b0e58b88932400d681460d251b8a302180f7f546e5de7bb74146f598b 19081670 emdros-dbgsym_3.8.0_amd64.ddeb
+ 3432d4599a090acdbf2195a8e4dd96da73877736898b7712804340e3c99c2a70 6180 emdros_3.8.0_amd64.buildinfo
+ e758a8852e0c3ee44f5fbfd819bc68844abb54e77ec3b8660e6a35d689a23c2e 3851418 emdros_3.8.0_amd64.deb
+Files:
+ 5cfbed66908fa0a094b957968e10e3ee 562 Text extra emdros_3.8.0.dsc
+ 7de9c0af78a8ee3f54cc72ccf3abf8b6 8856212 Text extra emdros_3.8.0.tar.xz
+ 6cd4b8de2e6d66181c06cedcc782d515 19081670 debug optional emdros-dbgsym_3.8.0_amd64.ddeb
+ 5ab019cc97804d6007c70a813f10aac9 6180 Text extra emdros_3.8.0_amd64.buildinfo
+ 97ebe7a7edaeff7bc6125ac03f3b016c 3851418 Text extra emdros_3.8.0_amd64.deb
