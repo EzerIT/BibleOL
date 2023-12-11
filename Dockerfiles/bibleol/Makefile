@@ -4,7 +4,7 @@ CONTAINER_NAME = bibleol-container
 
 build:
 	time sudo docker image build -t tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG) .
-	time sudo docker container run -d -t -p 80:80 --env-file environment.txt --name $(CONTAINER_NAME) tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)
+	time sudo docker container run -d -t -p 8000:80 --env-file environment.txt --name $(CONTAINER_NAME) tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)
 	time sudo docker container exec $(CONTAINER_NAME) bash /build_emdros.sh
 	time sudo docker container exec $(CONTAINER_NAME) bash /config.sh
 
