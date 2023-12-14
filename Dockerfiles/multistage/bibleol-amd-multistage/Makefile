@@ -1,6 +1,6 @@
-IMAGE_TAG = 2023_12_08
-IMAGE_NAME = bibleol-amd-img
-CONTAINER_NAME = bibleol-amd-container
+IMAGE_TAG = 2023_12_12
+IMAGE_NAME = bibleol-amd-ms
+CONTAINER_NAME = bibleol-amd-container-ms
 
 build:
 	time sudo docker image build -t tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG) .
