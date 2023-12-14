@@ -2,13 +2,13 @@
 There are two primary docker images for the Bible Online Learner. The image ```bibleol-arm``` is used for Mac operating systems that have an M1 or M2 chip, this is most of the newer models. The other image ```bibleol-amd``` will work on all other architectures including Windows, Linux, and Mac (Intel).
 
 # Dockerfiles Directory Contents
-```
-bibleol-amd: the directory containting the source code for running Bible Online Learner in an AMD container (Linux, Windows, Mac (Intel)).
 
-bibleol-arm: the directory containting the source code for running Bible Online Learner in an ARM container (Mac M1 & M2).
+**bibleol-amd**: the directory containting the source code for running Bible Online Learner in an AMD container (Linux, Windows, Mac (Intel)).
 
-multistage: a directory containing two sub-directories that build AMD and ARM containers respectively using primarily shell scripts instead of Dockerfiles, this approach is more space efficient, but the installation time will be constant across subsequent builds of the project because none of the required installation steps will be cached. This method is only reccomended for users who have less than 2GB of storage available.
-```
+**bibleol-arm**: the directory containting the source code for running Bible Online Learner in an ARM container (Mac M1 & M2).
+
+**multistage**: a directory containing two sub-directories that build AMD and ARM containers respectively using primarily shell scripts instead of Dockerfiles, this approach is more space efficient, but the installation time will be constant across subsequent builds of the project because none of the required installation steps will be cached. This method is only reccomended for users who have less than 2GB of storage available.
+
 
 # Installation
 The initial installation will take approximately 15 minutes, if the image is not already downloaded to your machine. Subsequent installations will generally take between 1-2 minutes. There is no need to be fluent in Docker commands to build these projects, because each sub-directory contains shell scripts and Makefiles that automate the installation.
