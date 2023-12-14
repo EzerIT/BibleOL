@@ -64,3 +64,7 @@ The initial installation will take approximately 15 minutes, if the image is not
 
 4. Type make clean to delete the image and container
 ```
+
+
+# Contributions
+All of the running containers will have git installed, and the root directory ```/var/www/html/BibleOL``` will point to this repository. Therefore any edits made in a docker container can be commited and pushed back to this repository.
