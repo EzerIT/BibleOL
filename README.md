@@ -23,6 +23,13 @@ This will install a Git hook that downloads the necessary databases from Dropbox
 *If you want to set up a Bible OL website, or if you want to develop for Bible OL, you must read the
  file techdoc/techdoc.pdf.*
 
+## Installation
+
+### Dockerized Installation
+Go to the Dockerfiles directory for detailed instructions on how to run Bible Online Learner on any computer.
+
+### Standard Installation
+Read Chapter 3 in techdoc/techdoc.pdf
 
 ## Contribute
 Since Bible OL is fully developed in Open Source, you are welcome to contribute.
