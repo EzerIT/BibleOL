@@ -3,7 +3,7 @@
 Run a docker container of the Bible Online Learner locally on your Linux, Windows, or Mac (Intel) machine.
 
 ## Directory Contents
-**emdros_amd**: a directory containing Emdros installation files for the AMD architecture, the most important of these files is `emdros_arm/emdros_3.8.0_amd64.deb`, this is the file used to install Emdros in the container.
+**emdros_amd**: a directory containing Emdros installation files for the AMD architecture, the most important of these files is `emdros_amd/emdros_3.8.0_amd64.deb`, this is the file used to install Emdros in the container.
 
 **bibleol.conf**: the apache configuration file for the Bible Online Learner site.
 
