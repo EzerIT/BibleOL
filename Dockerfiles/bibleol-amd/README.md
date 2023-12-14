@@ -1,16 +1,19 @@
-# bibleol-arm
+# bibleol-amd
 
-Run a docker container of the Bible Online Learner locally on your M1 or M2 mac.
-
+Run a docker container of the Bible Online Learner locally on your Linux, Windows, or Mac (Intel) machine.
 
 ## Directory Contents
-**emdros_arm**: a directory containing Emdros installation files for the ARM architecture, the most important of these files is `emdros_arm/emdros_3.8.0_arm64.deb`, this is the file used to install Emdros in the container.
+**emdros_amd**: a directory containing Emdros installation files for the AMD architecture, the most important of these files is `emdros_arm/emdros_3.8.0_amd64.deb`, this is the file used to install Emdros in the container.
 
 **bibleol.conf**: the apache configuration file for the Bible Online Learner site.
 
-**Dockerfile**: the Dockerfile used to build the bibleol-arm image
+**clean_windows.sh**: a shell script to delete the images and containers of this project for windows users who do not have access to the make commands.
+
+**Dockerfile**: the Dockerfile used to build the bibleol-amd image
 
 **environment.txt**: a text file containing the necessary configuration values for the container such as BASE_URL, MYSQL_USER, PW_SALT, etc...
+
+**make_windows.sh**: a shell script to build the project for windows users who do not have access to the make commands.
 
 **Makefile**: the Makefile that is used for automatically building the project, without a need for fluency in docker commands.
 
