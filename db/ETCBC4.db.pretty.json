@@ -513,6 +513,9 @@
                     "ignoreShow": true,
                     "ignoreRequest": true
                 },
+                "code_TYPE_text": {
+            
+                },
                 "dist": {
                     "ignoreSelect": true,
                     "ignoreShow": true,

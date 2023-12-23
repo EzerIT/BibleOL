@@ -1565,6 +1565,10 @@ var PanelForOneOtype = (function () {
         var sg = getSentenceGrammarFor(otype);
         var keylist = [];
         for (var featName in getObjectSetting(otype).featuresetting) {
+            if (featName === 'code_TYPE_text') {
+                keylist.push(featName);
+                continue;
+            }
             if (getFeatureSetting(otype, featName).ignoreShow
                 && getFeatureSetting(otype, featName).ignoreRequest
                 && (sg === null || !sg.containsFeature(featName)))
@@ -1577,7 +1581,17 @@ var PanelForOneOtype = (function () {
         }
         for (var ix = 0; ix < keylist.length; ++ix) {
             var featName = keylist[ix];
-            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName), featName, otype, useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, ptqf.getHideFeatures(featName), Boolean(getFeatureSetting(otype, featName).alternateshowrequestSql), !getFeatureSetting(otype, featName).ignoreShow, !getFeatureSetting(otype, featName).ignoreRequest, sg !== null && sg.containsFeature(featName));
+            if (featName === 'code_TYPE_text') {
+                var canShow = false;
+                var canRequest = false;
+                var canDisplayGrammar = true;
+            }
+            else {
+                var canShow = !getFeatureSetting(otype, featName).ignoreShow;
+                var canRequest = !getFeatureSetting(otype, featName).ignoreRequest;
+                var canDisplayGrammar = sg !== null && sg.containsFeature(featName);
+            }
+            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName), featName, otype, useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, ptqf.getHideFeatures(featName), Boolean(getFeatureSetting(otype, featName).alternateshowrequestSql), canShow, canRequest, canDisplayGrammar);
             this.allBAL.push(bal);
             table.append(bal.getRow());
         }

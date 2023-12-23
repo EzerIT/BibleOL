@@ -426,6 +426,12 @@ class PanelForOneOtype  {
         
         // Go through all features and identify the ones to include in the panel
         for (let featName in getObjectSetting(otype).featuresetting) {
+            // special case for "Linkage" feature
+            if(featName === 'code_TYPE_text') { 
+                keylist.push(featName);
+                continue;  
+            }
+            
             // Ignore features marked to be ignored, unless they belong to a SentenceGrammar
             if (getFeatureSetting(otype, featName).ignoreShow
                 && getFeatureSetting(otype, featName).ignoreRequest
@@ -445,15 +451,25 @@ class PanelForOneOtype  {
         // Loop through the relevant features and create radio buttons for each
         for (let ix=0; ix<keylist.length; ++ix) {
             let featName : string = keylist[ix]; // Feture name
+            if(featName === 'code_TYPE_text') {
+                var canShow = false;
+                var canRequest = false;
+                var canDisplayGrammar = true;
+            }
+            else {
+                var canShow = !getFeatureSetting(otype, featName).ignoreShow;
+                var canRequest = !getFeatureSetting(otype, featName).ignoreRequest;
+                var canDisplayGrammar = sg!==null && sg.containsFeature(featName);
+            }
             let bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName),                     // The localized name of the feature  
                                           featName,                                                    // The Emdros name of the feature     
                                           otype,                                                       // The Emdros object type             
                                           useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, // Initially selected radio button
                                           ptqf.getHideFeatures(featName),                              // List of feature values to hide from student
                                           Boolean(getFeatureSetting(otype,featName).alternateshowrequestSql), // Can multiple choice be used?       
-                                          !getFeatureSetting(otype, featName).ignoreShow,              // Can this be a display feature?     
-                                          !getFeatureSetting(otype, featName).ignoreRequest,           // Can this be a request feature?     
-                                          sg!==null && sg.containsFeature(featName));                  // Can this be a "don't show" feature?
+                                          canShow,                             // Can this be a display feature?     
+                                          canRequest,                          // Can this be a request feature?     
+                                          canDisplayGrammar);                  // Can this be a "don't show" feature?
             this.allBAL.push(bal);
             table.append(bal.getRow());
         }
