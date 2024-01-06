@@ -452,9 +452,6 @@ var GrammarSelectionBox = (function () {
                 break;
             case WHAT.feature:
             case WHAT.metafeature:
-                if (objType === "clause_atom" && featName === "code_TYPE_text") {
-                    var disabled_test = mayShowFeature(objType, origObjType, featName, sgiObj, true) ? '' : 'disabled';
-                }
                 var disabled = mayShowFeature(objType, origObjType, featName, sgiObj) ? '' : 'disabled';
                 if (this.hasSeenGrammarGroup) {
                     if (objType === "word" && featName === "frequency_rank")
@@ -462,9 +459,6 @@ var GrammarSelectionBox = (function () {
                     this.subgroupgrammardivs += "<div class=\"selectbutton\"><input id=\"".concat(objType, "_").concat(featName, "_cb\" type=\"checkbox\" ").concat(disabled, "><label class=\"").concat(disabled, "\" for=\"").concat(objType, "_").concat(featName, "_cb\">").concat(featNameLoc, "</label></div>");
                 }
                 else {
-                    if (objType === "clause_atom" && featName === "code_TYPE_text") {
-                        console.log('disabled: ', disabled);
-                    }
                     this.checkboxes += "<div class=\"selectbutton\"><input id=\"".concat(objType, "_").concat(featName, "_cb\" type=\"checkbox\" ").concat(disabled, "><label class=\"").concat(disabled, "\" for=\"").concat(objType, "_").concat(featName, "_cb\">").concat(featNameLoc, "</label></div>");
                 }
                 break;
@@ -1078,8 +1072,7 @@ function localize(s) {
     var str = l10n_js[s];
     return str === undefined ? '??' + s + '??' : str;
 }
-function mayShowFeature(oType, origOtype, feat, sgiObj, debug) {
-    if (debug === void 0) { debug = false; }
+function mayShowFeature(oType, origOtype, feat, sgiObj) {
     if (!inQuiz)
         return true;
     var qf = quizdata.quizFeatures;
@@ -1087,10 +1080,6 @@ function mayShowFeature(oType, origOtype, feat, sgiObj, debug) {
         for (var _i = 0, _a = qf.dontShowFeatures; _i < _a.length; _i++) {
             var dsf = _a[_i];
             if (dsf === feat) {
-                console.log('feat: ', feat);
-                console.log('qf.dontShowFeatures: ', qf.dontShowFeatures);
-                console.log('isDontShowFeature: ', dsf);
-                console.log('------------------------------------');
                 return true;
             }
         }

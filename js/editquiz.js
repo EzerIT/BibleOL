@@ -1596,7 +1596,6 @@ var PanelForOneOtype = (function () {
             if (isNaN(leveli))
                 return "continue";
             var otherOtype = configuration.sentencegrammar[leveli].objType;
-            console.log('OTHER OTYPE: ' + otherOtype);
             if (otherOtype !== otype && configuration.objectSettings[otherOtype].mayselect) {
                 table = $('<table class="striped featuretable"></table>');
                 table.append('<tr>'
