@@ -1581,12 +1581,22 @@ var PanelForOneOtype = (function () {
             this.allBAL.push(bal);
             table.append(bal.getRow());
         }
+        var friendly_name = 'Linkage';
+        var real_name = 'code_TYPE_text';
+        var useDropDown = false;
+        var canShow = false;
+        var canRequest = false;
+        var canDisplayGrammar = true;
+        var bal_linkage = new ButtonsAndLabel(friendly_name, real_name, otype, useSavedFeatures ? ptqf.getSelector(real_name) : ButtonSelection.DONT_CARE, ptqf.getHideFeatures(real_name), useDropDown, canShow, canRequest, canDisplayGrammar);
+        this.allBAL.push(bal_linkage);
+        table.append(bal_linkage.getRow());
         this.panel.append(this.wrapInCard(getObjectFriendlyName(otype), table, true, "accordion".concat(PanelForOneOtype.accordionNumber)));
         var _loop_1 = function (level) {
             var leveli = +level;
             if (isNaN(leveli))
                 return "continue";
             var otherOtype = configuration.sentencegrammar[leveli].objType;
+            console.log('OTHER OTYPE: ' + otherOtype);
             if (otherOtype !== otype && configuration.objectSettings[otherOtype].mayselect) {
                 table = $('<table class="striped featuretable"></table>');
                 table.append('<tr>'

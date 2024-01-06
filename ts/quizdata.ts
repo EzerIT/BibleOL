@@ -70,7 +70,17 @@ function mayShowFeature(oType : string, origOtype : string, feat : string, sgiOb
     if (!inQuiz)
         return true;
 
+    
     let qf : ExtendedQuizFeatures = quizdata.quizFeatures;
+
+    // Function to check if a feature is in qf.dontShowFeatures, this could have been added manually.
+    function isDontShowFeature() {
+        for(let dsf of qf.dontShowFeatures)
+            if(dsf === feat) {
+                return true;
+            }
+        return false;
+    }
 
     // Function to check if origOtype is a dontShowObject
     function isDontShowObject() {
@@ -80,6 +90,14 @@ function mayShowFeature(oType : string, origOtype : string, feat : string, sgiOb
         return false;
     }
     
+    // check for dontShowFeatures and if false, then do not allow the feature to be displayed in the grammar selection box
+    if(isDontShowFeature()){
+        return false;
+    }
+
+    
+    
+
     // Handle metafeatures as their separate components, unless we have a dontShowObject,
     // because dontShowObjects handle metafeatures in the same way as ordinary features
     if (sgiObj.mytype==='GrammarMetaFeature' && !isDontShowObject()) {
@@ -92,6 +110,7 @@ function mayShowFeature(oType : string, origOtype : string, feat : string, sgiOb
         }
         return true;
     }
+    
 
     let regex_feat = new RegExp(
         (sgiObj.mytype==='GrammarFeature' && getFeatureSetting(oType,feat).isGloss!==undefined)
@@ -112,6 +131,7 @@ function mayShowFeature(oType : string, origOtype : string, feat : string, sgiOb
     for (let rf of qf.requestFeatures)
         if (rf.name===feat)
             return false;
+
 
     // Don't-show features must not be displayed
     return qf.dontShowFeatures.indexOf(feat)===-1;

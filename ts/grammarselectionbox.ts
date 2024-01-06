@@ -137,13 +137,14 @@ class GrammarSelectionBox {
                 case WHAT.feature:
                 case WHAT.metafeature:
                     let disabled: string = mayShowFeature(objType, origObjType, featName, sgiObj) ? '' : 'disabled';
+                    
                                           
                 if (this.hasSeenGrammarGroup) {
                     if (objType==="word" && featName==="frequency_rank")
                         this.seenFreqRank = true;
-                    
                     this.subgroupgrammardivs += `<div class="selectbutton"><input id="${objType}_${featName}_cb" type="checkbox" ${disabled}><label class="${disabled}" for="${objType}_${featName}_cb">${featNameLoc}</label></div>`;
-                    } else {
+                    } 
+                    else {
                         this.checkboxes += `<div class="selectbutton"><input id="${objType}_${featName}_cb" type="checkbox" ${disabled}><label class="${disabled}" for="${objType}_${featName}_cb">${featNameLoc}</label></div>`;
                     }
                     break;
@@ -473,7 +474,7 @@ class GrammarSelectionBox {
             // Force removal of grammar items in Quiz, without saving to session
             if (force) {
                 let IDs: any[] = []
-                $('#grammarbuttongroup .selectbutton input:checked').each(function () { IDs.push($(this).attr('id')); });    
+                $('#grammarbuttongroup .selectbutton input:checked').each(function () {IDs.push($(this).attr('id')); });    
                 for (let i in IDs) {
                     $('#' + IDs[i]).prop('checked',false);
                     $('#' + IDs[i]).trigger('change','manual');
