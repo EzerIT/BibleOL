@@ -418,7 +418,6 @@ class PanelForOneOtype  {
         let hasSurfaceFeature : boolean         = otype===configuration.objHasSurface;
         let sg                : SentenceGrammar = getSentenceGrammarFor(otype);
         let keylist           : string[]        = []; // Will hold list of relevant feature names
-
         // Note:
         // getFeatureSetting(otype, featName).ignoreShow means featName cannot be a display feature.
         // getFeatureSetting(otype, featName).ignoreRequest means featName cannot be a request feature.
@@ -457,6 +456,27 @@ class PanelForOneOtype  {
             this.allBAL.push(bal);
             table.append(bal.getRow());
         }
+        // Manually add Linkage Button and Label
+        let friendly_name = 'Linkage';
+        let real_name = 'code_TYPE_text';
+        let useDropDown = false;        // Can multiple choice be used?
+        let canShow = false;            // Can this be a display feature?
+        let canRequest = false;         // Can this be a request feature?
+        let canDisplayGrammar = true;   // Can this be a "don't show" feature?
+
+        let bal_linkage = new ButtonsAndLabel(friendly_name,
+                                              real_name,
+                                              otype,
+                                              useSavedFeatures ? ptqf.getSelector(real_name) : ButtonSelection.DONT_CARE,
+                                              ptqf.getHideFeatures(real_name),
+                                              useDropDown, 
+                                              canShow, 
+                                              canRequest, 
+                                              canDisplayGrammar);
+
+        // Add Linkage Button and Label to allBAL
+        this.allBAL.push(bal_linkage);
+        table.append(bal_linkage.getRow());
 
         this.panel.append(this.wrapInCard(getObjectFriendlyName(otype), table, true, `accordion${PanelForOneOtype.accordionNumber}`));
 
