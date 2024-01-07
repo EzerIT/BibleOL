@@ -1581,15 +1581,14 @@ var PanelForOneOtype = (function () {
             this.allBAL.push(bal);
             table.append(bal.getRow());
         }
-        var friendly_name = 'Linkage';
         var real_name = 'code_TYPE_text';
-        var useDropDown = false;
-        var canShow = false;
-        var canRequest = false;
-        var canDisplayGrammar = true;
-        var bal_linkage = new ButtonsAndLabel(friendly_name, real_name, otype, useSavedFeatures ? ptqf.getSelector(real_name) : ButtonSelection.DONT_CARE, ptqf.getHideFeatures(real_name), useDropDown, canShow, canRequest, canDisplayGrammar);
-        this.allBAL.push(bal_linkage);
-        table.append(bal_linkage.getRow());
+        var friendly_name = 'Linkage';
+        var bal_row = this.addManualButton(real_name, friendly_name, otype, useSavedFeatures, ptqf.getSelector(real_name), ptqf.getHideFeatures(real_name));
+        table.append(bal_row);
+        real_name = 'code';
+        friendly_name = 'Syntactic Code';
+        bal_row = this.addManualButton(real_name, friendly_name, otype, useSavedFeatures, ptqf.getSelector(real_name), ptqf.getHideFeatures(real_name));
+        table.append(bal_row);
         this.panel.append(this.wrapInCard(getObjectFriendlyName(otype), table, true, "accordion".concat(PanelForOneOtype.accordionNumber)));
         var _loop_1 = function (level) {
             var leveli = +level;
@@ -1657,6 +1656,15 @@ var PanelForOneOtype = (function () {
         }
         this.panel.append(this.wrapInCard(localize('gloss_limit'), $("<div><span class=\"gloss-limit-prompt\">".concat(localize('gloss_limit_prompt'), " </span><input id=\"gloss-limit-").concat(otype, "\" type=\"number\" value=\"").concat(ptqf.getGlossLimit(), "\" style=\"width:5em\"></span>")), false, "accordion".concat(PanelForOneOtype.accordionNumber)));
     }
+    PanelForOneOtype.prototype.addManualButton = function (real_name, friendly_name, otype, useSavedFeatures, get_selector, get_hide_features) {
+        var useDropDown = false;
+        var canShow = false;
+        var canRequest = false;
+        var canDisplayGrammar = true;
+        var new_bal = new ButtonsAndLabel(friendly_name, real_name, otype, useSavedFeatures ? get_selector : ButtonSelection.DONT_CARE, get_hide_features, useDropDown, canShow, canRequest, canDisplayGrammar);
+        this.allBAL.push(new_bal);
+        return new_bal.getRow();
+    };
     PanelForOneOtype.prototype.wrapInCard = function (heading, contents, open, accordionId) {
         ++PanelForOneOtype.collapseNumber;
         var cardBody = $('<div class="card-body"></div>');
