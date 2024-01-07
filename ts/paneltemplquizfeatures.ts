@@ -586,7 +586,7 @@ class PanelForOneOtype  {
                                           `accordion${PanelForOneOtype.accordionNumber}`));
     }
     
-    addManualButton(real_name:string, friendly_name:string, otype:string, useSavedFeatures:boolean, get_selector:number, get_hide_features:string[]): JQuery {
+    private addManualButton(real_name:string, friendly_name:string, otype:string, useSavedFeatures:boolean, get_selector:number, get_hide_features:string[]): JQuery {
             
         let useDropDown = false;        // Can multiple choice be used?
         let canShow = false;            // Can this be a display feature?
