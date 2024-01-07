@@ -456,27 +456,23 @@ class PanelForOneOtype  {
             this.allBAL.push(bal);
             table.append(bal.getRow());
         }
+
+        
+
         // Manually add Linkage Button and Label
-        let friendly_name = 'Linkage';
         let real_name = 'code_TYPE_text';
-        let useDropDown = false;        // Can multiple choice be used?
-        let canShow = false;            // Can this be a display feature?
-        let canRequest = false;         // Can this be a request feature?
-        let canDisplayGrammar = true;   // Can this be a "don't show" feature?
+        let friendly_name = 'Linkage';
+        let bal_row = this.addManualButton(real_name, friendly_name, otype, useSavedFeatures, ptqf.getSelector(real_name), ptqf.getHideFeatures(real_name));
+        table.append(bal_row);
 
-        let bal_linkage = new ButtonsAndLabel(friendly_name,
-                                              real_name,
-                                              otype,
-                                              useSavedFeatures ? ptqf.getSelector(real_name) : ButtonSelection.DONT_CARE,
-                                              ptqf.getHideFeatures(real_name),
-                                              useDropDown, 
-                                              canShow, 
-                                              canRequest, 
-                                              canDisplayGrammar);
+        // Manually add Syntactic Code Button and Label
+        real_name = 'code';
+        friendly_name = 'Syntactic Code';
+        bal_row = this.addManualButton(real_name, friendly_name, otype, useSavedFeatures, ptqf.getSelector(real_name), ptqf.getHideFeatures(real_name));
+        table.append(bal_row);
+        
 
-        // Add Linkage Button and Label to allBAL
-        this.allBAL.push(bal_linkage);
-        table.append(bal_linkage.getRow());
+        
 
         this.panel.append(this.wrapInCard(getObjectFriendlyName(otype), table, true, `accordion${PanelForOneOtype.accordionNumber}`));
 
@@ -589,6 +585,31 @@ class PanelForOneOtype  {
                                           false,
                                           `accordion${PanelForOneOtype.accordionNumber}`));
     }
+    
+    addManualButton(real_name:string, friendly_name:string, otype:string, useSavedFeatures:boolean, get_selector:number, get_hide_features:string[]): JQuery {
+            
+        let useDropDown = false;        // Can multiple choice be used?
+        let canShow = false;            // Can this be a display feature?
+        let canRequest = false;         // Can this be a request feature?
+        let canDisplayGrammar = true;   // Can this be a "don't show" feature?
+
+        let new_bal = new ButtonsAndLabel(friendly_name,
+            real_name,
+            otype,
+            useSavedFeatures ? get_selector : ButtonSelection.DONT_CARE,
+            get_hide_features,
+            useDropDown, 
+            canShow, 
+            canRequest, 
+            canDisplayGrammar);
+
+        // Add the new button and label to allBAL
+        this.allBAL.push(new_bal);
+        return new_bal.getRow();
+    }
+    
+    
+    
 
 
     //------------------------------------------------------------------------------------------
