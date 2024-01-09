@@ -28,9 +28,11 @@
                                        '<?= site_url("classes/delete_class?classid=$cl->clid") ?>');
                         return false;"
                href="#"><?= $this->lang->line('class_delete') ?></a>
+          
         <?php endif; ?>
         <?php if ($isadmin): ?>
           <a class="badge badge-primary" onclick="changeOwnerClass(<?= $cl->clid ?>); return false;" href="#"><?= $this->lang->line('change_owner_class') ?></a>
+          <a class="badge badge-primary" href="<?= site_url("classes/add_one_grader?classid=$cl->clid") ?>"><?= $this->lang->line('add_grader') ?></a>
         <?php endif; ?>
       </td>
     </tr>
@@ -91,6 +93,9 @@
         $('#classid-to-modify').attr('value',classid);
         $('#chown-class-error').hide();
         $('#chown-class-dialog').modal('show');
+    }
+    function addGrader(classid) {
+        console.log("addGrader()");
     }
   </script>
 
