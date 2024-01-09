@@ -2,6 +2,7 @@
 
 $lang['add_class'] = "Add new class";
 $lang['assign_users'] = "Assign users";
+$lang['add_grader'] = "Add grader";
 $lang['change_owner_class'] = "Change owner";
 $lang['classes'] = "Classes";
 $lang['class_delete'] = "Delete";
