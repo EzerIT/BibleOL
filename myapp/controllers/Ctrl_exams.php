@@ -57,10 +57,14 @@ class Ctrl_exams extends MY_Controller
         $user_id = $this->mod_users->my_id();
 
         # Get classes user is part of.
-        if ($this->mod_users->is_teacher())
+        if ($this->mod_users->is_teacher()){
           $owned_classes = $this->mod_classes->get_classes_owned();
-        else
+          // get classes where the user is a grader
+          $graded_classes = array();
+        }
+        else{
           $owned_classes = $this->mod_userclass->get_classes_for_user($user_id);
+        }
 
         $class_names = array();
 

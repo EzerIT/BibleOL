@@ -16,31 +16,6 @@ if (!empty($valerr))
             <?= $this->lang->line('field_required') ?>
         </td>
     </tr>
-
-    <tr>
-        <td>
-            <?= "Grader Name" //$this->lang->line('add_grader') ?>
-        </td>
-        <!-- 
-        <td class="norb"><input type="text" name="classname"
-                value="<?= $x = 1; //set_value('classname', $class_name) ?>"></td>
-        -->
-        <td class="norb"><input type="text" name="grader_name">
-            <!--<td class="norb"><input type="text" name="grader_id">-->
-
-        </td>
-        
-    </tr>
-    <tr>
-        <td>
-            <?= "Grader Email: " ?>
-        </td>
-        <td class="norb">
-            <input type="text" name="grader_email">
-        </td>
-    </tr>
-
-
 </table>
 <p style="height:2px">&nbsp;</p>
 <p><input class="btn btn-primary" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>">

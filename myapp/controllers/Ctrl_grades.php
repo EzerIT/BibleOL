@@ -237,9 +237,12 @@ class Ctrl_grades extends MY_Controller {
 
         try {
             $this->mod_users->check_teacher();
-
+            //echo "LAST QUERY: <br>";
+            //echo var_dump($this->db->last_query()) . '<br>';
+            //echo var_dump($this->db);
 
             $classes = $this->mod_classes->get_named_classes_owned(false);
+            //echo 'classes: ' . var_dump($classes) . '<br>';
 
             $this->load->view('view_top1', array('title' => $this->lang->line('teacher_graphs_title')));
             $this->load->view('view_top2');
@@ -832,7 +835,7 @@ class Ctrl_grades extends MY_Controller {
         $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
 
         try {
-            // Check if user is enrollwed in the class
+            // Check if user is enrolled in the class
             $classid = (int)$this->input->get('classid');
             $is_enrolled=$this->mod_grades->check_if_enrolled($classid);
             if ( !$is_enrolled ) {
