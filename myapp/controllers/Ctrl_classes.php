@@ -126,65 +126,64 @@ class Ctrl_classes extends MY_Controller {
         return true;
     }
     public function add_one_grader() {
-        $classid = isset($_GET['classid']) ? intval($_GET['classid']) : 0;
-        $class_info = $this->mod_classes->get_class_by_id($classid);
-        $class_name = $class_info->classname;
-        //echo 'Class ID: ' . $classid . '<br>';
-        //echo 'Class Info: ' . var_dump($class_info) . '<br>';
-        //echo 'Class Name: ' . $class_name . '<br>';
+        // load the form helper and validation library
         $this->load->helper('form');
         $this->load->library('form_validation');
-
-        //$this->form_validation->set_message('is_unique', sprintf($this->lang->line('class_name_used'), $this->input->post('classname')));
+        // set validation rules for the grader username
         $this->form_validation->set_rules('grader_username', $this->lang->line('class_name'), "trim|required");
-        //$this->form_validation->set_rules('password', $this->lang->line('class_pw'), 'trim|strip_tags');
-        //$this->form_validation->set_rules('enrol_before', $this->lang->line('enroll_before'), 'trim|strip_tags|callback_date_valid_check');
+
+
+        // get the classid from the URL
+        $classid = isset($_GET['classid']) ? intval($_GET['classid']) : 0;
+
+        // from the id get the class name
+        $class_info = $this->mod_classes->get_class_by_id($classid);
+        $class_name = $class_info->classname;
 
         if ($this->form_validation->run()) {
-            echo 'RECEIVED FORM!<br>';
-            echo 'NEW GRADER: ' . $this->input->post('grader_name') . '<br>';
-            if($this->input->post('grader_email') != NULL){
-                echo 'GRADER EMAIL: ' . $this->input->post('grader_email') . '<br>';
-            }
-            if($this->input->post('grader_username') != NULL){
-                echo 'GRADER USERNAME: ' . $this->input->post('grader_username') . '<br>';
-            }
-            echo 'CLASS ID: ' . $classid . '<br>';
-            echo 'CLASS NAME: ' . $class_name . '<br>';
+            // build a query to retrieve the userid for the new grader            
+            //$query_statement = sprintf("SELECT id, username FROM bol_user WHERE username = '%s'", $this->input->post('grader_username'));
+            // run the query to get the userid
+            //$query = $this->db->query($query_statement);
             
             
-            // do the operation
-            //$this->db->
-            /*
-            echo 'run';
-            
-            $class_info->classname = $this->input->post('classname');
-            $class_info->password = $this->input->post('password');
-            $class_info->enrol_before = $this->input->post('enrol_before');
+            $grader_query = $this->db->select('id')->from('user')->where('username',$this->input->post('grader_username'))->get();
+            $grader_result = $grader_query->result();
+            $grader_id = $grader_result[0]->id;
 
-            $query = $this->mod_classes->set_class($class_info);
 
+
+
+            
+            // parse out the resulting userid
+            //$result = $query->result();
+            //$grader_id = $result[0]->id;
+
+            // build a query to insert the new grader into the bol_grader table
+            //$insert_stmt = sprintf("INSERT IGNORE INTO bol_grader (classid, graderid) VALUES (%d, %d)", $classid, $grader_id);
+            // run the query to insert the new grader
+            //$insert_query = $this->db->query($insert_stmt);
+            
+            $insert_data = array('classid' => $classid, 'graderid' => $grader_id);
+            $this->db->insert('grader', $insert_data);
+            
+            
+            
+            
+            // redirect to the classes list page
             redirect('/classes');
-            */
-            
         }
-        else{
-            // VIEW:
+        else {
+            // if the grader username has not been entered, then display the add grader form to the user
             $top_text = $this->lang->line('add_grader');
             $this->load->view('view_top1', array('title' => $top_text));
             $this->load->view('view_top2');
-            $this->load->view('view_menu_bar', array('langselect' => true));
-            
-            
+            $this->load->view('view_menu_bar', array('langselect' => true));   
             $center_text = $this->load->view('view_add_grader', array('class_name' => $class_name, 'classid' => $classid), true);
-            //$center_text = $this->load->view('view_enrolled',array('classid' => $classid, 'class_info' => $class_info), true);
-            //$center_text = "Add Grader";
-            $this->load->view('view_main_page', array('left_title' => $top_text,
-                                                    'center' => $center_text));
+            $this->load->view('view_main_page', array('left_title' => $top_text, 'center' => $center_text));
             $this->load->view('view_bottom');
 
         }
-        //echo "Triggered add_one_grader() from Ctrl_classes.php";
         
     }
 

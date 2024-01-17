@@ -62,12 +62,34 @@ class Mod_classes extends CI_Model {
     }
 
     public function get_named_classes_owned($all=true) {
-        if ($all && $this->mod_users->is_admin())
+        if ($all && $this->mod_users->is_admin()) {
             $query = $this->db->select('id,classname')->get('class');
-        else
-            $query = $this->db->select('id,classname')->where('ownerid',$this->mod_users->my_id())->get('class');
+            //echo 'Sample Result: ' . var_dump($query->result());
+            return $query->result();
+        }
+        else {
+            // Get classes owned by current user
+            $owner_query = $this->db->select('id,classname')->where('ownerid',$this->mod_users->my_id())->get('class');
+            $owned_classes = $owner_query->result();
 
-        return $query->result();
+            // Get classes where current user is a grader
+            $grader_query = $this->db->select('classid')->from('grader')->where('graderid',$this->mod_users->my_id())->get();
+            $grader_classes = array();
+
+            // For each class that the user is a grader for, get the class object and add it to the array of grader_classes
+            foreach ($grader_query->result() as $row) {
+                // get the class object from the class ID
+                $class_query = $this->db->select('id,classname')->where('id',$row->classid)->get('class');
+
+                // append the class object to the array of grader_classes
+                $grader_classes[] = $class_query->result()[0];
+            }
+
+            // get the classes where the user is either a grader or a owner and remove duplicates
+            $graded_or_owned_classes = array_unique(array_merge($owned_classes, $grader_classes));
+
+            return $graded_or_owned_classes;
+        }
     }
 
     // Get clases the ustand is enrolled in
