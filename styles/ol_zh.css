@@ -409,11 +409,11 @@ div#grammargroup {
 }
 .ui-tabs .ui-tabs-nav .ui-state-default {
   border: none;
-  padding-right: 5px;
+  padding-right: 0px;
 }
 .ui-tabs .ui-tabs-nav .ui-state-active {
   border: none;
-  padding-right: 5px;
+  padding-right: 0px;
 }
 .ui-tabs .ui-tabs-nav .ui-state-active #myview {
   border-bottom: 0px !important;
