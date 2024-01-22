@@ -61,7 +61,6 @@ class Mod_exams extends CI_Model{
 
     public function count_exams(){
         $query = $this->db->select('count(*) as count')->get('exam');
-        echo 'Last Query: ' . $this->db->last_query();
         return $query->row()->count;
     }
 
