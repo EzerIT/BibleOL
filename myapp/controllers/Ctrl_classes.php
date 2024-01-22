@@ -141,35 +141,20 @@ class Ctrl_classes extends MY_Controller {
         $class_name = $class_info->classname;
 
         if ($this->form_validation->run()) {
-            // build a query to retrieve the userid for the new grader            
-            //$query_statement = sprintf("SELECT id, username FROM bol_user WHERE username = '%s'", $this->input->post('grader_username'));
-            // run the query to get the userid
-            //$query = $this->db->query($query_statement);
+          
             
-            
+            // Get the grader ID from the form submission
             $grader_query = $this->db->select('id')->from('user')->where('username',$this->input->post('grader_username'))->get();
             $grader_result = $grader_query->result();
             $grader_id = $grader_result[0]->id;
+			echo 'GET ID: ' . $this->db->last_query() . '<br>';
 
 
-
-
-            
-            // parse out the resulting userid
-            //$result = $query->result();
-            //$grader_id = $result[0]->id;
-
-            // build a query to insert the new grader into the bol_grader table
-            //$insert_stmt = sprintf("INSERT IGNORE INTO bol_grader (classid, graderid) VALUES (%d, %d)", $classid, $grader_id);
-            // run the query to insert the new grader
-            //$insert_query = $this->db->query($insert_stmt);
-            
+			// Insert the new grader into the grader table
             $insert_data = array('classid' => $classid, 'graderid' => $grader_id);
             $this->db->insert('grader', $insert_data);
-            
-            
-            
-            
+			echo 'INSERT GRADER: ' . $this->db->last_query() . '<br>';
+
             // redirect to the classes list page
             redirect('/classes');
         }
