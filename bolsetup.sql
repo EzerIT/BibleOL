@@ -33,8 +33,7 @@ CREATE TABLE `bol_grader`(
 	`id` int NOT NULL AUTO_INCREMENT,
 	`grader_id` int NOT NULL DEFAULT '0',
 	`class_id` int NOT NULL DEFAULT '0',
-	PRIMARY KEY (id),
-	CONSTRAINT `bol_grader_ibfk_1` FOREIGN KEY (`grader_id`) REFERENCES `bol_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 
