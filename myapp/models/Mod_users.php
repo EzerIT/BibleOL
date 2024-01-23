@@ -79,6 +79,17 @@ class Mod_users extends CI_Model {
         return $this->me->isadmin && $this->accepted_current_policy();
     }
 
+	public function is_grader($classid, $userid) {
+		$is_grader = false;
+		$n = $this->db->select('id')->from('grader')->where('classid', $classid)->where('graderid', $userid)->get()->num_rows();
+		
+		if($n > 0) {
+			$is_grader = true;
+		}
+
+		return $is_grader;
+	}
+
     public function is_teacher() {
         return ($this->me->isteacher || $this->me->isadmin) && $this->accepted_current_policy(); // All admins are teachers
     }
