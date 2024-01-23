@@ -75,18 +75,28 @@ class Mod_classes extends CI_Model {
             // Get classes where current user is a grader
             $grader_query = $this->db->select('classid')->from('grader')->where('graderid',$this->mod_users->my_id())->get();
             $grader_classes = array();
+			$grader_classes_ids = array();
 
             // For each class that the user is a grader for, get the class object and add it to the array of grader_classes
             foreach ($grader_query->result() as $row) {
                 // get the class object from the class ID
-                $class_query = $this->db->select('id,classname')->where('id',$row->classid)->get('class');
+                $class_obj = $this->db->select('id,classname')->where('id',$row->classid)->get('class');
+				
+				if(!in_array($row->classid, $grader_classes_ids)) {
+					// append the id to grader_classes_ids
+					$grader_classes_ids[] = $row->classid;
 
-                // append the class object to the array of grader_classes
-                $grader_classes[] = $class_query->result()[0];
+                	// append the class object to the array of grader_classes
+                	$grader_classes[] = $class_obj->result()[0];
+				}
             }
+			//echo '<br><br><br>---------------------------------------------------<br>';
+			//echo 'Grader Classes: ' . var_dump($grader_classes) . '<br>';
+			//echo 'Owned Classes: ' . var_dump($owned_classes) . '<br>';
+
 
             // get the classes where the user is either a grader or a owner and remove duplicates
-            $graded_or_owned_classes = array_unique(array_merge($owned_classes, $grader_classes));
+            $graded_or_owned_classes = array_merge($owned_classes, $grader_classes); // array_unique() only works with strings
 
             return $graded_or_owned_classes;
         }
