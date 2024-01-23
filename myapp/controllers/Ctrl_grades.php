@@ -854,8 +854,11 @@ class Ctrl_grades extends MY_Controller {
 
             $classid = (int)$this->input->get('classid');
             $class = $this->mod_classes->get_class_by_id($classid);
-      //			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
-			if ($classid<=0 || (!$is_enrolled && $class->ownerid!=$this->mod_users->my_id()))
+            //			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
+			// if the classid is less than zero or (not enrolled and not the owner and not a grader)
+			$is_grader = $this->mod_users->is_grader($classid, $this->mod_users->my_id());
+
+			if ($classid<=0 || (!$is_enrolled && $class->ownerid!=$this->mod_users->my_id() && !$is_grader))
 				throw new DataException($this->lang->line('illegal_class_id'));
 
             $exam_list = $this->mod_grades->get_exams_for_class($classid);
