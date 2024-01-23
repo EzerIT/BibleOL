@@ -146,17 +146,20 @@ class Ctrl_classes extends MY_Controller {
             // Get the grader ID from the form submission
             $grader_query = $this->db->select('id')->from('user')->where('username',$this->input->post('grader_username'))->get();
             $grader_result = $grader_query->result();
-            $grader_id = $grader_result[0]->id;
-			echo 'GET ID: ' . $this->db->last_query() . '<br>';
-
-
-			// Insert the new grader into the grader table
-            $insert_data = array('classid' => $classid, 'graderid' => $grader_id);
-            $this->db->insert('grader', $insert_data);
-			echo 'INSERT GRADER: ' . $this->db->last_query() . '<br>';
-
-            // redirect to the classes list page
-            redirect('/classes');
+			if(count($grader_result) == 0) {
+				throw new DataException('Grader not found');
+				redirect('/classes');	
+			}
+			else {
+				$grader_id = $grader_result[0]->id;
+				// Insert the new grader into the grader table
+				$insert_data = array('classid' => $classid, 'graderid' => $grader_id);
+				$this->db->insert('grader', $insert_data);
+					
+				// redirect to the classes list page
+				redirect('/classes');
+			}
+			
         }
         else {
             // if the grader username has not been entered, then display the add grader form to the user
