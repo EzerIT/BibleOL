@@ -28,9 +28,13 @@ CREATE TABLE `bol_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-
-
-
+DROP TABLE IF EXISTS `bol_grader`;
+CREATE TABLE `bol_grader`(
+	`id` int NOT NULL AUTO_INCREMENT,
+	`graderid` int NOT NULL DEFAULT '0',
+	`classid` int NOT NULL DEFAULT '0',
+	PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 
 DROP TABLE IF EXISTS `bol_bible_refs`;

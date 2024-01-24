@@ -237,9 +237,12 @@ class Ctrl_grades extends MY_Controller {
 
         try {
             $this->mod_users->check_teacher();
-
+            //echo "LAST QUERY: <br>";
+            //echo var_dump($this->db->last_query()) . '<br>';
+            //echo var_dump($this->db);
 
             $classes = $this->mod_classes->get_named_classes_owned(false);
+            //echo 'classes: ' . var_dump($classes) . '<br>';
 
             $this->load->view('view_top1', array('title' => $this->lang->line('teacher_graphs_title')));
             $this->load->view('view_top2');
@@ -832,7 +835,7 @@ class Ctrl_grades extends MY_Controller {
         $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
 
         try {
-            // Check if user is enrollwed in the class
+            // Check if user is enrolled in the class
             $classid = (int)$this->input->get('classid');
             $is_enrolled=$this->mod_grades->check_if_enrolled($classid);
             if ( !$is_enrolled ) {
@@ -851,8 +854,11 @@ class Ctrl_grades extends MY_Controller {
 
             $classid = (int)$this->input->get('classid');
             $class = $this->mod_classes->get_class_by_id($classid);
-      //			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
-			if ($classid<=0 || (!$is_enrolled && $class->ownerid!=$this->mod_users->my_id()))
+            //			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
+			// if the classid is less than zero or (not enrolled and not the owner and not a grader)
+			$is_grader = $this->mod_users->is_grader($classid, $this->mod_users->my_id());
+
+			if ($classid<=0 || (!$is_enrolled && $class->ownerid!=$this->mod_users->my_id() && !$is_grader))
 				throw new DataException($this->lang->line('illegal_class_id'));
 
             $exam_list = $this->mod_grades->get_exams_for_class($classid);

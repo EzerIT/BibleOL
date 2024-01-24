@@ -2,6 +2,7 @@
 
 $lang['active_exams'] = "Active Exams";
 $lang['active_exams_description'] = "List of exams that are available.";
+$lang['add_grader'] = "Add Grader";
 $lang['choose_exercises_in_order'] = "Exercises will appear in the order in which they are selected.";
 $lang['class_name'] = "Class name";
 $lang['create_exam'] = "Create Exam";
