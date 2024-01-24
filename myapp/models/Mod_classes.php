@@ -62,12 +62,44 @@ class Mod_classes extends CI_Model {
     }
 
     public function get_named_classes_owned($all=true) {
-        if ($all && $this->mod_users->is_admin())
+        if ($all && $this->mod_users->is_admin()) {
             $query = $this->db->select('id,classname')->get('class');
-        else
-            $query = $this->db->select('id,classname')->where('ownerid',$this->mod_users->my_id())->get('class');
+            //echo 'Sample Result: ' . var_dump($query->result());
+            return $query->result();
+        }
+        else {
+            // Get classes owned by current user
+            $owner_query = $this->db->select('id,classname')->where('ownerid',$this->mod_users->my_id())->get('class');
+            $owned_classes = $owner_query->result();
 
-        return $query->result();
+            // Get classes where current user is a grader
+            $grader_query = $this->db->select('classid')->from('grader')->where('graderid',$this->mod_users->my_id())->get();
+            $grader_classes = array();
+			$grader_classes_ids = array();
+
+            // For each class that the user is a grader for, get the class object and add it to the array of grader_classes
+            foreach ($grader_query->result() as $row) {
+                // get the class object from the class ID
+                $class_obj = $this->db->select('id,classname')->where('id',$row->classid)->get('class');
+				
+				if(!in_array($row->classid, $grader_classes_ids)) {
+					// append the id to grader_classes_ids
+					$grader_classes_ids[] = $row->classid;
+
+                	// append the class object to the array of grader_classes
+                	$grader_classes[] = $class_obj->result()[0];
+				}
+            }
+			//echo '<br><br><br>---------------------------------------------------<br>';
+			//echo 'Grader Classes: ' . var_dump($grader_classes) . '<br>';
+			//echo 'Owned Classes: ' . var_dump($owned_classes) . '<br>';
+
+
+            // get the classes where the user is either a grader or a owner and remove duplicates
+            $graded_or_owned_classes = array_merge($owned_classes, $grader_classes); // array_unique() only works with strings
+
+            return $graded_or_owned_classes;
+        }
     }
 
     // Get clases the ustand is enrolled in

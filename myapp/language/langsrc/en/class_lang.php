@@ -2,6 +2,7 @@
 
 $lang['add_class'] = "Add new class";
 $lang['assign_users'] = "Assign users";
+$lang['add_grader'] = "Add grader";
 $lang['change_owner_class'] = "Change owner";
 $lang['classes'] = "Classes";
 $lang['class_delete'] = "Delete";
@@ -20,6 +21,8 @@ $lang['delete_class_confirm'] = "Do you want to delete the class %s?";
 $lang['edit_class'] = "Edit class";
 $lang['edit_class_information'] = "Edit class information";
 $lang['enroll_before'] = "Enroll before";
+$lang['grader_username'] = "Grader Username";
 $lang['leave_blank_if_no_pw'] = "Leave blank if no password is required.";
 $lang['not_class_owner'] = "You do not own this class";
+$lang['no_user_found'] = "The user name \"%s\" was not found";
 $lang['password_hidden'] = "(Hidden)";

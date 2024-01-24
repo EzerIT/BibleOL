@@ -125,8 +125,76 @@ class Ctrl_classes extends MY_Controller {
 
         return true;
     }
+    public function add_one_grader() {
+        // load the form helper and validation library
+        $this->load->helper('form');
+        $this->load->library('form_validation');
 
-   public function edit_one_class() {
+        // set validation rules for the grader username
+        $this->form_validation->set_rules('grader_username', $this->lang->line('grader_username'), "trim|required");
+
+
+        // get the classid from the URL
+        $classid = isset($_GET['classid']) ? intval($_GET['classid']) : 0;
+
+        // from the id get the class name
+        $class_info = $this->mod_classes->get_class_by_id($classid);
+        $class_name = $class_info->classname;
+
+		$dne_errorname = 'dne_error';
+
+        if ($this->form_validation->run()) {
+          
+            
+            // Get the grader ID from the form submission
+            $grader_query = $this->db->select('id')->from('user')->where('username',$this->input->post('grader_username'))->get();
+            $grader_result = $grader_query->result();
+			if(count($grader_result) == 0) {
+				// redirect to the classes list page
+				redirect('/classes/add_one_grader?classid=' . $classid . '&' . $dne_errorname . '=1' . '&grader_username=' . $this->input->post('grader_username'));	
+			}
+			else {
+				$grader_id = $grader_result[0]->id;
+				// Insert the new grader into the grader table
+				$insert_data = array('classid' => $classid, 'graderid' => $grader_id);
+				$this->db->insert('grader', $insert_data);
+					
+				// redirect to the classes list page
+				redirect('/classes');
+			}
+			
+        }
+        else {
+			// check if the entered username does not exist
+			$input_data = parse_url($_SERVER['REQUEST_URI'] );
+			parse_str($input_data["query"], $params);
+			if(array_key_exists($dne_errorname, $params)){
+				$custom_error = 'There is no user with the username ' . $params["grader_username"];
+				$custom_error = sprintf($this->lang->line('no_user_found'), $params["grader_username"]);
+			}
+			else{
+				$custom_error = '';
+			}
+			 
+			
+
+
+            // if the grader username has not been entered, then display the add grader form to the user
+            $top_text = $this->lang->line('add_grader');
+            $this->load->view('view_top1', array('title' => $top_text));
+            $this->load->view('view_top2');
+            $this->load->view('view_menu_bar', array('langselect' => true)); 
+			
+            $center_text = $this->load->view('view_add_grader', array('class_name' => $class_name, 'classid' => $classid, 'custom_error' => $custom_error), true);
+            //$center_text = "<div class=\"alert alert-danger\">$valerr</div>\n";
+			$this->load->view('view_main_page', array('left_title' => $top_text, 'center' => $center_text));
+            $this->load->view('view_bottom');
+
+        }
+        
+    }
+
+    public function edit_one_class() {
         try {
             $this->mod_users->check_teacher();
 
