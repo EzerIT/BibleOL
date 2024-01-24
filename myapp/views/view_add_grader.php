@@ -2,8 +2,13 @@
 if (!empty($valerr))
     echo "<div class=\"alert alert-danger\">$valerr</div>\n";
 ?>
+<?php 
+if (!empty($custom_error))
+	echo "<div class=\"alert alert-danger\">$custom_error</div>\n";
+?>
 
 <?= form_open("classes/add_one_grader?classid=$classid") ?>
+
 <table class="form">
     <tr>
         <td>
