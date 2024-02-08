@@ -1,0 +1,209 @@
+{
+	"version": 1,
+	"databaseName": "UBSGNT5",
+	"propertiesName": "UBSGNT5",
+	"databaseVersion": "1.0.0",
+	"granularity": "word",
+	"surfaceFeature": "surface",
+	"objHasSurface": "word",
+	"suffixFeature": null,
+	"charSet": "greek",
+	"objectSettings": {
+		"chapter": {},
+		"verse": {},
+		"book": {},
+		"sentence": {},
+		"ref": {},
+		"punctuation": {},
+		"token": {},
+		"ot_quote": {},
+		"b": {},
+		"p": {},
+		"emdrosinfo": {},
+		"word": {
+			"mayselect": true,
+			"featuresetting": {
+				"docindex": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"frequency_rank": {
+                    "ignoreShow": true,
+                    "ignoreRequest": true,
+                    "isRange": true
+                },
+				"post": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"self": {
+					"ignoreSelect": true,
+					"ignoreShow": true,
+					"ignoreRequest": true
+				},
+				
+				"pre": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"refid": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"surface": {
+					"hideWord": true,
+					"foreignText": true
+				},
+				"wholesurface": {
+					"hideWord": true,
+					"foreignText": true
+				},
+				"bn_lemma": {
+					"foreignText": true
+				},
+				"crasis_lemma": {
+					"foreignText": true
+				},
+				"lemma": {
+					"foreignText": true
+				},
+				"longtag": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"simpletag": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"strongs": {
+					"ignoreShow": true,
+					"ignoreRequest": true
+				},
+				"crasis_status": {},
+				"gloss": {
+                    "ignoreSelect": true,
+                    "matchregexp": "\/^(.+[;,] +)?(\\([^\\)]+\\))? *{0} *(\\([^\\)]+\\))?([,;].+)?$\/i",
+                    "indirdb": "mysql",
+                    "sql_command": "SELECT gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_LANG lang ON lang.lex_id=gr.id WHERE strongs=%d",
+                    "sql_command_variant": "SELECT COALESCE(lang_var.gloss,lang.gloss) gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_LANG lang ON lang.lex_id=gr.id LEFT JOIN {PRE}lexicon_greek_LANG_VARIANT lang_var ON lang_var.lex_id=gr.id WHERE strongs=%d AND strongs_unreliable=('%s'='true')",
+                    "sqlargs": [
+                        "strongs"
+                    ],
+                    "multiple": false
+                },
+				"hint": {
+					"ignoreSelect": true,
+					"ignoreRequest": true,
+					"indirdb": "nestle1904_hints.db",
+					"sql_command": "SELECT hint FROM hints WHERE self='%1$s'",
+					"sqlargs": [
+						"self"
+					],
+					"multiple": false
+				}
+			}
+		}
+	},
+	"universeHierarchy": [
+		{
+			"type":"book",
+			"feat":"code"
+		},
+		{
+			"type": "chapter",
+			"feat": "chapter"
+		},
+		{
+			"type": "verse",
+			"feat": "verse"
+		}
+	],
+	"picDb": null,
+	"sentencegrammar": [
+		{
+			"mytype": "SentenceGrammar",
+			"objType": "word",
+			"items": [
+				{
+					"mytype": "GrammarGroup",
+					"name": "lexeme",
+					"items": [
+						{
+							"mytype": "GrammarFeature",
+							"name": "bn_lemma"
+						},
+						{
+                            "mytype": "GrammarFeature",
+                            "name": "frequency_rank"
+                        },
+						
+						{
+							"mytype": "GrammarFeature",
+							"name": "crasis_lemma"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "lemma"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "strongs"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "docindex"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "post"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "pre"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "refid"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "surface"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "wholesurface"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "longtag"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "simpletag"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "crasis_status"
+						}
+					]
+				},
+				{
+                    "mytype": "GrammarGroupGlosses",
+                    "name": "glosses",
+                    "items": []
+                }
+			]
+		},
+		{
+			"mytype": "SentenceGrammar",
+			"objType": "sentence"
+		}
+	],
+	"subsetOf": null
+}
