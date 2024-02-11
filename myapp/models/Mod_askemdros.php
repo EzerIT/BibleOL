@@ -424,14 +424,18 @@ class Mod_askemdros extends CI_Model {
 
     // TODO: This works only for references containing book, chapter and verse range
     // $vfrom==0 means use entire chapter
-    private function find_monads(string $book, int $chapter, int $vfrom, int $vto) {
-        if ($vfrom==0)
-            // Fetch entire chapter
-            $emdros_data = $this->mql->exec("SELECT ALL OBJECTS WHERE [chapter book=$book AND chapter=$chapter] GOqxqxqx");
-        else
+    private function find_monads(string $db, string $book, int $chapter, int $vfrom, int $vto) {
+        if ($vfrom==0) {
+			if($db === 'UBSGNT5') {
+				$emdros_data = $this->mql->exec(sprintf("SELECT ALL OBJECTS WHERE [chapter code='%s' AND chapter=$chapter] GOqxqxqx", $book));
+			}
+			// Fetch entire chapter
+			$emdros_data = $this->mql->exec("SELECT ALL OBJECTS WHERE [chapter book=$book AND chapter=$chapter] GOqxqxqx");
+		}
+        else {
             $emdros_data = $this->mql->exec("SELECT ALL OBJECTS WHERE [verse book=$book AND chapter=$chapter "
-                                            . "AND verse>=$vfrom AND verse<=$vto] GOqxqxqx");
-  
+                                        . "AND verse>=$vfrom AND verse<=$vto] GOqxqxqx");
+		}
         $sh = $emdros_data[0]->get_sheaf();
         if ($sh->isEmpty())
             throw new DataException($this->lang->line('no_text_found'));
@@ -449,7 +453,7 @@ class Mod_askemdros extends CI_Model {
         try {
             $this->setup($db,$db);
 
-            $passage = $this->find_monads($book,$chapter,$vfrom,$vto);
+            $passage = $this->find_monads($db, $book,$chapter,$vfrom,$vto);
             
             $this->load->library('dictionary', array('msets' => array($passage), 'inQuiz' => false, 'showIcons' => $showIcons));
             $this->book_title = $this->dictionary->get_book_title();
