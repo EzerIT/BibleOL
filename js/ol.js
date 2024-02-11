@@ -1035,6 +1035,18 @@ function getFeatureValueFriendlyName(featureType, value, abbrev, doStripSort) {
         return doStripSort
             ? StringWithSort.stripSortIndex(l10n.emdrostype[featureType + '_abbrev'][value])
             : l10n.emdrostype[featureType + '_abbrev'][value];
+	
+	if(featureType === undefined) {
+		/*
+		console.log('Feature Type: ', featureType);
+		console.log('value: ', value);
+		console.log('abbrev: ', abbrev);
+		console.log('doStripSort: ', doStripSort);
+		console.log('l10: ', l10n);
+		*/
+		return null;
+	}
+
     if (featureType.substr(0, 8) === 'list of ') {
         featureType = featureType.substr(8);
         value = value.substr(1, value.length - 2);
