@@ -426,11 +426,13 @@ class Mod_askemdros extends CI_Model {
     // $vfrom==0 means use entire chapter
     private function find_monads(string $db, string $book, int $chapter, int $vfrom, int $vto) {
         if ($vfrom==0) {
+			// Fetch entire chapter
 			if($db === 'UBSGNT5') {
 				$emdros_data = $this->mql->exec(sprintf("SELECT ALL OBJECTS WHERE [chapter code='%s' AND chapter=$chapter] GOqxqxqx", $book));
 			}
-			// Fetch entire chapter
-			$emdros_data = $this->mql->exec("SELECT ALL OBJECTS WHERE [chapter book=$book AND chapter=$chapter] GOqxqxqx");
+			else {
+				$emdros_data = $this->mql->exec("SELECT ALL OBJECTS WHERE [chapter book=$book AND chapter=$chapter] GOqxqxqx");
+			}
 		}
         else {
             $emdros_data = $this->mql->exec("SELECT ALL OBJECTS WHERE [verse book=$book AND chapter=$chapter "
