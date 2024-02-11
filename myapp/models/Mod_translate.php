@@ -13,7 +13,8 @@ class Mod_translate extends CI_Model {
     private $dbs = array('ETCBC4',
                          'ETCBC4-translit',
                          'nestle1904',
-                         'jvulgate');
+                         'jvulgate',
+						 'UBSGNT5');
 
     private $min_tally = 5; // Only lexemes with a greater tally than this get into the frequency buttons
     
