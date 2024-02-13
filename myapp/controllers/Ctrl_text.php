@@ -119,7 +119,7 @@ class Ctrl_text extends MY_Controller {
             $this->load->view('view_menu_bar', array('langselect' => true,
                                                      'more_help_items' => array($help_page => 'help_this_page')));
                 
-                $this->load->view('view_text_display', array('is_quiz' => false,
+            $this->load->view('view_text_display', array('is_quiz' => false,
                                                          'mql_list' => $this->mql->mql_list,
                                                          'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
                                                          'quizData_json' => 'null',
