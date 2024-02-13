@@ -43,7 +43,81 @@
 					"ignoreShow": true,
 					"ignoreRequest": true
 				},
-				
+				"case": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"case_possessed": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"declinable": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"gender": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"gender_possessed": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"level": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"location": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"mood": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"number": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"number_possessed": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"part_of_speech": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"person": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"taxis": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"tense": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
+				"voice": {
+					"ignoreShow": true,
+					"ignoreRequest": true,
+					"isRange": true
+				},
 				"pre": {
 					"ignoreShow": true,
 					"ignoreRequest": true,
@@ -137,6 +211,66 @@
 						{
 							"mytype": "GrammarFeature",
 							"name": "bn_lemma"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "case"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "case_possessed"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "declinable"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "gender"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "gender_possessed"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "level"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "location"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "mood"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "number"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "number_possessed"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "part_of_speech"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "person"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "taxis"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "tense"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "voice"
 						},
 						{
                             "mytype": "GrammarFeature",

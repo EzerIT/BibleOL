@@ -76,7 +76,22 @@
 			"longtag":"string",
 			"simpletag":"string",
 			"strongs":"string",
-			"crasis_status":"integer"
+			"crasis_status":"integer",
+			"case":"string",
+			"case_possessed":"string",
+			"declinable":"string",
+			"gender":"string",
+			"gender_possessed":"string",
+			"level":"string",
+			"location":"string",
+			"mood":"string",
+			"number":"string",
+			"number_possessed":"string",
+			"person":"string",
+			"part_of_speech":"string",
+			"taxis":"string",
+			"tense":"string",
+			"voice":"string"
 		},
 		"book":{
 			"self":"id_d",

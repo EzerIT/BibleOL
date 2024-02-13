@@ -17,7 +17,22 @@
 			"longtag": "Long Tag",
 			"simpletag": "Simple Tag",
 			"strongs": "Strong's number",
-			"crasis_status_t": "Crasis Status"
+			"crasis_status_t": "Crasis Status",
+            "case":"Case",
+            "case_possessed":"Case Possessed",
+            "declinable":"Declinable",
+            "gender":"Gender",
+            "gender_possessed":"Gender Possessed",
+            "level":"Level",
+            "location":"Location",
+            "mood":"Mood",
+            "number":"Number",
+            "number_possessed":"Number Possessed",
+            "part_of_speech":"Part of Speech",
+            "person":"Person",
+            "taxis":"Taxis",
+            "tense":"Tense",
+            "voice":"Voice"
 		},
 		"sentence": {
             "_objname": "Sentence"
