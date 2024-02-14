@@ -900,8 +900,9 @@ class Ctrl_grades extends MY_Controller {
 
                     // foreach ($users_and_templs as $uid => $templs) {
                     $is_teacher=$this->mod_users->is_teacher();
+                    $is_grader = $this->mod_users->is_grader($classid, $this->mod_users->my_id());
                     foreach ($users_and_templs as $uid => $exams) {
-                        if ( $is_teacher || $this->mod_users->my_id()==$uid ) {
+                        if ( $is_teacher || $is_grader || $this->mod_users->my_id()==$uid ) {
                           $see_nongraded = $nongraded && $this->mod_grades->may_see_nongraded($uid, $ex);
 
                           // $res = $this->mod_grades->get_score_by_date_user_templ($uid,
