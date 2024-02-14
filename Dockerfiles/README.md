@@ -23,7 +23,11 @@ The initial installation will take approximately 15 minutes, if the image is not
 
 3. Go to localhost:8000 and you should be viewing the home page.
 
-4. Type make clean to delete the image and container
+4. Type make stop to stop or pause the docker container
+
+5. Type make start to start a stopped container
+
+6. Type make clean to delete the image and container
 ```
 
 ## Linux
@@ -36,7 +40,11 @@ The initial installation will take approximately 15 minutes, if the image is not
 
 3. Go to localhost:8000 and you should be viewing the home page.
 
-4. Type make clean to delete the image and container
+4. Type make stop to stop or pause the docker container
+
+5. Type make start to start a stopped container
+
+6. Type make clean to delete the image and container
 ```
 
 ## Windows
@@ -49,7 +57,11 @@ The initial installation will take approximately 15 minutes, if the image is not
 
 3. Go to localhost:8000 and you should be viewing the home page.
 
-4. If you have make type make clean to delete the container and image, or use the shell script with ./clean_windows.sh
+4. Type make stop to stop or pause the docker container, if you do not have make installed then copy and paste the commands from the Makefile stop target into your terminal.
+
+5. Type make start to start a stopped container, if you do not have make installed then copy and paste the commands from the Makefile start target into your terminal.
+
+6. If you have make type make clean to delete the container and image, or use the shell script with ./clean_windows.sh
 ```
 
 ## Mac (Intel)
@@ -62,7 +74,11 @@ The initial installation will take approximately 15 minutes, if the image is not
 
 3. Go to localhost:8000 and you should be viewing the home page.
 
-4. Type make clean to delete the image and container
+4. Type make stop to stop or pause the docker container
+
+5. Type make start to start a stopped container
+
+6. Type make clean to delete the image and container
 ```
 
 
