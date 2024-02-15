@@ -1,6 +1,42 @@
 <h1><?= sprintf($this->lang->line('number_of_users'), $user_count) ?></h1>
 <h2><?= sprintf($this->lang->line('showing_per_page'), $users_per_page) ?></h1>
 
+<?= form_open("users/filter_users") ?>
+<table class="searchbar">
+  <tr>
+    <td>
+      <?= "Username: " ?>
+    </td>
+    <td class="norb">
+      <input type="text" name="username">
+    </td>
+    <td>
+      <?= "First name: " ?>
+    </td>
+    <td class="norb">
+      <input type="text" name="firstname">
+    </td>
+    <td>
+      <?= "Last name: " ?>
+    </td>
+    <td class="norb">
+      <input type="text" name="lastname">
+    </td>
+    <td>
+      <?= "Email: " ?>
+    </td>
+    <td class="norb">
+      <input type="text" name="email">
+    </td>
+    <input style="float:right " class="btn btn-primary" type="submit" name="submit" value="<?= "Search" ?>">
+    <input style="float:right " class="btn btn-primary" type="submit" href="<?= site_url("users") ?>" value="<?= "Clear" ?>">
+
+  </tr>
+
+</table>
+
+
+
     <nav style="margin-bottom: 1rem;">
         <?php
         $per_line = 10;

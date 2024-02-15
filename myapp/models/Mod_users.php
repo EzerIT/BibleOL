@@ -218,6 +218,23 @@ class Mod_users extends CI_Model {
         $query = $this->db->order_by($orderby,$sortorder)->get('user',$limit,$offset);
         return $query->result();
     }
+    public function filter_users($username, $first_name, $last_name, $email){
+        $query = $this->db->select('*')->from('user');
+        if(!empty($username)){
+            $query = $query->like('username', $username);
+        }
+        if(!empty($first_name)){
+            $query = $query->like('first_name', $first_name);
+        }
+        if(!empty($last_name)){
+            $query = $query->like('last_name', $last_name);
+        }
+        if(!empty($email)){
+            $query = $query->like('email', $email);
+        }
+
+        return $query->get()->result();
+    }
 
     public function count_users() {
         $query = $this->db->select('count(*) as count')->get('user');

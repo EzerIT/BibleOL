@@ -1330,6 +1330,39 @@ table.type3 {
     }
 }
 
+table.searchbar {
+    border-spacing: 0;
+    background-color: @backgroundwhite;
+    border: solid 1px @dadelgreydark;
+    margin: 0px;
+
+    td {
+        
+        vertical-align: center;
+        padding: 7px;
+        padding-left: 13px;
+        
+        
+        &.norb {
+            border-right-width: 0;
+        }
+        &.nolb {
+            border-left-width: 0;
+        }
+    }
+
+    input {
+        font-size: 10pt;
+        width: 200px;
+        margin-top: auto;
+        margin-bottom: auto;
+
+        &.narrow {
+            width: auto;
+        }
+    }
+}
+
 table.form {
     border-spacing: 0;
     background-color: @backgroundwhite;
