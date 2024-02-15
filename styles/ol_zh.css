@@ -1049,6 +1049,32 @@ table.type3 {
 table.type3.table-striped > tbody > tr:nth-of-type(odd) {
   background-color: #e8e8e8;
 }
+table.searchbar {
+  border-spacing: 0;
+  background-color: white;
+  border: solid 1px #adadad;
+  margin: 0px;
+}
+table.searchbar td {
+  vertical-align: center;
+  padding: 7px;
+  padding-left: 13px;
+}
+table.searchbar td.norb {
+  border-right-width: 0;
+}
+table.searchbar td.nolb {
+  border-left-width: 0;
+}
+table.searchbar input {
+  font-size: 10pt;
+  width: 200px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+table.searchbar input.narrow {
+  width: auto;
+}
 table.form {
   border-spacing: 0;
   background-color: white;

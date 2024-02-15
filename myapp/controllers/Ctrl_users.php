@@ -11,9 +11,66 @@ class Ctrl_users extends MY_Controller {
         $this->users();
     }
 
+    public function filter_users(){
+        $this->mod_users->check_teacher();
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+
+        $this->load->model('mod_users');
+
+        $users_per_page = $this->config->item('users_per_page');
+        $user_count = $this->mod_users->count_users();
+        $page_count = intval(ceil($user_count/$users_per_page));
+        $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+
+        if ($offset>=$page_count)
+            $offset = $page_count-1;
+        if ($offset<0)
+            $offset = 0;
+
+        if (isset($_GET['orderby']) && in_array($_GET['orderby'],
+                                                    array('username','first_name','last_name','email','last_login','isteacher','isadmin','istranslator'),true))
+            $orderby = $_GET['orderby'];
+        else
+            $orderby = 'username';
+
+        $sortorder = isset($_GET['desc']) ? 'desc' : 'asc';
+
+
+        $username = $this->input->post('username');
+        $firstname = $this->input->post('firstname');
+        $lastname = $this->input->post('lastname');
+        $email = $this->input->post('email');
+
+        
+        $filtered_users = $this->mod_users->filter_users($username, $firstname, $lastname, $email);
+        // VIEW:
+        $this->load->view('view_top1', array('title' => $this->lang->line('users')));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => true));
+        $this->load->view('view_confirm_dialog');
+        $center_text = $this->load->view('view_user_list',
+                                        array('allusers' => $filtered_users,
+                                            'offset' => $offset,
+                                            'orderby' => $orderby,
+                                            'sortorder' => $sortorder,
+                                            'users_per_page' => $users_per_page,
+                                            'user_count' => $user_count,
+                                            'page_count' => $page_count,
+                                            'isadmin' => $this->mod_users->is_admin(),
+                                            'my_id' => $this->mod_users->my_id()),
+                                        true);
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line('user_list'),
+                                                'left' => $this->lang->line('configure_your_users'),
+                                                'center' => $center_text));
+        $this->load->view('view_bottom');
+    }
+
     public function users() {
         try {
             $this->mod_users->check_teacher();
+            $this->load->helper('form');
+            $this->load->library('form_validation');
 
             $users_per_page = $this->config->item('users_per_page');
             $user_count = $this->mod_users->count_users();
