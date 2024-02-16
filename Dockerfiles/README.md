@@ -28,6 +28,11 @@ The initial installation will take approximately 15 minutes, if the image is not
 5. Type make start to start a stopped container
 
 6. Type make clean to delete the image and container
+
+7. To log on as the default administrator go to Login and enter the login information
+
+username: admin
+password: bibleol_pwd
 ```
 
 ## Linux
@@ -45,6 +50,11 @@ The initial installation will take approximately 15 minutes, if the image is not
 5. Type make start to start a stopped container
 
 6. Type make clean to delete the image and container
+
+7. To log on as the default administrator go to Login and enter the login information
+
+username: admin
+password: bibleol_pwd
 ```
 
 ## Windows
@@ -62,6 +72,11 @@ The initial installation will take approximately 15 minutes, if the image is not
 5. Type make start to start a stopped container, if you do not have make installed then copy and paste the commands from the Makefile start target into your terminal.
 
 6. If you have make type make clean to delete the container and image, or use the shell script with ./clean_windows.sh
+
+7. To log on as the default administrator go to Login and enter the login information
+
+username: admin
+password: bibleol_pwd
 ```
 
 ## Mac (Intel)
@@ -79,6 +94,11 @@ The initial installation will take approximately 15 minutes, if the image is not
 5. Type make start to start a stopped container
 
 6. Type make clean to delete the image and container
+
+7. To log on as the default administrator go to Login and enter the login information
+
+username: admin
+password: bibleol_pwd
 ```
 
 
