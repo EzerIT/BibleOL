@@ -21,3 +21,5 @@ sudo mysql ${MYSQL_DATABASE} < bolsetup.sql
 sudo ./setup_lang.sh
 
 sudo service apache2 start
+
+sudo php index.php users generate_administrator admin Default Admin bibleol_pwd
