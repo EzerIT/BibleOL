@@ -23,6 +23,7 @@ interface QuizFeatures {
         show?        : string;   // Features to show even though object is hidden
     } [];
     glosslimit       : number;   // Frequency limit for showing glosses
+    order            : string;   // Order of the features  
 }
 
 
@@ -47,6 +48,7 @@ class ButtonsAndLabel {
     public  dontShowFeat : JQuery; // The "Don't show" radio button
     private ddCheck	 : JQuery; // The "Multiple choice" checkbox
     private feat	 : JQuery; // The <span> element containing the feature name
+    private order	 : JQuery; // The <input> element containing the order number
     private limitter	 : JQuery; // The <span> element containing the hideFeatures selector
 
     private static buttonNumber : number = 0; // Used by button name generator
@@ -76,6 +78,7 @@ class ButtonsAndLabel {
 	this.dcFeat	  =			$(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontcare">`);
 	this.dontShowFeat = canDisplayGrammar ? $(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontshowfeat">`) : $('<span></span>');
 	this.feat         =                     $(`<span>${lab}</span>`);
+    this.order  = canShow ? $(`<input type="text" name="feat_${ButtonsAndLabel.buttonNumber}" value="" style="text-align:center;" size="1">`) : $('<span></span>');
         this.limitter     =                     $('<span></span>');
         
 	switch (select) {
@@ -170,6 +173,7 @@ class ButtonsAndLabel {
         cell = $('<td></td>')                  .append(this.dontShowFeat); row.append(cell);
         cell = $('<td></td>')                  .append(this.ddCheck);      row.append(cell);
         cell = $('<td class="leftalign"></td>').append(this.feat);         row.append(cell);
+        cell = $('<td style="text-align:center;"></td>').append(this.order);        row.append(cell);
         cell = $('<td></td>')                  .append(this.limitter);     row.append(cell);
 
         return row;
@@ -331,13 +335,12 @@ class LimitDialog {
     // saveButtonAction method
     //
     // This function is called when the user clicks the "Save" button. It calls the callback
-    // function with information about which feaatures are NOT checked.
+    // function with information about which features are NOT checked.
     //
     // Note: This creates a new hideFeatures array so it will not affect the data stored in initialQf
     //
     private saveButtonAction() {
         let hideFeatures : string[] = [];
-
         $('input[type=checkbox][name=hideFeatures]:not(:checked)').each(
             function() {
                 hideFeatures.push(<string>$(this).val());
@@ -398,6 +401,7 @@ class PanelForOneOtype  {
                      + `<th>${localize('dont_show')}</th>`
                      + `<th>${localize('multiple_choice')}</th>`
                      + `<th class="leftalign">${localize('feature')}</th>`
+                     + `<th class="leftalign">Order</th>`
                      + '<th></th>'
                      + '</tr>');
 
@@ -498,6 +502,7 @@ class PanelForOneOtype  {
                              + `<th>${localize('dont_care')}</th>`
                              + `<th>${localize('dont_show')}</th>`
                              + '<td colspan="3"></td>'
+                             + '<td colspan="4"></td>'
                              + '</tr>');
 
             
