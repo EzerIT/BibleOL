@@ -1363,6 +1363,7 @@ var ButtonsAndLabel = (function () {
         this.dcFeat = $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontcare\">"));
         this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontshowfeat\">")) : $('<span></span>');
         this.feat = $("<span>".concat(lab, "</span>"));
+        this.order = canShow ? $("<input type=\"text\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"\" style=\"text-align:center;\" size=\"1\">")) : $('<span></span>');
         this.limitter = $('<span></span>');
         switch (select) {
             case ButtonSelection.SHOW:
@@ -1442,6 +1443,8 @@ var ButtonsAndLabel = (function () {
         cell = $('<td></td>').append(this.ddCheck);
         row.append(cell);
         cell = $('<td class="leftalign"></td>').append(this.feat);
+        row.append(cell);
+        cell = $('<td style="text-align:center;"></td>').append(this.order);
         row.append(cell);
         cell = $('<td></td>').append(this.limitter);
         row.append(cell);
@@ -1557,6 +1560,7 @@ var PanelForOneOtype = (function () {
             + "<th>".concat(localize('dont_show'), "</th>")
             + "<th>".concat(localize('multiple_choice'), "</th>")
             + "<th class=\"leftalign\">".concat(localize('feature'), "</th>")
+            + "<th class=\"leftalign\">Order</th>"
             + '<th></th>'
             + '</tr>');
         this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && Boolean(getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql), true, configuration.objHasSurface === otype, configuration.objHasSurface === otype);
@@ -1602,6 +1606,7 @@ var PanelForOneOtype = (function () {
                     + "<th>".concat(localize('dont_care'), "</th>")
                     + "<th>".concat(localize('dont_show'), "</th>")
                     + '<td colspan="3"></td>'
+                    + '<td colspan="4"></td>'
                     + '</tr>');
                 this_1.allObjBAL[otherOtype] = [];
                 var buttonrow = $('<tr><td colspan="2"></td></tr>');
