@@ -1785,7 +1785,8 @@ var PanelTemplQuizFeatures = (function () {
             requestFeatures: [],
             dontShowFeatures: [],
             dontShowObjects: [],
-            glosslimit: 0
+            glosslimit: 0,
+            order: '0'
         };
         if (!this.visiblePanel)
             return null;
