@@ -1,6 +1,7 @@
 // -*- js -*-
 // Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
 
+
 // Code to handle the specification of display and request features when creating an exercise. This
 // code is used by the 'Features' tab of the exercise editor.
 
@@ -14,6 +15,7 @@ interface QuizFeatures {
     showFeatures     : string[]; // Features to show to the user
     requestFeatures  : {         // Features to request from the user
         name         : string;   // Name of feature
+        order_val    : string;
         usedropdown  : boolean;  // Is a drop down list used for this feature?
         hideFeatures : string[]; // List of feature values to hide from student
     } [];
@@ -32,7 +34,7 @@ interface QuizFeatures {
 //
 // Names the radio buttons and checkboxes that speficy the handling of a feature
 //
-enum ButtonSelection { SHOW, REQUEST, REQUEST_DROPDOWN, DONT_CARE, DONT_SHOW };
+enum ButtonSelection { SHOW, REQUEST, REQUEST_DROPDOWN, DONT_CARE, DONT_SHOW};
 
 
 //****************************************************************************************************
@@ -47,6 +49,7 @@ class ButtonsAndLabel {
     public  dontShowFeat : JQuery; // The "Don't show" radio button
     private ddCheck	 : JQuery; // The "Multiple choice" checkbox
     private feat	 : JQuery; // The <span> element containing the feature name
+    private order	 : JQuery; // The <input> element containing the order number
     private limitter	 : JQuery; // The <span> element containing the hideFeatures selector
 
     private static buttonNumber : number = 0; // Used by button name generator
@@ -76,7 +79,8 @@ class ButtonsAndLabel {
 	this.dcFeat	  =			$(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontcare">`);
 	this.dontShowFeat = canDisplayGrammar ? $(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontshowfeat">`) : $('<span></span>');
 	this.feat         =                     $(`<span>${lab}</span>`);
-        this.limitter     =                     $('<span></span>');
+    this.order  = canShow ? $(`<input type="text" id="myInput" oninput="updateValue()" name="feat_${ButtonsAndLabel.buttonNumber}" value="" style="text-align:center;" size="1" script="function updateValue(){let x = document.getElementById('myInput').value; document.getElementById('myInput').value = x;}">`) : $('<span></span>');
+    this.limitter     =                     $('<span></span>');
         
 	switch (select) {
         case ButtonSelection.SHOW:             this.showFeat.prop('checked',true);     break;
@@ -155,6 +159,8 @@ class ButtonsAndLabel {
         }
     }
 
+    
+    
     //------------------------------------------------------------------------------------------
     // getRow method
     //
@@ -170,6 +176,7 @@ class ButtonsAndLabel {
         cell = $('<td></td>')                  .append(this.dontShowFeat); row.append(cell);
         cell = $('<td></td>')                  .append(this.ddCheck);      row.append(cell);
         cell = $('<td class="leftalign"></td>').append(this.feat);         row.append(cell);
+        cell = $('<td style="text-align:center;"></td>').append(this.order);        row.append(cell);
         cell = $('<td></td>')                  .append(this.limitter);     row.append(cell);
 
         return row;
@@ -201,9 +208,14 @@ class ButtonsAndLabel {
 
         case ButtonSelection.DONT_SHOW:
             return this.canDisplayGrammar && this.dontShowFeat.prop('checked');
+
+        
         }
     }
 
+    public getOrder() {
+        return this.order.prop('value');
+    }
     //------------------------------------------------------------------------------------------
     // getHideFeatures method
     //
@@ -331,13 +343,12 @@ class LimitDialog {
     // saveButtonAction method
     //
     // This function is called when the user clicks the "Save" button. It calls the callback
-    // function with information about which feaatures are NOT checked.
+    // function with information about which features are NOT checked.
     //
     // Note: This creates a new hideFeatures array so it will not affect the data stored in initialQf
     //
     private saveButtonAction() {
         let hideFeatures : string[] = [];
-
         $('input[type=checkbox][name=hideFeatures]:not(:checked)').each(
             function() {
                 hideFeatures.push(<string>$(this).val());
@@ -398,6 +409,7 @@ class PanelForOneOtype  {
                      + `<th>${localize('dont_show')}</th>`
                      + `<th>${localize('multiple_choice')}</th>`
                      + `<th class="leftalign">${localize('feature')}</th>`
+                     + `<th class="leftalign">Order</th>`
                      + '<th></th>'
                      + '</tr>');
 
@@ -498,6 +510,7 @@ class PanelForOneOtype  {
                              + `<th>${localize('dont_care')}</th>`
                              + `<th>${localize('dont_show')}</th>`
                              + '<td colspan="3"></td>'
+                             + '<td colspan="4"></td>'
                              + '</tr>');
 
             
@@ -867,6 +880,7 @@ class PanelTemplQuizFeatures {
             dontShowFeatures : [],
             dontShowObjects  : [],
             glosslimit       : 0
+            
         };
 
 
@@ -877,22 +891,28 @@ class PanelTemplQuizFeatures {
 	if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.SHOW))
 	    qf.showFeatures.push('visual');
 	else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST))
-	    qf.requestFeatures.push({name : 'visual', usedropdown : this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures : null});
-        else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.DONT_SHOW))
+	    qf.requestFeatures.push({name : 'visual', order_val:'', usedropdown : this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures : null});
+    else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.DONT_SHOW))
 	    qf.dontShowFeatures.push('visual');
 
         // Store informaiton about other features for the question object
         for (let i=0; i<this.visiblePanel.allBAL.length; ++i) {
             let bal : ButtonsAndLabel = this.visiblePanel.allBAL[i];
-
-	    if (bal.isSelected(ButtonSelection.SHOW))
-		qf.showFeatures.push(bal.getFeatName());
-	    else if (bal.isSelected(ButtonSelection.REQUEST))
-	        qf.requestFeatures.push({name : bal.getFeatName(), usedropdown : bal.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures : bal.getHideFeatures()});
-	    else if (bal.isSelected(ButtonSelection.DONT_SHOW))
-		qf.dontShowFeatures.push(bal.getFeatName());
+            
+            if (bal.isSelected(ButtonSelection.SHOW)){
+                qf.showFeatures.push(bal.getFeatName());
+            }
+            else if (bal.isSelected(ButtonSelection.REQUEST)){
+                let order_rank = bal.getOrder();
+                qf.requestFeatures.push({name : bal.getFeatName(), order_val:order_rank, usedropdown : bal.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures : bal.getHideFeatures()});
+            }
+            else if (bal.isSelected(ButtonSelection.DONT_SHOW)){
+                qf.dontShowFeatures.push(bal.getFeatName());
+            }
+            
         }
 
+        
         // Store informaiton about other features for other objects
         // Method:
         //     If all features for an object are DONT_CARE, skip the object.
