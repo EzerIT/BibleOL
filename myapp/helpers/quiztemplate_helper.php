@@ -40,11 +40,13 @@ class Template extends XmlHandler {
 			// If the exercise has a complete universe, but the database is a subset, reduce the universe to what the subset provides
 			if (empty($quizdata->selectedPaths)
                 || (count($quizdata->selectedPaths)==1 && empty($quizdata->selectedPaths[0]))) {
+                
 				// Complete universe is used; print subset's universe
 				foreach ($dbInfo->subsetOf->provides as $s)
 					$res .= sprintf("%2s<path>%s</path>\n", ' ', htmlspecialchars($s));
 			}
 			else {
+                
 				// Limited universe is used; print it
 				foreach ($quizdata->selectedPaths as $s)
 					$res .= sprintf("%2s<path>%s</path>\n", ' ', htmlspecialchars($s));
@@ -74,6 +76,8 @@ class Template extends XmlHandler {
         $res .= sprintf("%2s<fixedquestions>%d</fixedquestions>\n", ' ', $quizdata->fixedquestions);
         $res .= sprintf("%2s<randomize>%s</randomize>\n", ' ', $quizdata->randomize ? "true" : "false");
 		$res .= sprintf("</questiontemplate>\n", ' ');
+
+        //echo 'Result: ' . $res . '<br>';
 
         return $res;
 	}
@@ -1343,18 +1347,36 @@ class QuizFeatures extends XmlHandler {
 	 * XML writer interface
 	 ************************************************************************************************/
     static public function writeAsXml($quizfeatures) {
+        $default_order = 100;
 		$res = sprintf("%2s<quizfeatures version=\"%d\">\n", ' ', self::classVersion);
 
         foreach ($quizfeatures->showFeatures as $s)
 			$res .= sprintf("%4s<show>%s</show>\n", ' ', htmlspecialchars($s));
 
+        // cast order_val keys from strings to integers
+        foreach ($quizfeatures->requestFeatures as &$feat){
+            if(ctype_digit($feat->order_val))
+                $feat->order_val = (int) $feat->order_val;
+            else    
+                $feat->order_val = $default_order;
+        }
+        unset($feat);
+
+        // sort requestFeatures by order_val
+        usort($quizfeatures->requestFeatures, function($a, $b) {
+            return $a->order_val <=> $b->order_val;
+        });
+
         foreach ($quizfeatures->requestFeatures as $s) {
-            if ($s->usedropdown)
-				$res .= sprintf("%4s<requestdd>%s</requestdd>\n", ' ', htmlspecialchars($s->name));
-			else if (!empty($s->hideFeatures))
+            if ($s->usedropdown){
+                $res .= sprintf("%4s<requestdd>%s</requestdd>\n", ' ', htmlspecialchars($s->name));
+            }
+			else if (!empty($s->hideFeatures)){
 				$res .= sprintf("%4s<request hidefeatures=\"%s\">%s</request>\n", ' ', implode(',',$s->hideFeatures), htmlspecialchars($s->name));
-            else
+            }
+            else{
 				$res .= sprintf("%4s<request>%s</request>\n", ' ', htmlspecialchars($s->name));
+            }
         }
 
         foreach ($quizfeatures->dontShowFeatures as $s)
