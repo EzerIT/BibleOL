@@ -1363,7 +1363,7 @@ var ButtonsAndLabel = (function () {
         this.dcFeat = $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontcare\">"));
         this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontshowfeat\">")) : $('<span></span>');
         this.feat = $("<span>".concat(lab, "</span>"));
-        this.order = canShow ? $("<input type=\"text\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"\" style=\"text-align:center;\" size=\"1\">")) : $('<span></span>');
+        this.order = canShow ? $("<input type=\"text\" id=\"myInput\" oninput=\"updateValue()\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"\" style=\"text-align:center;\" size=\"1\" script=\"function updateValue(){let x = document.getElementById('myInput').value; document.getElementById('myInput').value = x;}\">")) : $('<span></span>');
         this.limitter = $('<span></span>');
         switch (select) {
             case ButtonSelection.SHOW:
@@ -1463,6 +1463,9 @@ var ButtonsAndLabel = (function () {
             case ButtonSelection.DONT_SHOW:
                 return this.canDisplayGrammar && this.dontShowFeat.prop('checked');
         }
+    };
+    ButtonsAndLabel.prototype.getOrder = function () {
+        return this.order.prop('value');
     };
     ButtonsAndLabel.prototype.getHideFeatures = function () {
         return this.hideFeatures;
@@ -1785,25 +1788,28 @@ var PanelTemplQuizFeatures = (function () {
             requestFeatures: [],
             dontShowFeatures: [],
             dontShowObjects: [],
-            glosslimit: 0,
-            order: '0'
+            glosslimit: 0
         };
         if (!this.visiblePanel)
             return null;
         if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.SHOW))
             qf.showFeatures.push('visual');
         else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST))
-            qf.requestFeatures.push({ name: 'visual', usedropdown: this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures: null });
+            qf.requestFeatures.push({ name: 'visual', order_val: '', usedropdown: this.visiblePanel.visualBAL.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures: null });
         else if (this.visiblePanel.visualBAL.isSelected(ButtonSelection.DONT_SHOW))
             qf.dontShowFeatures.push('visual');
         for (var i = 0; i < this.visiblePanel.allBAL.length; ++i) {
             var bal = this.visiblePanel.allBAL[i];
-            if (bal.isSelected(ButtonSelection.SHOW))
+            if (bal.isSelected(ButtonSelection.SHOW)) {
                 qf.showFeatures.push(bal.getFeatName());
-            else if (bal.isSelected(ButtonSelection.REQUEST))
-                qf.requestFeatures.push({ name: bal.getFeatName(), usedropdown: bal.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures: bal.getHideFeatures() });
-            else if (bal.isSelected(ButtonSelection.DONT_SHOW))
+            }
+            else if (bal.isSelected(ButtonSelection.REQUEST)) {
+                var order_rank = bal.getOrder();
+                qf.requestFeatures.push({ name: bal.getFeatName(), order_val: order_rank, usedropdown: bal.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures: bal.getHideFeatures() });
+            }
+            else if (bal.isSelected(ButtonSelection.DONT_SHOW)) {
                 qf.dontShowFeatures.push(bal.getFeatName());
+            }
         }
         for (var otherOtype in this.visiblePanel.allObjBAL) {
             var allDONT_CARE = true;
