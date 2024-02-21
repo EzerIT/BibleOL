@@ -426,6 +426,15 @@ class Ctrl_text extends MY_Controller {
 
             
             $this->load->view('view_alert_dialog');
+            $request_features = $this->mod_askemdros->decoded_3et->quizFeatures->requestFeatures;
+            $order_features = array();
+            $order_val = 1;
+            foreach ($request_features as $rf) {
+                $order_features[$rf->name] = $order_val;
+                $order_val++;
+            }
+
+            //echo 'Order Features: ' . json_encode($order_features) . '<br>';
 
             $center_text = $this->load->view('view_edit_quiz',
                                              array('decoded_3et_json' => json_encode($this->mod_askemdros->decoded_3et),
