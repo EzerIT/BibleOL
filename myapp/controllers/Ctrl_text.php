@@ -444,7 +444,8 @@ class Ctrl_text extends MY_Controller {
                                                    'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
                                                    'universe' => json_encode($this->mod_askemdros->universe),
                                                    'dir' => dirname($_GET['quiz']),
-                                                   'quiz' => substr(basename($_GET['quiz']),0,-4)), // Strips .3et
+                                                   'quiz' => substr(basename($_GET['quiz']),0,-4), // Strips .3et
+                                                   'order_features' => json_encode($order_features)), 
                                              true)
                 . $this->load->view('view_passage_tree_script',
                                     array('tree_data' => $this->universe_tree->get_jstree(),
