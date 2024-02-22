@@ -1,3 +1,6 @@
+<?php
+  var_dump($order_features);
+?>
 <div class="quizeditor" style="display:none;">
 <div id="quiz_tabs">
   <ul>
@@ -79,6 +82,14 @@
   var quiz_name = '<?= is_null($quiz) ? '' : $quiz ?>';
   var dir_name = '<?= $dir ?>';
   var order_features = <?= $order_features ?>;
+</script>
+<script>
+  function updateValue()
+  {
+    let x = document.getElementById('myInput').value; 
+    document.getElementById('myInput').value = x;
+  }
+
 </script>
 
 
