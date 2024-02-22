@@ -78,6 +78,7 @@
   var import_shebanq_url = '<?= site_url("shebanq/import_shebanq") ?>';
   var quiz_name = '<?= is_null($quiz) ? '' : $quiz ?>';
   var dir_name = '<?= $dir ?>';
+  var order_features = <?= $order_features ?>;
 </script>
 
 
