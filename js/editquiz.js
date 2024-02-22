@@ -1363,7 +1363,7 @@ var ButtonsAndLabel = (function () {
         this.dcFeat = $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontcare\">"));
         this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontshowfeat\">")) : $('<span></span>');
         this.feat = $("<span>".concat(lab, "</span>"));
-        this.order = canShow ? $("<input type=\"text\" id=\"myInput\" oninput=\"updateValue()\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"\" style=\"text-align:center;\" size=\"1\" script=\"function updateValue(){let x = document.getElementById('myInput').value; document.getElementById('myInput').value = x;}\">")) : $('<span></span>');
+        this.order = canShow ? $("<input type=\"text\" id=\"myInput\" oninput=\"updateValue()\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"\" style=\"text-align:center;\" size=\"1\">")) : $('<span></span>');
         this.limitter = $('<span></span>');
         switch (select) {
             case ButtonSelection.SHOW:
