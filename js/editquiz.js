@@ -1349,7 +1349,7 @@ var ButtonSelection;
 })(ButtonSelection || (ButtonSelection = {}));
 ;
 var ButtonsAndLabel = (function () {
-    function ButtonsAndLabel(lab, featName, otype, select, hideFeatures, useDropDown, canShow, canRequest, canDisplayGrammar) {
+    function ButtonsAndLabel(lab, featName, otype, select, hideFeatures, useDropDown, canShow, canRequest, canDisplayGrammar, order_features) {
         var _this = this;
         this.featName = featName;
         this.hideFeatures = hideFeatures;
@@ -1357,13 +1357,15 @@ var ButtonsAndLabel = (function () {
         this.canShow = canShow;
         this.canRequest = canRequest;
         this.canDisplayGrammar = canDisplayGrammar;
+        this.order_features = order_features;
         ++ButtonsAndLabel.buttonNumber;
         this.showFeat = canShow ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"show\">")) : $('<span></span>');
         this.reqFeat = canRequest ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"request\">")) : $('<span></span>');
         this.dcFeat = $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontcare\">"));
         this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontshowfeat\">")) : $('<span></span>');
         this.feat = $("<span>".concat(lab, "</span>"));
-        this.order = canShow ? $("<input type=\"text\" id=\"myInput\" oninput=\"updateValue()\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"\" style=\"text-align:center;\" size=\"1\">")) : $('<span></span>');
+        this.order_val = this.getOrderValue();
+        this.order = canShow ? $("<input type=\"text\" id=\"myInput\" oninput=\"updateValue()\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"").concat(this.order_val, "\" style=\"text-align:center;\" size=\"1\">")) : $('<span></span>');
         this.limitter = $('<span></span>');
         switch (select) {
             case ButtonSelection.SHOW:
@@ -1429,6 +1431,16 @@ var ButtonsAndLabel = (function () {
             }
         }
     }
+    ButtonsAndLabel.prototype.getOrderValue = function () {
+        var idx = this.order_features.indexOf(this.featName);
+        var order_val = '';
+        if (idx != -1) {
+            var rank = idx + 1;
+            var order_val_1 = rank.toString();
+            return order_val_1;
+        }
+        return order_val;
+    };
     ButtonsAndLabel.prototype.getRow = function () {
         var row = $('<tr></tr>');
         var cell;
@@ -1566,7 +1578,7 @@ var PanelForOneOtype = (function () {
             + "<th class=\"leftalign\">Order</th>"
             + '<th></th>'
             + '</tr>');
-        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && Boolean(getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql), true, configuration.objHasSurface === otype, configuration.objHasSurface === otype);
+        this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && Boolean(getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql), true, configuration.objHasSurface === otype, configuration.objHasSurface === otype, ptqf.order_features);
         table.append(this.visualBAL.getRow());
         var hasSurfaceFeature = otype === configuration.objHasSurface;
         var sg = getSentenceGrammarFor(otype);
@@ -1584,7 +1596,7 @@ var PanelForOneOtype = (function () {
         }
         for (var ix = 0; ix < keylist.length; ++ix) {
             var featName = keylist[ix];
-            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName), featName, otype, useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, ptqf.getHideFeatures(featName), Boolean(getFeatureSetting(otype, featName).alternateshowrequestSql), !getFeatureSetting(otype, featName).ignoreShow, !getFeatureSetting(otype, featName).ignoreRequest, sg !== null && sg.containsFeature(featName));
+            var bal = new ButtonsAndLabel(getFeatureFriendlyName(otype, featName), featName, otype, useSavedFeatures ? ptqf.getSelector(featName) : ButtonSelection.DONT_CARE, ptqf.getHideFeatures(featName), Boolean(getFeatureSetting(otype, featName).alternateshowrequestSql), !getFeatureSetting(otype, featName).ignoreShow, !getFeatureSetting(otype, featName).ignoreRequest, sg !== null && sg.containsFeature(featName), ptqf.order_features);
             this.allBAL.push(bal);
             table.append(bal.getRow());
         }
@@ -1637,7 +1649,7 @@ var PanelForOneOtype = (function () {
                     }
                     if (typeinfo.obj2feat[objType][featName] === 'url')
                         return;
-                    var bal = new ButtonsAndLabel(featNameLoc, featName, objType, useSavedFeatures ? ptqf.getObjectSelector(origObjType, featName) : ButtonSelection.DONT_CARE, null, false, false, false, true);
+                    var bal = new ButtonsAndLabel(featNameLoc, featName, objType, useSavedFeatures ? ptqf.getObjectSelector(origObjType, featName) : ButtonSelection.DONT_CARE, null, false, false, false, true, ptqf.order_features);
                     _this.allObjBAL[otherOtype].push(bal);
                     table.append(bal.getRow());
                 });
@@ -1669,7 +1681,8 @@ var PanelForOneOtype = (function () {
         var canShow = false;
         var canRequest = false;
         var canDisplayGrammar = true;
-        var new_bal = new ButtonsAndLabel(friendly_name, real_name, otype, useSavedFeatures ? get_selector : ButtonSelection.DONT_CARE, get_hide_features, useDropDown, canShow, canRequest, canDisplayGrammar);
+        var null_order = new Array();
+        var new_bal = new ButtonsAndLabel(friendly_name, real_name, otype, useSavedFeatures ? get_selector : ButtonSelection.DONT_CARE, get_hide_features, useDropDown, canShow, canRequest, canDisplayGrammar, null_order);
         this.allBAL.push(new_bal);
         return new_bal.getRow();
     };
@@ -1702,12 +1715,13 @@ var PanelForOneOtype = (function () {
     return PanelForOneOtype;
 }());
 var PanelTemplQuizFeatures = (function () {
-    function PanelTemplQuizFeatures(initialOtype, initialQf, where) {
+    function PanelTemplQuizFeatures(initialOtype, initialQf, where, order_features) {
         this.initialOtype = initialOtype;
         this.initialQf = initialQf;
         this.panels = {};
         this.fpan = $('<div id="fpan"></div>');
         where.append(this.fpan);
+        this.order_features = order_features;
     }
     PanelTemplQuizFeatures.prototype.populate = function (otype) {
         if (otype === this.oldOtype)
@@ -2401,7 +2415,14 @@ setTimeout(function () {
     $("#randomorder").prop("checked", origRandomize);
     $("#fixedorder").prop("checked", !origRandomize);
     $('#fixedquestions').on('keyup', null, { err_id: "fqerror" }, numberInputModifiedListener);
-    panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
+    var order_idx = 1;
+    var order_features = new Array();
+    for (var i = 0; i < decoded_3et.quizFeatures.requestFeatures.length; i++) {
+        var rf = decoded_3et.quizFeatures.requestFeatures[i];
+        order_features.push(rf.name);
+        order_idx++;
+    }
+    panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'), order_features);
     panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'), panelFeatures);
     panelSent = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'), panelSentUnit, panelFeatures);
     $('.quizeditor').show();

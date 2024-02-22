@@ -425,6 +425,9 @@ function numberInputModifiedListener(e : JQueryEventObject) : void {
         $('#' + e.data.err_id).html(localize('not_integer')); // Set error indication
 }
 
+interface FeatureOrder {
+    [key:string]: any;
+}
 
 //****************************************************************************************************
 // The main program
@@ -510,7 +513,17 @@ setTimeout(function() {
                             {err_id: "fqerror"}, // Event data
                             numberInputModifiedListener);
 
-    panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'));
+    //console.log('decoded_3et', decoded_3et.quizFeatures.requestFeatures);
+    let order_idx:number = 1;
+    let order_features: Array<string> = new Array();
+
+    for(let i = 0; i < decoded_3et.quizFeatures.requestFeatures.length; i++){
+        let rf = decoded_3et.quizFeatures.requestFeatures[i];
+        order_features.push(rf.name);
+        order_idx++;
+    }
+
+    panelFeatures = new PanelTemplQuizFeatures(decoded_3et.quizObjectSelection.object, decoded_3et.quizFeatures, $('#tab_features'), order_features);
     panelSentUnit = new PanelTemplQuizObjectSelector(decoded_3et.quizObjectSelection, $('#tab_sentence_units'), panelFeatures);
     panelSent     = new PanelTemplSentenceSelector(decoded_3et.sentenceSelection, $('#quiz_tabs'), $('#tab_sentences'), panelSentUnit, panelFeatures);
 

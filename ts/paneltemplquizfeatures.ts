@@ -51,7 +51,7 @@ class ButtonsAndLabel {
     private feat	 : JQuery; // The <span> element containing the feature name
     private order	 : JQuery; // The <input> element containing the order number
     private limitter	 : JQuery; // The <span> element containing the hideFeatures selector
-
+    private order_val : string; // The order value
     private static buttonNumber : number = 0; // Used by button name generator
     
     //------------------------------------------------------------------------------------------
@@ -69,7 +69,8 @@ class ButtonsAndLabel {
                 private useDropDown       : boolean,         // Can multiple choice be used?
                 private canShow           : boolean,         // Can this be a display feature?
                 private canRequest        : boolean,         // Can this be a request feature?
-                private canDisplayGrammar : boolean          // Can this be a "don't show" feature?
+                private canDisplayGrammar : boolean,         // Can this be a "don't show" feature?
+                private order_features    : string[]         // The order of the features
                ) {
 
         ++ButtonsAndLabel.buttonNumber;
@@ -79,9 +80,10 @@ class ButtonsAndLabel {
 	this.dcFeat	  =			$(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontcare">`);
 	this.dontShowFeat = canDisplayGrammar ? $(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontshowfeat">`) : $('<span></span>');
 	this.feat         =                     $(`<span>${lab}</span>`);
-    this.order  = canShow ? $(`<input type="text" id="myInput" oninput="updateValue()" name="feat_${ButtonsAndLabel.buttonNumber}" value="" style="text-align:center;" size="1">`) : $('<span></span>');
+    this.order_val = this.getOrderValue();
+    this.order  = canShow ? $(`<input type="text" id="myInput" oninput="updateValue()" name="feat_${ButtonsAndLabel.buttonNumber}" value="${this.order_val}" style="text-align:center;" size="1">`) : $('<span></span>');
     this.limitter     =                     $('<span></span>');
-        
+     
 	switch (select) {
         case ButtonSelection.SHOW:             this.showFeat.prop('checked',true);     break;
         case ButtonSelection.REQUEST:
@@ -159,6 +161,16 @@ class ButtonsAndLabel {
         }
     }
 
+    public getOrderValue(): string{
+        let idx = this.order_features.indexOf(this.featName);
+        let order_val = '';
+        if(idx != -1) {
+            let rank = idx + 1;
+            let order_val = rank.toString();
+            return order_val;
+        }
+        return order_val;
+    }
     
     
     //------------------------------------------------------------------------------------------
@@ -392,7 +404,6 @@ class PanelForOneOtype  {
         //////////////////////////////////////////////////
         // Create buttons for the specified object type //
         //////////////////////////////////////////////////
-
         let useSavedFeatures : boolean = otype === ptqf.initialOtype; // Use features read from exercise file?
 
 
@@ -422,7 +433,8 @@ class PanelForOneOtype  {
                                              configuration.objHasSurface===otype && Boolean(getFeatureSetting(otype,configuration.surfaceFeature).alternateshowrequestSql), // Can multiple choice be used?
                                              true,                                // Can this be a display feature?
                                              configuration.objHasSurface===otype, // Can this be a request feature?
-                                             configuration.objHasSurface===otype);// Can this be a "don't show" feature?
+                                             configuration.objHasSurface===otype, // Can this be a "don't show" feature?
+                                             ptqf.order_features);
 
         table.append(this.visualBAL.getRow());
 
@@ -464,7 +476,8 @@ class PanelForOneOtype  {
                                           Boolean(getFeatureSetting(otype,featName).alternateshowrequestSql), // Can multiple choice be used?       
                                           !getFeatureSetting(otype, featName).ignoreShow,              // Can this be a display feature?     
                                           !getFeatureSetting(otype, featName).ignoreRequest,           // Can this be a request feature?     
-                                          sg!==null && sg.containsFeature(featName));                  // Can this be a "don't show" feature?
+                                          sg!==null && sg.containsFeature(featName),
+                                          ptqf.order_features);                  // Can this be a "don't show" feature?
             this.allBAL.push(bal);
             table.append(bal.getRow());
         }
@@ -567,7 +580,8 @@ class PanelForOneOtype  {
                                                                             false,                                                                     // Can multiple choice be used?       
                                                                             false,                                                                     // Can this be a display feature?     
                                                                             false,                                                                     // Can this be a request feature?     
-                                                                            true);                                                                     // Can this be a "don't show" feature?
+                                                                            true,
+                                                                            ptqf.order_features);                                                                     // Can this be a "don't show" feature?
                                               this.allObjBAL[otherOtype].push(bal);
                                               table.append(bal.getRow());
                                           }
@@ -605,6 +619,7 @@ class PanelForOneOtype  {
         let canShow = false;            // Can this be a display feature?
         let canRequest = false;         // Can this be a request feature?
         let canDisplayGrammar = true;   // Can this be a "don't show" feature?
+        let null_order: Array<string> = new Array(); // there is no order for manually added features.
 
         let new_bal = new ButtonsAndLabel(friendly_name,
             real_name,
@@ -614,7 +629,8 @@ class PanelForOneOtype  {
             useDropDown, 
             canShow, 
             canRequest, 
-            canDisplayGrammar);
+            canDisplayGrammar,
+            null_order);
 
         // Add the new button and label to allBAL
         this.allBAL.push(new_bal);
@@ -701,6 +717,7 @@ class PanelTemplQuizFeatures {
     private panels       : { [ keyk : string ] : PanelForOneOtype } = {}; // Maps object type => associated panel
     private visiblePanel : PanelForOneOtype;                              // The currently visible panel
     private fpan         : JQuery = $('<div id="fpan"></div>');           // The HTML is built here
+    public order_features : string[];                                    // The order of the features
 
     //------------------------------------------------------------------------------------------
     // Constructor method
@@ -711,9 +728,11 @@ class PanelTemplQuizFeatures {
     //
     constructor(public initialOtype : string,       // Emdros object from exercise file
                 private initialQf   : QuizFeatures, // Feature specification from exercise file
-                where               : JQuery        // The <div> where this class should store the generated HTML
+                where               : JQuery,       // The <div> where this class should store the generated HTML
+                order_features      : string[]      // The order of the features
                ) {
         where.append(this.fpan);
+        this.order_features = order_features;
     }
 
     //------------------------------------------------------------------------------------------
