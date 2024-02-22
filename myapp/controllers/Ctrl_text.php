@@ -507,6 +507,8 @@ class Ctrl_text extends MY_Controller {
                     break;
             }
 
+            // initialize empty feature order
+            $order_features = array();
 
             //  View
             $this->load->view('view_top1', array('title' => $this->lang->line('edit_quiz'),
@@ -526,7 +528,8 @@ class Ctrl_text extends MY_Controller {
                                                    'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
                                                    'universe' => '[]',
                                                    'dir' => $dir,
-                                                   'quiz' => null),
+                                                   'quiz' => null,
+                                                   'order_features' => json_encode($order_features)),
                                              true)
                 . $this->load->view('view_passage_tree_script',
                                     array('tree_data' => $this->universe_tree->get_jstree(),
