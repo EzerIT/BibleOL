@@ -1,6 +1,3 @@
-<?php
-  var_dump($order_features);
-?>
 <div class="quizeditor" style="display:none;">
 <div id="quiz_tabs">
   <ul>
