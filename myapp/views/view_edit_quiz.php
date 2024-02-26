@@ -61,6 +61,7 @@
 
 <div class="buttons">
   <a class="btn btn-primary" href="#" onclick="save_quiz(); return false;"><?= $this->lang->line('save_button') ?></a>
+  <a class="btn btn-primary" href="#" onclick="test_quiz(); return false;">Test Exercise</a>
   <a class="btn btn-outline-dark" href="<?=site_url(build_get('file_manager',array('dir' => $dir))) ?>"><?= $this->lang->line('cancel_button') ?></a>
 </div>
 </div>
@@ -75,6 +76,7 @@
   var initial_universe = <?= $universe ?>;
   var submit_to = '<?= site_url("text/submit_quiz") ?>';
   var check_url = '<?= site_url("text/check_submit_quiz") ?>';
+  var test_quiz_url = '<?= site_url("text/test_quiz") ?>';
   var import_shebanq_url = '<?= site_url("shebanq/import_shebanq") ?>';
   var quiz_name = '<?= is_null($quiz) ? '' : $quiz ?>';
   var dir_name = '<?= $dir ?>';

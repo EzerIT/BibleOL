@@ -58,6 +58,7 @@ declare let decoded_3et        : any;      // JSON version of exercise template
 declare let initial_universe   : string[]; // Bible passes from exercise template
 declare let submit_to          : string;   // URL to which the edited exercise should be sent
 declare let check_url          : string;   // URL for ajax queries about the validity of an exercise file name
+declare let test_quiz_url      : string;   // URL for testing an exercise
 declare let import_shebanq_url : string;   // URL for ajax queries for imports from SHEBANQ (Note: This is a URL on the Bible OL server, not the SHEBANQ server)
 declare let quiz_name          : string;   // Name of exercise file
 declare let dir_name           : string;   // Name of exercise file directory
@@ -233,6 +234,39 @@ function save_quiz() : void {
 
     // Show the filename dialog
     $('#filename-dialog').modal('show');
+}
+
+function test_quiz() : void {
+
+    console.log('test_quiz');
+    // Build decoded_3et so that it contains the new exercise
+
+    decoded_3et.desc = ckeditor.val();    
+
+    decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
+    decoded_3et.sentbefore = $('#sentbefore').val();
+    decoded_3et.sentafter = $('#sentafter').val();
+    decoded_3et.fixedquestions = +$('#fixedquestions').val(); // Convert to number
+    decoded_3et.randomize = $('#randomorder').prop('checked');
+
+    if (!(decoded_3et.fixedquestions>0))
+        decoded_3et.fixedquestions = 0; // Non-positive or NaN
+
+    decoded_3et.sentenceSelection   = panelSent.getInfo();
+    decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
+    decoded_3et.quizFeatures        = panelFeatures.getInfo();
+    console.log('decoded_3et', decoded_3et);
+    // The HTML form contains the directory, the filename and the exercise as a JSON string
+    let form : JQuery = $(`<form action="${test_quiz_url}" method="post">
+                             <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">
+                             <input type="hidden" name="quiz"     value="${encodeURIComponent(quiz_name)}">
+                             <input type="hidden" name="quizdata" value="${encodeURIComponent(JSON.stringify(decoded_3et))}">
+                           </form>`);
+
+    $('body').append(form);
+    isSubmitting = true;
+    form.submit()
+
 }
 
 //****************************************************************************************************
