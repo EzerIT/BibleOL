@@ -89,6 +89,10 @@ class Ctrl_text extends MY_Controller {
         return $val;
     }
 
+    public function test_quiz(){
+        echo 'Test Exercise! <br>';
+    }
+    
 	public function show_text() {
         try {
             $showIcons = isset($_GET['icons']) && $_GET['icons']==='on';

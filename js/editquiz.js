@@ -2277,6 +2277,25 @@ function save_quiz() {
     });
     $('#filename-dialog').modal('show');
 }
+function test_quiz() {
+    console.log('test_quiz');
+    decoded_3et.desc = ckeditor.val();
+    decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
+    decoded_3et.sentbefore = $('#sentbefore').val();
+    decoded_3et.sentafter = $('#sentafter').val();
+    decoded_3et.fixedquestions = +$('#fixedquestions').val();
+    decoded_3et.randomize = $('#randomorder').prop('checked');
+    if (!(decoded_3et.fixedquestions > 0))
+        decoded_3et.fixedquestions = 0;
+    decoded_3et.sentenceSelection = panelSent.getInfo();
+    decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
+    decoded_3et.quizFeatures = panelFeatures.getInfo();
+    console.log('decoded_3et', decoded_3et);
+    var form = $("<form action=\"".concat(test_quiz_url, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                           </form>"));
+    $('body').append(form);
+    isSubmitting = true;
+    form.submit();
+}
 function check_overwrite() {
     $('#overwrite-yesbutton').off('click');
     $('#overwrite-yesbutton').on('click', function () {
