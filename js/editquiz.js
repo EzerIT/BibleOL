@@ -2277,20 +2277,7 @@ function save_quiz() {
     });
     $('#filename-dialog').modal('show');
 }
-function test_quiz(quiz_name) {
-    checked_passages = $('#passagetree').jstree('get_checked', null, false);
-    if (checked_passages.length == 0) {
-        myalert(localize('passage_selection'), localize('no_passages'));
-        return;
-    }
-    if (panelFeatures.noRequestFeatures()) {
-        myalert(localize('feature_specification'), localize('no_request_feature'));
-        return;
-    }
-    if (panelFeatures.noShowFeatures()) {
-        myalert(localize('feature_specification'), localize('no_show_feature'));
-        return;
-    }
+function test_quiz2(quiz_name) {
     decoded_3et.desc = ckeditor.val();
     decoded_3et.selectedPaths = [];
     for (var i = 0; i < checked_passages.length; ++i) {
@@ -2312,6 +2299,58 @@ function test_quiz(quiz_name) {
     $('body').append(form);
     isSubmitting = true;
     form.submit();
+}
+function test_quiz(quiz_name, is_new) {
+    checked_passages = $('#passagetree').jstree('get_checked', null, false);
+    if (checked_passages.length == 0) {
+        myalert(localize('passage_selection'), localize('no_passages'));
+        return;
+    }
+    if (panelFeatures.noRequestFeatures()) {
+        myalert(localize('feature_specification'), localize('no_request_feature'));
+        return;
+    }
+    if (panelFeatures.noShowFeatures()) {
+        myalert(localize('feature_specification'), localize('no_show_feature'));
+        return;
+    }
+    if (is_new === 'true') {
+        hide_error('#filename-error');
+        $('#filename-dialog-save').off('click');
+        $('#filename-dialog-save').on('click', function () {
+            if ($('#filename-name').val().trim() == '')
+                show_error('#filename-error', localize('missing_filename'));
+            else {
+                quiz_name = $('#filename-name').val().trim();
+                $.ajax("".concat(check_url, "?dir=").concat(encodeURIComponent(dir_name), "&quiz=").concat(encodeURIComponent(quiz_name)))
+                    .done(function (data, textStatus, jqXHR) {
+                    switch (data.trim()) {
+                        case 'OK':
+                            $('#filename-dialog').modal('hide');
+                            test_quiz2(quiz_name);
+                            break;
+                        case 'EXISTS':
+                            $('#filename-dialog').modal('hide');
+                            check_overwrite();
+                            break;
+                        case 'BADNAME':
+                            show_error('#filename-error', localize('badname'));
+                            break;
+                        default:
+                            show_error('#filename-error', data);
+                            break;
+                    }
+                })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                    show_error('#filename-error', "".concat(localize('error_response'), " ").concat(errorThrown));
+                });
+            }
+        });
+        $('#filename-dialog').modal('show');
+    }
+    else {
+        test_quiz2(quiz_name);
+    }
 }
 function check_overwrite() {
     $('#overwrite-yesbutton').off('click');

@@ -236,24 +236,7 @@ function save_quiz() : void {
     $('#filename-dialog').modal('show');
 }
 
-
-function test_quiz(quiz_name:string) : void {
-    checked_passages = $('#passagetree').jstree('get_checked',null,false);
-    if (checked_passages.length==0) {
-        myalert(localize('passage_selection'), localize('no_passages'));
-        return;
-    }
-
-    if (panelFeatures.noRequestFeatures()) {
-        myalert(localize('feature_specification'), localize('no_request_feature'));
-        return;
-    }
-
-    if (panelFeatures.noShowFeatures()) {
-        myalert(localize('feature_specification'), localize('no_show_feature'));
-        return;
-    }
-
+function test_quiz2(quiz_name:string) : void {
     // Build decoded_3et so that it contains the new exercise
     decoded_3et.desc = ckeditor.val();
     decoded_3et.selectedPaths = [];
@@ -283,8 +266,87 @@ function test_quiz(quiz_name:string) : void {
 
     $('body').append(form);
     isSubmitting = true;
-    form.submit()
+    form.submit();
+}
 
+function test_quiz(quiz_name:string, is_new:string) : void {
+    checked_passages = $('#passagetree').jstree('get_checked',null,false);
+    if (checked_passages.length==0) {
+        myalert(localize('passage_selection'), localize('no_passages'));
+        return;
+    }
+
+    if (panelFeatures.noRequestFeatures()) {
+        myalert(localize('feature_specification'), localize('no_request_feature'));
+        return;
+    }
+
+    if (panelFeatures.noShowFeatures()) {
+        myalert(localize('feature_specification'), localize('no_show_feature'));
+        return;
+    }
+
+    // if the quiz is new, make sure it has a name before it can be tested
+    if(is_new === 'true'){
+        hide_error('#filename-error');
+        // Set up handler for the 'Save' button in the filename dialog
+        $('#filename-dialog-save').off('click'); // Remove any previous handler
+        $('#filename-dialog-save').on('click',() => {
+            // This code is executed when the user clicks 'Save' in the filename dialog
+
+            if (($('#filename-name').val() as string).trim() == '')
+                show_error('#filename-error', localize('missing_filename'));
+            else {
+                quiz_name = ($('#filename-name').val() as string).trim();
+
+                // Ask the server if file may be written
+                $.ajax(`${check_url}?dir=${encodeURIComponent(dir_name)}&quiz=${encodeURIComponent(quiz_name)}`)
+                    .done((data, textStatus, jqXHR) => {
+
+                        // Check reply form check_url
+                        switch (data.trim()) {
+                        case 'OK':
+                            // Everthing is find
+                            $('#filename-dialog').modal('hide');
+                            test_quiz2(quiz_name); // Proceed to phase 2
+                            break;
+
+                        case 'EXISTS':
+                            // The file already exists
+                            $('#filename-dialog').modal('hide');
+                            check_overwrite(); // Check if it is OK to overwrite it
+                            break;
+
+                        case 'BADNAME':
+                            // The filename is illegal
+                            show_error('#filename-error', localize('badname'));
+                            break;
+
+                        default:
+                            // Error message - display it
+                            show_error('#filename-error', data);
+                            break;
+                        }
+                    })
+                    .fail((jqXHR, textStatus, errorThrown) => {
+                        // Ajax request failed - display error
+                        show_error('#filename-error', `${localize('error_response')} ${errorThrown}`);
+                    });
+            }
+        });
+
+        // Show the filename dialog
+        $('#filename-dialog').modal('show');
+    }
+    else {
+        test_quiz2(quiz_name);
+    }
+
+
+    
+
+    
+    
 }
 
 //****************************************************************************************************
