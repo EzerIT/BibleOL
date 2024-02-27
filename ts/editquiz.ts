@@ -236,11 +236,49 @@ function save_quiz() : void {
     $('#filename-dialog').modal('show');
 }
 
-function test_quiz() : void {
 
-    console.log('test_quiz');
+function test_quiz(quiz_name:string) : void {
+    //console.log('Quiz Name: ', qname);
+    checked_passages = $('#passagetree').jstree('get_checked',null,false);
+    if (checked_passages.length==0) {
+        myalert(localize('passage_selection'), localize('no_passages'));
+        return;
+    }
+
+    if (panelFeatures.noRequestFeatures()) {
+        myalert(localize('feature_specification'), localize('no_request_feature'));
+        return;
+    }
+
+    if (panelFeatures.noShowFeatures()) {
+        myalert(localize('feature_specification'), localize('no_show_feature'));
+        return;
+    }
+    //quiz_name = 'tmp';
+
     // Build decoded_3et so that it contains the new exercise
+    decoded_3et.desc = ckeditor.val();
+    decoded_3et.selectedPaths = [];
+    for (let i=0; i<checked_passages.length; ++i) {
+        let r = $(checked_passages[i]).data('ref');
+        if (r!='')
+            decoded_3et.selectedPaths.push(r);
+    }
+    decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
+    decoded_3et.sentbefore = $('#sentbefore').val();
+    decoded_3et.sentafter = $('#sentafter').val();
+    decoded_3et.fixedquestions = +$('#fixedquestions').val(); // Convert to number
+    decoded_3et.randomize = $('#randomorder').prop('checked');
+    if (!(decoded_3et.fixedquestions>0))
+        decoded_3et.fixedquestions = 0; // Non-positive or NaN
 
+    decoded_3et.sentenceSelection   = panelSent.getInfo();
+    decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
+    decoded_3et.quizFeatures        = panelFeatures.getInfo();
+
+
+    // Build decoded_3et so that it contains the new exercise
+    /*
     decoded_3et.desc = ckeditor.val();    
 
     decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
@@ -256,6 +294,7 @@ function test_quiz() : void {
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures        = panelFeatures.getInfo();
     console.log('decoded_3et', decoded_3et);
+    */
     // The HTML form contains the directory, the filename and the exercise as a JSON string
     let form : JQuery = $(`<form action="${test_quiz_url}" method="post">
                              <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">
