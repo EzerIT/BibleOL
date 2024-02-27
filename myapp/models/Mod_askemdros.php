@@ -234,6 +234,8 @@ class Mod_askemdros extends CI_Model {
     
     private function parseQuizBasic(string $filename) {
         $this->decoded_3et = $this->decodeQuiz($filename);
+        //echo 'Decoded 3et: ' . var_dump($this->decodeQuiz($filename)) . '<br>';
+        //$die=3/0;
 
         $this->setup($this->decoded_3et->database,$this->decoded_3et->properties);
 
@@ -285,7 +287,35 @@ class Mod_askemdros extends CI_Model {
             $this->universe = $this->decoded_3et->selectedPaths;
     }
 
+    public function show_test_quiz(int $number_of_quizzes, stdClass $quizdata, array $use_selection = null){
+        try {
+            $this->load->library('db_config');
+            self::parseQuiz($this->mod_quizpath->get_absolute(), $use_selection);
+            if ($this->quiz_data->getCandidateSheaf())
+                $numCandidates = $this->quiz_data->getNumberOfCandidates();
+            else
+                throw new DataException($this->lang->line('no_sentences_found'));
 
+            if ($this->quiz_data->fixedquestions>0)
+                $number_of_quizzes = $this->quiz_data->fixedquestions;
+            $this->dictionaries_json = json_encode($this->quiz_data->getNextCandidate($number_of_quizzes));
+            $this->quiz_data_json = json_encode($this->quiz_data);
+
+            $this->dbinfo_json = $this->db_config->dbinfo_json;
+            $this->l10n_json = $this->db_config->l10n_json;
+            $this->typeinfo_json = $this->db_config->typeinfo_json;
+        }
+        catch (MqlException $e) {
+            if (!empty($e->db_error)) 
+                $error = $this->lang->line('mql_database_error_colon') . "\n$e->db_error";
+            else
+                $error = $this->lang->line('mql_compiler_error_colon') . "\n$e->compiler_error";
+
+            $error = str_replace("\n","<br>",htmlspecialchars($error));
+            throw new DataException($error);
+        }
+
+    }
     public function show_quiz(int $number_of_quizzes, array $use_selection = null) {
         try {
             $this->load->library('db_config');
@@ -372,7 +402,18 @@ class Mod_askemdros extends CI_Model {
         }
     }
 
+    public function package_test_quiz(stdClass $quizdata){
+        $this->setup($quizdata->database,$quizdata->properties);
+        $this->load->helper(array('file','quiztemplate'));
+        $res = Template::writeAsXml($quizdata, $this->db_config->dbinfo);
+        if (!write_file($this->mod_quizpath->get_absolute(), $res))
+            throw new DataException($this->lang->line('cannot_write_to_quiz_file'));
+
+        return $res;
+    }
+
     public function save_quiz(stdClass $quizdata) {
+        echo 'Quiz Path: ' . $this->mod_quizpath->get_absolute() . '<br>';
         $this->setup($quizdata->database,$quizdata->properties);
 
         $this->load->helper(array('file','quiztemplate'));
