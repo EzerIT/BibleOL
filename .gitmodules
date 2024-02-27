@@ -1,6 +1,7 @@
 [submodule "zocial"]
 	path = zocial
-	url = https://github.com/EzerIT/css-social-buttons
+	url = ../css-social-buttons
 [submodule "jstree"]
 	path = jstree
-	url = https://github.com/EzerIT/jstree
+	url = ../jstree
+
