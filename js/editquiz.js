@@ -2277,9 +2277,27 @@ function save_quiz() {
     });
     $('#filename-dialog').modal('show');
 }
-function test_quiz() {
-    console.log('test_quiz');
+function test_quiz(quiz_name) {
+    checked_passages = $('#passagetree').jstree('get_checked', null, false);
+    if (checked_passages.length == 0) {
+        myalert(localize('passage_selection'), localize('no_passages'));
+        return;
+    }
+    if (panelFeatures.noRequestFeatures()) {
+        myalert(localize('feature_specification'), localize('no_request_feature'));
+        return;
+    }
+    if (panelFeatures.noShowFeatures()) {
+        myalert(localize('feature_specification'), localize('no_show_feature'));
+        return;
+    }
     decoded_3et.desc = ckeditor.val();
+    decoded_3et.selectedPaths = [];
+    for (var i = 0; i < checked_passages.length; ++i) {
+        var r = $(checked_passages[i]).data('ref');
+        if (r != '')
+            decoded_3et.selectedPaths.push(r);
+    }
     decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
     decoded_3et.sentbefore = $('#sentbefore').val();
     decoded_3et.sentafter = $('#sentafter').val();
@@ -2290,7 +2308,6 @@ function test_quiz() {
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
-    console.log('decoded_3et', decoded_3et);
     var form = $("<form action=\"".concat(test_quiz_url, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                           </form>"));
     $('body').append(form);
     isSubmitting = true;
