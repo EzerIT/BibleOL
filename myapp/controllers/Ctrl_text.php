@@ -109,7 +109,7 @@ class Ctrl_text extends MY_Controller {
 
         $dir = rawurldecode($_POST['dir']);
         $quiz = rawurldecode($_POST['quiz']);
-        $quiz_name = rawurldecode($dir) . '/' . rawurldecode($quiz) . '.3et';
+        $quiz_name = rawurldecode($dir) . '/' . rawurldecode($quiz);
         $quizdata = json_decode(urldecode($_POST['quizdata']));
 
         
