@@ -90,7 +90,81 @@ class Ctrl_text extends MY_Controller {
     }
 
     public function test_quiz(){
-        echo 'Test Exercise! <br>';
+        $this->mod_users->check_teacher();
+
+        if (!isset($_POST['dir']))
+            throw new DataException($this->lang->line('missing_folder_name'));
+        if (!isset($_POST['quiz']))
+            throw new DataException($this->lang->line('missing_quiz_filename'));
+
+        if (!isset($_POST['quizdata']))
+            throw new DataException("Missing quiz data");
+        
+        // MODEL:
+        $this->load->model('mod_quizpath' );
+        $this->load->model('mod_askemdros');
+        $this->load->model('mod_localize');
+
+        $this->mod_quizpath->init(rawurldecode($_POST['dir']) . '/' . rawurldecode($_POST['quiz']) . '.3et', false, false, false);
+
+        $dir = rawurldecode($_POST['dir']);
+        $quiz = rawurldecode($_POST['quiz']);
+        $quiz_name = rawurldecode($dir) . '/' . rawurldecode($quiz) . '.3et';
+        $quizdata = json_decode(urldecode($_POST['quizdata']));
+
+        
+        // Package quiz data
+        $res = $this->mod_askemdros->package_test_quiz($quizdata);
+        $this->mod_quizpath->set_owner($this->mod_users->my_id());
+
+        $number_of_quizzes = 5;
+        $universe = null;
+
+        $this->mod_askemdros->show_test_quiz($number_of_quizzes, $quizdata, $universe);
+
+        // VIEW:
+        $javascripts = array('js/ol.js');
+        if ($this->quiz_data->quizFeatures->useVirtualKeyboard) {
+            switch ($this->db_config->dbinfo->charSet) {
+              case 'hebrew':
+                    $javascripts[] = 'VirtualKeyboard.full.3.7.2/vk_loader.js?vk_layout=IL%20Biblical%20Hebrew%20(SIL)&amp;vk_skin=goldie';
+                    break;
+
+              case 'greek':
+                    $javascripts[] = 'VirtualKeyboard.full.3.7.2/vk_loader.js?vk_layout=GR%20Greek%20Polytonic&amp;vk_skin=goldie';
+                    break;
+
+              case 'transliterated_hebrew':
+              case 'latin':
+                    // Nothing for now
+                    break;
+            }
+        }
+        $display_data = array(
+            'is_quiz' => true,
+            'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
+            'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
+            'quizData_json' => $this->mod_askemdros->quiz_data_json,
+            'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
+            'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
+            'l10n_json' => $this->mod_askemdros->l10n_json,
+            'l10n_js_json' => $this->mod_localize->get_json(),
+            'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
+            'is_logged_in' => $this->mod_users->is_logged_in(),
+            'quiz_name' => $quiz_name
+          );
+        
+        $this->load->view('view_top1', array('title' => $this->lang->line('quiz'),
+          'css_list' => array('styles/selectbox.css'),
+          'js_list' => $javascripts));
+        $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => false));
+        
+        $this->load->view('view_test_quiz', $display_data);
+        $this->load->view('view_bottom');
+                
+
     }
     
 	public function show_text() {
@@ -604,7 +678,7 @@ class Ctrl_text extends MY_Controller {
                 throw new DataException("Missing quiz data");
 
             // MODEL:
-            $this->load->model('mod_quizpath');
+            $this->load->model('mod_quizpath' );
             $this->load->model('mod_askemdros');
 
             $this->mod_quizpath->init(rawurldecode($_POST['dir']) . '/' . rawurldecode($_POST['quiz']) . '.3et', false, false, false);
@@ -619,7 +693,6 @@ class Ctrl_text extends MY_Controller {
 
             $this->mod_askemdros->save_quiz(json_decode(urldecode($_POST['quizdata'])));
             $this->mod_quizpath->set_owner($this->mod_users->my_id());
-
             redirect('/file_manager?dir=' . $_POST['dir']); // Note: Don't use http_build_query, because $POST['dir'] is already encoded
         }
         catch (DataException $e) {
