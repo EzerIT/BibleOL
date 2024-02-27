@@ -457,6 +457,7 @@ class Ctrl_text extends MY_Controller {
 
     public function edit_quiz() {
         try {
+            $is_new = 'false';
             if (!isset($_GET['quiz']))
                 throw new DataException($this->lang->line('missing_quiz_filename'));
 
@@ -523,7 +524,8 @@ class Ctrl_text extends MY_Controller {
                                                    'universe' => json_encode($this->mod_askemdros->universe),
                                                    'dir' => dirname($_GET['quiz']),
                                                    'quiz' => substr(basename($_GET['quiz']),0,-4), // Strips .3et
-                                                   'order_features' => json_encode($order_features)), 
+                                                   'order_features' => json_encode($order_features),
+                                                   'is_new' => $is_new), 
                                              true)
                 . $this->load->view('view_passage_tree_script',
                                     array('tree_data' => $this->universe_tree->get_jstree(),
@@ -547,6 +549,7 @@ class Ctrl_text extends MY_Controller {
 
     public function new_quiz() {
         try {
+            $is_new = 'true';
             if (!isset($_POST['dir']))
                 throw new DataException($this->lang->line('missing_folder_name'));
             $dir = trim($_POST['dir']);
@@ -607,7 +610,8 @@ class Ctrl_text extends MY_Controller {
                                                    'universe' => '[]',
                                                    'dir' => $dir,
                                                    'quiz' => null,
-                                                   'order_features' => json_encode($order_features)),
+                                                   'order_features' => json_encode($order_features),
+                                                   'is_new' => $is_new),
                                              true)
                 . $this->load->view('view_passage_tree_script',
                                     array('tree_data' => $this->universe_tree->get_jstree(),

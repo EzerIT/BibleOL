@@ -1,3 +1,4 @@
+
 <div class="quizeditor" style="display:none;">
 <div id="quiz_tabs">
   <ul>
@@ -61,7 +62,7 @@
 
 <div class="buttons">
   <a class="btn btn-primary" href="#" onclick="save_quiz(); return false;"><?= $this->lang->line('save_button') ?></a>
-  <a class="btn btn-primary" href="#" onclick="test_quiz(quiz_name); return false;">Test Exercise</a>
+  <a class="btn btn-primary" href="#" onclick="test_quiz(quiz_name, is_new); return false;">Test Exercise</a>
   <a class="btn btn-outline-dark" href="<?=site_url(build_get('file_manager',array('dir' => $dir))) ?>"><?= $this->lang->line('cancel_button') ?></a>
 </div>
 </div>
@@ -81,6 +82,7 @@
   var quiz_name = '<?= is_null($quiz) ? '' : $quiz ?>';
   var dir_name = '<?= $dir ?>';
   var order_features = <?= $order_features ?>;
+  var is_new = '<?= $is_new ?>';
 </script>
 <script>
   function updateValue()
