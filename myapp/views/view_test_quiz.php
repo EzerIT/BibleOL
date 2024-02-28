@@ -16,7 +16,7 @@
     </div>
 
 
-<div class="col-lg-6 col-md-8">
+<div class="col-lg-6 col-md-8 quizpanel">
   <?php if ($is_quiz && !$is_logged_in): ?>
     <div class="centerblock alert alert-warning">
          <h1><?= $this->lang->line('warning') ?></h1>
