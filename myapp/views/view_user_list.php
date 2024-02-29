@@ -28,12 +28,13 @@
     <td class="norb">
       <input type="text" name="email">
     </td>
-    <input style="float:right " class="btn btn-primary" type="submit" name="submit" value="<?= "Search" ?>">
-    <input style="float:right " class="btn btn-primary" type="submit" href="<?= site_url("users") ?>" value="<?= "Clear" ?>">
     
   </tr>
 
 </table>
+<input style="float:left " class="btn btn-primary" type="submit" name="submit" value="<?= "Search" ?>">
+<input style="float:left " class="btn btn-primary" type="submit" href="<?= site_url("users") ?>" value="<?= "Clear" ?>">
+    
 <br>
 
 
