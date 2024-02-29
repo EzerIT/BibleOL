@@ -32,9 +32,11 @@
   </tr>
 
 </table>
+<br>
 <input style="float:left " class="btn btn-primary" type="submit" name="submit" value="<?= "Search" ?>">
 <input style="float:left " class="btn btn-primary" type="submit" href="<?= site_url("users") ?>" value="<?= "Clear" ?>">
-    
+<br>
+<br>    
 <br>
 
 
