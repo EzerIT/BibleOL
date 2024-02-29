@@ -1059,14 +1059,14 @@ table.searchbar td {
   padding-left: 10px;
 }
 table.searchbar td.norb {
-  border-right-width: 10px;
+  border-right-width: 0;
 }
 table.searchbar td.nolb {
-  border-left-width: 10px;
+  border-left-width: 0;
 }
 table.searchbar input {
   font-size: 10pt;
-  width: 250px;
+  width: 200px;
   margin-top: auto;
   margin-bottom: auto;
 }
@@ -1076,7 +1076,7 @@ table.searchbar input.narrow {
 table.form {
   border-spacing: 0;
   background-color: white;
-  border: solid 10px #adadad;
+  border: solid 1px #adadad;
   margin: 10px;
 }
 table.form td {
