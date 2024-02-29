@@ -1051,21 +1051,22 @@ table.searchbar {
   background-color: white;
   border: solid 1px #adadad;
   margin: 0px;
+  width: 100%;
 }
 table.searchbar td {
   vertical-align: center;
-  padding: 7px;
-  padding-left: 13px;
+  padding: 15px;
+  padding-left: 10px;
 }
 table.searchbar td.norb {
-  border-right-width: 0;
+  border-right-width: 10px;
 }
 table.searchbar td.nolb {
-  border-left-width: 0;
+  border-left-width: 10px;
 }
 table.searchbar input {
   font-size: 10pt;
-  width: 200px;
+  width: 250px;
   margin-top: auto;
   margin-bottom: auto;
 }
@@ -1075,7 +1076,7 @@ table.searchbar input.narrow {
 table.form {
   border-spacing: 0;
   background-color: white;
-  border: solid 1px #adadad;
+  border: solid 10px #adadad;
   margin: 10px;
 }
 table.form td {
