@@ -41,6 +41,8 @@ let selected_orders: { [key: string]: any } = {
 };
 let feature_array: string[] = [];
 
+
+
 //****************************************************************************************************
 // ButtonsAndLabel class
 //
@@ -119,21 +121,36 @@ class ButtonsAndLabel {
                 
                 this.order.empty();
                 this.order.append(order_select);
-                updateOrderDropdowns();
+                let update_user_input = true;
+                updateOrderDropdowns(update_user_input);
+
             })
 
+            this.order.change(() => {
+                let feat_dropdown = $(`#${this.featName}`)[0] as HTMLSelectElement;
+                feat_dropdown.classList.add('selected-dropdown');
+                let new_idx = Number(feat_dropdown.value) - 1;
+                let current_idx = feature_array.indexOf(this.featName);
+                let feature_at_new_idx = feature_array[new_idx];
+
+
+                // swap the values
+                feature_array[new_idx] = this.featName;
+                feature_array[current_idx] = feature_at_new_idx;
+                
+                let dropdown_replacefeat = $(`#${feature_at_new_idx}`)[0] as HTMLSelectElement;
+
+                dropdown_replacefeat.options[current_idx].selected=true;
+                
+
+            });
+            
             let generate_select_button = () => {
                 let order_select = $(`<select class="order-dropdown-select" name="dropdown" id="${this.featName}"></select`);
                 return order_select;
             }
 
-            let generate_order_dropdown = () => {
-                //let feat_idx = -1;
-                //if(selected_orders.hasOwnProperty(this.featName)){
-                //    feat_idx = selected_orders[this.featName];
-                //}
-                //console.log('Feature Name: ', this.featName);
-                //console.log('Feature Index: ', feat_idx);
+            let generate_order_dropdown = () => {            
                 let order_template = ''
                 for(let i = 0; i < n; i++) {
                     order_template += `<option value="${i+1}">${i+1}</option>`;
@@ -143,45 +160,35 @@ class ButtonsAndLabel {
             };
 
             let updateSelected = () => {
-                console.log('IN HERE')
-                console.log('feature_array: ', feature_array);
-                let idx = 1;
                 for (let i = 0; i < feature_array.length; i++){
-                    let feat = feature_array[i];
-                    let feat_dropdown = document.getElementById(feat) as HTMLSelectElement;;
-                    if(feat_dropdown){
-                        feat_dropdown.options[i].selected = true;
-                    }
-                    console.log('Dropdown: ', feat_dropdown);
-
+                    let feat = feature_array[i]
+                    let feat_dropdown = $(`#${feat}`)[0] as HTMLSelectElement;
+                    feat_dropdown.options[i].selected = true;
                 }
                 
             }
 
-            let updateOrderDropdowns = () => {
-                let order_menus = $('.order-dropdown-select');
-                console.log('ORDER MENUS: ', order_menus);
+            let updateOrderDropdowns = (update_user_input:boolean) => {
+                
+                if(update_user_input)
+                    var order_menus = $('.order-dropdown-select');
+                else
+                    var order_menus = $('.order-dropdown-select:not(.selected-dropdown)');
+
                 let order_template = generate_order_dropdown();
                 order_menus.empty();
                 order_menus.append(order_template);
                 updateSelected();
-                /*
-                let request_count = order_menus.length;
-
-                let idx = 0;
-                let order_template = generate_order_dropdown();
-                order_menus.empty();
-                order_menus.append(order_template);
-                
-                */
             };
 
             
             let unselectReqFeat = () => {
                 if(n > 0 && this.order.html())
                     n = n - 1;
+                feature_array = feature_array.filter(item => item !== this.featName);
                 this.order.empty();
-                updateOrderDropdowns();
+                let update_user_input = true;
+                updateOrderDropdowns(update_user_input);
             }
 
             if (select === ButtonSelection.REQUEST)
@@ -234,20 +241,11 @@ class ButtonsAndLabel {
                 };
 
                 let removeit = () => {
-                    //if(n > 0 && this.limitter.html())
-                    //    n = n - 1; 
-                    //console.log('DELETE');
-                    //console.log('N: ', n);
-                    //console.log('len(this.limitter): ',this.limitter.html());
                     this.limitter.empty(); 
                 };
                 
                 this.reqFeat.change( () =>
                     {
-                        //n = n + 1;
-                        //console.log('ADD');
-                        //console.log('N: ', n);
-                        //last_feature = featName;
                         limitButton.click(limitButton_clickFunction);
                         this.limitter.append(limitButton);
                     }

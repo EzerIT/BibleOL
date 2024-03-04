@@ -1398,7 +1398,19 @@ var ButtonsAndLabel = (function () {
                 var order_select = generate_select_button_1();
                 _this.order.empty();
                 _this.order.append(order_select);
-                updateOrderDropdowns_1();
+                var update_user_input = true;
+                updateOrderDropdowns_1(update_user_input);
+            });
+            this.order.change(function () {
+                var feat_dropdown = $("#".concat(_this.featName))[0];
+                feat_dropdown.classList.add('selected-dropdown');
+                var new_idx = Number(feat_dropdown.value) - 1;
+                var current_idx = feature_array.indexOf(_this.featName);
+                var feature_at_new_idx = feature_array[new_idx];
+                feature_array[new_idx] = _this.featName;
+                feature_array[current_idx] = feature_at_new_idx;
+                var dropdown_replacefeat = $("#".concat(feature_at_new_idx))[0];
+                dropdown_replacefeat.options[current_idx].selected = true;
             });
             var generate_select_button_1 = function () {
                 var order_select = $("<select class=\"order-dropdown-select\" name=\"dropdown\" id=\"".concat(_this.featName, "\"></select"));
@@ -1412,22 +1424,17 @@ var ButtonsAndLabel = (function () {
                 return order_template;
             };
             var updateSelected_1 = function () {
-                console.log('IN HERE');
-                console.log('feature_array: ', feature_array);
-                var idx = 1;
                 for (var i = 0; i < feature_array.length; i++) {
                     var feat = feature_array[i];
-                    var feat_dropdown = document.getElementById(feat);
-                    ;
-                    if (feat_dropdown) {
-                        feat_dropdown.options[i].selected = true;
-                    }
-                    console.log('Dropdown: ', feat_dropdown);
+                    var feat_dropdown = $("#".concat(feat))[0];
+                    feat_dropdown.options[i].selected = true;
                 }
             };
-            var updateOrderDropdowns_1 = function () {
-                var order_menus = $('.order-dropdown-select');
-                console.log('ORDER MENUS: ', order_menus);
+            var updateOrderDropdowns_1 = function (update_user_input) {
+                if (update_user_input)
+                    var order_menus = $('.order-dropdown-select');
+                else
+                    var order_menus = $('.order-dropdown-select:not(.selected-dropdown)');
                 var order_template = generate_order_dropdown_1();
                 order_menus.empty();
                 order_menus.append(order_template);
@@ -1436,8 +1443,10 @@ var ButtonsAndLabel = (function () {
             var unselectReqFeat = function () {
                 if (n > 0 && _this.order.html())
                     n = n - 1;
+                feature_array = feature_array.filter(function (item) { return item !== _this.featName; });
                 _this.order.empty();
-                updateOrderDropdowns_1();
+                var update_user_input = true;
+                updateOrderDropdowns_1(update_user_input);
             };
             if (select === ButtonSelection.REQUEST)
                 this.reqFeat.change();
