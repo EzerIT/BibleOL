@@ -1348,6 +1348,9 @@ var ButtonSelection;
     ButtonSelection[ButtonSelection["DONT_SHOW"] = 4] = "DONT_SHOW";
 })(ButtonSelection || (ButtonSelection = {}));
 ;
+var n = 0;
+var selected_orders = {};
+var feature_array = [];
 var ButtonsAndLabel = (function () {
     function ButtonsAndLabel(lab, featName, otype, select, hideFeatures, useDropDown, canShow, canRequest, canDisplayGrammar, order_features) {
         var _this = this;
@@ -1365,7 +1368,7 @@ var ButtonsAndLabel = (function () {
         this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontshowfeat\">")) : $('<span></span>');
         this.feat = $("<span>".concat(lab, "</span>"));
         this.order_val = this.getOrderValue();
-        this.order = canShow ? $("<input type=\"text\" id=\"myInput\" oninput=\"updateValue()\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"").concat(this.order_val, "\" style=\"text-align:center;\" size=\"1\">")) : $('<span></span>');
+        this.order = canRequest ? $("<span class=\"order-dropdown\"></span>") : $('<span></span>');
         this.limitter = $('<span></span>');
         switch (select) {
             case ButtonSelection.SHOW:
@@ -1389,6 +1392,60 @@ var ButtonsAndLabel = (function () {
         else
             this.ddCheck = $('<span></span>');
         if (canRequest) {
+            this.reqFeat.change(function () {
+                n = n + 1;
+                feature_array.push(_this.featName);
+                var order_select = generate_select_button_1();
+                _this.order.empty();
+                _this.order.append(order_select);
+                updateOrderDropdowns_1();
+            });
+            var generate_select_button_1 = function () {
+                var order_select = $("<select class=\"order-dropdown-select\" name=\"dropdown\" id=\"".concat(_this.featName, "\"></select"));
+                return order_select;
+            };
+            var generate_order_dropdown_1 = function () {
+                var order_template = '';
+                for (var i = 0; i < n; i++) {
+                    order_template += "<option value=\"".concat(i + 1, "\">").concat(i + 1, "</option>");
+                }
+                return order_template;
+            };
+            var updateSelected_1 = function () {
+                console.log('IN HERE');
+                console.log('feature_array: ', feature_array);
+                var idx = 1;
+                for (var i = 0; i < feature_array.length; i++) {
+                    var feat = feature_array[i];
+                    var feat_dropdown = document.getElementById(feat);
+                    ;
+                    if (feat_dropdown) {
+                        feat_dropdown.options[i].selected = true;
+                    }
+                    console.log('Dropdown: ', feat_dropdown);
+                }
+            };
+            var updateOrderDropdowns_1 = function () {
+                var order_menus = $('.order-dropdown-select');
+                console.log('ORDER MENUS: ', order_menus);
+                var order_template = generate_order_dropdown_1();
+                order_menus.empty();
+                order_menus.append(order_template);
+                updateSelected_1();
+            };
+            var unselectReqFeat = function () {
+                if (n > 0 && _this.order.html())
+                    n = n - 1;
+                _this.order.empty();
+                updateOrderDropdowns_1();
+            };
+            if (select === ButtonSelection.REQUEST)
+                this.reqFeat.change();
+            this.dcFeat.change(unselectReqFeat);
+            if (canShow)
+                this.showFeat.change(unselectReqFeat);
+            if (canDisplayGrammar)
+                this.dontShowFeat.change(unselectReqFeat);
             if (useDropDown) {
                 this.ddCheck.prop('disabled', !this.reqFeat.prop('checked'));
                 if (canShow)
@@ -1416,7 +1473,9 @@ var ButtonsAndLabel = (function () {
                         updateBadge_1();
                     });
                 };
-                var removeit = function () { return _this.limitter.empty(); };
+                var removeit = function () {
+                    _this.limitter.empty();
+                };
                 this.reqFeat.change(function () {
                     limitButton_1.click(limitButton_clickFunction_1);
                     _this.limitter.append(limitButton_1);
