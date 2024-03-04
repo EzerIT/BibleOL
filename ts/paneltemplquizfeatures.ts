@@ -35,7 +35,11 @@ interface QuizFeatures {
 // Names the radio buttons and checkboxes that speficy the handling of a feature
 //
 enum ButtonSelection { SHOW, REQUEST, REQUEST_DROPDOWN, DONT_CARE, DONT_SHOW};
+let n = 0;
+let selected_orders: { [key: string]: any } = {
 
+};
+let feature_array: string[] = [];
 
 //****************************************************************************************************
 // ButtonsAndLabel class
@@ -81,8 +85,12 @@ class ButtonsAndLabel {
 	this.dontShowFeat = canDisplayGrammar ? $(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontshowfeat">`) : $('<span></span>');
 	this.feat         =                     $(`<span>${lab}</span>`);
     this.order_val = this.getOrderValue();
-    this.order  = canShow ? $(`<input type="text" id="myInput" oninput="updateValue()" name="feat_${ButtonsAndLabel.buttonNumber}" value="${this.order_val}" style="text-align:center;" size="1">`) : $('<span></span>');
+    //this.order  = canShow ? $(`<input type="text" id="myInput" oninput="updateValue()" name="feat_${ButtonsAndLabel.buttonNumber}" value="${this.order_val}" style="text-align:center;" size="1">`) : $('<span></span>');
+    this.order = canRequest ? $(`<span class="order-dropdown"></span>`) : $('<span></span>');
+
+                                
     this.limitter     =                     $('<span></span>');
+    
      
 	switch (select) {
         case ButtonSelection.SHOW:             this.showFeat.prop('checked',true);     break;
@@ -99,7 +107,94 @@ class ButtonsAndLabel {
         else
             this.ddCheck = $('<span></span>'); // Empty space filler
 
+
+
+
+
         if (canRequest) {
+            this.reqFeat.change(() => {
+                n = n + 1;
+                feature_array.push(this.featName);
+                let order_select = generate_select_button();
+                
+                this.order.empty();
+                this.order.append(order_select);
+                updateOrderDropdowns();
+            })
+
+            let generate_select_button = () => {
+                let order_select = $(`<select class="order-dropdown-select" name="dropdown" id="${this.featName}"></select`);
+                return order_select;
+            }
+
+            let generate_order_dropdown = () => {
+                //let feat_idx = -1;
+                //if(selected_orders.hasOwnProperty(this.featName)){
+                //    feat_idx = selected_orders[this.featName];
+                //}
+                //console.log('Feature Name: ', this.featName);
+                //console.log('Feature Index: ', feat_idx);
+                let order_template = ''
+                for(let i = 0; i < n; i++) {
+                    order_template += `<option value="${i+1}">${i+1}</option>`;
+                }
+                
+                return order_template;
+            };
+
+            let updateSelected = () => {
+                console.log('IN HERE')
+                console.log('feature_array: ', feature_array);
+                let idx = 1;
+                for (let i = 0; i < feature_array.length; i++){
+                    let feat = feature_array[i];
+                    let feat_dropdown = document.getElementById(feat) as HTMLSelectElement;;
+                    if(feat_dropdown){
+                        feat_dropdown.options[i].selected = true;
+                    }
+                    console.log('Dropdown: ', feat_dropdown);
+
+                }
+                
+            }
+
+            let updateOrderDropdowns = () => {
+                let order_menus = $('.order-dropdown-select');
+                console.log('ORDER MENUS: ', order_menus);
+                let order_template = generate_order_dropdown();
+                order_menus.empty();
+                order_menus.append(order_template);
+                updateSelected();
+                /*
+                let request_count = order_menus.length;
+
+                let idx = 0;
+                let order_template = generate_order_dropdown();
+                order_menus.empty();
+                order_menus.append(order_template);
+                
+                */
+            };
+
+            
+            let unselectReqFeat = () => {
+                if(n > 0 && this.order.html())
+                    n = n - 1;
+                this.order.empty();
+                updateOrderDropdowns();
+            }
+
+            if (select === ButtonSelection.REQUEST)
+                this.reqFeat.change();  // Trigger the change event
+
+            this.dcFeat.change(unselectReqFeat);
+
+            if (canShow)
+                this.showFeat.change(unselectReqFeat);
+
+            if (canDisplayGrammar)
+                this.dontShowFeat.change(unselectReqFeat);
+
             if (useDropDown) {
                 // Enable or disable the "multiple choice" checkbox as required
                 this.ddCheck.prop('disabled', !this.reqFeat.prop('checked'));
@@ -138,10 +233,21 @@ class ButtonsAndLabel {
                                     });
                 };
 
-                let removeit = () => this.limitter.empty();
+                let removeit = () => {
+                    //if(n > 0 && this.limitter.html())
+                    //    n = n - 1; 
+                    //console.log('DELETE');
+                    //console.log('N: ', n);
+                    //console.log('len(this.limitter): ',this.limitter.html());
+                    this.limitter.empty(); 
+                };
                 
                 this.reqFeat.change( () =>
                     {
+                        //n = n + 1;
+                        //console.log('ADD');
+                        //console.log('N: ', n);
+                        //last_feature = featName;
                         limitButton.click(limitButton_clickFunction);
                         this.limitter.append(limitButton);
                     }
