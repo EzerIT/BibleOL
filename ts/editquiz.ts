@@ -398,6 +398,7 @@ function save_quiz2() : void {
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures        = panelFeatures.getInfo();
 
+    console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
     // The HTML form contains the directory, the filename and the exercise as a JSON string
     let form : JQuery = $(`<form action="${submit_to}" method="post">
                              <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">

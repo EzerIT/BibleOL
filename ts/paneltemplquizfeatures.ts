@@ -1,5 +1,9 @@
+
+
 // -*- js -*-
 // Copyright © 2018 by Ezer IT Consulting. All rights reserved. E-mail: claus@ezer.dk
+
+//import { get } from "jquery";
 
 
 // Code to handle the specification of display and request features when creating an exercise. This
@@ -40,6 +44,59 @@ let selected_orders: { [key: string]: any } = {
 
 };
 let feature_array: string[] = [];
+let initialize = true;
+
+function inFeatureArray(elem:string) {
+    let inArr = false;
+    for(let i = 0; i < feature_array.length; i++){
+        if(feature_array[i] === elem){
+            inArr = true;
+            break;
+        }
+    }
+    return inArr;
+}
+
+function elemInArray(elem:any, input_array:string[]){
+    for(let i = 0; i < input_array.length; i++){
+        if(input_array[i] === elem){
+            return true;
+        }
+    }
+    return false
+}
+
+
+
+
+function initMenus(of:string[], fname:string, menu:JQuery) {
+    if(elemInArray(fname, of)){
+        let order_rank = of.indexOf(fname) + 1;
+        let n_feat = of.length;
+        let order_template = '';
+        for(let i = 0; i < n_feat; i++){
+            if(i+1 == order_rank)
+                order_template += `<option value="${i+1}" selected>${i+1}</option>`;
+            else
+                order_template += `<option value="${i+1}">${i+1}</option>`;
+        }
+        
+        let order_select = $(`<select class="order-dropdown-select selected-dropdown" name="dropdown" id="${fname}"></select`);
+        order_select.append(order_template);
+        menu.append(order_select);
+        if(feature_array.length == of.length){
+            initialize = false;
+            feature_array = of;
+        }
+
+    }
+    else if(of.length == 0 ){
+        initialize = false;
+    }
+
+    
+
+}
 
 
 
@@ -59,6 +116,7 @@ class ButtonsAndLabel {
     private limitter	 : JQuery; // The <span> element containing the hideFeatures selector
     private order_val : string; // The order value
     private static buttonNumber : number = 0; // Used by button name generator
+    private blank: any;
     
     //------------------------------------------------------------------------------------------
     // Constructor method
@@ -77,6 +135,7 @@ class ButtonsAndLabel {
                 private canRequest        : boolean,         // Can this be a request feature?
                 private canDisplayGrammar : boolean,         // Can this be a "don't show" feature?
                 private order_features    : string[]         // The order of the features
+
                ) {
 
         ++ButtonsAndLabel.buttonNumber;
@@ -86,15 +145,14 @@ class ButtonsAndLabel {
 	this.dcFeat	  =			$(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontcare">`);
 	this.dontShowFeat = canDisplayGrammar ? $(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontshowfeat">`) : $('<span></span>');
 	this.feat         =                     $(`<span>${lab}</span>`);
-    this.order_val = this.getOrderValue();
-    //this.order  = canShow ? $(`<input type="text" id="myInput" oninput="updateValue()" name="feat_${ButtonsAndLabel.buttonNumber}" value="${this.order_val}" style="text-align:center;" size="1">`) : $('<span></span>');
-    this.order = canRequest ? $(`<span class="order-dropdown"></span>`) : $('<span></span>');
-
-                                
-    this.limitter     =                     $('<span></span>');
+    this.order = canRequest ? $(`<span id="span_${this.featName}" value="" class="order-dropdown"></span>`) : $('<span></span>');
     
-     
-	switch (select) {
+                                    
+    this.limitter     =                     $('<span></span>');
+	
+    
+    
+    switch (select) {
         case ButtonSelection.SHOW:             this.showFeat.prop('checked',true);     break;
         case ButtonSelection.REQUEST:
         case ButtonSelection.REQUEST_DROPDOWN: this.reqFeat.prop('checked',true);      break;
@@ -114,16 +172,23 @@ class ButtonsAndLabel {
 
 
         if (canRequest) {
+            
             this.reqFeat.change(() => {
-                n = n + 1;
-                feature_array.push(this.featName);
-                let order_select = generate_select_button();
-                
-                this.order.empty();
-                this.order.append(order_select);
-                let update_user_input = true;
-                updateOrderDropdowns(update_user_input);
 
+                if(!inFeatureArray(this.featName)){
+                    n = n + 1;
+                    feature_array.push(this.featName);
+                }
+                    
+                if(initialize == false){
+                    let order_select = generate_select_button();
+                    this.order.empty();
+                    this.order.append(order_select);
+                }
+                
+                let update_user_input = true;
+                updateOrderDropdowns();
+            
             })
 
             this.order.change(() => {
@@ -160,27 +225,36 @@ class ButtonsAndLabel {
             };
 
             let updateSelected = () => {
+                //console.log('FEATURE ARRAY: ', feature_array);
                 for (let i = 0; i < feature_array.length; i++){
                     let feat = feature_array[i]
                     let feat_dropdown = $(`#${feat}`)[0] as HTMLSelectElement;
-                    feat_dropdown.options[i].selected = true;
+                    let class_list = Array.from(feat_dropdown.classList);
+                    console.log('Feature Dropdown Class List: ', class_list);
+                    console.log('feature_arr: ', feature_array);
+                    console.log('order_features: ', this.order_features);
+                    if(feat_dropdown.options){
+                        feat_dropdown.options[i].selected = true;
+                    }
                 }
+                
+                
+                
                 
             }
 
-            let updateOrderDropdowns = (update_user_input:boolean) => {
-                
-                if(update_user_input)
-                    var order_menus = $('.order-dropdown-select');
-                else
-                    var order_menus = $('.order-dropdown-select:not(.selected-dropdown)');
-
+            let updateOrderDropdowns = () => {
+                let order_menus = $('.order-dropdown-select');
                 let order_template = generate_order_dropdown();
                 order_menus.empty();
                 order_menus.append(order_template);
-                updateSelected();
+                if(initialize == false)
+                    updateSelected();
+                
             };
 
+            
+            
             
             let unselectReqFeat = () => {
                 if(n > 0 && this.order.html())
@@ -188,7 +262,7 @@ class ButtonsAndLabel {
                 feature_array = feature_array.filter(item => item !== this.featName);
                 this.order.empty();
                 let update_user_input = true;
-                updateOrderDropdowns(update_user_input);
+                updateOrderDropdowns();
             }
 
             if (select === ButtonSelection.REQUEST)
@@ -263,18 +337,31 @@ class ButtonsAndLabel {
                     this.dontShowFeat.change(removeit);
             }
         }
-    }
+        if(initialize == true)
+            initMenus(this.order_features, this.featName, this.order);
 
-    public getOrderValue(): string{
-        let idx = this.order_features.indexOf(this.featName);
-        let order_val = '';
-        if(idx != -1) {
-            let rank = idx + 1;
-            let order_val = rank.toString();
-            return order_val;
-        }
-        return order_val;
     }
+    public initialize_dropdowns(update_user_input:boolean):any{
+                
+        if(update_user_input)
+            var order_menus = $('.order-dropdown-select');
+        else
+            var order_menus = $('.order-dropdown-select:not(.selected-dropdown)');
+    
+        let order_template = this.initialize_generate_order_dropdown();
+        order_menus.empty();
+        order_menus.append(order_template);
+        
+    };
+    public initialize_generate_order_dropdown():string {            
+        let order_template = ''
+        for(let i = 0; i < n; i++) {
+            order_template += `<option value="${i+1}">${i+1}</option>`;
+        }
+        return order_template;
+    };
+
+    
     
     
     //------------------------------------------------------------------------------------------
@@ -330,7 +417,12 @@ class ButtonsAndLabel {
     }
 
     public getOrder() {
-        return this.order.prop('value');
+        //return this.order.prop('value');
+        let order_rank = String(feature_array.indexOf(this.featName) + 1);
+        if(order_rank == '-1')
+            order_rank = '';
+    
+        return order_rank;
     }
     //------------------------------------------------------------------------------------------
     // getHideFeatures method
@@ -1027,6 +1119,7 @@ class PanelTemplQuizFeatures {
             }
             else if (bal.isSelected(ButtonSelection.REQUEST)){
                 let order_rank = bal.getOrder();
+
                 qf.requestFeatures.push({name : bal.getFeatName(), order_val:order_rank, usedropdown : bal.isSelected(ButtonSelection.REQUEST_DROPDOWN), hideFeatures : bal.getHideFeatures()});
             }
             else if (bal.isSelected(ButtonSelection.DONT_SHOW)){
@@ -1117,3 +1210,4 @@ class PanelTemplQuizFeatures {
         return false;
     }
 }
+
