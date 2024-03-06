@@ -1351,6 +1351,48 @@ var ButtonSelection;
 var n = 0;
 var selected_orders = {};
 var feature_array = [];
+var initialize = true;
+function inFeatureArray(elem) {
+    var inArr = false;
+    for (var i = 0; i < feature_array.length; i++) {
+        if (feature_array[i] === elem) {
+            inArr = true;
+            break;
+        }
+    }
+    return inArr;
+}
+function elemInArray(elem, input_array) {
+    for (var i = 0; i < input_array.length; i++) {
+        if (input_array[i] === elem) {
+            return true;
+        }
+    }
+    return false;
+}
+function initMenus(of, fname, menu) {
+    if (elemInArray(fname, of)) {
+        var order_rank = of.indexOf(fname) + 1;
+        var n_feat = of.length;
+        var order_template = '';
+        for (var i = 0; i < n_feat; i++) {
+            if (i + 1 == order_rank)
+                order_template += "<option value=\"".concat(i + 1, "\" selected>").concat(i + 1, "</option>");
+            else
+                order_template += "<option value=\"".concat(i + 1, "\">").concat(i + 1, "</option>");
+        }
+        var order_select = $("<select class=\"order-dropdown-select selected-dropdown\" name=\"dropdown\" id=\"".concat(fname, "\"></select"));
+        order_select.append(order_template);
+        menu.append(order_select);
+        if (feature_array.length == of.length) {
+            initialize = false;
+            feature_array = of;
+        }
+    }
+    else if (of.length == 0) {
+        initialize = false;
+    }
+}
 var ButtonsAndLabel = (function () {
     function ButtonsAndLabel(lab, featName, otype, select, hideFeatures, useDropDown, canShow, canRequest, canDisplayGrammar, order_features) {
         var _this = this;
@@ -1367,8 +1409,7 @@ var ButtonsAndLabel = (function () {
         this.dcFeat = $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontcare\">"));
         this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontshowfeat\">")) : $('<span></span>');
         this.feat = $("<span>".concat(lab, "</span>"));
-        this.order_val = this.getOrderValue();
-        this.order = canRequest ? $("<span class=\"order-dropdown\"></span>") : $('<span></span>');
+        this.order = canRequest ? $("<span id=\"span_".concat(this.featName, "\" value=\"\" class=\"order-dropdown\"></span>")) : $('<span></span>');
         this.limitter = $('<span></span>');
         switch (select) {
             case ButtonSelection.SHOW:
@@ -1393,13 +1434,17 @@ var ButtonsAndLabel = (function () {
             this.ddCheck = $('<span></span>');
         if (canRequest) {
             this.reqFeat.change(function () {
-                n = n + 1;
-                feature_array.push(_this.featName);
-                var order_select = generate_select_button_1();
-                _this.order.empty();
-                _this.order.append(order_select);
+                if (!inFeatureArray(_this.featName)) {
+                    n = n + 1;
+                    feature_array.push(_this.featName);
+                }
+                if (initialize == false) {
+                    var order_select = generate_select_button_1();
+                    _this.order.empty();
+                    _this.order.append(order_select);
+                }
                 var update_user_input = true;
-                updateOrderDropdowns_1(update_user_input);
+                updateOrderDropdowns_1();
             });
             this.order.change(function () {
                 var feat_dropdown = $("#".concat(_this.featName))[0];
@@ -1427,18 +1472,22 @@ var ButtonsAndLabel = (function () {
                 for (var i = 0; i < feature_array.length; i++) {
                     var feat = feature_array[i];
                     var feat_dropdown = $("#".concat(feat))[0];
-                    feat_dropdown.options[i].selected = true;
+                    var class_list = Array.from(feat_dropdown.classList);
+                    console.log('Feature Dropdown Class List: ', class_list);
+                    console.log('feature_arr: ', feature_array);
+                    console.log('order_features: ', _this.order_features);
+                    if (feat_dropdown.options) {
+                        feat_dropdown.options[i].selected = true;
+                    }
                 }
             };
-            var updateOrderDropdowns_1 = function (update_user_input) {
-                if (update_user_input)
-                    var order_menus = $('.order-dropdown-select');
-                else
-                    var order_menus = $('.order-dropdown-select:not(.selected-dropdown)');
+            var updateOrderDropdowns_1 = function () {
+                var order_menus = $('.order-dropdown-select');
                 var order_template = generate_order_dropdown_1();
                 order_menus.empty();
                 order_menus.append(order_template);
-                updateSelected_1();
+                if (initialize == false)
+                    updateSelected_1();
             };
             var unselectReqFeat = function () {
                 if (n > 0 && _this.order.html())
@@ -1446,7 +1495,7 @@ var ButtonsAndLabel = (function () {
                 feature_array = feature_array.filter(function (item) { return item !== _this.featName; });
                 _this.order.empty();
                 var update_user_input = true;
-                updateOrderDropdowns_1(update_user_input);
+                updateOrderDropdowns_1();
             };
             if (select === ButtonSelection.REQUEST)
                 this.reqFeat.change();
@@ -1498,17 +1547,27 @@ var ButtonsAndLabel = (function () {
                     this.dontShowFeat.change(removeit);
             }
         }
+        if (initialize == true)
+            initMenus(this.order_features, this.featName, this.order);
     }
-    ButtonsAndLabel.prototype.getOrderValue = function () {
-        var idx = this.order_features.indexOf(this.featName);
-        var order_val = '';
-        if (idx != -1) {
-            var rank = idx + 1;
-            var order_val_1 = rank.toString();
-            return order_val_1;
-        }
-        return order_val;
+    ButtonsAndLabel.prototype.initialize_dropdowns = function (update_user_input) {
+        if (update_user_input)
+            var order_menus = $('.order-dropdown-select');
+        else
+            var order_menus = $('.order-dropdown-select:not(.selected-dropdown)');
+        var order_template = this.initialize_generate_order_dropdown();
+        order_menus.empty();
+        order_menus.append(order_template);
     };
+    ;
+    ButtonsAndLabel.prototype.initialize_generate_order_dropdown = function () {
+        var order_template = '';
+        for (var i = 0; i < n; i++) {
+            order_template += "<option value=\"".concat(i + 1, "\">").concat(i + 1, "</option>");
+        }
+        return order_template;
+    };
+    ;
     ButtonsAndLabel.prototype.getRow = function () {
         var row = $('<tr></tr>');
         var cell;
@@ -1545,7 +1604,10 @@ var ButtonsAndLabel = (function () {
         }
     };
     ButtonsAndLabel.prototype.getOrder = function () {
-        return this.order.prop('value');
+        var order_rank = String(feature_array.indexOf(this.featName) + 1);
+        if (order_rank == '-1')
+            order_rank = '';
+        return order_rank;
     };
     ButtonsAndLabel.prototype.getHideFeatures = function () {
         return this.hideFeatures;
@@ -2446,6 +2508,7 @@ function save_quiz2() {
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
+    console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
     var form = $("<form action=\"".concat(submit_to, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                           </form>"));
     $('body').append(form);
     isSubmitting = true;
