@@ -140,7 +140,7 @@ class ButtonsAndLabel {
 
         ++ButtonsAndLabel.buttonNumber;
         
-        this.showFeat     = canShow           ? $(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="show">`)	  : $('<span></span>');
+        this.showFeat     = canShow           ? $(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="show" class="feature_radio">`)	  : $('<span></span>');
 	this.reqFeat	  = canRequest	      ? $(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="request">`)	  : $('<span></span>');
 	this.dcFeat	  =			$(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontcare">`);
 	this.dontShowFeat = canDisplayGrammar ? $(`<input type="radio" name="feat_${ButtonsAndLabel.buttonNumber}" value="dontshowfeat">`) : $('<span></span>');
@@ -373,13 +373,13 @@ class ButtonsAndLabel {
         let row  : JQuery = $('<tr></tr>');
         let cell : JQuery;
 
-        cell = $('<td></td>')                  .append(this.showFeat);     row.append(cell);
-        cell = $('<td></td>')                  .append(this.reqFeat);      row.append(cell);
-        cell = $('<td></td>')                  .append(this.dcFeat);       row.append(cell);
-        cell = $('<td></td>')                  .append(this.dontShowFeat); row.append(cell);
-        cell = $('<td></td>')                  .append(this.ddCheck);      row.append(cell);
+        cell = $('<td class="feature_radio"></td>')                  .append(this.showFeat);     row.append(cell);
+        cell = $('<td class="feature_radio"></td>')                  .append(this.reqFeat);      row.append(cell);
+        cell = $('<td class="feature_radio"></td>')                  .append(this.dcFeat);       row.append(cell);
+        cell = $('<td class="feature_radio"></td>')                  .append(this.dontShowFeat); row.append(cell);
+        cell = $('<td class="feature_radio"></td>')                  .append(this.ddCheck);      row.append(cell);
         cell = $('<td class="leftalign"></td>').append(this.feat);         row.append(cell);
-        cell = $('<td style="text-align:center;"></td>').append(this.order);        row.append(cell);
+        cell = $('<td class="feature_radio"></td>').append(this.order);        row.append(cell);
         cell = $('<td></td>')                  .append(this.limitter);     row.append(cell);
 
         return row;
@@ -606,17 +606,17 @@ class PanelForOneOtype  {
         ++PanelForOneOtype.accordionNumber;
         this.panel = $(`<div class="accordion" id="accordion${PanelForOneOtype.accordionNumber}"></div>`);
         
-        let table : JQuery = $('<table class="striped featuretable"></table>'); // Feature selections for one object type
+        let table : JQuery = $('<table class="type2 table table-sm"></table>'); // Feature selections for one object type
         
         // Add headings to the table
         table.append('<tr>'
-                     + `<th>${localize('show')}</th>`
-                     + `<th>${localize('request')}</th>`
-                     + `<th>${localize('dont_care')}</th>`
-                     + `<th>${localize('dont_show')}</th>`
-                     + `<th>${localize('multiple_choice')}</th>`
+                     + `<th class="feature_radio">${localize('show')}</th>`
+                     + `<th class="feature_radio">${localize('request')}</th>`
+                     + `<th class="feature_radio">${localize('dont_care')}</th>`
+                     + `<th class="feature_radio">${localize('dont_show')}</th>`
+                     + `<th class="feature_radio">${localize('multiple_choice')}</th>`
                      + `<th class="leftalign">${localize('feature')}</th>`
-                     + `<th class="leftalign">Order</th>`
+                     + `<th class="feature_radio">Order</th>`
                      + '<th></th>'
                      + '</tr>');
 

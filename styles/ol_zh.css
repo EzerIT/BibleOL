@@ -1082,6 +1082,9 @@ table.searchbar input {
 table.searchbar input.narrow {
   width: auto;
 }
+.feature_radio {
+  text-align: center;
+}
 table.form {
   border-spacing: 0;
   background-color: white;
