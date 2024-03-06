@@ -1404,7 +1404,7 @@ var ButtonsAndLabel = (function () {
         this.canDisplayGrammar = canDisplayGrammar;
         this.order_features = order_features;
         ++ButtonsAndLabel.buttonNumber;
-        this.showFeat = canShow ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"show\">")) : $('<span></span>');
+        this.showFeat = canShow ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"show\" class=\"feature_radio\">")) : $('<span></span>');
         this.reqFeat = canRequest ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"request\">")) : $('<span></span>');
         this.dcFeat = $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontcare\">"));
         this.dontShowFeat = canDisplayGrammar ? $("<input type=\"radio\" name=\"feat_".concat(ButtonsAndLabel.buttonNumber, "\" value=\"dontshowfeat\">")) : $('<span></span>');
@@ -1571,19 +1571,19 @@ var ButtonsAndLabel = (function () {
     ButtonsAndLabel.prototype.getRow = function () {
         var row = $('<tr></tr>');
         var cell;
-        cell = $('<td></td>').append(this.showFeat);
+        cell = $('<td class="feature_radio"></td>').append(this.showFeat);
         row.append(cell);
-        cell = $('<td></td>').append(this.reqFeat);
+        cell = $('<td class="feature_radio"></td>').append(this.reqFeat);
         row.append(cell);
-        cell = $('<td></td>').append(this.dcFeat);
+        cell = $('<td class="feature_radio"></td>').append(this.dcFeat);
         row.append(cell);
-        cell = $('<td></td>').append(this.dontShowFeat);
+        cell = $('<td class="feature_radio"></td>').append(this.dontShowFeat);
         row.append(cell);
-        cell = $('<td></td>').append(this.ddCheck);
+        cell = $('<td class="feature_radio"></td>').append(this.ddCheck);
         row.append(cell);
         cell = $('<td class="leftalign"></td>').append(this.feat);
         row.append(cell);
-        cell = $('<td style="text-align:center;"></td>').append(this.order);
+        cell = $('<td class="feature_radio"></td>').append(this.order);
         row.append(cell);
         cell = $('<td></td>').append(this.limitter);
         row.append(cell);
@@ -1697,15 +1697,15 @@ var PanelForOneOtype = (function () {
         var useSavedFeatures = otype === ptqf.initialOtype;
         ++PanelForOneOtype.accordionNumber;
         this.panel = $("<div class=\"accordion\" id=\"accordion".concat(PanelForOneOtype.accordionNumber, "\"></div>"));
-        var table = $('<table class="striped featuretable"></table>');
+        var table = $('<table class="type2 table table-sm"></table>');
         table.append('<tr>'
-            + "<th>".concat(localize('show'), "</th>")
-            + "<th>".concat(localize('request'), "</th>")
-            + "<th>".concat(localize('dont_care'), "</th>")
-            + "<th>".concat(localize('dont_show'), "</th>")
-            + "<th>".concat(localize('multiple_choice'), "</th>")
+            + "<th class=\"feature_radio\">".concat(localize('show'), "</th>")
+            + "<th class=\"feature_radio\">".concat(localize('request'), "</th>")
+            + "<th class=\"feature_radio\">".concat(localize('dont_care'), "</th>")
+            + "<th class=\"feature_radio\">".concat(localize('dont_show'), "</th>")
+            + "<th class=\"feature_radio\">".concat(localize('multiple_choice'), "</th>")
             + "<th class=\"leftalign\">".concat(localize('feature'), "</th>")
-            + "<th class=\"leftalign\">Order</th>"
+            + "<th class=\"feature_radio\">Order</th>"
             + '<th></th>'
             + '</tr>');
         this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && Boolean(getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql), true, configuration.objHasSurface === otype, configuration.objHasSurface === otype, ptqf.order_features);
