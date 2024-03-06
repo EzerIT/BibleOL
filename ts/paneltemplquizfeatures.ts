@@ -606,7 +606,7 @@ class PanelForOneOtype  {
         ++PanelForOneOtype.accordionNumber;
         this.panel = $(`<div class="accordion" id="accordion${PanelForOneOtype.accordionNumber}"></div>`);
         
-        let table : JQuery = $('<table class="type2 table table-sm"></table>'); // Feature selections for one object type
+        let table : JQuery = $('<table class="type2 table table-striped table-sm"></table>'); // Feature selections for one object type
         
         // Add headings to the table
         table.append('<tr>'
