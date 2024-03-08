@@ -165,6 +165,7 @@ function hide_error(id : string) : void {
 // further processing.
 //
 function save_quiz() : void {
+    console.log('Welcome to save_quiz()!');
     checked_passages = $('#passagetree').jstree('get_checked',null,false);
 
     if (checked_passages.length==0) {
@@ -374,6 +375,12 @@ function check_overwrite() : void {
 // server.
 //
 function save_quiz2() : void {
+
+    // get the time limit of the exercise
+    let minutes = $('#minutes-timer').val();
+    let seconds = $('#seconds-timer').val();
+    
+
     // Build decoded_3et so that it contains the new exercise
 
     decoded_3et.desc = ckeditor.val();
@@ -404,7 +411,10 @@ function save_quiz2() : void {
                              <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">
                              <input type="hidden" name="quiz"     value="${encodeURIComponent(quiz_name)}">
                              <input type="hidden" name="quizdata" value="${encodeURIComponent(JSON.stringify(decoded_3et))}">
-                           </form>`);
+                             <input type="hidden" name="minutes" value="${minutes}">
+                             <input type="hidden" name="seconds" value="${seconds}">
+
+                            </form>`);
 
     $('body').append(form);
 

@@ -4,6 +4,34 @@
   <div id="exercise_lst" style="display: none;"><?= $exercise_lst ?></div>
 <?php endif; ?>
 
+
+<script>
+  function formatTime(time) {
+    var hours = Math.floor(time / 60 / 60);
+    var minutes = Math.floor((time % (60 * 60)) / 60);
+    var seconds = Math.floor((time % (60)));
+    return minutes + "m " + seconds + "s ";
+  }
+
+  var seconds = <?= $time_seconds ?>;
+  //seconds = seconds * 60;
+  var deadline = (new Date().getTime() / 1000) + seconds;
+  
+  setInterval(function(){
+    var timeLeft = deadline - new Date().getTime() / 1000;
+    console.log('timeLeft: ', timeLeft);
+    if (timeLeft < 0) {
+      document.getElementById('timer').style.display = 'none';
+    }
+    else if(timeLeft < 11) {
+      document.getElementById('timeLeft').style.color = '#ffa5c7';
+    }
+    var timestamp = formatTime(timeLeft);
+    document.getElementById("timeLeft").innerHTML =   timestamp;
+  }, 1000);
+  
+</script>
+
 <div class="row">
     <div class="col-lg-3 sidepanel">
         <?php if ($is_quiz && (!isset($is_exam) || !$is_exam)): ?>
@@ -36,9 +64,29 @@
       <ul><li><a class="myview" href="#gramtabs"><h2><?= $this->lang->line('my_view') ?></h2></a></li></ul>
       <div id="tabs-background">
         <?php if ($is_quiz): ?>
-            <div class="selectbutton" id="locate_choice">
-            <label style="font-size:14pt; font-weight:normal; text-transform:capitalize;"><?= $this->lang->line('locate') ?><input id="locate_cb" type="checkbox">
-            <span class="location" style="font-weight:bold; text-transform:uppercase;"></span></label>
+          <div class="selectbutton row" id="locate_choice">
+            
+            <div>
+              <label style="font-size:14pt; font-weight:normal; text-transform:capitalize;"><?= $this->lang->line('locate') ?><input id="locate_cb" type="checkbox">
+                <span class="location" style="font-weight:bold; text-transform:uppercase;"></span>
+              </label>
+            </div>
+            <div style="margin-left:auto; margin-right: auto;">
+              <label id="timer" class="bg-secondary text-light" style="font-size:14pt; font-weight:normal; text-transform:capitalize;"><?= "Time Left: " ?>
+                <span id="timeLeft" style="font-weight:bold; text-transform:uppercase;"> </span>
+              </label>
+            </div>
+            <!--
+            <div id="quiz-info" style="margin-left:auto; margin-right: auto;">
+              <div id="timer" class="bg-secondary text-light" style="flex-grow:0; padding: 5px 20px; font-size:20;">
+                <div style="display:flex; align-items:center; justify-content:center;">
+                  <h5 style="text-align:center; margin-bottom:0"><?= "Time Left" ?>:</h5> 
+                  <span id="timeLeft" style="text-align:center; margin-left:10px"></span>
+                </div>
+              </div>
+            </div> 
+            -->
+             
           </div>
         <?php endif; ?>
         <?php if (!$is_quiz): ?>

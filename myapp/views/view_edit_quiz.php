@@ -100,7 +100,6 @@
 <script>
   $(document).ready(function() {
     $("#reset-timer").click(function(){
-      console.log('RESET');
       $("#seconds-timer").val("0");
       $("#minutes-timer").val("0");
       $("#time-left").text("00:00");
@@ -139,7 +138,6 @@
           myalert("Timer Limit Reached", "The timer cannot be negative.");
         }
         else{
-          console.log('New Seconds: ', new_seconds);
           let residual = 60 + new_seconds;
           $("#seconds-timer").val(residual.toString());
           $("#minutes-timer").val(parseInt(minutes) - 1);
@@ -164,7 +162,6 @@
           myalert("Timer Limit Reached", "The timer cannot exceed 60 minutes.");
         }
         else{
-          console.log('New Seconds: ', new_seconds);
           let residual = new_seconds - 60;
           $("#seconds-timer").val(residual.toString());
           $("#minutes-timer").val(parseInt(minutes) + 1);
