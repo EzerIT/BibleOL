@@ -28,25 +28,24 @@ function logos() {
     </div>
     <div class="row logopanel">
         <div class="col-md-4">
-            <a class="navbar-link" href="https://ministry.americanbible.org/nida-institute" target="_blank" ><img class="logo" src="images/logos/nida_logo.jpg" style="width: 140px; text-align: center;"></a>
+            <a class="navbar-link" href="http://www.ezer.dk" target="_blank"><img class="logo" src="images/logos/ezer_web_trans_lille.png" style="width: 140px; text-align: center;"></a>
         </div>
         <div class="col-md-4">
-            <a class="navbar-link" href="http://www.ezer.dk" target="_blank"><img class="logo" src="images/logos/ezer_web_trans_lille.png" style="width: 140px; text-align: center;"></a>
+            <a class="navbar-link" href="http://vu.nl" target="_blank"><img class="logo" src="images/logos/vu.png" style="width: 260px"></a>
         </div>
         <div class="col-md-4">
             <a class="navbar-link" href="http://pthu.nl" target="_blank"><img class="logo"  src="images/logos/pthu.png" style="width: 260px"></a>
         </div>
     </div>
     <div class="row logopanel">
+        <div class="col-md-2"></div>
         <div class="col-md-4">
             <a class="navbar-link" href="https://www.andrews.edu" target="_blank"><img class="logo"  src="images/logos/au_signature_vertical_blue_tag.png" style="width: 260px"></a>
         </div>
         <div class="col-md-4">
             <a class="navbar-link"  href="http://3bmoodle.dk" target="_blank"><img class="logo" src="images/logos/3bm_logo.png" style="width: 150px"></a>
         </div>
-        <div class="col-md-4">
-        <a class="navbar-link" href="http://vu.nl" target="_blank"><img class="logo" src="images/logos/vu.png" style="width: 260px"></a>
-        </div>
+        <div class="col-md-2"></div>
     </div>
 <?php 
 }
