@@ -1697,7 +1697,7 @@ var PanelForOneOtype = (function () {
         var useSavedFeatures = otype === ptqf.initialOtype;
         ++PanelForOneOtype.accordionNumber;
         this.panel = $("<div class=\"accordion\" id=\"accordion".concat(PanelForOneOtype.accordionNumber, "\"></div>"));
-        var table = $('<table class="type2 table table-sm"></table>');
+        var table = $('<table class="type2 table table-striped table-sm"></table>');
         table.append('<tr>'
             + "<th class=\"feature_radio\">".concat(localize('show'), "</th>")
             + "<th class=\"feature_radio\">".concat(localize('request'), "</th>")

@@ -1085,6 +1085,9 @@ table.searchbar input.narrow {
 .feature_radio {
   text-align: center;
 }
+.table-striped tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
 table.form {
   border-spacing: 0;
   background-color: white;
