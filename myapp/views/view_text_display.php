@@ -4,6 +4,10 @@
   <div id="exercise_lst" style="display: none;"><?= $exercise_lst ?></div>
 <?php endif; ?>
 
+<?php 
+  echo 'Number of Questions: ' . $number_of_quizzes . '<br>';
+
+?>
 
 <script>
   function formatTime(time) {
@@ -14,14 +18,49 @@
   }
 
   var seconds = <?= $time_seconds ?>;
+  var number_of_quizzes = <?= $number_of_quizzes ?>;
   //seconds = seconds * 60;
   var deadline = (new Date().getTime() / 1000) + seconds;
-  
+  var quiz_idx = 0
+  function iterateTimer(){
+    var timeLeft = deadline - new Date().getTime() / 1000;
+    console.log('timeLeft: ' + timeLeft);
+    
+    if (timeLeft < 0) {
+      if(quiz_idx < number_of_quizzes-1){
+        document.getElementById('next_question').click();
+        // reset clock            
+        var newDeadline = (new Date().getTime() / 1000) + seconds;
+        deadline = newDeadline;
+        timeLeft = deadline - new Date().getTime() / 1000;
+
+        // change color back to white
+        document.getElementById('timeLeft').style.color = '#ffffff';
+      }
+      else {
+        document.getElementById('finish').click();
+      }
+
+      
+      
+      quiz_idx++;
+      console.log('IDX: ', quiz_idx)
+    }
+    else if(timeLeft < 11) {
+      document.getElementById('timeLeft').style.color = '#ffa5c7';
+    }
+    var timestamp = formatTime(timeLeft);
+    document.getElementById("timeLeft").innerHTML =   timestamp;
+  }
+  $(document).ready(function(){
+    setInterval(iterateTimer, 1000);
+  });
+  /*
   setInterval(function(){
     var timeLeft = deadline - new Date().getTime() / 1000;
-    console.log('timeLeft: ', timeLeft);
     if (timeLeft < 0) {
       document.getElementById('timer').style.display = 'none';
+      console.log('NEXT QUESTION')
     }
     else if(timeLeft < 11) {
       document.getElementById('timeLeft').style.color = '#ffa5c7';
@@ -29,6 +68,7 @@
     var timestamp = formatTime(timeLeft);
     document.getElementById("timeLeft").innerHTML =   timestamp;
   }, 1000);
+  */
   
 </script>
 
@@ -73,20 +113,9 @@
             </div>
             <div style="margin-left:auto; margin-right: auto;">
               <label id="timer" class="bg-secondary text-light" style="font-size:14pt; font-weight:normal; text-transform:capitalize;"><?= "Time Left: " ?>
-                <span id="timeLeft" style="font-weight:bold; text-transform:uppercase;"> </span>
+                <span id="timeLeft" style="font-weight:bold; text-transform:uppercase;"></span>
               </label>
             </div>
-            <!--
-            <div id="quiz-info" style="margin-left:auto; margin-right: auto;">
-              <div id="timer" class="bg-secondary text-light" style="flex-grow:0; padding: 5px 20px; font-size:20;">
-                <div style="display:flex; align-items:center; justify-content:center;">
-                  <h5 style="text-align:center; margin-bottom:0"><?= "Time Left" ?>:</h5> 
-                  <span id="timeLeft" style="text-align:center; margin-left:10px"></span>
-                </div>
-              </div>
-            </div> 
-            -->
-             
           </div>
         <?php endif; ?>
         <?php if (!$is_quiz): ?>
