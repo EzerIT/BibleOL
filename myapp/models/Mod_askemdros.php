@@ -159,6 +159,9 @@ class Mod_askemdros extends CI_Model {
             ? $this->decoded_3et->quizObjectSelection->mql
             : $this->decoded_3et->quizObjectSelection->featHand->__toString();
 
+        //echo '$sentenceSelector' . $sentenceSelector . '<br>';
+        //echo '$qoSelector' . $qoSelector . '<br>';
+        
         // A full universe path looks like this: <path></path>
         // Depending on the XML parser used, this may either result in a path which is either array() or array('').
         // The following statement streamlines this as array('').
@@ -319,8 +322,9 @@ class Mod_askemdros extends CI_Model {
     public function show_quiz(int $number_of_quizzes, array $use_selection = null) {
         try {
             $this->load->library('db_config');
-
+            
             self::parseQuiz($this->mod_quizpath->get_absolute(), $use_selection);
+            //echo '$this->quiz_data: ' . var_dump($this->quiz_data) . '<br>';
             if ($this->quiz_data->getCandidateSheaf())
                 $numCandidates = $this->quiz_data->getNumberOfCandidates();
             else
@@ -330,6 +334,7 @@ class Mod_askemdros extends CI_Model {
                 $number_of_quizzes = $this->quiz_data->fixedquestions;
             $this->dictionaries_json = json_encode($this->quiz_data->getNextCandidate($number_of_quizzes));
             $this->quiz_data_json = json_encode($this->quiz_data);
+            //echo 'Quiz Data JSON: ' . $this->quiz_data_json . '<br>';
 
             $this->dbinfo_json = $this->db_config->dbinfo_json;
             $this->l10n_json = $this->db_config->l10n_json;
@@ -413,7 +418,6 @@ class Mod_askemdros extends CI_Model {
     }
 
     public function save_quiz(stdClass $quizdata) {
-        echo 'Quiz Path: ' . $this->mod_quizpath->get_absolute() . '<br>';
         $this->setup($quizdata->database,$quizdata->properties);
 
         $this->load->helper(array('file','quiztemplate'));

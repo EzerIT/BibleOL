@@ -1473,9 +1473,6 @@ var ButtonsAndLabel = (function () {
                     var feat = feature_array[i];
                     var feat_dropdown = $("#".concat(feat))[0];
                     var class_list = Array.from(feat_dropdown.classList);
-                    console.log('Feature Dropdown Class List: ', class_list);
-                    console.log('feature_arr: ', feature_array);
-                    console.log('order_features: ', _this.order_features);
                     if (feat_dropdown.options) {
                         feat_dropdown.options[i].selected = true;
                     }
@@ -2360,6 +2357,9 @@ function show_error(id, message) {
 function hide_error(id) {
     $(id).hide();
 }
+function alpha() {
+    console.log('Welcome to alpha()');
+}
 function save_quiz() {
     checked_passages = $('#passagetree').jstree('get_checked', null, false);
     if (checked_passages.length == 0) {
@@ -2489,6 +2489,53 @@ function check_overwrite() {
         $('#overwrite-dialog-confirm').modal('hide');
     });
     $('#overwrite-dialog-confirm').modal('show');
+}
+function trigger_preview_results(preview_data) {
+    var submit_url = '/text/preview_results';
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: preview_data,
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}
+function preview_results() {
+    console.log('preview_results() v2');
+    var checked_passages = $('#passagetree').jstree('get_checked', null, false);
+    var selected_paths = [];
+    for (var i = 0; i < checked_passages.length; ++i) {
+        var r = $(checked_passages[i]).data('ref');
+        if (r != '')
+            selected_paths.push(r);
+    }
+    var maylocate = $('#maylocate_cb').prop('checked');
+    var sentbefore = $('#sentbefore').val();
+    var sentafter = $('#sentafter').val();
+    var fixedquestions = +$('#fixedquestions').val();
+    var randomize = $('#randomorder').prop('checked');
+    if (!(fixedquestions > 0))
+        fixedquestions = 0;
+    var sentenceSelection = panelSent.getInfo();
+    var quizObjectSelection = panelSentUnit.getInfo();
+    var quizFeatures = panelFeatures.getInfo();
+    var preview_data = {
+        'selected_paths': selected_paths,
+        'maylocate': maylocate,
+        'sentbefore': sentbefore,
+        'sentafter': sentafter,
+        'fixedquestions': fixedquestions,
+        'randomize': randomize,
+        'sentenceSelection': sentenceSelection,
+        'quizObjectSelection': quizObjectSelection,
+        'quizFeatures': quizFeatures
+    };
+    $('#tab_sample_results').text(JSON.stringify(preview_data, null, 4));
+    trigger_preview_results(preview_data);
 }
 function save_quiz2() {
     decoded_3et.desc = ckeditor.val();

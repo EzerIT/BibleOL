@@ -244,6 +244,8 @@ class Ctrl_text extends MY_Controller {
         }
     }
 
+    
+
     // Displays a quiz with the universe specified in the .3et file.
 	public function show_quiz() {
         if (!isset($_GET['quiz'])) {
@@ -313,6 +315,16 @@ class Ctrl_text extends MY_Controller {
         }
 
         $this->show_quiz_common($_POST['quiz'], intval($_POST['count']), $_POST['sel']);
+    }
+
+    public function preview_results(){
+        // MODEL:
+        $this->load->model('mod_quizpath' );
+        $this->load->model('mod_askemdros');
+
+        $preview_data = json_encode($_POST);
+        //$die=4/0;
+        $number_of_quizzes = 5;
     }
 
     // Common code for show_quiz() and show_quiz_sel()
@@ -703,4 +715,6 @@ class Ctrl_text extends MY_Controller {
             $this->error_view($e->getMessage(), $this->lang->line('edit_quiz'));
         }
     }
+
+    
 }
