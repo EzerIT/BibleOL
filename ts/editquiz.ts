@@ -373,8 +373,9 @@ function check_overwrite() : void {
     $('#overwrite-dialog-confirm').modal('show');
 }
 
-function trigger_preview_results(preview_data:object): void{
+function trigger_preview_results(preview_data:object): string{
     let submit_url = '/text/preview_results';
+    let response_js = ''
     $.ajax({
         url: submit_url,
         type: 'POST',
@@ -382,26 +383,31 @@ function trigger_preview_results(preview_data:object): void{
         success: function(response) {
             // Handle the response here
             console.log(response);
+            response_js = response;
+
         },
         error: function(error) {
             // Handle the error here
             console.log(error);
         }
     });
+    console.log('Response JS: ', response_js)
+    return response_js;
 
 }
 
 
 
-function preview_results(): void{
-    console.log('preview_results() v2');
+function preview_results(): void {
+    let desc = ckeditor.val();
+    
     let checked_passages = $('#passagetree').jstree('get_checked',null,false);
     let selected_paths = []
     for (let i=0; i<checked_passages.length; ++i) {
         let r = $(checked_passages[i]).data('ref');
         if (r!='')
             selected_paths.push(r);
-    } 
+    }
     let maylocate = $('#maylocate_cb').prop('checked');
     let sentbefore = $('#sentbefore').val();
     let sentafter = $('#sentafter').val();
@@ -410,41 +416,32 @@ function preview_results(): void{
     if(!(fixedquestions>0))
         fixedquestions = 0;
     let sentenceSelection   = panelSent.getInfo();
+    //console.log('Sentence Selection: ', sentenceSelection);
     let quizObjectSelection = panelSentUnit.getInfo();
     let quizFeatures        = panelFeatures.getInfo();
-
     let preview_data = {
+        'desc': desc,
+        'database': decoded_3et.database,
+        'properties': decoded_3et.properties,
         'selected_paths': selected_paths,
+        'sentenceSelection': sentenceSelection,
+        'quizObjectSelection': quizObjectSelection,
+        'quizFeatures': quizFeatures,
         'maylocate': maylocate,
         'sentbefore': sentbefore,
         'sentafter': sentafter,
         'fixedquestions': fixedquestions,
-        'randomize': randomize,
-        'sentenceSelection': sentenceSelection,
-        'quizObjectSelection': quizObjectSelection, 
-        'quizFeatures': quizFeatures}
-
-    //console.log('PREVIEW DATA: ', preview_data);
+        'randomize': randomize
+    }
     
-    $('#tab_sample_results').text(JSON.stringify(preview_data, null, 4));
+    //console.log('Preview Data: ', preview_data);
+    // output the query ingredients to the tab_sample_results in view_edit_quiz.php
+    //$('#tab_sample_results').text(JSON.stringify(preview_data, null, 4));
 
-    trigger_preview_results(preview_data);
-
-    /*
-    // The HTML form contains the directory, the filename and the exercise as a JSON string
-    let form : JQuery = $(`<form action="${submit_to}" method="post">
-                             <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">
-                             <input type="hidden" name="quiz"     value="${encodeURIComponent(quiz_name)}">
-                             <input type="hidden" name="quizdata" value="${encodeURIComponent(JSON.stringify(decoded_3et))}">
-                           </form>`);
-
-    $('body').append(form);
-
-    isSubmitting = true;
-    //form.submit();
-    */
-
-    
+    let response_js = trigger_preview_results(preview_data); 
+    console.log('Response JS: ', response_js); 
+    $('#tab_sample_results').text(response_js);
+  
 }
 
 //****************************************************************************************************
@@ -478,7 +475,9 @@ function save_quiz2() : void {
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures        = panelFeatures.getInfo();
 
-    console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
+    //console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
+    //console.log('Normal Data: ', JSON.stringify(decoded_3et));
+    //console.log('SENTENCE SELECTION: ', decoded_3et.sentenceSelection);
     // The HTML form contains the directory, the filename and the exercise as a JSON string
     let form : JQuery = $(`<form action="${submit_to}" method="post">
                              <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">
@@ -490,6 +489,7 @@ function save_quiz2() : void {
 
     isSubmitting = true;
     form.submit();
+    
 }
 
 //****************************************************************************************************

@@ -323,8 +323,21 @@ class Ctrl_text extends MY_Controller {
         $this->load->model('mod_askemdros');
 
         $preview_data = json_encode($_POST);
+        $preview_data = json_decode($preview_data);
         //$die=4/0;
         $number_of_quizzes = 5;
+        //echo "Preview Results" . $preview_data;
+        //$this->mod_askemdros->setup($preview_data->database, $preview_data->properties);
+        //echo "type(preview_data): " . gettype($preview_data) . "<br>";
+        //$res = $this->mod_askemdros->generate_intermediate_quizdata($preview_data);
+        //$this->mod_askemdros->preview_quiz($number_of_quizzes, $preview_data);
+        //echo "Made it here!\n";
+        $sentence_selector = $this->mod_askemdros->get_sentence_selector($preview_data);
+        $display_data = $this->mod_askemdros->preview_quiz($number_of_quizzes, $preview_data, $sentence_selector);
+
+        //echo "Doing Okay \n";
+        echo "Display Data " . json_encode($display_data) . "\n";
+        return json_encode($display_data);
     }
 
     // Common code for show_quiz() and show_quiz_sel()
@@ -682,6 +695,9 @@ class Ctrl_text extends MY_Controller {
     }
 
     public function submit_quiz() {
+        $qdata = json_decode(urldecode($_POST['quizdata']));
+        echo "Welcome to submit_quiz()!<br>";
+        echo "Quiz Data: " . var_dump($qdata) . "<br>";
         try {
             $this->mod_users->check_teacher();
 
@@ -709,7 +725,7 @@ class Ctrl_text extends MY_Controller {
 
             $this->mod_askemdros->save_quiz(json_decode(urldecode($_POST['quizdata'])));
             $this->mod_quizpath->set_owner($this->mod_users->my_id());
-            redirect('/file_manager?dir=' . $_POST['dir']); // Note: Don't use http_build_query, because $POST['dir'] is already encoded
+            //redirect('/file_manager?dir=' . $_POST['dir']); // Note: Don't use http_build_query, because $POST['dir'] is already encoded
         }
         catch (DataException $e) {
             $this->error_view($e->getMessage(), $this->lang->line('edit_quiz'));
