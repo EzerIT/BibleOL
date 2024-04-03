@@ -2492,20 +2492,24 @@ function check_overwrite() {
 }
 function trigger_preview_results(preview_data) {
     var submit_url = '/text/preview_results';
+    var response_js = '';
     $.ajax({
         url: submit_url,
         type: 'POST',
         data: preview_data,
         success: function (response) {
             console.log(response);
+            response_js = response;
         },
         error: function (error) {
             console.log(error);
         }
     });
+    console.log('Response JS: ', response_js);
+    return response_js;
 }
 function preview_results() {
-    console.log('preview_results() v2');
+    var desc = ckeditor.val();
     var checked_passages = $('#passagetree').jstree('get_checked', null, false);
     var selected_paths = [];
     for (var i = 0; i < checked_passages.length; ++i) {
@@ -2524,18 +2528,22 @@ function preview_results() {
     var quizObjectSelection = panelSentUnit.getInfo();
     var quizFeatures = panelFeatures.getInfo();
     var preview_data = {
+        'desc': desc,
+        'database': decoded_3et.database,
+        'properties': decoded_3et.properties,
         'selected_paths': selected_paths,
+        'sentenceSelection': sentenceSelection,
+        'quizObjectSelection': quizObjectSelection,
+        'quizFeatures': quizFeatures,
         'maylocate': maylocate,
         'sentbefore': sentbefore,
         'sentafter': sentafter,
         'fixedquestions': fixedquestions,
-        'randomize': randomize,
-        'sentenceSelection': sentenceSelection,
-        'quizObjectSelection': quizObjectSelection,
-        'quizFeatures': quizFeatures
+        'randomize': randomize
     };
-    $('#tab_sample_results').text(JSON.stringify(preview_data, null, 4));
-    trigger_preview_results(preview_data);
+    var response_js = trigger_preview_results(preview_data);
+    console.log('Response JS: ', response_js);
+    $('#tab_sample_results').text(response_js);
 }
 function save_quiz2() {
     decoded_3et.desc = ckeditor.val();
@@ -2555,7 +2563,6 @@ function save_quiz2() {
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
-    console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
     var form = $("<form action=\"".concat(submit_to, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                           </form>"));
     $('body').append(form);
     isSubmitting = true;
