@@ -660,7 +660,8 @@ var PanelTemplMql = (function () {
             _this.objectSelectionUpdated(_this.objectTypeCombo.val(), null);
             _this.updateMql();
         });
-        this.clear = $('<button id="clear_button" type="button">' + localize('clear_button') + '</button>');
+        this.clear = $('<button style="border:1px solid gray" class="btn text-left" id="clear_button" type="button">' + localize('clear_button') + '</button>');
+        this.test_query = $('<button onclick="preview_results_frontend_alpha()" style="border:1px solid gray" class="btn text-left" id="test_query_button" type="button">' + localize('test_query') + '</button>');
         this.clear.click(function () {
             $('#virtualkbid').appendTo('#virtualkbcontainer');
             _this.rbFriendly.prop('checked', true);
@@ -1197,6 +1198,7 @@ var PanelTemplSentenceSelector = (function (_super) {
     };
     PanelTemplSentenceSelector.prototype.doLayout = function (where) {
         var table = $('<table></table>');
+        var table_query_output = $('<table></table>');
         var row;
         var cell;
         row = $('<tr></tr>');
@@ -1243,12 +1245,18 @@ var PanelTemplSentenceSelector = (function (_super) {
         row = $('<tr></tr>');
         cell = $('<td id="clearbuttoncell"></td>');
         cell.append(this.clear);
+        cell.append(this.test_query);
         row.append(cell);
         cell = $('<td></td>');
         cell.append(this.fpan);
         row.append(cell);
         table.append(row);
         where.append(table);
+        row = $('<tr></tr>');
+        cell = $('<td id="tq_output"></td>');
+        row.append(cell);
+        table_query_output.append(row);
+        where.append(table_query_output);
     };
     PanelTemplSentenceSelector.prototype.populateFeatureTab = function (otype) {
         if (this.cbUseForQo.prop('checked')) {
@@ -2507,6 +2515,86 @@ function trigger_preview_results(preview_data) {
     });
     console.log('Response JS: ', response_js);
     return response_js;
+}
+function package_preview_data() {
+    var desc = ckeditor.val();
+    var checked_passages = $('#passagetree').jstree('get_checked', null, false);
+    var selected_paths = [];
+    for (var i = 0; i < checked_passages.length; ++i) {
+        var r = $(checked_passages[i]).data('ref');
+        if (r != '')
+            selected_paths.push(r);
+    }
+    var maylocate = $('#maylocate_cb').prop('checked');
+    var sentbefore = $('#sentbefore').val();
+    var sentafter = $('#sentafter').val();
+    var fixedquestions = +$('#fixedquestions').val();
+    var randomize = $('#randomorder').prop('checked');
+    if (!(fixedquestions > 0))
+        fixedquestions = 0;
+    var sentenceSelection = panelSent.getInfo();
+    var quizObjectSelection = panelSentUnit.getInfo();
+    var quizFeatures = panelFeatures.getInfo();
+    var preview_data = {
+        'desc': desc,
+        'database': decoded_3et.database,
+        'properties': decoded_3et.properties,
+        'selected_paths': selected_paths,
+        'sentenceSelection': sentenceSelection,
+        'quizObjectSelection': quizObjectSelection,
+        'quizFeatures': quizFeatures,
+        'maylocate': maylocate,
+        'sentbefore': sentbefore,
+        'sentafter': sentafter,
+        'fixedquestions': fixedquestions,
+        'randomize': randomize
+    };
+    return preview_data;
+}
+function add_book_buttons(selected_paths) {
+    for (var i = 0; i < selected_paths.length; i++) {
+        var pathname = selected_paths[i];
+        var cell = $("<tr></tr>");
+        var row = $("<td id=row_book_".concat(i, "></td>"));
+        var button = $("<button id=book_".concat(i, " onclick=add_reference_table(").concat(i, ") class=\"btn text-left\">").concat(pathname, "</button>"));
+        var newline = $("<br><br>");
+        row.append(button);
+        row.append(newline);
+        cell.append(row);
+        $('#tq_output').append(cell);
+    }
+}
+function add_reference_table(idx) {
+    var row_book = $("#row_book_".concat(idx));
+    var leaf_count = row_book.find('table').length;
+    console.log('Leaf Count: ', leaf_count);
+    if (leaf_count <= 0) {
+        var table = $("<table id=\"book_table_".concat(idx, "\" class=\"type2 table table-striped table-sm\"></table>"));
+        var row1 = $("<tr></tr>");
+        var reference_col = $("<th>Reference</th>");
+        var text_col = $("<th>Text</th>");
+        var newline = $("<br>");
+        row1.append(reference_col);
+        row1.append(text_col);
+        table.append(row1);
+        row_book.append(table);
+    }
+    else {
+        $("#book_table_".concat(idx)).remove();
+    }
+}
+function preview_results_frontend_alpha() {
+    console.log("Welcome to preview_results_frontend_alpha()\n");
+    var preview_data = package_preview_data();
+    console.log('Preview Data: ', preview_data);
+    console.log('Selected Paths: ', preview_data.selected_paths);
+    var tq_output = $('#tq_output');
+    if (tq_output.is(':empty')) {
+        add_book_buttons(preview_data.selected_paths);
+    }
+    else {
+        tq_output.empty();
+    }
 }
 function preview_results() {
     var desc = ckeditor.val();

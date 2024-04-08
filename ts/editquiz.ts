@@ -395,8 +395,100 @@ function trigger_preview_results(preview_data:object): string{
     return response_js;
 
 }
+function package_preview_data(): any {
+    let desc = ckeditor.val();
+    let checked_passages = $('#passagetree').jstree('get_checked',null,false);
+    let selected_paths = []
+    for (let i=0; i<checked_passages.length; ++i) {
+        let r = $(checked_passages[i]).data('ref');
+        if (r!='')
+            selected_paths.push(r);
+    }
+    let maylocate = $('#maylocate_cb').prop('checked');
+    let sentbefore = $('#sentbefore').val();
+    let sentafter = $('#sentafter').val();
+    let fixedquestions = + $('#fixedquestions').val(); // Convert to number
+    let randomize = $('#randomorder').prop('checked');
+    if(!(fixedquestions>0))
+        fixedquestions = 0;
+    let sentenceSelection   = panelSent.getInfo();
+    let quizObjectSelection = panelSentUnit.getInfo();
+    let quizFeatures        = panelFeatures.getInfo();
+    let preview_data = {
+        'desc': desc,
+        'database': decoded_3et.database,
+        'properties': decoded_3et.properties,
+        'selected_paths': selected_paths,
+        'sentenceSelection': sentenceSelection,
+        'quizObjectSelection': quizObjectSelection,
+        'quizFeatures': quizFeatures,
+        'maylocate': maylocate,
+        'sentbefore': sentbefore,
+        'sentafter': sentafter,
+        'fixedquestions': fixedquestions,
+        'randomize': randomize
+    }
+    return preview_data;
+
+}
+
+function add_book_buttons(selected_paths:any): void {
+    for(let i = 0; i < selected_paths.length; i++){
+        let pathname = selected_paths[i];
+        let cell = $(`<tr></tr>`);
+        let row = $(`<td id=row_book_${i}></td>`);
+        let button = $(`<button id=book_${i} onclick=add_reference_table(${i}) class="btn text-left">${pathname}</button>`);
+        let newline = $(`<br><br>`);
+        row.append(button);
+        row.append(newline);
+        cell.append(row);
+        $('#tq_output').append(cell);
+    }
+
+}
+
+function add_reference_table(idx:number): void {
+    let row_book = $(`#row_book_${idx}`);
+    let leaf_count = row_book.find('table').length;
+    console.log('Leaf Count: ', leaf_count);
+    if(leaf_count <= 0){
+        let table = $(`<table id="book_table_${idx}" class="type2 table table-striped table-sm"></table>`);
+        let row1 = $(`<tr></tr>`);
+        let reference_col = $(`<th>Reference</th>`);
+        let text_col = $(`<th>Text</th>`);
+        let newline = $(`<br>`);
+        row1.append(reference_col);
+        row1.append(text_col);
+        table.append(row1);
+        row_book.append(table);
+    }
+    else {
+        $(`#book_table_${idx}`).remove();
+    }
+    
+    
+    
 
 
+}
+
+function preview_results_frontend_alpha(): void {
+    console.log("Welcome to preview_results_frontend_alpha()\n");
+    let preview_data = package_preview_data();
+    
+    console.log('Preview Data: ', preview_data);
+    console.log('Selected Paths: ', preview_data.selected_paths);
+    
+    
+
+    let tq_output = $('#tq_output');
+    if(tq_output.is(':empty')) {
+        add_book_buttons(preview_data.selected_paths);
+    }
+    else {
+        tq_output.empty();
+    }
+}
 
 function preview_results(): void {
     let desc = ckeditor.val();
