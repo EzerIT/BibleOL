@@ -317,6 +317,10 @@ class Ctrl_text extends MY_Controller {
         $this->show_quiz_common($_POST['quiz'], intval($_POST['count']), $_POST['sel']);
     }
 
+    public function preview_results_backend_alpha(){
+        echo "Preview Results Alpha Backend\n";
+    }
+
     public function preview_results(){
         // MODEL:
         $this->load->model('mod_quizpath' );

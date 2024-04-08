@@ -153,6 +153,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
     private doLayout(where : JQuery) : void {
         // The layout is a table containing a number of rows
         let table : JQuery = $('<table></table>');
+        let table_query_output : JQuery = $('<table></table>');
         let row   : JQuery;
         let cell  : JQuery;
 
@@ -220,14 +221,21 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         cell = $('<td id="clearbuttoncell"></td>');
 
         cell.append(this.clear);
+        cell.append(this.test_query);
         row.append(cell);
         
         cell = $('<td></td>');
         cell.append(this.fpan);
         row.append(cell);
-        table.append(row);
-        
+        table.append(row);        
         where.append(table);
+
+        //8th row contains the test query output
+        row = $('<tr></tr>');
+        cell = $('<td id="tq_output"></td>');
+        row.append(cell);
+        table_query_output.append(row);
+        where.append(table_query_output);
     }
 
     //------------------------------------------------------------------------------------------
