@@ -454,9 +454,8 @@ function add_reference_table(idx:number): void {
     if(leaf_count <= 0){
         let table = $(`<table id="book_table_${idx}" class="type2 table table-striped table-sm"></table>`);
         let row1 = $(`<tr></tr>`);
-        let reference_col = $(`<th>Reference</th>`);
-        let text_col = $(`<th>Text</th>`);
-        let newline = $(`<br>`);
+        let reference_col = $(`<th style=padding:10px;>Reference</th>`);
+        let text_col = $(`<th style=padding:10px;>Text</th>`);
         row1.append(reference_col);
         row1.append(text_col);
         table.append(row1);
