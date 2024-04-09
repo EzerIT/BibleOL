@@ -2571,9 +2571,8 @@ function add_reference_table(idx) {
     if (leaf_count <= 0) {
         var table = $("<table id=\"book_table_".concat(idx, "\" class=\"type2 table table-striped table-sm\"></table>"));
         var row1 = $("<tr></tr>");
-        var reference_col = $("<th>Reference</th>");
-        var text_col = $("<th>Text</th>");
-        var newline = $("<br>");
+        var reference_col = $("<th style=padding:10px;>Reference</th>");
+        var text_col = $("<th style=padding:10px;>Text</th>");
         row1.append(reference_col);
         row1.append(text_col);
         table.append(row1);
