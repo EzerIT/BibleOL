@@ -484,7 +484,7 @@ function add_reference_table(idx:number): void {
     let leaf_count = cbody.find('table').length;
     //console.log('Leaf Count: ', leaf_count);
     if(leaf_count <= 0){
-        let table = $(`<table style="display:block; table-layout:fixed;" id="book_table_${idx}" class="type2 table"></table>`);
+        let table = $(`<table style="display:block; table-layout:fixed;" id="book_table_${idx}" class="type2 table table-striped table-sm"></table>`);
         let row1 = $(`<tr></tr>`);
         let reference_col = $(`<th style="padding:10px; text-align:center; vertical-align:middle;">Reference</th>`);
         let text_col = $(`<th style="padding:10px; text-align:center; vertical-align:middle;">Text</th>`);

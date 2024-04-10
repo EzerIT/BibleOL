@@ -47,18 +47,20 @@
     let monadObjects = dictionaries['monadObjects'];
     //console.log('Monad Objects: ', monadObjects);
     let sentences = [];
-    let sentence_i = '<div class="ltr">';
+    let sentence_i = '<span class="textdisplay greek" style="white-space:break-spaces;" >';
     for(let i = 0; i < monadObjects.length; i++){
       let entry = monadObjects[i][0];
       for(let j = 0; j < entry.length; j++){
         let word = entry[j]['text'];
-        if(j !== entry.length - 1)
-          sentence_i = sentence_i + '<span  class="textdisplay greek">'  + word + '</span>' + '&nbsp;&nbsp;&nbsp;';
-        else
-          sentence_i = sentence_i + '<span class="textdisplay greek">'  + word + '</span>' + '</div>';
+        if(j !== entry.length - 1) {
+          sentence_i = sentence_i  + word  + '&nbsp;&nbsp;&nbsp;';
+        }
+        else {
+          sentence_i = sentence_i  + word + '</span>';
+        }
       }
       sentences.push(sentence_i);
-      sentence_i = '';
+      sentence_i = '<span class="textdisplay greek" style="white-space:break-spaces;" >';
     }
     console.log('Sentences: ', sentences);
 
@@ -71,7 +73,7 @@
       references.push(bcv_loc);
       let row = $(`<tr></tr>`);
       let cell_ref = $(`<td style="text-align:center; vertical-align:middle;"><span class="location" style="font-weight:bold; text-transform:uppercase;">${bcv_loc}</span></td>`);
-      let cell_txt = $(`<td style="white-space:pre; word-wrap: break-word;">${sentences[i]}</td>`);
+      let cell_txt = $(`<td style="white-space:pre; word-wrap: anywhere;">${sentences[i]}</td>`);
       row.append(cell_ref);
       row.append(cell_txt);
       $('#book_table_0').append(row);

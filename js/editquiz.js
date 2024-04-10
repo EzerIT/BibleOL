@@ -2598,7 +2598,7 @@ function add_reference_table(idx) {
     var row_book = $("#row_book_".concat(idx));
     var leaf_count = cbody.find('table').length;
     if (leaf_count <= 0) {
-        var table = $("<table style=\"display:block; table-layout:fixed;\" id=\"book_table_".concat(idx, "\" class=\"type2 table\"></table>"));
+        var table = $("<table style=\"display:block; table-layout:fixed;\" id=\"book_table_".concat(idx, "\" class=\"type2 table table-striped table-sm\"></table>"));
         var row1 = $("<tr></tr>");
         var reference_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Reference</th>");
         var text_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Text</th>");
