@@ -1198,7 +1198,8 @@ var PanelTemplSentenceSelector = (function (_super) {
     };
     PanelTemplSentenceSelector.prototype.doLayout = function (where) {
         var table = $('<table></table>');
-        var table_query_output = $('<div stle="display:table;" id="tqrow" class="row"><table stle="width:100%" id="tq_output_mega"></table></div>');
+        var container = $('<div style="display:table;" id="tqrow" class="row"></div>');
+        var table_query_output = $('<table style="width:100%" id="tq_output_mega"></table>');
         var row;
         var cell;
         row = $('<tr></tr>');
@@ -1256,7 +1257,8 @@ var PanelTemplSentenceSelector = (function (_super) {
         cell = $('<td id="tq_output"></td>');
         row.append(cell);
         table_query_output.append(row);
-        where.append(table_query_output);
+        container.append(table_query_output);
+        where.append(container);
     };
     PanelTemplSentenceSelector.prototype.populateFeatureTab = function (otype) {
         if (this.cbUseForQo.prop('checked')) {
