@@ -930,7 +930,8 @@ var DisplaySingleMonadObject = (function (_super) {
         }
         else
             sentenceTextArr[0] += text + ' ';
-        return $("<span class=\"textblock inline\"><span class=\"textdisplay ".concat(charset.foreignClass + textDisplayClass, "\" data-idd=\"").concat(smo.mo.id_d, "\">").concat(versestring).concat(refstring).concat(urlstring).concat(text, "</span>").concat(grammar, "</span>").concat(follow_space));
+        var sent = $("<span class=\"textblock inline\"><span class=\"textdisplay ".concat(charset.foreignClass + textDisplayClass, "\" data-idd=\"").concat(smo.mo.id_d, "\">").concat(versestring).concat(refstring).concat(urlstring).concat(text, "</span>").concat(grammar, "</span>").concat(follow_space));
+        return sent;
     };
     return DisplaySingleMonadObject;
 }(DisplayMonadObject));

@@ -153,7 +153,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
     private doLayout(where : JQuery) : void {
         // The layout is a table containing a number of rows
         let table : JQuery = $('<table></table>');
-        let table_query_output : JQuery = $('<table></table>');
+        let table_query_output : JQuery = $('<div stle="display:table;" id="tqrow" class="row"><table stle="width:100%" id="tq_output_mega"></table></div>');
         let row   : JQuery;
         let cell  : JQuery;
 

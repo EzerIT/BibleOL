@@ -432,12 +432,38 @@ function package_preview_data(): any {
 
 }
 
-function add_book_buttons(selected_paths:any): void {
+function generate_query_data(preview_data:any):void {
+    // generate query data
+    let submit_url = '/text/preview_results_backend_alpha';
+    let response_data = '';
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: preview_data,
+        success: function(response) {
+            response_data = response;
+            console.log(response_data);
+            $('#tq_output').append(response_data);
+            
+        },
+        error: function(error){
+            console.log('ERROR!!');
+            console.log(error);
+        }
+    });
+
+}
+
+
+function add_book_buttons(preview_data:any): void {
+    let selected_paths = preview_data.selected_paths;
     for(let i = 0; i < selected_paths.length; i++){
         let pathname = selected_paths[i];
         let cell = $(`<tr></tr>`);
         let row = $(`<td id=row_book_${i}></td>`);
-        let button = $(`<button id=book_${i} onclick=add_reference_table(${i}) class="btn text-left">${pathname}</button>`);
+        let preview_data_str = JSON.stringify(preview_data).replace(/"/g, "'");
+        //let button = $(`<button id=book_${i} onclick=add_reference_table(${i}, ${JSON.stringify(preview_data)}) class="btn text-left">${pathname}</button>`);
+        let button = $(`<button id=book_${i} class="btn text-left" onclick=add_reference_table(${i})>${pathname}</button>`); 
         let newline = $(`<br><br>`);
         row.append(button);
         row.append(newline);
@@ -448,14 +474,18 @@ function add_book_buttons(selected_paths:any): void {
 }
 
 function add_reference_table(idx:number): void {
+    // generate query
+    let preview_data = package_preview_data();
+    generate_query_data(preview_data);
+    // create table
     let row_book = $(`#row_book_${idx}`);
     let leaf_count = row_book.find('table').length;
-    console.log('Leaf Count: ', leaf_count);
+    //console.log('Leaf Count: ', leaf_count);
     if(leaf_count <= 0){
-        let table = $(`<table id="book_table_${idx}" class="type2 table table-striped table-sm"></table>`);
+        let table = $(`<table id="book_table_${idx}" class="type2 table"></table>`);
         let row1 = $(`<tr></tr>`);
-        let reference_col = $(`<th style=padding:10px;>Reference</th>`);
-        let text_col = $(`<th style=padding:10px;>Text</th>`);
+        let reference_col = $(`<th style="padding:10px; text-align:center; vertical-align:middle;">Reference</th>`);
+        let text_col = $(`<th style="padding:10px; text-align:center; vertical-align:middle;">Text</th>`);
         row1.append(reference_col);
         row1.append(text_col);
         table.append(row1);
@@ -472,17 +502,17 @@ function add_reference_table(idx:number): void {
 }
 
 function preview_results_frontend_alpha(): void {
-    console.log("Welcome to preview_results_frontend_alpha()\n");
+    //console.log("Welcome to preview_results_frontend_alpha()\n");
     let preview_data = package_preview_data();
     
-    console.log('Preview Data: ', preview_data);
-    console.log('Selected Paths: ', preview_data.selected_paths);
+    //console.log('Preview Data: ', preview_data);
+    //console.log('Selected Paths: ', preview_data.selected_paths);
     
     
 
     let tq_output = $('#tq_output');
     if(tq_output.is(':empty')) {
-        add_book_buttons(preview_data.selected_paths);
+        add_book_buttons(preview_data);
     }
     else {
         tq_output.empty();

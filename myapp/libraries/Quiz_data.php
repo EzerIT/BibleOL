@@ -193,6 +193,10 @@ class Quiz_data {
         return $emdat[0]->get_sheaf()->get_straws()[0]->get_matched_objects()[0]->get_monadset();
     }
     
+    public function iteratePreview(){
+        
+    }
+
 	public function getNextCandidate(int $request_number) {
         assert(isset($this->mainSheaf));
 
