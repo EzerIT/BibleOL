@@ -1198,7 +1198,7 @@ var PanelTemplSentenceSelector = (function (_super) {
     };
     PanelTemplSentenceSelector.prototype.doLayout = function (where) {
         var table = $('<table></table>');
-        var table_query_output = $('<table></table>');
+        var table_query_output = $('<div stle="display:table;" id="tqrow" class="row"><table stle="width:100%" id="tq_output_mega"></table></div>');
         var row;
         var cell;
         row = $('<tr></tr>');
@@ -2551,12 +2551,32 @@ function package_preview_data() {
     };
     return preview_data;
 }
-function add_book_buttons(selected_paths) {
+function generate_query_data(preview_data) {
+    var submit_url = '/text/preview_results_backend_alpha';
+    var response_data = '';
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: preview_data,
+        success: function (response) {
+            response_data = response;
+            console.log(response_data);
+            $('#tq_output').append(response_data);
+        },
+        error: function (error) {
+            console.log('ERROR!!');
+            console.log(error);
+        }
+    });
+}
+function add_book_buttons(preview_data) {
+    var selected_paths = preview_data.selected_paths;
     for (var i = 0; i < selected_paths.length; i++) {
         var pathname = selected_paths[i];
         var cell = $("<tr></tr>");
         var row = $("<td id=row_book_".concat(i, "></td>"));
-        var button = $("<button id=book_".concat(i, " onclick=add_reference_table(").concat(i, ") class=\"btn text-left\">").concat(pathname, "</button>"));
+        var preview_data_str = JSON.stringify(preview_data).replace(/"/g, "'");
+        var button = $("<button id=book_".concat(i, " class=\"btn text-left\" onclick=add_reference_table(").concat(i, ")>").concat(pathname, "</button>"));
         var newline = $("<br><br>");
         row.append(button);
         row.append(newline);
@@ -2565,14 +2585,15 @@ function add_book_buttons(selected_paths) {
     }
 }
 function add_reference_table(idx) {
+    var preview_data = package_preview_data();
+    generate_query_data(preview_data);
     var row_book = $("#row_book_".concat(idx));
     var leaf_count = row_book.find('table').length;
-    console.log('Leaf Count: ', leaf_count);
     if (leaf_count <= 0) {
-        var table = $("<table id=\"book_table_".concat(idx, "\" class=\"type2 table table-striped table-sm\"></table>"));
+        var table = $("<table id=\"book_table_".concat(idx, "\" class=\"type2 table\"></table>"));
         var row1 = $("<tr></tr>");
-        var reference_col = $("<th style=padding:10px;>Reference</th>");
-        var text_col = $("<th style=padding:10px;>Text</th>");
+        var reference_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Reference</th>");
+        var text_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Text</th>");
         row1.append(reference_col);
         row1.append(text_col);
         table.append(row1);
@@ -2583,13 +2604,10 @@ function add_reference_table(idx) {
     }
 }
 function preview_results_frontend_alpha() {
-    console.log("Welcome to preview_results_frontend_alpha()\n");
     var preview_data = package_preview_data();
-    console.log('Preview Data: ', preview_data);
-    console.log('Selected Paths: ', preview_data.selected_paths);
     var tq_output = $('#tq_output');
     if (tq_output.is(':empty')) {
-        add_book_buttons(preview_data.selected_paths);
+        add_book_buttons(preview_data);
     }
     else {
         tq_output.empty();

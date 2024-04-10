@@ -318,7 +318,57 @@ class Ctrl_text extends MY_Controller {
     }
 
     public function preview_results_backend_alpha(){
-        echo "Preview Results Alpha Backend\n";
+        //echo "Preview Results Alpha Backend\n";
+        $this->load->model('mod_quizpath' );
+        $this->load->model('mod_askemdros');
+        $this->load->model('mod_localize');
+        $number_of_quizzes = 5;
+        $preview_data = json_encode($_POST);
+        $preview_data = json_decode($preview_data);
+        $sentence_selector = $this->mod_askemdros->get_sentence_selector($preview_data);
+        $display_data = $this->mod_askemdros->preview_quiz($number_of_quizzes, $preview_data, $sentence_selector);
+        $main_sheaf = $display_data['main_sheaf'];
+        //$javascripts = array('js/ol.js');
+        $javascripts = array('jstree/jquery.jstree.js',
+                                 'ckeditor/ckeditor.js',
+                                 'ckeditor/adapters/jquery.js',
+                                 'js/editquiz.js',
+                                 'js/ol.js');
+        $display_data2 = array(
+            'is_quiz' => true,
+            'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
+            'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
+            'quizData_json' => $this->mod_askemdros->quiz_data_json,
+            'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
+            'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
+            'l10n_json' => $this->mod_askemdros->l10n_json,
+            'l10n_js_json' => $this->mod_localize->get_json(),
+            'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
+            'is_logged_in' => $this->mod_users->is_logged_in(),
+            'js_list' => $javascripts,
+            'css_list' => array('styles/selectbox.css')
+          );
+        
+        
+        //$this->load->view('view_sampling', $display_data2);
+        $this->load->view('view_top1', array('title' => $this->lang->line('quiz'),
+                                                'css_list' => array('styles/selectbox.css'),
+                                                'js_list' => $javascripts));
+
+        $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
+        //$this->load->view('view_top2');
+        
+        $this->load->view('view_sampling', $display_data2);
+        
+        //$this->load->view('view_bottom');
+        
+        /*
+        $this->load->view('view_top1', array('title' => $this->lang->line('quiz'),
+                                             'css_list' => array('styles/selectbox.css'),
+                                             'js_list' => $javascripts));
+        */
+
+        //echo "Display Data-2: " . json_encode($display_data2) . "\n";
     }
 
     public function preview_results(){
@@ -386,6 +436,8 @@ class Ctrl_text extends MY_Controller {
               'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
               'is_logged_in' => $this->mod_users->is_logged_in(),
             );
+
+            echo var_dump($display_data) . "\n";
 
             $exam_data = array(
               'is_exam' => $examid !== null,
@@ -600,7 +652,8 @@ class Ctrl_text extends MY_Controller {
             $javascripts = array('jstree/jquery.jstree.js',
                                  'ckeditor/ckeditor.js',
                                  'ckeditor/adapters/jquery.js',
-                                 'js/editquiz.js');
+                                 'js/editquiz.js',
+                                 'js/ol.js');
 
             switch ($this->db_config->dbinfo->charSet) {
               case 'hebrew':

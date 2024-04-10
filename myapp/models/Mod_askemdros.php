@@ -359,93 +359,52 @@ class Mod_askemdros extends CI_Model {
         //echo "Welcome to preview_quiz() in Mod_askemdros!<br>";
         $this->load->library('db_config');
         $this->setup($preview_data->database, $preview_data->properties);
-        if(property_exists($preview_data->quizFeatures, 'requestFeatures') and property_exists($preview_data, 'selected_paths')){
-            //echo "\nSuccess: requestFeatures and selected_paths both exist\n";
-            if($preview_data->quizObjectSelection->object === $this->db_config->dbinfo->objHasSurface){
-                $fsetting = $this->db_config->dbinfo->objectSettings->{$this->db_config->dbinfo->objHasSurface}->featuresetting;
-    
-                $gloss_features = array();
-                foreach (get_object_vars($fsetting) as $featname => $featval) {
-                    if (!empty($featval->isGloss)) {
-                        $gloss_features[$featname] = true;
-                    }
-                }
-    
-                $requestGlossFound = false;
-                foreach ($preview_data->quizFeatures->requestFeatures as $f) {
-                    if (!empty($fsetting->{$f->name}->isGloss)) {
-                        $requestGlossFound = true;
-                        $gloss_features[$f->name] = false;
-                    }
-                }
-    
-                if ($requestGlossFound) {
-                    foreach ($preview_data->quizFeatures->showFeatures as $f)
-                        if (!empty($fsetting->$f->isGloss))
-                            $gloss_features[$f] = false;
-        
-                    foreach ($preview_data->quizFeatures->dontShowFeatures as $f)
-                        if (!empty($fsetting->$f->isGloss))
-                            $gloss_features[$f] = false;
-        
-                    // Mark the remaining gloss features as "don't show"
-                    foreach ($gloss_features as $f => $is_dontCare)
-                        if ($is_dontCare)
-                            $preview_data->quizFeatures->dontShowFeatures[] = $f;
-                }            
-            }
+        if(property_exists($preview_data, 'selected_paths')){
+            
             if (count($preview_data->selected_paths) === 0)
                 $preview_universe = array('');
             else
                 $preview_universe = $preview_data->selected_paths;
 
-            $qoSelector = isset($preview_data->quizObjectSelection->mql) 
-                ? $preview_data->quizObjectSelection->mql
-                : $preview_data->quizObjectSelection->featHand->__toString();
-    
-            if (count($preview_data->selected_paths)===0)
-                $preview_data->selected_paths = array('');
-
+            
+            
             $quizid = -1;
             
             $this->load->library('quiz_data',array('quizid' => $quizid,
                                            'universe' => self::parsePath($preview_data->selected_paths, $preview_data->fixedquestions>0 ? null : null),
                                            'senSelect' => $sentenceSelector,
-                                           'qoSelect' => $qoSelector,
+                                           'qoSelect' => '',
                                            'desc' => $preview_data->desc,
                                            'maylocate' => $preview_data->maylocate,
                                            'sentbefore' => $preview_data->sentbefore,
                                            'sentafter' => $preview_data->sentafter,
                                            'fixedquestions' => $preview_data->fixedquestions,
                                            'randomize' => $preview_data->randomize,
-                                           'show_features' => $preview_data->quizFeatures->showFeatures,
-                                           'request_features' => $preview_data->quizFeatures->requestFeatures,
+                                           'show_features' => $preview_data->quizFeatures->showFeatures ?? [],
+                                           'request_features' => $preview_data->quizFeatures->requestFeatures ?? [],
                                            'dontshow_features' => $preview_data->quizFeatures->dontShowFeatures ?? [],
                                            'dontshow_objects' => $preview_data->quizFeatures->dontShowObjects ?? [],
                                            'glosslimit' => $preview_data->quizFeatures->glosslimit,
                                            'oType' => $preview_data->quizObjectSelection->object));
             
-            //echo "Testing 04-01\n";
-            //$ss_test = "[{$preview_data->sentenceSelection->object} NORETRIEVE {$preview_data->sentenceSelection->featHand}]";
-            //echo "\nss->object: " . $preview_data->sentenceSelection->object . "\n";
-            //echo "ss->featHand: " . var_dump($preview_data->sentenceSelection->featHand) . "\n";
-
-
+            
 
             $universe =  self::parsePath($preview_data->selected_paths, $preview_data->fixedquestions>0 ? null : null);
 
             $display_data = $this->quiz_data->previewSheaf($sentenceSelector);                            
-            /*
-            $response = $this->quiz_data->getCandidateSheaf();
-            echo "Response: " . $response . "\n";
-            if($response == true){
-                $numCandidates = $this->quiz_data->getNumberOfCandidates();
-                echo "numCandidates: " . $numCandidates . "\n";
-            }
-            */
+            
+            //continue on here
+            $number_of_quizzes = 5;
+            $this->dictionaries_json = json_encode($this->quiz_data->getNextCandidate($number_of_quizzes));
+            //echo "Dictionaries JSON: " . $this->dictionaries_json . "<br>";
+            $this->quiz_data_json = json_encode($this->quiz_data);
+            //echo 'Quiz Data JSON: ' . $this->quiz_data_json . '<br>';
+            $this->dbinfo_json = $this->db_config->dbinfo_json;
+            $this->l10n_json = $this->db_config->l10n_json;
+            $this->typeinfo_json = $this->db_config->typeinfo_json;
         }
         else {
-            echo "\nError: preview_data does not contain requestFeatures or selected_paths\n";
+            echo "\nError: preview_data does not contain selected_paths\n";
             $display_data = ["n_candidates" => null,
                              "query" => null,
                              "main_sheaf" => null];
@@ -469,6 +428,7 @@ class Mod_askemdros extends CI_Model {
             if ($this->quiz_data->fixedquestions>0)
                 $number_of_quizzes = $this->quiz_data->fixedquestions;
             $this->dictionaries_json = json_encode($this->quiz_data->getNextCandidate($number_of_quizzes));
+            //echo "Dictionaries JSON: " . $this->dictionaries_json . "<br>";
             $this->quiz_data_json = json_encode($this->quiz_data);
             //echo 'Quiz Data JSON: ' . $this->quiz_data_json . '<br>';
 

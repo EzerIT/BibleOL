@@ -316,8 +316,11 @@ class DisplaySingleMonadObject extends DisplayMonadObject {
         }
         else
             sentenceTextArr[0] += text + ' ';
-            
-        return $(`<span class="textblock inline"><span class="textdisplay ${charset.foreignClass + textDisplayClass}" data-idd="${smo.mo.id_d}">${versestring}${refstring}${urlstring}${text}</span>${grammar}</span>${follow_space}`);
+        
+        
+        let sent = $(`<span class="textblock inline"><span class="textdisplay ${charset.foreignClass + textDisplayClass}" data-idd="${smo.mo.id_d}">${versestring}${refstring}${urlstring}${text}</span>${grammar}</span>${follow_space}`);
+
+        return sent;
     }
 }
 
