@@ -1202,6 +1202,12 @@ var PanelTemplSentenceSelector = (function (_super) {
         var table_query_output = $('<table style="width:100%" id="tq_output_mega"></table>');
         var row;
         var cell;
+        var fpan2 = $('<div style="display:none" id="fpan2"></div>');
+        var accordion2 = $('<div id="accordion2" class="accordion"></div>');
+        var card = $('<div class="card"></div>');
+        var card_header = $('<div id="cardhead" class="card-header"></div>');
+        var accbody = $('<div id="accbody2" class="collapse-show" parent="#accordion2"></div>');
+        var card_body = $('<div id="card-body-original" class="card-body"></div>');
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
         cell.append(this.cbUseForQo, '&nbsp;', this.cbUseForQoLabel);
@@ -1253,12 +1259,12 @@ var PanelTemplSentenceSelector = (function (_super) {
         row.append(cell);
         table.append(row);
         where.append(table);
-        row = $('<tr></tr>');
-        cell = $('<td id="tq_output"></td>');
-        row.append(cell);
-        table_query_output.append(row);
-        container.append(table_query_output);
-        where.append(container);
+        card.append(card_header);
+        accbody.append(card_body);
+        card.append(accbody);
+        accordion2.append(card);
+        fpan2.append(accordion2);
+        where.append(fpan2);
     };
     PanelTemplSentenceSelector.prototype.populateFeatureTab = function (otype) {
         if (this.cbUseForQo.prop('checked')) {
@@ -2563,7 +2569,7 @@ function generate_query_data(preview_data) {
         success: function (response) {
             response_data = response;
             console.log(response_data);
-            $('#tq_output').append(response_data);
+            $('#card-body-original').append(response_data);
         },
         error: function (error) {
             console.log('ERROR!!');
@@ -2573,46 +2579,53 @@ function generate_query_data(preview_data) {
 }
 function add_book_buttons(preview_data) {
     var selected_paths = preview_data.selected_paths;
+    console.log('SELECTED PATHS: ', selected_paths);
     for (var i = 0; i < selected_paths.length; i++) {
         var pathname = selected_paths[i];
         var cell = $("<tr></tr>");
         var row = $("<td id=row_book_".concat(i, "></td>"));
         var preview_data_str = JSON.stringify(preview_data).replace(/"/g, "'");
-        var button = $("<button id=book_".concat(i, " class=\"btn text-left\" onclick=add_reference_table(").concat(i, ")>").concat(pathname, "</button>"));
-        var newline = $("<br><br>");
+        var button = $("<button data-toggle=\"collapse\" data-target=\"#accbody2\" id=book_".concat(i, " class=\"btn text-left\" onclick=add_reference_table(").concat(i, ")>").concat(pathname, "</button>"));
         row.append(button);
-        row.append(newline);
         cell.append(row);
-        $('#tq_output').append(cell);
+        $('#cardhead').append(cell);
     }
 }
 function add_reference_table(idx) {
     var preview_data = package_preview_data();
     generate_query_data(preview_data);
+    var cbody = $("#card-body-original");
     var row_book = $("#row_book_".concat(idx));
-    var leaf_count = row_book.find('table').length;
+    var leaf_count = cbody.find('table').length;
     if (leaf_count <= 0) {
-        var table = $("<table id=\"book_table_".concat(idx, "\" class=\"type2 table\"></table>"));
+        var table = $("<table style=\"display:block;\" id=\"book_table_".concat(idx, "\" class=\"type2 table\"></table>"));
         var row1 = $("<tr></tr>");
         var reference_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Reference</th>");
         var text_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Text</th>");
         row1.append(reference_col);
         row1.append(text_col);
         table.append(row1);
-        row_book.append(table);
+        cbody.append(table);
     }
     else {
         $("#book_table_".concat(idx)).remove();
     }
 }
 function preview_results_frontend_alpha() {
+    console.log("Welcome to preview_results_frontend_alpha()\n");
     var preview_data = package_preview_data();
-    var tq_output = $('#tq_output');
-    if (tq_output.is(':empty')) {
+    if ($('#fpan2').is(':hidden')) {
+        $('#fpan2').show();
+    }
+    else {
+        $('#fpan2').hide();
+    }
+    var chead_data = $('#cardhead');
+    if (chead_data.is(':empty')) {
         add_book_buttons(preview_data);
     }
     else {
-        tq_output.empty();
+        chead_data.empty();
     }
 }
 function preview_results() {

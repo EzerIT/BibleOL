@@ -443,7 +443,7 @@ function generate_query_data(preview_data:any):void {
         success: function(response) {
             response_data = response;
             console.log(response_data);
-            $('#tq_output').append(response_data);
+            $('#card-body-original').append(response_data);
             
         },
         error: function(error){
@@ -457,18 +457,19 @@ function generate_query_data(preview_data:any):void {
 
 function add_book_buttons(preview_data:any): void {
     let selected_paths = preview_data.selected_paths;
+    console.log('SELECTED PATHS: ', selected_paths);
     for(let i = 0; i < selected_paths.length; i++){
         let pathname = selected_paths[i];
         let cell = $(`<tr></tr>`);
         let row = $(`<td id=row_book_${i}></td>`);
         let preview_data_str = JSON.stringify(preview_data).replace(/"/g, "'");
         //let button = $(`<button id=book_${i} onclick=add_reference_table(${i}, ${JSON.stringify(preview_data)}) class="btn text-left">${pathname}</button>`);
-        let button = $(`<button id=book_${i} class="btn text-left" onclick=add_reference_table(${i})>${pathname}</button>`); 
-        let newline = $(`<br><br>`);
+        let button = $(`<button data-toggle="collapse" data-target="#accbody2" id=book_${i} class="btn text-left" onclick=add_reference_table(${i})>${pathname}</button>`); 
+        //let newline = $(`<br><br>`);
         row.append(button);
-        row.append(newline);
+        //row.append(newline);
         cell.append(row);
-        $('#tq_output').append(cell);
+        $('#cardhead').append(cell);
     }
 
 }
@@ -478,18 +479,20 @@ function add_reference_table(idx:number): void {
     let preview_data = package_preview_data();
     generate_query_data(preview_data);
     // create table
+    let cbody = $(`#card-body-original`);
     let row_book = $(`#row_book_${idx}`);
-    let leaf_count = row_book.find('table').length;
+    let leaf_count = cbody.find('table').length;
     //console.log('Leaf Count: ', leaf_count);
     if(leaf_count <= 0){
-        let table = $(`<table id="book_table_${idx}" class="type2 table"></table>`);
+        let table = $(`<table style="display:block;" id="book_table_${idx}" class="type2 table"></table>`);
         let row1 = $(`<tr></tr>`);
         let reference_col = $(`<th style="padding:10px; text-align:center; vertical-align:middle;">Reference</th>`);
         let text_col = $(`<th style="padding:10px; text-align:center; vertical-align:middle;">Text</th>`);
         row1.append(reference_col);
         row1.append(text_col);
         table.append(row1);
-        row_book.append(table);
+        cbody.append(table);
+        //cbody.append(row_book);
     }
     else {
         $(`#book_table_${idx}`).remove();
@@ -502,14 +505,26 @@ function add_reference_table(idx:number): void {
 }
 
 function preview_results_frontend_alpha(): void {
-    //console.log("Welcome to preview_results_frontend_alpha()\n");
+    console.log("Welcome to preview_results_frontend_alpha()\n");
     let preview_data = package_preview_data();
     
+    if($('#fpan2').is(':hidden')){
+        $('#fpan2').show();
+    }
+    else {
+        $('#fpan2').hide();
+    }
     //console.log('Preview Data: ', preview_data);
     //console.log('Selected Paths: ', preview_data.selected_paths);
     
-    
-
+    let chead_data = $('#cardhead');
+    if(chead_data.is(':empty')){
+        add_book_buttons(preview_data);
+    }
+    else {
+        chead_data.empty();
+    }
+    /*
     let tq_output = $('#tq_output');
     if(tq_output.is(':empty')) {
         add_book_buttons(preview_data);
@@ -517,6 +532,7 @@ function preview_results_frontend_alpha(): void {
     else {
         tq_output.empty();
     }
+    */
 }
 
 function preview_results(): void {
