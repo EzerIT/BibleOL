@@ -355,7 +355,7 @@ class Mod_askemdros extends CI_Model {
 
     }
 
-    public function preview_quiz(int $number_of_quizzes, object $preview_data, string $sentenceSelector){
+    public function preview_quiz(object $preview_data, string $sentenceSelector){
         //echo "Welcome to preview_quiz() in Mod_askemdros!<br>";
         $this->load->library('db_config');
         $this->setup($preview_data->database, $preview_data->properties);
@@ -394,7 +394,7 @@ class Mod_askemdros extends CI_Model {
             $display_data = $this->quiz_data->previewSheaf($sentenceSelector);                            
             
             //continue on here
-            $number_of_quizzes = 5;
+            $number_of_quizzes = $display_data['n_candidates'];
             $this->dictionaries_json = json_encode($this->quiz_data->getNextCandidate($number_of_quizzes));
             //echo "Dictionaries JSON: " . $this->dictionaries_json . "<br>";
             $this->quiz_data_json = json_encode($this->quiz_data);
@@ -405,7 +405,7 @@ class Mod_askemdros extends CI_Model {
         }
         else {
             echo "\nError: preview_data does not contain selected_paths\n";
-            $display_data = ["n_candidates" => null,
+            $display_data = ["n_candidates" => 0,
                              "query" => null,
                              "main_sheaf" => null];
         

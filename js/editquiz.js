@@ -1202,7 +1202,7 @@ var PanelTemplSentenceSelector = (function (_super) {
         var table_query_output = $('<table style="width:100%" id="tq_output_mega"></table>');
         var row;
         var cell;
-        var fpan2 = $('<div style="display:none" id="fpan2"></div>');
+        var fpan2 = $('<div style="display:none; padding-top:10px;" id="fpan2"></div>');
         var accordion2 = $('<div id="accordion2" class="accordion"></div>');
         var card = $('<div class="card"></div>');
         var card_header = $('<div id="cardhead" class="card-header"></div>');
@@ -2343,6 +2343,8 @@ var isSubmitting = false;
 var checked_passages;
 var ckeditor;
 var charset;
+var init = false;
+var table_idx = 0;
 function isDirty() {
     if (isSubmitting)
         return false;
@@ -2372,9 +2374,6 @@ function show_error(id, message) {
 }
 function hide_error(id) {
     $(id).hide();
-}
-function alpha() {
-    console.log('Welcome to alpha()');
 }
 function save_quiz() {
     checked_passages = $('#passagetree').jstree('get_checked', null, false);
@@ -2514,24 +2513,21 @@ function trigger_preview_results(preview_data) {
         type: 'POST',
         data: preview_data,
         success: function (response) {
-            console.log(response);
             response_js = response;
         },
         error: function (error) {
             console.log(error);
         }
     });
-    console.log('Response JS: ', response_js);
     return response_js;
 }
 function package_preview_data() {
     var desc = ckeditor.val();
-    var checked_passages = $('#passagetree').jstree('get_checked', null, false);
+    var checked_passages = $('.jstree-checked');
     var selected_paths = [];
-    for (var i = 0; i < checked_passages.length; ++i) {
-        var r = $(checked_passages[i]).data('ref');
-        if (r != '')
-            selected_paths.push(r);
+    for (var i = 0; i < checked_passages.length; i++) {
+        var r = checked_passages[i].getAttribute('data-ref');
+        selected_paths.push(r);
     }
     var maylocate = $('#maylocate_cb').prop('checked');
     var sentbefore = $('#sentbefore').val();
@@ -2555,20 +2551,22 @@ function package_preview_data() {
         'sentbefore': sentbefore,
         'sentafter': sentafter,
         'fixedquestions': fixedquestions,
-        'randomize': randomize
+        'randomize': randomize,
+        'idx': table_idx
     };
+    preview_data_mega = preview_data;
     return preview_data;
 }
-function generate_query_data(preview_data) {
+function generate_query_data() {
     var submit_url = '/text/preview_results_backend_alpha';
     var response_data = '';
     $.ajax({
         url: submit_url,
         type: 'POST',
-        data: preview_data,
+        data: preview_data_mega,
         success: function (response) {
             response_data = response;
-            console.log(response_data);
+            $('#card-body-original').removeData();
             $('#card-body-original').append(response_data);
         },
         error: function (error) {
@@ -2577,43 +2575,82 @@ function generate_query_data(preview_data) {
         }
     });
 }
-function add_book_buttons(preview_data) {
-    var selected_paths = preview_data.selected_paths;
-    console.log('SELECTED PATHS: ', selected_paths);
+function add_book_buttons() {
+    var selected_paths = preview_data_mega.selected_paths;
     for (var i = 0; i < selected_paths.length; i++) {
         var pathname = selected_paths[i];
-        var cell = $("<tr></tr>");
-        var row = $("<td id=row_book_".concat(i, "></td>"));
-        var preview_data_str = JSON.stringify(preview_data).replace(/"/g, "'");
-        var button = $("<button data-toggle=\"collapse\" data-target=\"#accbody2\" id=book_".concat(i, " class=\"btn text-left\" onclick=add_reference_table(").concat(i, ")>").concat(pathname, "</button>"));
-        row.append(button);
-        cell.append(row);
-        $('#cardhead').append(cell);
+        if (i == 0) {
+            var cell = $("<tr></tr>");
+            var row = $("<td id=row_book_".concat(i, "></td>"));
+            var button = $("<button data-toggle=\"collapse\" data-target=\"#accbody2\" id=book_".concat(i, " class=\"btn text-left\" onclick=add_reference_table(").concat(i, ")>").concat(pathname, "</button>"));
+            var results_box = $("<span id=\"n_results\" style=\"padding-left:20px;\"><b>".concat(localize('results_prompt'), "</b></span>"));
+            row.append(button);
+            row.append(results_box);
+            cell.append(row);
+            $('#cardhead').append(cell);
+        }
+        else {
+            var card = $('<div class="card"></div>');
+            var card_header = $("<div id=\"cardhead_".concat(i, "\" class=\"card-header\"></div>"));
+            var cell = $("<tr></tr>");
+            var row = $("<td id=row_book_".concat(i, "></td>"));
+            var button = $("<button data-toggle=\"collapse\" data-target=\"#accbody2\" id=book_".concat(i, " class=\"btn text-left\" onclick=add_reference_table(").concat(i, ")>").concat(pathname, "</button>"));
+            row.append(button);
+            cell.append(row);
+            card_header.append(cell);
+            var accbody = $("#accordion2");
+            card.append(card_header);
+            accbody.append(card);
+        }
     }
 }
-function add_reference_table(idx) {
-    var preview_data = package_preview_data();
-    generate_query_data(preview_data);
+function add_reference_table(idx, show_res) {
+    if (show_res === void 0) { show_res = false; }
     var cbody = $("#card-body-original");
-    var row_book = $("#row_book_".concat(idx));
     var leaf_count = cbody.find('table').length;
-    if (leaf_count <= 0) {
-        var table = $("<table style=\"display:block; table-layout:fixed;\" id=\"book_table_".concat(idx, "\" class=\"type2 table table-striped table-sm\"></table>"));
-        var row1 = $("<tr></tr>");
-        var reference_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Reference</th>");
-        var text_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Text</th>");
-        row1.append(reference_col);
-        row1.append(text_col);
-        table.append(row1);
-        cbody.append(table);
+    if (leaf_count <= 0 || $("#book_table_".concat(idx)).is(':hidden') || show_res === true) {
+        $("#accbody2").show();
+        cbody.show();
+        if (leaf_count <= 0 || show_res === true) {
+            var container = $("<div style=\"overflow-y:auto;\"></div>");
+            var table = $("<table style=\"display:block; height:500px;\" id=\"book_table_".concat(idx, "\" class=\"type2 table table-striped table-sm\"></table>"));
+            var row1 = $("<tr></tr>");
+            var reference_col = $("<th style=\"padding:10px; vertical-align:middle;\">Reference</th>");
+            var text_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Text</th>");
+            row1.append(reference_col);
+            row1.append(text_col);
+            table.append(row1);
+            container.append(table);
+            cbody.append(container);
+            console.log("GENERATING\n");
+            generate_query_data();
+            init = true;
+        }
+        else {
+            $("#book_table_".concat(idx)).show();
+        }
     }
     else {
-        $("#book_table_".concat(idx)).remove();
+        $("#book_table_".concat(idx)).hide();
+        $("#accbody2").hide();
+        cbody.hide();
     }
 }
 function preview_results_frontend_alpha() {
-    console.log("Welcome to preview_results_frontend_alpha()\n");
-    var preview_data = package_preview_data();
+    if (typeof preview_data_mega === 'undefined') {
+        show_results = true;
+        package_preview_data();
+        console.log('Initial Test Query!');
+    }
+    else {
+        show_results = !show_results;
+        console.log('Not Initial Test Query!');
+        if (show_results === true) {
+            package_preview_data();
+        }
+    }
+    console.log('Show Results: ', show_results);
+    console.log('Preview Data Mega: ', preview_data_mega);
     if ($('#fpan2').is(':hidden')) {
         $('#fpan2').show();
     }
@@ -2622,48 +2659,10 @@ function preview_results_frontend_alpha() {
     }
     var chead_data = $('#cardhead');
     if (chead_data.is(':empty')) {
-        add_book_buttons(preview_data);
+        add_book_buttons();
     }
-    else {
-        chead_data.empty();
-    }
-}
-function preview_results() {
-    var desc = ckeditor.val();
-    var checked_passages = $('#passagetree').jstree('get_checked', null, false);
-    var selected_paths = [];
-    for (var i = 0; i < checked_passages.length; ++i) {
-        var r = $(checked_passages[i]).data('ref');
-        if (r != '')
-            selected_paths.push(r);
-    }
-    var maylocate = $('#maylocate_cb').prop('checked');
-    var sentbefore = $('#sentbefore').val();
-    var sentafter = $('#sentafter').val();
-    var fixedquestions = +$('#fixedquestions').val();
-    var randomize = $('#randomorder').prop('checked');
-    if (!(fixedquestions > 0))
-        fixedquestions = 0;
-    var sentenceSelection = panelSent.getInfo();
-    var quizObjectSelection = panelSentUnit.getInfo();
-    var quizFeatures = panelFeatures.getInfo();
-    var preview_data = {
-        'desc': desc,
-        'database': decoded_3et.database,
-        'properties': decoded_3et.properties,
-        'selected_paths': selected_paths,
-        'sentenceSelection': sentenceSelection,
-        'quizObjectSelection': quizObjectSelection,
-        'quizFeatures': quizFeatures,
-        'maylocate': maylocate,
-        'sentbefore': sentbefore,
-        'sentafter': sentafter,
-        'fixedquestions': fixedquestions,
-        'randomize': randomize
-    };
-    var response_js = trigger_preview_results(preview_data);
-    console.log('Response JS: ', response_js);
-    $('#tab_sample_results').text(response_js);
+    add_reference_table(table_idx, show_results);
+    table_idx++;
 }
 function save_quiz2() {
     decoded_3et.desc = ckeditor.val();

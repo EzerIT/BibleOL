@@ -318,22 +318,34 @@ class Ctrl_text extends MY_Controller {
     }
 
     public function preview_results_backend_alpha(){
-        //echo "Preview Results Alpha Backend\n";
+        echo "BACKEND!!";
         $this->load->model('mod_quizpath' );
         $this->load->model('mod_askemdros');
         $this->load->model('mod_localize');
-        $number_of_quizzes = 5;
+    
+        
         $preview_data = json_encode($_POST);
         $preview_data = json_decode($preview_data);
+        $table_idx = $preview_data->idx;
+        
+        //echo "Preview Data: " . json_encode($preview_data) . "\n";
         $sentence_selector = $this->mod_askemdros->get_sentence_selector($preview_data);
-        $display_data = $this->mod_askemdros->preview_quiz($number_of_quizzes, $preview_data, $sentence_selector);
-        $main_sheaf = $display_data['main_sheaf'];
+        $display_data = $this->mod_askemdros->preview_quiz($preview_data, $sentence_selector);
+        //$number_of_quizzes = $display_data->n_candidates;
+        //echo "\nDICTIONARIES: " . json_encode($this->mod_askemdros->dictionaries_json) . "\n";
+
+        //$main_sheaf = $display_data['main_sheaf'];
         //$javascripts = array('js/ol.js');
         $javascripts = array('jstree/jquery.jstree.js',
                                  'ckeditor/ckeditor.js',
                                  'ckeditor/adapters/jquery.js',
                                  'js/editquiz.js',
                                  'js/ol.js');
+
+        $mo = json_decode($this->mod_askemdros->dictionaries_json)->monadObjects;                 
+        file_put_contents('dictionaries-test.json', json_encode($mo));
+        
+
         $display_data2 = array(
             'is_quiz' => true,
             'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
@@ -346,7 +358,10 @@ class Ctrl_text extends MY_Controller {
             'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
             'is_logged_in' => $this->mod_users->is_logged_in(),
             'js_list' => $javascripts,
-            'css_list' => array('styles/selectbox.css')
+            'css_list' => array('styles/selectbox.css'),
+            'n_candidates'=>$display_data['n_candidates'],
+            'table_idx'=>$table_idx
+
           );
         
         
@@ -367,8 +382,9 @@ class Ctrl_text extends MY_Controller {
                                              'css_list' => array('styles/selectbox.css'),
                                              'js_list' => $javascripts));
         */
-
-        //echo "Display Data-2: " . json_encode($display_data2) . "\n";
+        $data = json_decode($this->mod_askemdros->dictionaries_json)->monadObjects[0];
+        //echo "Display Data-2: " . json_encode($data) . "\n";
+        echo "Table IDX: " . $table_idx . "\n";
     }
 
     public function preview_results(){
