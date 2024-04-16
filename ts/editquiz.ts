@@ -62,7 +62,8 @@ declare let test_quiz_url      : string;   // URL for testing an exercise
 declare let import_shebanq_url : string;   // URL for ajax queries for imports from SHEBANQ (Note: This is a URL on the Bible OL server, not the SHEBANQ server)
 declare let quiz_name          : string;   // Name of exercise file
 declare let dir_name           : string;   // Name of exercise file directory
-
+declare let preview_data_mega  : any;      // JSON used to display query return data
+declare let show_results       : boolean;  // Show the results of the test query
 
 //****************************************************************************************************
 // Other globale variables
@@ -80,7 +81,8 @@ let isSubmitting       : boolean = false;              // Are we in the process 
 let checked_passages   : any[];                        // Selected Bible passages
 let ckeditor           : any;                          // Text editor
 let charset            : Charset;                      // Character set
-
+let init               : boolean = false;              // Initialization flag
+let table_idx          : number = 0;                   // Table index
 
 //****************************************************************************************************
 // isDirty function
@@ -151,9 +153,7 @@ function hide_error(id : string) : void {
     $(id).hide();
 }
 
-function alpha(): void {
-    console.log('Welcome to alpha()');
-}
+
 
 //****************************************************************************************************
 // save_quiz function
@@ -382,7 +382,7 @@ function trigger_preview_results(preview_data:object): string{
         data: preview_data,
         success: function(response) {
             // Handle the response here
-            console.log(response);
+            //console.log(response);
             response_js = response;
 
         },
@@ -391,19 +391,31 @@ function trigger_preview_results(preview_data:object): string{
             console.log(error);
         }
     });
-    console.log('Response JS: ', response_js)
+    //console.log('Response JS: ', response_js)
     return response_js;
 
 }
 function package_preview_data(): any {
     let desc = ckeditor.val();
-    let checked_passages = $('#passagetree').jstree('get_checked',null,false);
+    /*
+    let checked_passages = $('#passagetree').jstree('get_checked');
     let selected_paths = []
     for (let i=0; i<checked_passages.length; ++i) {
         let r = $(checked_passages[i]).data('ref');
+        console.log('REF: ', r)
         if (r!='')
             selected_paths.push(r);
     }
+    */
+   let checked_passages = $('.jstree-checked');
+   let selected_paths = [];
+   for(let i = 0; i < checked_passages.length; i++) {
+    let r = checked_passages[i].getAttribute('data-ref');
+    selected_paths.push(r);
+   }
+
+    //let checked_paths_exp = $('#passagetree ul input[type="checkbox"]:checked') 
+
     let maylocate = $('#maylocate_cb').prop('checked');
     let sentbefore = $('#sentbefore').val();
     let sentafter = $('#sentafter').val();
@@ -426,23 +438,27 @@ function package_preview_data(): any {
         'sentbefore': sentbefore,
         'sentafter': sentafter,
         'fixedquestions': fixedquestions,
-        'randomize': randomize
+        'randomize': randomize,
+        'idx': table_idx
     }
+    preview_data_mega = preview_data;
+    
     return preview_data;
 
 }
 
-function generate_query_data(preview_data:any):void {
+function generate_query_data():void {
     // generate query data
     let submit_url = '/text/preview_results_backend_alpha';
     let response_data = '';
     $.ajax({
         url: submit_url,
         type: 'POST',
-        data: preview_data,
+        data: preview_data_mega,
         success: function(response) {
             response_data = response;
-            console.log(response_data);
+            //console.log(response_data);
+            $('#card-body-original').removeData();
             $('#card-body-original').append(response_data);
             
         },
@@ -455,130 +471,125 @@ function generate_query_data(preview_data:any):void {
 }
 
 
-function add_book_buttons(preview_data:any): void {
-    let selected_paths = preview_data.selected_paths;
-    console.log('SELECTED PATHS: ', selected_paths);
+function add_book_buttons(): void {
+    // get the series of books
+    let selected_paths = preview_data_mega.selected_paths;
     for(let i = 0; i < selected_paths.length; i++){
         let pathname = selected_paths[i];
-        let cell = $(`<tr></tr>`);
-        let row = $(`<td id=row_book_${i}></td>`);
-        let preview_data_str = JSON.stringify(preview_data).replace(/"/g, "'");
-        //let button = $(`<button id=book_${i} onclick=add_reference_table(${i}, ${JSON.stringify(preview_data)}) class="btn text-left">${pathname}</button>`);
-        let button = $(`<button data-toggle="collapse" data-target="#accbody2" id=book_${i} class="btn text-left" onclick=add_reference_table(${i})>${pathname}</button>`); 
-        //let newline = $(`<br><br>`);
-        row.append(button);
-        //row.append(newline);
-        cell.append(row);
-        $('#cardhead').append(cell);
+
+        if(i == 0) {
+            // first book
+            let cell = $(`<tr></tr>`);
+            let row = $(`<td id=row_book_${i}></td>`);
+            let button = $(`<button data-toggle="collapse" data-target="#accbody2" id=book_${i} class="btn text-left" onclick=add_reference_table(${i})>${pathname}</button>`); 
+            let results_box = $(`<span id="n_results" style="padding-left:20px;"><b>${localize('results_prompt')}</b></span>`);
+            row.append(button);
+            row.append(results_box);
+            cell.append(row);
+            // add button to card head
+            $('#cardhead').append(cell);    
+        }
+        else {
+            // create a new card body and header
+            let card : JQuery = $('<div class="card"></div>');
+            let card_header : JQuery = $(`<div id="cardhead_${i}" class="card-header"></div>`);
+            let cell = $(`<tr></tr>`);
+            let row = $(`<td id=row_book_${i}></td>`);
+            let button = $(`<button data-toggle="collapse" data-target="#accbody2" id=book_${i} class="btn text-left" onclick=add_reference_table(${i})>${pathname}</button>`); 
+            row.append(button);
+            cell.append(row);
+            card_header.append(cell)
+            let accbody = $(`#accordion2`);
+            card.append(card_header);
+            accbody.append(card);
+
+        }
+        
     }
 
 }
 
-function add_reference_table(idx:number): void {
+function add_reference_table(idx:number, show_res: boolean = false): void {
     // generate query
-    let preview_data = package_preview_data();
-    generate_query_data(preview_data);
+    //let preview_data = package_preview_data();
+    //console.log('Preview Data Mega: ', preview_data_mega);
+    //console.log('INIT: ', init);
     // create table
     let cbody = $(`#card-body-original`);
-    let row_book = $(`#row_book_${idx}`);
+    //let row_book = $(`#row_book_${idx}`);
     let leaf_count = cbody.find('table').length;
     //console.log('Leaf Count: ', leaf_count);
-    if(leaf_count <= 0){
-        let table = $(`<table style="display:block; table-layout:fixed;" id="book_table_${idx}" class="type2 table table-striped table-sm"></table>`);
-        let row1 = $(`<tr></tr>`);
-        let reference_col = $(`<th style="padding:10px; text-align:center; vertical-align:middle;">Reference</th>`);
-        let text_col = $(`<th style="padding:10px; text-align:center; vertical-align:middle;">Text</th>`);
-        row1.append(reference_col);
-        row1.append(text_col);
-        table.append(row1);
-        cbody.append(table);
-        //cbody.append(row_book);
+
+
+    
+    if(leaf_count <= 0 || $(`#book_table_${idx}`).is(':hidden') || show_res === true) {
+        $(`#accbody2`).show();
+        cbody.show();
+        if(leaf_count <= 0 || show_res === true) {
+            let container = $(`<div style="overflow-y:auto;"></div>`)
+            let table = $(`<table style="display:block; height:500px;" id="book_table_${idx}" class="type2 table table-striped table-sm"></table>`);
+            let row1 = $(`<tr></tr>`);
+            let reference_col = $(`<th style="padding:10px; vertical-align:middle;">Reference</th>`);
+            let text_col = $(`<th style="padding:10px; text-align:center; vertical-align:middle;">Text</th>`);
+            row1.append(reference_col);
+            row1.append(text_col);
+            table.append(row1);
+            container.append(table);
+            cbody.append(container);
+            console.log("GENERATING\n");
+            generate_query_data();
+            init = true;
+        }
+        else {
+            $(`#book_table_${idx}`).show();
+        }
+                               
     }
     else {
-        $(`#book_table_${idx}`).remove();
+        $(`#book_table_${idx}`).hide();
+        $(`#accbody2`).hide();
+        cbody.hide();
     }
-    
-    
-    
-
 
 }
 
 function preview_results_frontend_alpha(): void {
-    console.log("Welcome to preview_results_frontend_alpha()\n");
-    let preview_data = package_preview_data();
+    //console.log("Welcome to preview_results_frontend_alpha()\n");
+    if(typeof preview_data_mega === 'undefined'){
+        show_results = true;
+        package_preview_data();
+        console.log('Initial Test Query!');
+    }
+    else {
+        show_results = !show_results;
+        console.log('Not Initial Test Query!');
+        if(show_results === true){
+            package_preview_data();
+        }
+    }
+    console.log('Show Results: ', show_results);
+    console.log('Preview Data Mega: ', preview_data_mega);
+
     
+    
+    // Toggle Feature Panel 2 (fpan2)
     if($('#fpan2').is(':hidden')){
         $('#fpan2').show();
     }
     else {
         $('#fpan2').hide();
     }
-    //console.log('Preview Data: ', preview_data);
-    //console.log('Selected Paths: ', preview_data.selected_paths);
-    
+        
+    // if the cardhead is empty, add the book buttons
     let chead_data = $('#cardhead');
     if(chead_data.is(':empty')){
-        add_book_buttons(preview_data);
+        add_book_buttons();
     }
-    else {
-        chead_data.empty();
-    }
-    /*
-    let tq_output = $('#tq_output');
-    if(tq_output.is(':empty')) {
-        add_book_buttons(preview_data);
-    }
-    else {
-        tq_output.empty();
-    }
-    */
-}
 
-function preview_results(): void {
-    let desc = ckeditor.val();
-    
-    let checked_passages = $('#passagetree').jstree('get_checked',null,false);
-    let selected_paths = []
-    for (let i=0; i<checked_passages.length; ++i) {
-        let r = $(checked_passages[i]).data('ref');
-        if (r!='')
-            selected_paths.push(r);
-    }
-    let maylocate = $('#maylocate_cb').prop('checked');
-    let sentbefore = $('#sentbefore').val();
-    let sentafter = $('#sentafter').val();
-    let fixedquestions = + $('#fixedquestions').val(); // Convert to number
-    let randomize = $('#randomorder').prop('checked');
-    if(!(fixedquestions>0))
-        fixedquestions = 0;
-    let sentenceSelection   = panelSent.getInfo();
-    //console.log('Sentence Selection: ', sentenceSelection);
-    let quizObjectSelection = panelSentUnit.getInfo();
-    let quizFeatures        = panelFeatures.getInfo();
-    let preview_data = {
-        'desc': desc,
-        'database': decoded_3et.database,
-        'properties': decoded_3et.properties,
-        'selected_paths': selected_paths,
-        'sentenceSelection': sentenceSelection,
-        'quizObjectSelection': quizObjectSelection,
-        'quizFeatures': quizFeatures,
-        'maylocate': maylocate,
-        'sentbefore': sentbefore,
-        'sentafter': sentafter,
-        'fixedquestions': fixedquestions,
-        'randomize': randomize
-    }
-    
-    //console.log('Preview Data: ', preview_data);
-    // output the query ingredients to the tab_sample_results in view_edit_quiz.php
-    //$('#tab_sample_results').text(JSON.stringify(preview_data, null, 4));
-
-    let response_js = trigger_preview_results(preview_data); 
-    console.log('Response JS: ', response_js); 
-    $('#tab_sample_results').text(response_js);
-  
+    // add the first table
+    //let initial_idx = 0;
+    add_reference_table(table_idx, show_results);
+    table_idx++;
 }
 
 //****************************************************************************************************

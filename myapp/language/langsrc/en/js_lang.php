@@ -49,6 +49,7 @@ $lang['other_sentence_unit_types'] = "Other types";
 $lang['other_value'] = "Something else";
 $lang['passage_selection'] = "Passage selection";
 $lang['request'] = "Request";
+$lang['results_prompt'] = "Results: ";
 $lang['save'] = "Save";
 $lang['select_1_or_more'] = "Select one or more:";
 $lang['sending_statistics'] = "Sending statistics to server...";

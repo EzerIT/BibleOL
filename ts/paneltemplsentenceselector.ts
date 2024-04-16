@@ -157,7 +157,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         let table_query_output : JQuery = $('<table style="width:100%" id="tq_output_mega"></table>');
         let row   : JQuery;
         let cell  : JQuery;
-        let fpan2 : JQuery = $('<div style="display:none" id="fpan2"></div>');          
+        let fpan2 : JQuery = $('<div style="display:none; padding-top:10px;" id="fpan2"></div>');          
         let accordion2 : JQuery = $('<div id="accordion2" class="accordion"></div>');
         let card : JQuery = $('<div class="card"></div>');
         let card_header : JQuery = $('<div id="cardhead" class="card-header"></div>');

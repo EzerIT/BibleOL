@@ -14,9 +14,14 @@
 
 <?php 
   //echo "Quiz Data: " . var_dump($quizData_json) . "<br>";
-  $data = json_encode(json_decode($dictionaries_json)->monadObjects[0]);
-  file_put_contents('data.json', $data);
+  //$data = json_encode(json_decode($dictionaries_json)->monadObjects[0]);
+  //file_put_contents('data.json', $data);
 ?>
+
+<script>
+  var count = <?= $n_candidates ?>;
+  $('#n_results').append(count);
+</script>
 
 
 <script>
@@ -27,25 +32,25 @@
     var l10n_js = <?= $l10n_js_json ?>;
     var typeinfo = <?= $typeinfo_json ?>;
     var quizdata = <?= $quizData_json ?>;
+    var table_idx = <?= $table_idx ?>;
     var site_url = '<?= site_url() ?>';
+    
 
-    <?php $this->load->helper('icon_helper'); ?>
-    var l_icon_map = <?= L_icon::json() ?>;
-
-    $(function() {
-            $('.mqlarea').hide();
-            $('button#togglemql').click(function() {
-                    $('.mqlarea').toggle();
-                });
-        });
+    
 </script>
 
 
+<?php 
+  echo "LOAD!!!!<br>";
+?>
+<script>
+  console.log('CONSOLE LOAD!!!');
+</script>
 
 <script>
     //console.log("Dictionaries: " + JSON.stringify(dictionaries['monadObjects']));
     let monadObjects = dictionaries['monadObjects'];
-    //console.log('Monad Objects: ', monadObjects);
+    console.log('Monad Objects Length: ', monadObjects.length);
     let sentences = [];
     let sentence_i = '<span class="textdisplay greek" style="white-space:break-spaces;" >';
     for(let i = 0; i < monadObjects.length; i++){
@@ -62,9 +67,6 @@
       sentences.push(sentence_i);
       sentence_i = '<span class="textdisplay greek" style="white-space:break-spaces;" >';
     }
-    console.log('Sentences: ', sentences);
-
-
 
     let references = [];
     for(let i = 0; i < monadObjects.length; i++) {
@@ -76,7 +78,8 @@
       let cell_txt = $(`<td style="white-space:pre; word-wrap: anywhere;">${sentences[i]}</td>`);
       row.append(cell_ref);
       row.append(cell_txt);
-      $('#book_table_0').append(row);
+      //console.log('Entry: ', entry);
+      $(`#book_table_${table_idx}`).append(row);
     }
     //console.log('References: ', references);
 </script>

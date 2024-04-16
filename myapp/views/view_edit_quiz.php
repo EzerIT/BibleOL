@@ -78,6 +78,7 @@
   var l10n_js = <?= $l10n_js_json ?>;
   var typeinfo = <?= $typeinfo_json ?>;
   var decoded_3et = <?= $decoded_3et_json ?>;
+  var preview_data = <?= $decoded_3et_json ?>;
   var initial_universe = <?= $universe ?>;
   var submit_to = '<?= site_url("text/submit_quiz") ?>';
   var check_url = '<?= site_url("text/check_submit_quiz") ?>';
