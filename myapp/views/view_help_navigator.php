@@ -56,7 +56,8 @@ $menu = array(
         ),
 
     'Exams' => array('exam_introduction'   => array(0,'Introduction to Exams'),
-        'AU_exam_hebrew'  => array(1,'Andrews University final Hebrew Exam'),
+        'AU_exam_hebrewI'  => array(1,'Andrews University Final Exam: Hebrew I'),
+        'AU_exam_hebrewII'  => array(1,'Andrews University Final Exam: Hebrew II'),
         'AU_qualifier_hebrew'  => array(1,'Andrews University Hebrew Placement Exam'),
         'AU_exam_greek'  => array(1,'Andrews University final Greek Exam'),
         'AU_qualifier_greek'  => array(1,'Andrews University Greek Placement Exam'),        
