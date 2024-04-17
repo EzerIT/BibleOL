@@ -83,7 +83,6 @@ let ckeditor           : any;                          // Text editor
 let charset            : Charset;                      // Character set
 let init               : boolean = false;              // Initialization flag
 let table_idx          : number = 0;                   // Table index
-
 //****************************************************************************************************
 // isDirty function
 //
@@ -474,42 +473,82 @@ function generate_query_data():void {
 function add_book_buttons(): void {
     // get the series of books
     let selected_paths = preview_data_mega.selected_paths;
-    for(let i = 0; i < selected_paths.length; i++){
-        let pathname = selected_paths[i];
-
+    console.log('SELECTED PATHS: ', selected_paths);
+    for(let i = 0; i < selected_paths.length; i++) {
+        let pathname = selected_paths[i];        
         if(i == 0) {
             // first book
-            let cell = $(`<tr></tr>`);
+            let cell = $(`<tr class="bookrow"></tr>`);
             let row = $(`<td id=row_book_${i}></td>`);
-            let button = $(`<button data-toggle="collapse" data-target="#accbody2" id=book_${i} class="btn text-left" onclick=add_reference_table(${i})>${pathname}</button>`); 
+            let button = $(`<button data-toggle="collapse" data-target="" id=book_${i} class="btn text-left" onclick=toggle_cbody(${i})>${pathname}</button>`); 
             let results_box = $(`<span id="n_results" style="padding-left:20px;"><b>${localize('results_prompt')}</b></span>`);
+            let actual_count = $(`<span id="actual_count">0</span>`);
+            results_box.append(actual_count);
             row.append(button);
             row.append(results_box);
+
             cell.append(row);
             // add button to card head
-            $('#cardhead').append(cell);    
+            if($('#cardhead tr').length === 0){
+                $('#cardhead').append(cell);    
+            }
         }
         else {
             // create a new card body and header
             let card : JQuery = $('<div class="card"></div>');
             let card_header : JQuery = $(`<div id="cardhead_${i}" class="card-header"></div>`);
-            let cell = $(`<tr></tr>`);
+            let cell = $(`<tr class="bookrow"></tr>`);
             let row = $(`<td id=row_book_${i}></td>`);
-            let button = $(`<button data-toggle="collapse" data-target="#accbody2" id=book_${i} class="btn text-left" onclick=add_reference_table(${i})>${pathname}</button>`); 
+            let button = $(`<button data-toggle="collapse" data-target="" id=book_${i} class="btn text-left" onclick=toggle_cbody(${i})>${pathname}</button>`); 
             row.append(button);
             cell.append(row);
             card_header.append(cell)
             let accbody = $(`#accordion2`);
-            card.append(card_header);
-            accbody.append(card);
+            if($(`.card #cardhead_${i}`).length === 0){
+                card.append(card_header);
+                accbody.append(card);
+                // add a new card body
+                let new_card_body : JQuery = $(`<div id="card-body-original${i}" class="card-body"></div>`);
+                let new_accbody  : JQuery = $(`<div id="accbody2_${i}" class="" parent=""></div>`);
+                new_accbody.append(new_card_body);
+                card.append(new_accbody);
+            }
 
-        }
-        
+        }                                       
     }
 
 }
 
+function toggle_cbody(idx:number): void {
+    let cbody = $(`#card-body-original`);
+    if(idx > 0 ){
+        cbody = $(`#card-body-original${idx}`);
+        if(cbody.is(':hidden')) {
+            cbody.show();
+        }
+        else {
+            cbody.hide();
+        }
+    }
+    else {
+        if(cbody.is(':hidden')) {
+            cbody.show();
+        }
+        else {
+            cbody.hide();
+        }
+    }
+
+    
+    
+
+}
+
 function add_reference_table(idx:number, show_res: boolean = false): void {
+    //toggle_cbody(idx);
+    idx = table_idx;
+
+    let parent_button = $(`#book_${idx}`);
     // generate query
     //let preview_data = package_preview_data();
     //console.log('Preview Data Mega: ', preview_data_mega);
@@ -518,7 +557,7 @@ function add_reference_table(idx:number, show_res: boolean = false): void {
     let cbody = $(`#card-body-original`);
     //let row_book = $(`#row_book_${idx}`);
     let leaf_count = cbody.find('table').length;
-    //console.log('Leaf Count: ', leaf_count);
+    console.log('Leaf Count: ', leaf_count);
 
 
     
@@ -527,7 +566,7 @@ function add_reference_table(idx:number, show_res: boolean = false): void {
         cbody.show();
         if(leaf_count <= 0 || show_res === true) {
             let container = $(`<div style="overflow-y:auto;"></div>`)
-            let table = $(`<table style="display:block; height:500px;" id="book_table_${idx}" class="type2 table table-striped table-sm"></table>`);
+            let table = $(`<table style="display:block; height:500px;" id="book_table_${idx}" class="type2 table table-striped table-sm table-res"></table>`);
             let row1 = $(`<tr></tr>`);
             let reference_col = $(`<th style="padding:10px; vertical-align:middle;">Reference</th>`);
             let text_col = $(`<th style="padding:10px; text-align:center; vertical-align:middle;">Text</th>`);
@@ -546,8 +585,8 @@ function add_reference_table(idx:number, show_res: boolean = false): void {
                                
     }
     else {
-        $(`#book_table_${idx}`).hide();
-        $(`#accbody2`).hide();
+        //$(`#book_table_${idx}`).hide();
+        //$(`#accbody2`).hide();
         cbody.hide();
     }
 
@@ -581,14 +620,19 @@ function preview_results_frontend_alpha(): void {
     }
         
     // if the cardhead is empty, add the book buttons
+    /*
     let chead_data = $('#cardhead');
     if(chead_data.is(':empty')){
         add_book_buttons();
     }
+    */
+    add_book_buttons();
 
     // add the first table
     //let initial_idx = 0;
     add_reference_table(table_idx, show_results);
+    console.log('TABLE IDX: ', table_idx);
+
     table_idx++;
 }
 
