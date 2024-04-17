@@ -318,7 +318,6 @@ class Ctrl_text extends MY_Controller {
     }
 
     public function preview_results_backend_alpha(){
-        echo "BACKEND!!";
         $this->load->model('mod_quizpath' );
         $this->load->model('mod_askemdros');
         $this->load->model('mod_localize');
@@ -384,7 +383,6 @@ class Ctrl_text extends MY_Controller {
         */
         $data = json_decode($this->mod_askemdros->dictionaries_json)->monadObjects[0];
         //echo "Display Data-2: " . json_encode($data) . "\n";
-        echo "Table IDX: " . $table_idx . "\n";
     }
 
     public function preview_results(){

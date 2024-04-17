@@ -1206,7 +1206,7 @@ var PanelTemplSentenceSelector = (function (_super) {
         var accordion2 = $('<div id="accordion2" class="accordion"></div>');
         var card = $('<div class="card"></div>');
         var card_header = $('<div id="cardhead" class="card-header"></div>');
-        var accbody = $('<div id="accbody2" class="collapse-show" parent="#accordion2"></div>');
+        var accbody = $('<div id="accbody2" class="" parent=""></div>');
         var card_body = $('<div id="card-body-original" class="card-body"></div>');
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
@@ -2577,43 +2577,77 @@ function generate_query_data() {
 }
 function add_book_buttons() {
     var selected_paths = preview_data_mega.selected_paths;
+    console.log('SELECTED PATHS: ', selected_paths);
     for (var i = 0; i < selected_paths.length; i++) {
         var pathname = selected_paths[i];
         if (i == 0) {
-            var cell = $("<tr></tr>");
+            var cell = $("<tr class=\"bookrow\"></tr>");
             var row = $("<td id=row_book_".concat(i, "></td>"));
-            var button = $("<button data-toggle=\"collapse\" data-target=\"#accbody2\" id=book_".concat(i, " class=\"btn text-left\" onclick=add_reference_table(").concat(i, ")>").concat(pathname, "</button>"));
+            var button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\" onclick=toggle_cbody(").concat(i, ")>").concat(pathname, "</button>"));
             var results_box = $("<span id=\"n_results\" style=\"padding-left:20px;\"><b>".concat(localize('results_prompt'), "</b></span>"));
+            var actual_count = $("<span id=\"actual_count\">0</span>");
+            results_box.append(actual_count);
             row.append(button);
             row.append(results_box);
             cell.append(row);
-            $('#cardhead').append(cell);
+            if ($('#cardhead tr').length === 0) {
+                $('#cardhead').append(cell);
+            }
         }
         else {
             var card = $('<div class="card"></div>');
             var card_header = $("<div id=\"cardhead_".concat(i, "\" class=\"card-header\"></div>"));
-            var cell = $("<tr></tr>");
+            var cell = $("<tr class=\"bookrow\"></tr>");
             var row = $("<td id=row_book_".concat(i, "></td>"));
-            var button = $("<button data-toggle=\"collapse\" data-target=\"#accbody2\" id=book_".concat(i, " class=\"btn text-left\" onclick=add_reference_table(").concat(i, ")>").concat(pathname, "</button>"));
+            var button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\" onclick=toggle_cbody(").concat(i, ")>").concat(pathname, "</button>"));
             row.append(button);
             cell.append(row);
             card_header.append(cell);
             var accbody = $("#accordion2");
-            card.append(card_header);
-            accbody.append(card);
+            if ($(".card #cardhead_".concat(i)).length === 0) {
+                card.append(card_header);
+                accbody.append(card);
+                var new_card_body = $("<div id=\"card-body-original".concat(i, "\" class=\"card-body\"></div>"));
+                var new_accbody = $("<div id=\"accbody2_".concat(i, "\" class=\"\" parent=\"\"></div>"));
+                new_accbody.append(new_card_body);
+                card.append(new_accbody);
+            }
+        }
+    }
+}
+function toggle_cbody(idx) {
+    var cbody = $("#card-body-original");
+    if (idx > 0) {
+        cbody = $("#card-body-original".concat(idx));
+        if (cbody.is(':hidden')) {
+            cbody.show();
+        }
+        else {
+            cbody.hide();
+        }
+    }
+    else {
+        if (cbody.is(':hidden')) {
+            cbody.show();
+        }
+        else {
+            cbody.hide();
         }
     }
 }
 function add_reference_table(idx, show_res) {
     if (show_res === void 0) { show_res = false; }
+    idx = table_idx;
+    var parent_button = $("#book_".concat(idx));
     var cbody = $("#card-body-original");
     var leaf_count = cbody.find('table').length;
+    console.log('Leaf Count: ', leaf_count);
     if (leaf_count <= 0 || $("#book_table_".concat(idx)).is(':hidden') || show_res === true) {
         $("#accbody2").show();
         cbody.show();
         if (leaf_count <= 0 || show_res === true) {
             var container = $("<div style=\"overflow-y:auto;\"></div>");
-            var table = $("<table style=\"display:block; height:500px;\" id=\"book_table_".concat(idx, "\" class=\"type2 table table-striped table-sm\"></table>"));
+            var table = $("<table style=\"display:block; height:500px;\" id=\"book_table_".concat(idx, "\" class=\"type2 table table-striped table-sm table-res\"></table>"));
             var row1 = $("<tr></tr>");
             var reference_col = $("<th style=\"padding:10px; vertical-align:middle;\">Reference</th>");
             var text_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Text</th>");
@@ -2631,8 +2665,6 @@ function add_reference_table(idx, show_res) {
         }
     }
     else {
-        $("#book_table_".concat(idx)).hide();
-        $("#accbody2").hide();
         cbody.hide();
     }
 }
@@ -2657,11 +2689,9 @@ function preview_results_frontend_alpha() {
     else {
         $('#fpan2').hide();
     }
-    var chead_data = $('#cardhead');
-    if (chead_data.is(':empty')) {
-        add_book_buttons();
-    }
+    add_book_buttons();
     add_reference_table(table_idx, show_results);
+    console.log('TABLE IDX: ', table_idx);
     table_idx++;
 }
 function save_quiz2() {

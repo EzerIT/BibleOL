@@ -161,7 +161,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         let accordion2 : JQuery = $('<div id="accordion2" class="accordion"></div>');
         let card : JQuery = $('<div class="card"></div>');
         let card_header : JQuery = $('<div id="cardhead" class="card-header"></div>');
-        let accbody : JQuery = $('<div id="accbody2" class="collapse-show" parent="#accordion2"></div>');
+        let accbody : JQuery = $('<div id="accbody2" class="" parent=""></div>');
         let card_body : JQuery = $('<div id="card-body-original" class="card-body"></div>');
 
 
