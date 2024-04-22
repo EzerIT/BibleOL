@@ -2737,7 +2737,7 @@ var Quiz = (function () {
         this.currentDictIx = -1;
         this.currentPanelQuestion = null;
         this.last_action = 'next';
-        this.previous_data = {};
+        this.quiz_dictionary = {};
         console.log('CONSTRUCTION!!!');
         this.quiz_statistics = new QuizStatistics(qid);
         this.exam_mode = inExam;
@@ -2749,22 +2749,19 @@ var Quiz = (function () {
         $('button#finish').on('click', function () { return _this.finishQuiz(true); });
         $('button#finishNoStats').on('click', function () { return _this.finishQuiz(false); });
     }
-    Quiz.prototype.loadPreviousData = function (previous_answers) {
-        $('.inputshow').empty();
-        for (var i = 0; i < previous_answers.length; i++) {
-            var answer_i = previous_answers[i];
-            if (answer_i.includes('Unanswered')) {
-                continue;
-            }
-            else {
-                $('.inputshow')[i].append(answer_i);
-            }
-        }
+    Quiz.prototype.logData = function () {
+        console.log('Quiz Statistics: ', this.quiz_statistics.questions);
+        console.log('this.currentDictIx: ', this.currentDictIx);
+        console.log('Last Action: ', this.last_action);
+        console.log('Quiz Dictionary: ', this.quiz_dictionary);
+        console.log('--------------------------------------------------------------------------');
     };
     Quiz.prototype.nextQuestion = function (first) {
         this.last_action = 'next';
         if (this.currentPanelQuestion !== null) {
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
+            var previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
+            this.savePreviousAnswer(previous_answers);
         }
         else if (quizdata.fixedquestions > 0) {
             $('button#finish').attr('disabled', 'disabled');
@@ -2799,11 +2796,61 @@ var Quiz = (function () {
         $('html, body').animate({
             scrollTop: first ? 0 : $('#myview').offset().top - 5
         }, 50);
-        console.log('<next>Quiz Statistics: ', this.quiz_statistics.questions);
-        console.log('this.currentDictIx: ', this.currentDictIx);
-        console.log('--------------------------------------------------------------------------');
+        this.logData();
+        var str_idx = this.currentDictIx.toString();
+        if (str_idx in this.quiz_dictionary) {
+            console.log('STRIDX IN QUIZ DICTIONARY!!!');
+            var previous_answers = this.quiz_dictionary[str_idx];
+            console.log('PREVIOUS ANSWERS: ', previous_answers);
+            for (var i = 0; i < previous_answers.length; i++) {
+                var answer_i = previous_answers[i];
+                if (answer_i.includes('Unanswered')) {
+                    continue;
+                }
+                else {
+                    $('.inputshow')[i].append(answer_i);
+                }
+            }
+        }
+    };
+    Quiz.prototype.loadPreviousAnswer = function () {
+        $('.inputshow').empty();
+        var str_idx = this.currentDictIx.toString();
+        if (!(str_idx in this.quiz_dictionary)) {
+            var previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
+            for (var i = 0; i < previous_answers.length; i++) {
+                var answer_i = previous_answers[i];
+                if (answer_i.includes('Unanswered')) {
+                    continue;
+                }
+                else {
+                    $('.inputshow')[i].append(answer_i);
+                }
+            }
+            this.savePreviousAnswer(previous_answers);
+        }
+        else {
+            console.log('IN HERE!!!');
+            var previous_answers = this.quiz_dictionary[str_idx];
+            for (var i = 0; i < previous_answers.length; i++) {
+                var answer_i = previous_answers[i];
+                if (answer_i.includes('Unanswered')) {
+                    continue;
+                }
+                else {
+                    $('.inputshow')[i].append(answer_i);
+                }
+            }
+            this.savePreviousAnswer(previous_answers);
+        }
+    };
+    Quiz.prototype.savePreviousAnswer = function (previous_answers) {
+        this.quiz_dictionary[this.currentDictIx.toString()] = previous_answers;
     };
     Quiz.prototype.previousQuestion = function (first) {
+        if (this.last_action === 'previous') {
+            console.log('You should not have deleted!!!');
+        }
         if (this.currentDictIx > 0) {
             $('button#next_question').removeAttr('disabled');
             var previousDict = new Dictionary(dictionaries, this.currentDictIx - 1, quizdata);
@@ -2817,24 +2864,11 @@ var Quiz = (function () {
             }
             this.currentDictIx = this.currentDictIx - 1;
         }
-        $('.inputshow').empty();
-        var previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
-        for (var i = 0; i < previous_answers.length; i++) {
-            var answer_i = previous_answers[i];
-            if (answer_i.includes('Unanswered')) {
-                continue;
-            }
-            else {
-                $('.inputshow')[i].append(answer_i);
-            }
-        }
-        this.previous_data[this.currentDictIx.toString()] = previous_answers;
+        this.loadPreviousAnswer();
+        console.log('Quiz Dictionary: ', this.quiz_dictionary);
         this.quiz_statistics.questions.splice(this.currentDictIx, 1);
-        console.log('Last Action: ', this.last_action);
-        console.log('<prev>Quiz Statistics: ', this.quiz_statistics.questions);
-        console.log('this.currentDictIx: ', this.currentDictIx);
-        console.log('--------------------------------------------------------------------------');
         this.last_action = 'previous';
+        this.logData();
     };
     Quiz.prototype.finishQuiz = function (gradingFlag) {
         var _this = this;
