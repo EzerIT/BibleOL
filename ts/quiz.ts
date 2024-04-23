@@ -20,6 +20,7 @@ class Quiz {
     private exam_mode            : boolean;              // Are we running an exam?
     private last_action          : string = 'next';      // Last action taken by the user
     private quiz_dictionary      : { [key: string]: any } = {}; // a dictionary tracking the previous answer data
+    private qd_verbose           : {[key:string]:any} = {}; // a dictionary tracking the verbose data for each question
     //------------------------------------------------------------------------------------------
     // Constructor method
     //
@@ -48,6 +49,7 @@ class Quiz {
         console.log('this.currentDictIx: ', this.currentDictIx);
         console.log('Last Action: ', this.last_action);
         console.log('Quiz Dictionary: ', this.quiz_dictionary);
+        console.log('QD Verbose: ', this.qd_verbose);
         console.log('--------------------------------------------------------------------------')
     }
 
@@ -70,6 +72,24 @@ class Quiz {
             let previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
             this.savePreviousAnswer(previous_answers);
 
+            let tracking_data : {[key:string]:any} = {};
+
+            let previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
+            let req_features = previous_data.names;
+            let nreq_features = req_features.length;
+            let user_answers = previous_data.users_answer;
+            for(let i = 0; i < user_answers.length; i++){
+                let answer_i = user_answers[i];
+                let feature_idx = i % nreq_features;
+                let feature_i = req_features[feature_idx];
+                if(feature_i in tracking_data){
+                    tracking_data[feature_i].push(answer_i);
+                }
+                else {
+                    tracking_data[feature_i] = [answer_i];
+                }
+            }
+            this.qd_verbose[this.currentDictIx.toString()] = tracking_data;
             
         }        
         else if (quizdata.fixedquestions>0) {
@@ -182,7 +202,6 @@ class Quiz {
 
     public savePreviousAnswer(previous_answers:string []) : void {
         this.quiz_dictionary[this.currentDictIx.toString()] = previous_answers;
-
     }
     
     public previousQuestion(first:boolean) : void {

@@ -2738,6 +2738,7 @@ var Quiz = (function () {
         this.currentPanelQuestion = null;
         this.last_action = 'next';
         this.quiz_dictionary = {};
+        this.qd_verbose = {};
         console.log('CONSTRUCTION!!!');
         this.quiz_statistics = new QuizStatistics(qid);
         this.exam_mode = inExam;
@@ -2754,6 +2755,7 @@ var Quiz = (function () {
         console.log('this.currentDictIx: ', this.currentDictIx);
         console.log('Last Action: ', this.last_action);
         console.log('Quiz Dictionary: ', this.quiz_dictionary);
+        console.log('QD Verbose: ', this.qd_verbose);
         console.log('--------------------------------------------------------------------------');
     };
     Quiz.prototype.nextQuestion = function (first) {
@@ -2762,6 +2764,23 @@ var Quiz = (function () {
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
             var previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
             this.savePreviousAnswer(previous_answers);
+            var tracking_data = {};
+            var previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
+            var req_features = previous_data.names;
+            var nreq_features = req_features.length;
+            var user_answers = previous_data.users_answer;
+            for (var i = 0; i < user_answers.length; i++) {
+                var answer_i = user_answers[i];
+                var feature_idx = i % nreq_features;
+                var feature_i = req_features[feature_idx];
+                if (feature_i in tracking_data) {
+                    tracking_data[feature_i].push(answer_i);
+                }
+                else {
+                    tracking_data[feature_i] = [answer_i];
+                }
+            }
+            this.qd_verbose[this.currentDictIx.toString()] = tracking_data;
         }
         else if (quizdata.fixedquestions > 0) {
             $('button#finish').attr('disabled', 'disabled');
