@@ -29,6 +29,7 @@ $lang['owner'] = "Owner";
 $lang['planned_end'] = "Planned end";
 $lang['planned_start'] = "Planned start";
 $lang['please_choose_exercises'] = "Please choose exercises";
+$lang['previous'] = "Previous";
 $lang['questions'] = "questions";
 $lang['start_date'] = "Start date";
 $lang['start_time'] = "Start time";

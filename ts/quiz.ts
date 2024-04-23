@@ -18,7 +18,8 @@ class Quiz {
     private currentPanelQuestion : PanelQuestion = null; // The current question panel
     private quiz_statistics      : QuizStatistics;       // Statistics about the execution of the exercise
     private exam_mode            : boolean;              // Are we running an exam?
-
+    private last_action          : string = 'next';      // Last action taken by the user
+    private previous_data        : { [key: string]: any } = {};
     //------------------------------------------------------------------------------------------
     // Constructor method
     //
@@ -28,15 +29,34 @@ class Quiz {
     //     qid: The server's identification of statistics for this exercise execution.
     //
     constructor(qid : number, inExam : boolean) {
+        console.log('CONSTRUCTION!!!');
         this.quiz_statistics = new QuizStatistics(qid);
         this.exam_mode = inExam;
 
         // Set up handlers for the buttons
         $('button#next_question').on('click', () => this.nextQuestion(false));
+        $('button#previous_question').on('click', () => this.previousQuestion(false));
+        if($('button#next_question').is(':hidden')){
+            $('button#previous_question').hide()
+        }
+
         $('button#finish').on('click', () => this.finishQuiz(true));
         $('button#finishNoStats').on('click', () => this.finishQuiz(false));
     }
 
+    public loadPreviousData(previous_answers:string[]) : void {
+        // load the previous answer
+        $('.inputshow').empty();
+        for(let i = 0; i < previous_answers.length; i++) {
+            let answer_i = previous_answers[i];
+            if(answer_i.includes('Unanswered')){
+                continue;
+            }
+            else {
+                $('.inputshow')[i].append(answer_i);
+            }
+        }
+    }
     //------------------------------------------------------------------------------------------
     // nextQuestion method
     //
@@ -47,10 +67,10 @@ class Quiz {
     //    first: True for the first question in a quiz
     //
     public nextQuestion(first : boolean) : void {
-        if (this.currentPanelQuestion!==null)
-            // Update statistics.
-            this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
-
+        this.last_action = 'next';
+        if (this.currentPanelQuestion!==null){
+            this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat()); // Update Statistics            
+        }        
         else if (quizdata.fixedquestions>0) {
             $('button#finish').attr('disabled', 'disabled');
             $('button#finishNoStats').attr('disabled', 'disabled');
@@ -78,7 +98,9 @@ class Quiz {
             
             // Create a panel for the next question
             this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
-            
+            if($('button#next_question').is(':hidden')){
+                $('button#previous_question').hide()
+            }
             if (this.currentDictIx+1 === dictionaries.sentenceSets.length) {
                 // This is the last question, disable the 'Next' button
                 $('button#next_question').attr('disabled', 'disabled');
@@ -96,8 +118,65 @@ class Quiz {
         $('html, body').animate({
             scrollTop: first ? 0 : $('#myview').offset().top - 5 // -5 to add take 5 additional px above myview
         }, 50);
+        console.log('<next>Quiz Statistics: ', this.quiz_statistics.questions);
+        console.log('this.currentDictIx: ', this.currentDictIx);
+        console.log('--------------------------------------------------------------------------')
 
 
+
+    }
+
+    public previousQuestion(first:boolean) : void {
+        
+        //console.log('Welcome to previousQuestion()!!!');
+        if(this.currentDictIx > 0){
+             
+            // enable the next question button if it is disabled
+            $('button#next_question').removeAttr('disabled');
+
+            // get the text for the previous question
+            let previousDict : Dictionary = new Dictionary(dictionaries, this.currentDictIx - 1, quizdata);
+
+            // empty current question data
+            $('#textarea').empty();
+            $('#quizcontainer').empty();
+            $('.quizcard').empty();
+
+            // update the progress bar
+            $('progress#progress').attr('value',this.currentDictIx).attr('max',dictionaries.sentenceSets.length);
+            
+            // Create a panel for the next question
+            this.currentPanelQuestion = new PanelQuestion(quizdata, previousDict, this.exam_mode);
+            if($('button#next_question').is(':hidden')){
+                $('button#previous_question').hide()
+            }
+            this.currentDictIx = this.currentDictIx - 1;                    
+
+        }
+        // load the previous answer
+        $('.inputshow').empty();
+        let previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
+        for(let i = 0; i < previous_answers.length; i++) {
+            let answer_i = previous_answers[i];
+            if(answer_i.includes('Unanswered')){
+                continue;
+            }
+            else {
+                $('.inputshow')[i].append(answer_i);
+            }
+        }
+        this.previous_data[this.currentDictIx.toString()] = previous_answers;
+        this.quiz_statistics.questions.splice(this.currentDictIx, 1);
+        
+        console.log('Last Action: ', this.last_action)
+        console.log('<prev>Quiz Statistics: ', this.quiz_statistics.questions);
+        console.log('this.currentDictIx: ', this.currentDictIx);
+        console.log('--------------------------------------------------------------------------')
+        this.last_action = 'previous';
+
+
+
+        
     }
 
     //------------------------------------------------------------------------------------------

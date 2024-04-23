@@ -443,6 +443,9 @@ class PanelQuestion {
             $('button#next_question').hide();
             $('button#finish').hide();
             $('button#finishNoStats').hide();
+            $('button#previous_question').hide();
+
+        
         };
 
         if (this.subQuizIndex === slides.length - 1) {
@@ -451,6 +454,8 @@ class PanelQuestion {
             $('button#next_question').show();
             $('button#finish').show();
             $('button#finishNoStats').show();
+            $('button#previous_question').show();
+
         };
 
         // Show the quizcard change
@@ -676,7 +681,8 @@ class PanelQuestion {
         let questionheaders: string[] = []; // Initialize empty array for questionheaders
                                             // For each question card, the headers are pulled out from this list
         let headInd : number = 0;           // Header index is the index into questionheaders
-
+        
+        
         /////////////////////////////
         // Define question headers //
 

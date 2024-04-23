@@ -2613,6 +2613,7 @@ var PanelQuestion = (function () {
             $('button#next_question').hide();
             $('button#finish').hide();
             $('button#finishNoStats').hide();
+            $('button#previous_question').hide();
         }
         ;
         if (this.subQuizIndex === slides.length - 1) {
@@ -2620,6 +2621,7 @@ var PanelQuestion = (function () {
             $('button#next_question').show();
             $('button#finish').show();
             $('button#finishNoStats').show();
+            $('button#previous_question').show();
         }
         ;
         for (i = 0; i < slides.length; i++) {
@@ -2734,15 +2736,36 @@ var Quiz = (function () {
         var _this = this;
         this.currentDictIx = -1;
         this.currentPanelQuestion = null;
+        this.last_action = 'next';
+        this.previous_data = {};
+        console.log('CONSTRUCTION!!!');
         this.quiz_statistics = new QuizStatistics(qid);
         this.exam_mode = inExam;
         $('button#next_question').on('click', function () { return _this.nextQuestion(false); });
+        $('button#previous_question').on('click', function () { return _this.previousQuestion(false); });
+        if ($('button#next_question').is(':hidden')) {
+            $('button#previous_question').hide();
+        }
         $('button#finish').on('click', function () { return _this.finishQuiz(true); });
         $('button#finishNoStats').on('click', function () { return _this.finishQuiz(false); });
     }
+    Quiz.prototype.loadPreviousData = function (previous_answers) {
+        $('.inputshow').empty();
+        for (var i = 0; i < previous_answers.length; i++) {
+            var answer_i = previous_answers[i];
+            if (answer_i.includes('Unanswered')) {
+                continue;
+            }
+            else {
+                $('.inputshow')[i].append(answer_i);
+            }
+        }
+    };
     Quiz.prototype.nextQuestion = function (first) {
-        if (this.currentPanelQuestion !== null)
+        this.last_action = 'next';
+        if (this.currentPanelQuestion !== null) {
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
+        }
         else if (quizdata.fixedquestions > 0) {
             $('button#finish').attr('disabled', 'disabled');
             $('button#finishNoStats').attr('disabled', 'disabled');
@@ -2760,6 +2783,9 @@ var Quiz = (function () {
                 $('div#progressbar').progressbar({ value: this.currentDictIx + 1, max: dictionaries.sentenceSets.length });
             $('#progresstext').html((this.currentDictIx + 1) + '/' + dictionaries.sentenceSets.length);
             this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
+            if ($('button#next_question').is(':hidden')) {
+                $('button#previous_question').hide();
+            }
             if (this.currentDictIx + 1 === dictionaries.sentenceSets.length) {
                 $('button#next_question').attr('disabled', 'disabled');
                 $('button#finish').removeAttr('disabled');
@@ -2773,6 +2799,42 @@ var Quiz = (function () {
         $('html, body').animate({
             scrollTop: first ? 0 : $('#myview').offset().top - 5
         }, 50);
+        console.log('<next>Quiz Statistics: ', this.quiz_statistics.questions);
+        console.log('this.currentDictIx: ', this.currentDictIx);
+        console.log('--------------------------------------------------------------------------');
+    };
+    Quiz.prototype.previousQuestion = function (first) {
+        if (this.currentDictIx > 0) {
+            $('button#next_question').removeAttr('disabled');
+            var previousDict = new Dictionary(dictionaries, this.currentDictIx - 1, quizdata);
+            $('#textarea').empty();
+            $('#quizcontainer').empty();
+            $('.quizcard').empty();
+            $('progress#progress').attr('value', this.currentDictIx).attr('max', dictionaries.sentenceSets.length);
+            this.currentPanelQuestion = new PanelQuestion(quizdata, previousDict, this.exam_mode);
+            if ($('button#next_question').is(':hidden')) {
+                $('button#previous_question').hide();
+            }
+            this.currentDictIx = this.currentDictIx - 1;
+        }
+        $('.inputshow').empty();
+        var previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
+        for (var i = 0; i < previous_answers.length; i++) {
+            var answer_i = previous_answers[i];
+            if (answer_i.includes('Unanswered')) {
+                continue;
+            }
+            else {
+                $('.inputshow')[i].append(answer_i);
+            }
+        }
+        this.previous_data[this.currentDictIx.toString()] = previous_answers;
+        this.quiz_statistics.questions.splice(this.currentDictIx, 1);
+        console.log('Last Action: ', this.last_action);
+        console.log('<prev>Quiz Statistics: ', this.quiz_statistics.questions);
+        console.log('this.currentDictIx: ', this.currentDictIx);
+        console.log('--------------------------------------------------------------------------');
+        this.last_action = 'previous';
     };
     Quiz.prototype.finishQuiz = function (gradingFlag) {
         var _this = this;
