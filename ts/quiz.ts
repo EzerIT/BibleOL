@@ -53,6 +53,39 @@ class Quiz {
         console.log('--------------------------------------------------------------------------')
     }
 
+
+    //------------------------------------------------------------------------------------------
+    // savePreviousAnswerAdvanced method
+    // 
+    // This method is called to record the previous answer, but it works for advanced question with
+    // multiple request features.
+    public savePreviousAnswerAdvanced() : void {
+        // create an object maping the request feature to an array of user input
+        let tracking_data : {[key:string]:any} = {};
+        let previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
+        console.log('Previous Data: ', previous_data);
+        let req_features = previous_data.names; // the request features (ex. lexeme, tense, etc.)
+        let nreq_features = req_features.length;
+        let user_answers = previous_data.users_answer; // the user answers (ex. 'Imperfect', 'Future', etc.)
+        
+        // for each user answer, add it to the corresponding req feature in tracking data ex. {tense: ['Imperfect', 'Future']}
+        for(let i = 0; i < user_answers.length; i++){
+            let answer_i = user_answers[i];
+            let feature_idx = i % nreq_features;
+            let feature_i = req_features[feature_idx];
+            // if the feature is already in the tracking data, append the answer to the array, otherwise add it as a new key
+            if(feature_i in tracking_data){
+                tracking_data[feature_i].push(answer_i);
+            }
+            else {
+                tracking_data[feature_i] = [answer_i];
+            }
+        }
+        // add the tracking data to the verbose data for the current question
+        // ex. {0: {tense: ['Imperfect', 'Future']}}
+        this.qd_verbose[this.currentDictIx.toString()] = tracking_data;
+
+    }
     
     //------------------------------------------------------------------------------------------
     // nextQuestion method
@@ -64,33 +97,18 @@ class Quiz {
     //    first: True for the first question in a quiz
     //
     public nextQuestion(first : boolean) : void {
+        // set the last action to 'next'
         this.last_action = 'next';
+        // if there is a current panel question, then add this question to the quiz statistics array
         if (this.currentPanelQuestion!==null){
+            console.log('currentPanelQuestion is not null...')
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat()); // Update Statistics    
             
-            // Save previous answer
-            let previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
-            this.savePreviousAnswer(previous_answers);
+            // Save the previous answer in this.quiz_dictionary and this.qd_verbose
+            //let previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
+            //this.savePreviousAnswer(previous_answers);
+            this.savePreviousAnswerAdvanced();
 
-            let tracking_data : {[key:string]:any} = {};
-
-            let previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
-            let req_features = previous_data.names;
-            let nreq_features = req_features.length;
-            let user_answers = previous_data.users_answer;
-            for(let i = 0; i < user_answers.length; i++){
-                let answer_i = user_answers[i];
-                let feature_idx = i % nreq_features;
-                let feature_i = req_features[feature_idx];
-                if(feature_i in tracking_data){
-                    tracking_data[feature_i].push(answer_i);
-                }
-                else {
-                    tracking_data[feature_i] = [answer_i];
-                }
-            }
-            this.qd_verbose[this.currentDictIx.toString()] = tracking_data;
-            
         }        
         else if (quizdata.fixedquestions>0) {
             $('button#finish').attr('disabled', 'disabled');
@@ -102,6 +120,8 @@ class Quiz {
             // We have another question
             
             // $('#virtualkbid').appendTo('#virtualkbcontainer'); // Move the keyboard back to its initial position
+            
+            // empty out the previous question data
             $('#textarea').empty();
             $('#quizcontainer').empty();
             $('.quizcard').empty();
@@ -139,9 +159,20 @@ class Quiz {
         $('html, body').animate({
             scrollTop: first ? 0 : $('#myview').offset().top - 5 // -5 to add take 5 additional px above myview
         }, 50);
+
+        // log the tracking data to the console
         this.logData();
+        if(this.currentDictIx.toString() in this.qd_verbose) {
+            this.loadPreviousAnswerAdvanced();
+        }
         
-        // load previous answer from next
+        // load previous answer from next, if this question has already been visited.
+        /*
+        if(this.currentDictIx > 1){
+            this.loadPreviousAnswer();
+        }
+        */
+        /*
         let str_idx = this.currentDictIx.toString();
         if(str_idx in this.quiz_dictionary) {
             console.log('STRIDX IN QUIZ DICTIONARY!!!');   
@@ -157,18 +188,31 @@ class Quiz {
                 }
             }
         }
+        */
 
 
     }
-    // this method loads the previously entered answer when a user clicks the previous button
+    //------------------------------------------------------------------------------------------
+    // loadPreviousAnswer method
+    //
+    // This method loads the most recent previously entered answer into a question. It only
+    // loads data into inputshow divs not radio buttons
+    //
+    
     public loadPreviousAnswer() :  void {
-        // empty the inputshow div
+
+        // empty the inputshow div this is the text area for inserting lexemes
         $('.inputshow').empty();
         
+        // the string index is the key mapping indexes to previous answers
         let str_idx = this.currentDictIx.toString();
 
+        // if the string index is not in the quiz dictionary, then the previous answer is not available
         if(!(str_idx in this.quiz_dictionary)) {
-            let previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
+            // get the data from the prior element of quiz_statistics array
+            let previous_answers = this.quiz_statistics.questions[this.currentDictIx-1].req_feat.users_answer;
+            console.log('Previous Answers: ', previous_answers);
+            // iterate over the previous answers and append them to the inputshow div
             for(let i = 0; i < previous_answers.length; i++) {
                 let answer_i = previous_answers[i];
                 if(answer_i.includes('Unanswered')){
@@ -180,8 +224,31 @@ class Quiz {
             }
             this.savePreviousAnswer(previous_answers);
         }
+        // if the string index is in the quiz dictionary, then the previous answer is available
         else {
-            console.log('IN HERE!!!');
+            console.log('PREVIOUS ANSWER AVAILABLE!!!');
+            let answer_data = this.qd_verbose[str_idx];
+            let req_features = Object.keys(answer_data);
+            console.log('REQ FEATURES: ', req_features);
+            for(let i = 0; i < req_features.length; i++) {
+                let feature_i = req_features[i];
+                for(let j = 0; j < answer_data[feature_i].length; j++) {
+                    if(answer_data[feature_i][j].includes('Unanswered')){
+                        continue;
+                    }
+                    else {
+                        if(feature_i === 'lemma'){
+                            $('.inputshow')[j].append(answer_data[feature_i][j]);
+                        }
+                        else if(feature_i === 'tense') {
+                            console.log('TENSE: ', answer_data[feature_i][j]);
+                            $(`input[name="quizitem_2"]#${answer_data[feature_i][j]}_2`).prop('checked', true);                    
+                        }
+                    }
+                    
+                }
+            }
+            /*
             let previous_answers = this.quiz_dictionary[str_idx];
             for(let i = 0; i < previous_answers.length; i++) {
                 let answer_i = previous_answers[i];
@@ -193,6 +260,7 @@ class Quiz {
                 }
             }
             this.savePreviousAnswer(previous_answers);
+            */
         }
 
 
@@ -202,6 +270,62 @@ class Quiz {
 
     public savePreviousAnswer(previous_answers:string []) : void {
         this.quiz_dictionary[this.currentDictIx.toString()] = previous_answers;
+    }
+    public getInputType(feature_name:string): string {
+        let input_type = 'radio';
+        if(feature_name === 'lemma'){
+            input_type = 'text';
+        }
+        else if(feature_name === 'raw_normalized'){
+            input_type = 'text';
+        }
+        return input_type;
+
+    }
+    public loadPreviousAnswerAdvanced() : void {
+        console.log('Welcome to loadPreviousAnswerAdvanced()');
+
+        let previous_data = this.qd_verbose[this.currentDictIx.toString()];
+        console.log('Previous Data: ', previous_data);
+        let iter = 1;
+        let n_features = Object.keys(previous_data).length;
+        for(let feat in previous_data){
+            console.log('Feature: ', feat);
+            let user_answer = previous_data[feat];
+            let input_type = this.getInputType(feat);
+            if(input_type === 'text'){
+                for(let i = 0; i < user_answer.length; i++){
+                    let user_answer_i = user_answer[i];
+                    console.log('User Answer: ', user_answer_i);
+                    if(user_answer_i.includes('Unanswered')){
+                        continue;
+                    }
+                    else {
+                        $('.inputshow')[i].append(user_answer_i);
+                    }
+                }
+            }
+            else {
+                // get the number of sub parts in the question
+                let n_parts = user_answer.length;
+
+                // for each user anser, check the corresponding radio button
+                for(let i = 0; i < n_parts; i++) {
+                    let current_answer = user_answer[i];
+                    console.log('User Answer: ', current_answer);
+
+                    if(current_answer.includes('Unanswered')){
+                        continue;
+                    }
+                    let part_id = iter + (i*n_features);
+                    let query = `input[name="quizitem_${part_id}"]#${current_answer}_${part_id}`;
+                    $(query).prop('checked', true);
+                }
+            }
+
+            iter = iter + 1;
+        }
+
     }
     
     public previousQuestion(first:boolean) : void {
@@ -233,16 +357,19 @@ class Quiz {
             this.currentDictIx = this.currentDictIx - 1;                    
 
         }
+        this.loadPreviousAnswerAdvanced();
+        // delete the last saved version of the question in case the user updates the answer
+        this.quiz_statistics.questions.splice(this.currentDictIx, 1);
+     
+
+        /*
         this.loadPreviousAnswer();
         console.log('Quiz Dictionary: ', this.quiz_dictionary);
-        this.quiz_statistics.questions.splice(this.currentDictIx, 1);
         
         this.last_action = 'previous';
         this.logData();
+        */
         
-
-
-
         
     }
 

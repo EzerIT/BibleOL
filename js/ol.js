@@ -2758,29 +2758,32 @@ var Quiz = (function () {
         console.log('QD Verbose: ', this.qd_verbose);
         console.log('--------------------------------------------------------------------------');
     };
+    Quiz.prototype.savePreviousAnswerAdvanced = function () {
+        var tracking_data = {};
+        var previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
+        console.log('Previous Data: ', previous_data);
+        var req_features = previous_data.names;
+        var nreq_features = req_features.length;
+        var user_answers = previous_data.users_answer;
+        for (var i = 0; i < user_answers.length; i++) {
+            var answer_i = user_answers[i];
+            var feature_idx = i % nreq_features;
+            var feature_i = req_features[feature_idx];
+            if (feature_i in tracking_data) {
+                tracking_data[feature_i].push(answer_i);
+            }
+            else {
+                tracking_data[feature_i] = [answer_i];
+            }
+        }
+        this.qd_verbose[this.currentDictIx.toString()] = tracking_data;
+    };
     Quiz.prototype.nextQuestion = function (first) {
         this.last_action = 'next';
         if (this.currentPanelQuestion !== null) {
+            console.log('currentPanelQuestion is not null...');
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
-            var previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
-            this.savePreviousAnswer(previous_answers);
-            var tracking_data = {};
-            var previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
-            var req_features = previous_data.names;
-            var nreq_features = req_features.length;
-            var user_answers = previous_data.users_answer;
-            for (var i = 0; i < user_answers.length; i++) {
-                var answer_i = user_answers[i];
-                var feature_idx = i % nreq_features;
-                var feature_i = req_features[feature_idx];
-                if (feature_i in tracking_data) {
-                    tracking_data[feature_i].push(answer_i);
-                }
-                else {
-                    tracking_data[feature_i] = [answer_i];
-                }
-            }
-            this.qd_verbose[this.currentDictIx.toString()] = tracking_data;
+            this.savePreviousAnswerAdvanced();
         }
         else if (quizdata.fixedquestions > 0) {
             $('button#finish').attr('disabled', 'disabled');
@@ -2816,27 +2819,16 @@ var Quiz = (function () {
             scrollTop: first ? 0 : $('#myview').offset().top - 5
         }, 50);
         this.logData();
-        var str_idx = this.currentDictIx.toString();
-        if (str_idx in this.quiz_dictionary) {
-            console.log('STRIDX IN QUIZ DICTIONARY!!!');
-            var previous_answers = this.quiz_dictionary[str_idx];
-            console.log('PREVIOUS ANSWERS: ', previous_answers);
-            for (var i = 0; i < previous_answers.length; i++) {
-                var answer_i = previous_answers[i];
-                if (answer_i.includes('Unanswered')) {
-                    continue;
-                }
-                else {
-                    $('.inputshow')[i].append(answer_i);
-                }
-            }
+        if (this.currentDictIx.toString() in this.qd_verbose) {
+            this.loadPreviousAnswerAdvanced();
         }
     };
     Quiz.prototype.loadPreviousAnswer = function () {
         $('.inputshow').empty();
         var str_idx = this.currentDictIx.toString();
         if (!(str_idx in this.quiz_dictionary)) {
-            var previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
+            var previous_answers = this.quiz_statistics.questions[this.currentDictIx - 1].req_feat.users_answer;
+            console.log('Previous Answers: ', previous_answers);
             for (var i = 0; i < previous_answers.length; i++) {
                 var answer_i = previous_answers[i];
                 if (answer_i.includes('Unanswered')) {
@@ -2849,22 +2841,79 @@ var Quiz = (function () {
             this.savePreviousAnswer(previous_answers);
         }
         else {
-            console.log('IN HERE!!!');
-            var previous_answers = this.quiz_dictionary[str_idx];
-            for (var i = 0; i < previous_answers.length; i++) {
-                var answer_i = previous_answers[i];
-                if (answer_i.includes('Unanswered')) {
-                    continue;
-                }
-                else {
-                    $('.inputshow')[i].append(answer_i);
+            console.log('PREVIOUS ANSWER AVAILABLE!!!');
+            var answer_data = this.qd_verbose[str_idx];
+            var req_features = Object.keys(answer_data);
+            console.log('REQ FEATURES: ', req_features);
+            for (var i = 0; i < req_features.length; i++) {
+                var feature_i = req_features[i];
+                for (var j = 0; j < answer_data[feature_i].length; j++) {
+                    if (answer_data[feature_i][j].includes('Unanswered')) {
+                        continue;
+                    }
+                    else {
+                        if (feature_i === 'lemma') {
+                            $('.inputshow')[j].append(answer_data[feature_i][j]);
+                        }
+                        else if (feature_i === 'tense') {
+                            console.log('TENSE: ', answer_data[feature_i][j]);
+                            $("input[name=\"quizitem_2\"]#".concat(answer_data[feature_i][j], "_2")).prop('checked', true);
+                        }
+                    }
                 }
             }
-            this.savePreviousAnswer(previous_answers);
         }
     };
     Quiz.prototype.savePreviousAnswer = function (previous_answers) {
         this.quiz_dictionary[this.currentDictIx.toString()] = previous_answers;
+    };
+    Quiz.prototype.getInputType = function (feature_name) {
+        var input_type = 'radio';
+        if (feature_name === 'lemma') {
+            input_type = 'text';
+        }
+        else if (feature_name === 'raw_normalized') {
+            input_type = 'text';
+        }
+        return input_type;
+    };
+    Quiz.prototype.loadPreviousAnswerAdvanced = function () {
+        console.log('Welcome to loadPreviousAnswerAdvanced()');
+        var previous_data = this.qd_verbose[this.currentDictIx.toString()];
+        console.log('Previous Data: ', previous_data);
+        var iter = 1;
+        var n_features = Object.keys(previous_data).length;
+        for (var feat in previous_data) {
+            console.log('Feature: ', feat);
+            var user_answer = previous_data[feat];
+            var input_type = this.getInputType(feat);
+            if (input_type === 'text') {
+                for (var i = 0; i < user_answer.length; i++) {
+                    var user_answer_i = user_answer[i];
+                    console.log('User Answer: ', user_answer_i);
+                    if (user_answer_i.includes('Unanswered')) {
+                        continue;
+                    }
+                    else {
+                        $('.inputshow')[i].append(user_answer_i);
+                    }
+                }
+            }
+            else {
+                var n_parts = user_answer.length;
+                for (var i = 0; i < n_parts; i++) {
+                    var current_answer = user_answer[i];
+                    console.log('User Answer: ', current_answer);
+                    if (current_answer.includes('Unanswered')) {
+                        continue;
+                    }
+                    var part_id = iter + (i * n_features);
+                    var query = "input[name=\"quizitem_".concat(part_id, "\"]#").concat(current_answer, "_").concat(part_id);
+                    $(query).prop('checked', true);
+                }
+            }
+            iter = iter + 1;
+        }
     };
     Quiz.prototype.previousQuestion = function (first) {
         if (this.last_action === 'previous') {
@@ -2883,11 +2932,8 @@ var Quiz = (function () {
             }
             this.currentDictIx = this.currentDictIx - 1;
         }
-        this.loadPreviousAnswer();
-        console.log('Quiz Dictionary: ', this.quiz_dictionary);
+        this.loadPreviousAnswerAdvanced();
         this.quiz_statistics.questions.splice(this.currentDictIx, 1);
-        this.last_action = 'previous';
-        this.logData();
     };
     Quiz.prototype.finishQuiz = function (gradingFlag) {
         var _this = this;
