@@ -83,10 +83,15 @@ class Quiz {
         }
         // add the tracking data to the verbose data for the current question
         // ex. {0: {tense: ['Imperfect', 'Future']}}
+        
         this.qd_verbose[this.currentDictIx.toString()] = tracking_data;
+        
 
     }
+
     
+    
+
     //------------------------------------------------------------------------------------------
     // nextQuestion method
     //
@@ -161,7 +166,7 @@ class Quiz {
         }, 50);
 
         // log the tracking data to the console
-        this.logData();
+        //this.logData();
         if(this.currentDictIx.toString() in this.qd_verbose) {
             this.loadPreviousAnswerAdvanced();
         }
@@ -271,6 +276,7 @@ class Quiz {
     public savePreviousAnswer(previous_answers:string []) : void {
         this.quiz_dictionary[this.currentDictIx.toString()] = previous_answers;
     }
+
     public getInputType(feature_name:string): string {
         let input_type = 'radio';
         if(feature_name === 'lemma'){
@@ -283,20 +289,20 @@ class Quiz {
 
     }
     public loadPreviousAnswerAdvanced() : void {
-        console.log('Welcome to loadPreviousAnswerAdvanced()');
+        //console.log('Welcome to loadPreviousAnswerAdvanced()');
 
         let previous_data = this.qd_verbose[this.currentDictIx.toString()];
-        console.log('Previous Data: ', previous_data);
+        //console.log('Previous Data: ', previous_data);
         let iter = 1;
         let n_features = Object.keys(previous_data).length;
         for(let feat in previous_data){
-            console.log('Feature: ', feat);
+            //console.log('Feature: ', feat);
             let user_answer = previous_data[feat];
             let input_type = this.getInputType(feat);
             if(input_type === 'text'){
                 for(let i = 0; i < user_answer.length; i++){
                     let user_answer_i = user_answer[i];
-                    console.log('User Answer: ', user_answer_i);
+                    //console.log('User Answer: ', user_answer_i);
                     if(user_answer_i.includes('Unanswered')){
                         continue;
                     }
@@ -312,7 +318,7 @@ class Quiz {
                 // for each user anser, check the corresponding radio button
                 for(let i = 0; i < n_parts; i++) {
                     let current_answer = user_answer[i];
-                    console.log('User Answer: ', current_answer);
+                    //console.log('User Answer: ', current_answer);
 
                     if(current_answer.includes('Unanswered')){
                         continue;
@@ -327,11 +333,53 @@ class Quiz {
         }
 
     }
-    
+    //------------------------------------------------------------------------------------------
+    // saveCurrentAnswer method
+    // 
+    // save an answer after pressing 'Previous' button
+    public saveCurrentAnswer() : void {
+        let panel = this.currentPanelQuestion.updateQuestionStat();
+        let previous_data = panel.req_feat;
+        let feature_names = previous_data.names;
+        let user_answers = previous_data.users_answer;
+        let nreq_features = feature_names.length;
+        let tracking_data : {[key:string]:any} = {};
+
+        for(let i = 0; i < user_answers.length; i++){
+            let answer_i = user_answers[i];
+            let feature_idx = i % nreq_features;
+            let feature_i = feature_names[feature_idx];
+            // if the feature is already in the tracking data, append the answer to the array, otherwise add it as a new key
+            if(feature_i in tracking_data){
+                tracking_data[feature_i].push(answer_i);
+            }
+            else {
+                tracking_data[feature_i] = [answer_i];
+            }
+        }
+        console.log('Tracking Data: ', tracking_data);
+        this.qd_verbose[this.currentDictIx.toString()] = tracking_data;
+
+        this.logData();
+
+    }
+
+
     public previousQuestion(first:boolean) : void {
         if(this.last_action === 'previous'){
             console.log('You should not have deleted!!!');
         }
+        
+        
+
+
+
+
+        //let user_answers = panel.req_feat.users_answer;
+        //console.log(user_answers);
+
+        console.log('==================================================')
+
         //console.log('Welcome to previousQuestion()!!!');
         if(this.currentDictIx > 0){
              
@@ -354,19 +402,23 @@ class Quiz {
             if($('button#next_question').is(':hidden')){
                 $('button#previous_question').hide()
             }
-            this.currentDictIx = this.currentDictIx - 1;                    
-
+            this.currentDictIx = this.currentDictIx - 1;
+            this.loadPreviousAnswerAdvanced();                    
         }
-        this.loadPreviousAnswerAdvanced();
+
         // delete the last saved version of the question in case the user updates the answer
         this.quiz_statistics.questions.splice(this.currentDictIx, 1);
      
-
+        //this.logData();
+        this.last_action = 'previous';
+        //this.saveCurrentAnswerAdvanced();
+        console.log('FROM PREVIOUS QUESTION!!!');
+        //this.logData();
         /*
         this.loadPreviousAnswer();
         console.log('Quiz Dictionary: ', this.quiz_dictionary);
         
-        this.last_action = 'previous';
+        
         this.logData();
         */
         
