@@ -369,7 +369,7 @@ class Quiz {
         if(this.last_action === 'previous'){
             console.log('You should not have deleted!!!');
         }
-        
+        this.saveCurrentAnswer();
         
 
 

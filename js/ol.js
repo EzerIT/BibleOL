@@ -2935,6 +2935,7 @@ var Quiz = (function () {
         if (this.last_action === 'previous') {
             console.log('You should not have deleted!!!');
         }
+        this.saveCurrentAnswer();
         console.log('==================================================');
         if (this.currentDictIx > 0) {
             $('button#next_question').removeAttr('disabled');
