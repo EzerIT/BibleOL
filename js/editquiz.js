@@ -2583,12 +2583,8 @@ function add_book_buttons() {
         if (i == 0) {
             var cell = $("<tr class=\"bookrow\"></tr>");
             var row = $("<td id=row_book_".concat(i, "></td>"));
-            var button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\" onclick=toggle_cbody(").concat(i, ")>").concat(pathname, "</button>"));
-            var results_box = $("<span id=\"n_results\" style=\"padding-left:20px;\"><b>".concat(localize('results_prompt'), "</b></span>"));
-            var actual_count = $("<span id=\"actual_count\">0</span>");
-            results_box.append(actual_count);
+            var button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\" onclick=toggle_cbody(").concat(i, ")><b>").concat(pathname, ":&nbsp;</b><span id=\"actual_count\"></span></button>"));
             row.append(button);
-            row.append(results_box);
             cell.append(row);
             if ($('#cardhead tr').length === 0) {
                 $('#cardhead').append(cell);

@@ -480,12 +480,12 @@ function add_book_buttons(): void {
             // first book
             let cell = $(`<tr class="bookrow"></tr>`);
             let row = $(`<td id=row_book_${i}></td>`);
-            let button = $(`<button data-toggle="collapse" data-target="" id=book_${i} class="btn text-left" onclick=toggle_cbody(${i})>${pathname}</button>`); 
-            let results_box = $(`<span id="n_results" style="padding-left:20px;"><b>${localize('results_prompt')}</b></span>`);
-            let actual_count = $(`<span id="actual_count">0</span>`);
-            results_box.append(actual_count);
+            let button = $(`<button data-toggle="collapse" data-target="" id=book_${i} class="btn text-left" onclick=toggle_cbody(${i})><b>${pathname}:&nbsp;</b><span id="actual_count"></span></button>`); 
+            //let results_box = $(`<span id="n_results" style="padding-left:20px;"><b>${localize('results_prompt')}</b></span>`);
+            //let actual_count = $(`<span id="actual_count">0</span>`);
+            //results_box.append(actual_count);
             row.append(button);
-            row.append(results_box);
+            //row.append(results_box);
 
             cell.append(row);
             // add button to card head
