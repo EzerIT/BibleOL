@@ -81,13 +81,15 @@ class Mod_classes extends CI_Model {
             foreach ($grader_query->result() as $row) {
                 // get the class object from the class ID
                 $class_obj = $this->db->select('id,classname')->where('id',$row->classid)->get('class');
-				
+
 				if(!in_array($row->classid, $grader_classes_ids)) {
 					// append the id to grader_classes_ids
 					$grader_classes_ids[] = $row->classid;
 
                 	// append the class object to the array of grader_classes
-                	$grader_classes[] = $class_obj->result()[0];
+                  if (count($class_obj->result()) > 0) {
+                	   $grader_classes[] = $class_obj->result()[0];
+                  }
 				}
             }
 			//echo '<br><br><br>---------------------------------------------------<br>';
