@@ -544,9 +544,10 @@ function toggle_cbody(idx:number): void {
 
 }
 
-function add_reference_table(idx:number, show_res: boolean = false): void {
+function add_reference_table(cbody_idx:number, show_res: boolean = false): void {
     //toggle_cbody(idx);
-    idx = table_idx;
+    let idx = table_idx;
+    
 
     let parent_button = $(`#book_${idx}`);
     // generate query
@@ -555,6 +556,10 @@ function add_reference_table(idx:number, show_res: boolean = false): void {
     //console.log('INIT: ', init);
     // create table
     let cbody = $(`#card-body-original`);
+    if(cbody_idx > 0) {
+        cbody = $(`#card-body-original${cbody_idx}`);
+    }
+
     //let row_book = $(`#row_book_${idx}`);
     let leaf_count = cbody.find('table').length;
     console.log('Leaf Count: ', leaf_count);
@@ -620,20 +625,26 @@ function preview_results_frontend_alpha(): void {
     }
         
     // if the cardhead is empty, add the book buttons
-    /*
-    let chead_data = $('#cardhead');
-    if(chead_data.is(':empty')){
-        add_book_buttons();
-    }
-    */
+    
     add_book_buttons();
 
     // add the first table
     //let initial_idx = 0;
-    add_reference_table(table_idx, show_results);
+    let selected_paths = preview_data_mega.selected_paths;
+    for(let i = 0; i < selected_paths.length; i++) {
+        add_reference_table(i);
+        table_idx++;
+        if(i > 0) {
+            toggle_cbody(i);
+        }
+    }
+
+    //add_reference_table(table_idx, show_results);
     console.log('TABLE IDX: ', table_idx);
 
-    table_idx++;
+    //table_idx++;
+    //add_reference_table(table_idx, show_results);
+
 }
 
 //****************************************************************************************************

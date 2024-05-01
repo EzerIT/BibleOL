@@ -2631,11 +2631,14 @@ function toggle_cbody(idx) {
         }
     }
 }
-function add_reference_table(idx, show_res) {
+function add_reference_table(cbody_idx, show_res) {
     if (show_res === void 0) { show_res = false; }
-    idx = table_idx;
+    var idx = table_idx;
     var parent_button = $("#book_".concat(idx));
     var cbody = $("#card-body-original");
+    if (cbody_idx > 0) {
+        cbody = $("#card-body-original".concat(cbody_idx));
+    }
     var leaf_count = cbody.find('table').length;
     console.log('Leaf Count: ', leaf_count);
     if (leaf_count <= 0 || $("#book_table_".concat(idx)).is(':hidden') || show_res === true) {
@@ -2686,9 +2689,15 @@ function preview_results_frontend_alpha() {
         $('#fpan2').hide();
     }
     add_book_buttons();
-    add_reference_table(table_idx, show_results);
+    var selected_paths = preview_data_mega.selected_paths;
+    for (var i = 0; i < selected_paths.length; i++) {
+        add_reference_table(i);
+        table_idx++;
+        if (i > 0) {
+            toggle_cbody(i);
+        }
+    }
     console.log('TABLE IDX: ', table_idx);
-    table_idx++;
 }
 function save_quiz2() {
     decoded_3et.desc = ckeditor.val();
