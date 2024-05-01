@@ -360,7 +360,6 @@ class Ctrl_text extends MY_Controller {
             'css_list' => array('styles/selectbox.css'),
             'n_candidates'=>$display_data['n_candidates'],
             'table_idx'=>$table_idx
-
           );
         
         
