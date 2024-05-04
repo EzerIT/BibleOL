@@ -115,6 +115,7 @@ class Quiz {
             //let previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
             //this.savePreviousAnswer(previous_answers);
             this.savePreviousAnswerAdvanced();
+            this.logData();
 
         }        
         else if (quizdata.fixedquestions>0) {
@@ -281,61 +282,123 @@ class Quiz {
         this.quiz_dictionary[this.currentDictIx.toString()] = previous_answers;
     }
 
+    public checkForTarget(target:string, series:string[]):boolean {
+        let found = false;
+        for(let i = 0; i < series.length; i++) {
+            if(target === series[i]){
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
+
     public getInputType(feature_name:string): string {
+        let vocab_features = ['amharic', 'danish', 'dutch', 'english', 'portuguese', 'spanish', 'swahili'];
+        let text_features = ['lemma', 'raw_lemma', 'normalized', 'raw_normalized'];
+
         let input_type = 'radio';
-        if(feature_name === 'lemma'){
+        if(this.checkForTarget(feature_name, text_features) === true) {
             input_type = 'text';
         }
-        else if(feature_name === 'raw_normalized'){
-            input_type = 'text';
+        else if(this.checkForTarget(feature_name, vocab_features) === true) {
+            input_type = 'vocab';
         }
+
         return input_type;
 
     }
-    public loadPreviousAnswerAdvanced() : void {
-        //console.log('Welcome to loadPreviousAnswerAdvanced()');
-
+    
+    public populateVocabAnswers(n_parts:number, vocab_features:string []): void {
         let previous_data = this.qd_verbose[this.currentDictIx.toString()];
-        //console.log('Previous Data: ', previous_data);
+        console.log('Vocab Features: ', vocab_features);
+        let counter = 0
+        for(let i = 0; i < n_parts; i++) {
+            for(let j = 0; j < vocab_features.length; j++) { 
+                let vocab_elem = $('input[type="text"]')[counter] as HTMLInputElement;
+                let user_answers = previous_data[vocab_features[j]];
+                counter = counter + 1;
+                if(user_answers[i].includes('Unanswered')) {
+                    // do not display the answer
+                    continue;
+                }
+                else {
+                    // do display the answer
+                    vocab_elem.value = user_answers[i];
+                }
+                
+            }
+        }
+    
+    }
+    
+    public populateTextAnswers(n_parts:number, text_features:string []): void {
+        let previous_data = this.qd_verbose[this.currentDictIx.toString()];
+        let counter = 0;
+        for(let i = 0; i < n_parts; i++) {
+            for(let j = 0; j < text_features.length; j++) {
+                let user_answers = previous_data[text_features[j]];
+                let user_answer_i = user_answers[i];
+                if(!(user_answer_i.includes('Unanswered'))) {
+                    $('.inputshow')[counter].append(user_answer_i);    
+                }
+                counter = counter + 1;
+                
+            }
+        }
+    }
+    
+    public populateRadioAnswers(n_parts:number, radio_features:string []): void {
         let iter = 1;
+        let previous_data = this.qd_verbose[this.currentDictIx.toString()];
         let n_features = Object.keys(previous_data).length;
-        for(let feat in previous_data){
-            //console.log('Feature: ', feat);
-            let user_answer = previous_data[feat];
-            let input_type = this.getInputType(feat);
-            if(input_type === 'text'){
-                for(let i = 0; i < user_answer.length; i++){
-                    let user_answer_i = user_answer[i];
-                    //console.log('User Answer: ', user_answer_i);
-                    if(user_answer_i.includes('Unanswered')){
-                        continue;
-                    }
-                    else {
-                        $('.inputshow')[i].append(user_answer_i);
-                    }
-                }
-            }
-            else {
-                // get the number of sub parts in the question
-                let n_parts = user_answer.length;
-
-                // for each user anser, check the corresponding radio button
+        for(let feature in previous_data) {
+            let user_answers = previous_data[feature];
+            if(this.checkForTarget(feature, radio_features) === true) {
                 for(let i = 0; i < n_parts; i++) {
-                    let current_answer = user_answer[i];
-                    //console.log('User Answer: ', current_answer);
-
-                    if(current_answer.includes('Unanswered')){
-                        continue;
-                    }
-                    let part_id = iter + (i*n_features);
-                    let query = `input[name="quizitem_${part_id}"]#${current_answer}_${part_id}`;
-                    $(query).prop('checked', true);
+                    let current_answer = user_answers[i];
+                    if(!(current_answer).includes('Unanswered')) {
+                        let part_id = iter + (i * n_features);
+                        let radio_elem = `input[name="quizitem_${part_id}"]#${current_answer}_${part_id}`;
+                        $(radio_elem).prop('checked', true);
+                    }                
                 }
             }
-
             iter = iter + 1;
         }
+    }
 
+    public loadPreviousAnswerAdvanced() : void {
+        let previous_data = this.qd_verbose[this.currentDictIx.toString()];
+        let text_features : string[] = [];
+        let vocab_features : string[] = [];
+        let radio_features : string[] = [];
+        let n_parts  =  0;
+    
+        for(let feat in previous_data){
+            let input_type = this.getInputType(feat);
+            let user_answer = previous_data[feat];
+            n_parts = user_answer.length;
+    
+            if(input_type === 'text'){
+                text_features.push(feat);
+            }
+            else if(input_type === 'vocab'){
+                vocab_features.push(feat);
+            }
+            else {
+                radio_features.push(feat);
+            }
+        }
+    
+        // Handle vocab features
+        this.populateVocabAnswers(n_parts, vocab_features);
+    
+        // Handle text features
+        this.populateTextAnswers(n_parts, text_features);
+    
+        // Handle radio features
+        this.populateRadioAnswers(n_parts, radio_features);
     }
     //------------------------------------------------------------------------------------------
     // saveCurrentAnswer method

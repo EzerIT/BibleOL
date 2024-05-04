@@ -2780,6 +2780,7 @@ var Quiz = (function () {
             console.log('currentPanelQuestion is not null...');
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
             this.savePreviousAnswerAdvanced();
+            this.logData();
         }
         else if (quizdata.fixedquestions > 0) {
             $('button#finish').attr('disabled', 'disabled');
@@ -2859,48 +2860,102 @@ var Quiz = (function () {
     Quiz.prototype.savePreviousAnswer = function (previous_answers) {
         this.quiz_dictionary[this.currentDictIx.toString()] = previous_answers;
     };
+    Quiz.prototype.checkForTarget = function (target, series) {
+        var found = false;
+        for (var i = 0; i < series.length; i++) {
+            if (target === series[i]) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    };
     Quiz.prototype.getInputType = function (feature_name) {
+        var vocab_features = ['amharic', 'danish', 'dutch', 'english', 'portuguese', 'spanish', 'swahili'];
+        var text_features = ['lemma', 'raw_lemma', 'normalized', 'raw_normalized'];
         var input_type = 'radio';
-        if (feature_name === 'lemma') {
+        if (this.checkForTarget(feature_name, text_features) === true) {
             input_type = 'text';
         }
-        else if (feature_name === 'raw_normalized') {
-            input_type = 'text';
+        else if (this.checkForTarget(feature_name, vocab_features) === true) {
+            input_type = 'vocab';
         }
         return input_type;
     };
-    Quiz.prototype.loadPreviousAnswerAdvanced = function () {
+    Quiz.prototype.populateVocabAnswers = function (n_parts, vocab_features) {
         var previous_data = this.qd_verbose[this.currentDictIx.toString()];
-        var iter = 1;
-        var n_features = Object.keys(previous_data).length;
-        for (var feat in previous_data) {
-            var user_answer = previous_data[feat];
-            var input_type = this.getInputType(feat);
-            if (input_type === 'text') {
-                for (var i = 0; i < user_answer.length; i++) {
-                    var user_answer_i = user_answer[i];
-                    if (user_answer_i.includes('Unanswered')) {
-                        continue;
-                    }
-                    else {
-                        $('.inputshow')[i].append(user_answer_i);
-                    }
+        console.log('Vocab Features: ', vocab_features);
+        var counter = 0;
+        for (var i = 0; i < n_parts; i++) {
+            for (var j = 0; j < vocab_features.length; j++) {
+                var vocab_elem = $('input[type="text"]')[counter];
+                var user_answers = previous_data[vocab_features[j]];
+                counter = counter + 1;
+                if (user_answers[i].includes('Unanswered')) {
+                    continue;
+                }
+                else {
+                    vocab_elem.value = user_answers[i];
                 }
             }
-            else {
-                var n_parts = user_answer.length;
+        }
+    };
+    Quiz.prototype.populateTextAnswers = function (n_parts, text_features) {
+        var previous_data = this.qd_verbose[this.currentDictIx.toString()];
+        var counter = 0;
+        for (var i = 0; i < n_parts; i++) {
+            for (var j = 0; j < text_features.length; j++) {
+                var user_answers = previous_data[text_features[j]];
+                var user_answer_i = user_answers[i];
+                if (!(user_answer_i.includes('Unanswered'))) {
+                    $('.inputshow')[counter].append(user_answer_i);
+                }
+                counter = counter + 1;
+            }
+        }
+    };
+    Quiz.prototype.populateRadioAnswers = function (n_parts, radio_features) {
+        var iter = 1;
+        var previous_data = this.qd_verbose[this.currentDictIx.toString()];
+        var n_features = Object.keys(previous_data).length;
+        for (var feature in previous_data) {
+            var user_answers = previous_data[feature];
+            if (this.checkForTarget(feature, radio_features) === true) {
                 for (var i = 0; i < n_parts; i++) {
-                    var current_answer = user_answer[i];
-                    if (current_answer.includes('Unanswered')) {
-                        continue;
+                    var current_answer = user_answers[i];
+                    if (!(current_answer).includes('Unanswered')) {
+                        var part_id = iter + (i * n_features);
+                        var radio_elem = "input[name=\"quizitem_".concat(part_id, "\"]#").concat(current_answer, "_").concat(part_id);
+                        $(radio_elem).prop('checked', true);
                     }
-                    var part_id = iter + (i * n_features);
-                    var query = "input[name=\"quizitem_".concat(part_id, "\"]#").concat(current_answer, "_").concat(part_id);
-                    $(query).prop('checked', true);
                 }
             }
             iter = iter + 1;
         }
+    };
+    Quiz.prototype.loadPreviousAnswerAdvanced = function () {
+        var previous_data = this.qd_verbose[this.currentDictIx.toString()];
+        var text_features = [];
+        var vocab_features = [];
+        var radio_features = [];
+        var n_parts = 0;
+        for (var feat in previous_data) {
+            var input_type = this.getInputType(feat);
+            var user_answer = previous_data[feat];
+            n_parts = user_answer.length;
+            if (input_type === 'text') {
+                text_features.push(feat);
+            }
+            else if (input_type === 'vocab') {
+                vocab_features.push(feat);
+            }
+            else {
+                radio_features.push(feat);
+            }
+        }
+        this.populateVocabAnswers(n_parts, vocab_features);
+        this.populateTextAnswers(n_parts, text_features);
+        this.populateRadioAnswers(n_parts, radio_features);
     };
     Quiz.prototype.saveCurrentAnswer = function () {
         var panel = this.currentPanelQuestion.updateQuestionStat();
