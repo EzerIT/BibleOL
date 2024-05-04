@@ -2613,7 +2613,6 @@ var PanelQuestion = (function () {
             $('button#next_question').hide();
             $('button#finish').hide();
             $('button#finishNoStats').hide();
-            $('button#previous_question').hide();
         }
         ;
         if (this.subQuizIndex === slides.length - 1) {
@@ -2744,9 +2743,6 @@ var Quiz = (function () {
         this.exam_mode = inExam;
         $('button#next_question').on('click', function () { return _this.nextQuestion(false); });
         $('button#previous_question').on('click', function () { return _this.previousQuestion(false); });
-        if ($('button#next_question').is(':hidden')) {
-            $('button#previous_question').hide();
-        }
         $('button#finish').on('click', function () { return _this.finishQuiz(true); });
         $('button#finishNoStats').on('click', function () { return _this.finishQuiz(false); });
     }
@@ -2802,9 +2798,6 @@ var Quiz = (function () {
                 $('div#progressbar').progressbar({ value: this.currentDictIx + 1, max: dictionaries.sentenceSets.length });
             $('#progresstext').html((this.currentDictIx + 1) + '/' + dictionaries.sentenceSets.length);
             this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
-            if ($('button#next_question').is(':hidden')) {
-                $('button#previous_question').hide();
-            }
             if (this.currentDictIx + 1 === dictionaries.sentenceSets.length) {
                 $('button#next_question').attr('disabled', 'disabled');
                 $('button#finish').removeAttr('disabled');
@@ -2945,9 +2938,6 @@ var Quiz = (function () {
             $('.quizcard').empty();
             $('progress#progress').attr('value', this.currentDictIx).attr('max', dictionaries.sentenceSets.length);
             this.currentPanelQuestion = new PanelQuestion(quizdata, previousDict, this.exam_mode);
-            if ($('button#next_question').is(':hidden')) {
-                $('button#previous_question').hide();
-            }
             this.currentDictIx = this.currentDictIx - 1;
             this.loadPreviousAnswerAdvanced();
         }

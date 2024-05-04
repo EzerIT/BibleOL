@@ -443,7 +443,6 @@ class PanelQuestion {
             $('button#next_question').hide();
             $('button#finish').hide();
             $('button#finishNoStats').hide();
-            $('button#previous_question').hide();
 
         
         };

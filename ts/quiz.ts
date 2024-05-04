@@ -37,9 +37,11 @@ class Quiz {
         // Set up handlers for the buttons
         $('button#next_question').on('click', () => this.nextQuestion(false));
         $('button#previous_question').on('click', () => this.previousQuestion(false));
+        /*
         if($('button#next_question').is(':hidden')){
             $('button#previous_question').hide()
         }
+        */
 
         $('button#finish').on('click', () => this.finishQuiz(true));
         $('button#finishNoStats').on('click', () => this.finishQuiz(false));
@@ -144,9 +146,11 @@ class Quiz {
             
             // Create a panel for the next question
             this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
+            /*
             if($('button#next_question').is(':hidden')){
                 $('button#previous_question').hide()
             }
+            */
             if (this.currentDictIx+1 === dictionaries.sentenceSets.length) {
                 // This is the last question, disable the 'Next' button
                 $('button#next_question').attr('disabled', 'disabled');
@@ -399,9 +403,11 @@ class Quiz {
             
             // Create a panel for the next question
             this.currentPanelQuestion = new PanelQuestion(quizdata, previousDict, this.exam_mode);
+            /*
             if($('button#next_question').is(':hidden')){
                 $('button#previous_question').hide()
             }
+            */
             this.currentDictIx = this.currentDictIx - 1;
             this.loadPreviousAnswerAdvanced();                    
         }
