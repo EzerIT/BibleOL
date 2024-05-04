@@ -21,6 +21,8 @@ class Quiz {
     private last_action          : string = 'next';      // Last action taken by the user
     private quiz_dictionary      : { [key: string]: any } = {}; // a dictionary tracking the previous answer data
     private qd_verbose           : {[key:string]:any} = {}; // a dictionary tracking the verbose data for each question
+    private answers_exposed      : {[key:string]:any} = {}; // a dictionary tracking the answers exposed by the user using 'Show Answer' or 'Check Answer'
+
     //------------------------------------------------------------------------------------------
     // Constructor method
     //
@@ -30,7 +32,6 @@ class Quiz {
     //     qid: The server's identification of statistics for this exercise execution.
     //
     constructor(qid : number, inExam : boolean) {
-        console.log('CONSTRUCTION!!!');
         this.quiz_statistics = new QuizStatistics(qid);
         this.exam_mode = inExam;
 
@@ -65,7 +66,6 @@ class Quiz {
         // create an object maping the request feature to an array of user input
         let tracking_data : {[key:string]:any} = {};
         let previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
-        console.log('Previous Data: ', previous_data);
         let req_features = previous_data.names; // the request features (ex. lexeme, tense, etc.)
         let nreq_features = req_features.length;
         let user_answers = previous_data.users_answer; // the user answers (ex. 'Imperfect', 'Future', etc.)
@@ -91,7 +91,59 @@ class Quiz {
 
     }
 
-    
+    //------------------------------------------------------------------------------------------
+    // saveAnswersExposed method
+    //
+    // record whether or not a given answer has been exposed with 'Show Answer' or 'Check Answer',
+    // exposed answers are automatically incorrect
+    //
+    public saveAnswersExposed() : void {
+        // Check if Show Answer has been pressed
+
+        // get the show_anyway_button from the alert modal
+        let show_anyway_button = document.getElementById('show_anyway_button');
+        if(show_anyway_button != null){
+            // when 'Show Anyway' is clicked, record the answer as exposed
+            show_anyway_button.addEventListener('click', () => {
+                let sub_index = this.currentPanelQuestion.getSubQuizIndex(); // the current sub index
+                let sub_quiz_max = this.currentPanelQuestion.getSubQuizMax(); // the number of subparts in the question
+                let currentDictIx_str = this.currentDictIx.toString(); // the current index
+
+                // if the current index is not in the answers_exposed dictionary, add it
+                if(!(currentDictIx_str in this.answers_exposed)){
+                    let is_exposed = new Array(sub_quiz_max).fill(false);
+                    is_exposed[sub_index] = true;
+                    this.answers_exposed[currentDictIx_str] = is_exposed;
+                } // otherwise, update the sub index to be exposed
+                else {
+                    this.answers_exposed[currentDictIx_str][sub_index] = true;
+                }
+
+            });
+        }
+
+        // Check if Check Answer has been pressed
+        let check_anyway_button = document.getElementById('check_anyway_button');
+        if(check_anyway_button != null){
+            // when 'Check Anyway' is clicked, record the answer as exposed
+            check_anyway_button.addEventListener('click', () => {
+                let sub_index = this.currentPanelQuestion.getSubQuizIndex(); // the current sub index
+                let sub_quiz_max = this.currentPanelQuestion.getSubQuizMax(); // the number of subparts in the question
+                let currentDictIx_str = this.currentDictIx.toString(); // the current index
+
+                // if the current index is not in the answers_exposed dictionary, add it
+                if(!(currentDictIx_str in this.answers_exposed)){
+                    let is_exposed = new Array(sub_quiz_max).fill(false);
+                    is_exposed[sub_index] = true;
+                    this.answers_exposed[currentDictIx_str] = is_exposed;
+                } // otherwise, update the sub index to be exposed
+                else {
+                    this.answers_exposed[currentDictIx_str][sub_index] = true;
+                }
+
+            });
+        }
+    }
     
 
     //------------------------------------------------------------------------------------------
@@ -108,14 +160,13 @@ class Quiz {
         this.last_action = 'next';
         // if there is a current panel question, then add this question to the quiz statistics array
         if (this.currentPanelQuestion!==null){
-            console.log('currentPanelQuestion is not null...')
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat()); // Update Statistics    
             
             // Save the previous answer in this.quiz_dictionary and this.qd_verbose
             //let previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
             //this.savePreviousAnswer(previous_answers);
             this.savePreviousAnswerAdvanced();
-            this.logData();
+            //this.logData();
 
         }        
         else if (quizdata.fixedquestions>0) {
@@ -176,29 +227,7 @@ class Quiz {
             this.loadPreviousAnswerAdvanced();
         }
         
-        // load previous answer from next, if this question has already been visited.
-        /*
-        if(this.currentDictIx > 1){
-            this.loadPreviousAnswer();
-        }
-        */
-        /*
-        let str_idx = this.currentDictIx.toString();
-        if(str_idx in this.quiz_dictionary) {
-            console.log('STRIDX IN QUIZ DICTIONARY!!!');   
-            let previous_answers = this.quiz_dictionary[str_idx];
-            console.log('PREVIOUS ANSWERS: ', previous_answers); 
-            for(let i = 0; i < previous_answers.length; i++) {
-                let answer_i = previous_answers[i];
-                if(answer_i.includes('Unanswered')){
-                    continue;
-                }
-                else {
-                    $('.inputshow')[i].append(answer_i);
-                }
-            }
-        }
-        */
+        this.saveAnswersExposed();
 
 
     }
@@ -221,7 +250,6 @@ class Quiz {
         if(!(str_idx in this.quiz_dictionary)) {
             // get the data from the prior element of quiz_statistics array
             let previous_answers = this.quiz_statistics.questions[this.currentDictIx-1].req_feat.users_answer;
-            console.log('Previous Answers: ', previous_answers);
             // iterate over the previous answers and append them to the inputshow div
             for(let i = 0; i < previous_answers.length; i++) {
                 let answer_i = previous_answers[i];
@@ -236,10 +264,8 @@ class Quiz {
         }
         // if the string index is in the quiz dictionary, then the previous answer is available
         else {
-            console.log('PREVIOUS ANSWER AVAILABLE!!!');
             let answer_data = this.qd_verbose[str_idx];
             let req_features = Object.keys(answer_data);
-            console.log('REQ FEATURES: ', req_features);
             for(let i = 0; i < req_features.length; i++) {
                 let feature_i = req_features[i];
                 for(let j = 0; j < answer_data[feature_i].length; j++) {
@@ -251,7 +277,6 @@ class Quiz {
                             $('.inputshow')[j].append(answer_data[feature_i][j]);
                         }
                         else if(feature_i === 'tense') {
-                            console.log('TENSE: ', answer_data[feature_i][j]);
                             $(`input[name="quizitem_2"]#${answer_data[feature_i][j]}_2`).prop('checked', true);                    
                         }
                     }
@@ -308,10 +333,9 @@ class Quiz {
         return input_type;
 
     }
-    
+
     public populateVocabAnswers(n_parts:number, vocab_features:string []): void {
         let previous_data = this.qd_verbose[this.currentDictIx.toString()];
-        console.log('Vocab Features: ', vocab_features);
         let counter = 0
         for(let i = 0; i < n_parts; i++) {
             for(let j = 0; j < vocab_features.length; j++) { 
@@ -368,15 +392,36 @@ class Quiz {
         }
     }
 
+    public getInputTypeAdvanced(vanswers:any, iter:number) : string {
+        let ctype = vanswers[iter].cType;
+        let input_type = 'radio';
+        if(ctype === COMPONENT_TYPE.textFieldForeign) {
+            input_type = 'text';
+        }
+        else if(ctype === COMPONENT_TYPE.textField) {
+            input_type = 'vocab';
+        }
+        else if(ctype === COMPONENT_TYPE.textFieldWithVirtKeyboard) {
+            input_type = 'vocab';
+        }
+        return input_type;
+    }
+
     public loadPreviousAnswerAdvanced() : void {
         let previous_data = this.qd_verbose[this.currentDictIx.toString()];
         let text_features : string[] = [];
         let vocab_features : string[] = [];
         let radio_features : string[] = [];
         let n_parts  =  0;
-    
+        let vanswers = this.currentPanelQuestion.getVanswers();
+        let iter = 0;
         for(let feat in previous_data){
-            let input_type = this.getInputType(feat);
+            //let input_type = this.getInputType(feat);
+            let input_type = this.getInputTypeAdvanced(vanswers, iter);
+            //console.log('VANSWERS: ', vanswers[iter]);
+            //let ctype = vanswers[iter].cType;
+            
+            
             let user_answer = previous_data[feat];
             n_parts = user_answer.length;
     
@@ -389,6 +434,7 @@ class Quiz {
             else {
                 radio_features.push(feat);
             }
+            iter += 1;
         }
     
         // Handle vocab features
@@ -424,34 +470,22 @@ class Quiz {
                 tracking_data[feature_i] = [answer_i];
             }
         }
-        console.log('Tracking Data: ', tracking_data);
         this.qd_verbose[this.currentDictIx.toString()] = tracking_data;
 
-        this.logData();
+        //this.logData();
 
     }
 
 
     public previousQuestion(first:boolean) : void {
-        if(this.last_action === 'previous'){
-            console.log('You should not have deleted!!!');
-        }
-        this.saveCurrentAnswer();
         
 
+        this.saveCurrentAnswer();
 
-
-
-        //let user_answers = panel.req_feat.users_answer;
-        //console.log(user_answers);
-
-        console.log('==================================================')
-
-        //console.log('Welcome to previousQuestion()!!!');
         if(this.currentDictIx > 0){
              
             // enable the next question button if it is disabled
-            $('button#next_question').removeAttr('disabled');
+            //$('button#next_question').removeAttr('disabled');
 
             // get the text for the previous question
             let previousDict : Dictionary = new Dictionary(dictionaries, this.currentDictIx - 1, quizdata);
@@ -466,6 +500,15 @@ class Quiz {
             
             // Create a panel for the next question
             this.currentPanelQuestion = new PanelQuestion(quizdata, previousDict, this.exam_mode);
+            let parts = this.currentPanelQuestion.getSubQuizMax();
+            if(parts === 1) {
+                // Show "Next", "GRADE task" and "SAVE outcome" buttons
+                $('button#next_question').show();
+                $('button#finish').show();
+                $('button#finishNoStats').show();
+                $('button#next_question').removeAttr('disabled');
+            }
+
             /*
             if($('button#next_question').is(':hidden')){
                 $('button#previous_question').hide()
@@ -476,23 +519,51 @@ class Quiz {
         }
 
         // delete the last saved version of the question in case the user updates the answer
-        this.quiz_statistics.questions.splice(this.currentDictIx, 1);
-     
-        //this.logData();
+        this.quiz_statistics.questions.splice(this.currentDictIx, 1);     
         this.last_action = 'previous';
-        //this.saveCurrentAnswerAdvanced();
-        console.log('FROM PREVIOUS QUESTION!!!');
-        //this.logData();
-        /*
-        this.loadPreviousAnswer();
-        console.log('Quiz Dictionary: ', this.quiz_dictionary);
+
+        // save the exposed status of the answers
+        this.saveAnswersExposed();
         
-        
-        this.logData();
-        */
         
         
     }
+
+    //------------------------------------------------------------------------------------------
+    // markRevealedIncorrect method
+    // 
+    // Update the quiz statistics given the principle that revealed answers are incorrect
+    //
+    
+    public markRevealedIncorrect():void {
+        for(let i = 0; i < this.quiz_statistics.questions.length; i++) {
+            let question = this.quiz_statistics.questions[i];
+            let req_feat = question.req_feat;
+            let n = req_feat.names.length; // how many request features are there
+            let answer_status = req_feat.users_answer_was_correct;
+            let index_str = i.toString();
+            if(!(index_str in Object.keys(this.answers_exposed))) {
+                continue;
+            }
+                
+            let exposed_data = this.answers_exposed[index_str];
+            let offset = 0;
+            for(let j = 0; j < exposed_data.length; j++) {
+                let exposed_status = exposed_data[j];
+                for(let k = offset; k < offset + n; k++){
+                    if(answer_status[k] === true && exposed_status === true){
+                        answer_status[k] = false;
+                    }
+                }
+                offset = offset + n;
+            }
+            
+            this.quiz_statistics.questions[i].req_feat.users_answer_was_correct = answer_status;
+        }
+
+
+    }
+
 
     //------------------------------------------------------------------------------------------
     // finishQuiz method
@@ -511,12 +582,17 @@ class Quiz {
                 window.location.replace(site_url + 'text/select_quiz'); // Go to quiz selection
         }
         else {
-            if (this.currentPanelQuestion===null)
+            if (this.currentPanelQuestion===null) {
                 alert('System error: No current question panel');
-            else
+            }
+            else {
                 this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
+                this.saveAnswersExposed();
+            }
 
             this.quiz_statistics.grading = gradingFlag;
+
+            this.markRevealedIncorrect();
 
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
             

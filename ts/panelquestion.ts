@@ -389,6 +389,19 @@ class PanelQuestion {
         return this.question_stat;
     }
 
+    public getVanswers():any {
+        return this.vAnswers;
+    }
+
+    // return the index of the sub question
+    public getSubQuizIndex() : number {
+        return this.subQuizIndex;
+    }
+
+    // return the number of sub questions in the current question
+    public getSubQuizMax() : number {
+        return this.subQuizMax;
+    }
 
     //------------------------------------------------------------------------------------------
     // buildQuizObjectFeatureList method
@@ -439,21 +452,20 @@ class PanelQuestion {
 
         if (this.subQuizIndex < slides.length - 1) {
             $('#nextsubquiz').show(); // show button if the quizcard is not the last
+            
             // Hide "Next", "GRADE task" and "SAVE outcome" buttons
             $('button#next_question').hide();
             $('button#finish').hide();
-            $('button#finishNoStats').hide();
-
-        
+            $('button#finishNoStats').hide();        
         };
 
         if (this.subQuizIndex === slides.length - 1) {
             $('#nextsubquiz').hide(); // hide button if the quizcard is the last
+            
             // Show "Next", "GRADE task" and "SAVE outcome" buttons
             $('button#next_question').show();
             $('button#finish').show();
             $('button#finishNoStats').show();
-            $('button#previous_question').show();
 
         };
 
@@ -1625,26 +1637,90 @@ class PanelQuestion {
         $('button#check_answer').off('click'); // Remove old handler
         $('button#check_answer').on('click',
                                     () => {
-                                        let firstAns : number = this.subQuizIndex==0 ? 0 : this.answersPerCard[this.subQuizIndex-1];
-                                        let lastAns  : number = this.answersPerCard[this.subQuizIndex];
-                                        for (let aix=firstAns; aix<lastAns; ++aix) {
-                                            let a: Answer = this.vAnswers[aix];
-                                            a.checkIt(false,true);
+                                        let check_answer_alert = function() {
+                                            $('#myalert-dialog-ca').addClass('modal-sm');
+                                            $('#alert-title-ca').html(localize('check_answer_warning'));
+                                            $('#alert-text-ca').html(localize('check_answer_msg'));
+                                            $('#alert-dialog-ca').modal('show');
                                         }
+
+                                        let check_answer_basic = function(subQuizIndex:any, answersPerCard:any, vAnswers:any):void {
+                                            let firstAns : number = subQuizIndex==0 ? 0 : answersPerCard[subQuizIndex-1];
+                                            let lastAns  : number = answersPerCard[subQuizIndex];
+                                            for (let aix=firstAns; aix<lastAns; ++aix) {
+                                                let a: Answer = vAnswers[aix];
+                                                a.checkIt(false,true);
+                                            }
+                                        }
+
+                                        let check_answer_with_warning = function(subQuizIndex:any, answersPerCard:any, vAnswers:any):void {
+                                            let check_anyway_button = document.getElementById('check_anyway_button');
+                                            if(check_anyway_button != null){
+                                                check_anyway_button.addEventListener('click', function() {
+                                                    check_answer_basic(subQuizIndex, answersPerCard, vAnswers);
+                                                });
+                                            }
+                                        }
+
+
+                                        let show_warnings_status = $('#show_warnings').prop('checked');
+
+                                        // if the user has checked the show warnings checkbox, show the warning
+                                        if (show_warnings_status === true) {
+                                            check_answer_alert(); 
+                                        }
+                                        else {
+                                            check_answer_basic(this.subQuizIndex, this.answersPerCard, this.vAnswers);
+                                        }
+
+                                        check_answer_with_warning(this.subQuizIndex, this.answersPerCard, this.vAnswers);   
+
                                     }
-                                   );
+                                );
 
         // Add "Show answer" button handler
         $('button#show_answer').off('click'); // Remove old handler
         $('button#show_answer').on('click',
                                 () => {
-                                    let firstAns : number = this.subQuizIndex==0 ? 0 : this.answersPerCard[this.subQuizIndex-1];
-                                    let lastAns  : number = this.answersPerCard[this.subQuizIndex];
-                                    for (let aix=firstAns; aix<lastAns; ++aix) {
-                                        let a: Answer = this.vAnswers[+aix];
-                                        a.showIt();
-                                        a.checkIt(true,true);
+                                    let show_answer_alert = function() {
+                                        $('#myalert-dialog-sa').addClass('modal-sm');
+                                        $('#alert-title-sa').html(localize('show_answer_warning'));
+                                        $('#alert-text-sa').html(localize('show_answer_msg'));
+                                        $('#alert-dialog-sa').modal('show');
                                     }
+
+                                    let display_answer_basic = function(subQuizIndex:any, answersPerCard:any, vAnswers:any): void{
+                                        let firstAns: number = subQuizIndex == 0 ? 0 : answersPerCard[subQuizIndex - 1];
+                                        let lastAns: number = answersPerCard[subQuizIndex];
+                                        for (let aix=firstAns; aix<lastAns; ++aix) {
+                                            let a: Answer = vAnswers[+aix];
+                                            a.showIt();
+                                            a.checkIt(true,true);
+                                        }
+                                    }
+
+                                    let display_answer_with_warning = function(subQuizIndex:any, answersPerCard:any, vAnswers:any):void {
+                                        let show_anyway_button = document.getElementById('show_anyway_button');
+                                        if(show_anyway_button != null){
+                                            show_anyway_button.addEventListener('click', function() {
+                                                display_answer_basic(subQuizIndex, answersPerCard, vAnswers);
+                                            });
+                                        }
+                                    }
+
+                                    let show_warnings_status = $('#show_warnings').prop('checked');
+                                    // if the user has checked the show warnings checkbox, show the warning
+                                    if (show_warnings_status === true) {
+                                        show_answer_alert(); 
+                                    }
+                                    else { 
+                                        // otherwise show the answer without a warning
+                                        display_answer_basic(this.subQuizIndex, this.answersPerCard, this.vAnswers);
+                                    }
+
+                                    // initialize the event listener in case the user presses 'Show Anyway' button
+                                    display_answer_with_warning(this.subQuizIndex, this.answersPerCard, this.vAnswers);
+                                    
                                 }
             );
 

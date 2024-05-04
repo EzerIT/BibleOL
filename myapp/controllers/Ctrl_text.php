@@ -378,6 +378,8 @@ class Ctrl_text extends MY_Controller {
             if ($examid === null) {
               $this->load->view('view_menu_bar', array('langselect' => false));
             }
+            // load alert warning messages
+            $this->load->view('view_alert_dialog');
             $this->load->view('view_text_display', $display_data);
             if ($examid === null) {
               $this->load->view('view_bottom');

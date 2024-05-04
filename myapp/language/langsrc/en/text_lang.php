@@ -96,6 +96,7 @@ $lang['show_link_icons_prompt'] = "Show link icons:";
 $lang['show_only_options'] = "Show these options to student";
 $lang['show_quiz_passages'] = "Show quiz passages";
 $lang['show_text'] = "Show text";
+$lang['show_warnings'] = "Show Warnings";
 $lang['specify_file_name'] = "Specify File Name";
 $lang['start_quiz'] = "Start quiz";
 $lang['start_text_reading'] = "Start text reading";
