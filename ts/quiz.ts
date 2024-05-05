@@ -592,14 +592,14 @@ class Quiz {
             }
 
             this.quiz_statistics.grading = gradingFlag;
-            this.markRevealedIncorrect();
-            /*
+            //this.markRevealedIncorrect();
+            
             try {
                 this.markRevealedIncorrect();
             } catch(error) {
                 console.log(error.message);
             }
-            */
+            
 
 
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
