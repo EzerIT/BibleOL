@@ -355,7 +355,7 @@ class Ctrl_text extends MY_Controller {
               'l10n_json' => $this->mod_askemdros->l10n_json,
               'l10n_js_json' => $this->mod_localize->get_json(),
               'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
-              'is_logged_in' => $this->mod_users->is_logged_in(),
+              'is_logged_in' => $this->mod_users->is_logged_in()
             );
 
             $exam_data = array(
