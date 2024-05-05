@@ -575,6 +575,7 @@ class Quiz {
     //     gradingFlag: May the statistics be used for grading the student?
     //
     private finishQuiz(gradingFlag : boolean) : void {
+        //this.logData();
         if (quizdata.quizid == -1) { // User not logged in
             if (this.exam_mode)
                 window.location.replace(site_url + 'exam/active_exams');
@@ -591,8 +592,15 @@ class Quiz {
             }
 
             this.quiz_statistics.grading = gradingFlag;
-
             this.markRevealedIncorrect();
+            /*
+            try {
+                this.markRevealedIncorrect();
+            } catch(error) {
+                console.log(error.message);
+            }
+            */
+
 
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
             

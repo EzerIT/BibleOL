@@ -3127,6 +3127,7 @@ var Quiz = (function () {
     };
     Quiz.prototype.finishQuiz = function (gradingFlag) {
         var _this = this;
+        this.logData();
         if (quizdata.quizid == -1) {
             if (this.exam_mode)
                 window.location.replace(site_url + 'exam/active_exams');
