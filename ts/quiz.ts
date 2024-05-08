@@ -228,6 +228,7 @@ class Quiz {
         }
         
         this.saveAnswersExposed();
+        this.logData();
 
 
     }
@@ -392,8 +393,48 @@ class Quiz {
         }
     }
 
+    public populateCheckboxAnswers(checkbox_features:string[]) {
+        // get the data the user has answered from the previous question
+        let previous_data = this.qd_verbose[this.currentDictIx.toString()];
+        let iter = 1;
+        // for each feature in the question, check if its a checkbox feature, if it is, then populate the checkbox with the answer
+        for(let feature in previous_data) {
+            if(this.checkForTarget(feature, checkbox_features)) {
+                let user_answers = previous_data[feature];
+                // for each subquestion, check all the boxes the user previously entered
+                for(let i = 0; i < user_answers.length; i++) {
+                    // delete the parentheses from the string
+                    let boxes_array_str = user_answers[i].replace("(", "").replace(")", "");
+                    // make an array containing the values of all the checked boxes
+                    let boxes_array = boxes_array_str.split(',');
+                    for(let j = 0; j < boxes_array.length; j++) {
+                        let box_j = boxes_array[j];
+                        let box_j_id = `#${box_j}_${iter}`;
+                        $(box_j_id).prop('checked', true);
+                    }
+                    iter = iter + 1;
+                }
+                
+
+                /*
+                turn this off for a second.
+                for(let i = 0; i < user_answers.length; i++) {
+                    let boxid = user_answers[i].replace("(", "");
+                    boxid = boxid.replace(")", "");
+                    boxid = '#' + boxid + `_${iter}`;
+                    console.log('BOXID: ', boxid);
+                    $(boxid).prop('checked', true);
+                }
+                iter = iter + 1;
+                */
+            }
+        }
+        console.log('-----------------------------------------');
+    }
+
     public getInputTypeAdvanced(vanswers:any, iter:number) : string {
         let ctype = vanswers[iter].cType;
+        console.log('ctype: ', ctype);
         let input_type = 'radio';
         if(ctype === COMPONENT_TYPE.textFieldForeign) {
             input_type = 'text';
@@ -404,6 +445,9 @@ class Quiz {
         else if(ctype === COMPONENT_TYPE.textFieldWithVirtKeyboard) {
             input_type = 'vocab';
         }
+        else if(ctype === COMPONENT_TYPE.checkBoxes) {
+            input_type = 'checkbox';
+        }
         return input_type;
     }
 
@@ -411,13 +455,17 @@ class Quiz {
         let previous_data = this.qd_verbose[this.currentDictIx.toString()];
         let text_features : string[] = [];
         let vocab_features : string[] = [];
+        let checkbox_features : string[] = [];
         let radio_features : string[] = [];
         let n_parts  =  0;
         let vanswers = this.currentPanelQuestion.getVanswers();
         let iter = 0;
         for(let feat in previous_data){
             //let input_type = this.getInputType(feat);
+            console.log('Feature: ', feat);
             let input_type = this.getInputTypeAdvanced(vanswers, iter);
+            console.log('Input Type: ', input_type);
+            console.log('========================================');
             //console.log('VANSWERS: ', vanswers[iter]);
             //let ctype = vanswers[iter].cType;
             
@@ -430,6 +478,9 @@ class Quiz {
             }
             else if(input_type === 'vocab'){
                 vocab_features.push(feat);
+            }
+            else if(input_type === 'checkbox'){
+                checkbox_features.push(feat);
             }
             else {
                 radio_features.push(feat);
@@ -445,6 +496,9 @@ class Quiz {
     
         // Handle radio features
         this.populateRadioAnswers(n_parts, radio_features);
+
+        // Handle checkbox features
+        this.populateCheckboxAnswers(checkbox_features);
     }
     //------------------------------------------------------------------------------------------
     // saveCurrentAnswer method
@@ -484,9 +538,6 @@ class Quiz {
 
         if(this.currentDictIx > 0){
              
-            // enable the next question button if it is disabled
-            //$('button#next_question').removeAttr('disabled');
-
             // get the text for the previous question
             let previousDict : Dictionary = new Dictionary(dictionaries, this.currentDictIx - 1, quizdata);
 
@@ -509,11 +560,7 @@ class Quiz {
                 $('button#next_question').removeAttr('disabled');
             }
 
-            /*
-            if($('button#next_question').is(':hidden')){
-                $('button#previous_question').hide()
-            }
-            */
+            
             this.currentDictIx = this.currentDictIx - 1;
             this.loadPreviousAnswerAdvanced();                    
         }

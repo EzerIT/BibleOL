@@ -2904,6 +2904,7 @@ var Quiz = (function () {
             this.loadPreviousAnswerAdvanced();
         }
         this.saveAnswersExposed();
+        this.logData();
     };
     Quiz.prototype.loadPreviousAnswer = function () {
         $('.inputshow').empty();
@@ -3017,8 +3018,29 @@ var Quiz = (function () {
             iter = iter + 1;
         }
     };
+    Quiz.prototype.populateCheckboxAnswers = function (checkbox_features) {
+        var previous_data = this.qd_verbose[this.currentDictIx.toString()];
+        var iter = 1;
+        for (var feature in previous_data) {
+            if (this.checkForTarget(feature, checkbox_features)) {
+                var user_answers = previous_data[feature];
+                for (var i = 0; i < user_answers.length; i++) {
+                    var boxes_array_str = user_answers[i].replace("(", "").replace(")", "");
+                    var boxes_array = boxes_array_str.split(',');
+                    for (var j = 0; j < boxes_array.length; j++) {
+                        var box_j = boxes_array[j];
+                        var box_j_id = "#".concat(box_j, "_").concat(iter);
+                        $(box_j_id).prop('checked', true);
+                    }
+                    iter = iter + 1;
+                }
+            }
+        }
+        console.log('-----------------------------------------');
+    };
     Quiz.prototype.getInputTypeAdvanced = function (vanswers, iter) {
         var ctype = vanswers[iter].cType;
+        console.log('ctype: ', ctype);
         var input_type = 'radio';
         if (ctype === COMPONENT_TYPE.textFieldForeign) {
             input_type = 'text';
@@ -3029,18 +3051,25 @@ var Quiz = (function () {
         else if (ctype === COMPONENT_TYPE.textFieldWithVirtKeyboard) {
             input_type = 'vocab';
         }
+        else if (ctype === COMPONENT_TYPE.checkBoxes) {
+            input_type = 'checkbox';
+        }
         return input_type;
     };
     Quiz.prototype.loadPreviousAnswerAdvanced = function () {
         var previous_data = this.qd_verbose[this.currentDictIx.toString()];
         var text_features = [];
         var vocab_features = [];
+        var checkbox_features = [];
         var radio_features = [];
         var n_parts = 0;
         var vanswers = this.currentPanelQuestion.getVanswers();
         var iter = 0;
         for (var feat in previous_data) {
+            console.log('Feature: ', feat);
             var input_type = this.getInputTypeAdvanced(vanswers, iter);
+            console.log('Input Type: ', input_type);
+            console.log('========================================');
             var user_answer = previous_data[feat];
             n_parts = user_answer.length;
             if (input_type === 'text') {
@@ -3048,6 +3077,9 @@ var Quiz = (function () {
             }
             else if (input_type === 'vocab') {
                 vocab_features.push(feat);
+            }
+            else if (input_type === 'checkbox') {
+                checkbox_features.push(feat);
             }
             else {
                 radio_features.push(feat);
@@ -3057,6 +3089,7 @@ var Quiz = (function () {
         this.populateVocabAnswers(n_parts, vocab_features);
         this.populateTextAnswers(n_parts, text_features);
         this.populateRadioAnswers(n_parts, radio_features);
+        this.populateCheckboxAnswers(checkbox_features);
     };
     Quiz.prototype.saveCurrentAnswer = function () {
         var panel = this.currentPanelQuestion.updateQuestionStat();
