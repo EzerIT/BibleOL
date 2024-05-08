@@ -3029,6 +3029,9 @@ var Quiz = (function () {
                     var boxes_array = boxes_array_str.split(',');
                     for (var j = 0; j < boxes_array.length; j++) {
                         var box_j = boxes_array[j];
+                        if (box_j.includes('Unanswered')) {
+                            continue;
+                        }
                         var box_j_id = "#".concat(box_j, "_").concat(iter);
                         $(box_j_id).prop('checked', true);
                     }

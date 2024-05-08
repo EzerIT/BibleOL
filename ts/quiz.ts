@@ -409,6 +409,9 @@ class Quiz {
                     let boxes_array = boxes_array_str.split(',');
                     for(let j = 0; j < boxes_array.length; j++) {
                         let box_j = boxes_array[j];
+                        if(box_j.includes('Unanswered')) {
+                            continue;
+                        }
                         let box_j_id = `#${box_j}_${iter}`;
                         $(box_j_id).prop('checked', true);
                     }
