@@ -14,6 +14,7 @@ sudo sed -i -e "s/PASSWORD/${MYSQL_PASSWORD}/g" database.php
 sudo sed -i -e "s/DATABASE/${MYSQL_DATABASE}/g" database.php 
 sudo sed -i -e "s/localhost/localhost:3306/g" database.php
 sudo cp ol.php-dist ol.php
+sudo sed -i -e "s/array()/array('MyBH', 'RRG', 'Hinneh', 'AndrewsUniversity')/g" ol.php
 sudo cp config.php-dist config.php
 sudo sed -i -e "s@https://example.com@${BASE_URL}@g" config.php
 cd /var/www/html/BibleOL
