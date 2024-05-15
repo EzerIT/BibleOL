@@ -2810,16 +2810,22 @@ var Quiz = (function () {
         console.log('QD Verbose: ', this.qd_verbose);
         console.log('--------------------------------------------------------------------------');
     };
-    Quiz.prototype.savePreviousAnswerAdvanced = function () {
+    Quiz.prototype.savePreviousAnswerAdvanced = function (n_parts) {
+        var mc_features = ['g_prs_utf8', 'g_word_nocant_utf8'];
         var tracking_data = {};
-        var previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
-        var req_features = previous_data.names;
-        var nreq_features = req_features.length;
-        var user_answers = previous_data.users_answer;
+        var previous_data = this.quiz_statistics.questions[this.currentDictIx];
+        var request_features = previous_data.req_feat;
+        var names = request_features.names;
+        var nreq_features = names.length;
+        var user_answers = request_features.users_answer;
+        var correct_answers = request_features.correct_answer;
         for (var i = 0; i < user_answers.length; i++) {
             var answer_i = user_answers[i];
             var feature_idx = i % nreq_features;
-            var feature_i = req_features[feature_idx];
+            var feature_i = names[feature_idx];
+            if (this.checkForTarget(feature_i, mc_features) === true) {
+                console.log('Multiple Choice Feature');
+            }
             if (feature_i in tracking_data) {
                 tracking_data[feature_i].push(answer_i);
             }
@@ -2868,7 +2874,9 @@ var Quiz = (function () {
         this.last_action = 'next';
         if (this.currentPanelQuestion !== null) {
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
-            this.savePreviousAnswerAdvanced();
+            var number_of_parts = this.currentPanelQuestion.getSubQuizMax();
+            this.savePreviousAnswerAdvanced(number_of_parts);
+            this.logData();
         }
         else if (quizdata.fixedquestions > 0) {
             $('button#finish').attr('disabled', 'disabled');
@@ -2904,7 +2912,6 @@ var Quiz = (function () {
             this.loadPreviousAnswerAdvanced();
         }
         this.saveAnswersExposed();
-        this.logData();
     };
     Quiz.prototype.loadPreviousAnswer = function () {
         $('.inputshow').empty();
@@ -3043,7 +3050,6 @@ var Quiz = (function () {
     };
     Quiz.prototype.getInputTypeAdvanced = function (vanswers, iter) {
         var ctype = vanswers[iter].cType;
-        console.log('ctype: ', ctype);
         var input_type = 'radio';
         if (ctype === COMPONENT_TYPE.textFieldForeign) {
             input_type = 'text';
@@ -3069,10 +3075,7 @@ var Quiz = (function () {
         var vanswers = this.currentPanelQuestion.getVanswers();
         var iter = 0;
         for (var feat in previous_data) {
-            console.log('Feature: ', feat);
             var input_type = this.getInputTypeAdvanced(vanswers, iter);
-            console.log('Input Type: ', input_type);
-            console.log('========================================');
             var user_answer = previous_data[feat];
             n_parts = user_answer.length;
             if (input_type === 'text') {
@@ -3114,6 +3117,12 @@ var Quiz = (function () {
         }
         this.qd_verbose[this.currentDictIx.toString()] = tracking_data;
     };
+    Quiz.prototype.enableNext = function () {
+        $('button#next_question').show();
+        $('button#finish').show();
+        $('button#finishNoStats').show();
+        $('button#next_question').removeAttr('disabled');
+    };
     Quiz.prototype.previousQuestion = function (first) {
         this.saveCurrentAnswer();
         if (this.currentDictIx > 0) {
@@ -3124,14 +3133,14 @@ var Quiz = (function () {
             $('progress#progress').attr('value', this.currentDictIx).attr('max', dictionaries.sentenceSets.length);
             this.currentPanelQuestion = new PanelQuestion(quizdata, previousDict, this.exam_mode);
             var parts = this.currentPanelQuestion.getSubQuizMax();
-            if (parts === 1) {
-                $('button#next_question').show();
-                $('button#finish').show();
-                $('button#finishNoStats').show();
-                $('button#next_question').removeAttr('disabled');
-            }
             this.currentDictIx = this.currentDictIx - 1;
             this.loadPreviousAnswerAdvanced();
+            if (parts === 1) {
+                this.enableNext();
+            }
+            else if (this.currentDictIx + 1 < dictionaries.sentenceSets.length) {
+                this.enableNext();
+            }
         }
         this.quiz_statistics.questions.splice(this.currentDictIx, 1);
         this.last_action = 'previous';

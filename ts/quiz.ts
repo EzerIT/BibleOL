@@ -62,33 +62,95 @@ class Quiz {
     // 
     // This method is called to record the previous answer, but it works for advanced question with
     // multiple request features.
-    public savePreviousAnswerAdvanced() : void {
+    public savePreviousAnswerAdvanced(n_parts:number) : void {
+        // there are some multiple choice features that require special treatment
+        let mc_features = ['g_prs_utf8', 'g_word_nocant_utf8'];
+
+
         // create an object maping the request feature to an array of user input
         let tracking_data : {[key:string]:any} = {};
-        let previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
-        let req_features = previous_data.names; // the request features (ex. lexeme, tense, etc.)
-        let nreq_features = req_features.length;
-        let user_answers = previous_data.users_answer; // the user answers (ex. 'Imperfect', 'Future', etc.)
-        
+        let previous_data = this.quiz_statistics.questions[this.currentDictIx];
+        let request_features = previous_data.req_feat;
+        //console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+        //console.log('Previous Data: ', previous_data);
+        //console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+        let names = request_features.names; // the request features (ex. lexeme, tense, etc.)
+        let nreq_features = names.length;
+        let user_answers = request_features.users_answer; // the user answers (ex. 'Imperfect', 'Future', etc.)
+        let correct_answers = request_features.correct_answer;
+
+        /*
+        console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+        console.log(this.qd_verbose);
+        console.log('Names: ', names);
+        console.log('n: ', nreq_features);
+        console.log('User Answers: ', user_answers);
+        console.log('Correct Answers: ', correct_answers);
+        if(n_parts * names.length != user_answers.length) {
+            console.log('Null feature');
+        }
+        console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+        */
+
         // for each user answer, add it to the corresponding req feature in tracking data ex. {tense: ['Imperfect', 'Future']}
         for(let i = 0; i < user_answers.length; i++){
             let answer_i = user_answers[i];
             let feature_idx = i % nreq_features;
-            let feature_i = req_features[feature_idx];
+            let feature_i = names[feature_idx];
+
+            if(this.checkForTarget(feature_i, mc_features) === true) {
+                console.log('Multiple Choice Feature');
+            }
+            
             // if the feature is already in the tracking data, append the answer to the array, otherwise add it as a new key
-            if(feature_i in tracking_data){
+            if(feature_i in tracking_data) {
                 tracking_data[feature_i].push(answer_i);
             }
             else {
                 tracking_data[feature_i] = [answer_i];
             }
+            
+
+            
         }
+
         // add the tracking data to the verbose data for the current question
         // ex. {0: {tense: ['Imperfect', 'Future']}}
-        
         this.qd_verbose[this.currentDictIx.toString()] = tracking_data;
-        
 
+        // check if there is a null feature
+        /*
+        for(let key in this.qd_verbose) {
+            let child_object = this.qd_verbose[key];
+            for(let child_key in child_object) {
+                let child_answers = child_object[child_key];
+            }
+        }
+        */
+
+        /*
+        console.log('=========================================================================================');
+        let n_children_keys = 0; // if this variable does not remain constant, then there is a null feature
+        let n_changes = 0; // track the number of times n_children_keys changes, if this is more than one, then there is a null feature
+        let is_null = false;
+        for(let key_index in this.qd_verbose) {
+            if(this.qd_verbose.hasOwnProperty(key_index)) {
+                let child_object = this.qd_verbose[key_index];
+                let n = Object.keys(child_object).length; 
+                console.log('+++++++++--' + key_index + '--+++++++++');
+                console.log('n: ', n);
+                console.log(child_object);
+                if(n_children_keys !== n) {
+
+                    n_changes = n_changes + 1;
+                }
+                
+
+            }
+        }
+        console.log('=========================================================================================');
+        */
+        
     }
 
     //------------------------------------------------------------------------------------------
@@ -165,8 +227,9 @@ class Quiz {
             // Save the previous answer in this.quiz_dictionary and this.qd_verbose
             //let previous_answers = this.quiz_statistics.questions[this.currentDictIx].req_feat.users_answer;
             //this.savePreviousAnswer(previous_answers);
-            this.savePreviousAnswerAdvanced();
-            //this.logData();
+            let number_of_parts = this.currentPanelQuestion.getSubQuizMax();
+            this.savePreviousAnswerAdvanced(number_of_parts);
+            this.logData();
 
         }        
         else if (quizdata.fixedquestions>0) {
@@ -228,7 +291,7 @@ class Quiz {
         }
         
         this.saveAnswersExposed();
-        this.logData();
+        //this.logData();
 
 
     }
@@ -373,6 +436,8 @@ class Quiz {
         }
     }
     
+
+
     public populateRadioAnswers(n_parts:number, radio_features:string []): void {
         let iter = 1;
         let previous_data = this.qd_verbose[this.currentDictIx.toString()];
@@ -437,7 +502,7 @@ class Quiz {
 
     public getInputTypeAdvanced(vanswers:any, iter:number) : string {
         let ctype = vanswers[iter].cType;
-        console.log('ctype: ', ctype);
+        //console.log('ctype: ', ctype);
         let input_type = 'radio';
         if(ctype === COMPONENT_TYPE.textFieldForeign) {
             input_type = 'text';
@@ -465,10 +530,10 @@ class Quiz {
         let iter = 0;
         for(let feat in previous_data){
             //let input_type = this.getInputType(feat);
-            console.log('Feature: ', feat);
+            //console.log('Feature: ', feat);
             let input_type = this.getInputTypeAdvanced(vanswers, iter);
-            console.log('Input Type: ', input_type);
-            console.log('========================================');
+            //console.log('Input Type: ', input_type);
+            //console.log('========================================');
             //console.log('VANSWERS: ', vanswers[iter]);
             //let ctype = vanswers[iter].cType;
             
@@ -533,6 +598,13 @@ class Quiz {
 
     }
 
+    public enableNext() {
+        // Show "Next", "GRADE task" and "SAVE outcome" buttons
+        $('button#next_question').show();
+        $('button#finish').show();
+        $('button#finishNoStats').show();
+        $('button#next_question').removeAttr('disabled');
+    }
 
     public previousQuestion(first:boolean) : void {
         
@@ -555,17 +627,17 @@ class Quiz {
             // Create a panel for the next question
             this.currentPanelQuestion = new PanelQuestion(quizdata, previousDict, this.exam_mode);
             let parts = this.currentPanelQuestion.getSubQuizMax();
+            this.currentDictIx = this.currentDictIx - 1;
+            this.loadPreviousAnswerAdvanced();   
             if(parts === 1) {
-                // Show "Next", "GRADE task" and "SAVE outcome" buttons
-                $('button#next_question').show();
-                $('button#finish').show();
-                $('button#finishNoStats').show();
-                $('button#next_question').removeAttr('disabled');
+                this.enableNext();
+            }
+            else if (this.currentDictIx+1 < dictionaries.sentenceSets.length){
+                this.enableNext();
             }
 
             
-            this.currentDictIx = this.currentDictIx - 1;
-            this.loadPreviousAnswerAdvanced();                    
+                             
         }
 
         // delete the last saved version of the question in case the user updates the answer
