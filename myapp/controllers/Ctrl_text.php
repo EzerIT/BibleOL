@@ -360,7 +360,8 @@ class Ctrl_text extends MY_Controller {
               'l10n_js_json' => $this->mod_localize->get_json(),
               'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
               'is_logged_in' => $this->mod_users->is_logged_in(),
-              'time_seconds' => $time_seconds
+              'time_seconds' => $time_seconds,
+              'number_of_quizzes' => $number_of_quizzes
             );
 
             $exam_data = array(
@@ -678,7 +679,9 @@ class Ctrl_text extends MY_Controller {
         try {
             $minutes = (int)$_POST['minutes'];
             $seconds = (int)$_POST['seconds'];
+            $buffer = 3; // 3 seconds buffer to allow for page to load
             $time_limit = $minutes * 60 + $seconds;
+            $time_limit += $buffer;
 
             $this->mod_users->check_teacher();
 
