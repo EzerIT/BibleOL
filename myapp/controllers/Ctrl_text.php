@@ -346,7 +346,13 @@ class Ctrl_text extends MY_Controller {
             }
             // Retrieve Time Limit
             $result = $this->db->select('time_seconds')->where('pathname', $quiz)->get('exerciseowner')->row();
-            $time_seconds = $result->time_seconds;  
+        
+            $time_seconds = $result->time_seconds;
+            $is_unlimited = false;
+            if(is_null($time_seconds)) {
+                $is_unlimited = true;
+            }
+            
 
 
             $display_data = array(
@@ -361,6 +367,7 @@ class Ctrl_text extends MY_Controller {
               'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
               'is_logged_in' => $this->mod_users->is_logged_in(),
               'time_seconds' => $time_seconds,
+              'is_unlimited' => $is_unlimited,
               'number_of_quizzes' => $number_of_quizzes
             );
 

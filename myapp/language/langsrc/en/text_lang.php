@@ -102,6 +102,7 @@ $lang['start_quiz'] = "Start quiz";
 $lang['start_text_reading'] = "Start text reading";
 $lang['stop_practicing'] = "Stop practicing?";
 $lang['timer'] = "Timer";
+$lang['timer_label_section'] = "Section Time Left: "; 
 $lang['toggle_mql'] = "Toggle MQL";
 $lang['try_an_exercise'] = "Try an exercise";
 $lang['using_database'] = "Using database: %s";
