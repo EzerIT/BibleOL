@@ -4,8 +4,14 @@
   <div id="exercise_lst" style="display: none;"><?= $exercise_lst ?></div>
 <?php endif; ?>
 
+
+
+
+<div id="unlim" style="display:none"><?= $is_unlimited ?></div>
+
 <script>
   function formatTime(time) {
+    
     var hours = Math.floor(time / 60 / 60);
     var minutes = Math.floor((time % (60 * 60)) / 60);
     var seconds = Math.floor((time % (60)));
@@ -13,16 +19,24 @@
   }
 
   var seconds = <?= $time_seconds ?>;
-  //seconds = seconds * 60;
+  console.log('HELLO FROM SCIRPT');
   var number_of_quizzes = <?= $number_of_quizzes ?>;
-  var deadline = (new Date().getTime() / 1000) + seconds;
-
+  var total_time = number_of_quizzes * seconds;
+  //seconds = seconds * 60;
+  var deadline = (new Date().getTime() / 1000) + total_time;
+  
+  
+  //var exam_status =  isset($is_exam) && $is_exam ?>;
+  //console.log('Exam Status: ', exam_status);
   var quiz_idx = 0
   function iterateTimer(){
     var timeLeft = deadline - new Date().getTime() / 1000;
     console.log('timeLeft: ' + timeLeft);
-
+    
+    
     if (timeLeft < 0) {
+      document.getElementById('finish').click();
+      /*
       if(quiz_idx < number_of_quizzes-1){
         document.getElementById('next_question').click();
         // reset clock            
@@ -41,18 +55,24 @@
 
       quiz_idx++;
       console.log('IDX: ', quiz_idx)
+      */
     }
     else if(timeLeft < 11) {
       document.getElementById('timeLeft').style.color = '#ffa5c7';
     }
     var timestamp = formatTime(timeLeft);
     document.getElementById("timeLeft").innerHTML =   timestamp;
+  
+    
   }
-  $(document).ready(function(){
-    setInterval(iterateTimer, 1000);
+
+
+  $(document).ready(function(){  
+    setInterval(iterateTimer, 1000);  
   });
 
   setInterval(function(){
+    console.log('Hello From setInterval');
     var timeLeft = deadline - new Date().getTime() / 1000;
     console.log('timeLeft: ', timeLeft);
     if (timeLeft < 0) {
@@ -63,6 +83,8 @@
     }
     var timestamp = formatTime(timeLeft);
     document.getElementById("timeLeft").innerHTML =   timestamp;
+  
+  
   }, 1000);
 
 </script>
@@ -113,7 +135,7 @@
             </label>
 
             <div style="margin-left:auto; margin-right: auto;">
-              <label id="timer" class="bg-secondary text-light" style="font-size:14pt; font-weight:normal; text-transform:capitalize;"><?= "Time Left: " ?>
+              <label id="timer" class="bg-secondary text-light" style="font-size:14pt; font-weight:normal; text-transform:capitalize;"><?= $this->lang->line('timer_label_section')?>
                 <span id="timeLeft" style="font-weight:bold; text-transform:uppercase;"> </span>
               </label>
             </div>
@@ -205,3 +227,11 @@
         });
 </script>
 </div><!-- end of div class="row" -->
+
+<?php if($is_unlimited): ?>
+  <script>
+    var unlimited_msg = 'Unlimited';
+    document.getElementById("timeLeft").innerHTML = unlimited_msg;
+    document.getElementById('timeLeft').style.color = '#c3e3f7';
+  </script>
+<?php endif; ?>
