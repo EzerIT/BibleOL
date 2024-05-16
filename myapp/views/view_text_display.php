@@ -14,7 +14,43 @@
 
   var seconds = <?= $time_seconds ?>;
   //seconds = seconds * 60;
+  var number_of_quizzes = <?= $number_of_quizzes ?>;
   var deadline = (new Date().getTime() / 1000) + seconds;
+
+  var quiz_idx = 0
+  function iterateTimer(){
+    var timeLeft = deadline - new Date().getTime() / 1000;
+    console.log('timeLeft: ' + timeLeft);
+
+    if (timeLeft < 0) {
+      if(quiz_idx < number_of_quizzes-1){
+        document.getElementById('next_question').click();
+        // reset clock            
+        var newDeadline = (new Date().getTime() / 1000) + seconds;
+        deadline = newDeadline;
+        timeLeft = deadline - new Date().getTime() / 1000;
+
+        // change color back to white
+        document.getElementById('timeLeft').style.color = '#ffffff';
+      }
+      else {
+        document.getElementById('finish').click();
+      }
+
+
+
+      quiz_idx++;
+      console.log('IDX: ', quiz_idx)
+    }
+    else if(timeLeft < 11) {
+      document.getElementById('timeLeft').style.color = '#ffa5c7';
+    }
+    var timestamp = formatTime(timeLeft);
+    document.getElementById("timeLeft").innerHTML =   timestamp;
+  }
+  $(document).ready(function(){
+    setInterval(iterateTimer, 1000);
+  });
 
   setInterval(function(){
     var timeLeft = deadline - new Date().getTime() / 1000;
