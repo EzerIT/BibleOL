@@ -115,6 +115,7 @@ CREATE TABLE `bol_exerciseowner` (
   `id` int NOT NULL AUTO_INCREMENT,
   `pathname` text NOT NULL,
   `ownerid` int NOT NULL,
+  `time_seconds` int,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
