@@ -7,6 +7,7 @@
     <li><a href="#tab_sentences"><?= $this->lang->line('sentences') ?></a></li>
     <li><a href="#tab_sentence_units"><?= $this->lang->line('sentence_units') ?></a></li>
     <li><a href="#tab_features"><?= $this->lang->line('features') ?></a></li>
+    <li><a href="#tab_timer"><?= 'Timer' ?></a></li>
   </ul>
    
   <div id="tab_description">
@@ -53,7 +54,178 @@
   </div>
   <div id="tab_features">
   </div>
+  <div id="tab_timer">
+    <div class="row">
+      <label style="margin-right:10px" for="minutes">Minutes: </label> 
+      <select class="timer-settings" id="minutes-timer" name="minutes" style="margin-right:20px">
+        <?php 
+          for ($i = 0; $i < 60; $i++) {
+            echo "<option value=\"$i\">$i</option>";
+          }
+        ?>
+      </select>
+      <label style="margin-right:10px" for="seconds">Seconds: </label> 
+      <select class="timer-settings" id="seconds-timer" name="seconds">
+        <?php 
+          for ($i = 0; $i < 60; $i++) {
+            echo "<option value=\"$i\">$i</option>";
+          }
+        ?>
+      </select>
+      <label style="margin-left:20px" for="activate-timer">Timer: </label>
+      <select class="timer-settings" style="margin-left:10px" id="activate-timer-menu" name="activate-timer">
+        <option value="off">OFF</option>
+        <option value="on">ON</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <div style="border:3px; border-color:black" class="clock-container">
+        <div class="bordered" id="time-left">00:00</div>
+        <div id="display-controls">
+          <button id="reset-timer" class="timer-controls btn"><i class="fa" aria-hidden="true">&#xf021;</i></button>
+          <button id="increase-arrow-min" class="timer-controls btn"><i class="fa fa-arrow-up"></i></button>
+          <button id="decrease-arrow-min" class="timer-controls btn"><i class="fa fa-arrow-down"></i></button>
+          <button id="increase-arrow-seconds" class="timer-controls btn"><i class="fa fa-arrow-up"></i></button>
+          <button id="decrease-arrow-seconds" class="timer-controls btn"><i class="fa fa-arrow-down"></i></button>
+
+
+        </div>
+      </div>
+    </div>
+
+    <br>
+  </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+    $("#reset-timer").click(function(){
+      console.log('RESET');
+      $("#seconds-timer").val("0");
+      $("#minutes-timer").val("0");
+      $("#time-left").text("00:00");
+      $("#activate-timer-menu").val("off");
+    })
+    $("#decrease-arrow-min").click(function(){
+      let minutes = $("#minutes-timer").val();
+      let new_minutes = parseInt(minutes) - 1;
+      if(new_minutes < 0){
+        myalert("Timer Limit Reached", "The timer cannot be negative.");
+      }
+      else{
+        $("#minutes-timer").val(new_minutes);
+        $("#minutes-timer").trigger("change");
+      }
+    })
+    $("#increase-arrow-min").click(function(){
+      let minutes = $("#minutes-timer").val();
+      let new_minutes = parseInt(minutes) + 1;
+      if(new_minutes >= 60){
+        myalert("Timer Limit Reached", "The timer cannot exceed 60 minutes.");
+      }
+      else{
+        $("#minutes-timer").val(new_minutes);
+        $("#minutes-timer").trigger("change");
+      }
+    })
+    $("#decrease-arrow-seconds").click(function(){
+      let seconds = $("#seconds-timer").val();
+      let minutes = $("#minutes-timer").val();
+
+      let new_seconds = parseInt(seconds) - 15;
+      if(new_seconds < 0){
+        let new_minutes = parseInt(minutes) - 1;
+        if(new_minutes < 0){
+          myalert("Timer Limit Reached", "The timer cannot be negative.");
+        }
+        else{
+          console.log('New Seconds: ', new_seconds);
+          let residual = 60 + new_seconds;
+          $("#seconds-timer").val(residual.toString());
+          $("#minutes-timer").val(parseInt(minutes) - 1);
+          $("#seconds-timer").trigger("change");
+          $("#minutes-timer").trigger("change");
+        }
+      }
+      else{
+        $("#seconds-timer").val(new_seconds);
+        $("#seconds-timer").trigger("change");
+      }
+    })
+    $("#increase-arrow-seconds").click(function(){
+      let seconds = $("#seconds-timer").val();
+      let minutes = $("#minutes-timer").val();
+
+      let new_seconds = parseInt(seconds) + 15;
+      if(new_seconds >= 60){
+
+        let new_minutes = parseInt(minutes) + 1;
+        if(new_minutes >= 60){
+          myalert("Timer Limit Reached", "The timer cannot exceed 60 minutes.");
+        }
+        else{
+          console.log('New Seconds: ', new_seconds);
+          let residual = new_seconds - 60;
+          $("#seconds-timer").val(residual.toString());
+          $("#minutes-timer").val(parseInt(minutes) + 1);
+          $("#seconds-timer").trigger("change");
+          $("#minutes-timer").trigger("change");
+        }
+      }
+      else{
+        $("#seconds-timer").val(new_seconds);
+        $("#seconds-timer").trigger("change");
+      }
+    })
+
+
+
+
+
+
+    $("#activate-timer-menu").change(function(){
+      let timer_status = $("#activate-timer-menu").val();
+      if(timer_status =="off"){
+        $("#seconds-timer").val("0");
+        $("#minutes-timer").val("0");
+        $("#time-left").text("00:00");
+      }
+    });
+    $("#seconds-timer").change(function(){
+      let timer_status = $("#activate-timer-menu").val();
+      if(timer_status =="off"){
+        myalert("Timer is Off", "The timer is currently turned off, to set a time limit turn the timer on.");
+        $("#seconds-timer").val("0");
+      }
+    });
+    $("#seconds-timer").change(function(){
+      let minutes = $("#minutes-timer").val()
+      if(minutes.length < 2)
+        minutes = "0" + minutes;
+      let seconds = $("#seconds-timer").val()
+      if(seconds.length < 2)
+        seconds = "0" + seconds;
+      $("#time-left").text( minutes + ":" + seconds);
+    });
+    $("#minutes-timer").change(function(){
+      let timer_status = $("#activate-timer-menu").val();
+      if(timer_status =="off"){
+        myalert("Timer is Off", "The timer is currently turned off, to set a time limit turn the timer on.");
+        $("#minutes-timer").val("0");
+      }
+    });
+    $("#minutes-timer").change(function(){
+      let minutes = $("#minutes-timer").val()
+      if(minutes.length < 2)
+        minutes = "0" + minutes;
+      let seconds = $("#seconds-timer").val()
+      if(seconds.length < 2)
+        seconds = "0" + seconds;
+      $("#time-left").text( minutes + ":" + seconds);
+    });
+  });
+</script>
 
 <div style="display:none" id="virtualkbcontainer">
   <div id="virtualkbid"></div>
