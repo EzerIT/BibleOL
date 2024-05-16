@@ -7,7 +7,7 @@
     <li><a href="#tab_sentences"><?= $this->lang->line('sentences') ?></a></li>
     <li><a href="#tab_sentence_units"><?= $this->lang->line('sentence_units') ?></a></li>
     <li><a href="#tab_features"><?= $this->lang->line('features') ?></a></li>
-    <li><a href="#tab_timer"><?= 'Timer' ?></a></li>
+    <li><a href="#tab_timer"><?= $this->lang->line('timer') ?></a></li>
   </ul>
    
   <div id="tab_description">
