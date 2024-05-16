@@ -189,6 +189,9 @@ class Mod_quizpath extends CI_Model {
     // If $filename==null, assume that $this is a file object
     // If $filename!=null, assume that $this is a directory object containing the file
     public function set_owner(int $owner, int $time_limit, string $filename=null) {
+        if($time_limit === -1) {
+            $time_limit = null;
+        }
         if (is_null($filename)) {
             assert(is_file($this->canonical_absolute));
             $pathname = $this->canonical_relative;
