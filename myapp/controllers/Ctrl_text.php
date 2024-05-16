@@ -115,7 +115,8 @@ class Ctrl_text extends MY_Controller {
         
         // Package quiz data
         $res = $this->mod_askemdros->package_test_quiz($quizdata);
-        $this->mod_quizpath->set_owner($this->mod_users->my_id());
+        $dummy_time_limit = 100;
+        $this->mod_quizpath->set_owner($this->mod_users->my_id(), $dummy_time_limit);
 
         $number_of_quizzes = 5;
         $universe = null;
