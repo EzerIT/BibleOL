@@ -4,10 +4,7 @@
   <div id="exercise_lst" style="display: none;"><?= $exercise_lst ?></div>
 <?php endif; ?>
 
-<?php 
-  echo 'Number of Questions: ' . $number_of_quizzes . '<br>';
 
-?>
 
 <script>
   function formatTime(time) {
