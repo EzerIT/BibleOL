@@ -344,6 +344,10 @@ class Ctrl_text extends MY_Controller {
                         break;
                 }
             }
+            // Retrieve Time Limit
+            $result = $this->db->select('time_seconds')->where('pathname', $quiz)->get('exerciseowner')->row();
+            $time_seconds = $result->time_seconds;  
+
 
             $display_data = array(
               'is_quiz' => true,
@@ -355,7 +359,8 @@ class Ctrl_text extends MY_Controller {
               'l10n_json' => $this->mod_askemdros->l10n_json,
               'l10n_js_json' => $this->mod_localize->get_json(),
               'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
-              'is_logged_in' => $this->mod_users->is_logged_in()
+              'is_logged_in' => $this->mod_users->is_logged_in(),
+              'time_seconds' => $time_seconds
             );
 
             $exam_data = array(
@@ -673,6 +678,10 @@ class Ctrl_text extends MY_Controller {
 
     public function submit_quiz() {
         try {
+            $minutes = (int)$_POST['minutes'];
+            $seconds = (int)$_POST['seconds'];
+            $time_limit = $minutes * 60 + $seconds;
+
             $this->mod_users->check_teacher();
 
             if (!isset($_POST['dir']))
@@ -698,7 +707,8 @@ class Ctrl_text extends MY_Controller {
             }
 
             $this->mod_askemdros->save_quiz(json_decode(urldecode($_POST['quizdata'])));
-            $this->mod_quizpath->set_owner($this->mod_users->my_id());
+            //$this->mod_quizpath->set_owner($this->mod_users->my_id());
+            $this->mod_quizpath->set_owner($this->mod_users->my_id(), $time_limit);
             redirect('/file_manager?dir=' . $_POST['dir']); // Note: Don't use http_build_query, because $POST['dir'] is already encoded
         }
         catch (DataException $e) {

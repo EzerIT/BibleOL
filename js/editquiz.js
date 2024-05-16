@@ -2491,6 +2491,8 @@ function check_overwrite() {
     $('#overwrite-dialog-confirm').modal('show');
 }
 function save_quiz2() {
+    var minutes = $('#minutes-timer').val();
+    var seconds = $('#seconds-timer').val();
     decoded_3et.desc = ckeditor.val();
     decoded_3et.selectedPaths = [];
     for (var i = 0; i < checked_passages.length; ++i) {
@@ -2509,7 +2511,7 @@ function save_quiz2() {
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
     console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
-    var form = $("<form action=\"".concat(submit_to, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                           </form>"));
+    var form = $("<form action=\"".concat(submit_to, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                             <input type=\"hidden\" name=\"minutes\" value=\"").concat(minutes, "\">\n                             <input type=\"hidden\" name=\"seconds\" value=\"").concat(seconds, "\">\n                           </form>"));
     $('body').append(form);
     isSubmitting = true;
     form.submit();
