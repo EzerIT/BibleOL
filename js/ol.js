@@ -2825,6 +2825,7 @@ var Quiz = (function () {
             var feature_i = names[feature_idx];
             if (this.checkForTarget(feature_i, mc_features) === true) {
                 console.log('Multiple Choice Feature');
+                $('button#previous_question').attr('disabled', 'disabled');
             }
             if (feature_i in tracking_data) {
                 tracking_data[feature_i].push(answer_i);

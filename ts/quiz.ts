@@ -100,6 +100,7 @@ class Quiz {
 
             if(this.checkForTarget(feature_i, mc_features) === true) {
                 console.log('Multiple Choice Feature');
+                $('button#previous_question').attr('disabled', 'disabled');
             }
             
             // if the feature is already in the tracking data, append the answer to the array, otherwise add it as a new key
