@@ -8,6 +8,7 @@
     <li><a href="#tab_sentence_units"><?= $this->lang->line('sentence_units') ?></a></li>
     <li><a href="#tab_features"><?= $this->lang->line('features') ?></a></li>
     <li><a href="#tab_timer"><?= $this->lang->line('timer') ?></a></li>
+    <li><a href="#tab_sample"><?= $this->lang->line('sample_results') ?></a></li>
   </ul>
    
   <div id="tab_description">
@@ -53,6 +54,9 @@
   <div id="tab_sentence_units">
   </div>
   <div id="tab_features">
+  </div>
+  <div id="tab_sample">
+    <?php echo "Sample Results Here"; ?>
   </div>
   <div id="tab_timer">
     <div class="row">

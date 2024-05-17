@@ -69,6 +69,7 @@ $lang['quiz_instruct1'] = "Select the Passages to Use for the Quiz...";
 $lang['quiz_instruct2'] = "...and then press the “Start quiz” button at the bottom of the page.";
 $lang['quiz_name'] = "Quiz name";
 $lang['restricted_access'] = "(Restricted access)";
+$lang['sample_results'] = "Sample Results";
 $lang['save_button'] = "Save";
 $lang['select_a_passage'] = "<p>Here, you can select a Bible passage to display.<p>\n"
         . "     <p>If you omit “First verse”, an entire chapter will be displayed.</p>\n"
