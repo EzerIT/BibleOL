@@ -7,6 +7,7 @@
     <li><a href="#tab_sentences"><?= $this->lang->line('sentences') ?></a></li>
     <li><a href="#tab_sentence_units"><?= $this->lang->line('sentence_units') ?></a></li>
     <li><a href="#tab_features"><?= $this->lang->line('features') ?></a></li>
+    <li><a href="#tab_sample_results" onclick="preview_results()"><?= $this->lang->line('sample_results') ?></a></li>
     <li><a href="#tab_timer"><?= $this->lang->line('timer') ?></a></li>
     <li><a href="#tab_sample" onclick="preview_results()"><?= $this->lang->line('sample_results') ?></a></li>
   </ul>
@@ -54,6 +55,9 @@
   <div id="tab_sentence_units">
   </div>
   <div id="tab_features">
+  </div>
+  <div id="tab_sample_results">
+    <?php echo "Hello World!"?>
   </div>
   <div id="tab_sample">
     <?php echo "Sample Results Here"; ?>
@@ -250,6 +254,7 @@
   var l10n_js = <?= $l10n_js_json ?>;
   var typeinfo = <?= $typeinfo_json ?>;
   var decoded_3et = <?= $decoded_3et_json ?>;
+  var preview_data = <?= $decoded_3et_json ?>;
   var initial_universe = <?= $universe ?>;
   var submit_to = '<?= site_url("text/submit_quiz") ?>';
   var check_url = '<?= site_url("text/check_submit_quiz") ?>';

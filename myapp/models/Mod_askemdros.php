@@ -147,8 +147,37 @@ class Mod_askemdros extends CI_Model {
         return $stripped_selection;
     }
 
+    public function get_sentence_selector($preview_data){
+        //echo "Received Data: " . json_encode($preview_data) . "<br>";
+        $sentenceSelector = isset($preview_data->sentenceSelection->mql) 
+            ? $preview_data->sentenceSelection->mql
+            : "[{$preview_data->sentenceSelection->object} NORETRIEVE {$preview_data->sentenceSelection->featHand}]";
+
+        //echo "this->decoded_3et->sentenceSelection->featHand: " . json_encode($preview_data->sentenceSelection->featHand) . "\n";
+        //echo "\nFeature Hand: " . json_encode($preview_data->sentenceSelection->featHand) . "\n";
+        //echo "\nsentenceSelector: " . $sentenceSelector . "\n";
+        
+        $comparator = $preview_data->sentenceSelection->featHand->vhand[0]->comparator;
+        if($comparator == "equals")
+            $joiner = "IN";
+        else    
+            $joiner = "NOT IN";
+
+        $values = $preview_data->sentenceSelection->featHand->vhand[0]->values;
+        $values_str = "(" . implode(",", $values) . ")";
+        //echo "Values String: " . $values_str . "\n";
+
+        $sentenceSelector = "[{$preview_data->sentenceSelection->object} NORETRIEVE {$preview_data->sentenceSelection->featHand->vhand[0]->name} {$joiner} {$values_str}]";
+        //echo "New Sentence Selector: " . $sentenceSelector . "\n";
+
+        //$this->quiz_data->previewSheaf($sentenceSelector);
+
+        return $sentenceSelector;
+    }
+
 
     private function parseQuiz(string $filename, array $use_selection = null) {
+        
         $this->parseQuizBasic($filename);
 
         $sentenceSelector = isset($this->decoded_3et->sentenceSelection->mql) 
@@ -159,6 +188,10 @@ class Mod_askemdros extends CI_Model {
             ? $this->decoded_3et->quizObjectSelection->mql
             : $this->decoded_3et->quizObjectSelection->featHand->__toString();
 
+        //echo "this->decoded_3et->sentenceSelection->object: " . $this->decoded_3et->sentenceSelection->featHand. "<br>";
+        //echo '$sentenceSelector' . $sentenceSelector . '<br>';
+        //echo '$qoSelector' . $qoSelector . '<br>';
+        
         // A full universe path looks like this: <path></path>
         // Depending on the XML parser used, this may either result in a path which is either array() or array('').
         // The following statement streamlines this as array('').
@@ -234,10 +267,10 @@ class Mod_askemdros extends CI_Model {
     
     private function parseQuizBasic(string $filename) {
         $this->decoded_3et = $this->decodeQuiz($filename);
-        //echo 'Decoded 3et: ' . var_dump($this->decodeQuiz($filename)) . '<br>';
-        //$die=3/0;
+        //echo 'Welcome to parseQuizBasic()!<br>';
 
         $this->setup($this->decoded_3et->database,$this->decoded_3et->properties);
+        //echo 'Here is the decoded 3et: ' . json_encode($this->decoded_3et) . '<br>';
 
         // Make sure glosses are not visible if a gloss language is requested
         if ($this->decoded_3et->quizObjectSelection->object===$this->db_config->dbinfo->objHasSurface) {
@@ -285,6 +318,11 @@ class Mod_askemdros extends CI_Model {
             $this->universe = array('');
         else
             $this->universe = $this->decoded_3et->selectedPaths;
+    
+        //echo 'Here is the decoded 3et (v2): ' . json_encode($this->decoded_3et) . '<br>';
+
+
+
     }
 
     public function show_test_quiz(int $number_of_quizzes, stdClass $quizdata, array $use_selection = null){
@@ -316,11 +354,72 @@ class Mod_askemdros extends CI_Model {
         }
 
     }
+
+    public function preview_quiz(object $preview_data, string $sentenceSelector){
+        //echo "Welcome to preview_quiz() in Mod_askemdros!<br>";
+        $this->load->library('db_config');
+        $this->setup($preview_data->database, $preview_data->properties);
+        if(property_exists($preview_data, 'selected_paths')){
+            
+            if (count($preview_data->selected_paths) === 0)
+                $preview_universe = array('');
+            else
+                $preview_universe = $preview_data->selected_paths;
+
+            
+            
+            $quizid = -1;
+            
+            $this->load->library('quiz_data',array('quizid' => $quizid,
+                                           'universe' => self::parsePath($preview_data->selected_paths, $preview_data->fixedquestions>0 ? null : null),
+                                           'senSelect' => $sentenceSelector,
+                                           'qoSelect' => '',
+                                           'desc' => $preview_data->desc,
+                                           'maylocate' => $preview_data->maylocate,
+                                           'sentbefore' => $preview_data->sentbefore,
+                                           'sentafter' => $preview_data->sentafter,
+                                           'fixedquestions' => $preview_data->fixedquestions,
+                                           'randomize' => $preview_data->randomize,
+                                           'show_features' => $preview_data->quizFeatures->showFeatures ?? [],
+                                           'request_features' => $preview_data->quizFeatures->requestFeatures ?? [],
+                                           'dontshow_features' => $preview_data->quizFeatures->dontShowFeatures ?? [],
+                                           'dontshow_objects' => $preview_data->quizFeatures->dontShowObjects ?? [],
+                                           'glosslimit' => $preview_data->quizFeatures->glosslimit,
+                                           'oType' => $preview_data->quizObjectSelection->object));
+            
+            
+
+            $universe =  self::parsePath($preview_data->selected_paths, $preview_data->fixedquestions>0 ? null : null);
+
+            $display_data = $this->quiz_data->previewSheaf($sentenceSelector);                            
+            
+            //continue on here
+            $number_of_quizzes = $display_data['n_candidates'];
+            $this->dictionaries_json = json_encode($this->quiz_data->getNextCandidate($number_of_quizzes));
+            //echo "Dictionaries JSON: " . $this->dictionaries_json . "<br>";
+            $this->quiz_data_json = json_encode($this->quiz_data);
+            //echo 'Quiz Data JSON: ' . $this->quiz_data_json . '<br>';
+            $this->dbinfo_json = $this->db_config->dbinfo_json;
+            $this->l10n_json = $this->db_config->l10n_json;
+            $this->typeinfo_json = $this->db_config->typeinfo_json;
+        }
+        else {
+            echo "\nError: preview_data does not contain selected_paths\n";
+            $display_data = ["n_candidates" => 0,
+                             "query" => null,
+                             "main_sheaf" => null];
+        
+        }
+
+        return $display_data;
+        
+    }
     public function show_quiz(int $number_of_quizzes, array $use_selection = null) {
         try {
             $this->load->library('db_config');
-
+            
             self::parseQuiz($this->mod_quizpath->get_absolute(), $use_selection);
+            //echo '$this->quiz_data: ' . var_dump($this->quiz_data) . '<br>';
             if ($this->quiz_data->getCandidateSheaf())
                 $numCandidates = $this->quiz_data->getNumberOfCandidates();
             else
@@ -329,7 +428,9 @@ class Mod_askemdros extends CI_Model {
             if ($this->quiz_data->fixedquestions>0)
                 $number_of_quizzes = $this->quiz_data->fixedquestions;
             $this->dictionaries_json = json_encode($this->quiz_data->getNextCandidate($number_of_quizzes));
+            //echo "Dictionaries JSON: " . $this->dictionaries_json . "<br>";
             $this->quiz_data_json = json_encode($this->quiz_data);
+            //echo 'Quiz Data JSON: ' . $this->quiz_data_json . '<br>';
 
             $this->dbinfo_json = $this->db_config->dbinfo_json;
             $this->l10n_json = $this->db_config->l10n_json;
@@ -371,7 +472,6 @@ class Mod_askemdros extends CI_Model {
         try {
             $this->load->library('db_config');
             $this->setup($db, $db);
-            
             $this->dbinfo_json = $this->db_config->dbinfo_json;
             $this->l10n_json = $this->db_config->l10n_json;
             $this->typeinfo_json = $this->db_config->typeinfo_json;
@@ -412,14 +512,21 @@ class Mod_askemdros extends CI_Model {
         return $res;
     }
 
+    public function generate_intermediate_quizdata(stdClass $quizdata){
+        $this->setup($quizdata->database,$quizdata->properties);
+        $this->load->helper(array('file','quiztemplate'));
+        $res = Template::writeAsXml($quizdata, $this->db_config->dbinfo);
+        return $res;    
+    }
+    
     public function save_quiz(stdClass $quizdata) {
-        echo 'Quiz Path: ' . $this->mod_quizpath->get_absolute() . '<br>';
         $this->setup($quizdata->database,$quizdata->properties);
 
         $this->load->helper(array('file','quiztemplate'));
+        //echo "quizdata: " . json_encode($quizdata) . "<br>";
 
         $res = Template::writeAsXml($quizdata, $this->db_config->dbinfo);
-
+        //echo "res: " . $res . "<br>";
         if (!write_file($this->mod_quizpath->get_absolute(), $res))
             throw new DataException($this->lang->line('cannot_write_to_quiz_file'));
     }

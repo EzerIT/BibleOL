@@ -245,6 +245,8 @@ class Ctrl_text extends MY_Controller {
         }
     }
 
+    
+
     // Displays a quiz with the universe specified in the .3et file.
 	public function show_quiz() {
         if (!isset($_GET['quiz'])) {
@@ -316,6 +318,96 @@ class Ctrl_text extends MY_Controller {
         $this->show_quiz_common($_POST['quiz'], intval($_POST['count']), $_POST['sel']);
     }
 
+    public function preview_results_backend_alpha(){
+        $this->load->model('mod_quizpath' );
+        $this->load->model('mod_askemdros');
+        $this->load->model('mod_localize');
+    
+        
+        $preview_data = json_encode($_POST);
+        $preview_data = json_decode($preview_data);
+        $table_idx = $preview_data->idx;
+        
+        //echo "Preview Data: " . json_encode($preview_data) . "\n";
+        $sentence_selector = $this->mod_askemdros->get_sentence_selector($preview_data);
+        $display_data = $this->mod_askemdros->preview_quiz($preview_data, $sentence_selector);
+        //$number_of_quizzes = $display_data->n_candidates;
+        //echo "\nDICTIONARIES: " . json_encode($this->mod_askemdros->dictionaries_json) . "\n";
+
+        //$main_sheaf = $display_data['main_sheaf'];
+        //$javascripts = array('js/ol.js');
+        $javascripts = array('jstree/jquery.jstree.js',
+                                 'ckeditor/ckeditor.js',
+                                 'ckeditor/adapters/jquery.js',
+                                 'js/editquiz.js',
+                                 'js/ol.js');
+
+        $mo = json_decode($this->mod_askemdros->dictionaries_json)->monadObjects;                 
+        file_put_contents('dictionaries-test.json', json_encode($mo));
+        
+
+        $display_data2 = array(
+            'is_quiz' => true,
+            'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
+            'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
+            'quizData_json' => $this->mod_askemdros->quiz_data_json,
+            'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
+            'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
+            'l10n_json' => $this->mod_askemdros->l10n_json,
+            'l10n_js_json' => $this->mod_localize->get_json(),
+            'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
+            'is_logged_in' => $this->mod_users->is_logged_in(),
+            'js_list' => $javascripts,
+            'css_list' => array('styles/selectbox.css'),
+            'n_candidates'=>$display_data['n_candidates'],
+            'table_idx'=>$table_idx
+          );
+        
+        
+        //$this->load->view('view_sampling', $display_data2);
+        $this->load->view('view_top1', array('title' => $this->lang->line('quiz'),
+                                                'css_list' => array('styles/selectbox.css'),
+                                                'js_list' => $javascripts));
+
+        $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
+        //$this->load->view('view_top2');
+        
+        $this->load->view('view_sampling', $display_data2);
+        
+        //$this->load->view('view_bottom');
+        
+        /*
+        $this->load->view('view_top1', array('title' => $this->lang->line('quiz'),
+                                             'css_list' => array('styles/selectbox.css'),
+                                             'js_list' => $javascripts));
+        */
+        $data = json_decode($this->mod_askemdros->dictionaries_json)->monadObjects[0];
+        //echo "Display Data-2: " . json_encode($data) . "\n";
+    }
+
+    public function preview_results(){
+        // MODEL:
+        $this->load->model('mod_quizpath' );
+        $this->load->model('mod_askemdros');
+
+        $preview_data = json_encode($_POST);
+        $preview_data = json_decode($preview_data);
+        //$die=4/0;
+        $number_of_quizzes = 5;
+        //echo "Preview Results" . $preview_data;
+        //$this->mod_askemdros->setup($preview_data->database, $preview_data->properties);
+        //echo "type(preview_data): " . gettype($preview_data) . "<br>";
+        //$res = $this->mod_askemdros->generate_intermediate_quizdata($preview_data);
+        //$this->mod_askemdros->preview_quiz($number_of_quizzes, $preview_data);
+        //echo "Made it here!\n";
+        $sentence_selector = $this->mod_askemdros->get_sentence_selector($preview_data);
+        $display_data = $this->mod_askemdros->preview_quiz($number_of_quizzes, $preview_data, $sentence_selector);
+
+        //echo "Doing Okay \n";
+        echo "Display Data " . json_encode($display_data) . "\n";
+        return json_encode($display_data);
+    }
+
     public function preview_results(){
         // MODEL:
         $this->load->model('mod_quizpath' );
@@ -381,6 +473,8 @@ class Ctrl_text extends MY_Controller {
               'is_unlimited' => $is_unlimited,
               'number_of_quizzes' => $number_of_quizzes
             );
+
+            echo var_dump($display_data) . "\n";
 
             $exam_data = array(
               'is_exam' => $examid !== null,
@@ -597,7 +691,8 @@ class Ctrl_text extends MY_Controller {
             $javascripts = array('jstree/jquery.jstree.js',
                                  'ckeditor/ckeditor.js',
                                  'ckeditor/adapters/jquery.js',
-                                 'js/editquiz.js');
+                                 'js/editquiz.js',
+                                 'js/ol.js');
 
             switch ($this->db_config->dbinfo->charSet) {
               case 'hebrew':
@@ -696,6 +791,9 @@ class Ctrl_text extends MY_Controller {
     }
 
     public function submit_quiz() {
+        $qdata = json_decode(urldecode($_POST['quizdata']));
+        echo "Welcome to submit_quiz()!<br>";
+        echo "Quiz Data: " . var_dump($qdata) . "<br>";
         try {
             $minutes = (int)$_POST['minutes'];
             $seconds = (int)$_POST['seconds'];
@@ -734,6 +832,8 @@ class Ctrl_text extends MY_Controller {
             }
 
             $this->mod_askemdros->save_quiz(json_decode(urldecode($_POST['quizdata'])));
+            $this->mod_quizpath->set_owner($this->mod_users->my_id());
+            //redirect('/file_manager?dir=' . $_POST['dir']); // Note: Don't use http_build_query, because $POST['dir'] is already encoded
             //$this->mod_quizpath->set_owner($this->mod_users->my_id());
             $this->mod_quizpath->set_owner($this->mod_users->my_id(), $time_limit);
             redirect('/file_manager?dir=' . $_POST['dir']); // Note: Don't use http_build_query, because $POST['dir'] is already encoded
@@ -742,4 +842,6 @@ class Ctrl_text extends MY_Controller {
             $this->error_view($e->getMessage(), $this->lang->line('edit_quiz'));
         }
     }
+
+    
 }

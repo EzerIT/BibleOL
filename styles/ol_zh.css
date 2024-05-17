@@ -1452,6 +1452,12 @@ div.quizeditor #tab_features {
   border: solid 1px #adadad;
   border-radius: 0;
 }
+div.quizeditor #tqrow {
+  width: 100%;
+}
+div.quizeditor #tqrow #tq_output_mega table {
+  width: 100%;
+}
 footer {
   margin-top: auto;
 }
