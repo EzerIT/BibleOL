@@ -316,6 +316,16 @@ class Ctrl_text extends MY_Controller {
         $this->show_quiz_common($_POST['quiz'], intval($_POST['count']), $_POST['sel']);
     }
 
+    public function preview_results(){
+        // MODEL:
+        $this->load->model('mod_quizpath' );
+        $this->load->model('mod_askemdros');
+
+        $preview_data = json_encode($_POST);
+        //$die=4/0;
+        $number_of_quizzes = 5;
+    }
+
     // Common code for show_quiz() and show_quiz_sel()
 	private function show_quiz_common(string $quiz, int $number_of_quizzes, array $universe = null, int $examid = null, string $exercise_lst = null) {
         try {
