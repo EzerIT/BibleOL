@@ -367,6 +367,76 @@ function check_overwrite() : void {
     $('#overwrite-dialog-confirm').modal('show');
 }
 
+function trigger_preview_results(preview_data:object): void{
+    let submit_url = '/text/preview_results';
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: preview_data,
+        success: function(response) {
+            // Handle the response here
+            console.log(response);
+        },
+        error: function(error) {
+            // Handle the error here
+            console.log(error);
+        }
+    });
+
+}
+
+function preview_results(): void{
+    console.log('preview_results() v2');
+    let checked_passages = $('#passagetree').jstree('get_checked',null,false);
+    let selected_paths = []
+    for (let i=0; i<checked_passages.length; ++i) {
+        let r = $(checked_passages[i]).data('ref');
+        if (r!='')
+            selected_paths.push(r);
+    } 
+    let maylocate = $('#maylocate_cb').prop('checked');
+    let sentbefore = $('#sentbefore').val();
+    let sentafter = $('#sentafter').val();
+    let fixedquestions = + $('#fixedquestions').val(); // Convert to number
+    let randomize = $('#randomorder').prop('checked');
+    if(!(fixedquestions>0))
+        fixedquestions = 0;
+    let sentenceSelection   = panelSent.getInfo();
+    let quizObjectSelection = panelSentUnit.getInfo();
+    let quizFeatures        = panelFeatures.getInfo();
+
+    let preview_data = {
+        'selected_paths': selected_paths,
+        'maylocate': maylocate,
+        'sentbefore': sentbefore,
+        'sentafter': sentafter,
+        'fixedquestions': fixedquestions,
+        'randomize': randomize,
+        'sentenceSelection': sentenceSelection,
+        'quizObjectSelection': quizObjectSelection, 
+        'quizFeatures': quizFeatures}
+
+    //console.log('PREVIEW DATA: ', preview_data);
+
+    $('#tab_sample_results').text(JSON.stringify(preview_data, null, 4));
+
+    trigger_preview_results(preview_data);
+
+    /*
+    // The HTML form contains the directory, the filename and the exercise as a JSON string
+    let form : JQuery = $(`<form action="${submit_to}" method="post">
+                             <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">
+                             <input type="hidden" name="quiz"     value="${encodeURIComponent(quiz_name)}">
+                             <input type="hidden" name="quizdata" value="${encodeURIComponent(JSON.stringify(decoded_3et))}">
+                           </form>`);
+    $('body').append(form);
+    isSubmitting = true;
+    //form.submit();
+    */
+
+
+}
+
 //****************************************************************************************************
 // save_quiz2 function
 //
