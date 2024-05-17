@@ -2583,7 +2583,7 @@ function add_book_buttons() {
         if (i == 0) {
             var cell = $("<tr class=\"bookrow\"></tr>");
             var row = $("<td id=row_book_".concat(i, "></td>"));
-            var button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\" onclick=toggle_cbody(").concat(i, ")><b>").concat(pathname, ":&nbsp;</b><span id=\"actual_count\"></span></button>"));
+            var button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\" onclick=toggle_cbody(").concat(i, ")><b>").concat(pathname, ":&nbsp;</b><span id=\"actual_count").concat(i, "\"></span></button>"));
             row.append(button);
             cell.append(row);
             if ($('#cardhead tr').length === 0) {
@@ -2595,7 +2595,7 @@ function add_book_buttons() {
             var card_header = $("<div id=\"cardhead_".concat(i, "\" class=\"card-header\"></div>"));
             var cell = $("<tr class=\"bookrow\"></tr>");
             var row = $("<td id=row_book_".concat(i, "></td>"));
-            var button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\" onclick=toggle_cbody(").concat(i, ")>").concat(pathname, "</button>"));
+            var button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\" onclick=toggle_cbody(").concat(i, ")><b>").concat(pathname, ":&nbsp;</b><span id=\"actual_count").concat(i, "\"></span></button>"));
             row.append(button);
             cell.append(row);
             card_header.append(cell);

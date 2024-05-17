@@ -90,8 +90,31 @@
       }
     }
     console.log('Monads by Passage: ', monads_by_passage);
+
     return monads_by_passage;
   }
+  /*
+  var count = $n_candidates ;
+  $('#actual_count').empty();
+  $('#actual_count').append(count);
+  */
+  //--------------------------------------------------------------------------------
+  // update_counts() function
+  //
+  // Parameters:
+  //    button_idx (int) - the index of the button that is getting the count labeled onto it
+  //    monads_by_passage (dict) - a dictionary of monads grouped by passage
+  //    passage_name (string) - the name of the passage
+  // Returns:
+  //    None
+  function update_counts(button_idx, monads_by_passage, passage_name) {
+    let count = monads_by_passage[passage_name].length;
+    $(`#actual_count${button_idx}`).empty();
+    $(`#actual_count${button_idx}`).append(count);
+  }
+
+
+
   //--------------------------------------------------------------------------------
   // generate_table() function
   //
@@ -155,6 +178,7 @@
   let passages = Object.keys(monads_by_passage);
   for(let i = 0; i < passages.length; i++){
     let monad_section = monads_by_passage[passages[i]];
+    update_counts(i, monads_by_passage, passages[i]);
     populate_table(monad_section, i);
 
   }
