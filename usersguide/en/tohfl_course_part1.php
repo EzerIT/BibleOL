@@ -114,7 +114,7 @@
 	<li>Learn Vocabulary of Lesson #04</li>
 	<li>BibleOL exercise:
 	<ul>
-		<li>Vocabulary: Words of Lesson #4: Click <a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University/OTST551_Heb-I_(based%20on%20Gen19,%20Gen20)/OTST551_Heb-I_day03_W_vocab_Gen19.3et&amp;count=15" rel="noopener" target="_blank">here</a>.</li>
+		<li>Vocabulary: Words of Lesson #4: Click <a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2FOTST551_Heb-I_%28based%20on%20Gen19%2C%20Gen20%29%2FOTST551_Heb-I_day04_R_vocab_Gen19.3et&count=10" rel="noopener" target="_blank">here</a>.</li>
 		<li>Morphology: Prefixing of ב ,כ ,ל ,מן ,ה ,ו (including compounding) exercise: Click&nbsp;<a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2FOTST551_Heb-I_%28based%20on%20Gen19%2C%20Gen20%29%2FOTST551_Heb-I_day04_R_morphology_prefixing_WeBeKeLeMinHaCompounding.3et&amp;count=10" rel="noopener" target="_blank">here</a>.</li>
 		<li>Morphology: Basical noun morphology (number, gender, state) exercise: Click <a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2FOTST551_Heb-I_%28based%20on%20Gen19%2C%20Gen20%29%2FOTST551_Heb-I_day04_R_grammar_regular-nouns%28participles%29_no-suffixes.3et&amp;count=15" rel="noopener" target="_blank">here</a>.</li>
 	</ul>
