@@ -690,8 +690,14 @@ class Ctrl_text extends MY_Controller {
             $minutes = (int)$_POST['minutes'];
             $seconds = (int)$_POST['seconds'];
             $buffer = 3; // 3 seconds buffer to allow for page to load
+            
             $time_limit = $minutes * 60 + $seconds;
-            $time_limit += $buffer;
+            if($time_limit == 0){
+                $time_limit = -1;
+            }
+            else {
+                $time_limit += $buffer;
+            }
 
             $this->mod_users->check_teacher();
 
