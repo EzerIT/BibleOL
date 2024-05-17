@@ -2699,20 +2699,6 @@ function preview_results_frontend_alpha() {
     }
     console.log('TABLE IDX: ', table_idx);
 }
-function trigger_preview_results(preview_data) {
-    var submit_url = '/text/preview_results';
-    $.ajax({
-        url: submit_url,
-        type: 'POST',
-        data: preview_data,
-        success: function (response) {
-            console.log(response);
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    });
-}
 function preview_results() {
     console.log('preview_results() v2');
     var checked_passages = $('#passagetree').jstree('get_checked', null, false);
@@ -2766,8 +2752,6 @@ function save_quiz2() {
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
-    var form = $("<form action=\"".concat(submit_to, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                           </form>"));
-    console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
     var form = $("<form action=\"".concat(submit_to, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                             <input type=\"hidden\" name=\"minutes\" value=\"").concat(minutes, "\">\n                             <input type=\"hidden\" name=\"seconds\" value=\"").concat(seconds, "\">\n                           </form>"));
     $('body').append(form);
     isSubmitting = true;

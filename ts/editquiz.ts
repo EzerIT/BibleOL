@@ -647,23 +647,7 @@ function preview_results_frontend_alpha(): void {
 
 }
 
-function trigger_preview_results(preview_data:object): void{
-    let submit_url = '/text/preview_results';
-    $.ajax({
-        url: submit_url,
-        type: 'POST',
-        data: preview_data,
-        success: function(response) {
-            // Handle the response here
-            console.log(response);
-        },
-        error: function(error) {
-            // Handle the error here
-            console.log(error);
-        }
-    });
 
-}
 
 function preview_results(): void{
     console.log('preview_results() v2');
