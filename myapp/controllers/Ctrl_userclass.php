@@ -174,10 +174,23 @@ class Ctrl_userclass extends MY_Controller {
             $all_classes = $this->mod_classes->get_all_classes();
             $old_classes = $this->mod_userclass->get_classes_and_access_for_user($userid);
             $avail_classes = array();
+            $priority_classes = array();
+            $no_priority_classes = array();
 
-            foreach ($all_classes as $ix => $ac)
-                if (!array_key_exists($ac->clid, $old_classes) && (empty($ac->enrol_before) ||self::before_date($ac->enrol_before)))
-                    $avail_classes[] = $ac->clid;
+            foreach ($all_classes as $ix => $ac) {
+            
+                // if the class is not in the old_classes array and if the enrole_before date is valid, then add the class id to $avail_classes
+                if (!array_key_exists($ac->clid, $old_classes) && (empty($ac->enrol_before) ||self::before_date($ac->enrol_before))) {
+                    // if the class is valid and high priority, then add it to $priority_classes
+                    if($ac->priority) {
+                        $priority_classes[] = $ac->clid;
+                    }
+                    else {
+                        $no_priority_classes[] = $ac->clid;
+                    }
+                }
+            }
+            $avail_classes = array_merge($priority_classes, $no_priority_classes);                
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('enroll_in_class')));
