@@ -129,7 +129,6 @@
             <?php endif; ?>
 
             <div class="selectbutton row" id="locate_choice">
-            <div class="selectbutton" id="locate_choice">
             <label style="font-size:14pt; font-weight:normal; text-transform:capitalize;"><?= $this->lang->line('locate') ?><input id="locate_cb" type="checkbox">
               <span class="location" style="font-weight:bold; text-transform:uppercase;"></span>
             </label>
