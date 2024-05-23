@@ -2516,7 +2516,6 @@ function trigger_preview_results(preview_data) {
             response_js = response;
         },
         error: function (error) {
-            console.log(error);
         }
     });
     return response_js;
@@ -2555,10 +2554,10 @@ function package_preview_data() {
         'idx': table_idx
     };
     preview_data_mega = preview_data;
-    return preview_data;
 }
-function generate_query_data() {
+function generate_query_data(idx) {
     var submit_url = '/text/preview_results_backend_alpha';
+    preview_data_mega.idx = idx;
     var response_data = '';
     $.ajax({
         url: submit_url,
@@ -2570,25 +2569,27 @@ function generate_query_data() {
             $('#card-body-original').append(response_data);
         },
         error: function (error) {
-            console.log('ERROR!!');
-            console.log(error);
         }
     });
 }
 function add_book_buttons() {
+    console.log('Welcome to add_book_buttons()');
     var selected_paths = preview_data_mega.selected_paths;
-    console.log('SELECTED PATHS: ', selected_paths);
     for (var i = 0; i < selected_paths.length; i++) {
         var pathname = selected_paths[i];
+        console.log('-------------------------------------------');
+        console.log('PATHNAME: ', pathname);
+        console.log('-------------------------------------------');
         if (i == 0) {
             var cell = $("<tr class=\"bookrow\"></tr>");
             var row = $("<td id=row_book_".concat(i, "></td>"));
             var button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\" onclick=toggle_cbody(").concat(i, ")><b>").concat(pathname, ":&nbsp;</b><span id=\"actual_count").concat(i, "\"></span></button>"));
             row.append(button);
             cell.append(row);
-            if ($('#cardhead tr').length === 0) {
-                $('#cardhead').append(cell);
+            if ($('#cardhead tr').length !== 0) {
+                $('#cardhead').empty();
             }
+            $('#cardhead').append(cell);
         }
         else {
             var card = $('<div class="card"></div>');
@@ -2633,55 +2634,42 @@ function toggle_cbody(idx) {
 }
 function add_reference_table(cbody_idx, show_res) {
     if (show_res === void 0) { show_res = false; }
+    console.log(preview_data_mega.selected_paths);
+    var n_passage = preview_data_mega.selected_paths.length;
+    var passage_idx = table_idx % n_passage;
+    var passage = preview_data_mega.selected_paths[passage_idx];
     var idx = table_idx;
     var parent_button = $("#book_".concat(idx));
     var cbody = $("#card-body-original");
     if (cbody_idx > 0) {
         cbody = $("#card-body-original".concat(cbody_idx));
     }
+    cbody.empty();
     var leaf_count = cbody.find('table').length;
     console.log('Leaf Count: ', leaf_count);
-    if (leaf_count <= 0 || $("#book_table_".concat(idx)).is(':hidden') || show_res === true) {
-        $("#accbody2").show();
-        cbody.show();
-        if (leaf_count <= 0 || show_res === true) {
-            var container = $("<div style=\"overflow-y:auto;\"></div>");
-            var table = $("<table style=\"display:block; height:500px;\" id=\"book_table_".concat(idx, "\" class=\"type2 table table-striped table-sm table-res\"></table>"));
-            var row1 = $("<tr></tr>");
-            var reference_col = $("<th style=\"padding:10px; vertical-align:middle;\">Reference</th>");
-            var text_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Text</th>");
-            row1.append(reference_col);
-            row1.append(text_col);
-            table.append(row1);
-            container.append(table);
-            cbody.append(container);
-            console.log("GENERATING\n");
-            generate_query_data();
-            init = true;
-        }
-        else {
-            $("#book_table_".concat(idx)).show();
-        }
-    }
-    else {
-        cbody.hide();
-    }
+    var container = $("<div style=\"overflow-y:auto;\"></div>");
+    var table = $("<table style=\"display:block; height:500px;\" id=\"book_table_".concat(idx, "\" class=\"type2 table table-striped table-sm table-res table-").concat(passage_idx, "\"></table>"));
+    var row1 = $("<tr></tr>");
+    var reference_col = $("<th style=\"padding:10px; vertical-align:middle;\">Reference</th>");
+    var text_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Text</th>");
+    row1.append(reference_col);
+    row1.append(text_col);
+    table.append(row1);
+    container.append(table);
+    cbody.append(container);
 }
 function preview_results_frontend_alpha() {
     if (typeof preview_data_mega === 'undefined') {
         show_results = true;
         package_preview_data();
-        console.log('Initial Test Query!');
     }
     else {
         show_results = !show_results;
-        console.log('Not Initial Test Query!');
         if (show_results === true) {
             package_preview_data();
         }
     }
-    console.log('Show Results: ', show_results);
-    console.log('Preview Data Mega: ', preview_data_mega);
+    console.log('=======================================================');
     if ($('#fpan2').is(':hidden')) {
         $('#fpan2').show();
     }
@@ -2691,16 +2679,16 @@ function preview_results_frontend_alpha() {
     add_book_buttons();
     var selected_paths = preview_data_mega.selected_paths;
     for (var i = 0; i < selected_paths.length; i++) {
+        console.log('i: ', i);
         add_reference_table(i);
         table_idx++;
         if (i > 0) {
             toggle_cbody(i);
         }
     }
-    console.log('TABLE IDX: ', table_idx);
+    console.log('=======================================================');
 }
 function preview_results() {
-    console.log('preview_results() v2');
     var checked_passages = $('#passagetree').jstree('get_checked', null, false);
     var selected_paths = [];
     for (var i = 0; i < checked_passages.length; ++i) {

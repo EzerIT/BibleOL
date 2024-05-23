@@ -381,27 +381,27 @@ function trigger_preview_results(preview_data:object): string{
         data: preview_data,
         success: function(response) {
             // Handle the response here
-            //console.log(response);
+            ////console.log(response);
             response_js = response;
 
         },
         error: function(error) {
             // Handle the error here
-            console.log(error);
+            //console.log(error);
         }
     });
-    //console.log('Response JS: ', response_js)
+    ////console.log('Response JS: ', response_js)
     return response_js;
 
 }
-function package_preview_data(): any {
+function package_preview_data(): void {
     let desc = ckeditor.val();
     /*
     let checked_passages = $('#passagetree').jstree('get_checked');
     let selected_paths = []
     for (let i=0; i<checked_passages.length; ++i) {
         let r = $(checked_passages[i]).data('ref');
-        console.log('REF: ', r)
+        //console.log('REF: ', r)
         if (r!='')
             selected_paths.push(r);
     }
@@ -442,13 +442,15 @@ function package_preview_data(): any {
     }
     preview_data_mega = preview_data;
     
-    return preview_data;
+
 
 }
 
-function generate_query_data():void {
+function generate_query_data(idx:number):void {
     // generate query data
     let submit_url = '/text/preview_results_backend_alpha';
+    preview_data_mega.idx = idx;
+    
     let response_data = '';
     $.ajax({
         url: submit_url,
@@ -456,14 +458,14 @@ function generate_query_data():void {
         data: preview_data_mega,
         success: function(response) {
             response_data = response;
-            //console.log(response_data);
+            ////console.log(response_data);
             $('#card-body-original').removeData();
             $('#card-body-original').append(response_data);
             
         },
         error: function(error){
-            console.log('ERROR!!');
-            console.log(error);
+            //console.log('ERROR!!');
+            //console.log(error);
         }
     });
 
@@ -471,11 +473,15 @@ function generate_query_data():void {
 
 
 function add_book_buttons(): void {
+    console.log('Welcome to add_book_buttons()');
     // get the series of books
     let selected_paths = preview_data_mega.selected_paths;
-    console.log('SELECTED PATHS: ', selected_paths);
     for(let i = 0; i < selected_paths.length; i++) {
-        let pathname = selected_paths[i];        
+        let pathname = selected_paths[i]; 
+        console.log('-------------------------------------------');
+        console.log('PATHNAME: ', pathname);  
+        console.log('-------------------------------------------');
+     
         if(i == 0) {
             // first book
             let cell = $(`<tr class="bookrow"></tr>`);
@@ -488,10 +494,13 @@ function add_book_buttons(): void {
             //row.append(results_box);
 
             cell.append(row);
+            
             // add button to card head
-            if($('#cardhead tr').length === 0){
-                $('#cardhead').append(cell);    
+            if($('#cardhead tr').length !== 0){
+                $('#cardhead').empty();   
             }
+            $('#cardhead').append(cell);
+
         }
         else {
             // create a new card body and header
@@ -545,27 +554,42 @@ function toggle_cbody(idx:number): void {
 }
 
 function add_reference_table(cbody_idx:number, show_res: boolean = false): void {
+    //console.log('Welcome to add_reference_table()');
     //toggle_cbody(idx);
+
+    console.log(preview_data_mega.selected_paths);
+    let n_passage = preview_data_mega.selected_paths.length;
+    let passage_idx = table_idx % n_passage;
+    let passage = preview_data_mega.selected_paths[passage_idx];
+
     let idx = table_idx;
     
 
     let parent_button = $(`#book_${idx}`);
-    // generate query
-    //let preview_data = package_preview_data();
-    //console.log('Preview Data Mega: ', preview_data_mega);
-    //console.log('INIT: ', init);
+
     // create table
     let cbody = $(`#card-body-original`);
     if(cbody_idx > 0) {
         cbody = $(`#card-body-original${cbody_idx}`);
     }
+    cbody.empty();
 
-    //let row_book = $(`#row_book_${idx}`);
     let leaf_count = cbody.find('table').length;
     console.log('Leaf Count: ', leaf_count);
+    let container = $(`<div style="overflow-y:auto;"></div>`)
+    let table = $(`<table style="display:block; height:500px;" id="book_table_${idx}" class="type2 table table-striped table-sm table-res table-${passage_idx}"></table>`);
+    let row1 = $(`<tr></tr>`);
+    let reference_col = $(`<th style="padding:10px; vertical-align:middle;">Reference</th>`);
+    let text_col = $(`<th style="padding:10px; text-align:center; vertical-align:middle;">Text</th>`);
+    row1.append(reference_col);
+    row1.append(text_col);
+    table.append(row1);
+    container.append(table);
+    cbody.append(container);
+    //generate_query_data(passage_idx);
 
 
-    
+    /*
     if(leaf_count <= 0 || $(`#book_table_${idx}`).is(':hidden') || show_res === true) {
         $(`#accbody2`).show();
         cbody.show();
@@ -580,7 +604,7 @@ function add_reference_table(cbody_idx:number, show_res: boolean = false): void 
             table.append(row1);
             container.append(table);
             cbody.append(container);
-            console.log("GENERATING\n");
+            //console.log("GENERATING\n");
             generate_query_data();
             init = true;
         }
@@ -594,27 +618,31 @@ function add_reference_table(cbody_idx:number, show_res: boolean = false): void 
         //$(`#accbody2`).hide();
         cbody.hide();
     }
+    */
 
 }
 
 function preview_results_frontend_alpha(): void {
-    //console.log("Welcome to preview_results_frontend_alpha()\n");
+
+    ////console.log("Welcome to preview_results_frontend_alpha()\n");
     if(typeof preview_data_mega === 'undefined'){
         show_results = true;
         package_preview_data();
-        console.log('Initial Test Query!');
+        //console.log('Initial Test Query!');
     }
     else {
         show_results = !show_results;
-        console.log('Not Initial Test Query!');
+        //console.log('Not Initial Test Query!');
         if(show_results === true){
             package_preview_data();
         }
     }
-    console.log('Show Results: ', show_results);
-    console.log('Preview Data Mega: ', preview_data_mega);
+    ////console.log('Show Results: ', show_results);
+    ////console.log('Preview Data Mega: ', preview_data_mega);
 
-    
+    console.log('=======================================================');
+    //console.log('Selected Paths: ');
+    //console.log(preview_data_mega.selected_paths);
     
     // Toggle Feature Panel 2 (fpan2)
     if($('#fpan2').is(':hidden')){
@@ -632,6 +660,7 @@ function preview_results_frontend_alpha(): void {
     //let initial_idx = 0;
     let selected_paths = preview_data_mega.selected_paths;
     for(let i = 0; i < selected_paths.length; i++) {
+        console.log('i: ', i);
         add_reference_table(i);
         table_idx++;
         if(i > 0) {
@@ -640,17 +669,19 @@ function preview_results_frontend_alpha(): void {
     }
 
     //add_reference_table(table_idx, show_results);
-    console.log('TABLE IDX: ', table_idx);
+    //console.log('TABLE IDX: ', table_idx);
 
     //table_idx++;
     //add_reference_table(table_idx, show_results);
+    console.log('=======================================================');
+
 
 }
 
 
 
 function preview_results(): void{
-    console.log('preview_results() v2');
+    //console.log('preview_results() v2');
     let checked_passages = $('#passagetree').jstree('get_checked',null,false);
     let selected_paths = []
     for (let i=0; i<checked_passages.length; ++i) {
@@ -680,7 +711,7 @@ function preview_results(): void{
         'quizObjectSelection': quizObjectSelection, 
         'quizFeatures': quizFeatures}
 
-    //console.log('PREVIEW DATA: ', preview_data);
+    ////console.log('PREVIEW DATA: ', preview_data);
 
     $('#tab_sample_results').text(JSON.stringify(preview_data, null, 4));
 
@@ -736,9 +767,9 @@ function save_quiz2() : void {
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures        = panelFeatures.getInfo();
 
-    //console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
-    //console.log('Normal Data: ', JSON.stringify(decoded_3et));
-    //console.log('SENTENCE SELECTION: ', decoded_3et.sentenceSelection);
+    ////console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
+    ////console.log('Normal Data: ', JSON.stringify(decoded_3et));
+    ////console.log('SENTENCE SELECTION: ', decoded_3et.sentenceSelection);
     // The HTML form contains the directory, the filename and the exercise as a JSON string
     let form : JQuery = $(`<form action="${submit_to}" method="post">
                              <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">
@@ -971,7 +1002,7 @@ setTimeout(function() {
                             {err_id: "fqerror"}, // Event data
                             numberInputModifiedListener);
 
-    //console.log('decoded_3et', decoded_3et.quizFeatures.requestFeatures);
+    ////console.log('decoded_3et', decoded_3et.quizFeatures.requestFeatures);
     let order_idx:number = 1;
     let order_features: Array<string> = new Array();
 

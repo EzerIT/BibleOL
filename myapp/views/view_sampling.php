@@ -174,17 +174,13 @@
   
   monadObjects = dictionaries['monadObjects'];
   monadObjects = order_by_reference(monadObjects);
-  let monads_by_passage = group_by_passage(monadObjects);
-  let passages = Object.keys(monads_by_passage);
+  var monads_by_passage = group_by_passage(monadObjects);
+  var passages = Object.keys(monads_by_passage);
   for(let i = 0; i < passages.length; i++){
-    let monad_section = monads_by_passage[passages[i]];
+    var monad_section = monads_by_passage[passages[i]];
     update_counts(i, monads_by_passage, passages[i]);
     populate_table(monad_section, i);
-
-  }
-  
-  
-    
+  } 
 </script>
 
 
