@@ -1,3 +1,24 @@
+<script>
+  var configuration = <?= $dbinfo_json ?>;
+  var l10n = <?= $l10n_json ?>;
+  var l10n_js = <?= $l10n_js_json ?>;
+  var typeinfo = <?= $typeinfo_json ?>;
+  var decoded_3et = <?= $decoded_3et_json ?>;
+  var initial_universe = <?= $universe ?>;
+  var total_time_seconds = <?= $time_seconds ?>;
+  var is_unlimited = <?php echo json_encode($is_unlimited); ?>;
+
+  var submit_to = '<?= site_url("text/submit_quiz") ?>';
+  var check_url = '<?= site_url("text/check_submit_quiz") ?>';
+  var test_quiz_url = '<?= site_url("text/test_quiz") ?>';
+  var import_shebanq_url = '<?= site_url("shebanq/import_shebanq") ?>';
+  var quiz_name = '<?= is_null($quiz) ? '' : $quiz ?>';
+  var dir_name = '<?= $dir ?>';
+  var order_features = <?= $order_features ?>;
+  var is_new = '<?= $is_new ?>';
+  
+
+</script>
 
 <div class="quizeditor" style="display:none;">
 <div id="quiz_tabs">
@@ -88,8 +109,6 @@
           <button id="decrease-arrow-min" class="timer-controls btn"><i class="fa fa-arrow-down"></i></button>
           <button id="increase-arrow-seconds" class="timer-controls btn"><i class="fa fa-arrow-up"></i></button>
           <button id="decrease-arrow-seconds" class="timer-controls btn"><i class="fa fa-arrow-down"></i></button>
-
-
         </div>
       </div>
     </div>
@@ -240,22 +259,8 @@
 </div>
 
 
-<script>
-  var configuration = <?= $dbinfo_json ?>;
-  var l10n = <?= $l10n_json ?>;
-  var l10n_js = <?= $l10n_js_json ?>;
-  var typeinfo = <?= $typeinfo_json ?>;
-  var decoded_3et = <?= $decoded_3et_json ?>;
-  var initial_universe = <?= $universe ?>;
-  var submit_to = '<?= site_url("text/submit_quiz") ?>';
-  var check_url = '<?= site_url("text/check_submit_quiz") ?>';
-  var test_quiz_url = '<?= site_url("text/test_quiz") ?>';
-  var import_shebanq_url = '<?= site_url("shebanq/import_shebanq") ?>';
-  var quiz_name = '<?= is_null($quiz) ? '' : $quiz ?>';
-  var dir_name = '<?= $dir ?>';
-  var order_features = <?= $order_features ?>;
-  var is_new = '<?= $is_new ?>';
-</script>
+
+
 <script>
   function updateValue()
   {
@@ -402,3 +407,73 @@
   </div>
 </div>
 
+<script>
+  function display_clock(seconds_display, minutes_display) {
+    // convert the seconds and minute values to strings
+    minutes_display_str = String(minutes_display);
+    seconds_display_str = String(seconds_display);
+
+    // if the seconds and minutes are single digits add a preceeding zero
+    if(seconds_display_str.length < 2) {
+      seconds_display_str = "0" + seconds_display_str;
+    }
+    if(minutes_display_str.length < 2) {
+      minutes_display_str = "0" + minutes_display_str;
+    }
+
+    // build the display string
+    let display_string = minutes_display_str + ":" + seconds_display_str;
+    
+    // update the clock value
+    $('#time-left').text(display_string);
+
+    // update the time on the seconds menu
+    update_seconds_menu(seconds_display);
+    $("#seconds-timer").val(seconds_display);
+
+    // update the time on the minutes menu
+    update_seconds_menu(minutes_display);
+
+    // turn on the timer
+    turn_on_timer();
+
+  }
+
+  function get_minutes(seconds_display, total_time_seconds) {
+    let minutes_display = total_time_seconds - seconds_display;
+    minutes_display = Math.floor(minutes_display / 60); 
+    return minutes_display;
+  }
+
+  function get_seconds(total_time_seconds) {
+    let seconds_display = total_time_seconds % 60;
+    return seconds_display;
+  }
+
+  function update_seconds_menu(seconds_display) {
+    let seconds_display_str = String(seconds_display);
+    //console.log("SECONDS: ", seconds_display_str);
+    $("#seconds-timer").val(seconds_display);
+  }
+
+  function update_minutes_menu(minutes_display) {
+    let minutes_display_str = String(minutes_display);
+    console.log("MINUTES: ", minutes_display_str);
+    $("#minutes-timer").val(minutes_display_str);
+  }
+
+  function turn_on_timer(){
+    $("#activate-timer-menu").val("on");
+  }
+
+  $(document).ready(function() {
+    if(is_unlimited === false){
+      let seconds_display = get_seconds(total_time_seconds);
+      let minutes_display = get_minutes(seconds_display, total_time_seconds);
+      
+      // display the time on the clock
+      display_clock(seconds_display, minutes_display);
+    }
+  })
+  
+</script>

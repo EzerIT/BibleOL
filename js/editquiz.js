@@ -2576,7 +2576,52 @@ function numberInputModifiedListener(e) {
     if (s.length !== 0 && s.match(/\D/g) !== null)
         $('#' + e.data.err_id).html(localize('not_integer'));
 }
+function display_clock(seconds_display, minutes_display) {
+    var minutes_display_str = String(minutes_display);
+    var seconds_display_str = String(seconds_display);
+    if (seconds_display_str.length < 2) {
+        seconds_display_str = "0" + seconds_display_str;
+    }
+    if (minutes_display_str.length < 2) {
+        minutes_display_str = "0" + minutes_display_str;
+    }
+    var display_string = minutes_display_str + ":" + seconds_display_str;
+    $('#time-left').text(display_string);
+}
+function get_minutes(seconds_display, total_time_seconds) {
+    var minutes_display = total_time_seconds - seconds_display;
+    minutes_display = Math.floor(minutes_display / 60);
+    return minutes_display;
+}
+function get_seconds(total_time_seconds) {
+    var seconds_display = total_time_seconds % 60;
+    return seconds_display;
+}
+function update_seconds_menu(seconds_display) {
+    var seconds_display_str = String(seconds_display);
+    $("#seconds-timer").val(seconds_display_str);
+}
+function update_minutes_menu(minutes_display) {
+    var minutes_display_str = String(minutes_display);
+    $("#minutes-timer").val(minutes_display_str);
+}
+function turn_on_timer() {
+    $("#activate-timer-menu").val("on");
+}
+function turn_off_timer() {
+    $("#activate-timer-menu").val("off");
+}
 setTimeout(function () {
+    console.log(total_time_seconds);
+    var seconds_display = get_seconds(total_time_seconds);
+    var minutes_display = get_minutes(seconds_display, total_time_seconds);
+    display_clock(seconds_display, minutes_display);
+    update_seconds_menu(seconds_display);
+    update_minutes_menu(minutes_display);
+    if (total_time_seconds > 0)
+        turn_on_timer();
+    else
+        turn_off_timer();
     for (var i in configuration.sentencegrammar) {
         if (isNaN(+i))
             continue;

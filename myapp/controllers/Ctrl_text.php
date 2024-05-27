@@ -354,7 +354,7 @@ class Ctrl_text extends MY_Controller {
                 $is_unlimited = true;
             }
             
-
+            $n_small_questions = count($this->mod_askemdros->quiz_data->monad2Id);
 
             $display_data = array(
               'is_quiz' => true,
@@ -369,7 +369,8 @@ class Ctrl_text extends MY_Controller {
               'is_logged_in' => $this->mod_users->is_logged_in(),
               'time_seconds' => $time_seconds,
               'is_unlimited' => $is_unlimited,
-              'number_of_quizzes' => $number_of_quizzes
+              'number_of_quizzes' => $number_of_quizzes,
+              'number_small_questions' => $n_small_questions
             );
 
             $exam_data = array(
@@ -529,6 +530,18 @@ class Ctrl_text extends MY_Controller {
 
             //echo 'Order Features: ' . json_encode($order_features) . '<br>';
 
+            // Retrieve Time Limit
+            //$quiz = $_GET['quiz'];
+            //$result = $this->db->select('time_seconds')->where('pathname', $quiz)->get('exerciseowner')->row();
+        
+            //$time_seconds = $result->time_seconds;
+            //$is_unlimited = false;
+            //if(is_null($time_seconds)) {
+            //    $is_unlimited = true;
+            //}
+            $time_seconds = 40;
+            $is_unlimited = false;
+
             $center_text = $this->load->view('view_edit_quiz',
                                              array('decoded_3et_json' => json_encode($this->mod_askemdros->decoded_3et),
                                                    'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
@@ -539,7 +552,9 @@ class Ctrl_text extends MY_Controller {
                                                    'dir' => dirname($_GET['quiz']),
                                                    'quiz' => substr(basename($_GET['quiz']),0,-4), // Strips .3et
                                                    'order_features' => json_encode($order_features),
-                                                   'is_new' => $is_new), 
+                                                   'is_new' => $is_new,
+                                                   'time_seconds' => $time_seconds,
+                                                   'is_unlimited' => $is_unlimited), 
                                              true)
                 . $this->load->view('view_passage_tree_script',
                                     array('tree_data' => $this->universe_tree->get_jstree(),
@@ -615,6 +630,8 @@ class Ctrl_text extends MY_Controller {
                                                      'more_help_items' => array('tabs' => 'help_this_page')));
             $this->load->view('view_alert_dialog');
 
+            $time_seconds = 0;
+            $is_unlimited = true;
             $center_text = $this->load->view('view_edit_quiz',
                                              array('decoded_3et_json' => $decoded_3et_json,
                                                    'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
@@ -625,7 +642,9 @@ class Ctrl_text extends MY_Controller {
                                                    'dir' => $dir,
                                                    'quiz' => null,
                                                    'order_features' => json_encode($order_features),
-                                                   'is_new' => $is_new),
+                                                   'is_new' => $is_new,
+                                                   'time_seconds' => $time_seconds,
+                                                   'is_unlimited' => $is_unlimited),
                                              true)
                 . $this->load->view('view_passage_tree_script',
                                     array('tree_data' => $this->universe_tree->get_jstree(),

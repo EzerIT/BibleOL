@@ -62,7 +62,7 @@ declare let test_quiz_url      : string;   // URL for testing an exercise
 declare let import_shebanq_url : string;   // URL for ajax queries for imports from SHEBANQ (Note: This is a URL on the Bible OL server, not the SHEBANQ server)
 declare let quiz_name          : string;   // Name of exercise file
 declare let dir_name           : string;   // Name of exercise file directory
-
+declare let total_time_seconds : any;      // Time limit of the exercise in seconds
 
 //****************************************************************************************************
 // Other globale variables
@@ -550,6 +550,56 @@ interface FeatureOrder {
     [key:string]: any;
 }
 
+function display_clock(seconds_display:number, minutes_display:number) {
+    // convert the seconds and minute values to strings
+    let minutes_display_str = String(minutes_display);
+    let seconds_display_str = String(seconds_display);
+
+    // if the seconds and minutes are single digits add a preceeding zero
+    if(seconds_display_str.length < 2) {
+      seconds_display_str = "0" + seconds_display_str;
+    }
+    if(minutes_display_str.length < 2) {
+      minutes_display_str = "0" + minutes_display_str;
+    }
+
+    // build the display string
+    let display_string = minutes_display_str + ":" + seconds_display_str;
+    
+    // update the clock value
+    $('#time-left').text(display_string);
+
+}
+
+function get_minutes(seconds_display:number, total_time_seconds:number) {
+    let minutes_display = total_time_seconds - seconds_display;
+    minutes_display = Math.floor(minutes_display / 60); 
+    return minutes_display;
+}
+
+function get_seconds(total_time_seconds:number) {
+    let seconds_display = total_time_seconds % 60;
+    return seconds_display;
+}
+
+function update_seconds_menu(seconds_display:number) {
+    let seconds_display_str = String(seconds_display);
+    $("#seconds-timer").val(seconds_display_str);
+}
+
+function update_minutes_menu(minutes_display:number) {
+    let minutes_display_str = String(minutes_display);
+    $("#minutes-timer").val(minutes_display_str);
+}
+
+function turn_on_timer(){
+    $("#activate-timer-menu").val("on");
+}
+
+function turn_off_timer(){
+    $("#activate-timer-menu").val("off");
+}
+
 //****************************************************************************************************
 // The main program
 //
@@ -559,6 +609,20 @@ interface FeatureOrder {
 // Maybe it can be removed again by replaceing setTimeout(....,1000) with $(....).
 //
 setTimeout(function() {
+    console.log(total_time_seconds);
+    let seconds_display = get_seconds(total_time_seconds);
+    let minutes_display = get_minutes(seconds_display, total_time_seconds);
+    display_clock(seconds_display, minutes_display);
+    update_seconds_menu(seconds_display);
+    update_minutes_menu(minutes_display);
+
+    // if the timer is a valid limit then turn on the timer:
+    if(total_time_seconds > 0) 
+        turn_on_timer();
+    else
+        turn_off_timer();
+    
+
     // Add polymorphic function to the contents of configuration.sentencegrammar
     for (let i in configuration.sentencegrammar) {
         if (isNaN(+i)) continue; // Not numeric
