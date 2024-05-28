@@ -123,12 +123,7 @@
       <ul><li><a class="myview" href="#gramtabs"><h2><?= $this->lang->line('my_view') ?></h2></a></li></ul>
       <div id="tabs-background">
         <?php if ($is_quiz): ?>
-            <?php if(!(isset($is_exam) && $is_exam)): ?>
-              <label style="float:right; margin-right:10px; margin-top:5px;">
-                <input id="show_warnings" type="checkbox" style="float:right; margin-top:6px;" checked>
-                <span style="margin-right:5px;"><?= $this->lang->line('show_warnings') ?></span>
-              </label>
-            <?php endif; ?>
+            
 
             <div class="selectbutton row" id="locate_choice">
             <label style="font-size:14pt; font-weight:normal; text-transform:capitalize;"><?= $this->lang->line('locate') ?><input id="locate_cb" type="checkbox">
