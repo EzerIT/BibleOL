@@ -349,9 +349,14 @@ class Ctrl_text extends MY_Controller {
             $result = $this->db->select('time_seconds')->where('pathname', $quiz)->get('exerciseowner')->row();
         
             $time_seconds = $result->time_seconds;
+            $buffer = 3;
+
             $is_unlimited = false;
             if(is_null($time_seconds)) {
                 $is_unlimited = true;
+            }
+            else {
+                $time_seconds = $time_seconds - $buffer;
             }
             
             $n_small_questions = count($this->mod_askemdros->quiz_data->monad2Id);
