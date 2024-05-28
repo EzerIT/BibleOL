@@ -201,9 +201,15 @@ class Mod_quizpath extends CI_Model {
             $pathname = $this->canonical_relative_slash . $filename;
         }
 
-        if ($this->db->from('exerciseowner')->where('pathname', $pathname)->count_all_results() == 0)
-            // A record does not exist, insert one.
+        // this quiz pathname does not exist
+        if ($this->db->from('exerciseowner')->where('pathname', $pathname)->count_all_results() == 0){
             $query = $this->db->insert('exerciseowner', array('pathname' => $pathname, 'ownerid' => $owner, 'time_seconds' => $time_limit));
+        }
+        else {
+            // this quiz pathname does exist, but the time limit should still be updated
+            $update_query = $this->db->from('exerciseowner')->where('pathname', $pathname)->update('exerciseowner', array('time_seconds'=>$time_limit));
+        }
+            
     }
 
 

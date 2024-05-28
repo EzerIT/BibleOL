@@ -378,6 +378,7 @@ function save_quiz2() : void {
     let minutes = $('#minutes-timer').val();
     let seconds = $('#seconds-timer').val();
 
+    //console.log(4/0);
     // Build decoded_3et so that it contains the new exercise
 
     decoded_3et.desc = ckeditor.val();
@@ -402,8 +403,9 @@ function save_quiz2() : void {
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures        = panelFeatures.getInfo();
 
-    console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
+    //console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
     // The HTML form contains the directory, the filename and the exercise as a JSON string
+    
     let form : JQuery = $(`<form action="${submit_to}" method="post">
                              <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">
                              <input type="hidden" name="quiz"     value="${encodeURIComponent(quiz_name)}">
@@ -416,6 +418,9 @@ function save_quiz2() : void {
 
     isSubmitting = true;
     form.submit();
+    
+    //console.log('Minutes: ', minutes);
+    //console.log('Seconds: ', seconds);
 }
 
 //****************************************************************************************************

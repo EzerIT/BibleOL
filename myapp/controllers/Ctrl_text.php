@@ -528,20 +528,22 @@ class Ctrl_text extends MY_Controller {
                 $order_val++;
             }
 
-            //echo 'Order Features: ' . json_encode($order_features) . '<br>';
+            // get the quizpath
+            $quizpath = $_GET['quiz'];
 
-            // Retrieve Time Limit
-            //$quiz = $_GET['quiz'];
-            //$result = $this->db->select('time_seconds')->where('pathname', $quiz)->get('exerciseowner')->row();
-        
-            //$time_seconds = $result->time_seconds;
-            //$is_unlimited = false;
-            //if(is_null($time_seconds)) {
-            //    $is_unlimited = true;
-            //}
-            $time_seconds = 40;
-            $is_unlimited = false;
-
+            // default settings 
+            $time_seconds = 0;
+            $is_unlimited = true;
+            
+            // get the time limit from the user database
+            $time_limit = $this->db->select('time_seconds')->where('pathname', $quizpath)->get('exerciseowner')->row()->time_seconds;
+            
+            // if there is a time limit, then update the time_seconds and is_unlimited variables
+            if(isset($time_limit)){
+                $is_unlimited = false;
+                $time_seconds = $time_limit;
+            }
+            
             $center_text = $this->load->view('view_edit_quiz',
                                              array('decoded_3et_json' => json_encode($this->mod_askemdros->decoded_3et),
                                                    'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
