@@ -8,6 +8,8 @@
   var total_time_seconds = <?= $time_seconds ?>;
   var buffer = 3;
   total_time_seconds =total_time_seconds - buffer;
+  if(total_time_seconds < 0)
+    total_time_seconds = 0;
   var is_unlimited = <?php echo json_encode($is_unlimited); ?>;
 
   var submit_to = '<?= site_url("text/submit_quiz") ?>';
