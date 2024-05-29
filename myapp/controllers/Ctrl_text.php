@@ -90,6 +90,18 @@ class Ctrl_text extends MY_Controller {
     }
 
     public function test_quiz(){
+        $minutes = (int)$_POST['minutes'];
+        $seconds = (int)$_POST['seconds'];
+        $buffer = 3; // 3 seconds buffer to allow for page to load
+        
+        $time_limit = $minutes * 60 + $seconds;
+        if($time_limit == 0){
+            $time_limit = -1;
+        }
+        else {
+            $time_limit += $buffer;
+        }
+
         $this->mod_users->check_teacher();
 
         if (!isset($_POST['dir']))
@@ -115,8 +127,8 @@ class Ctrl_text extends MY_Controller {
         
         // Package quiz data
         $res = $this->mod_askemdros->package_test_quiz($quizdata);
-        $dummy_time_limit = -1;
-        $this->mod_quizpath->set_owner($this->mod_users->my_id(), $dummy_time_limit);
+        //$dummy_time_limit = -1;
+        $this->mod_quizpath->set_owner($this->mod_users->my_id(), $time_limit);
 
         $number_of_quizzes = 5;
         $universe = null;
@@ -542,7 +554,8 @@ class Ctrl_text extends MY_Controller {
             
             // get the time limit from the user database
             $time_limit = $this->db->select('time_seconds')->where('pathname', $quizpath)->get('exerciseowner')->row()->time_seconds;
-            
+
+
             // if there is a time limit, then update the time_seconds and is_unlimited variables
             if(isset($time_limit)){
                 $is_unlimited = false;

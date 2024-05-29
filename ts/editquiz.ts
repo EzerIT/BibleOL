@@ -237,6 +237,10 @@ function save_quiz() : void {
 }
 
 function test_quiz2(quiz_name:string) : void {
+    // get the time limit of the exercise
+    let minutes = $('#minutes-timer').val();
+    let seconds = $('#seconds-timer').val();
+
     // Build decoded_3et so that it contains the new exercise
     decoded_3et.desc = ckeditor.val();
     decoded_3et.selectedPaths = [];
@@ -262,6 +266,8 @@ function test_quiz2(quiz_name:string) : void {
                              <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">
                              <input type="hidden" name="quiz"     value="${encodeURIComponent(quiz_name)}">
                              <input type="hidden" name="quizdata" value="${encodeURIComponent(JSON.stringify(decoded_3et))}">
+                             <input type="hidden" name="minutes" value="${minutes}">
+                             <input type="hidden" name="seconds" value="${seconds}">
                            </form>`);
 
     $('body').append(form);
