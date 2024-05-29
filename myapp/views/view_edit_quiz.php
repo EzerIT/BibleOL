@@ -6,6 +6,8 @@
   var decoded_3et = <?= $decoded_3et_json ?>;
   var initial_universe = <?= $universe ?>;
   var total_time_seconds = <?= $time_seconds ?>;
+  var buffer = 3;
+  total_time_seconds =total_time_seconds - buffer;
   var is_unlimited = <?php echo json_encode($is_unlimited); ?>;
 
   var submit_to = '<?= site_url("text/submit_quiz") ?>';
