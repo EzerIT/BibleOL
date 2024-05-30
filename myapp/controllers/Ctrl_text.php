@@ -371,8 +371,18 @@ class Ctrl_text extends MY_Controller {
                 $time_seconds = $time_seconds - $buffer;
             }
             
+            //echo 'Quiz Data: ';
+            //echo var_dump($this->mod_askemdros->quiz_data);
             $n_small_questions = count($this->mod_askemdros->quiz_data->monad2Id);
 
+            echo 'Number of monad2Id Entries: ';
+            echo count($this->mod_askemdros->quiz_data->monad2Id);
+            echo '<br>Length of id2FeatVal: ';
+            echo count($this->mod_askemdros->quiz_data->id2FeatVal);
+            /*
+            echo '<br><br>id2FeatVal: <br>';
+            echo json_encode($this->mod_askemdros->quiz_data->id2FeatVal);
+            */
             $display_data = array(
               'is_quiz' => true,
               'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',

@@ -20,7 +20,6 @@
 
   var seconds = <?= $time_seconds ?>;
   console.log('HELLO FROM SCIRPT');
-  //var number_of_quizzes = <?= $number_of_quizzes ?>;
   var number_small_questions = <?= isset($number_small_questions) ? $number_small_questions : $number_of_quizzes; ?>;
   var total_time = number_small_questions * seconds;
 
