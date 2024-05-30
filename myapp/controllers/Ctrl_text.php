@@ -90,6 +90,18 @@ class Ctrl_text extends MY_Controller {
     }
 
     public function test_quiz(){
+        $minutes = (int)$_POST['minutes'];
+        $seconds = (int)$_POST['seconds'];
+        $buffer = 3; // 3 seconds buffer to allow for page to load
+        
+        $time_limit = $minutes * 60 + $seconds;
+        if($time_limit == 0){
+            $time_limit = -1;
+        }
+        else {
+            $time_limit += $buffer;
+        }
+
         $this->mod_users->check_teacher();
 
         if (!isset($_POST['dir']))
@@ -115,7 +127,8 @@ class Ctrl_text extends MY_Controller {
         
         // Package quiz data
         $res = $this->mod_askemdros->package_test_quiz($quizdata);
-        $this->mod_quizpath->set_owner($this->mod_users->my_id());
+        //$dummy_time_limit = -1;
+        $this->mod_quizpath->set_owner($this->mod_users->my_id(), $time_limit);
 
         $number_of_quizzes = 5;
         $universe = null;
@@ -344,7 +357,22 @@ class Ctrl_text extends MY_Controller {
                         break;
                 }
             }
+            // Retrieve Time Limit
+            $result = $this->db->select('time_seconds')->where('pathname', $quiz)->get('exerciseowner')->row();
+        
+            $time_seconds = $result->time_seconds;
+            $buffer = 3;
 
+            $is_unlimited = false;
+            if(is_null($time_seconds)) {
+                $is_unlimited = true;
+            }
+            else {
+                $time_seconds = $time_seconds - $buffer;
+            }
+            
+            $n_small_questions = count($this->mod_askemdros->quiz_data->id2FeatVal);
+            
             $display_data = array(
               'is_quiz' => true,
               'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
@@ -356,6 +384,10 @@ class Ctrl_text extends MY_Controller {
               'l10n_js_json' => $this->mod_localize->get_json(),
               'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
               'is_logged_in' => $this->mod_users->is_logged_in(),
+              'time_seconds' => $time_seconds,
+              'is_unlimited' => $is_unlimited,
+              'number_of_quizzes' => $number_of_quizzes,
+              'number_small_questions' => $n_small_questions
             );
 
             $exam_data = array(
@@ -513,8 +545,23 @@ class Ctrl_text extends MY_Controller {
                 $order_val++;
             }
 
-            //echo 'Order Features: ' . json_encode($order_features) . '<br>';
+            // get the quizpath
+            $quizpath = $_GET['quiz'];
 
+            // default settings 
+            $time_seconds = 0;
+            $is_unlimited = true;
+            
+            // get the time limit from the user database
+            $time_limit = $this->db->select('time_seconds')->where('pathname', $quizpath)->get('exerciseowner')->row()->time_seconds;
+
+
+            // if there is a time limit, then update the time_seconds and is_unlimited variables
+            if(isset($time_limit)){
+                $is_unlimited = false;
+                $time_seconds = $time_limit;
+            }
+            
             $center_text = $this->load->view('view_edit_quiz',
                                              array('decoded_3et_json' => json_encode($this->mod_askemdros->decoded_3et),
                                                    'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
@@ -525,7 +572,9 @@ class Ctrl_text extends MY_Controller {
                                                    'dir' => dirname($_GET['quiz']),
                                                    'quiz' => substr(basename($_GET['quiz']),0,-4), // Strips .3et
                                                    'order_features' => json_encode($order_features),
-                                                   'is_new' => $is_new), 
+                                                   'is_new' => $is_new,
+                                                   'time_seconds' => $time_seconds,
+                                                   'is_unlimited' => $is_unlimited), 
                                              true)
                 . $this->load->view('view_passage_tree_script',
                                     array('tree_data' => $this->universe_tree->get_jstree(),
@@ -601,6 +650,8 @@ class Ctrl_text extends MY_Controller {
                                                      'more_help_items' => array('tabs' => 'help_this_page')));
             $this->load->view('view_alert_dialog');
 
+            $time_seconds = 0;
+            $is_unlimited = true;
             $center_text = $this->load->view('view_edit_quiz',
                                              array('decoded_3et_json' => $decoded_3et_json,
                                                    'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
@@ -611,7 +662,9 @@ class Ctrl_text extends MY_Controller {
                                                    'dir' => $dir,
                                                    'quiz' => null,
                                                    'order_features' => json_encode($order_features),
-                                                   'is_new' => $is_new),
+                                                   'is_new' => $is_new,
+                                                   'time_seconds' => $time_seconds,
+                                                   'is_unlimited' => $is_unlimited),
                                              true)
                 . $this->load->view('view_passage_tree_script',
                                     array('tree_data' => $this->universe_tree->get_jstree(),
@@ -671,6 +724,18 @@ class Ctrl_text extends MY_Controller {
 
     public function submit_quiz() {
         try {
+            $minutes = (int)$_POST['minutes'];
+            $seconds = (int)$_POST['seconds'];
+            $buffer = 3; // 3 seconds buffer to allow for page to load
+            
+            $time_limit = $minutes * 60 + $seconds;
+            if($time_limit == 0){
+                $time_limit = -1;
+            }
+            else {
+                $time_limit += $buffer;
+            }
+
             $this->mod_users->check_teacher();
 
             if (!isset($_POST['dir']))
@@ -696,7 +761,8 @@ class Ctrl_text extends MY_Controller {
             }
 
             $this->mod_askemdros->save_quiz(json_decode(urldecode($_POST['quizdata'])));
-            $this->mod_quizpath->set_owner($this->mod_users->my_id());
+            //$this->mod_quizpath->set_owner($this->mod_users->my_id());
+            $this->mod_quizpath->set_owner($this->mod_users->my_id(), $time_limit);
             redirect('/file_manager?dir=' . $_POST['dir']); // Note: Don't use http_build_query, because $POST['dir'] is already encoded
         }
         catch (DataException $e) {

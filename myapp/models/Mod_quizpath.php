@@ -188,7 +188,10 @@ class Mod_quizpath extends CI_Model {
     // Sets owner ID of a file, unless it already has an owner
     // If $filename==null, assume that $this is a file object
     // If $filename!=null, assume that $this is a directory object containing the file
-    public function set_owner(int $owner, string $filename=null) {
+    public function set_owner(int $owner, int $time_limit, string $filename=null) {
+        if($time_limit === -1) {
+            $time_limit = null;
+        }
         if (is_null($filename)) {
             assert(is_file($this->canonical_absolute));
             $pathname = $this->canonical_relative;
@@ -198,9 +201,15 @@ class Mod_quizpath extends CI_Model {
             $pathname = $this->canonical_relative_slash . $filename;
         }
 
-        if ($this->db->from('exerciseowner')->where('pathname', $pathname)->count_all_results() == 0)
-            // A record does not exist, insert one.
-            $query = $this->db->insert('exerciseowner', array('pathname' => $pathname, 'ownerid' => $owner));
+        // this quiz pathname does not exist
+        if ($this->db->from('exerciseowner')->where('pathname', $pathname)->count_all_results() == 0){
+            $query = $this->db->insert('exerciseowner', array('pathname' => $pathname, 'ownerid' => $owner, 'time_seconds' => $time_limit));
+        }
+        else {
+            // this quiz pathname does exist, but the time limit should still be updated
+            $update_query = $this->db->from('exerciseowner')->where('pathname', $pathname)->update('exerciseowner', array('time_seconds'=>$time_limit));
+        }
+            
     }
 
 

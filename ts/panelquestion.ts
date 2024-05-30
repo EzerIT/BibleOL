@@ -500,8 +500,12 @@ class PanelQuestion {
                     $('.location').html('');
             });
         }
-        else
-            $('#locate_choice').hide();
+        /*
+        else {
+            //$('#locate_choice').hide();
+        }
+        */
+            
 
         if ($('#locate_cb').prop('checked'))
             $('.location').html(this.location);

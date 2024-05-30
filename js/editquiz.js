@@ -2408,6 +2408,8 @@ function save_quiz() {
     $('#filename-dialog').modal('show');
 }
 function test_quiz2(quiz_name) {
+    var minutes = $('#minutes-timer').val();
+    var seconds = $('#seconds-timer').val();
     decoded_3et.desc = ckeditor.val();
     decoded_3et.selectedPaths = [];
     for (var i = 0; i < checked_passages.length; ++i) {
@@ -2425,7 +2427,7 @@ function test_quiz2(quiz_name) {
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
-    var form = $("<form action=\"".concat(test_quiz_url, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                           </form>"));
+    var form = $("<form action=\"".concat(test_quiz_url, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                             <input type=\"hidden\" name=\"minutes\" value=\"").concat(minutes, "\">\n                             <input type=\"hidden\" name=\"seconds\" value=\"").concat(seconds, "\">\n                           </form>"));
     $('body').append(form);
     isSubmitting = true;
     form.submit();
@@ -2491,6 +2493,8 @@ function check_overwrite() {
     $('#overwrite-dialog-confirm').modal('show');
 }
 function save_quiz2() {
+    var minutes = $('#minutes-timer').val();
+    var seconds = $('#seconds-timer').val();
     decoded_3et.desc = ckeditor.val();
     decoded_3et.selectedPaths = [];
     for (var i = 0; i < checked_passages.length; ++i) {
@@ -2508,8 +2512,7 @@ function save_quiz2() {
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
-    console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
-    var form = $("<form action=\"".concat(submit_to, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                           </form>"));
+    var form = $("<form action=\"".concat(submit_to, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                             <input type=\"hidden\" name=\"minutes\" value=\"").concat(minutes, "\">\n                             <input type=\"hidden\" name=\"seconds\" value=\"").concat(seconds, "\">\n                           </form>"));
     $('body').append(form);
     isSubmitting = true;
     form.submit();
@@ -2574,7 +2577,52 @@ function numberInputModifiedListener(e) {
     if (s.length !== 0 && s.match(/\D/g) !== null)
         $('#' + e.data.err_id).html(localize('not_integer'));
 }
+function display_clock(seconds_display, minutes_display) {
+    var minutes_display_str = String(minutes_display);
+    var seconds_display_str = String(seconds_display);
+    if (seconds_display_str.length < 2) {
+        seconds_display_str = "0" + seconds_display_str;
+    }
+    if (minutes_display_str.length < 2) {
+        minutes_display_str = "0" + minutes_display_str;
+    }
+    var display_string = minutes_display_str + ":" + seconds_display_str;
+    $('#time-left').text(display_string);
+}
+function get_minutes(seconds_display, total_time_seconds) {
+    var minutes_display = total_time_seconds - seconds_display;
+    minutes_display = Math.floor(minutes_display / 60);
+    return minutes_display;
+}
+function get_seconds(total_time_seconds) {
+    var seconds_display = total_time_seconds % 60;
+    return seconds_display;
+}
+function update_seconds_menu(seconds_display) {
+    var seconds_display_str = String(seconds_display);
+    $("#seconds-timer").val(seconds_display_str);
+}
+function update_minutes_menu(minutes_display) {
+    var minutes_display_str = String(minutes_display);
+    $("#minutes-timer").val(minutes_display_str);
+}
+function turn_on_timer() {
+    $("#activate-timer-menu").val("on");
+}
+function turn_off_timer() {
+    $("#activate-timer-menu").val("off");
+}
 setTimeout(function () {
+    console.log(total_time_seconds);
+    var seconds_display = get_seconds(total_time_seconds);
+    var minutes_display = get_minutes(seconds_display, total_time_seconds);
+    display_clock(seconds_display, minutes_display);
+    update_seconds_menu(seconds_display);
+    update_minutes_menu(minutes_display);
+    if (total_time_seconds > 0)
+        turn_on_timer();
+    else
+        turn_off_timer();
     for (var i in configuration.sentencegrammar) {
         if (isNaN(+i))
             continue;

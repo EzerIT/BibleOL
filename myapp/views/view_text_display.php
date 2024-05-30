@@ -4,6 +4,92 @@
   <div id="exercise_lst" style="display: none;"><?= $exercise_lst ?></div>
 <?php endif; ?>
 
+
+
+
+<div id="unlim" style="display:none"><?= $is_unlimited ?></div>
+
+<script>
+  function formatTime(time) {
+    
+    var hours = Math.floor(time / 60 / 60);
+    var minutes = Math.floor((time % (60 * 60)) / 60);
+    var seconds = Math.floor((time % (60)));
+    return minutes + "m " + seconds + "s ";
+  }
+
+  var seconds = <?= $time_seconds ?>;
+  console.log('HELLO FROM SCIRPT');
+  var number_small_questions = <?= isset($number_small_questions) ? $number_small_questions : $number_of_quizzes; ?>;
+  var total_time = number_small_questions * seconds;
+
+  //seconds = seconds * 60;
+  var deadline = (new Date().getTime() / 1000) + total_time;
+  
+  
+  //var exam_status =  isset($is_exam) && $is_exam ?>;
+  //console.log('Exam Status: ', exam_status);
+  var quiz_idx = 0
+  function iterateTimer(){
+    var timeLeft = deadline - new Date().getTime() / 1000;
+    console.log('timeLeft: ' + timeLeft);
+    
+    
+    if (timeLeft < 0) {
+      document.getElementById('finish').click();
+      /*
+      if(quiz_idx < number_of_quizzes-1){
+        document.getElementById('next_question').click();
+        // reset clock            
+        var newDeadline = (new Date().getTime() / 1000) + seconds;
+        deadline = newDeadline;
+        timeLeft = deadline - new Date().getTime() / 1000;
+
+        // change color back to white
+        document.getElementById('timeLeft').style.color = '#ffffff';
+      }
+      else {
+        document.getElementById('finish').click();
+      }
+
+
+
+      quiz_idx++;
+      console.log('IDX: ', quiz_idx)
+      */
+    }
+    else if(timeLeft < 11) {
+      document.getElementById('timeLeft').style.color = '#ffa5c7';
+    }
+    var timestamp = formatTime(timeLeft);
+    document.getElementById("timeLeft").innerHTML =   timestamp;
+  
+    
+  }
+
+
+  $(document).ready(function(){  
+    setInterval(iterateTimer, 1000);  
+  });
+
+  setInterval(function(){
+    console.log('Hello From setInterval');
+    var timeLeft = deadline - new Date().getTime() / 1000;
+    console.log('timeLeft: ', timeLeft);
+    if (timeLeft < 0) {
+      document.getElementById('timer').style.display = 'none';
+    }
+    else if(timeLeft < 11) {
+      document.getElementById('timeLeft').style.color = '#ffa5c7';
+    }
+    var timestamp = formatTime(timeLeft);
+    document.getElementById("timeLeft").innerHTML =   timestamp;
+  
+  
+  }, 1000);
+
+</script>
+
 <div class="row">
     <div class="col-lg-3 sidepanel">
         <?php if ($is_quiz && (!isset($is_exam) || !$is_exam)): ?>
@@ -36,9 +122,18 @@
       <ul><li><a class="myview" href="#gramtabs"><h2><?= $this->lang->line('my_view') ?></h2></a></li></ul>
       <div id="tabs-background">
         <?php if ($is_quiz): ?>
-            <div class="selectbutton" id="locate_choice">
+            
+
+            <div class="selectbutton row" id="locate_choice">
             <label style="font-size:14pt; font-weight:normal; text-transform:capitalize;"><?= $this->lang->line('locate') ?><input id="locate_cb" type="checkbox">
-            <span class="location" style="font-weight:bold; text-transform:uppercase;"></span></label>
+              <span class="location" style="font-weight:bold; text-transform:uppercase;"></span>
+            </label>
+
+            <div style="margin-left:auto; margin-right: auto;">
+              <label id="timer" class="bg-secondary text-light" style="font-size:14pt; font-weight:normal; text-transform:capitalize;"><?= $this->lang->line('timer_label_section')?>
+                <span id="timeLeft" style="font-weight:bold; text-transform:uppercase;"> </span>
+              </label>
+            </div>
           </div>
         <?php endif; ?>
         <?php if (!$is_quiz): ?>
@@ -127,3 +222,11 @@
         });
 </script>
 </div><!-- end of div class="row" -->
+
+<?php if($is_unlimited): ?>
+  <script>
+    var unlimited_msg = 'Unlimited';
+    document.getElementById("timeLeft").innerHTML = unlimited_msg;
+    document.getElementById('timeLeft').style.color = '#c3e3f7';
+  </script>
+<?php endif; ?>
