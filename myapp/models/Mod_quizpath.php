@@ -188,7 +188,9 @@ class Mod_quizpath extends CI_Model {
     // Sets owner ID of a file, unless it already has an owner
     // If $filename==null, assume that $this is a file object
     // If $filename!=null, assume that $this is a directory object containing the file
-    public function set_owner(int $owner, int $time_limit, string $filename=null) {
+    public function set_owner(int $owner, string $time_limit, string $filename=null) {
+        
+        $time_limit = (int)$time_limit;  
         if($time_limit === -1) {
             $time_limit = null;
         }
