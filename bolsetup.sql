@@ -77,7 +77,7 @@ CREATE TABLE `bol_class` (
   `password` tinytext,
   `enrol_before` date DEFAULT NULL,
   `ownerid` int NOT NULL DEFAULT '0',
-  `priority` tinyint DEFAULT '0'
+  `priority` tinyint DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
