@@ -18,7 +18,7 @@ RUN sudo systemctl restart apache2
 RUN sudo a2enmod ssl rewrite
 RUN sudo a2dissite 000-default 
 
-RUN cd /var/www/html && git clone --recursive https://github.com/EzerIT/BibleOL && git pull origin master
+RUN cd /var/www/html && git clone --recursive https://github.com/EzerIT/BibleOL
 RUN cd /var/www/html/BibleOL && bash git-hooks/setup.sh && sudo cp .htaccess-dist .htaccess
 
 RUN sudo chown www-data:www-data /var/lib/php/sessions
@@ -31,5 +31,8 @@ EXPOSE 8000
 
 ADD start.sh /
 RUN chmod +x start.sh
+
+# update repository
+RUN cd /var/www/html/BibleOL && git pull origin master
 
 CMD '/bin/bash'
