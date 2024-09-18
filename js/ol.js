@@ -2766,6 +2766,14 @@ var Quiz = (function () {
         }
         else
             alert('No more questions');
+        if (this.exam_mode == true) {
+            if ($('#progress').val() < $('#progress').attr('max')) {
+                $('#finish').attr('disabled', 'disabled');
+            }
+            else {
+                $('#finish').removeAttr('disabled');
+            }
+        }
         util.FollowerBox.resetCheckboxCounters();
         $('#grammarbuttongroup input:enabled:checked').trigger('change');
         $('html, body').animate({

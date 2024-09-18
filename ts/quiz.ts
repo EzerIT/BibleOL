@@ -89,6 +89,13 @@ class Quiz {
         else
             alert('No more questions');
 
+        if(this.exam_mode == true) {
+            if ($('#progress').val() < $('#progress').attr('max')) {
+                $('#finish').attr('disabled', 'disabled');
+            } else {
+              $('#finish').removeAttr('disabled');
+            }
+        }
         util.FollowerBox.resetCheckboxCounters(); // Reset counters in preparation for the following trigger() call
         $('#grammarbuttongroup input:enabled:checked').trigger('change'); // Make sure grammar is displayed for relevant checkboxes
 
