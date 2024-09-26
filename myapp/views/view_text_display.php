@@ -25,7 +25,7 @@
 
   //seconds = seconds * 60;
   var deadline = (new Date().getTime() / 1000) + total_time;
-  
+  var isExam = <?php echo $is_exam ? 'true' : 'false'; ?>;
   
   //var exam_status =  isset($is_exam) && $is_exam ?>;
   //console.log('Exam Status: ', exam_status);
@@ -35,7 +35,7 @@
     console.log('timeLeft: ' + timeLeft);
     
     
-    if (timeLeft < 0) {
+    if (timeLeft < 0 and isExam == false) {
       document.getElementById('finish').click();
       /*
       if(quiz_idx < number_of_quizzes-1){
