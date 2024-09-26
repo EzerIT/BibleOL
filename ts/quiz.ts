@@ -31,6 +31,10 @@ class Quiz {
         this.quiz_statistics = new QuizStatistics(qid);
         this.exam_mode = inExam;
 
+        if(this.exam_mode == true){
+            $(`#timer`).hide();
+        }
+
         // Set up handlers for the buttons
         $('button#next_question').on('click', () => this.nextQuestion(false));
         $('button#finish').on('click', () => this.finishQuiz(true));

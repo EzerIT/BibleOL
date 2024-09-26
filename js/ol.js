@@ -2734,6 +2734,9 @@ var Quiz = (function () {
         this.currentPanelQuestion = null;
         this.quiz_statistics = new QuizStatistics(qid);
         this.exam_mode = inExam;
+        if (this.exam_mode == true) {
+            $("#timer").hide();
+        }
         $('button#next_question').on('click', function () { return _this.nextQuestion(false); });
         $('button#finish').on('click', function () { return _this.finishQuiz(true); });
         $('button#finishNoStats').on('click', function () { return _this.finishQuiz(false); });
