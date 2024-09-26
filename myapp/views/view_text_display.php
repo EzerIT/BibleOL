@@ -35,7 +35,7 @@
     console.log('timeLeft: ' + timeLeft);
     
     
-    if (timeLeft < 0 and isExam == false) {
+    if (timeLeft < 0 && isExam == false) {
       document.getElementById('finish').click();
       /*
       if(quiz_idx < number_of_quizzes-1){
