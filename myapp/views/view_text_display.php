@@ -25,7 +25,7 @@
 
   //seconds = seconds * 60;
   var deadline = (new Date().getTime() / 1000) + total_time;
-  var isExam = <?php echo $is_exam ? 'true' : 'false'; ?>;
+  var isExam = <?php echo isset($is_exam) ? 'true' : 'false'; ?>;
   
   //var exam_status =  isset($is_exam) && $is_exam ?>;
   //console.log('Exam Status: ', exam_status);
