@@ -31,7 +31,7 @@ function logos() {
             <a class="navbar-link" href="https://ministry.americanbible.org/nida-institute" target="_blank" ><img class="logo" src="images/logos/nida_logo.jpg" style="height:130px; text-align: center;"></a>
         </div>
         <div class="col-md-4">
-        <a class="navbar-link" href="http://www.ezer.dk" target="_blank"><img class="logo" src="images/logos/TheOnlineProfessor_screenB_coal.png" style="height:130px;"></a>
+        <a class="navbar-link" href="https://www.judith.dk/dadel" target="_blank"><img class="logo" src="images/logos/TheOnlineProfessor_screenB_coal.png" style="height:130px;"></a>
         </div>
         <div class="col-md-4">
             <a class="navbar-link" href="http://pthu.nl" target="_blank"><img class="logo"  src="images/logos/pthu.png" style="height:130px;"></a>
