@@ -2737,13 +2737,16 @@ var Quiz = (function () {
         if (this.exam_mode == true) {
             $("#timer").hide();
         }
-        console.log("IX" + this.currentDictIx);
         $('button#next_question').on('click', function () { return _this.nextQuestion(false); });
+        $('button#prev_question').on('click', function () { return _this.prevQuestion(); });
         $('button#finish').on('click', function () { return _this.finishQuiz(true); });
         $('button#finishNoStats').on('click', function () { return _this.finishQuiz(false); });
     }
+    Quiz.prototype.prevQuestion = function () {
+        console.log("Click Previous Question");
+    };
     Quiz.prototype.nextQuestion = function (first) {
-        if (this.currentDictIx < 0)
+        if (first == true)
             $('#prev_question').hide();
         else
             $('#prev_question').show();
@@ -2784,7 +2787,6 @@ var Quiz = (function () {
         }
         util.FollowerBox.resetCheckboxCounters();
         $('#grammarbuttongroup input:enabled:checked').trigger('change');
-        console.log("NEW IDX: ", this.currentDictIx);
         $('html, body').animate({
             scrollTop: first ? 0 : $('#myview').offset().top - 5
         }, 50);
