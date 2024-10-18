@@ -18,75 +18,77 @@
     return minutes + "m " + seconds + "s ";
   }
 
-  var seconds = <?= $time_seconds ?>;
-  console.log('HELLO FROM SCIRPT');
-  var number_small_questions = <?= isset($number_small_questions) ? $number_small_questions : $number_of_quizzes; ?>;
-  var total_time = number_small_questions * seconds;
+  var seconds = <?= isset($time_seconds) ? $time_seconds : -1000 ?>;
+  if (seconds != -1000){ 
+    console.log('HELLO FROM SCIRPT');
+    var number_small_questions = <?= isset($number_small_questions) ? $number_small_questions : $number_of_quizzes; ?>;
+    var total_time = number_small_questions * seconds;
 
-  //seconds = seconds * 60;
-  var deadline = (new Date().getTime() / 1000) + total_time;
-  var isExam = <?php echo isset($is_exam) ? 'true' : 'false'; ?>;
-  
-  //var exam_status =  isset($is_exam) && $is_exam ?>;
-  //console.log('Exam Status: ', exam_status);
-  var quiz_idx = 0
-  function iterateTimer(){
-    var timeLeft = deadline - new Date().getTime() / 1000;
-    console.log('timeLeft: ' + timeLeft);
+    //seconds = seconds * 60;
+    var deadline = (new Date().getTime() / 1000) + total_time;
+    var isExam = <?php echo isset($is_exam) ? 'true' : 'false'; ?>;
     
-    
-    if (timeLeft < 0 && isExam == false) {
-      document.getElementById('finish').click();
-      /*
-      if(quiz_idx < number_of_quizzes-1){
-        document.getElementById('next_question').click();
-        // reset clock            
-        var newDeadline = (new Date().getTime() / 1000) + seconds;
-        deadline = newDeadline;
-        timeLeft = deadline - new Date().getTime() / 1000;
-
-        // change color back to white
-        document.getElementById('timeLeft').style.color = '#ffffff';
-      }
-      else {
+    //var exam_status =  isset($is_exam) && $is_exam ?>;
+    //console.log('Exam Status: ', exam_status);
+    var quiz_idx = 0
+    function iterateTimer(){
+      var timeLeft = deadline - new Date().getTime() / 1000;
+      console.log('timeLeft: ' + timeLeft);
+      
+      
+      if (timeLeft < 0 && isExam == false) {
         document.getElementById('finish').click();
+        /*
+        if(quiz_idx < number_of_quizzes-1){
+          document.getElementById('next_question').click();
+          // reset clock            
+          var newDeadline = (new Date().getTime() / 1000) + seconds;
+          deadline = newDeadline;
+          timeLeft = deadline - new Date().getTime() / 1000;
+
+          // change color back to white
+          document.getElementById('timeLeft').style.color = '#ffffff';
+        }
+        else {
+          document.getElementById('finish').click();
+        }
+
+
+
+        quiz_idx++;
+        console.log('IDX: ', quiz_idx)
+        */
       }
-
-
-
-      quiz_idx++;
-      console.log('IDX: ', quiz_idx)
-      */
-    }
-    else if(timeLeft < 11) {
-      document.getElementById('timeLeft').style.color = '#ffa5c7';
-    }
-    var timestamp = formatTime(timeLeft);
-    document.getElementById("timeLeft").innerHTML =   timestamp;
-  
+      else if(timeLeft < 11) {
+        document.getElementById('timeLeft').style.color = '#ffa5c7';
+      }
+      var timestamp = formatTime(timeLeft);
+      document.getElementById("timeLeft").innerHTML =   timestamp;
     
+      
+    }
+
+
+    $(document).ready(function(){  
+      setInterval(iterateTimer, 1000);  
+    });
+
+    setInterval(function(){
+      console.log('Hello From setInterval');
+      var timeLeft = deadline - new Date().getTime() / 1000;
+      console.log('timeLeft: ', timeLeft);
+      if (timeLeft < 0) {
+        document.getElementById('timer').style.display = 'none';
+      }
+      else if(timeLeft < 11) {
+        document.getElementById('timeLeft').style.color = '#ffa5c7';
+      }
+      var timestamp = formatTime(timeLeft);
+      document.getElementById("timeLeft").innerHTML =   timestamp;
+    
+    
+    }, 1000);
   }
-
-
-  $(document).ready(function(){  
-    setInterval(iterateTimer, 1000);  
-  });
-
-  setInterval(function(){
-    console.log('Hello From setInterval');
-    var timeLeft = deadline - new Date().getTime() / 1000;
-    console.log('timeLeft: ', timeLeft);
-    if (timeLeft < 0) {
-      document.getElementById('timer').style.display = 'none';
-    }
-    else if(timeLeft < 11) {
-      document.getElementById('timeLeft').style.color = '#ffa5c7';
-    }
-    var timestamp = formatTime(timeLeft);
-    document.getElementById("timeLeft").innerHTML =   timestamp;
-  
-  
-  }, 1000);
 
 </script>
 
