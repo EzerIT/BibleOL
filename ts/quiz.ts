@@ -37,8 +37,19 @@ class Quiz {
         
         // Set up handlers for the buttons
         $('button#next_question').on('click', () => this.nextQuestion(false));
+        $('button#prev_question').on('click', () => this.prevQuestion());
         $('button#finish').on('click', () => this.finishQuiz(true));
         $('button#finishNoStats').on('click', () => this.finishQuiz(false));
+    }
+    //------------------------------------------------------------------------------------------
+    // prevQuestion method
+    //
+    // Called whenever the user clicks 'Previous',
+    // Replaces the current quiz question with the previous one, if any.
+    //
+    //
+    public prevQuestion():void {
+        console.log("Click Previous Question");
     }
 
     //------------------------------------------------------------------------------------------
@@ -51,9 +62,9 @@ class Quiz {
     //    first: True for the first question in a quiz
     //
     public nextQuestion(first : boolean) : void {
-        if(this.currentDictIx < 0)
+        if(first == true)
             $('#prev_question').hide();
-        else 
+        else
             $('#prev_question').show();
 
         if (this.currentPanelQuestion!==null)
