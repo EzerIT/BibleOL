@@ -59,6 +59,7 @@ $lang['only_cli'] = "This command can only be run from the command line";
 $lang['overwrite'] = "Overwrite?";
 $lang['parent'] = "Parent";
 $lang['passages'] = "Passages";
+$lang['previous'] = "Previous:";
 $lang['progress'] = "Progress:";
 $lang['question_order'] = "Order of questions:";
 $lang['question_order_fixed'] = "Fixed";

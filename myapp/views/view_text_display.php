@@ -147,6 +147,7 @@
       <!-- <div id="virtualkbcontainer"><div id="virtualkbid"></div></div> -->
       <div id="quizcontainer"></div>
       <div id="buttonlist2">
+          <button id="prev_question" class="btn btn-quiz" type="button"><?= $this->lang->line('previous') ?></button>
           <button id="next_question" class="btn btn-quiz" type="button"><?= $this->lang->line('next') ?></button>
           <button id="finish" class="btn btn-quiz" type="button"><?= isset($is_exam) && $is_exam ? $this->lang->line('finish_section') : $this->lang->line('finish') ?></button>
           <?php if (!(isset($is_exam) && $is_exam)): ?>
