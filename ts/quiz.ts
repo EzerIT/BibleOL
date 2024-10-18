@@ -34,7 +34,7 @@ class Quiz {
         if(this.exam_mode == true){
             $(`#timer`).hide();
         }
-
+        
         // Set up handlers for the buttons
         $('button#next_question').on('click', () => this.nextQuestion(false));
         $('button#finish').on('click', () => this.finishQuiz(true));
@@ -51,6 +51,11 @@ class Quiz {
     //    first: True for the first question in a quiz
     //
     public nextQuestion(first : boolean) : void {
+        if(this.currentDictIx < 0)
+            $('#prev_question').hide();
+        else 
+            $('#prev_question').show();
+
         if (this.currentPanelQuestion!==null)
             // Update statistics.
             this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
@@ -107,7 +112,6 @@ class Quiz {
         $('html, body').animate({
             scrollTop: first ? 0 : $('#myview').offset().top - 5 // -5 to add take 5 additional px above myview
         }, 50);
-
 
     }
 
