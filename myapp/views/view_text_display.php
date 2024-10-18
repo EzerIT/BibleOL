@@ -39,26 +39,6 @@
       
       if (timeLeft < 0 && isExam == false) {
         document.getElementById('finish').click();
-        /*
-        if(quiz_idx < number_of_quizzes-1){
-          document.getElementById('next_question').click();
-          // reset clock            
-          var newDeadline = (new Date().getTime() / 1000) + seconds;
-          deadline = newDeadline;
-          timeLeft = deadline - new Date().getTime() / 1000;
-
-          // change color back to white
-          document.getElementById('timeLeft').style.color = '#ffffff';
-        }
-        else {
-          document.getElementById('finish').click();
-        }
-
-
-
-        quiz_idx++;
-        console.log('IDX: ', quiz_idx)
-        */
       }
       else if(timeLeft < 11) {
         document.getElementById('timeLeft').style.color = '#ffa5c7';
