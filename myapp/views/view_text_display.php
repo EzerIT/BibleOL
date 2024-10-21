@@ -6,8 +6,9 @@
 
 
 
-
-<div id="unlim" style="display:none"><?= $is_unlimited ?></div>
+<?php if(isset($is_unlimited)): ?>
+  <div id="unlim" style="display:none"><?= $is_unlimited ?></div>
+<?php endif; ?>
 
 <script>
   function formatTime(time) {
@@ -223,7 +224,7 @@
 </script>
 </div><!-- end of div class="row" -->
 
-<?php if($is_unlimited): ?>
+<?php if(isset($is_unlimited) && $is_unlimited == true): ?>
   <script>
     var unlimited_msg = 'Unlimited';
     document.getElementById("timeLeft").innerHTML = unlimited_msg;
