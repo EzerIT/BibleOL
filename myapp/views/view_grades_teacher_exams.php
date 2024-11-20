@@ -240,8 +240,18 @@
               }
               ?>
         <?php $hiddenStyles = array();
+        function removeNonAlphaExceptSpaceExams($input) {
+          // Use preg_replace to remove all non-alphabetic characters except spaces
+          return preg_replace('/[^a-zA-Z\s]/', '', $input);
+        } 
         foreach ($resscoreall_ind as $ra): ?>
-          <?PHP $lineId = 0; $stk = str_replace(" ", "__", $st); $hiddenStyles["$stk"] = ".{$stk}_hiddenDetails {
+          <?PHP 
+          
+
+          $lineId = 0; 
+          $st = removeNonAlphaExceptSpaceExams($st);
+          $stk = str_replace(" ", "__", $st); 
+          $hiddenStyles["$stk"] = ".{$stk}_hiddenDetails {
             visibility: collapse;
           }
           ";
