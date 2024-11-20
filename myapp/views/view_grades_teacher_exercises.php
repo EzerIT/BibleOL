@@ -233,9 +233,20 @@
                 $max_time = 3600; // Sets to 1h, which virtually disables the feature
               }
               ?>
-        <?php $hiddenStyles = array();
+        <?php
+        function removeNonAlphaExceptSpace($input) {
+          // Use preg_replace to remove all non-alphabetic characters except spaces
+          return preg_replace('/[^a-zA-Z\s]/', '', $input);
+        } 
+        
+        $hiddenStyles = array();
         foreach ($resscoreall_ind as $ra): ?>
-          <?PHP $lineId = 0; $stk = str_replace(" ", "__", $st); $hiddenStyles["$stk"] = ".{$stk}_hiddenDetails {
+          <?PHP 
+          $lineId = 0; 
+          $st = removeNonAlphaExceptSpace($st);
+          $stk = str_replace(" ", "__", $st);
+
+          $hiddenStyles["$stk"] = ".{$stk}_hiddenDetails {
            visibility: collapse;
           }
           "; ?>
