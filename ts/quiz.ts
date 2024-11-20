@@ -50,6 +50,32 @@ class Quiz {
     //
     public prevQuestion():void {
         console.log("Click Previous Question");
+        console.log(this.currentDictIx);
+        if(this.currentDictIx > 0){
+            // get data from previous question
+            let previousDict : Dictionary = new Dictionary(dictionaries, this.currentDictIx - 1, quizdata);
+            
+            // empty current question data
+            $('#textarea').empty();
+            $('#quizcontainer').empty();
+            $('.quizcard').empty();
+
+            // update the progress bar
+            $('progress#progress').attr('value',this.currentDictIx).attr('max',dictionaries.sentenceSets.length);
+
+            // Create a panel for the next question
+            this.currentPanelQuestion = new PanelQuestion(quizdata, previousDict, this.exam_mode);
+            
+            this.currentDictIx = this.currentDictIx - 1;
+            if(this.currentDictIx <= 0){
+                $('#prev_question').hide();
+            }
+
+        }
+        else {
+            console.log("Should not be in here");
+        }
+        console.log(this.currentDictIx);
     }
 
     //------------------------------------------------------------------------------------------

@@ -2744,6 +2744,23 @@ var Quiz = (function () {
     }
     Quiz.prototype.prevQuestion = function () {
         console.log("Click Previous Question");
+        console.log(this.currentDictIx);
+        if (this.currentDictIx > 0) {
+            var previousDict = new Dictionary(dictionaries, this.currentDictIx - 1, quizdata);
+            $('#textarea').empty();
+            $('#quizcontainer').empty();
+            $('.quizcard').empty();
+            $('progress#progress').attr('value', this.currentDictIx).attr('max', dictionaries.sentenceSets.length);
+            this.currentPanelQuestion = new PanelQuestion(quizdata, previousDict, this.exam_mode);
+            this.currentDictIx = this.currentDictIx - 1;
+            if (this.currentDictIx <= 0) {
+                $('#prev_question').hide();
+            }
+        }
+        else {
+            console.log("Should not be in here");
+        }
+        console.log(this.currentDictIx);
     };
     Quiz.prototype.nextQuestion = function (first) {
         if (first == true)
