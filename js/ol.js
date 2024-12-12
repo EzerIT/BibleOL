@@ -2744,6 +2744,42 @@ var Quiz = (function () {
     }
     Quiz.prototype.prevQuestion = function () {
         console.log("Click Previous Question");
+        console.log("Dictionaries: ");
+        console.log(dictionaries);
+        console.log("Quiz Statistics Questions: ");
+        console.log(this.quiz_statistics.questions);
+        console.log("INDEX: ");
+        console.log(this.currentDictIx);
+        $('#textarea').empty();
+        $('#quizcontainer').empty();
+        $('.quizcard').empty();
+        --this.currentDictIx;
+        if (this.currentDictIx + 1 <= dictionaries.sentenceSets.length) {
+            $('button#next_question').removeAttr('disabled');
+            $('button#finish').attr('disabled');
+            $('button#finishNoStats').attr('disabled');
+        }
+        var first = (this.currentDictIx == 0) ? true : false;
+        if (first == true)
+            $('#prev_question').hide();
+        else
+            $('#prev_question').show();
+        var currentDict = new Dictionary(dictionaries, this.currentDictIx, quizdata);
+        $('#quizdesc').html(quizdata.desc);
+        $('#quizdesc').find('a').attr('target', '_blank');
+        if (supportsProgress)
+            $('progress#progress').attr('value', this.currentDictIx + 1).attr('max', dictionaries.sentenceSets.length);
+        else
+            $('div#progressbar').progressbar({ value: this.currentDictIx + 1, max: dictionaries.sentenceSets.length });
+        $('#progresstext').html((this.currentDictIx + 1) + '/' + dictionaries.sentenceSets.length);
+        this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
+        var previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
+        var req_feat_names = previous_data.names;
+        var nreq_feat_names = req_feat_names.length;
+        var user_answers = previous_data.users_answer;
+        var number_parts = user_answers.length;
+        console.log("Previous Data: ");
+        console.log(previous_data);
     };
     Quiz.prototype.nextQuestion = function (first) {
         if (first == true)
@@ -2760,6 +2796,7 @@ var Quiz = (function () {
             $('#textarea').empty();
             $('#quizcontainer').empty();
             $('.quizcard').empty();
+            console.log("more questions");
             var currentDict = new Dictionary(dictionaries, this.currentDictIx, quizdata);
             $('#quizdesc').html(quizdata.desc);
             $('#quizdesc').find('a').attr('target', '_blank');
