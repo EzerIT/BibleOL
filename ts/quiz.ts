@@ -49,7 +49,71 @@ class Quiz {
     //
     //
     public prevQuestion():void {
+        // debugging output
         console.log("Click Previous Question");
+        console.log("Dictionaries: ");
+        console.log(dictionaries);
+        console.log("Quiz Statistics Questions: ");
+        console.log(this.quiz_statistics.questions);
+        console.log("INDEX: ");
+        console.log(this.currentDictIx);
+
+        // clear current question
+        $('#textarea').empty();
+        $('#quizcontainer').empty();
+        $('.quizcard').empty();
+
+        // decrease current index
+        --this.currentDictIx;
+
+        if (this.currentDictIx+1 <= dictionaries.sentenceSets.length) {
+            // This is the last question, disable the 'Next' button
+            $('button#next_question').removeAttr('disabled');
+            $('button#finish').attr('disabled');
+            $('button#finishNoStats').attr('disabled');
+        }
+
+        // if the current index is zero, hide the previous button
+        let first : boolean = (this.currentDictIx == 0) ? true : false;
+        if(first == true)
+            $('#prev_question').hide();
+        else
+            $('#prev_question').show();
+
+
+        // Get text for previous question
+        let currentDict : Dictionary = new Dictionary(dictionaries,this.currentDictIx,quizdata);
+
+        // update the description 
+        $('#quizdesc').html(quizdata.desc);
+        $('#quizdesc').find('a').attr('target','_blank'); // Force all hyperlinks in description to open a new browser tab
+        
+        // update the progress bar
+        if (supportsProgress)
+            $('progress#progress').attr('value',this.currentDictIx+1).attr('max',dictionaries.sentenceSets.length);
+        else
+            $('div#progressbar').progressbar({value: this.currentDictIx+1, max: dictionaries.sentenceSets.length});
+        
+        $('#progresstext').html((this.currentDictIx+1)+'/'+dictionaries.sentenceSets.length);
+        
+
+        // Create a panel for the next question
+        this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
+        
+        // populate the panel with the old answer from the previous question
+        let previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
+        let req_feat_names = previous_data.names; // the request feature names (ex. lexeme, tense, etc.)
+        let nreq_feat_names = req_feat_names.length;
+        let user_answers = previous_data.users_answer; // (ex. 'Imperfect', 'Future', etc.)
+        let number_parts = user_answers.length;
+
+        console.log("Previous Data: ");
+        console.log(previous_data);
+
+        
+
+
+
     }
 
     //------------------------------------------------------------------------------------------
@@ -62,6 +126,7 @@ class Quiz {
     //    first: True for the first question in a quiz
     //
     public nextQuestion(first : boolean) : void {
+        // if this question is first, hide the previous question button
         if(first == true)
             $('#prev_question').hide();
         else
@@ -84,7 +149,8 @@ class Quiz {
             $('#textarea').empty();
             $('#quizcontainer').empty();
             $('.quizcard').empty();
-     
+            //throw new Error("This is a forced error.");
+            console.log("more questions");
             // Get text for next question
             let currentDict : Dictionary = new Dictionary(dictionaries,this.currentDictIx,quizdata);
      
