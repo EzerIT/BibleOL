@@ -74,8 +74,12 @@ class Quiz {
         
         let number_subquestions = this.currentPanelQuestion.getSubQuizMax();
         
-        if(number_subquestions == 1)
+        if(number_subquestions == 1) {
             $('button#next_question').show();
+            $('button#finish').show();
+            $('button#finishNoStats').show();
+        }
+            
 
         if (this.currentDictIx+1 <= dictionaries.sentenceSets.length) {
             // enable the 'Next' button
