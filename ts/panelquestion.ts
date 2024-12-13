@@ -388,6 +388,10 @@ class PanelQuestion {
 
         return this.question_stat;
     }
+    
+    public getSubQuizMax(): number {
+        return this.subQuizMax;
+    }
 
 
     //------------------------------------------------------------------------------------------

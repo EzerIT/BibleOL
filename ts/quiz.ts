@@ -66,8 +66,19 @@ class Quiz {
         // decrease current index
         --this.currentDictIx;
 
+        // Get text for previous question
+        let currentDict : Dictionary = new Dictionary(dictionaries,this.currentDictIx,quizdata);
+
+        // Create a panel for the next question
+        this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
+        
+        let number_subquestions = this.currentPanelQuestion.getSubQuizMax();
+        
+        if(number_subquestions == 1)
+            $('button#next_question').show();
+
         if (this.currentDictIx+1 <= dictionaries.sentenceSets.length) {
-            // This is the last question, disable the 'Next' button
+            // enable the 'Next' button
             $('button#next_question').removeAttr('disabled');
             $('button#finish').attr('disabled');
             $('button#finishNoStats').attr('disabled');
@@ -81,9 +92,7 @@ class Quiz {
             $('#prev_question').show();
 
 
-        // Get text for previous question
-        let currentDict : Dictionary = new Dictionary(dictionaries,this.currentDictIx,quizdata);
-
+        
         // update the description 
         $('#quizdesc').html(quizdata.desc);
         $('#quizdesc').find('a').attr('target','_blank'); // Force all hyperlinks in description to open a new browser tab
@@ -97,9 +106,6 @@ class Quiz {
         $('#progresstext').html((this.currentDictIx+1)+'/'+dictionaries.sentenceSets.length);
         
 
-        // Create a panel for the next question
-        this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
-        
         // populate the panel with the old answer from the previous question
         let previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
         let req_feat_names = previous_data.names; // the request feature names (ex. lexeme, tense, etc.)
