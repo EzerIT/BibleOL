@@ -2760,8 +2760,11 @@ var Quiz = (function () {
         var currentDict = new Dictionary(dictionaries, this.currentDictIx, quizdata);
         this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
         var number_subquestions = this.currentPanelQuestion.getSubQuizMax();
-        if (number_subquestions == 1)
+        if (number_subquestions == 1) {
             $('button#next_question').show();
+            $('button#finish').show();
+            $('button#finishNoStats').show();
+        }
         if (this.currentDictIx + 1 <= dictionaries.sentenceSets.length) {
             $('button#next_question').removeAttr('disabled');
             $('button#finish').attr('disabled');
