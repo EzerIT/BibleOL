@@ -8,6 +8,15 @@
 
 declare let WirtualKeyboard : any;
 
+// Define the type for the dictionary
+interface StringArrayDictionary {
+    [key: string]: string[];
+}
+
+// Declare an empty dictionary with the defined type
+let myDictionary: StringArrayDictionary = {};
+
+
 //****************************************************************************************************
 // Quiz class
 //
@@ -41,6 +50,17 @@ class Quiz {
         $('button#finish').on('click', () => this.finishQuiz(true));
         $('button#finishNoStats').on('click', () => this.finishQuiz(false));
     }
+
+    public logInput():void {
+        // populate the panel with the old answer from the previous question
+        let previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
+        let user_answers = previous_data.users_answer; // (ex. 'Imperfect', 'Future', etc.)
+        console.log("Input Log: ");
+        console.log(user_answers);
+
+    }
+
+
     //------------------------------------------------------------------------------------------
     // prevQuestion method
     //
@@ -49,19 +69,19 @@ class Quiz {
     //
     //
     public prevQuestion():void {
-        // debugging output
-        console.log("Click Previous Question");
-        console.log("Dictionaries: ");
-        console.log(dictionaries);
-        console.log("Quiz Statistics Questions: ");
-        console.log(this.quiz_statistics.questions);
-        console.log("INDEX: ");
-        console.log(this.currentDictIx);
+
+        
+        let previous_data = this.currentPanelQuestion.updateQuestionStat().req_feat;
+        let user_answers = previous_data.users_answer; // (ex. 'Imperfect', 'Future', etc.)
+
+        myDictionary[this.currentDictIx.toString()] = user_answers;
+
 
         // clear current question
         $('#textarea').empty();
         $('#quizcontainer').empty();
         $('.quizcard').empty();
+
 
         // decrease current index
         --this.currentDictIx;
@@ -95,7 +115,8 @@ class Quiz {
         else
             $('#prev_question').show();
 
-
+        console.log(this.currentDictIx);
+        this.logInput();
         
         // update the description 
         $('#quizdesc').html(quizdata.desc);
@@ -108,22 +129,30 @@ class Quiz {
             $('div#progressbar').progressbar({value: this.currentDictIx+1, max: dictionaries.sentenceSets.length});
         
         $('#progresstext').html((this.currentDictIx+1)+'/'+dictionaries.sentenceSets.length);
-        
+        this.loadAnswer();
 
-        // populate the panel with the old answer from the previous question
-        let previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
-        let req_feat_names = previous_data.names; // the request feature names (ex. lexeme, tense, etc.)
-        let nreq_feat_names = req_feat_names.length;
-        let user_answers = previous_data.users_answer; // (ex. 'Imperfect', 'Future', etc.)
-        let number_parts = user_answers.length;
+    }
 
-        console.log("Previous Data: ");
-        console.log(previous_data);
-
-        
-
-
-
+    public loadAnswer(): void {
+        // if there is a previous answer, then load it
+        let keys = Object.keys(myDictionary);
+        let visited = false;
+        for(let i = 0; i < keys.length; i++) {
+            if(keys[i] == this.currentDictIx.toString()) {
+                visited = true;
+                break;
+            }
+        }
+        if(visited == true) {
+            let answer_to_load = myDictionary[this.currentDictIx.toString()]
+            for(let i = 0; i < answer_to_load.length; i++) {
+                let current_answer = answer_to_load[i];
+                if(!(current_answer).includes('Unanswered')) {
+                    let radio_elem = `input[name="quizitem_${i+1}"]#${current_answer}_${i+1}`;
+                    $(radio_elem).prop('checked', true);
+                }
+            }
+        }
     }
 
     //------------------------------------------------------------------------------------------
@@ -151,16 +180,27 @@ class Quiz {
             $('button#finishNoStats').attr('disabled', 'disabled');
         }
 
+
+        if(first == false) {
+            console.log(this.currentDictIx);
+            this.logInput();
+            let previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
+            let user_answers = previous_data.users_answer; // (ex. 'Imperfect', 'Future', etc.)
+
+            myDictionary[this.currentDictIx.toString()] = user_answers;
+
+
+        }
+        
         // Sanity check: are there more questions?
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
             // We have another question
-            
+
             // $('#virtualkbid').appendTo('#virtualkbcontainer'); // Move the keyboard back to its initial position
             $('#textarea').empty();
             $('#quizcontainer').empty();
             $('.quizcard').empty();
             //throw new Error("This is a forced error.");
-            console.log("more questions");
             // Get text for next question
             let currentDict : Dictionary = new Dictionary(dictionaries,this.currentDictIx,quizdata);
      
@@ -181,6 +221,11 @@ class Quiz {
                 $('button#finish').removeAttr('disabled');
                 $('button#finishNoStats').removeAttr('disabled');
             }
+
+
+            this.loadAnswer();
+
+
         }
         else
             alert('No more questions');
