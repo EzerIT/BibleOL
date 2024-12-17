@@ -2730,6 +2730,7 @@ var QuizStatistics = (function () {
     }
     return QuizStatistics;
 }());
+var myDictionary = {};
 var Quiz = (function () {
     function Quiz(qid, inExam) {
         var _this = this;
@@ -2745,14 +2746,16 @@ var Quiz = (function () {
         $('button#finish').on('click', function () { return _this.finishQuiz(true); });
         $('button#finishNoStats').on('click', function () { return _this.finishQuiz(false); });
     }
+    Quiz.prototype.logInput = function () {
+        var previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
+        var user_answers = previous_data.users_answer;
+        console.log("Input Log: ");
+        console.log(user_answers);
+    };
     Quiz.prototype.prevQuestion = function () {
-        console.log("Click Previous Question");
-        console.log("Dictionaries: ");
-        console.log(dictionaries);
-        console.log("Quiz Statistics Questions: ");
-        console.log(this.quiz_statistics.questions);
-        console.log("INDEX: ");
-        console.log(this.currentDictIx);
+        var previous_data = this.currentPanelQuestion.updateQuestionStat().req_feat;
+        var user_answers = previous_data.users_answer;
+        myDictionary[this.currentDictIx.toString()] = user_answers;
         $('#textarea').empty();
         $('#quizcontainer').empty();
         $('.quizcard').empty();
@@ -2775,6 +2778,8 @@ var Quiz = (function () {
             $('#prev_question').hide();
         else
             $('#prev_question').show();
+        console.log(this.currentDictIx);
+        this.logInput();
         $('#quizdesc').html(quizdata.desc);
         $('#quizdesc').find('a').attr('target', '_blank');
         if (supportsProgress)
@@ -2782,13 +2787,27 @@ var Quiz = (function () {
         else
             $('div#progressbar').progressbar({ value: this.currentDictIx + 1, max: dictionaries.sentenceSets.length });
         $('#progresstext').html((this.currentDictIx + 1) + '/' + dictionaries.sentenceSets.length);
-        var previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
-        var req_feat_names = previous_data.names;
-        var nreq_feat_names = req_feat_names.length;
-        var user_answers = previous_data.users_answer;
-        var number_parts = user_answers.length;
-        console.log("Previous Data: ");
-        console.log(previous_data);
+        this.loadAnswer();
+    };
+    Quiz.prototype.loadAnswer = function () {
+        var keys = Object.keys(myDictionary);
+        var visited = false;
+        for (var i = 0; i < keys.length; i++) {
+            if (keys[i] == this.currentDictIx.toString()) {
+                visited = true;
+                break;
+            }
+        }
+        if (visited == true) {
+            var answer_to_load = myDictionary[this.currentDictIx.toString()];
+            for (var i = 0; i < answer_to_load.length; i++) {
+                var current_answer = answer_to_load[i];
+                if (!(current_answer).includes('Unanswered')) {
+                    var radio_elem = "input[name=\"quizitem_".concat(i + 1, "\"]#").concat(current_answer, "_").concat(i + 1);
+                    $(radio_elem).prop('checked', true);
+                }
+            }
+        }
     };
     Quiz.prototype.nextQuestion = function (first) {
         if (first == true)
@@ -2801,11 +2820,17 @@ var Quiz = (function () {
             $('button#finish').attr('disabled', 'disabled');
             $('button#finishNoStats').attr('disabled', 'disabled');
         }
+        if (first == false) {
+            console.log(this.currentDictIx);
+            this.logInput();
+            var previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
+            var user_answers = previous_data.users_answer;
+            myDictionary[this.currentDictIx.toString()] = user_answers;
+        }
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
             $('#textarea').empty();
             $('#quizcontainer').empty();
             $('.quizcard').empty();
-            console.log("more questions");
             var currentDict = new Dictionary(dictionaries, this.currentDictIx, quizdata);
             $('#quizdesc').html(quizdata.desc);
             $('#quizdesc').find('a').attr('target', '_blank');
@@ -2820,6 +2845,7 @@ var Quiz = (function () {
                 $('button#finish').removeAttr('disabled');
                 $('button#finishNoStats').removeAttr('disabled');
             }
+            this.loadAnswer();
         }
         else
             alert('No more questions');
