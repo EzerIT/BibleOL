@@ -1,49 +1,51 @@
+<? version: 20241212 ?>
+
 <h1>Required Skills</h1>
 
-<p>Andrews University requires from OTST551 students that the following material must be&nbsp;covered</p>
+<p>Andrews University requires from OTST551 students that the following material be mastered:</p>
 
 <ul>
-	<li>The entire content of Page Kelley (chapter I &ndash; XXI)</li>
-	<li>All vocab with an occurrence of 200 and higher</li>
-	<li>Basic syntax skills.&nbsp;</li>
+	<li>The entire content of the Page Kelley textbook (chapter I &ndash; XXI).</li>
+	<li>All vocab with an occurrence of 200 and higher.</li>
+	<li>Basic syntax skills.</li>
 </ul>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
 <h1>Required Materials</h1>
 
 <ol>
-	<li>Page Kelley or any equivalent book that covers at least the same content as Page Kelley does.<br />
-	=&gt; Kelley, Page H., and Timothy G. Crawford. <i>Biblical Hebrew: An Introductory Grammar.</i> Second edition. Grand Rapids, Michigan: Eerdmans, 2018.<br />
-	=&gt; Merwe, Christo H. van der, and Jacobus A. Naud&eacute;. <i>A Biblical Hebrew Reference Grammar: Second Edition</i>. 2 edition. London, Oxford, New York: T&amp;T Clark, 2017. (used by Roy Gane, Oliver Glanz)</li>
-	<li>Vocab Builder:<br />
-	The department requires the new Biblical Hebrew Vocabulary Builder (to be soon published by AUP).<br />
-	=&gt; Oliver Glanz, and Tsegaw, Melak. <i>Biblical Hebrew Vocabulary Builder: Analog and Digital, Alphabetic, and Illustrative, arranged by Frequency and Semantic Categories</i>. Berrien Springs: Andrews University Press, 2024&nbsp;(in process).<br />
-	A simple pdf version of this Hebrew vocab builder will be shared with all Hebrew instructors before the beginning of the semester. For Hebrew instructors at our partner schools, please contact otst[AT]andrews.edu to receive your PDF copy for you and your class.</li>
-	<li>Comprehensive Paradigm selection. The department approves and recommends the following:<br />
-	=&gt;&nbsp;Glanz, Oliver. <i>Biblical Hebrew Reviewer: A Universal Study Companion</i>. Berrien Springs: Andrews University Press, 2018.</li>
-	<li>Syntax Defintion Document:<br />
-	Download the Syntax Defintion Document <a href="https://liveandrews-my.sharepoint.com/:b:/g/personal/glanz_andrews_edu/EfTqdEHzzzhOhD45SLv_1AoBKUwPCH_4jkuZoUb8_9zZNQ?e=2Qqdmt" target="_blank">here</a>. All definitions are to be mastered and assumed in the exam.</li>
+	<li><strong>Textbook:</strong> Any textbook that covers the materials found in Kelley, Page H., and Timothy G. Crawford. <em>Biblical Hebrew: An Introductory Grammar</em>. 2nd edition. Grand Rapids, Michigan: Eerdmans, 2018. Several professors use as an alternative&nbsp;Merwe, Christo H. van der, and Jacobus A. Naud&eacute;. <em>A Biblical Hebrew Reference Grammar</em>: 2nd Edition.&nbsp;London, New York: T&amp;T Clark, 2017.</li>
+	<li><strong>Vocab Builder</strong>:&nbsp;The department requires the Biblical Hebrew Vocabulary Builder (soon to be published by AUP).<br />
+	=&gt; Oliver Glanz, and Tsegaw, Melak. <em>Biblical Hebrew Vocabulary Builder: Analog and Digital, Alphabetic, and Illustrative, arranged by Frequency and Semantic Categories</em>. Berrien Springs: Andrews University Press, 2025 (in process to be published). A simplified pdf version of this Hebrew vocab builder will be shared with all Hebrew instructors before the beginning of the semester. Hebrew instructors at our partner schools can&nbsp;contact otst[AT]andrews.edu to receive a pdf copy of a simplified list.</li>
+	<li><strong>Comprehensive Paradigms</strong>:&nbsp;The department approves and recommends&nbsp;Glanz, Oliver. <em>Biblical Hebrew Reviewer: A Universal Study Companion</em>. Berrien Springs: Andrews University Press, 2018.</li>
+	<li><strong>Document for Syntax Defintions</strong>: Download the Syntax Defintion Document <a href="https://liveandrews-my.sharepoint.com/:b:/g/personal/glanz_andrews_edu/EfTqdEHzzzhOhD45SLv_1AoBKUwPCH_4jkuZoUb8_9zZNQ?e=2Qqdmt" target="_blank">here</a>. All definitions are to be mastered and assumed in the exam.</li>
 </ol>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
 <h1>The Exam for OTST551 students</h1>
 
-<p>The BibleOL-based Hebrew Final Exam contains the following four elements:</p>
+<p>The BibleOL-based Hebrew-I Final Exam contains the following elements:</p>
 
 <ul>
-	<li><strong>Vocabulary</strong>: Students will be asked 20 words. Students need to provide glosses they have learned as part of their vocab training. Students must use the AUP based vocab builder to make sure their learned glosses match the ones in the BibleOL (a simple pdf version will be provided until AUP has not published the vocab builder).</li>
-	<li><strong>Morphology Prefixing</strong>: Students must choose the right vowel+consonant combinations for prefixing prepositions and conjunctions to words. 10 words need to be prefixed correctly.</li>
-	<li><strong>Morphology Nouns</strong>: Students must analyze 10 nominal forms (covering all states, number, gender).</li>
-	<li><strong>Morphology Suffixation</strong>: Students must analyze 5 suffixes attached to nominal forms (person, number, gender).</li>
-	<li><strong>Verbal Morphology</strong>: Students must answer 16 verbal forms (covering all tenses, all stems, all verbal classes, suffixed and non-suffixed forms).</li>
-	<li><strong>Subphrasre Analysis</strong>: Students must analyze 10 subphrase relations (is the word relation part of a construct relation, attributive-adjective relation, a demonstrative relation, or something else).</li>
+	<li><strong>Vocabulary</strong>: Students will be asked 20 words. Students need to provide glosses they have learned as part of their vocab training. Students must use the AUP-based vocab builder to make sure their learned glosses match the ones in the BibleOL (a simplified pdf version will be provided until AUP has published its vocab builder).</li>
+	<li><strong>Morphology of Prefixing</strong>: Students must choose the right vowel+consonant combinations for prefixing prepositions and conjunctions to words. 10 words must be prefixed correctly.</li>
+	<li><strong>Morphology of Nouns</strong>: Students must analyze 10 nominal forms (covering all states, number, gender).</li>
+	<li><strong>Morphology of Suffixation</strong>: Students must analyze 5 suffixes (person, number, gender) attached to nominal forms or prepositions.</li>
+	<li><strong>Morphology of Verbs</strong>: Students must answer 16 regular verbal forms (covering all tenses, all stems, suffixed and non-suffixed forms).</li>
+	<li><strong>Subphrase analysis</strong>: Students must analyze 10 subphrase relations (is the word relation part of a construct relation, attributive-adjective relation, a demonstrative relation, or something else).</li>
 	<li><strong>Phrase analysis</strong>: Students must translate 10 clauses by identifying the phrase function of the different phrases in simple sentences. BibleOL will provide the meaning of unknown words if they do appear.</li>
-	<li><strong>Clause relation analysis</strong>: Student must translate ~6 sentences by identifying clause relations (independent vs. dependent clause [relative clause, object clause)</li>
+	<li><strong>Clause-relation analysis</strong>: Student must translate ~6 sentences by identifying clause relations (independent vs. dependent clause [relative clause, object clause]).</li>
 </ul>
 
-<p>Students get access to each BibleOL based exercise that will be used in the final exam. Access will be given to them from the moment they enroll into the Hebrew course. Consequently, students can exercise with these materials and get a realistic sense of the final exam before the actual exam day. If a student&rsquo;s performance is on a top level when doing the exercises, the student will know that she or he will perform well in the final new. No surprises should be expected. This is because the data pool for the exam-prep exercises are identical to the actual exam.</p>
+<p>Students get access to each BibleOL-based exercise used in the final exam before taking the exam. Access will be given to them when they enroll in a Hebrew-I course. Consequently, students can exercise with these materials and get a realistic sense of the final exam before the actual exam day. If a student performs at a top level when doing the exercises, the student will know that she or he will perform well in the final exam. No surprises should be expected. This is because the data pool for the exam-prep exercises is identical to the actual exam.</p>
 
-<p>The table below provides access to each ot the four parts of the exam. Each exam part is <em><strong>hyperlinked</em></strong> so that students can get started with exam preparations.</p>
+<p>The table below provides access to each part of the exam. Each exam part is <strong>hyperlinked</strong> (underlined, blue table headers) so that students can begin exam preparations.</p>
 
-<p>&nbsp;</p>
+<p></p>
 
 <table align="left" border="1" cellpadding="1" cellspacing="1" style="width:1800px">
 	<tbody>
@@ -58,69 +60,60 @@
 			<td><strong><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FHebrew-01_52_SDATS_syntax_clause-connection-analysis.3et&amp;count=10" target="_blank">syntax:clause relations</a></strong></td>
 		</tr>
 		<tr>
-        <td style="vertical-align:top; width:225px;">
+			<td style="vertical-align:top; width:225px">
 			<figure class="easyimage easyimage-full"><?= $hdir->img("AU_hebrew-exam_otst551_01_vocab.png") ?>
-			<figcaption></figcaption>
+			<figcaption>&nbsp;</figcaption>
 			</figure>
 			</td>
-            
-			<td style="vertical-align:top; width:225px;">
+			<td style="vertical-align:top; width:225px">
 			<figure class="easyimage easyimage-full"><?= $hdir->img("AU_hebrew-exam_otst551_02_prefixing.png") ?>
-			<figcaption></figcaption>
+			<figcaption>&nbsp;</figcaption>
 			</figure>
 			</td>
-
-			<td style="vertical-align:top; width:225px;">
+			<td style="vertical-align:top; width:225px">
 			<figure class="easyimage easyimage-full"><?= $hdir->img("AU_hebrew-exam_otst551_03_n-morphology.png") ?>
-			<figcaption></figcaption>
+			<figcaption>&nbsp;</figcaption>
 			</figure>
 			</td>
-
-			<td style="vertical-align:top; width:225px;">
+			<td style="vertical-align:top; width:225px">
 			<figure class="easyimage easyimage-full"><?= $hdir->img("AU_hebrew-exam_otst551_04_s-morphology.png") ?>
-			<figcaption></figcaption>
+			<figcaption>&nbsp;</figcaption>
 			</figure>
 			</td>
-
-			<td style="vertical-align:top; width:225px;">
+			<td style="vertical-align:top; width:225px">
 			<figure class="easyimage easyimage-full"><?= $hdir->img("AU_hebrew-exam_otst551_05_v-morphology.png") ?>
-			<figcaption></figcaption>
+			<figcaption>&nbsp;</figcaption>
 			</figure>
 			</td>
-
-			<td style="vertical-align:top; width:225px;">
+			<td style="vertical-align:top; width:225px">
 			<figure class="easyimage easyimage-full"><?= $hdir->img("AU_hebrew-exam_otst551_06_subphrase.png") ?>
-			<figcaption></figcaption>
+			<figcaption>&nbsp;</figcaption>
 			</figure>
 			</td>
-            
-			<td style="vertical-align:top; width:225px;">
+			<td style="vertical-align:top; width:225px">
 			<figure class="easyimage easyimage-full"><?= $hdir->img("AU_hebrew-exam_otst551_07_phrase.png") ?>
-			<figcaption></figcaption>
+			<figcaption>&nbsp;</figcaption>
 			</figure>
 			</td>
-
-			<td style="vertical-align:top; width:225px;">
+			<td style="vertical-align:top; width:225px">
 			<figure class="easyimage easyimage-full"><?= $hdir->img("AU_hebrew-exam_otst551_08_clause.png") ?>
-			<figcaption></figcaption>
+			<figcaption>&nbsp;</figcaption>
 			</figure>
 			</td>
-
 		</tr>
 	</tbody>
 </table>
 
 <p>&nbsp;</p>
+<p>&nbsp;</p>
 
+<h1>How to take the Final Exam?</h1>
 
-<h2>How to take the Final Exam?</h2>
-
-<p>If you are presently enrolled in a Hebrew I (OTST551) class you must take the following steps to get access to the Final Exam:</p>
+<p>If you are presently enrolled in a Hebrew I (OTST551) class, you must take the following steps to get access to the Final Exam:</p>
 
 <ol>
-	<li>Make sure you are enrolled in the correct class that your instructor is teaching. The class could look like this:<br />
-	    <figure class="easyimage easyimage-full"><?= $hdir->img("AU_otst551_final-exam_course.png") ?>
-		</figure>
+	<li>Make sure you are enrolled in the correct class that your instructor is teaching. The class&nbsp;could look like this:
+	<figure class="easyimage easyimage-full"><?= $hdir->img("AU_otst551_final-exam_course.png") ?></figure>
 	<br />
 	The following video shows how you can enroll in classes:<br />
 	<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/e-8zfi4U5uc?si=NXkg_Xq4UHsg_TBW" width="560"></iframe><br />

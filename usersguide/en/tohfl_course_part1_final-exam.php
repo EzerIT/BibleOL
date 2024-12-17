@@ -1,3 +1,5 @@
+<? version: 20241212 ?>
+
 <h1>TOHFL-I Final Exam</h1>
 
 <p>The TOHFL-I Final Exam consists of the following eight elements:</p>
@@ -83,11 +85,3 @@
 		</tr>
 	</tbody>
 </table>
-
-<p>&nbsp;</p>
-
-<h2>&nbsp;</h2>
-
-<h2>&nbsp;</h2>
-
-<h2>&nbsp;</h2>

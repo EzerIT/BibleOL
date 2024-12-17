@@ -1,3 +1,4 @@
+<? version: 20241212 ?>
 <h1>Required Skills</h1>
 
 <p>Andrews University requires from OTST552 students that the following material must be&nbsp;covered</p>

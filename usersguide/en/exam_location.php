@@ -1,3 +1,5 @@
+<? version: 20241212 ?>
+
 <h1>Where to take your exam?</h1>
 
 <p>Your instructor or institution can make exams available for registered classes.</p>
@@ -9,4 +11,3 @@
 <figure class="easyimage easyimage-full"><?= $hdir->img("exam_location.png") ?>
 <figcaption></figcaption>
 </figure>
-
