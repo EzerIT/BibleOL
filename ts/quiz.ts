@@ -180,31 +180,34 @@ class Quiz {
         else
             $('#prev_question').show();
 
-        if (this.currentPanelQuestion!==null)
+        
+        if (this.currentPanelQuestion!==null) {
+            let qstat = this.currentPanelQuestion.updateQuestionStat();
+            console.log(qstat);
             // Update statistics.
-            this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
+            this.quiz_statistics.questions.push(qstat);
 
+            if(first == false) {
+                console.log(this.currentDictIx);
+                //this.logInput();
+                let previous_data = qstat.req_feat;
+                let user_answers = previous_data.users_answer; // (ex. 'Imperfect', 'Future', etc.)
+                console.log("-----------------------------------------------");
+                console.log("UPDATING:  ");
+                console.log(user_answers);
+                console.log(previous_data);
+                console.log(this.quiz_statistics.questions);
+                console.log("-----------------------------------------------");
+                myDictionary[this.currentDictIx.toString()] = user_answers;    
+            }
+        }
         else if (quizdata.fixedquestions>0) {
             $('button#finish').attr('disabled', 'disabled');
             $('button#finishNoStats').attr('disabled', 'disabled');
         }
 
 
-        if(first == false) {
-            console.log(this.currentDictIx);
-            //this.logInput();
-            let previous_data = this.currentPanelQuestion.updateQuestionStat().req_feat;
-            let user_answers = previous_data.users_answer; // (ex. 'Imperfect', 'Future', etc.)
-            console.log("-----------------------------------------------");
-            console.log("UPDATING:  ");
-            console.log(user_answers);
-            console.log(previous_data);
-            console.log(this.quiz_statistics.questions);
-            console.log("-----------------------------------------------");
-            myDictionary[this.currentDictIx.toString()] = user_answers;
-
-
-        }
+        
         
         // Sanity check: are there more questions?
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {

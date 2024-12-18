@@ -2821,23 +2821,26 @@ var Quiz = (function () {
             $('#prev_question').hide();
         else
             $('#prev_question').show();
-        if (this.currentPanelQuestion !== null)
-            this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
+        if (this.currentPanelQuestion !== null) {
+            var qstat = this.currentPanelQuestion.updateQuestionStat();
+            console.log(qstat);
+            this.quiz_statistics.questions.push(qstat);
+            if (first == false) {
+                console.log(this.currentDictIx);
+                var previous_data = qstat.req_feat;
+                var user_answers = previous_data.users_answer;
+                console.log("-----------------------------------------------");
+                console.log("UPDATING:  ");
+                console.log(user_answers);
+                console.log(previous_data);
+                console.log(this.quiz_statistics.questions);
+                console.log("-----------------------------------------------");
+                myDictionary[this.currentDictIx.toString()] = user_answers;
+            }
+        }
         else if (quizdata.fixedquestions > 0) {
             $('button#finish').attr('disabled', 'disabled');
             $('button#finishNoStats').attr('disabled', 'disabled');
-        }
-        if (first == false) {
-            console.log(this.currentDictIx);
-            var previous_data = this.currentPanelQuestion.updateQuestionStat().req_feat;
-            var user_answers = previous_data.users_answer;
-            console.log("-----------------------------------------------");
-            console.log("UPDATING:  ");
-            console.log(user_answers);
-            console.log(previous_data);
-            console.log(this.quiz_statistics.questions);
-            console.log("-----------------------------------------------");
-            myDictionary[this.currentDictIx.toString()] = user_answers;
         }
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
             $('#textarea').empty();
