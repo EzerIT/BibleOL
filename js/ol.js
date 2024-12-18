@@ -2752,6 +2752,14 @@ var Quiz = (function () {
         console.log("Input Log: ");
         console.log(user_answers);
     };
+    Quiz.prototype.logMyDictionary = function () {
+        console.log("IX: ", this.currentDictIx);
+        console.log("{");
+        for (var key in myDictionary) {
+            console.log("\t" + key + " : " + "[" + myDictionary[key] + "]");
+        }
+        console.log("}");
+    };
     Quiz.prototype.prevQuestion = function () {
         var previous_data = this.currentPanelQuestion.updateQuestionStat().req_feat;
         var user_answers = previous_data.users_answer;
@@ -2778,8 +2786,6 @@ var Quiz = (function () {
             $('#prev_question').hide();
         else
             $('#prev_question').show();
-        console.log(this.currentDictIx);
-        this.logInput();
         $('#quizdesc').html(quizdata.desc);
         $('#quizdesc').find('a').attr('target', '_blank');
         if (supportsProgress)
@@ -2788,6 +2794,7 @@ var Quiz = (function () {
             $('div#progressbar').progressbar({ value: this.currentDictIx + 1, max: dictionaries.sentenceSets.length });
         $('#progresstext').html((this.currentDictIx + 1) + '/' + dictionaries.sentenceSets.length);
         this.loadAnswer();
+        this.logMyDictionary();
     };
     Quiz.prototype.loadAnswer = function () {
         var keys = Object.keys(myDictionary);
@@ -2822,9 +2829,14 @@ var Quiz = (function () {
         }
         if (first == false) {
             console.log(this.currentDictIx);
-            this.logInput();
-            var previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
+            var previous_data = this.currentPanelQuestion.updateQuestionStat().req_feat;
             var user_answers = previous_data.users_answer;
+            console.log("-----------------------------------------------");
+            console.log("UPDATING:  ");
+            console.log(user_answers);
+            console.log(previous_data);
+            console.log(this.quiz_statistics.questions);
+            console.log("-----------------------------------------------");
             myDictionary[this.currentDictIx.toString()] = user_answers;
         }
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
@@ -2846,6 +2858,7 @@ var Quiz = (function () {
                 $('button#finishNoStats').removeAttr('disabled');
             }
             this.loadAnswer();
+            this.logMyDictionary();
         }
         else
             alert('No more questions');
