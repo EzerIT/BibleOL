@@ -60,6 +60,14 @@ class Quiz {
 
     }
 
+    public logMyDictionary():void {
+        console.log("IX: ", this.currentDictIx);
+        console.log("{");
+        for (let key in myDictionary) {
+            console.log("\t" + key + " : " +  "[" + myDictionary[key] + "]");
+        }
+        console.log("}");
+    }
 
     //------------------------------------------------------------------------------------------
     // prevQuestion method
@@ -115,8 +123,8 @@ class Quiz {
         else
             $('#prev_question').show();
 
-        console.log(this.currentDictIx);
-        this.logInput();
+        //console.log(this.currentDictIx);
+        //this.logInput();
         
         // update the description 
         $('#quizdesc').html(quizdata.desc);
@@ -130,6 +138,7 @@ class Quiz {
         
         $('#progresstext').html((this.currentDictIx+1)+'/'+dictionaries.sentenceSets.length);
         this.loadAnswer();
+        this.logMyDictionary();
 
     }
 
@@ -183,10 +192,15 @@ class Quiz {
 
         if(first == false) {
             console.log(this.currentDictIx);
-            this.logInput();
-            let previous_data = this.quiz_statistics.questions[this.currentDictIx].req_feat;
+            //this.logInput();
+            let previous_data = this.currentPanelQuestion.updateQuestionStat().req_feat;
             let user_answers = previous_data.users_answer; // (ex. 'Imperfect', 'Future', etc.)
-
+            console.log("-----------------------------------------------");
+            console.log("UPDATING:  ");
+            console.log(user_answers);
+            console.log(previous_data);
+            console.log(this.quiz_statistics.questions);
+            console.log("-----------------------------------------------");
             myDictionary[this.currentDictIx.toString()] = user_answers;
 
 
@@ -224,6 +238,8 @@ class Quiz {
 
 
             this.loadAnswer();
+            this.logMyDictionary();
+
 
 
         }
