@@ -1,4 +1,4 @@
-<!--? version: 20241212 ?-->
+<!--? version: 20241217 ?-->
 <h2><strong>Lesson #1: Introduction to the "Weak Verbs" and Verba Gutturales</strong></h2>
 <h5><strong>Lecture Overview</strong></h5>
 <ul>
@@ -24,7 +24,7 @@
 <p> </p>
 <h5><strong>Assignments</strong></h5>
 <ol>
-<li>Go to the BibleOL and follow the instructions given under "<a href="https://learner.bible/help/show_help/tohfl_course_FirstStepsForStudents" target="_blank" rel="noopener">First Steps for Students</a>" and enroll into the class <strong>OTST552-Heb-II_2024-02(summer)_glanz<br><img style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;" src="https://learninghub.andrews.edu/draftfile.php/60990/user/draft/889983814/enroll.png" alt="" width="500" height="350"></strong></li>
+<li>Go to the BibleOL and follow the instructions given under "<a href="https://learner.bible/help/show_help/tohfl_course_FirstStepsForStudents" target="_blank" rel="noopener">First Steps for Students</a>" and enroll into your instructor's class.</li>
 <li>Learn Vocabulary of Lesson #01.  You can optionally watch the pronunciation of the vocabulary below:<br><iframe style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;" title="YouTube video player" src="https://www.youtube.com/embed/Nx0f0ZY5HIA?si=PEfum1qlEdwoEy4S" width="560" height="315" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" referrerpolicy="strict-origin-when-cross-origin"></iframe><br><br></li>
 <li>BibleOL exercises<br>First inform yourself about how to take BibleOL based exercises by following the instructions given under "<a href="https://learner.bible/help/show_help/tohfl_course_PerformanceAndGrades" target="_blank" rel="noopener">Taking Exercises, Exams, and Looking up Grades/Performance Data</a>". All BibleOL exercises are graded. You can take each exercise as often as you want. I will only grade your best run. The deadline is next class' day at 8am (EST).
 <ul>
