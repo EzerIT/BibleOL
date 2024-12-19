@@ -12,7 +12,7 @@
 class Answer {
     private comp         : ComponentWithYesNo; // The feature request component
     private c            : JQuery;             // The answer part of comp
-    private cType        : COMPONENT_TYPE;     // The type of c
+    public cType        : COMPONENT_TYPE;     // The type of c
     private answerSws    : StringWithSort;     // The correct answer as a StringWithSort, when relevant
     private answerString : string;             // The correct answer as as string
     private answerArray  : string[];           // The correct answer as an array of values (only for COMPONENT_TYPE.checkBoxes)
