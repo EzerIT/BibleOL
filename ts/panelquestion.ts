@@ -364,6 +364,37 @@ class PanelQuestion {
              : featset.transliteratedText ? charset.transliteratedClass : '';
     }
 
+    //------------------------------------------------------------------------------------------
+    // getInputTypes method
+    //
+    // Returns a list of input types for each request feature, the input type determines the algorithm for loading previous answers
+    //
+    // Returns:
+    //      The list of input types for the question.
+    public getInputTypes():string[] {
+        let inputTypes:string[] = [];
+        for(let i = 0; i < this.vAnswers.length; i++) {
+            let answer = this.vAnswers[i];
+            let ctype = answer.cType;
+            let input_type = 'radio';
+            if(ctype === COMPONENT_TYPE.textFieldForeign) {
+                input_type = 'text';
+            }
+            else if(ctype === COMPONENT_TYPE.textField) {
+                input_type = 'vocab';
+            }
+            else if(ctype === COMPONENT_TYPE.textFieldWithVirtKeyboard) {
+                input_type = 'vocab';
+            }
+            else if(ctype === COMPONENT_TYPE.checkBoxes) {
+                input_type = 'checkbox';
+            }
+            inputTypes.push(input_type);
+        }
+
+        return inputTypes;
+    }
+
 
     //------------------------------------------------------------------------------------------
     // updateQuestionStat method

@@ -2572,6 +2572,28 @@ var PanelQuestion = (function () {
         return featset.foreignText ? charset.foreignClass
             : featset.transliteratedText ? charset.transliteratedClass : '';
     };
+    PanelQuestion.prototype.getInputTypes = function () {
+        var inputTypes = [];
+        for (var i = 0; i < this.vAnswers.length; i++) {
+            var answer = this.vAnswers[i];
+            var ctype = answer.cType;
+            var input_type = 'radio';
+            if (ctype === COMPONENT_TYPE.textFieldForeign) {
+                input_type = 'text';
+            }
+            else if (ctype === COMPONENT_TYPE.textField) {
+                input_type = 'vocab';
+            }
+            else if (ctype === COMPONENT_TYPE.textFieldWithVirtKeyboard) {
+                input_type = 'vocab';
+            }
+            else if (ctype === COMPONENT_TYPE.checkBoxes) {
+                input_type = 'checkbox';
+            }
+            inputTypes.push(input_type);
+        }
+        return inputTypes;
+    };
     PanelQuestion.prototype.updateQuestionStat = function () {
         this.question_stat.end_time = Math.round((new Date()).getTime() / 1000);
         for (var i = 0, len = this.vAnswers.length; i < len; ++i) {
@@ -2731,6 +2753,7 @@ var QuizStatistics = (function () {
     return QuizStatistics;
 }());
 var myDictionary = {};
+var featDictionary = {};
 var Quiz = (function () {
     function Quiz(qid, inExam) {
         var _this = this;
@@ -2760,10 +2783,20 @@ var Quiz = (function () {
         }
         console.log("}");
     };
+    Quiz.prototype.logFeatDictionary = function () {
+        console.log("IX: ", this.currentDictIx);
+        console.log("{");
+        for (var key in featDictionary) {
+            console.log("\t" + key + " : " + "[" + featDictionary[key] + "]");
+        }
+        console.log("}");
+    };
     Quiz.prototype.prevQuestion = function () {
         var previous_data = this.currentPanelQuestion.updateQuestionStat().req_feat;
         var user_answers = previous_data.users_answer;
         myDictionary[this.currentDictIx.toString()] = user_answers;
+        var feat_names = previous_data.names;
+        featDictionary[this.currentDictIx.toString()] = feat_names;
         $('#textarea').empty();
         $('#quizcontainer').empty();
         $('.quizcard').empty();
@@ -2795,23 +2828,62 @@ var Quiz = (function () {
         $('#progresstext').html((this.currentDictIx + 1) + '/' + dictionaries.sentenceSets.length);
         this.loadAnswer();
         this.logMyDictionary();
+        this.logFeatDictionary();
     };
-    Quiz.prototype.loadAnswer = function () {
-        var keys = Object.keys(myDictionary);
-        var visited = false;
-        for (var i = 0; i < keys.length; i++) {
-            if (keys[i] == this.currentDictIx.toString()) {
-                visited = true;
+    Quiz.prototype.populateRadio = function (answer_idx, current_answer) {
+        if (!(current_answer).includes('Unanswered')) {
+            var radio_elem = "input[name=\"quizitem_".concat(answer_idx + 1, "\"]#").concat(current_answer, "_").concat(answer_idx + 1);
+            $(radio_elem).prop('checked', true);
+        }
+    };
+    Quiz.prototype.populateVocab = function (nvocab, current_answer) {
+        if (!(current_answer).includes('Unanswered')) {
+            var vocab_elem = $('input[type="text"]')[nvocab];
+            vocab_elem.value = current_answer;
+        }
+    };
+    Quiz.prototype.populateText = function (ntext, current_answer) {
+        if (!(current_answer).includes('Unanswered')) {
+            var text_elem = $('.inputshow')[ntext];
+            text_elem.append(current_answer);
+        }
+    };
+    Quiz.prototype.checkQuestionVisited = function () {
+        var hasVisited = false;
+        var visited_indices = Object.keys(myDictionary);
+        for (var i = 0; i < visited_indices.length; i++) {
+            if (visited_indices[i] == this.currentDictIx.toString()) {
+                hasVisited = true;
                 break;
             }
         }
-        if (visited == true) {
+        return hasVisited;
+    };
+    Quiz.prototype.loadAnswer = function () {
+        var hasVisited = this.checkQuestionVisited();
+        var inputTypes = this.currentPanelQuestion.getInputTypes();
+        console.log("Input Types: ", inputTypes);
+        if (hasVisited == true) {
             var answer_to_load = myDictionary[this.currentDictIx.toString()];
+            var request_features = featDictionary[this.currentDictIx.toString()];
+            var nreq_features = request_features.length;
+            var nvocab = 0;
+            var ntext = 0;
             for (var i = 0; i < answer_to_load.length; i++) {
                 var current_answer = answer_to_load[i];
-                if (!(current_answer).includes('Unanswered')) {
-                    var radio_elem = "input[name=\"quizitem_".concat(i + 1, "\"]#").concat(current_answer, "_").concat(i + 1);
-                    $(radio_elem).prop('checked', true);
+                var feature_idx = i % nreq_features;
+                var current_feature = request_features[feature_idx];
+                var feature_type = inputTypes[feature_idx];
+                if (feature_type == "vocab") {
+                    this.populateVocab(nvocab, current_answer);
+                    nvocab++;
+                }
+                else if (feature_type == "text") {
+                    this.populateText(ntext, current_answer);
+                    ntext++;
+                }
+                else {
+                    this.populateRadio(i, current_answer);
                 }
             }
         }
@@ -2823,7 +2895,6 @@ var Quiz = (function () {
             $('#prev_question').show();
         if (this.currentPanelQuestion !== null) {
             var qstat = this.currentPanelQuestion.updateQuestionStat();
-            console.log(qstat);
             this.quiz_statistics.questions.push(qstat);
             if (first == false) {
                 console.log(this.currentDictIx);
@@ -2836,6 +2907,8 @@ var Quiz = (function () {
                 console.log(this.quiz_statistics.questions);
                 console.log("-----------------------------------------------");
                 myDictionary[this.currentDictIx.toString()] = user_answers;
+                var feat_names = previous_data.names;
+                featDictionary[this.currentDictIx.toString()] = feat_names;
             }
         }
         else if (quizdata.fixedquestions > 0) {
@@ -2862,6 +2935,7 @@ var Quiz = (function () {
             }
             this.loadAnswer();
             this.logMyDictionary();
+            this.logFeatDictionary();
         }
         else
             alert('No more questions');

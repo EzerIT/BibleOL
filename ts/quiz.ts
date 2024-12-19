@@ -15,7 +15,7 @@ interface StringArrayDictionary {
 
 // Declare an empty dictionary with the defined type
 let myDictionary: StringArrayDictionary = {};
-
+let featDictionary: StringArrayDictionary = {};
 
 //****************************************************************************************************
 // Quiz class
@@ -69,6 +69,17 @@ class Quiz {
         console.log("}");
     }
 
+    public logFeatDictionary():void {
+        console.log("IX: ", this.currentDictIx);
+        console.log("{");
+        for (let key in featDictionary) {
+            console.log("\t" + key + " : " +  "[" + featDictionary[key] + "]");
+        }
+        console.log("}");
+    }
+
+
+
     //------------------------------------------------------------------------------------------
     // prevQuestion method
     //
@@ -81,8 +92,9 @@ class Quiz {
         
         let previous_data = this.currentPanelQuestion.updateQuestionStat().req_feat;
         let user_answers = previous_data.users_answer; // (ex. 'Imperfect', 'Future', etc.)
-
         myDictionary[this.currentDictIx.toString()] = user_answers;
+        let feat_names = previous_data.names;
+        featDictionary[this.currentDictIx.toString()] = feat_names;
 
 
         // clear current question
@@ -139,26 +151,68 @@ class Quiz {
         $('#progresstext').html((this.currentDictIx+1)+'/'+dictionaries.sentenceSets.length);
         this.loadAnswer();
         this.logMyDictionary();
+        this.logFeatDictionary();
 
     }
 
-    public loadAnswer(): void {
-        // if there is a previous answer, then load it
-        let keys = Object.keys(myDictionary);
-        let visited = false;
-        for(let i = 0; i < keys.length; i++) {
-            if(keys[i] == this.currentDictIx.toString()) {
-                visited = true;
+    public populateRadio(answer_idx:number, current_answer:string):void {
+        if(!(current_answer).includes('Unanswered')) {
+            let radio_elem = `input[name="quizitem_${answer_idx+1}"]#${current_answer}_${answer_idx+1}`;
+            $(radio_elem).prop('checked', true);
+        }
+    }
+    public populateVocab(nvocab:number, current_answer:string):void {
+        if(!(current_answer).includes('Unanswered')) {
+            let vocab_elem = $('input[type="text"]')[nvocab] as HTMLInputElement;
+            vocab_elem.value = current_answer;
+        }
+    }
+    public populateText(ntext:number, current_answer:string): void {
+        if(!(current_answer).includes('Unanswered')) {
+            let text_elem = $('.inputshow')[ntext] as HTMLInputElement;
+            text_elem.append(current_answer);
+        }
+    }
+
+    public checkQuestionVisited():boolean{
+        let hasVisited = false;
+        let visited_indices = Object.keys(myDictionary);
+        for(let i = 0; i < visited_indices.length; i++) {
+            if(visited_indices[i] == this.currentDictIx.toString()) {
+                hasVisited = true;
                 break;
             }
         }
-        if(visited == true) {
+        return hasVisited;
+    }
+
+    public loadAnswer(): void {
+        // check if this question has been visited before, if it has been visited, then we need to load the previous user input
+        let hasVisited = this.checkQuestionVisited();
+        
+        let inputTypes = this.currentPanelQuestion.getInputTypes();
+        console.log("Input Types: ", inputTypes);
+        if(hasVisited == true) {
             let answer_to_load = myDictionary[this.currentDictIx.toString()]
+            let request_features = featDictionary[this.currentDictIx.toString()];
+            let nreq_features = request_features.length;
+            let nvocab = 0;
+            let ntext = 0;
             for(let i = 0; i < answer_to_load.length; i++) {
                 let current_answer = answer_to_load[i];
-                if(!(current_answer).includes('Unanswered')) {
-                    let radio_elem = `input[name="quizitem_${i+1}"]#${current_answer}_${i+1}`;
-                    $(radio_elem).prop('checked', true);
+                let feature_idx = i % nreq_features;
+                let current_feature = request_features[feature_idx];
+                let feature_type = inputTypes[feature_idx];
+                if(feature_type == "vocab") {
+                    this.populateVocab(nvocab, current_answer);
+                    nvocab++;
+                }
+                else if(feature_type == "text") {
+                    this.populateText(ntext, current_answer);
+                    ntext++;
+                }
+                else {
+                    this.populateRadio(i, current_answer);
                 }
             }
         }
@@ -183,7 +237,7 @@ class Quiz {
         
         if (this.currentPanelQuestion!==null) {
             let qstat = this.currentPanelQuestion.updateQuestionStat();
-            console.log(qstat);
+            //console.log(qstat);
             // Update statistics.
             this.quiz_statistics.questions.push(qstat);
 
@@ -198,7 +252,9 @@ class Quiz {
                 console.log(previous_data);
                 console.log(this.quiz_statistics.questions);
                 console.log("-----------------------------------------------");
-                myDictionary[this.currentDictIx.toString()] = user_answers;    
+                myDictionary[this.currentDictIx.toString()] = user_answers;  
+                let feat_names = previous_data.names;
+                featDictionary[this.currentDictIx.toString()] = feat_names;  
             }
         }
         else if (quizdata.fixedquestions>0) {
@@ -242,6 +298,7 @@ class Quiz {
 
             this.loadAnswer();
             this.logMyDictionary();
+            this.logFeatDictionary();
 
 
 
