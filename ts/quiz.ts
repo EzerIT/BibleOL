@@ -13,9 +13,14 @@ interface StringArrayDictionary {
     [key: string]: string[];
 }
 
+interface StatisticsDictionary {
+    [key: string]: QuestionStatistics;
+}
+
 // Declare an empty dictionary with the defined type
 let myDictionary: StringArrayDictionary = {};
 let featDictionary: StringArrayDictionary = {};
+let statDictionary: StatisticsDictionary = {};
 
 //****************************************************************************************************
 // Quiz class
@@ -78,6 +83,11 @@ class Quiz {
         console.log("}");
     }
 
+    public logStatDictionary():void {
+        console.log("IX: ", this.currentDictIx);
+        console.log(statDictionary);
+    }
+
 
 
     //------------------------------------------------------------------------------------------
@@ -90,12 +100,13 @@ class Quiz {
     public prevQuestion():void {
 
         
-        let previous_data = this.currentPanelQuestion.updateQuestionStat().req_feat;
+        let qstat = this.currentPanelQuestion.updateQuestionStat();
+        let previous_data = qstat.req_feat;
         let user_answers = previous_data.users_answer; // (ex. 'Imperfect', 'Future', etc.)
         myDictionary[this.currentDictIx.toString()] = user_answers;
         let feat_names = previous_data.names;
         featDictionary[this.currentDictIx.toString()] = feat_names;
-
+        statDictionary[this.currentDictIx.toString()] = qstat;
 
         // clear current question
         $('#textarea').empty();
@@ -150,8 +161,9 @@ class Quiz {
         
         $('#progresstext').html((this.currentDictIx+1)+'/'+dictionaries.sentenceSets.length);
         this.loadAnswer();
-        this.logMyDictionary();
-        this.logFeatDictionary();
+        this.logStatDictionary();
+        //this.logMyDictionary();
+        //this.logFeatDictionary();
 
     }
 
@@ -239,7 +251,7 @@ class Quiz {
             let qstat = this.currentPanelQuestion.updateQuestionStat();
             //console.log(qstat);
             // Update statistics.
-            this.quiz_statistics.questions.push(qstat);
+            //this.quiz_statistics.questions.push(qstat);
 
             if(first == false) {
                 console.log(this.currentDictIx);
@@ -254,7 +266,8 @@ class Quiz {
                 console.log("-----------------------------------------------");
                 myDictionary[this.currentDictIx.toString()] = user_answers;  
                 let feat_names = previous_data.names;
-                featDictionary[this.currentDictIx.toString()] = feat_names;  
+                featDictionary[this.currentDictIx.toString()] = feat_names; 
+                statDictionary[this.currentDictIx.toString()] = qstat; 
             }
         }
         else if (quizdata.fixedquestions>0) {
@@ -297,8 +310,9 @@ class Quiz {
 
 
             this.loadAnswer();
-            this.logMyDictionary();
-            this.logFeatDictionary();
+            //this.logMyDictionary();
+            //this.logFeatDictionary();
+            this.logStatDictionary();
 
 
 
@@ -340,11 +354,22 @@ class Quiz {
                 window.location.replace(site_url + 'text/select_quiz'); // Go to quiz selection
         }
         else {
-            if (this.currentPanelQuestion===null)
+            if (this.currentPanelQuestion===null) {
                 alert('System error: No current question panel');
-            else
-                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
+            }
+            else {
+                //this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
+                // update the final question to statistics dictionary
+                let qstat = this.currentPanelQuestion.updateQuestionStat()
+                statDictionary[this.currentDictIx.toString()] = qstat;
 
+                // package the statDictionary into the questions array
+                for(const index in statDictionary) {
+                    if(statDictionary.hasOwnProperty(index)) {
+                        this.quiz_statistics.questions.push(statDictionary[index]);
+                    }
+                }
+            }
             this.quiz_statistics.grading = gradingFlag;
 
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
