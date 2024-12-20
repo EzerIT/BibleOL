@@ -2754,6 +2754,7 @@ var QuizStatistics = (function () {
 }());
 var myDictionary = {};
 var featDictionary = {};
+var statDictionary = {};
 var Quiz = (function () {
     function Quiz(qid, inExam) {
         var _this = this;
@@ -2791,12 +2792,18 @@ var Quiz = (function () {
         }
         console.log("}");
     };
+    Quiz.prototype.logStatDictionary = function () {
+        console.log("IX: ", this.currentDictIx);
+        console.log(statDictionary);
+    };
     Quiz.prototype.prevQuestion = function () {
-        var previous_data = this.currentPanelQuestion.updateQuestionStat().req_feat;
+        var qstat = this.currentPanelQuestion.updateQuestionStat();
+        var previous_data = qstat.req_feat;
         var user_answers = previous_data.users_answer;
         myDictionary[this.currentDictIx.toString()] = user_answers;
         var feat_names = previous_data.names;
         featDictionary[this.currentDictIx.toString()] = feat_names;
+        statDictionary[this.currentDictIx.toString()] = qstat;
         $('#textarea').empty();
         $('#quizcontainer').empty();
         $('.quizcard').empty();
@@ -2827,8 +2834,7 @@ var Quiz = (function () {
             $('div#progressbar').progressbar({ value: this.currentDictIx + 1, max: dictionaries.sentenceSets.length });
         $('#progresstext').html((this.currentDictIx + 1) + '/' + dictionaries.sentenceSets.length);
         this.loadAnswer();
-        this.logMyDictionary();
-        this.logFeatDictionary();
+        this.logStatDictionary();
     };
     Quiz.prototype.populateRadio = function (answer_idx, current_answer) {
         if (!(current_answer).includes('Unanswered')) {
@@ -2895,7 +2901,6 @@ var Quiz = (function () {
             $('#prev_question').show();
         if (this.currentPanelQuestion !== null) {
             var qstat = this.currentPanelQuestion.updateQuestionStat();
-            this.quiz_statistics.questions.push(qstat);
             if (first == false) {
                 console.log(this.currentDictIx);
                 var previous_data = qstat.req_feat;
@@ -2909,6 +2914,7 @@ var Quiz = (function () {
                 myDictionary[this.currentDictIx.toString()] = user_answers;
                 var feat_names = previous_data.names;
                 featDictionary[this.currentDictIx.toString()] = feat_names;
+                statDictionary[this.currentDictIx.toString()] = qstat;
             }
         }
         else if (quizdata.fixedquestions > 0) {
@@ -2934,8 +2940,7 @@ var Quiz = (function () {
                 $('button#finishNoStats').removeAttr('disabled');
             }
             this.loadAnswer();
-            this.logMyDictionary();
-            this.logFeatDictionary();
+            this.logStatDictionary();
         }
         else
             alert('No more questions');
@@ -2962,10 +2967,18 @@ var Quiz = (function () {
                 window.location.replace(site_url + 'text/select_quiz');
         }
         else {
-            if (this.currentPanelQuestion === null)
+            if (this.currentPanelQuestion === null) {
                 alert('System error: No current question panel');
-            else
-                this.quiz_statistics.questions.push(this.currentPanelQuestion.updateQuestionStat());
+            }
+            else {
+                var qstat = this.currentPanelQuestion.updateQuestionStat();
+                statDictionary[this.currentDictIx.toString()] = qstat;
+                for (var index in statDictionary) {
+                    if (statDictionary.hasOwnProperty(index)) {
+                        this.quiz_statistics.questions.push(statDictionary[index]);
+                    }
+                }
+            }
             this.quiz_statistics.grading = gradingFlag;
             $('#textcontainer').html('<p>' + localize('sending_statistics') + '</p>');
             $.post(site_url + 'statistics/update_stat', this.quiz_statistics)
