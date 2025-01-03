@@ -1,4 +1,5 @@
-<!--? version: 20241217 ?-->
+<? version: 20241231 ?>
+
 <h2><strong>Lesson #1: Introduction to the "Weak Verbs" and Verba Gutturales</strong></h2>
 <h5><strong>Lecture Overview</strong></h5>
 <ul>
@@ -403,7 +404,7 @@
 <li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;"><a href="https://learner.bible/text/show_quiz?quiz=TOHFL%2FBHR%2Fmorphology_verb_ii-geminate-only.3et&amp;count=10" target="_blank" rel="noopener">Geminate</a> verbs only</span></li>
 </ul>
 </li>
-<li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;">All information for the final and al finall exam preparation materials can be found here: <a href="https://learner.bible/help/show_help/tohfl_course_part2_final-exam" target="_blank" rel="noopener">https://learner.bible/help/show_help/tohfl_course_part2_final-exam</a></span></li>
+<li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;">All information for the final and all final exam preparation materials can be found here: <a href="https://learner.bible/help/show_help/tohfl_course_part2_final-exam" target="_blank" rel="noopener">https://learner.bible/help/show_help/tohfl_course_part2_final-exam</a></span></li>
 </ol>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -470,7 +471,7 @@
 <li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;"><a href="https://learner.bible/text/show_quiz?quiz=TOHFL%2FBHR%2Fmorphology_verb_ii-geminate-only.3et&amp;count=10" target="_blank" rel="noopener">Geminate</a> verbs only</span></li>
 </ul>
 </li>
-<li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;">All information for the final and al finall exam preparation materials can be found here: <a href="https://learner.bible/help/show_help/AU_exam_hebrewII" target="_blank" rel="noopener">https://learner.bible/help/show_help/AU_exam_hebrewII</a> </span></li>
+<li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;">All information for the final and all final exam preparation materials can be found here: <a href="https://learner.bible/help/show_help/AU_exam_hebrewII" target="_blank" rel="noopener">https://learner.bible/help/show_help/AU_exam_hebrewII</a> </span></li>
 </ol>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -513,7 +514,7 @@
 <li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;"><a href="https://learner.bible/text/show_quiz?quiz=TOHFL%2FBHR%2Fmorphology_verb_ii-geminate-only.3et&amp;count=10" target="_blank" rel="noopener">Geminate</a> verbs only</span></li>
 </ul>
 </li>
-<li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;">All information for the final and al finall exam preparation materials can be found here: <a href="https://learner.bible/help/show_help/AU_exam_hebrewII" target="_blank" rel="noopener">https://learner.bible/help/show_help/AU_exam_hebrewII</a></span></li>
+<li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;">All information for the final and all final exam preparation materials can be found here: <a href="https://learner.bible/help/show_help/AU_exam_hebrewII" target="_blank" rel="noopener">https://learner.bible/help/show_help/AU_exam_hebrewII</a></span></li>
 </ol>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -555,7 +556,7 @@
 <li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;"><a href="https://learner.bible/text/show_quiz?quiz=TOHFL%2FBHR%2Fmorphology_verb_ii-geminate-only.3et&amp;count=10" target="_blank" rel="noopener">Geminate</a> verbs only</span></li>
 </ul>
 </li>
-<li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;">All information for the final and al finall exam preparation materials can be found here: <a href="https://learner.bible/help/show_help/AU_exam_hebrewII" target="_blank" rel="noopener">https://learner.bible/help/show_help/AU_exam_hebrewII</a></span></li>
+<li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;">All information for the final and all final exam preparation materials can be found here: <a href="https://learner.bible/help/show_help/AU_exam_hebrewII" target="_blank" rel="noopener">https://learner.bible/help/show_help/AU_exam_hebrewII</a></span></li>
 </ol>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -597,7 +598,7 @@
 <li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;"><a href="https://learner.bible/text/show_quiz?quiz=TOHFL%2FBHR%2Fmorphology_verb_ii-geminate-only.3et&amp;count=10" target="_blank" rel="noopener">Geminate</a> verbs only</span></li>
 </ul>
 </li>
-<li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;">All information for the final and al finall exam preparation materials can be found here: <a href="https://learner.bible/help/show_help/AU_exam_hebrewII" target="_blank" rel="noopener">https://learner.bible/help/show_help/AU_exam_hebrewII</a></span></li>
+<li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;">All information for the final and all final exam preparation materials can be found here: <a href="https://learner.bible/help/show_help/AU_exam_hebrewII" target="_blank" rel="noopener">https://learner.bible/help/show_help/AU_exam_hebrewII</a></span></li>
 </ol>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -637,7 +638,7 @@
 <li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;"><a href="https://learner.bible/text/show_quiz?quiz=TOHFL%2FBHR%2Fmorphology_verb_ii-geminate-only.3et&amp;count=10" target="_blank" rel="noopener">Geminate</a> verbs only</span></li>
 </ul>
 </li>
-<li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;">All information for the final and al finall exam preparation materials can be found here: <a href="https://learner.bible/help/show_help/AU_exam_hebrewII" target="_blank" rel="noopener">https://learner.bible/help/show_help/AU_exam_hebrewII</a></span></li>
+<li><span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 1rem; text-align: initial;">All information for the final and all final exam preparation materials can be found here: <a href="https://learner.bible/help/show_help/AU_exam_hebrewII" target="_blank" rel="noopener">https://learner.bible/help/show_help/AU_exam_hebrewII</a></span></li>
 </ol>
 <p> </p>
 <p>&nbsp;</p>

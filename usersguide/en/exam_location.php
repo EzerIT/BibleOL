@@ -1,4 +1,4 @@
-<? version: 20241212 ?>
+<? version: 20241231 ?>
 
 <h1>Where to take your exam?</h1>
 
@@ -6,8 +6,10 @@
 
 <p>As a student you can take exams when you are enrolled in a class.</p>
 
-<p>When an exam is available it will show&nbsp;under the tab &ldquo;TEXT AND EXERCISES/Exams&rdquo;</p>
+<p>When an exam is available it will show under the tab &ldquo;TEXT AND EXERCISES/Exams&rdquo;</p>
 
-<figure class="easyimage easyimage-full"><?= $hdir->img("exam_location.png") ?>
-<figcaption></figcaption>
+<figure 
+			class="easyimage easyimage-full" 
+			style="float: left; width: 1120px; margin: 0;">
+    		<?= $hdir->img("exam_location.png") ?>
 </figure>
