@@ -359,8 +359,10 @@ class Ctrl_text extends MY_Controller {
             }
             // Retrieve Time Limit
             $result = $this->db->select('time_seconds')->where('pathname', $quiz)->get('exerciseowner')->row();
-        
-            $time_seconds = $result->time_seconds;
+            if(!empty($result))
+                $time_seconds = $result->time_seconds;
+            else
+                $time_seconds = null;
             $buffer = 3;
 
             $is_unlimited = false;
