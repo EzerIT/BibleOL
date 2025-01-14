@@ -2317,6 +2317,9 @@ var util;
     }
     util.mydump = mydump;
 })(util || (util = {}));
+if (typeof total_time_seconds === 'undefined') {
+    total_time_seconds = 0;
+}
 var WirtualKeyboard;
 var origMayLocate;
 var origSentBefore;
@@ -2613,7 +2616,6 @@ function turn_off_timer() {
     $("#activate-timer-menu").val("off");
 }
 setTimeout(function () {
-    console.log(total_time_seconds);
     var seconds_display = get_seconds(total_time_seconds);
     var minutes_display = get_minutes(seconds_display, total_time_seconds);
     display_clock(seconds_display, minutes_display);
