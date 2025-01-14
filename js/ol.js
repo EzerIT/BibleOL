@@ -2765,6 +2765,9 @@ var Quiz = (function () {
         if (this.exam_mode == true) {
             $("#timer").hide();
         }
+        else {
+            $("#prev_question").hide();
+        }
         $('button#next_question').on('click', function () { return _this.nextQuestion(false); });
         $('button#prev_question').on('click', function () { return _this.prevQuestion(); });
         $('button#finish').on('click', function () { return _this.finishQuiz(true); });
@@ -2895,10 +2898,13 @@ var Quiz = (function () {
         }
     };
     Quiz.prototype.nextQuestion = function (first) {
-        if (first == true)
+        if (first == true) {
             $('#prev_question').hide();
-        else
-            $('#prev_question').show();
+        }
+        else {
+            if (this.exam_mode == true)
+                $('#prev_question').show();
+        }
         if (this.currentPanelQuestion !== null) {
             var qstat = this.currentPanelQuestion.updateQuestionStat();
             if (first == false) {

@@ -5,9 +5,9 @@
   var typeinfo = <?= $typeinfo_json ?>;
   var decoded_3et = <?= $decoded_3et_json ?>;
   var initial_universe = <?= $universe ?>;
-  var total_time_seconds = <?= $time_seconds ?>;
+  var total_time_seconds = <?= $time_seconds ?? 0 ?>;
   var buffer = 3;
-  total_time_seconds =total_time_seconds - buffer;
+  total_time_seconds = total_time_seconds - buffer;
   if(total_time_seconds < 0)
     total_time_seconds = 0;
   var is_unlimited = <?php echo json_encode($is_unlimited); ?>;

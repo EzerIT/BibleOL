@@ -63,7 +63,9 @@ declare let import_shebanq_url : string;   // URL for ajax queries for imports f
 declare let quiz_name          : string;   // Name of exercise file
 declare let dir_name           : string;   // Name of exercise file directory
 declare let total_time_seconds : any;      // Time limit of the exercise in seconds
-
+if (typeof total_time_seconds === 'undefined') {
+    total_time_seconds = 0;
+}
 //****************************************************************************************************
 // Other globale variables
 //
@@ -620,7 +622,7 @@ function turn_off_timer(){
 // Maybe it can be removed again by replaceing setTimeout(....,1000) with $(....).
 //
 setTimeout(function() {
-    console.log(total_time_seconds);
+    //console.log(total_time_seconds);
     let seconds_display = get_seconds(total_time_seconds);
     let minutes_display = get_minutes(seconds_display, total_time_seconds);
     display_clock(seconds_display, minutes_display);

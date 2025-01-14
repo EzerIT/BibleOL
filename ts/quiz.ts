@@ -48,6 +48,10 @@ class Quiz {
         if(this.exam_mode == true){
             $(`#timer`).hide();
         }
+        else {
+            $(`#prev_question`).hide();
+        }
+        
         
         // Set up handlers for the buttons
         $('button#next_question').on('click', () => this.nextQuestion(false));
@@ -241,10 +245,13 @@ class Quiz {
     //
     public nextQuestion(first : boolean) : void {
         // if this question is first, hide the previous question button
-        if(first == true)
+        if(first == true) {
             $('#prev_question').hide();
-        else
-            $('#prev_question').show();
+        }
+        else {
+            if(this.exam_mode == true)
+                $('#prev_question').show();
+        }
 
         
         if (this.currentPanelQuestion!==null) {
