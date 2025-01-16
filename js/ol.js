@@ -2816,13 +2816,11 @@ var Quiz = (function () {
         var number_subquestions = this.currentPanelQuestion.getSubQuizMax();
         if (number_subquestions == 1) {
             $('button#next_question').show();
-            $('button#finish').show();
-            $('button#finishNoStats').show();
         }
         if (this.currentDictIx + 1 <= dictionaries.sentenceSets.length) {
             $('button#next_question').removeAttr('disabled');
-            $('button#finish').attr('disabled');
-            $('button#finishNoStats').attr('disabled');
+            $('button#finish').attr('disabled', 'disabled');
+            $('button#finishNoStats').attr('disabled', 'disabled');
         }
         var first = (this.currentDictIx == 0) ? true : false;
         if (first == true)

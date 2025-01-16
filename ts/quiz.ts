@@ -131,16 +131,16 @@ class Quiz {
         
         if(number_subquestions == 1) {
             $('button#next_question').show();
-            $('button#finish').show();
-            $('button#finishNoStats').show();
+            //$('button#finish').show();
+            //$('button#finishNoStats').show();
         }
             
 
         if (this.currentDictIx+1 <= dictionaries.sentenceSets.length) {
             // enable the 'Next' button
             $('button#next_question').removeAttr('disabled');
-            $('button#finish').attr('disabled');
-            $('button#finishNoStats').attr('disabled');
+            $('button#finish').attr('disabled', 'disabled');
+            $('button#finishNoStats').attr('disabled', 'disabled');
         }
 
         // if the current index is zero, hide the previous button
