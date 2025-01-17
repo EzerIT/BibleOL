@@ -18,58 +18,60 @@
     var seconds = Math.floor((time % (60)));
     return minutes + "m " + seconds + "s ";
   }
+  <?php if(isset($is_quiz) && $is_quiz): ?>
+    var seconds = <?= isset($time_seconds) ? $time_seconds : -1000 ?>;
+    if (seconds != -1000){ 
+      console.log('HELLO FROM SCIRPT');
+      var number_small_questions = <?= isset($number_small_questions) ? $number_small_questions : $number_of_quizzes; ?>;
+      var total_time = number_small_questions * seconds;
 
-  var seconds = <?= isset($time_seconds) ? $time_seconds : -1000 ?>;
-  if (seconds != -1000){ 
-    console.log('HELLO FROM SCIRPT');
-    var number_small_questions = <?= isset($number_small_questions) ? $number_small_questions : $number_of_quizzes; ?>;
-    var total_time = number_small_questions * seconds;
+      //seconds = seconds * 60;
+      var deadline = (new Date().getTime() / 1000) + total_time;
+      var isExam = <?php echo isset($is_exam) ? 'true' : 'false'; ?>;
+      
+      
+      //console.log('Exam Status: ', exam_status);
+      var quiz_idx = 0
+      function iterateTimer(){
+        var timeLeft = deadline - new Date().getTime() / 1000;
+        console.log('timeLeft: ' + timeLeft);
+        
+        
+        if (timeLeft < 0 && isExam == false) {
+          document.getElementById('finish').click();
+        }
+        else if(timeLeft < 11) {
+          document.getElementById('timeLeft').style.color = '#ffa5c7';
+        }
+        var timestamp = formatTime(timeLeft);
+        document.getElementById("timeLeft").innerHTML =   timestamp;
+      
+        
+      }
 
-    //seconds = seconds * 60;
-    var deadline = (new Date().getTime() / 1000) + total_time;
-    var isExam = <?php echo isset($is_exam) ? 'true' : 'false'; ?>;
-    
-    //var exam_status =  isset($is_exam) && $is_exam ?>;
-    //console.log('Exam Status: ', exam_status);
-    var quiz_idx = 0
-    function iterateTimer(){
-      var timeLeft = deadline - new Date().getTime() / 1000;
-      console.log('timeLeft: ' + timeLeft);
+
+      $(document).ready(function(){  
+        setInterval(iterateTimer, 1000);  
+      });
+
+      setInterval(function(){
+        console.log('Hello From setInterval');
+        var timeLeft = deadline - new Date().getTime() / 1000;
+        console.log('timeLeft: ', timeLeft);
+        if (timeLeft < 0) {
+          document.getElementById('timer').style.display = 'none';
+        }
+        else if(timeLeft < 11) {
+          document.getElementById('timeLeft').style.color = '#ffa5c7';
+        }
+        var timestamp = formatTime(timeLeft);
+        document.getElementById("timeLeft").innerHTML =   timestamp;
       
       
-      if (timeLeft < 0 && isExam == false) {
-        document.getElementById('finish').click();
-      }
-      else if(timeLeft < 11) {
-        document.getElementById('timeLeft').style.color = '#ffa5c7';
-      }
-      var timestamp = formatTime(timeLeft);
-      document.getElementById("timeLeft").innerHTML =   timestamp;
-    
-      
+      }, 1000);
     }
-
-
-    $(document).ready(function(){  
-      setInterval(iterateTimer, 1000);  
-    });
-
-    setInterval(function(){
-      console.log('Hello From setInterval');
-      var timeLeft = deadline - new Date().getTime() / 1000;
-      console.log('timeLeft: ', timeLeft);
-      if (timeLeft < 0) {
-        document.getElementById('timer').style.display = 'none';
-      }
-      else if(timeLeft < 11) {
-        document.getElementById('timeLeft').style.color = '#ffa5c7';
-      }
-      var timestamp = formatTime(timeLeft);
-      document.getElementById("timeLeft").innerHTML =   timestamp;
-    
-    
-    }, 1000);
-  }
+  <?php endif; ?>
+  
 
 </script>
 
