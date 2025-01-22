@@ -1,4 +1,4 @@
-<? version: 20250114 ?>
+<? version: 20250117 ?>
 
 <h1>The Hebrew Placement Exam</h1>
 
@@ -11,19 +11,11 @@
 	<li>In the <u>second part</u>, basic Hebrew-II questions are being asked. If one has passed the first part but has not passed the second part, one must enroll in an OTST552 course. If one passes both parts successfully, all language requirements are fulfilled, and the student can move on to enrolling in exegesis courses.</li>
 </ul>
 
-<p>The exam duration is 3 hours. For the first part 60 minutes are allocated. The second part needs to be taken within 120 minutes.</p>
-<p>The exam is offered each first Friday of the month at 8:30am. To register please contact the OT department: email <?php
-																															$email = "otst@andrews.edu";
-																															$linkText = "here";
-
-																															// Encode the email to hide it from bots
-																															$encodedEmail = '';
-																															  for ($i = 0; $i < strlen($email); $i++) {
-    																															$encodedEmail .= "&#" . ord($email[$i]) . ";";
-																															                                          }
-																															  echo '<a href="mailto:' . $encodedEmail . '">' . htmlspecialchars($linkText) . '</a>';
-																															?>.
+<p>The exam is a proctored 3 hours exam. For the first part of the exam 60 minutes are allocated. The second part needs to be taken within 120 minutes.</p>
+<p>The exam is offered each first Friday of the month at 9am. To register please fill in the sign-up form <strong><a href="https://forms.gle/QczMZftFfUqA1jCZA" target="_blank">here</a></strong>. Information about the exam location is provided by the OT department.
 </p>
+
+<p>Exam results will be available instantly. The placement exam can be taken <strong><em>only one time</em></strong>! However, the exercise links below can be used endlessly to make good preparation possible.</p>
 
 <p>Below, you can see what type of questions you will have to answer in the different parts of the exam. Each exam part is <strong><em>hyperlinked</em></strong> (underlined, blue table headers) so that students can begin exam preparations. You can exercise and test yourself on each category by clicking the hyperlink. The actual placement exam will draw from the same pool of questions from which the hyperlinked exercises are drawn.</p>
 
@@ -146,7 +138,9 @@
 
 <p style="clear: left;">Students at any location can prepare by using the above links.</p>
 
-<p>The exam will be made available by the OT department at the Seminary and can be taken at the location of any of our partner schools. Results will be available instantly. The placement exam can be taken <strong>only one time</strong>! However, the above links can be used endlessly to make good preparation possible. Instructors can also use the above links in their classes as class material. Please contact 
+
+<h2>Placement Exams for Partnerschools</h2>
+<p>The exam will be made available by the OT department at the Seminary and can be taken at the location of any of our partner schools. Please contact 
 
 the department  <?php
 																															$email = "otst@andrews.edu";
@@ -159,7 +153,7 @@ the department  <?php
 																															                                          }
 																															  echo '<a href="mailto:' . $encodedEmail . '">' . htmlspecialchars($linkText) . '</a>';
 																															?> 
-to request a placement exam to be set up for your school. The requesting school should provide the OT department with the date and time they want the placement exam to be available.</p>
+to request a placement exam to be set up for your school. The requesting school should provide the OT department with the date and time they want the placement exam to be available. Instructors can also use the exercises in the tables above for their classes as class material.</p>
 
 <p> </p>
 <br />
