@@ -2819,7 +2819,7 @@ var Quiz = (function () {
         }
         if (this.currentDictIx + 1 <= dictionaries.sentenceSets.length) {
             $('button#next_question').removeAttr('disabled');
-            $('button#finish').attr('disabled', 'disabled');
+            $('button#finish').addClass('not-clickable');
             $('button#finishNoStats').attr('disabled', 'disabled');
         }
         var first = (this.currentDictIx == 0) ? true : false;
@@ -2922,7 +2922,7 @@ var Quiz = (function () {
             }
         }
         else if (quizdata.fixedquestions > 0) {
-            $('button#finish').attr('disabled', 'disabled');
+            $('button#finish').addClass('not-clickable');
             $('button#finishNoStats').attr('disabled', 'disabled');
         }
         if (++this.currentDictIx < dictionaries.sentenceSets.length) {
@@ -2940,7 +2940,7 @@ var Quiz = (function () {
             this.currentPanelQuestion = new PanelQuestion(quizdata, currentDict, this.exam_mode);
             if (this.currentDictIx + 1 === dictionaries.sentenceSets.length) {
                 $('button#next_question').attr('disabled', 'disabled');
-                $('button#finish').removeAttr('disabled');
+                $('button#finish').removeClass('not-clickable');
                 $('button#finishNoStats').removeAttr('disabled');
             }
             this.loadAnswer();
@@ -2950,10 +2950,10 @@ var Quiz = (function () {
             alert('No more questions');
         if (this.exam_mode == true) {
             if ($('#progress').val() < $('#progress').attr('max')) {
-                $('#finish').attr('disabled', 'disabled');
+                $('#finish').addClass('not-clickable');
             }
             else {
-                $('#finish').removeAttr('disabled');
+                $('#finish').removeClass('not-clickable');
             }
         }
         util.FollowerBox.resetCheckboxCounters();
