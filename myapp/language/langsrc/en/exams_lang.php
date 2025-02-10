@@ -23,6 +23,7 @@ $lang['exam_mgmt_description'] = "Here you can manage existing exams or create a
 $lang['exam_name'] = "Exam name";
 $lang['finish'] = "Finish Section";
 $lang['instance_name'] = "Instance name";
+$lang['instructor'] = "Instructor";
 $lang['next'] = "Next";
 $lang['number_of_exams'] = "Number of exams: %s";
 $lang['owner'] = "Owner";
