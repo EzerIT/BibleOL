@@ -88,6 +88,10 @@ $comment['instance_name'] = "";
 $format['instance_name'] = "";
 $use_textarea['instance_name'] = false;
 
+$comment['instructor'] = "";
+$format['instructor'] = "";
+$use_textarea['instructor'] = false;
+
 $comment['next'] = "";
 $format['next'] = "";
 $use_textarea['next'] = false;

@@ -18,8 +18,6 @@
 -->
 </ul>
 
-
-
 <div class="tab-content" id="myTabContent">
   <div class="tab-pane fade show active" id="active_exams" role="tabpanel" aria-labelledby="home-tab">
     <div class="table-responsive">
@@ -36,11 +34,11 @@
         <?php foreach ($active_exams_list as $exam): ?>
           <tr>
             <td class="leftalign"><?= $class_names[$exam->class_id] ?></td>
-            <td class="leftalign"><?= "Instructor Name" ?></td>
+            <td class="leftalign"><?= $instructors[$exam->class_id] ?></td>
             <td class="leftalign"><?= $exam->instance_name ?></td>
             <td class="leftalign time"><?= $exam->exam_start_time ?></td>
             <td class="leftalign time"><?= $exam->exam_end_time ?></td>
-            <td class="leftalign time"><?= $exam->exam_length ?></td>
+            <td class="leftalign"><?= $exam->exam_length ?></td>
             <td class="leftalign">
               <a class="badge badge-primary" href="/exams/take_exam?exam=<?= $exam->id ?>">Take Exam</a>
               <?php if ($this->mod_users->is_teacher()): ?>
@@ -68,7 +66,8 @@
         <?php foreach ($future_exams_list as $exam): ?>
           <tr>
             <td class="leftalign"><?= $class_names[$exam->class_id] ?></td>
-            <td class="leftalign"><?= "Instructor Name" ?></td>
+         
+            <td class="leftalign"><?= $instructors[$exam->class_id] ?></td>
             <td class="leftalign"><?= $exam->instance_name ?></td>
             <td class="leftalign time"><?= $exam->exam_start_time ?></td>
             <td class="leftalign time"><?= $exam->exam_end_time ?></td>
