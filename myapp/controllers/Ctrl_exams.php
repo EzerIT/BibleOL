@@ -114,7 +114,6 @@ class Ctrl_exams extends MY_Controller
               'future_exams_list' => $future_exams_list,
               'offset' => $offset,
               'orderby' => $orderby,
-              'owned_classes' => $owned_classes,
               'page_count' => $page_count,
               'past_exams_list' => $past_exams_list,
               'sortorder' => $sortorder,
