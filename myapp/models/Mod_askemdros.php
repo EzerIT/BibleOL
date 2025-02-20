@@ -98,15 +98,19 @@ class Mod_askemdros extends CI_Model {
     
                 $command .= "SELECT ALL OBJECTS WHERE ";
 
-                for ($i=0; $i<$num; ++$i)
-                    $command .= "[{$this->db_config->dbinfo->universeHierarchy[$i]->type} {$this->db_config->dbinfo->universeHierarchy[$i]->type}={$split_p[$i]} ";
-
+                for ($i=0; $i<$num; ++$i) {
+                    if($this->setup_db == "UBSGNT5") {
+                        $command .= "[{$this->db_config->dbinfo->universeHierarchy[$i]->type} {$this->db_config->dbinfo->universeHierarchy[$i]->feat}='{$split_p[$i]}' ";
+                    }
+                    else {
+                        $command .= "[{$this->db_config->dbinfo->universeHierarchy[$i]->type} {$this->db_config->dbinfo->universeHierarchy[$i]->type}={$split_p[$i]} ";
+                    }
+                }
                 for ($i=0; $i<$num; ++$i)
                     $command .= ']';
 
                 $command .= " GOqxqxqx\n";
             }
-
             $emdros_data = $this->mql->exec($command); 
 
             for ($i=0; $i<$path_count; ++$i) {
