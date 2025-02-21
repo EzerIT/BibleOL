@@ -3,7 +3,7 @@
 	"databaseName": "UBSGNT5",
 	"propertiesName": "UBSGNT5",
 	"databaseVersion": "1.0.0",
-	"granularity": "word",
+	"granularity": "sentence",
 	"surfaceFeature": "surface",
 	"objHasSurface": "word",
 	"suffixFeature": null,
@@ -12,7 +12,14 @@
 		"chapter": {},
 		"verse": {},
 		"book": {},
-		"sentence": {},
+		"sentence": {
+			"mayselect": true,
+			"featuresetting":{
+				"head":{
+					"foreignText": true
+				}
+			}
+		},
 		"ref": {},
 		"punctuation": {},
 		"token": {},
@@ -33,21 +40,10 @@
                     "ignoreRequest": true,
                     "isRange": true
                 },
-				"post": {
-					"ignoreShow": true,
-					"ignoreRequest": true,
-					"isRange": true
-				},
 				"self": {
 					"ignoreSelect": true,
 					"ignoreShow": true,
 					"ignoreRequest": true
-				},
-				
-				"pre": {
-					"ignoreShow": true,
-					"ignoreRequest": true,
-					"isRange": true
 				},
 				"refid": {
 					"ignoreShow": true,
@@ -58,40 +54,22 @@
 					"hideWord": true,
 					"foreignText": true
 				},
-				"wholesurface": {
-					"hideWord": true,
-					"foreignText": true
-				},
 				"bn_lemma": {
-					"foreignText": true
-				},
-				"crasis_lemma": {
 					"foreignText": true
 				},
 				"lemma": {
 					"foreignText": true
 				},
-				"longtag": {
-					"ignoreShow": true,
-					"ignoreRequest": true,
-					"isRange": true
-				},
-				"simpletag": {
-					"ignoreShow": true,
-					"ignoreRequest": true,
-					"isRange": true
-				},
-				"strongs": {
+				"strongnumber": {
 					"ignoreShow": true,
 					"ignoreRequest": true
 				},
-				"crasis_status": {},
 				"gloss": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\([^\\)]+\\))? *{0} *(\\([^\\)]+\\))?([,;].+)?$\/i",
                     "indirdb": "mysql",
                     "sql_command": "SELECT gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_LANG lang ON lang.lex_id=gr.id WHERE strongs=%d",
-                    "sql_command_variant": "SELECT COALESCE(lang_var.gloss,lang.gloss) gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_LANG lang ON lang.lex_id=gr.id LEFT JOIN {PRE}lexicon_greek_LANG_VARIANT lang_var ON lang_var.lex_id=gr.id WHERE strongs=%d AND strongs_unreliable=('%s'='true')",
+                    "sql_command_variant": "SELECT COALESCE(lang_var.gloss,lang.gloss) gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_LANG lang ON lang.lex_id=gr.id LEFT JOIN {PRE}lexicon_greek_LANG_VARIANT lang_var ON lang_var.lex_id=gr.id WHERE strongnumber=%d AND strongs_unreliable=('%s'='true')",
                     "sqlargs": [
                         "strongs"
                     ],
@@ -145,27 +123,15 @@
 						
 						{
 							"mytype": "GrammarFeature",
-							"name": "crasis_lemma"
-						},
-						{
-							"mytype": "GrammarFeature",
 							"name": "lemma"
 						},
 						{
 							"mytype": "GrammarFeature",
-							"name": "strongs"
+							"name": "strongnumber"
 						},
 						{
 							"mytype": "GrammarFeature",
 							"name": "docindex"
-						},
-						{
-							"mytype": "GrammarFeature",
-							"name": "post"
-						},
-						{
-							"mytype": "GrammarFeature",
-							"name": "pre"
 						},
 						{
 							"mytype": "GrammarFeature",
@@ -174,23 +140,8 @@
 						{
 							"mytype": "GrammarFeature",
 							"name": "surface"
-						},
-						{
-							"mytype": "GrammarFeature",
-							"name": "wholesurface"
-						},
-						{
-							"mytype": "GrammarFeature",
-							"name": "longtag"
-						},
-						{
-							"mytype": "GrammarFeature",
-							"name": "simpletag"
-						},
-						{
-							"mytype": "GrammarFeature",
-							"name": "crasis_status"
 						}
+
 					]
 				},
 				{
@@ -202,7 +153,13 @@
 		},
 		{
 			"mytype": "SentenceGrammar",
-			"objType": "sentence"
+			"objType": "sentence",
+			"items": [
+                {
+                    "mytype": "GrammarFeature",
+                    "name": "head"
+                }
+            ]
 		}
 	],
 	"subsetOf": null

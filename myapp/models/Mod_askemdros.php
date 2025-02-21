@@ -299,12 +299,10 @@ class Mod_askemdros extends CI_Model {
                 $numCandidates = $this->quiz_data->getNumberOfCandidates();
             else
                 throw new DataException($this->lang->line('no_sentences_found'));
-
             if ($this->quiz_data->fixedquestions>0)
                 $number_of_quizzes = $this->quiz_data->fixedquestions;
             $this->dictionaries_json = json_encode($this->quiz_data->getNextCandidate($number_of_quizzes));
             $this->quiz_data_json = json_encode($this->quiz_data);
-
             $this->dbinfo_json = $this->db_config->dbinfo_json;
             $this->l10n_json = $this->db_config->l10n_json;
             $this->typeinfo_json = $this->db_config->typeinfo_json;

@@ -243,12 +243,12 @@ class Quiz_data {
             else
                 $extended_msets[] = $current_ms;
         }
-
         $this->CI->load->library('dictionary', array('msets' => $extended_msets, 'msets_quiz' => $msets, 'inQuiz' => true, 'showIcons' => false, 'glosslimit' => $this->quizFeatures->glosslimit));
 
         $mset_union = new OlMonadSet();
-        foreach ($msets as $mset)
+        foreach ($msets as $mset) {
             $mset_union->addSetNoConsolidate($mset);
+        }
 
         // **************************************************************************
         // Populate the $this->monad2Id and $this->id2FeatVal with data from the quiz objects

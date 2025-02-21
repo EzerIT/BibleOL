@@ -65,18 +65,11 @@
 		"word": {
 			"frequency_rank": "integer",
 			"docindex":"integer",
-			"post":"string",
-			"pre":"string",
 			"refid":"string",
 			"surface":"string",
-			"wholesurface":"string",
 			"bn_lemma":"string",
-			"crasis_lemma":"string",
 			"lemma":"string",
-			"longtag":"string",
-			"simpletag":"string",
-			"strongs":"string",
-			"crasis_status":"integer"
+			"strongnumber":"string"
 		},
 		"book":{
 			"self":"id_d",
@@ -98,7 +91,8 @@
 		},
 		"sentence":{
 			"self":"id_d",
-			"docindex":"integer"
+			"docindex":"integer",
+			"head":"string"
 		}
 	},
 	"enumTypes":[

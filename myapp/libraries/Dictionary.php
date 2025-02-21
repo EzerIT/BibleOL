@@ -57,7 +57,6 @@ class Dictionary {
         assert(isset($fset->sql) || isset($fset->sql_command));
         assert(isset($fset->sqlargs));
         assert(isset($fset->multiple));
-
         if ($test_glosslimit && ($fset->isGloss ?? false)) {
             assert(isset($mo->features['frequency_rank']));
             if ($mo->features['frequency_rank'] <= $this->glosslimit) {
@@ -90,15 +89,18 @@ class Dictionary {
                                           true);
             }
 
-            if (isset($fset->sql_command_variant))
+            if (isset($fset->sql_command_variant)){
                 $query = $this->indir_db_handle[$fset->indirdb]->query(vsprintf($fset->sql_command_variant,$key_array));
-            elseif (isset($fset->sql_command))
+            }
+            elseif (isset($fset->sql_command)){
                 $query = $this->indir_db_handle[$fset->indirdb]->query(vsprintf($fset->sql_command,$key_array));
-            else 
+            }
+            else {
                 $query = $this->indir_db_handle[$fset->indirdb]
                     ->select($fset->sql[0])
                     ->where(vsprintf($fset->sql[2],$key_array), NULL, false)
                     ->get($fset->sql[1]);
+            }
 
             if ($fset->multiple) {
                 // We may get more than one answer from the database
@@ -136,6 +138,7 @@ class Dictionary {
                     $this->indirectLookupCache[$key] = '*';
             }
         }
+
 
         $mo->features[$feat] = $this->indirectLookupCache[$key];
     }
@@ -204,7 +207,6 @@ class Dictionary {
         $inQuiz = $params['inQuiz'];
         $showIcons = $params['showIcons'];
         $this->glosslimit = $params['glosslimit'] ?? 0;
-
         $CI =& get_instance();
         $CI->load->library('picdb');
 
@@ -247,7 +249,7 @@ class Dictionary {
         for ($msetIndex=0; $msetIndex<$number_sets; ++$msetIndex)
             $this->singleMonadsM[$msetIndex] = array();
         $this->monadObjects = array();
- 
+
         for ($msetIndex=0; $msetIndex<$number_sets; ++$msetIndex) {
             $moarr = array();
             for ($i=0; $i<$this->maxLevels; ++$i)
@@ -293,7 +295,6 @@ class Dictionary {
         if (!$inQuiz)
             foreach ($dbinfo->universeHierarchy as $uht)
                 $command .= "GET OBJECTS HAVING MONADS IN $mset_union [$uht->type GET $uht->feat] GOqxqxqx\n";
-
         $emdros_data = $CI->mql->exec($command);
 
         $mqlresult_index = 0;
@@ -305,8 +306,9 @@ class Dictionary {
                 foreach ($sh->get_straws() as $str) {
                     foreach ($str->get_matched_objects() as $mo) {
                         if ($sdiIndex==0) {
-                            foreach ($indirect as $feat => $fsetting)
+                            foreach ($indirect as $feat => $fsetting) {
                                 $this->indirectLookup($feat, $mo, $fsetting, true);
+                            }
                         }
                         $this->addMonadObject($msetIndex, $sdiIndex, $mo);
                     }

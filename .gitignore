@@ -2,6 +2,8 @@
 *~
 dont_git
 quizzes
+*.INACTIVE
+db/output.txt
 db/*.name
 db/ETCBC4
 db/nestle1904

@@ -5,22 +5,17 @@
 		"word":{
 			"_objname": "Word",
 			"docindex": "Document Index",
-			"post": "Post",
 			"frequency_rank": "Frequency Rank",
-			"pre": "Pre",
 			"refid": "Reference ID",
 			"surface": "Text",
-			"wholesurface": "Whole Text",
 			"bn_lemma": "Bangla Lexeme",
-			"crasis_lemma": "Crasis Lexeme",
 			"lemma": "Lexeme",
-			"longtag": "Long Tag",
-			"simpletag": "Simple Tag",
-			"strongs": "Strong's number",
+			"strongnumber": "Strong's number",
 			"crasis_status_t": "Crasis Status"
 		},
 		"sentence": {
-            "_objname": "Sentence"
+            "_objname": "Sentence",
+            "head":"Head"
         },
 		"ref": {
 			"_objname": "Reference"
