@@ -72,7 +72,14 @@ class Ctrl_exams extends MY_Controller
         foreach ($owned_classes as $class_id){
           $class = $this->mod_classes->get_class_by_id($class_id);
           $class_names[$class_id] = $class->classname;
-          $instructors[$class_id] = $this->mod_users->user_full_name($class->ownerid);
+          $user_full_name = 'None';
+          try {
+            $user_full_name = $this->mod_users->user_full_name($class->ownerid);
+          }
+          catch(DataException $e){
+            error_log($e->getMessage());
+          }
+          $instructors[$class_id] = $user_full_name;
           $active_exam_query = $this->db->get_where('exam_active', array('class_id' => $class_id))->result();
           foreach ($active_exam_query as $exam_row) {
             if ($exam_row->exam_end_time > time()){
