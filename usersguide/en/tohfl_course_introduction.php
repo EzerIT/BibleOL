@@ -1,4 +1,4 @@
-<? version: 20241212 ?>
+<? version: 20250312 ?>
 
 <h2>The Hebrew TOHFL course</h2>
 
@@ -7,7 +7,7 @@
 <ul>
 	<li>Merwe, Christo H. van der, and Jacobus A. Naud&eacute;. <em>A Biblical Hebrew Reference Grammar</em>.&nbsp;2nd edition. London, New York: T&amp;T Clark, 2017.</li>
 	<li>Glanz, Oliver. <em>Biblical Hebrew Reviewer: A Universal Study Companion</em>. Berrien Springs: Andrews University Press, 2018.</li>
-	<li>TOHFL vocab booklet (download vocab booklet for TOHFL course I <a href="https://liveandrews-my.sharepoint.com/:b:/g/personal/glanz_andrews_edu/EWL-d2GESRtNli857PtcqL8BTnTb6_Y0psn-OY5QaC4yKg?e=JvFaAe">here</a>, and TOHFL course II <a href="https://liveandrews-my.sharepoint.com/:b:/g/personal/glanz_andrews_edu/ESOwuGqPAThMp9fwf2TExoQBj5PUEp868vjqevAwGQRvHw?e=KkgBjf">here</a>).</li>
+	<li>TOHFL vocab booklet (download vocab booklet for TOHFL course I <a href="https://drive.google.com/file/d/1M2qKlc_GG3xpYIZwBIJ9ZR9tEa858hZC/view?usp=sharing" target="_blank">here</a>, and TOHFL course II <a href="https://drive.google.com/file/d/1RpiqLM_MNmO0zE7Y5IyZezc-TEiocuH2/view?usp=sharing" target="_blank">here</a>).</li>
 </ul>
 
 <p>Since this course does not use a textbook, it follows a text-driven approach in which vocabulary and grammar are not learned in the abstract but are closely related to the texts being translated through both TOHFL courses. TOHFL-I will work with Gen 19-20. TOHFL-II will work with Gen 19-20, Ruth 1, and Psa 3. The vocabulary of each course will cover the words found in the texts to be translated in the respective courses.</p>
