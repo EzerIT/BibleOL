@@ -51,6 +51,11 @@
 			"hasdet":"functionalphrase_hasdet_t",
 			"phrasefunction":"functionalphrase_phrasefunction_t",
 			"rule":"functionalphrase_rule_t"
+		},
+		"clause":{
+			"self":"id_d",
+			"cltype":"clause_cltype_t",
+			"hasdet":"clause_hasdet_t"
 		}
 	},
 	"enumTypes":[
@@ -59,7 +64,9 @@
 		"phrase_hasdet_t",
 		"functionalphrase_hasdet_t",
 		"functionalphrase_phrasefunction_t",
-		"functionalphrase_rule_t"
+		"functionalphrase_rule_t",
+		"clause_cltype_t",
+		"clause_hasdet_t"
 	],
 	"enum2values":{
 		"crasis_status_t":[
@@ -126,6 +133,17 @@
 			"ptcl2P",
 			"ptcl2S",
 			"vp2VC"
+		],
+		"clause_cltype_t":[
+			"NA",
+			"Minor",
+			"VerbElided",
+			"VerbalClause",
+			"Verbless"
+		],
+		"clause_hasdet_t":[
+			"False",
+			"True"
 		]
 	}
 	

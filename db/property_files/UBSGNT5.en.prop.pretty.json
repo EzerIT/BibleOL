@@ -28,6 +28,11 @@
             "rule":"Rule",
             "hasdet":"Has detail?",
             "phrasefunction":"Phrase Function"
+        },
+        "clause":{
+            "_objname":"Clause",
+            "cltype":"Clause Type",
+            "hasdet":"Has detail?"
         }
 	},
     "emdrostype":{
@@ -91,6 +96,17 @@
             "ptcl2P":"ptcl2P",
             "ptcl2S":"ptcl2S",
             "vp2VC":"vp2VC"
+        },
+        "clause_cltype_t":{
+            "NA":"NA",
+            "Minor":"Minor",
+            "VerbElided":"VerbElided",
+            "VerbalClause":"VerbalClause",
+            "Verbless":"Verbless"
+        },
+        "clause_hasdet_t":{
+            "False":"False",
+            "True":"True"
         }
 
     },

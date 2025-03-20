@@ -44,6 +44,13 @@
 				}
 			}
 		},
+		"clause":{
+			"mayselect": true,
+			"featuresetting":{
+				"cltype":{"isDefault":true},
+				"hasdet":{"isDefault":true}
+			}
+		},
 		"word": {
 			"mayselect": true,
 			"featuresetting": {
