@@ -17,15 +17,10 @@
             "_objname": "Sentence",
             "head":"Head"
         },
-		"ref": {
-			"_objname": "Reference"
-		},
-		"punctuation": {
-			"_objname": "Punctuation"
-		},
-		"token": {
-			"_objname": "Token"
-		}
+        "phrase":{
+            "_objname":"Phrase",
+            "rule":"Rule"
+        }
 	},
 	"grammargroup": {
         "word": {

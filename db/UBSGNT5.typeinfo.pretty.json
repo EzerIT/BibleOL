@@ -4,64 +4,10 @@
         "book",
         "chapter",
         "verse",
-		"ref",
-		"punctuation",
-		"token",
-		"ot_quote",
-		"b",
-		"p",
-		"emdrosinfo",
-        "sentence"
+        "sentence",
+		"phrase"
 	],
 	"obj2feat":{
-		"ref":{
-			"self":"id_d",
-			"docindex":"integer",
-			"loc":"string"
-		},
-		"punctuation":{
-			"self":"id_d",
-			"docindex":"integer",
-			"post":"string",
-			"pre":"string",
-			"surface":"string"
-		},
-		"token":{
-			"self":"id_d",
-			"docindex":"integer",
-			"post":"string",
-			"pre":"string",
-			"surface":"string"
-		},
-		"ot_quote":{
-			"self":"id_d",
-			"docindex":"integer"
-		},
-		"b":{
-			"self":"id_d",
-			"docindex":"integer"
-		},
-		"p":{
-			"self":"id_d",
-			"docindex":"integer",
-			"lang":"string",
-			"ptype":"string"
-		},
-		"emdrosinfo":{
-			"self":"id_d",
-			"abbreviation":"string",
-			"bookcase_object_type":"string",
-			"bookcase_title_feature_name":"string",
-			"bookcase_title_object_type":"string",
-			"dbname":"string",
-			"dbtype":"string",
-			"fts_search":"string",
-			"languages":"string",
-			"metadata":"string",
-			"stylesheet":"string",
-			"token_feature_name":"string",
-			"token_object_type":"string"
-		},
 		"word": {
 			"frequency_rank": "integer",
 			"docindex":"integer",
@@ -93,6 +39,10 @@
 			"self":"id_d",
 			"docindex":"integer",
 			"head":"string"
+		},
+		"phrase":{
+			"self":"id_d",
+			"rule":"string"
 		}
 	},
 	"enumTypes":[

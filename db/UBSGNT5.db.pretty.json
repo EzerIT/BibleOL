@@ -9,9 +9,6 @@
 	"suffixFeature": null,
 	"charSet": "greek",
 	"objectSettings": {
-		"chapter": {},
-		"verse": {},
-		"book": {},
 		"sentence": {
 			"mayselect": true,
 			"featuresetting":{
@@ -20,13 +17,13 @@
 				}
 			}
 		},
-		"ref": {},
-		"punctuation": {},
-		"token": {},
-		"ot_quote": {},
-		"b": {},
-		"p": {},
-		"emdrosinfo": {},
+		"phrase":{
+			"mayselect": true,
+			"featuresetting":{
+				"rule":{
+				}
+			}
+		},
 		"word": {
 			"mayselect": true,
 			"featuresetting": {
