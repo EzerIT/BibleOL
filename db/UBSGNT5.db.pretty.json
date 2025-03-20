@@ -21,7 +21,8 @@
 			"mayselect": true,
 			"featuresetting":{
 				"rule":{
-				}
+				},
+				"phrasetype":{"isDefault": true}
 			}
 		},
 		"word": {

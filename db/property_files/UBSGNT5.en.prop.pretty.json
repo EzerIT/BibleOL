@@ -19,9 +19,21 @@
         },
         "phrase":{
             "_objname":"Phrase",
-            "rule":"Rule"
+            "rule":"Rule",
+            "phrasetype":"Phrase Type"
         }
 	},
+    "emdrostype":{
+        "phrase_phrasetype_t": {
+            "NA":"N/A",
+            "ADJP":"ADJP",
+            "ADVP":"ADVP",
+            "NP":"NP",
+            "NumP":"NumP",
+            "PP":"PP",
+            "VP":"VP"
+        }
+    },
 	"grammargroup": {
         "word": {
             "lexeme": "Lexeme",

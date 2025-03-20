@@ -42,16 +42,27 @@
 		},
 		"phrase":{
 			"self":"id_d",
-			"rule":"string"
+			"rule":"string",
+			"phrasetype":"phrase_phrasetype_t"
 		}
 	},
 	"enumTypes":[
-		"crasis_status_t"
+		"crasis_status_t",
+		"phrase_phrasetype_t"
 	],
 	"enum2values":{
 		"crasis_status_t":[
 			"NA",
 			"crasis_combined"
+		],
+		"phrase_phrasetype_t":[
+			"NA",
+			"ADJP",
+			"ADVP",
+			"NP",
+			"NumP",
+			"PP",
+			"VP"
 		]
 	}
 	
