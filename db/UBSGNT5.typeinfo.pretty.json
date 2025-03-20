@@ -43,12 +43,14 @@
 		"phrase":{
 			"self":"id_d",
 			"rule":"string",
-			"phrasetype":"phrase_phrasetype_t"
+			"phrasetype":"phrase_phrasetype_t",
+			"hasdet":"phrase_hasdet_t"
 		}
 	},
 	"enumTypes":[
 		"crasis_status_t",
-		"phrase_phrasetype_t"
+		"phrase_phrasetype_t",
+		"phrase_hasdet_t"
 	],
 	"enum2values":{
 		"crasis_status_t":[
@@ -63,6 +65,10 @@
 			"NumP",
 			"PP",
 			"VP"
+		],
+		"phrase_hasdet_t":[
+			"False",
+			"True"
 		]
 	}
 	

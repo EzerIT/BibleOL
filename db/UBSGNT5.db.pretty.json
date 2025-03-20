@@ -22,7 +22,12 @@
 			"featuresetting":{
 				"rule":{
 				},
-				"phrasetype":{"isDefault": true}
+				"phrasetype":{
+					"isDefault": true
+				},
+				"hasdet":{
+					"isDefault": true
+				}
 			}
 		},
 		"word": {

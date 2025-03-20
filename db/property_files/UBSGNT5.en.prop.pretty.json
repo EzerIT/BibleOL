@@ -20,7 +20,8 @@
         "phrase":{
             "_objname":"Phrase",
             "rule":"Rule",
-            "phrasetype":"Phrase Type"
+            "phrasetype":"Phrase Type",
+            "hasdet":"Has detail?"
         }
 	},
     "emdrostype":{
@@ -32,6 +33,10 @@
             "NumP":"NumP",
             "PP":"PP",
             "VP":"VP"
+        },
+        "phrase_hasdet_t":{
+            "False":"False",
+			"True":"True"
         }
     },
 	"grammargroup": {
