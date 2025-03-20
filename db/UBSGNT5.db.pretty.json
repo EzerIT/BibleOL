@@ -30,6 +30,20 @@
 				}
 			}
 		},
+		"functionalphrase":{
+			"mayselect": true,
+			"featuresetting":{
+				"hasdet":{
+					"isDefault": true
+				},
+				"phrasefunction":{
+					"isDefault": true
+				},
+				"rule":{
+					"isDefault": true
+				}
+			}
+		},
 		"word": {
 			"mayselect": true,
 			"featuresetting": {
