@@ -5,17 +5,37 @@
         "chapter",
         "verse",
         "sentence",
-		"phrase"
+		"phrase",
+		"clause"
 	],
 	"obj2feat":{
 		"word": {
-			"frequency_rank": "integer",
-			"docindex":"integer",
-			"refid":"string",
-			"surface":"string",
+			"adjuncttype": "string",
 			"bn_lemma":"string",
+			"chinese":"string",
+			"english":"string",
+			"formaltag":"string",
+			"frame":"string",
+			"framegloss":"string",
+			"functionaltag":"string",
+			"label":"string",
 			"lemma":"string",
-			"strongnumber":"string"
+			"lexdomain":"string",
+			"normalizedform":"string",
+			"notes":"string",
+			"prepositiontype":"string",
+			"punc":"string",
+			"ref":"string",
+			"refenglish":"string",
+			"reflemma":"string",
+			"refstrong":"string",
+			"role":"string",
+			"surface":"string",
+			"frequency_rank":"integer",
+			"strongnumber":"string",
+			"docindex":"integer",
+			"refid":"string"
+			
 		},
 		"book":{
 			"self":"id_d",
@@ -56,6 +76,11 @@
 			"self":"id_d",
 			"cltype":"clause_cltype_t",
 			"hasdet":"clause_hasdet_t"
+		},
+		"functionalword":{
+			"self":"id_d",
+			"functionalpartofspeech":"functionalword_functionalpartofspeech_t",
+			"rule":"functionalword_rule_t"
 		}
 	},
 	"enumTypes":[
@@ -66,7 +91,9 @@
 		"functionalphrase_phrasefunction_t",
 		"functionalphrase_rule_t",
 		"clause_cltype_t",
-		"clause_hasdet_t"
+		"clause_hasdet_t",
+		"functionalword_functionalpartofspeech_t",
+		"functionalword_rule_t"
 	],
 	"enum2values":{
 		"crasis_status_t":[
@@ -144,7 +171,36 @@
 		"clause_hasdet_t":[
 			"False",
 			"True"
+		],
+		"functionalword_functionalpartofspeech_t":[
+			"NA",
+			"adj",
+			"adv",
+			"conj",
+			"intj",
+			"prep",
+			"pron",
+			"ptcl"
+		],
+		"functionalword_rule_t":[
+			"NA",
+			"Adv2Adj",
+			"Adv2Conj",
+			"Adv2Prep",
+			"Adv2Ptcl",
+			"Conj2Adv",
+			"Conj2Prep",
+			"Conj2Pron",
+			"Conj2Ptcl",
+			"ConjConj",
+			"Prep2Adv",
+			"Ptcl2Adv",
+			"Ptcl2Conj",
+			"Ptcl2Intj",
+			"V2Intj",
+			"pron2adj"
 		]
+
 	}
 	
 }

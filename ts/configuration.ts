@@ -97,6 +97,8 @@ function getObjectSetting(otype : string) : ObjectSetting {
 //     FeatureSetting for the specified object type and feature
 //
 function getFeatureSetting(otype : string, feature : string) : FeatureSetting {
+    console.log(otype);
+    console.log(feature);
     // Handle the pseudo-feature 'visual'
     if (feature==='visual') {
         otype = configuration.objHasSurface;

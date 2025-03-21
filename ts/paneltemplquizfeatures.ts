@@ -401,6 +401,9 @@ class PanelForOneOtype  {
                      + '<th></th>'
                      + '</tr>');
 
+        console.log(otype)
+        console.log(configuration.surfaceFeature);
+        console.log(getFeatureSetting(otype,configuration.surfaceFeature));
         // Set up "visual" pseudo feature
         this.visualBAL = new ButtonsAndLabel(localize('visual'),                  // The localized name of the feature
                                              'visual',                            // The Emdros name of the feature
@@ -929,7 +932,8 @@ class PanelTemplQuizFeatures {
     //
     public isDirty() : boolean {
         let qfnow : QuizFeatures = this.getInfo();
-
+        console.log(qfnow.showFeatures);
+        console.log(this.initialQf.showFeatures);
         if (qfnow.showFeatures.length !== this.initialQf.showFeatures.length ||
             qfnow.requestFeatures.length !== this.initialQf.requestFeatures.length ||
             qfnow.dontShowFeatures.length !== this.initialQf.dontShowFeatures.length ||

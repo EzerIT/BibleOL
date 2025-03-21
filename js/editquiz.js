@@ -17,6 +17,8 @@ function getObjectSetting(otype) {
     return configuration.objectSettings[otype];
 }
 function getFeatureSetting(otype, feature) {
+    console.log(otype);
+    console.log(feature);
     if (feature === 'visual') {
         otype = configuration.objHasSurface;
         feature = configuration.surfaceFeature;
@@ -1559,6 +1561,9 @@ var PanelForOneOtype = (function () {
             + "<th class=\"leftalign\">".concat(localize('feature'), "</th>")
             + '<th></th>'
             + '</tr>');
+        console.log(otype);
+        console.log(configuration.surfaceFeature);
+        console.log(getFeatureSetting(otype, configuration.surfaceFeature));
         this.visualBAL = new ButtonsAndLabel(localize('visual'), 'visual', otype, useSavedFeatures ? ptqf.getSelector('visual') : ButtonSelection.DONT_CARE, null, configuration.objHasSurface === otype && Boolean(getFeatureSetting(otype, configuration.surfaceFeature).alternateshowrequestSql), true, configuration.objHasSurface === otype, configuration.objHasSurface === otype);
         table.append(this.visualBAL.getRow());
         var hasSurfaceFeature = otype === configuration.objHasSurface;
@@ -1826,6 +1831,8 @@ var PanelTemplQuizFeatures = (function () {
     };
     PanelTemplQuizFeatures.prototype.isDirty = function () {
         var qfnow = this.getInfo();
+        console.log(qfnow.showFeatures);
+        console.log(this.initialQf.showFeatures);
         if (qfnow.showFeatures.length !== this.initialQf.showFeatures.length ||
             qfnow.requestFeatures.length !== this.initialQf.requestFeatures.length ||
             qfnow.dontShowFeatures.length !== this.initialQf.dontShowFeatures.length ||

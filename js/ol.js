@@ -185,6 +185,8 @@ function getObjectSetting(otype) {
     return configuration.objectSettings[otype];
 }
 function getFeatureSetting(otype, feature) {
+    console.log(otype);
+    console.log(feature);
     if (feature === 'visual') {
         otype = configuration.objHasSurface;
         feature = configuration.surfaceFeature;

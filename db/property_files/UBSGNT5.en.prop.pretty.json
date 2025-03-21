@@ -4,14 +4,30 @@
 	"emdrosobject": {
 		"word":{
 			"_objname": "Word",
-			"docindex": "Document Index",
-			"frequency_rank": "Frequency Rank",
-			"refid": "Reference ID",
-			"surface": "Text",
-			"bn_lemma": "Bangla Lexeme",
-			"lemma": "Lexeme",
-			"strongnumber": "Strong's number",
-			"crasis_status_t": "Crasis Status"
+			"adjuncttype": "Adjunct Type",
+			"bn_lemma": "Bengali Lemma",
+			"chinese": "Chinese",
+			"english": "English",
+			"formaltag": "Formal Tag",
+			"frame": "Frame",
+			"framegloss": "Frame Gloss",
+			"functionaltag":"Functional Tag",
+            "label":"Label",
+            "lemma":"Lemma",
+            "lexdomain":"Lex Domain",
+            "normalizedform":"Normalized Form",
+            "notes":"Notes",
+            "prepositiontype":"Preposition Type",
+            "punc":"Punctuation",
+            "ref":"Reference",
+            "refenglish":"Reference English",
+            "reflemma":"Reference Lemma",
+            "refstrong":"Reference Strong",
+            "role":"Role",
+            "surface":"surface",
+            "frequency_rank":"Frequency Rank",
+            "strongnumber":"Strong Number",
+            "docindex":"Document Index"
 		},
 		"sentence": {
             "_objname": "Sentence",
@@ -33,7 +49,13 @@
             "_objname":"Clause",
             "cltype":"Clause Type",
             "hasdet":"Has detail?"
+        },
+        "functionalword":{
+            "_objname":"Functional Word",
+            "functionalpartofspeech":"Functional Part of Speech",
+            "rule":"Rule"
         }
+
 	},
     "emdrostype":{
         "phrase_phrasetype_t": {
@@ -107,6 +129,34 @@
         "clause_hasdet_t":{
             "False":"False",
             "True":"True"
+        },
+        "functionalword_functionalpartofspeech_t":{
+            "NA":"NA",
+            "adj":"Adjective",
+            "adv":"Adverb",
+            "conj":"Conjunction",
+            "intj":"Interjection",
+            "prep":"Preposition",
+            "pron":"Pronoun",
+            "ptcl":"Particle"
+        },
+        "functionalword_rule_t":{
+            "NA":"NA",
+            "Adv2Adj":"Adv2Adj",
+            "Adv2Conj":"Adv2Conj",
+            "Adv2Prep":"Adv2Prep",
+            "Adv2Ptcl":"Adv2Ptcl",
+            "Conj2Adv":"Conj2Adv",
+            "Conj2Prep":"Conj2Prep",
+            "Conj2Pron":"Conj2Pron",
+            "Conj2Ptcl":"Conj2Ptcl",
+            "ConjConj":"ConjConj",
+            "Prep2Adv":"Prep2Adv",
+            "Ptcl2Adv":"Ptcl2Adv",
+            "Ptcl2Conj":"Ptcl2Conj",
+            "Ptcl2Intj":"Ptcl2Intj",
+            "V2Intj":"V2Intj",
+            "pron2adj":"pron2adj"
         }
 
     },

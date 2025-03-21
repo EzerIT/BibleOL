@@ -51,43 +51,41 @@
 				"hasdet":{"isDefault":true}
 			}
 		},
+		"functionalword":{
+			"mayselect": true,
+			"featuresetting":{
+				"functionalpartofspeech":{"isDefault":true},
+				"rule":{"isDefault":true}
+			}
+		},
 		"word": {
 			"mayselect": true,
 			"featuresetting": {
-				"docindex": {
-					"ignoreShow": true,
-					"ignoreRequest": true,
-					"isRange": true
-				},
-				"frequency_rank": {
-                    "ignoreShow": true,
-                    "ignoreRequest": true,
-                    "isRange": true
-                },
-				"self": {
-					"ignoreSelect": true,
-					"ignoreShow": true,
-					"ignoreRequest": true
-				},
-				"refid": {
-					"ignoreShow": true,
-					"ignoreRequest": true,
-					"isRange": true
-				},
-				"surface": {
-					"hideWord": true,
-					"foreignText": true
-				},
-				"bn_lemma": {
-					"foreignText": true
-				},
-				"lemma": {
-					"foreignText": true
-				},
-				"strongnumber": {
-					"ignoreShow": true,
-					"ignoreRequest": true
-				},
+				"adjuncttype":{"isDefault":true, "foreignText": true},
+				"bn_lemma":{"isDefault":true, "foreignText": true},
+				"chinese":{"isDefault":true, "foreignText": true},
+				"english":{"isDefault":true, "foreignText": true},
+				"formaltag":{"isDefault":true, "foreignText": true},
+				"frame":{"isDefault":true, "foreignText": true},
+				"framegloss":{"isDefault":true, "foreignText": true},
+				"functionaltag":{"isDefault":true, "foreignText": true},
+				"label":{"isDefault":true, "foreignText": true},
+				"lemma":{"isDefault":true, "foreignText": true},
+				"lexdomain":{"isDefault":true, "foreignText": true},
+				"normalizedform":{"isDefault":true, "foreignText": true},
+				"notes":{"isDefault":true, "foreignText": true},
+				"prepositiontype":{"isDefault":true, "foreignText": true},
+				"punc":{"isDefault":true, "foreignText": true},
+				"ref":{"isDefault":true, "foreignText": true},
+				"refenglish":{"isDefault":true, "foreignText": true},
+				"reflemma":{"isDefault":true, "foreignText": true},
+				"refstrong":{"isDefault":true, "foreignText": true},
+				"role":{"isDefault":true, "foreignText": true},
+				"surface":{"hideWord": true, "foreignText": true},
+				"frequency_rank":{},
+				"strongnumber":{},
+				"docindex":{},
+				"refid":{},
 				"gloss": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\([^\\)]+\\))? *{0} *(\\([^\\)]+\\))?([,;].+)?$\/i",
