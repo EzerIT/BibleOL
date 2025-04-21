@@ -1,4 +1,4 @@
-<? version: 20250117 ?>
+<? version: 20250416 ?>
 
 <h1>The Hebrew Placement Exam</h1>
 
@@ -16,6 +16,12 @@
 </p>
 
 <p>Exam results will be available instantly. The placement exam can be taken <strong><em>only one time</em></strong>! However, the exercise links below can be used endlessly to make good preparation possible.</p>
+
+<p>To prepare well for the exam, make sure 
+<ul>	
+	<li>that you use this complete <strong><a href="https://drive.google.com/file/d/19wuZMlywhLV44lAD_r1T5d97OiskH3H_/view?usp=sharing" target="_blank">Vocabularly List</a></strong> (containing all down to a frequency of 100) that matches the gloss database of the BibleOL.</li>
+	<li>that you download the <strong><a href="https://drive.google.com/file/d/1WSE2h44YE6PUJocPChgMgbrudfmoqZ62/view?usp=sharing" target="_blank">Syntax Defintion Document</a></strong> and learn them. All definitions are to be mastered and assumed in the Placement Exam.</li>
+</ul>
 
 <p>Below, you can see what type of questions you will have to answer in the different parts of the exam. Each exam part is <strong><em>hyperlinked</em></strong> (underlined, blue table headers) so that students can begin exam preparations. You can exercise and test yourself on each category by clicking the hyperlink. The actual placement exam will draw from the same pool of questions from which the hyperlinked exercises are drawn.</p>
 
