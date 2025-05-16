@@ -10,31 +10,30 @@
 	],
 	"obj2feat":{
 		"word": {
-			"adjuncttype": "string",
 			"bn_lemma":"string",
 			"chinese":"string",
 			"english":"string",
-			"formaltag":"string",
-			"frame":"string",
-			"framegloss":"string",
-			"functionaltag":"string",
-			"label":"string",
 			"lemma":"string",
-			"lexdomain":"string",
-			"normalizedform":"string",
-			"notes":"string",
 			"prepositiontype":"string",
 			"punc":"string",
-			"ref":"string",
-			"refenglish":"string",
-			"reflemma":"string",
-			"refstrong":"string",
-			"role":"string",
 			"surface":"string",
-			"frequency_rank":"integer",
-			"strongnumber":"string",
-			"docindex":"integer",
-			"refid":"string"
+			"adjectivetype":"word_adjectivetype_t",
+			"adverbtype":"word_adverbtype_t",
+			"case":"word_case_t",
+			"cltype":"word_cltype_t",
+			"conjunctiontype":"word_conjunctiontype_t",
+			"degree":"word_degree_t",
+			"gender":"word_gender_t",
+			"mood":"word_mood_t",
+			"nountype":"word_nountype_t",
+			"number":"word_number_t",
+			"particletype":"word_particletype_t",
+			"partofspeech":"word_partofspeech_t",
+			"person":"word_person_t",
+			"pronountype":"word_pronountype_t",
+			"verbtype":"word_verbtype_t",
+			"voice":"word_voice_t",
+			"frequency_rank":"string"
 			
 		},
 		"book":{
@@ -84,122 +83,140 @@
 		}
 	},
 	"enumTypes":[
-		"crasis_status_t",
-		"phrase_phrasetype_t",
-		"phrase_hasdet_t",
-		"functionalphrase_hasdet_t",
-		"functionalphrase_phrasefunction_t",
-		"functionalphrase_rule_t",
-		"clause_cltype_t",
-		"clause_hasdet_t",
-		"functionalword_functionalpartofspeech_t",
-		"functionalword_rule_t"
+		"word_adjectivetype_t",
+		"word_adverbtype_t",
+		"word_case_t",
+		"word_cltype_t",
+		"word_conjunctiontype_t",
+		"word_degree_t",
+		"word_gender_t",
+		"word_mood_t",
+		"word_nountype_t",
+		"word_number_t",
+		"word_particletype_t",
+		"word_partofspeech_t",
+		"word_person_t",
+		"word_pronountype_t",
+		"word_verbtype_t",
+		"word_voice_t"
 	],
 	"enum2values":{
-		"crasis_status_t":[
+		"word_adjectivetype_t": [
 			"NA",
-			"crasis_combined"
+			"Common",
+			"Interrogative",
+			"Place",
+			"Proper",
+			"Relative"
 		],
-		"phrase_phrasetype_t":[
+		"word_adverbtype_t": [
 			"NA",
-			"ADJP",
-			"ADVP",
-			"NP",
-			"NumP",
-			"PP",
-			"VP"
+			"Conditional",
+			"Correlative",
+			"Emphatic",
+			"Indefinite",
+			"Interrogative",
+			"Negative",
+			"Place",
+			"Superlative"
 		],
-		"phrase_hasdet_t":[
-			"False",
-			"True"
-		],
-		"functionalphrase_hasdet_t":[
-			"False",
-			"True"
-		],
-		"functionalphrase_phrasefunction_t":[
+		"word_case_t": [
 			"NA",
-			"AdverbialFunction",
-			"IndirectObjectFunction",
-			"ObjectFunction",
-			"PredicateFunction",
-			"SecondObjectFunction",
-			"SubjectFunction",
-			"VerbalCopulaFunction",
-			"VerbalFunction"
+			"Accusative",
+			"Dative",
+			"Genitive",
+			"Nominative",
+			"Vocative"
 		],
-		"functionalphrase_rule_t":[
-			"ADV2ADV",
-			"ADVaADV",
-			"Adjp2O",
-			"Adjp2P",
-			"AdvAdv",
-			"Advp2ADV",
-			"Advp2P",
-			"CL2ADV",
-			"CL2O2x",
-			"CL2Ox",
-			"CL2P",
-			"CL2S",
-			"Conj3ADV",
+		"word_cltype_t":[
 			"NA",
-			"Np2ADV",
-			"Np2IO",
-			"Np2O",
-			"Np2O2",
-			"Np2P",
-			"Np2S",
-			"Vp2P",
-			"Vp2V",
-			"adjp2ADV",
-			"adjp2O2",
-			"adjp2S",
-			"notADVbutADV",
-			"pp2ADV",
-			"pp2P",
-			"ptcl2P",
-			"ptcl2S",
-			"vp2VC"
+			"Verbal"
 		],
-		"clause_cltype_t":[
+		"word_conjunctiontype_t":[
 			"NA",
-			"Minor",
-			"VerbElided",
-			"VerbalClause",
-			"Verbless"
+			"Adverbial",
+			"Logical"
 		],
-		"clause_hasdet_t":[
-			"False",
-			"True"
+		"word_degree_t": [
+			"NA",
+			"Comparative",
+			"Superlative"
 		],
-		"functionalword_functionalpartofspeech_t":[
+		"word_gender_t": [
+			"NA",
+			"Feminine",
+			"Masculine",
+			"Neuter"
+		],
+		"word_mood_t": [
+			"NA",
+			"Imperative",
+			"Indicative",
+			"Infinitive",
+			"Optative",
+			"Participle",
+			"Subjunctive"
+		],
+		"word_nountype_t": [
+			"NA",
+			"Common",
+			"Place",
+			"Proper"
+		],
+		"word_number_t": [
+			"NA",
+			"Plural",
+			"Singular"
+		],
+		"word_particletype_t": [
+			"NA",
+			"Conditional",
+			"Correlative",
+			"Emphatic",
+			"Interrogative",
+			"Negative"
+		],
+		"word_partofspeech_t": [
 			"NA",
 			"adj",
 			"adv",
 			"conj",
+			"det",
 			"intj",
+			"noun",
+			"num",
 			"prep",
 			"pron",
-			"ptcl"
+			"ptcl",
+			"verb"
 		],
-		"functionalword_rule_t":[
+		"word_person_t": [
 			"NA",
-			"Adv2Adj",
-			"Adv2Conj",
-			"Adv2Prep",
-			"Adv2Ptcl",
-			"Conj2Adv",
-			"Conj2Prep",
-			"Conj2Pron",
-			"Conj2Ptcl",
-			"ConjConj",
-			"Prep2Adv",
-			"Ptcl2Adv",
-			"Ptcl2Conj",
-			"Ptcl2Intj",
-			"V2Intj",
-			"pron2adj"
+			"p1",
+			"p2",
+			"p3"
+		],
+		"word_pronountype_t":[
+			"NA",
+			"Demonstrative",
+			"Emphatic",
+			"Indefinite",
+			"Interrogative",
+			"Personal",
+			"Relative"
+		],
+		"word_verbtype_t":[
+			"NA",
+			"Place"
+		],
+		"word_voice_t":[
+			"NA",
+			"Active",
+			"Middle",
+			"MiddlePassive",
+			"Passive"
 		]
+
 
 	}
 	

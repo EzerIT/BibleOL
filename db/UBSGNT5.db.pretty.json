@@ -9,6 +9,12 @@
 	"suffixFeature": null,
 	"charSet": "greek",
 	"objectSettings": {
+		"clause":{
+			"mayselect": true,
+			"featuresetting":{
+				"cltype":{"isDefault":true}
+			}
+		},
 		"sentence": {
 			"mayselect": true,
 			"featuresetting":{
@@ -24,68 +30,50 @@
 				},
 				"phrasetype":{
 					"isDefault": true
-				},
-				"hasdet":{
-					"isDefault": true
 				}
 			}
 		},
 		"functionalphrase":{
 			"mayselect": true,
 			"featuresetting":{
-				"hasdet":{
-					"isDefault": true
-				},
 				"phrasefunction":{
 					"isDefault": true
-				},
-				"rule":{
-					"isDefault": true
 				}
-			}
-		},
-		"clause":{
-			"mayselect": true,
-			"featuresetting":{
-				"cltype":{"isDefault":true},
-				"hasdet":{"isDefault":true}
 			}
 		},
 		"functionalword":{
 			"mayselect": true,
 			"featuresetting":{
-				"functionalpartofspeech":{"isDefault":true},
-				"rule":{"isDefault":true}
-			}
+				"functionalpartofspeech":{"isDefault":true}			}
 		},
 		"word": {
 			"mayselect": true,
 			"featuresetting": {
-				"adjuncttype":{"isDefault":true, "foreignText": true},
-				"bn_lemma":{"isDefault":true, "foreignText": true},
-				"chinese":{"isDefault":true, "foreignText": true},
-				"english":{"isDefault":true, "foreignText": true},
-				"formaltag":{"isDefault":true, "foreignText": true},
-				"frame":{"isDefault":true, "foreignText": true},
-				"framegloss":{"isDefault":true, "foreignText": true},
-				"functionaltag":{"isDefault":true, "foreignText": true},
-				"label":{"isDefault":true, "foreignText": true},
-				"lemma":{"isDefault":true, "foreignText": true},
-				"lexdomain":{"isDefault":true, "foreignText": true},
-				"normalizedform":{"isDefault":true, "foreignText": true},
-				"notes":{"isDefault":true, "foreignText": true},
-				"prepositiontype":{"isDefault":true, "foreignText": true},
-				"punc":{"isDefault":true, "foreignText": true},
-				"ref":{"isDefault":true, "foreignText": true},
-				"refenglish":{"isDefault":true, "foreignText": true},
-				"reflemma":{"isDefault":true, "foreignText": true},
-				"refstrong":{"isDefault":true, "foreignText": true},
-				"role":{"isDefault":true, "foreignText": true},
-				"surface":{"hideWord": true, "foreignText": true},
+				"bn_lemma":{"foreignText": true},
+				"chinese":{"foreignText": true},
+				"english":{},
+				"lemma":{"foreignText": true},
+				"prepositiontype":{"foreignText": true},
+				"punc":{"foreignText": true},
+				"adjectivetype":{},
+				"surface":{},
+				"adverbtype":{},
+				"case":{},
+				"cltype":{},
+				"conjunctiontype":{},
+				"degree":{},
+				"gender":{},
+				"mood":{},
+				"nountype":{},
+				"number":{},
+				"particletype":{},
+				"partofspeech":{"isDefault":true},
+				"person":{},
+				"pronountype":{},
+				"verbtype":{},
+				"voice":{},
 				"frequency_rank":{},
-				"strongnumber":{},
-				"docindex":{},
-				"refid":{},
+
 				"gloss": {
                     "ignoreSelect": true,
                     "matchregexp": "\/^(.+[;,] +)?(\\([^\\)]+\\))? *{0} *(\\([^\\)]+\\))?([,;].+)?$\/i",
@@ -93,7 +81,8 @@
                     "sql_command": "SELECT gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_LANG lang ON lang.lex_id=gr.id WHERE strongs=%d",
                     "sql_command_variant": "SELECT COALESCE(lang_var.gloss,lang.gloss) gloss FROM {PRE}lexicon_greek gr JOIN {PRE}lexicon_greek_LANG lang ON lang.lex_id=gr.id LEFT JOIN {PRE}lexicon_greek_LANG_VARIANT lang_var ON lang_var.lex_id=gr.id WHERE strongnumber=%d AND strongs_unreliable=('%s'='true')",
                     "sqlargs": [
-                        "strongs"
+                        "strongnumber",
+						"strongnumber"
                     ],
                     "multiple": false
                 },
@@ -138,30 +127,19 @@
 							"mytype": "GrammarFeature",
 							"name": "bn_lemma"
 						},
-						{
-                            "mytype": "GrammarFeature",
-                            "name": "frequency_rank"
-                        },
 						
 						{
 							"mytype": "GrammarFeature",
 							"name": "lemma"
 						},
-						{
-							"mytype": "GrammarFeature",
-							"name": "strongnumber"
-						},
-						{
-							"mytype": "GrammarFeature",
-							"name": "docindex"
-						},
-						{
-							"mytype": "GrammarFeature",
-							"name": "refid"
-						},
+
 						{
 							"mytype": "GrammarFeature",
 							"name": "surface"
+						},
+						{
+							"mytype": "GrammarFeature",
+							"name": "frequency_rank"
 						}
 
 					]

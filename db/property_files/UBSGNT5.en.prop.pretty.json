@@ -4,30 +4,30 @@
 	"emdrosobject": {
 		"word":{
 			"_objname": "Word",
-			"adjuncttype": "Adjunct Type",
 			"bn_lemma": "Bengali Lemma",
 			"chinese": "Chinese",
 			"english": "English",
-			"formaltag": "Formal Tag",
-			"frame": "Frame",
-			"framegloss": "Frame Gloss",
-			"functionaltag":"Functional Tag",
-            "label":"Label",
             "lemma":"Lemma",
-            "lexdomain":"Lex Domain",
-            "normalizedform":"Normalized Form",
-            "notes":"Notes",
             "prepositiontype":"Preposition Type",
             "punc":"Punctuation",
-            "ref":"Reference",
-            "refenglish":"Reference English",
-            "reflemma":"Reference Lemma",
-            "refstrong":"Reference Strong",
-            "role":"Role",
             "surface":"surface",
-            "frequency_rank":"Frequency Rank",
-            "strongnumber":"Strong Number",
-            "docindex":"Document Index"
+            "adjectivetype":"Adjective Type",
+            "adverbtype":"Adverb Type",
+            "case":"Case",
+            "cltype":"Clause Type",
+            "conjunctiontype":"Conjunction Type",
+            "degree":"Degree",
+            "gender":"Gender",
+            "mood":"Mood",
+            "nountype":"Noun Type",
+            "number":"Number",
+            "particletype":"Particle Type",
+            "partofspeech":"Part of Speech",
+            "person":"Person",
+            "pronountype":"Pronoun Type",
+            "verbtype":"Verb Type",
+            "voice":"Voice",
+            "frequency_rank":"Frequency Rank"
 		},
 		"sentence": {
             "_objname": "Sentence",
@@ -57,107 +57,123 @@
         }
 
 	},
-    "emdrostype":{
-        "phrase_phrasetype_t": {
-            "NA":"N/A",
-            "ADJP":"ADJP",
-            "ADVP":"ADVP",
-            "NP":"NP",
-            "NumP":"NumP",
-            "PP":"PP",
-            "VP":"VP"
-        },
-        "phrase_hasdet_t":{
-            "False":"False",
-			"True":"True"
-        },
-        "functionalphrase_hasdet_t":{
-            "False":"False",
-			"True":"True"
-        },
-        "functionalphrase_phrasefunction_t":{
+    "emdrostype": {
+        "word_adjectivetype_t":{
             "NA":"NA",
-            "AdverbialFunction": "Adverbial Function",
-            "IndirectObjectFunction": "Indirect Object Function",
-            "ObjectFunction": "Object Function",
-            "PredicateFunction": "Predicate Function",
-            "SecondObjectFunction": "Second Object Function",
-            "SubjectFunction" : "Subject Function",
-            "VerbalCopulaFunction":"Verbal Copula Function",
-            "VerbalFunction": "Verbal Function"
+            "Common":"Common",
+            "Interrogative":"Interrogative",
+            "Place":"Place",
+            "Proper":"Proper",
+            "Relative":"Relative"
         },
-        "functionalphrase_rule_t":{
-            "ADV2ADV":"ADV2ADV",
-            "ADVaADV":"ADVaADV",
-            "Adjp2O":"Adjp2O",
-            "Adjp2P":"Adjp2P",
-            "AdvAdv":"AdvAdv",
-            "Advp2ADV":"Advp2ADV",
-            "Advp2P":"Advp2P",
-            "CL2ADV":"CL2ADV",
-            "CL2O2x":"CL2O2x",
-            "CL2Ox":"CL2Ox",
-            "CL2P":"CL2P",
-            "CL2S":"CL2S",
-            "Conj3ADV":"Conj3ADV",
+        "word_adverbtype_t":{
             "NA":"NA",
-            "Np2ADV":"Np2ADV",
-            "Np2IO":"Np2IO",
-            "Np2O":"Np2O",
-            "Np2O2":"Np2O2",
-            "Np2P":"Np2P",
-            "Np2S":"Np2S",
-            "Vp2P":"Vp2P",
-            "Vp2V":"Vp2V",
-            "adjp2ADV":"adjp2ADV",
-            "adjp2O2":"adjp2O2",
-            "adjp2S":"adjp2S",
-            "notADVbutADV":"notADVbutADV",
-            "pp2ADV":"pp2ADV",
-            "pp2P":"pp2P",
-            "ptcl2P":"ptcl2P",
-            "ptcl2S":"ptcl2S",
-            "vp2VC":"vp2VC"
+            "Conditional":"Conditional",
+            "Correlative":"Correlative",
+            "Emphatic":"Emphatic",
+            "Indefinite":"Indefinite",
+            "Interrogative":"Interrogative",
+            "Negative":"Negative",
+            "Place":"Place",
+            "Superlative":"Superlative"
         },
-        "clause_cltype_t":{
+        "word_case_t":{
             "NA":"NA",
-            "Minor":"Minor",
-            "VerbElided":"VerbElided",
-            "VerbalClause":"VerbalClause",
-            "Verbless":"Verbless"
+            "Accusative":"Accusative",
+            "Dative":"Dative",
+            "Genitive":"Genitive",
+            "Nominative":"Nominative",
+            "Vocative":"Vocative"
         },
-        "clause_hasdet_t":{
-            "False":"False",
-            "True":"True"
-        },
-        "functionalword_functionalpartofspeech_t":{
+        "word_cltype_t":{
             "NA":"NA",
-            "adj":"Adjective",
-            "adv":"Adverb",
-            "conj":"Conjunction",
-            "intj":"Interjection",
-            "prep":"Preposition",
-            "pron":"Pronoun",
-            "ptcl":"Particle"
+            "Verbal":"Verbal"
         },
-        "functionalword_rule_t":{
+        "word_conjunctiontype_t":{
             "NA":"NA",
-            "Adv2Adj":"Adv2Adj",
-            "Adv2Conj":"Adv2Conj",
-            "Adv2Prep":"Adv2Prep",
-            "Adv2Ptcl":"Adv2Ptcl",
-            "Conj2Adv":"Conj2Adv",
-            "Conj2Prep":"Conj2Prep",
-            "Conj2Pron":"Conj2Pron",
-            "Conj2Ptcl":"Conj2Ptcl",
-            "ConjConj":"ConjConj",
-            "Prep2Adv":"Prep2Adv",
-            "Ptcl2Adv":"Ptcl2Adv",
-            "Ptcl2Conj":"Ptcl2Conj",
-            "Ptcl2Intj":"Ptcl2Intj",
-            "V2Intj":"V2Intj",
-            "pron2adj":"pron2adj"
+            "Adverbial":"Adverbial",
+            "Logical":"Logical"
+        },
+        "word_degree_t":{
+            "NA":"NA",
+            "Comparative":"Comparative",
+            "Superlative":"Superlative"
+        },
+        "word_gender_t":{
+            "NA":"NA",
+            "Feminine":"Feminine",
+            "Masculine":"Masculine",
+            "Neuter":"Neuter"
+        },
+        "word_mood_t":{
+            "NA":"NA",
+            "Imperative":"Imperative",
+            "Indicative":"Indicative",
+            "Infinitive":"Infinitive",
+            "Optative":"Optative",
+            "Participle":"Participle",
+            "Subjunctive":"Subjunctive"
+        },
+        "word_nountype_t":{
+            "NA":"NA",
+            "Common":"Common",
+            "Place":"Place",
+            "Proper":"Proper"
+        },
+        "word_number_t":{
+            "NA":"NA",
+            "Plural":"Plural",
+            "Singular":"Singular"
+        },
+        "word_particletype_t":{
+            "NA":"NA",
+            "Conditional":"Conditional",
+            "Correlative":"Correlative",
+            "Emphatic":"Emphatic",
+            "Interrogative":"Interrogative",
+            "Negative":"Negative"
+        },
+        "word_partofspeech_t":{
+            "NA":"NA",
+            "adj":"Adj",
+            "adv":"Adv",
+            "conj": "Conj",
+            "det":"Det",
+            "intj":"Intj",
+            "noun":"Noun",
+            "num":"Num",
+            "prep":"Prep",
+            "pron":"Pron",
+            "ptcl":"Ptcl",
+            "verb":"Verb"
+        },
+        "word_person_t":{
+            "NA":"NA",
+            "p1":"Person 1",
+            "p2":"Person 2",
+            "p3":"Person 3"
+        },
+        "word_pronountype_t":{
+            "NA":"NA",
+            "Demonstrative":"Demonstrative",
+            "Emphatic":"Emphatic",
+            "Indefinite":"Indefinite",
+            "Interrogative":"Interrogative",
+            "Personal":"Personal",
+            "Relative":"Relative"
+        },
+        "word_verbtype_t":{
+            "NA":"NA",
+            "Place":"Place"
+        },
+        "word_voice_t":{
+            "NA":"NA",
+            "Active":"Active",
+            "Middle":"Middle",
+            "MiddlePassive":"MiddlePassive",
+            "Passive":"Passive"
         }
+        
 
     },
 	"grammargroup": {
