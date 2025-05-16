@@ -36,6 +36,17 @@
 			"frequency_rank":"string"
 			
 		},
+		"clause":{
+			"self":"id_d",
+			"cltype":"clause_cltype_t",
+			"hasdet":"clause_hasdet_t"
+		},
+		"functionalphrase":{
+			"self": "id_d",
+			"hasdet":"functionalphrase_hasdet_t",
+			"phrasefunction":"functionalphrase_phrasefunction_t",
+			"rule":"functionalphrase_rule_t"
+		},
 		"book":{
 			"self":"id_d",
 			"docindex":"integer",
@@ -61,20 +72,8 @@
 		},
 		"phrase":{
 			"self":"id_d",
-			"rule":"string",
 			"phrasetype":"phrase_phrasetype_t",
 			"hasdet":"phrase_hasdet_t"
-		},
-		"functionalphrase":{
-			"self": "id_d",
-			"hasdet":"functionalphrase_hasdet_t",
-			"phrasefunction":"functionalphrase_phrasefunction_t",
-			"rule":"functionalphrase_rule_t"
-		},
-		"clause":{
-			"self":"id_d",
-			"cltype":"clause_cltype_t",
-			"hasdet":"clause_hasdet_t"
 		},
 		"functionalword":{
 			"self":"id_d",
@@ -98,7 +97,16 @@
 		"word_person_t",
 		"word_pronountype_t",
 		"word_verbtype_t",
-		"word_voice_t"
+		"word_voice_t",
+		"clause_cltype_t",
+		"clause_hasdet_t",
+		"functionalphrase_hasdet_t",
+		"functionalphrase_phrasefunction_t",
+		"functionalphrase_rule_t",
+		"functionalword_functionalpartofspeech_t",
+		"functionalword_rule_t",
+		"phrase_hasdet_t",
+		"phrase_phrasetype_t"
 	],
 	"enum2values":{
 		"word_adjectivetype_t": [
@@ -215,6 +223,106 @@
 			"Middle",
 			"MiddlePassive",
 			"Passive"
+		],
+		"clause_cltype_t":[
+			"NA",
+			"Minor",
+			"VerbElided",
+			"VerbalClause",
+			"\"Verbless\""
+		],
+		"clause_hasdet_t":[
+			"False",
+			"True"
+		],
+		"functionalphrase_hasdet_t":[
+			"False",
+			"True"
+		],
+		"functionalphrase_phrasefunction_t":[
+			"NA",
+			"AdverbialFunction",
+			"IndirectObjectFunction",
+			"ObjectFunction",
+			"PredicateFunction",
+			"SecondObjectFunction",
+			"SubjectFunction",
+			"VerbalCopulaFunction",
+			"VerbalFunction"
+		],
+		"functionalphrase_rule_t":[
+			"NA",
+			"ADV2ADV",
+			"ADVaADV",
+			"Adjp2O",
+			"Adjp2P",
+			"AdvAdv",
+			"Advp2ADV",
+			"Advp2P",
+			"CL2ADV",
+			"CL2O2x",
+			"CL2Ox",
+			"CL2P",
+			"CL2S",
+			"Conj3ADV",
+			"Np2ADV",
+			"Np2IO",
+			"Np2O",
+			"Np2O2",
+			"Np2P",
+			"Np2S",
+			"Vp2P",
+			"Vp2V",
+			"adjp2ADV",
+			"adjp2O2",
+			"adjp2S",
+			"notADVbutADV",
+			"pp2ADV",
+			"pp2P",
+			"ptcl2P",
+			"ptcl2S",
+			"vp2VC"
+		],
+		"functionalword_functionalpartofspeech_t":[
+			"NA",
+			"adj",
+			"adv",
+			"conj",
+			"intj",
+			"prep",
+			"pron",
+			"ptcl"
+		],
+		"functionalword_rule_t":[
+			"NA",
+			"Adv2Adj",
+			"Adv2Conj",
+			"Adv2Prep",
+			"Adv2Ptcl",
+			"Conj2Adv",
+			"Conj2Prep",
+			"Conj2Pron",
+			"Conj2Ptcl",
+			"ConjConj",
+			"Prep2Adv",
+			"Ptcl2Adv",
+			"Ptcl2Conj",
+			"Ptcl2Intj",
+			"V2Intj",
+			"pron2adj"
+		],
+		"phrase_phrasetype_t":[
+			"NA",
+			"ADJP",
+			"ADVP",
+			"NP",
+			"NumP",
+			"PP",
+			"VP"
+		],
+		"phrase_hasdet_t":[
+			"False",
+			"True"
 		]
 
 

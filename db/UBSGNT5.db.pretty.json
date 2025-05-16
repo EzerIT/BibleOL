@@ -12,39 +12,41 @@
 		"clause":{
 			"mayselect": true,
 			"featuresetting":{
-				"cltype":{"isDefault":true}
+				"cltype":{"isDefault":true},
+				"hasdet":{}
+			}
+		},
+		"functionalphrase":{
+			"mayselect": true,
+			"featuresetting":{
+				"phrasefunction":{"isDefault": true},
+				"hasdet":{},
+				"rule":{}
 			}
 		},
 		"sentence": {
-			"mayselect": true,
+			"mayselect": false,
 			"featuresetting":{
 				"head":{
 					"foreignText": true
 				}
 			}
 		},
-		"phrase":{
-			"mayselect": true,
-			"featuresetting":{
-				"rule":{
-				},
-				"phrasetype":{
-					"isDefault": true
-				}
-			}
-		},
-		"functionalphrase":{
-			"mayselect": true,
-			"featuresetting":{
-				"phrasefunction":{
-					"isDefault": true
-				}
-			}
-		},
 		"functionalword":{
 			"mayselect": true,
 			"featuresetting":{
-				"functionalpartofspeech":{"isDefault":true}			}
+				"functionalpartofspeech":{"isDefault":true},
+				"rule":{}	
+			}
+		},
+		"phrase":{
+			"mayselect": true,
+			"featuresetting":{
+				"phrasetype":{
+					"isDefault": true
+				},
+				"hasdet":{}
+			}
 		},
 		"word": {
 			"mayselect": true,

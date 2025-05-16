@@ -29,32 +29,32 @@
             "voice":"Voice",
             "frequency_rank":"Frequency Rank"
 		},
+        "clause":{
+            "_objname":"Clause",
+            "cltype":"Clause Type",
+            "hasdet":"Has detail?"
+        },
+        "functionalphrase":{
+            "_objname":"Functional Phrase",
+            "hasdet":"Has detail?",
+            "phrasefunction":"Phrase Function",
+            "rule":"Rule"
+        },
+        "functionalword":{
+            "_objname":"Functional Word",
+            "functionalpartofspeech":"Functional Part of Speech",
+            "rule":"Rule"
+        },
 		"sentence": {
             "_objname": "Sentence",
             "head":"Head"
         },
         "phrase":{
             "_objname":"Phrase",
-            "rule":"Rule",
             "phrasetype":"Phrase Type",
             "hasdet":"Has detail?"
-        },
-        "functionalphrase":{
-            "_objname":"Functional Phrase",
-            "rule":"Rule",
-            "hasdet":"Has detail?",
-            "phrasefunction":"Phrase Function"
-        },
-        "clause":{
-            "_objname":"Clause",
-            "cltype":"Clause Type",
-            "hasdet":"Has detail?"
-        },
-        "functionalword":{
-            "_objname":"Functional Word",
-            "functionalpartofspeech":"Functional Part of Speech",
-            "rule":"Rule"
         }
+        
 
 	},
     "emdrostype": {
@@ -172,8 +172,107 @@
             "Middle":"Middle",
             "MiddlePassive":"MiddlePassive",
             "Passive":"Passive"
-        }
-        
+        },
+        "clause_cltype_t":{
+            "NA":"NA",
+            "Minor":"Minor",
+            "VerbElided":"Verb Elided",
+            "VerbalClause":"Verbal Clause",
+            "\"Verbless\"":"Verbless"
+        },
+        "clause_hasdet_t":{
+            "False":"False",
+            "True":"True"
+        },
+        "functionalphrase_hasdet_t":{
+            "False":"False",
+            "True":"True"
+        },
+        "functionalphrase_phrasefunction_t":{
+            "NA":"NA",
+            "AdverbialFunction":"Adverbial Function",
+            "IndirectObjectFunction":"Indirect Object Function",
+            "ObjectFunction":"Object Function",
+            "PredicateFunction":"Predicate Function",
+            "SecondObjectFunction":"Second Object Function",
+            "SubjectFunction":"Subject Function",
+            "VerbalCopulaFunction":"Verbal Copula Function",
+            "VerbalFunction":"Verbal Function"
+        },
+        "functionalphrase_rule_t":{
+            "NA":"NA",
+            "ADV2ADV":"ADV2ADV",
+            "ADVaADV":"ADVaADV",
+            "Adjp2O":"Adjp2O",
+            "Adjp2P":"Adjp2P",
+            "AdvAdv":"AdvAdv",
+            "Advp2ADV":"Advp2ADV",
+            "Advp2P":"Advp2P",
+            "CL2ADV":"CL2ADV",
+            "CL2O2x":"CL2O2x",
+            "CL2Ox":"CL2Ox",
+            "CL2P":"CL2P",
+            "CL2S":"CL2S",
+            "Conj3ADV":"Conj3ADV",
+            "Np2ADV":"Np2ADV",
+            "Np2IO":"Np2IO",
+            "Np2O":"Np2O",
+            "Np2O2":"Np2O2",
+            "Np2P":"Np2P",
+            "Np2S":"Np2S",
+            "Vp2P":"Vp2P",
+            "Vp2V":"Vp2V",
+            "adjp2ADV":"adjp2ADV",
+            "adjp2O2":"adjp2O2",
+            "adjp2S":"adjp2S",
+            "notADVbutADV":"notADVbutADV",
+            "pp2ADV":"pp2ADV",
+            "pp2P":"pp2P",
+            "ptcl2P":"ptcl2P",
+            "ptcl2S":"ptcl2S",
+            "vp2VC":"vp2VC"
+        },
+        "functionalword_functionalpartofspeech_t":{
+            "NA":"NA",
+            "adj":"adj",
+            "adv":"adv",
+            "conj":"conj",
+            "intj":"intj",
+            "prep":"prep",
+            "pron":"pron",
+            "ptcl":"ptcl"
+        },
+        "functionalword_rule_t":{
+            "NA":"NA",
+            "Adv2Adj":"Adv2Adj",
+            "Adv2Conj":"Adv2Conj",
+            "Adv2Prep":"Adv2Prep",
+            "Adv2Ptcl":"Adv2Ptcl",
+            "Conj2Adv":"Conj2Adv",
+            "Conj2Prep":"Conj2Prep",
+            "Conj2Pron":"Conj2Pron",
+            "Conj2Ptcl":"Conj2Ptcl",
+            "ConjConj":"ConjConj",
+            "Prep2Adv":"Prep2Adv",
+            "Ptcl2Adv":"Ptcl2Adv",
+            "Ptcl2Conj":"Ptcl2Conj",
+            "Ptcl2Intj":"Ptcl2Intj",
+            "V2Intj":"V2Intj",
+            "pron2adj":"pron2adj"
+        },
+        "phrase_phrasetype_t":{
+            "NA":"NA",
+            "ADJP":"ADJP",
+            "ADVP":"ADVP",
+            "NP":"NP",
+            "NumP":"NumP",
+            "PP":"PP",
+            "VP":"VP"
+        },
+        "phrase_hasdet_t":{
+            "False":"False",
+            "True":"True"
+        }    
 
     },
 	"grammargroup": {
