@@ -104,3 +104,5 @@ password: bibleol_pwd
 
 # Contributions
 All of the running containers will have git installed, and the root directory ```/var/www/html/BibleOL``` will point to this repository. Therefore any edits made in a docker container can be commited and pushed back to this repository.
+
+If you run `make build2` instead of just `make`, the /var/www/html/BibleOL/myapp of the docker will be mapped to BibleOL/myapp on your host machine.  
