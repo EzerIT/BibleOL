@@ -346,7 +346,7 @@ class Mod_grades extends CI_Model {
     }
 
     // Get all pathnames of templates relating to $classid
-    public function get_pathnames_for_class(int $classid) {
+    public function get_pathnames_for_class(int $classid, array $student_ids=null) {
         // Find all pathids relating to $classid
         $query = $this->db
             ->select('pathname')
@@ -362,10 +362,24 @@ class Mod_grades extends CI_Model {
             // We need to escape parentheses i pathnames twice. So ( becomes \\(
             $escaped_pathname = str_replace("\\","\\\\",addcslashes($row->pathname,"()"));
 
-            $query2 = $this->db
-                ->select('pathname')
-                ->where("pathname REGEXP '^{$this->quizzespath}/$escaped_pathname/[^/]*$'")
-                ->get('sta_quiztemplate');
+            // Check if is teacher to select the right source for the combo
+            if ($this->mod_users->is_teacher()) {
+
+
+                $where_clause = "";
+                $query2 = $this->db
+                    ->select('pathname')
+                    ->where("pathname REGEXP '^{$this->quizzespath}/$escaped_pathname/[^/]*$'")
+                    ->where_in('userid',$student_ids)
+                    ->get('sta_quiztemplate');
+            }
+            else {
+                $query2 = $this->db
+                    ->select('pathname')
+                    ->where("pathname REGEXP '^{$this->quizzespath}/$escaped_pathname/[^/]*$'" . " AND userid=" . $this->mod_users->my_id())
+                    ->get('sta_quiztemplate');
+            }
+
             foreach ($query2->result() as $row2)
                 $pathset[$row2->pathname] = true;
         }
