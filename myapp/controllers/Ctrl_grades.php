@@ -434,6 +434,8 @@ class Ctrl_grades extends MY_Controller {
             $this->load->helper('form');
             $this->load->library('form_validation');
             $this->load->library('db_config');
+            $this->load->model('mod_userclass');
+
             // Add grading schemes (MRCN)
             $this->load->helper('calc_grades_helper');
 
@@ -444,7 +446,16 @@ class Ctrl_grades extends MY_Controller {
 			if ($classid<=0 || ( !$is_enrolled && $class->ownerid!=$this->mod_users->my_id() ))
 				throw new DataException($this->lang->line('illegal_class_id'));
 
-            $exercise_list = $this->mod_grades->get_pathnames_for_class($classid);
+            // Send students ids
+            $students = $this->mod_userclass->get_named_users_in_class($classid);
+            if (empty($students))
+                throw new DataException('No students in class');
+
+            $student_ids = array();
+            foreach ($students as $st)
+                $student_ids[] = (int)$st->userid;
+
+            $exercise_list = $this->mod_grades->get_pathnames_for_class($classid, $student_ids);
 
             $this->statistics_timeperiod->set_validation_rules();
             $this->form_validation->set_rules('exercise', '', 'callback_always_true');  // Dummy rule. At least one rule is required
