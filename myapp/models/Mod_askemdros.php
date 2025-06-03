@@ -99,7 +99,7 @@ class Mod_askemdros extends CI_Model {
                 $command .= "SELECT ALL OBJECTS WHERE ";
 
                 for ($i=0; $i<$num; ++$i) {
-                    if($this->setup_db == "UBSGNT5") {
+                    if($this->setup_db == "UBSGNT5" && $i == 0) {
                         $command .= "[{$this->db_config->dbinfo->universeHierarchy[$i]->type} {$this->db_config->dbinfo->universeHierarchy[$i]->feat}='{$split_p[$i]}' ";
                     }
                     else {
@@ -182,7 +182,7 @@ class Mod_askemdros extends CI_Model {
         }
         else
             $quizid = -1;
-
+        
         $this->load->library('quiz_data',array('quizid' => $quizid,
                                                'universe' => self::parsePath($this->decoded_3et->selectedPaths, $this->decoded_3et->fixedquestions>0 ? null : $use_selection),
                                                'senSelect' => $sentenceSelector,
@@ -199,6 +199,7 @@ class Mod_askemdros extends CI_Model {
                                                'dontshow_objects' => $this->decoded_3et->quizFeatures->dontShowObjects,
                                                'glosslimit' => $this->decoded_3et->quizFeatures->glosslimit,
                                                'oType' => $this->decoded_3et->quizObjectSelection->object));
+
     }
 
     function convert_ETCBC4_v7(string $filename) {
