@@ -153,8 +153,18 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
     private doLayout(where : JQuery) : void {
         // The layout is a table containing a number of rows
         let table : JQuery = $('<table></table>');
+        let container : JQuery = $('<div style="display:table;" id="tqrow" class="row"></div>');
+        let table_query_output : JQuery = $('<table style="width:100%" id="tq_output_mega"></table>');
         let row   : JQuery;
         let cell  : JQuery;
+        let fpan2 : JQuery = $('<div style="display:none; padding-top:10px;" id="fpan2"></div>');          
+        let accordion2 : JQuery = $('<div id="accordion2" class="accordion"></div>');
+        let card : JQuery = $('<div class="card"></div>');
+        let card_header : JQuery = $('<div id="cardhead" class="card-header"></div>');
+        let accbody : JQuery = $('<div id="accbody2" class="" parent=""></div>');
+        let card_body : JQuery = $('<div id="card-body-original" class="card-body"></div>');
+
+
 
         // 1st row: Contains the 'Use for sentence unit selection' checkbox
         row = $('<tr></tr>');
@@ -220,14 +230,32 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         cell = $('<td id="clearbuttoncell"></td>');
 
         cell.append(this.clear);
+        cell.append(this.test_query);
         row.append(cell);
         
         cell = $('<td></td>');
         cell.append(this.fpan);
         row.append(cell);
-        table.append(row);
-        
+        table.append(row);        
         where.append(table);
+
+        // Row 8
+        card.append(card_header);
+        accbody.append(card_body);
+        card.append(accbody);
+        accordion2.append(card);
+        fpan2.append(accordion2);
+        where.append(fpan2);
+        //8th row contains the test query output
+        /*
+        row = $('<tr></tr>');
+        cell = $('<td id="tq_output"></td>');
+        row.append(cell);
+        table_query_output.append(row);
+        container.append(table_query_output);
+        where.append(container);
+        */
+
     }
 
     //------------------------------------------------------------------------------------------

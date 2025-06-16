@@ -660,7 +660,8 @@ var PanelTemplMql = (function () {
             _this.objectSelectionUpdated(_this.objectTypeCombo.val(), null);
             _this.updateMql();
         });
-        this.clear = $('<button id="clear_button" type="button">' + localize('clear_button') + '</button>');
+        this.clear = $('<button style="border:1px solid gray" class="btn text-left" id="clear_button" type="button">' + localize('clear_button') + '</button>');
+        this.test_query = $('<button onclick="preview_results_frontend_alpha()" style="border:1px solid gray" class="btn text-left" id="test_query_button" type="button">' + localize('test_query') + '</button>');
         this.clear.click(function () {
             $('#virtualkbid').appendTo('#virtualkbcontainer');
             _this.rbFriendly.prop('checked', true);
@@ -1197,8 +1198,16 @@ var PanelTemplSentenceSelector = (function (_super) {
     };
     PanelTemplSentenceSelector.prototype.doLayout = function (where) {
         var table = $('<table></table>');
+        var container = $('<div style="display:table;" id="tqrow" class="row"></div>');
+        var table_query_output = $('<table style="width:100%" id="tq_output_mega"></table>');
         var row;
         var cell;
+        var fpan2 = $('<div style="display:none; padding-top:10px;" id="fpan2"></div>');
+        var accordion2 = $('<div id="accordion2" class="accordion"></div>');
+        var card = $('<div class="card"></div>');
+        var card_header = $('<div id="cardhead" class="card-header"></div>');
+        var accbody = $('<div id="accbody2" class="" parent=""></div>');
+        var card_body = $('<div id="card-body-original" class="card-body"></div>');
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
         cell.append(this.cbUseForQo, '&nbsp;', this.cbUseForQoLabel);
@@ -1243,12 +1252,19 @@ var PanelTemplSentenceSelector = (function (_super) {
         row = $('<tr></tr>');
         cell = $('<td id="clearbuttoncell"></td>');
         cell.append(this.clear);
+        cell.append(this.test_query);
         row.append(cell);
         cell = $('<td></td>');
         cell.append(this.fpan);
         row.append(cell);
         table.append(row);
         where.append(table);
+        card.append(card_header);
+        accbody.append(card_body);
+        card.append(accbody);
+        accordion2.append(card);
+        fpan2.append(accordion2);
+        where.append(fpan2);
     };
     PanelTemplSentenceSelector.prototype.populateFeatureTab = function (otype) {
         if (this.cbUseForQo.prop('checked')) {
@@ -1473,9 +1489,6 @@ var ButtonsAndLabel = (function () {
                     var feat = feature_array[i];
                     var feat_dropdown = $("#".concat(feat))[0];
                     var class_list = Array.from(feat_dropdown.classList);
-                    console.log('Feature Dropdown Class List: ', class_list);
-                    console.log('feature_arr: ', feature_array);
-                    console.log('order_features: ', _this.order_features);
                     if (feat_dropdown.options) {
                         feat_dropdown.options[i].selected = true;
                     }
@@ -2330,6 +2343,8 @@ var isSubmitting = false;
 var checked_passages;
 var ckeditor;
 var charset;
+var init = false;
+var table_idx = 0;
 function isDirty() {
     if (isSubmitting)
         return false;
@@ -2490,6 +2505,200 @@ function check_overwrite() {
     });
     $('#overwrite-dialog-confirm').modal('show');
 }
+function trigger_preview_results(preview_data) {
+    var submit_url = '/text/preview_results';
+    var response_js = '';
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: preview_data,
+        success: function (response) {
+            response_js = response;
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+    return response_js;
+}
+function package_preview_data() {
+    var desc = ckeditor.val();
+    var checked_passages = $('.jstree-checked');
+    var selected_paths = [];
+    for (var i = 0; i < checked_passages.length; i++) {
+        var r = checked_passages[i].getAttribute('data-ref');
+        selected_paths.push(r);
+    }
+    var maylocate = $('#maylocate_cb').prop('checked');
+    var sentbefore = $('#sentbefore').val();
+    var sentafter = $('#sentafter').val();
+    var fixedquestions = +$('#fixedquestions').val();
+    var randomize = $('#randomorder').prop('checked');
+    if (!(fixedquestions > 0))
+        fixedquestions = 0;
+    var sentenceSelection = panelSent.getInfo();
+    var quizObjectSelection = panelSentUnit.getInfo();
+    var quizFeatures = panelFeatures.getInfo();
+    var preview_data = {
+        'desc': desc,
+        'database': decoded_3et.database,
+        'properties': decoded_3et.properties,
+        'selected_paths': selected_paths,
+        'sentenceSelection': sentenceSelection,
+        'quizObjectSelection': quizObjectSelection,
+        'quizFeatures': quizFeatures,
+        'maylocate': maylocate,
+        'sentbefore': sentbefore,
+        'sentafter': sentafter,
+        'fixedquestions': fixedquestions,
+        'randomize': randomize,
+        'idx': table_idx
+    };
+    preview_data_mega = preview_data;
+    return preview_data;
+}
+function generate_query_data() {
+    var submit_url = '/text/preview_results_backend_alpha';
+    var response_data = '';
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: preview_data_mega,
+        success: function (response) {
+            response_data = response;
+            $('#card-body-original').removeData();
+            $('#card-body-original').append(response_data);
+        },
+        error: function (error) {
+            console.log('ERROR!!');
+            console.log(error);
+        }
+    });
+}
+function add_book_buttons() {
+    var selected_paths = preview_data_mega.selected_paths;
+    console.log('SELECTED PATHS: ', selected_paths);
+    for (var i = 0; i < selected_paths.length; i++) {
+        var pathname = selected_paths[i];
+        if (i == 0) {
+            var cell = $("<tr class=\"bookrow\"></tr>");
+            var row = $("<td id=row_book_".concat(i, "></td>"));
+            var button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\" onclick=toggle_cbody(").concat(i, ")><b>").concat(pathname, ":&nbsp;</b><span id=\"actual_count").concat(i, "\"></span></button>"));
+            row.append(button);
+            cell.append(row);
+            if ($('#cardhead tr').length === 0) {
+                $('#cardhead').append(cell);
+            }
+        }
+        else {
+            var card = $('<div class="card"></div>');
+            var card_header = $("<div id=\"cardhead_".concat(i, "\" class=\"card-header\"></div>"));
+            var cell = $("<tr class=\"bookrow\"></tr>");
+            var row = $("<td id=row_book_".concat(i, "></td>"));
+            var button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\" onclick=toggle_cbody(").concat(i, ")><b>").concat(pathname, ":&nbsp;</b><span id=\"actual_count").concat(i, "\"></span></button>"));
+            row.append(button);
+            cell.append(row);
+            card_header.append(cell);
+            var accbody = $("#accordion2");
+            if ($(".card #cardhead_".concat(i)).length === 0) {
+                card.append(card_header);
+                accbody.append(card);
+                var new_card_body = $("<div id=\"card-body-original".concat(i, "\" class=\"card-body\"></div>"));
+                var new_accbody = $("<div id=\"accbody2_".concat(i, "\" class=\"\" parent=\"\"></div>"));
+                new_accbody.append(new_card_body);
+                card.append(new_accbody);
+            }
+        }
+    }
+}
+function toggle_cbody(idx) {
+    var cbody = $("#card-body-original");
+    if (idx > 0) {
+        cbody = $("#card-body-original".concat(idx));
+        if (cbody.is(':hidden')) {
+            cbody.show();
+        }
+        else {
+            cbody.hide();
+        }
+    }
+    else {
+        if (cbody.is(':hidden')) {
+            cbody.show();
+        }
+        else {
+            cbody.hide();
+        }
+    }
+}
+function add_reference_table(cbody_idx, show_res) {
+    if (show_res === void 0) { show_res = false; }
+    var idx = table_idx;
+    var parent_button = $("#book_".concat(idx));
+    var cbody = $("#card-body-original");
+    if (cbody_idx > 0) {
+        cbody = $("#card-body-original".concat(cbody_idx));
+    }
+    var leaf_count = cbody.find('table').length;
+    console.log('Leaf Count: ', leaf_count);
+    if (leaf_count <= 0 || $("#book_table_".concat(idx)).is(':hidden') || show_res === true) {
+        $("#accbody2").show();
+        cbody.show();
+        if (leaf_count <= 0 || show_res === true) {
+            var container = $("<div style=\"overflow-y:auto;\"></div>");
+            var table = $("<table style=\"display:block; height:500px;\" id=\"book_table_".concat(idx, "\" class=\"type2 table table-striped table-sm table-res\"></table>"));
+            var row1 = $("<tr></tr>");
+            var reference_col = $("<th style=\"padding:10px; vertical-align:middle;\">Reference</th>");
+            var text_col = $("<th style=\"padding:10px; text-align:center; vertical-align:middle;\">Text</th>");
+            row1.append(reference_col);
+            row1.append(text_col);
+            table.append(row1);
+            container.append(table);
+            cbody.append(container);
+            console.log("GENERATING\n");
+            generate_query_data();
+            init = true;
+        }
+        else {
+            $("#book_table_".concat(idx)).show();
+        }
+    }
+    else {
+        cbody.hide();
+    }
+}
+function preview_results_frontend_alpha() {
+    if (typeof preview_data_mega === 'undefined') {
+        show_results = true;
+        package_preview_data();
+        console.log('Initial Test Query!');
+    }
+    else {
+        show_results = !show_results;
+        console.log('Not Initial Test Query!');
+        if (show_results === true) {
+            package_preview_data();
+        }
+    }
+    console.log('Show Results: ', show_results);
+    console.log('Preview Data Mega: ', preview_data_mega);
+    if ($('#fpan2').is(':hidden')) {
+        $('#fpan2').show();
+    }
+    else {
+        $('#fpan2').hide();
+    }
+    add_book_buttons();
+    var selected_paths = preview_data_mega.selected_paths;
+    for (var i = 0; i < selected_paths.length; i++) {
+        add_reference_table(i);
+        table_idx++;
+        if (i > 0) {
+            toggle_cbody(i);
+        }
+    }
+    console.log('TABLE IDX: ', table_idx);
+}
 function save_quiz2() {
     decoded_3et.desc = ckeditor.val();
     decoded_3et.selectedPaths = [];
@@ -2508,7 +2717,6 @@ function save_quiz2() {
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
-    console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
     var form = $("<form action=\"".concat(submit_to, "\" method=\"post\">\n                             <input type=\"hidden\" name=\"dir\"      value=\"").concat(encodeURIComponent(dir_name), "\">\n                             <input type=\"hidden\" name=\"quiz\"     value=\"").concat(encodeURIComponent(quiz_name), "\">\n                             <input type=\"hidden\" name=\"quizdata\" value=\"").concat(encodeURIComponent(JSON.stringify(decoded_3et)), "\">\n                           </form>"));
     $('body').append(form);
     isSubmitting = true;

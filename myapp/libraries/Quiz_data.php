@@ -184,6 +184,7 @@ class Quiz_data {
         $this->randomize = $params['randomize'];
         
 		$this->nextCandidate = 0;
+        //echo "\nConstrcuted Quiz Data:\n";
 	}
 
     private function fetchBookLimit(OlMonadSet $ms) {
@@ -192,6 +193,10 @@ class Quiz_data {
         return $emdat[0]->get_sheaf()->get_straws()[0]->get_matched_objects()[0]->get_monadset();
     }
     
+    public function iteratePreview(){
+        
+    }
+
 	public function getNextCandidate(int $request_number) {
         assert(isset($this->mainSheaf));
 
@@ -303,6 +308,41 @@ class Quiz_data {
 		return $this->CI->dictionary;
 	}
 	
+    public function previewSheaf($sentenceSelector){
+        $sample_query = "SELECT ALL OBJECTS IN $this->universe " . "WHERE [{$this->CI->db_config->dbinfo->granularity} $this->mqlSentenceSelection\n] GOqxqxqx";
+
+        $quick_emdros_data = $this->CI->mql->exec("SELECT ALL OBJECTS IN $this->universe "
+                                                  . "WHERE [{$this->CI->db_config->dbinfo->granularity} $this->mqlSentenceSelection\n] GOqxqxqx", true);
+
+        $this->mainSheaf = $quick_emdros_data[0]->get_sheaf();
+
+        if (!isset($this->mainSheaf) || !$this->mainSheaf->has_monadset()) {
+            $this->numberOfCandidates = 0;
+            return false;
+        }
+
+		$this->numberOfCandidates = count($this->mainSheaf->get_monadset());
+		if ($this->numberOfCandidates==0)
+			return false;
+
+		$this->order = array();
+		for ($i=0; $i<$this->numberOfCandidates; ++$i)
+			$this->order[] = $i;
+        if ($this->randomize)
+		    shuffle($this->order); // Randomizes $this->order 
+
+        //echo "Number of candidates: $this->numberOfCandidates\n";
+        //echo "Query: $sample_query\n";
+        $display_data = ["n_candidates" => $this->numberOfCandidates,
+                         "query" => $sample_query,
+                         "main_sheaf" => json_encode($this->mainSheaf->get_monadset())];
+        
+        return $display_data;
+        
+
+
+    }
+
 	public function getCandidateSheaf() {
         $quick_emdros_data = $this->CI->mql->exec("SELECT ALL OBJECTS IN $this->universe "
                                                   . "WHERE [{$this->CI->db_config->dbinfo->granularity} $this->mqlSentenceSelection\n] GOqxqxqx", true);

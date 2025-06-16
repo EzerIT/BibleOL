@@ -230,9 +230,9 @@ class ButtonsAndLabel {
                     let feat = feature_array[i]
                     let feat_dropdown = $(`#${feat}`)[0] as HTMLSelectElement;
                     let class_list = Array.from(feat_dropdown.classList);
-                    console.log('Feature Dropdown Class List: ', class_list);
-                    console.log('feature_arr: ', feature_array);
-                    console.log('order_features: ', this.order_features);
+                    //console.log('Feature Dropdown Class List: ', class_list);
+                    //console.log('feature_arr: ', feature_array);
+                    //console.log('order_features: ', this.order_features);
                     if(feat_dropdown.options){
                         feat_dropdown.options[i].selected = true;
                     }

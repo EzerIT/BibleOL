@@ -62,7 +62,8 @@ declare let test_quiz_url      : string;   // URL for testing an exercise
 declare let import_shebanq_url : string;   // URL for ajax queries for imports from SHEBANQ (Note: This is a URL on the Bible OL server, not the SHEBANQ server)
 declare let quiz_name          : string;   // Name of exercise file
 declare let dir_name           : string;   // Name of exercise file directory
-
+declare let preview_data_mega  : any;      // JSON used to display query return data
+declare let show_results       : boolean;  // Show the results of the test query
 
 //****************************************************************************************************
 // Other globale variables
@@ -80,8 +81,8 @@ let isSubmitting       : boolean = false;              // Are we in the process 
 let checked_passages   : any[];                        // Selected Bible passages
 let ckeditor           : any;                          // Text editor
 let charset            : Charset;                      // Character set
-
-
+let init               : boolean = false;              // Initialization flag
+let table_idx          : number = 0;                   // Table index
 //****************************************************************************************************
 // isDirty function
 //
@@ -150,6 +151,8 @@ function show_error(id : string, message : string) : void {
 function hide_error(id : string) : void {
     $(id).hide();
 }
+
+
 
 //****************************************************************************************************
 // save_quiz function
@@ -235,6 +238,8 @@ function save_quiz() : void {
     // Show the filename dialog
     $('#filename-dialog').modal('show');
 }
+
+
 
 function test_quiz2(quiz_name:string) : void {
     // Build decoded_3et so that it contains the new exercise
@@ -367,6 +372,281 @@ function check_overwrite() : void {
     $('#overwrite-dialog-confirm').modal('show');
 }
 
+function trigger_preview_results(preview_data:object): string{
+    let submit_url = '/text/preview_results';
+    let response_js = ''
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: preview_data,
+        success: function(response) {
+            // Handle the response here
+            //console.log(response);
+            response_js = response;
+
+        },
+        error: function(error) {
+            // Handle the error here
+            console.log(error);
+        }
+    });
+    //console.log('Response JS: ', response_js)
+    return response_js;
+
+}
+function package_preview_data(): any {
+    let desc = ckeditor.val();
+    /*
+    let checked_passages = $('#passagetree').jstree('get_checked');
+    let selected_paths = []
+    for (let i=0; i<checked_passages.length; ++i) {
+        let r = $(checked_passages[i]).data('ref');
+        console.log('REF: ', r)
+        if (r!='')
+            selected_paths.push(r);
+    }
+    */
+   let checked_passages = $('.jstree-checked');
+   let selected_paths = [];
+   for(let i = 0; i < checked_passages.length; i++) {
+    let r = checked_passages[i].getAttribute('data-ref');
+    selected_paths.push(r);
+   }
+
+    //let checked_paths_exp = $('#passagetree ul input[type="checkbox"]:checked') 
+
+    let maylocate = $('#maylocate_cb').prop('checked');
+    let sentbefore = $('#sentbefore').val();
+    let sentafter = $('#sentafter').val();
+    let fixedquestions = + $('#fixedquestions').val(); // Convert to number
+    let randomize = $('#randomorder').prop('checked');
+    if(!(fixedquestions>0))
+        fixedquestions = 0;
+    let sentenceSelection   = panelSent.getInfo();
+    let quizObjectSelection = panelSentUnit.getInfo();
+    let quizFeatures        = panelFeatures.getInfo();
+    let preview_data = {
+        'desc': desc,
+        'database': decoded_3et.database,
+        'properties': decoded_3et.properties,
+        'selected_paths': selected_paths,
+        'sentenceSelection': sentenceSelection,
+        'quizObjectSelection': quizObjectSelection,
+        'quizFeatures': quizFeatures,
+        'maylocate': maylocate,
+        'sentbefore': sentbefore,
+        'sentafter': sentafter,
+        'fixedquestions': fixedquestions,
+        'randomize': randomize,
+        'idx': table_idx
+    }
+    preview_data_mega = preview_data;
+    
+    return preview_data;
+
+}
+
+function generate_query_data():void {
+    // generate query data
+    let submit_url = '/text/preview_results_backend_alpha';
+    let response_data = '';
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: preview_data_mega,
+        success: function(response) {
+            response_data = response;
+            //console.log(response_data);
+            $('#card-body-original').removeData();
+            $('#card-body-original').append(response_data);
+            
+        },
+        error: function(error){
+            console.log('ERROR!!');
+            console.log(error);
+        }
+    });
+
+}
+
+
+function add_book_buttons(): void {
+    // get the series of books
+    let selected_paths = preview_data_mega.selected_paths;
+    console.log('SELECTED PATHS: ', selected_paths);
+    for(let i = 0; i < selected_paths.length; i++) {
+        let pathname = selected_paths[i];        
+        if(i == 0) {
+            // first book
+            let cell = $(`<tr class="bookrow"></tr>`);
+            let row = $(`<td id=row_book_${i}></td>`);
+            let button = $(`<button data-toggle="collapse" data-target="" id=book_${i} class="btn text-left" onclick=toggle_cbody(${i})><b>${pathname}:&nbsp;</b><span id="actual_count${i}"></span></button>`); 
+            //let results_box = $(`<span id="n_results" style="padding-left:20px;"><b>${localize('results_prompt')}</b></span>`);
+            //let actual_count = $(`<span id="actual_count">0</span>`);
+            //results_box.append(actual_count);
+            row.append(button);
+            //row.append(results_box);
+
+            cell.append(row);
+            // add button to card head
+            if($('#cardhead tr').length === 0){
+                $('#cardhead').append(cell);    
+            }
+        }
+        else {
+            // create a new card body and header
+            let card : JQuery = $('<div class="card"></div>');
+            let card_header : JQuery = $(`<div id="cardhead_${i}" class="card-header"></div>`);
+            let cell = $(`<tr class="bookrow"></tr>`);
+            let row = $(`<td id=row_book_${i}></td>`);
+            let button = $(`<button data-toggle="collapse" data-target="" id=book_${i} class="btn text-left" onclick=toggle_cbody(${i})><b>${pathname}:&nbsp;</b><span id="actual_count${i}"></span></button>`); 
+            row.append(button);
+            cell.append(row);
+            card_header.append(cell)
+            let accbody = $(`#accordion2`);
+            if($(`.card #cardhead_${i}`).length === 0){
+                card.append(card_header);
+                accbody.append(card);
+                // add a new card body
+                let new_card_body : JQuery = $(`<div id="card-body-original${i}" class="card-body"></div>`);
+                let new_accbody  : JQuery = $(`<div id="accbody2_${i}" class="" parent=""></div>`);
+                new_accbody.append(new_card_body);
+                card.append(new_accbody);
+            }
+
+        }                                       
+    }
+
+}
+
+function toggle_cbody(idx:number): void {
+    let cbody = $(`#card-body-original`);
+    if(idx > 0 ){
+        cbody = $(`#card-body-original${idx}`);
+        if(cbody.is(':hidden')) {
+            cbody.show();
+        }
+        else {
+            cbody.hide();
+        }
+    }
+    else {
+        if(cbody.is(':hidden')) {
+            cbody.show();
+        }
+        else {
+            cbody.hide();
+        }
+    }
+
+    
+    
+
+}
+
+function add_reference_table(cbody_idx:number, show_res: boolean = false): void {
+    //toggle_cbody(idx);
+    let idx = table_idx;
+    
+
+    let parent_button = $(`#book_${idx}`);
+    // generate query
+    //let preview_data = package_preview_data();
+    //console.log('Preview Data Mega: ', preview_data_mega);
+    //console.log('INIT: ', init);
+    // create table
+    let cbody = $(`#card-body-original`);
+    if(cbody_idx > 0) {
+        cbody = $(`#card-body-original${cbody_idx}`);
+    }
+
+    //let row_book = $(`#row_book_${idx}`);
+    let leaf_count = cbody.find('table').length;
+    console.log('Leaf Count: ', leaf_count);
+
+
+    
+    if(leaf_count <= 0 || $(`#book_table_${idx}`).is(':hidden') || show_res === true) {
+        $(`#accbody2`).show();
+        cbody.show();
+        if(leaf_count <= 0 || show_res === true) {
+            let container = $(`<div style="overflow-y:auto;"></div>`)
+            let table = $(`<table style="display:block; height:500px;" id="book_table_${idx}" class="type2 table table-striped table-sm table-res"></table>`);
+            let row1 = $(`<tr></tr>`);
+            let reference_col = $(`<th style="padding:10px; vertical-align:middle;">Reference</th>`);
+            let text_col = $(`<th style="padding:10px; text-align:center; vertical-align:middle;">Text</th>`);
+            row1.append(reference_col);
+            row1.append(text_col);
+            table.append(row1);
+            container.append(table);
+            cbody.append(container);
+            console.log("GENERATING\n");
+            generate_query_data();
+            init = true;
+        }
+        else {
+            $(`#book_table_${idx}`).show();
+        }
+                               
+    }
+    else {
+        //$(`#book_table_${idx}`).hide();
+        //$(`#accbody2`).hide();
+        cbody.hide();
+    }
+
+}
+
+function preview_results_frontend_alpha(): void {
+    //console.log("Welcome to preview_results_frontend_alpha()\n");
+    if(typeof preview_data_mega === 'undefined'){
+        show_results = true;
+        package_preview_data();
+        console.log('Initial Test Query!');
+    }
+    else {
+        show_results = !show_results;
+        console.log('Not Initial Test Query!');
+        if(show_results === true){
+            package_preview_data();
+        }
+    }
+    console.log('Show Results: ', show_results);
+    console.log('Preview Data Mega: ', preview_data_mega);
+
+    
+    
+    // Toggle Feature Panel 2 (fpan2)
+    if($('#fpan2').is(':hidden')){
+        $('#fpan2').show();
+    }
+    else {
+        $('#fpan2').hide();
+    }
+        
+    // if the cardhead is empty, add the book buttons
+    
+    add_book_buttons();
+
+    // add the first table
+    //let initial_idx = 0;
+    let selected_paths = preview_data_mega.selected_paths;
+    for(let i = 0; i < selected_paths.length; i++) {
+        add_reference_table(i);
+        table_idx++;
+        if(i > 0) {
+            toggle_cbody(i);
+        }
+    }
+
+    //add_reference_table(table_idx, show_results);
+    console.log('TABLE IDX: ', table_idx);
+
+    //table_idx++;
+    //add_reference_table(table_idx, show_results);
+
+}
+
 //****************************************************************************************************
 // save_quiz2 function
 //
@@ -389,7 +669,7 @@ function save_quiz2() : void {
     decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
     decoded_3et.sentbefore = $('#sentbefore').val();
     decoded_3et.sentafter = $('#sentafter').val();
-    decoded_3et.fixedquestions = +$('#fixedquestions').val(); // Convert to number
+    decoded_3et.fixedquestions = + $('#fixedquestions').val(); // Convert to number
     decoded_3et.randomize = $('#randomorder').prop('checked');
     if (!(decoded_3et.fixedquestions>0))
         decoded_3et.fixedquestions = 0; // Non-positive or NaN
@@ -398,7 +678,9 @@ function save_quiz2() : void {
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures        = panelFeatures.getInfo();
 
-    console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
+    //console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
+    //console.log('Normal Data: ', JSON.stringify(decoded_3et));
+    //console.log('SENTENCE SELECTION: ', decoded_3et.sentenceSelection);
     // The HTML form contains the directory, the filename and the exercise as a JSON string
     let form : JQuery = $(`<form action="${submit_to}" method="post">
                              <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">
@@ -410,6 +692,7 @@ function save_quiz2() : void {
 
     isSubmitting = true;
     form.submit();
+    
 }
 
 //****************************************************************************************************
