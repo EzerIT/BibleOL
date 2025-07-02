@@ -1,4 +1,4 @@
-<? version: 20250416 ?>
+<? version: 20250701 ?>
 
 <h1>The Hebrew Placement Exam</h1>
 
@@ -167,18 +167,7 @@ to request a placement exam to be set up for your school. The requesting school 
 
 <h2>How to take the Placement Exam?</h2>
 
-<p>Once you have requested a placement exam with the OT department   <?php
-																															$email = "otst@andrews.edu";
-																															$linkText = "(email)";
-
-																															// Encode the email to hide it from bots
-																															$encodedEmail = '';
-																															  for ($i = 0; $i < strlen($email); $i++) {
-    																															$encodedEmail .= "&#" . ord($email[$i]) . ";";
-																															                                          }
-																															  echo '<a href="mailto:' . $encodedEmail . '">' . htmlspecialchars($linkText) . '</a>';
-																															?>
-, you are provided with the exact time and date when the exam will be available. You will then have to take the following steps:</p>
+<p>Once you have requested a placement exam with the OT department you will have to take the following steps:</p>
 
 <ol>
 	<li>In the Bible OL enroll into the class with the name &ldquo;AU Hebrew Placement Exam&rdquo;.<br />
@@ -209,19 +198,3 @@ to request a placement exam to be set up for your school. The requesting school 
 	</li><br />
 	<li>When you are finished taking your exam, you can look up your exam results instantly. The OT department will inform you within a few days with an official email that you have failed or partially/fully passed the language requirements and will provide you with further instructions in case enrolling in an OTST551 (Hebrew I) or OTST552 (Hebrew II) course is required.</li>
 </ol>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
