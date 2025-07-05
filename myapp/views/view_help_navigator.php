@@ -1,4 +1,4 @@
-<!--? version: 20241212 ?-->
+<? version: 20250701 ?>
 
 <?php
 $menu = array(
@@ -58,10 +58,12 @@ $menu = array(
         ),
 
     'AU Exams' => array('exam_introduction'   => array(0,'Introduction to Exams'),
-        'AU_exam_hebrewI'  => array(1,'Andrews University Final Exam: Hebrew I'),
-        'AU_exam_hebrewII'  => array(1,'Andrews University Final Exam: Hebrew II'),
+        'AU_exam_hebrewI'  => array(1,'Andrews University Final Exam: Hebrew I (OTST551)'),
+        'AU_exam_hebrewII'  => array(1,'Andrews University Final Exam: Hebrew II (OTST552)'),
+        'AU_exam_hebrewIII'  => array(1,'Andrews University Final Exam: Advanced Hebrew (OTST625)'),
         'AU_qualifier_hebrew'  => array(1,'Andrews University Hebrew Placement Exam'),
-        'AU_exam_greek'  => array(1,'Andrews University final Greek Exam'),
+        'AU_exam_OTST_exegesis'  => array(1,'Hebrew Proficiency Exam for OTST Exegesis classes'),
+        'AU_exam_greek'  => array(1,'Andrews University Final Exam: Intermediate Greek (NTST552)'),
         'AU_qualifier_greek'  => array(1,'Andrews University Greek Placement Exam'),        
         'UBS_exam_hebrew'  => array(1,'United Bible Society Hebrew Exam'),
         'exam_location'   => array(0,'Where are the Exams?'),
