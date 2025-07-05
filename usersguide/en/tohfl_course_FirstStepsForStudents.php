@@ -1,6 +1,6 @@
-<? version: 20241231 ?>
+<? version: 20250704 ?>
 
-<h2><strong>First Steps for Students</strong></h2>
+<h1>First Steps for Students</h1>
 
 <p>To get started, it is important to create a BibleOL (1) user account, (2) update one&#39;s user profile, and (3) enroll in a class. Below each single step is explained in detail with instructional videos.</p>
 

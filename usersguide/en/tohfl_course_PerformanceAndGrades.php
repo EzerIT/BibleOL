@@ -1,6 +1,6 @@
-<? version: 20241231 ?>
+<? version: 20250704 ?>
 
-<h2><strong>Taking Exercises, Exams and Looking up Grades/Performance Data</strong></h2>
+<h1>Taking Exercises, Exams and Looking up Grades/Performance Data</h1>
 
 <p>Once you are enrolled in a class you can start taking exercises and tracing your performance improvement.</p>
 

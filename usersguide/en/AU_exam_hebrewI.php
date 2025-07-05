@@ -1,6 +1,11 @@
-<? version: 20250416 ?>
+<? version: 20250704 ?>
 
-<h1>Required Skills</h1>
+<h1>The Hebrew I Final Exam</h1>
+
+<p> </p>
+<br />
+
+<h2>Required Skills</h2>
 
 <p>Andrews University requires from OTST551 students that the following material be mastered:</p>
 
@@ -16,7 +21,7 @@
 <br />
 <br />
 
-<h1>Required Materials</h1>
+<h2>Required Materials</h2>
 
 <ol>
 	<li><strong>Textbook:</strong> Any textbook that covers the materials found in Kelley, Page H., and Timothy G. Crawford. <em>Biblical Hebrew: An Introductory Grammar</em>. 2nd edition. Grand Rapids, Michigan: Eerdmans, 2018. Several professors use as an alternative Merwe, Christo H. van der, and Jacobus A. Naud&eacute;. <em>A Biblical Hebrew Reference Grammar</em>: 2nd Edition. London, New York: T&amp;T Clark, 2017.</li>
@@ -30,7 +35,7 @@
 <br />
 <br />
 
-<h1>The Exam for OTST551 students</h1>
+<h2>The Exam for OTST551 students</h2>
 
 <p>The BibleOL-based Hebrew-I Final Exam contains the following elements:</p>
 
@@ -112,7 +117,7 @@
 <p> </p>
 <br />
 
-<h1 style="clear: left;">How to take the Final Exam?</h1>
+<h2 style="clear: left;">How to take the Final Exam?</h2>
 
 <p>If you are presently enrolled in a Hebrew I (OTST551) class, you must take the following steps to get access to the Final Exam:</p>
 
