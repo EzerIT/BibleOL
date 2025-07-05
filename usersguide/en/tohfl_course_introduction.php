@@ -1,6 +1,6 @@
-<? version: 20250701 ?>
+<? version: 20250704 ?>
 
-<h2><strong>The Hebrew TOHFL course</strong></h2>
+<h1>The Hebrew TOHFL course</h1>
 
 <p>This Hebrew TOHFL course was created to represent a standard course teaching all essential vocabulary, grammar, syntax, and translation skills required by the accrediting institutions (VU, AU, PThU, ETF, Nida). Since each institution might use different textbooks, this course does not adopt a specific textbook but uses the widely used Biblical Hebrew Reference Grammar with a few more sources:</p>
 
@@ -8,8 +8,6 @@
 	<li>Merwe, Christo H. van der, and Jacobus A. Naud&eacute;. <em>A Biblical Hebrew Reference Grammar</em>.&nbsp;2nd edition. London, New York: T&amp;T Clark, 2017.</li>
 	<li>Glanz, Oliver. <em>Biblical Hebrew Reviewer: A Universal Study Companion</em>. Berrien Springs: Andrews University Press, 2018.</li>
 	<li>TOHFL vocab booklet (download vocab booklet for TOHFL course I <a href="https://drive.google.com/file/d/1M2qKlc_GG3xpYIZwBIJ9ZR9tEa858hZC/view?usp=sharing" target="_blank">here</a>, and TOHFL course II <a href="https://drive.google.com/file/d/1RpiqLM_MNmO0zE7Y5IyZezc-TEiocuH2/view?usp=sharing" target="_blank">here</a>).</li>
-	<li>Document for Syntax Defintions: Download the Syntax Defintion Document <a href="https://drive.google.com/file/d/1WSE2h44YE6PUJocPChgMgbrudfmoqZ62/view?usp=sharing" target="_blank">here</a>. All definitions are to be mastered and assumed in the final exam.</li>
-
 </ul>
 
 <p>Since this course does not use a textbook, it follows a text-driven approach in which vocabulary and grammar are not learned in the abstract but are closely related to the texts being translated through both TOHFL courses. TOHFL-I will work with Gen 19-20. TOHFL-II will work with Gen 19-20, Ruth 1, and Psa 3. The vocabulary of each course will cover the words found in the texts to be translated in the respective courses.</p>

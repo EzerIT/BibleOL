@@ -1,37 +1,47 @@
-<? version: 20250701 ?>
+<? version: 20250704 ?>
 
 <h1>The Hebrew Proficiency Exam for OTST Exegesis Courses</h1>
 
-<p>As a prerequisite (see syllabus and the academic Bulletin) for enrollment in an exegesis course, each student must have successfully completed a qualifying Hebrew course or successfully passed the Hebrew Placement Exam. Since it is not uncommon for the successful completion of a Hebrew course or Hebrew Placement Exam to be in the distant past, every exegesis student is tested on basic Hebrew skills at the beginning of an OTST exegesis course. In this way, the student can assess right at the beginning how likely it is that the exegesis course can be successfully completed. </p>
+<p> </p>
+<br />
+
+<h2>Introduction</h2>
 
 
-<p>After a 60-minute Hebrew test, the student can immediately view her or his results and decide whether she or he has the ability to pass the exegesis course successfully. After viewing the results, the student can withdraw from the exegesis course if there is no prospect of successfully completing the course. The result of this test is not included in the final grade of the exegesis course but is only used to estimate the probability of successful course completion. If necessary, the teaching professor will provide advice in the event of very poor results.</p>
+<p>As stated in the syllabus and the Academic Bulletin, enrollment in an Old Testament exegesis course requires prior successful completion of a qualifying Hebrew course or a passing score on the Hebrew Placement Exam.</p>
+
+<p>However, it is not uncommon for students to have met this requirement long before enrolling in an exegesis course. As a result, their working knowledge of Hebrew—essential for successful participation in the course—may have diminished over time.</p>
+
+<p>To address this, every student enrolled in an OTST exegesis course is required to take a Hebrew proficiency test at the beginning of the term. This diagnostic assessment helps students evaluate whether their current Hebrew skills are sufficient for the demands of the course.</p>
+
+<p>Test results are provided immediately. Based on their performance, students can make an informed decision about whether to continue in the course or withdraw if they feel unprepared. The test does not count toward the final course grade; its sole purpose is to assess the likelihood of successful course completion. In cases of weak performance, the instructor will offer appropriate guidance and support.</p>
 
 
-<p>To prepare for this Hebrew test before the start of the semester, it is advisable to refresh your basic knowledge of Hebrew. The TOHFL-I and TOHFL-II courses are available for this purpose. These courses have been developed in close cooperation with leading institutions (Vrije Universiteit Amsterdam, Evangelical Faculty of Theology Leuven, Protestant Faculty of Theology of the Netherlands, United Bible Society, Andrews University et al). The course is free of charge. All information about the course can be found <strong><a href="https://learner.bible/help/show_help/tohfl_course_introduction" target="_blank">here</a></strong>.</p>
 
-<p>Also, to prepare well for the exam, make sure 
-<ul>	
-	<li>that you use this complete <strong><a href="https://drive.google.com/file/d/19wuZMlywhLV44lAD_r1T5d97OiskH3H_/view?usp=sharing" target="_blank">Vocabularly List</a></strong> (containing all down to a frequency of 100) that matches the gloss database of the BibleOL.</li>
-	<li>that you download the <strong><a href="https://drive.google.com/file/d/1WSE2h44YE6PUJocPChgMgbrudfmoqZ62/view?usp=sharing" target="_blank">Syntax Defintion Document</a></strong> and learn them. All definitions are to be mastered and assumed in the Placement Exam.</li>
-</ul>
+<p> </p>
+<br />
+<h2>The Exam</h2>
+
+<p>To ensure you are ready for the Hebrew proficiency test at the start of the semester, it is strongly recommended that you refresh your foundational Hebrew skills in advance. The TOHFL-I and TOHFL-II courses are excellent resources for this purpose. Developed in collaboration with leading institutions—including Vrije Universiteit Amsterdam, the Evangelical Faculty of Theology Leuven, the Protestant Theological University (Netherlands), the United Bible Societies, and Andrews University—these courses are available free of charge. Full course details can be found [here].</p>
+
+<p>In addition to the TOHFL courses, you are encouraged to review your Hebrew vocabulary and syntax. The <strong><a href="https://drive.google.com/file/d/19wuZMlywhLV44lAD_r1T5d97OiskH3H_/view?usp=sharing" target="_blank">TOHFL Vocabularly List</a></strong> is a helpful tool for vocabulary review. For syntax, the OTST department provides a comprehensive Syntax Definitions document, which can be downloaded <strong><a href="https://drive.google.com/file/d/1WSE2h44YE6PUJocPChgMgbrudfmoqZ62/view?usp=sharing" target="_blank">here</a></strong>. Familiarity with these definitions is assumed for the exam.</p>
+
 
 <p></p>
 
-<p>The table below provides access to each part of the exam. Each exam part is <strong>hyperlinked</strong> (underlined, blue table headers) so that students can begin exam preparations.</p>
+<p>The table below outlines the components of the Hebrew proficiency test. Each exam part is <strong>hyperlinked</strong> (underlined, blue table headers) so that students can begin exam preparations. Click on the hyperlink and start exercising with the exam materials.</p>
 
 <p></p>
 
 <table align="left" border="1" cellpadding="1" cellspacing="1" style="width:900px">
 	<tbody>
 		<tr>
-			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_01_01_SDATS_morphology_nominal-forms.3et&count=5" target="_blank"><strong>Noun Morphology</strong></a></td>
-			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_01_02_SDATS_morphology_suffixation_nouns-prepositions.3et&count=5" target="_blank"><strong>Pronominal Suffixes attached to Nouns and Particles</strong></a></td>
-			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_01_03_SDATS_morphology_prefixing_WawHaBeKeLeMin_multiplechoice.3et&count=5" target="_blank"><strong>Prefixing</strong></a></td>
-			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_02_01_SDATS_morphology_verbal-forms.3et&count=5" target="_blank"><strong>Verbal Morphology</strong></a></td>
-			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_02_02_SDATS_syntax_subphrase-analysis.3et&count=5" target="_blank"><strong>Subphrase Analysis (constructs, attribution)</strong></a></td>
-			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_02_03_SDATS_syntax_phrase-analysis.3et&count=5" target="_blank"><strong>Phrase Function Analysis</strong></a></td>
-			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_02_04_SDATS_syntax_clause-connection-analysis.3et&count=5" target="_blank"><strong>Clause Relation Analysis</strong></a></td>
+			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_01_01_SDATS_morphology_nominal-forms.3et&count=5" target="_blank"><u><strong>Noun Morphology</strong></u></a></td>
+			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_01_02_SDATS_morphology_suffixation_nouns-prepositions.3et&count=5" target="_blank"><u><strong>Pronominal Suffixes attached to Nouns and Particles</strong></a></td>
+			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_02_01_SDATS_morphology_verbal-forms.3et&count=5" target="_blank"><u><strong>Verbal Morphology</strong></u></a></td>
+			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_02_02_SDATS_syntax_subphrase-analysis.3et&count=5" target="_blank"><u><strong>Subphrase Analysis (constructs, attribution)</strong></u></a></td>
+			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_02_03_SDATS_syntax_phrase-analysis.3et&count=5" target="_blank"><u><strong>Phrase Function Analysis</strong></u></a></td>
+			<td style="vertical-align:top;"><a href="https://learner.bible/text/show_quiz?quiz=Andrews%20University%2F0_Hebrew-Qualifier%2FOTdept_OTST699_exegesis_HebrewSkillAssessment%2FOTST_Exegesis_02_04_SDATS_syntax_clause-connection-analysis.3et&count=5" target="_blank"><u><strong>Clause Relation Analysis</strong></u></a></td>
 		</tr>
 		<tr>
 			<td style="vertical-align:top; width:225px;">
@@ -42,12 +52,6 @@
       
 			<td style="vertical-align:top; width:225px;">
 			<figure class="easyimage easyimage-full"><?= $hdir->img("AU_hebrew-exam_otst551_04_s-morphology.png") ?>
-			<figcaption></figcaption>
-			</figure>
-			</td>
-
-			<td style="vertical-align:top; width:225px;">
-			<figure class="easyimage easyimage-full"><?= $hdir->img("AU_hebrew-exam_otst551_02_prefixing.png") ?>
 			<figcaption></figcaption>
 			</figure>
 			</td>
@@ -82,13 +86,36 @@
 <p style="clear: left;"> </p>
 <p> </p>
 <br />
-<br />
 
-<h1 style="clear: left;">How to take the Hebrew Exam for OTST Exegesis courses?</h1>
 
-<p>You must take the following steps to get access to the Exam:</p>
+<h2 style="clear: left;">How to take the Hebrew Exam for OTST Exegesis courses?</h2>
+
+<p>To get started, it is important to create a BibleOL (1) user account, (2) update one&#39;s user profile, and (3) enroll in a class. Below each single step is explained in detail with instructional videos.</p>
 
 <ol>
+	<li>Creating a User Account on BibleOL:<br />
+		<iframe 
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+			allowfullscreen="" 
+			frameborder="0" 
+			height="315" 
+			src="https://www.youtube.com/embed/a96RG5gw-tA" 
+			width="560">
+		</iframe>
+	</li><br />
+
+	<li>Updating one&rsquo;s User Profile:<br />
+	Change your User Profile and choose the profile &ldquo;AndrewsUniversity&rdquo;:<br />
+		<iframe 
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+			allowfullscreen="" 
+			frameborder="0" 
+			height="315" 
+			src="https://www.youtube.com/embed/UYE69Sg-W8M"
+			width="560">
+		</iframe>
+	 </li><br />
+
 	<li>In BibleOL enroll in the class &ldquo;AU OTST Exegesis Hebrew Exam&rdquo;.<br />
 		<figure 
 			class="easyimage easyimage-full" 
@@ -105,7 +132,8 @@
 			width="560">
 		</iframe><br />
 	</li><br />
-	<li>Once you have enrolled, you can see the Final Exam show up under &ldquo;TEXT AND EXERCISES/Exams&rdquo;. The following video shows how you can find and take exams on BibleOL:<br />
+
+	<li>Once you have enrolled, you can see the Exam show up under &ldquo;TEXT AND EXERCISES/Exams&rdquo;. The following video shows how you can find and take exams on BibleOL:<br />
 		<iframe 
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
 			allowfullscreen="" 
@@ -115,6 +143,6 @@
 			width="560">
 		</iframe><br />
 	</li><br />
-	<li>When you are finished taking your exam you can lookup your exam results instantly. The OT department will inform your instructor within a few days about your official final exam grade.
+	<li>When you are finished taking your exam you can lookup your exam results instantly.
 	</li>
 </ol>
