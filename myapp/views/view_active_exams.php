@@ -29,7 +29,7 @@
           <th><?= $this->lang->line('exam_name') ?></th>
           <th><?= $this->lang->line('end_time') ?></th>
           <th><?= $this->lang->line('duration') ?></th>
-          <th><?= $this->lang->line('user_operations') ?></th>
+          <th><?= $this->lang->line('user_operations') ?>*******</th>
         </tr>
         <?php foreach ($active_exams_list as $exam): ?>
           <tr>
@@ -40,7 +40,13 @@
             <td class="leftalign">
               <a class="badge badge-primary" href="/exams/take_exam?exam=<?= $exam->id ?>">Take Exam</a>
               <?php if ($this->mod_users->is_teacher()): ?>
-                <a class="badge badge-danger" href="#" onclick="dltexam(<?= $exam->id ?>, '<?= $exam->instance_name ?>');"><?= $this->lang->line('delete_exam_instance') ?></a>
+                <a 
+                  class="badge badge-danger" 
+                  href="#" 
+                  onclick="dltexam(<?= $exam->id ?>, <?= htmlspecialchars($exam->instance_name) ?>);"
+                >
+                  <?= $this->lang->line('delete_exam_instance') ?>
+                </a>
               <?php endif; ?>
             </td>
           </tr>
@@ -64,10 +70,16 @@
             <td class="leftalign"><?= $class_names[$exam->class_id] ?></td>
             <td class="leftalign"><?= $exam->instance_name ?></td>
             <td class="leftalign time"><?= $exam->exam_start_time ?></td>
-            <td class="leftalign"><?= $exam->exam_length ?></td>
+            <td class="leftalign"><?= $exam->exam_length ?>hi</td>
             <td class="leftalign">
               <?php if ($this->mod_users->is_teacher()): ?>
-                <a class="badge badge-danger" href="#" onclick="dltexam(<?= $exam->id ?>, '<?= $exam->instance_name ?>');"><?= $this->lang->line('delete_exam_instance') ?></a>
+                <a 
+                  class="badge badge-danger" 
+                  href="#" 
+                  onclick="dltexam(<?= $exam->id ?>, <?= htmlspecialchars($exam->instance_name) ?>);"
+                >
+                  <?= $this->lang->line('delete_exam_instance') ?>
+                </a>
               <?php endif; ?>
             </td>
           </tr>
@@ -147,7 +159,7 @@
 
   function dltexam(examid, examname) {
     $('#delete-exid').attr('value', examid);
-    document.getElementById('delete-exam-instance').innerHTML = examname;
+    document.getElementById('delete-exam-instance').innerHTML = decodeHtmlEntities(encodedHtml);
     $('#delete-error').hide();
     $("#delete-exam-instance-dialog").modal("show");
   }
