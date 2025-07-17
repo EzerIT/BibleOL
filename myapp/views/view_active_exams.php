@@ -165,7 +165,7 @@
 
   function dltexam(examid, examname) {
     $('#delete-exid').attr('value', examid);
-    document.getElementById('delete-exam-instance').innerHTML = decodeHtmlEntities(encodedHtml);
+    document.getElementById('delete-exam-instance').innerHTML = decodeHtmlEntities(examname);
     $('#delete-error').hide();
     $("#delete-exam-instance-dialog").modal("show");
   }
