@@ -21,6 +21,14 @@ cd /var/www/html/BibleOL
 sudo mysql ${MYSQL_DATABASE} < bolsetup.sql
 sudo ./setup_lang.sh
 
-sudo service apache2 start
+# Fix PHP Errors in uploading exercises
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 10M/g' /etc/php/8.1/apache2/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 10M/g' /etc/php/8.1/apache2/php.ini
+
+#prepare quizzes directory
+mkdir /var/www/html/BibleOL/quizzes
+sudo chown -R www-data:www-data /var/www/html/BibleOL/quizzes
+
+sudo service apache2 restart
 
 sudo php index.php users generate_administrator admin Default Admin bibleol_pwd

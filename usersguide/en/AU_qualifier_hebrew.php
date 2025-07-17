@@ -1,6 +1,11 @@
-<? version: 20250117 ?>
+<? version: 20250704 ?>
 
 <h1>The Hebrew Placement Exam</h1>
+
+<p> </p>
+<br />
+
+<h2>Introduction</h2>
 
 <p>All present or prospective students wanting to meet the Hebrew Language requirements at the SDA Theological Seminary at Andrews University without taking a class can do so by signing up for the Hebrew Placement Exam. The exam is called &ldquo;<strong><em>placement</em></strong>&rdquo; exam because the results will determine whether you have passed all Hebrew language requirements or are <strong><em>placed</em></strong> into an OTST551 (Hebrew I) or OTST552 (Hebrew II) course.</p>
 
@@ -16,6 +21,18 @@
 </p>
 
 <p>Exam results will be available instantly. The placement exam can be taken <strong><em>only one time</em></strong>! However, the exercise links below can be used endlessly to make good preparation possible.</p>
+
+<p>To prepare well for the exam, make sure 
+<ul>	
+	<li>that you use this complete <strong><a href="https://drive.google.com/file/d/19wuZMlywhLV44lAD_r1T5d97OiskH3H_/view?usp=sharing" target="_blank">Vocabularly List</a></strong> (containing all down to a frequency of 100) that matches the gloss database of the BibleOL.</li>
+	<li>that you download the <strong><a href="https://drive.google.com/file/d/1WSE2h44YE6PUJocPChgMgbrudfmoqZ62/view?usp=sharing" target="_blank">Syntax Defintion Document</a></strong> and learn them. All definitions are to be mastered and assumed in the Placement Exam.</li>
+</ul>
+
+
+<p> </p>
+<br />
+
+<h2>The Exam</h2>
 
 <p>Below, you can see what type of questions you will have to answer in the different parts of the exam. Each exam part is <strong><em>hyperlinked</em></strong> (underlined, blue table headers) so that students can begin exam preparations. You can exercise and test yourself on each category by clicking the hyperlink. The actual placement exam will draw from the same pool of questions from which the hyperlinked exercises are drawn.</p>
 
@@ -138,6 +155,8 @@
 
 <p style="clear: left;">Students at any location can prepare by using the above links.</p>
 
+<p> </p>
+<br />
 
 <h2>Placement Exams for Partnerschools</h2>
 <p>The exam will be made available by the OT department at the Seminary and can be taken at the location of any of our partner schools. Please contact 
@@ -157,24 +176,37 @@ to request a placement exam to be set up for your school. The requesting school 
 
 <p> </p>
 <br />
-<br />
+
 
 <h2>How to take the Placement Exam?</h2>
 
-<p>Once you have requested a placement exam with the OT department   <?php
-																															$email = "otst@andrews.edu";
-																															$linkText = "(email)";
-
-																															// Encode the email to hide it from bots
-																															$encodedEmail = '';
-																															  for ($i = 0; $i < strlen($email); $i++) {
-    																															$encodedEmail .= "&#" . ord($email[$i]) . ";";
-																															                                          }
-																															  echo '<a href="mailto:' . $encodedEmail . '">' . htmlspecialchars($linkText) . '</a>';
-																															?>
-, you are provided with the exact time and date when the exam will be available. You will then have to take the following steps:</p>
+<p>Once you have requested a placement exam with the OT department, it is important to create a BibleOL (1) user account, (2) update one&#39;s user profile, and (3) enroll in a class. Below each single step is explained in detail with instructional videos.</p>
 
 <ol>
+	<li>Creating a User Account on BibleOL:<br />
+		<iframe 
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+			allowfullscreen="" 
+			frameborder="0" 
+			height="315" 
+			src="https://www.youtube.com/embed/a96RG5gw-tA" 
+			width="560">
+		</iframe>
+	</li><br />
+
+	<li>Updating one&rsquo;s User Profile:<br />
+	Change your User Profile and choose the profile &ldquo;AndrewsUniversity&rdquo;:<br />
+		<iframe 
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+			allowfullscreen="" 
+			frameborder="0" 
+			height="315" 
+			src="https://www.youtube.com/embed/UYE69Sg-W8M"
+			width="560">
+		</iframe>
+	 </li><br />
+
+
 	<li>In the Bible OL enroll into the class with the name &ldquo;AU Hebrew Placement Exam&rdquo;.<br />
 		<figure 
 			class="easyimage easyimage-full" 
@@ -191,6 +223,7 @@ to request a placement exam to be set up for your school. The requesting school 
 			width="560">
 		</iframe>
 	</li><br />
+
 	<li>Once you have enrolled, you can see the Placement Exam under &ldquo;Exams&rdquo;. The following video shows how you can find and take exams on the Bible OL:<br />
 		<iframe 
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -203,19 +236,3 @@ to request a placement exam to be set up for your school. The requesting school 
 	</li><br />
 	<li>When you are finished taking your exam, you can look up your exam results instantly. The OT department will inform you within a few days with an official email that you have failed or partially/fully passed the language requirements and will provide you with further instructions in case enrolling in an OTST551 (Hebrew I) or OTST552 (Hebrew II) course is required.</li>
 </ol>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -472,21 +472,32 @@ class Mod_users extends CI_Model {
     // Generates an administrator entry in the user database.
     // Can only be run from the command line.
     public function generate_administrator(string $username, string $first_name, string $last_name, string $password) {
-        $this->me = make_dummy_user();
-		$this->me->id = null; // Indicates new user
-		$this->me->first_name = $first_name;
-		$this->me->last_name = $last_name;
-		$this->me->family_name_first = false;
-		$this->me->username = $username;
-		$this->me->password = md5($this->config->item('pw_salt') . $password);
-        $this->me->isadmin = 1;
-		$this->me->created_time = time();
-		$this->me->last_login = time();
-		$this->me->preflang = 'none';
-		$this->me->prefvariant = 'none';
+        // Check first if the user exists
+        $query2 = $this->db
+            ->select('id')
+            ->where("username='" . $username . "'")
+            ->get('user');
 
-        $query = $this->db->insert('user', $this->me);
+        if ($query2->num_rows()==0) {
+            $this->me = make_dummy_user();
+            $this->me->id = null; // Indicates new user
+            $this->me->first_name = $first_name;
+            $this->me->last_name = $last_name;
+            $this->me->family_name_first = false;
+            $this->me->username = $username;
+            $this->me->password = md5($this->config->item('pw_salt') . $password);
+            $this->me->isadmin = 1;
+            $this->me->created_time = time();
+            $this->me->last_login = time();
+            $this->me->preflang = 'none';
+            $this->me->prefvariant = 'none';
 
-        return $this->db->insert_id();
+            $query = $this->db->insert('user', $this->me);
+
+            return $this->db->insert_id();
+        }
+        else {
+            return $query2->row()->id;
+        }
     }
 }

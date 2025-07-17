@@ -1,6 +1,11 @@
-<? version: 20241231 ?>
+<? version: 20250704 ?>
 
-<h1>Required Skills</h1>
+<h1>The Hebrew I Final Exam</h1>
+
+<p> </p>
+<br />
+
+<h2>Required Skills</h2>
 
 <p>Andrews University requires from OTST551 students that the following material be mastered:</p>
 
@@ -10,25 +15,27 @@
 	<li>Basic syntax skills.</li>
 </ul>
 
+
+
 <p> </p>
 <br />
 <br />
 
-<h1>Required Materials</h1>
+<h2>Required Materials</h2>
 
 <ol>
 	<li><strong>Textbook:</strong> Any textbook that covers the materials found in Kelley, Page H., and Timothy G. Crawford. <em>Biblical Hebrew: An Introductory Grammar</em>. 2nd edition. Grand Rapids, Michigan: Eerdmans, 2018. Several professors use as an alternative Merwe, Christo H. van der, and Jacobus A. Naud&eacute;. <em>A Biblical Hebrew Reference Grammar</em>: 2nd Edition. London, New York: T&amp;T Clark, 2017.</li>
 	<li><strong>Vocab Builder</strong>: The department requires the Biblical Hebrew Vocabulary Builder (soon to be published by AUP).<br />
-	=&gt; Oliver Glanz, and Tsegaw, Melak. <em>Biblical Hebrew Vocabulary Builder: Analog and Digital, Alphabetic, and Illustrative, arranged by Frequency and Semantic Categories</em>. Berrien Springs: Andrews University Press, 2025 (in process to be published). A simplified pdf version of this Hebrew vocab builder will be shared with all Hebrew instructors before the beginning of the semester. Hebrew instructors at our partner schools can contact otst[AT]andrews.edu to receive a pdf copy of a simplified list.</li>
+	=&gt; Oliver Glanz, and Tsegaw, Melak. <em>Biblical Hebrew Vocabulary Builder: Analog and Digital, Alphabetic, and Illustrative, arranged by Frequency and Semantic Categories</em>. Berrien Springs: Andrews University Press, 2025 (in process to be published). Until the publication, a simplified pdf version of this Hebrew vocab builder will be shared with all Hebrew instructors before the beginning of the semester. Students, wanting to prepare for a OTST551 Final Exam but are not currently enrolled in a class can download <strong><a href="https://drive.google.com/file/d/1NLO2oCrB944h2d1m1OIVO_935768oud8/view?usp=sharing" target="_blank">this</a></strong> complete vocabularly list (containing all OTST551 words) that matches the gloss database of the BibleOL.</li>
 	<li><strong>Comprehensive Paradigms</strong>: The department approves and recommends Glanz, Oliver. <em>Biblical Hebrew Reviewer: A Universal Study Companion</em>. Berrien Springs: Andrews University Press, 2018.</li>
-	<li><strong>Document for Syntax Defintions</strong>: Download the Syntax Defintion Document <a href="https://liveandrews-my.sharepoint.com/:b:/g/personal/glanz_andrews_edu/EfTqdEHzzzhOhD45SLv_1AoBKUwPCH_4jkuZoUb8_9zZNQ?e=2Qqdmt" target="_blank">here</a>. All definitions are to be mastered and assumed in the exam.</li>
+	<li><strong>Document for Syntax Defintions</strong>: Download the Syntax Defintion Document <strong><a href="https://drive.google.com/file/d/1WSE2h44YE6PUJocPChgMgbrudfmoqZ62/view?usp=sharing" target="_blank">here</a></strong>. All definitions are to be mastered and assumed in the exam.</li>
 </ol>
 
 <p> </p>
 <br />
 <br />
 
-<h1>The Exam for OTST551 students</h1>
+<h2>The Exam for OTST551 students</h2>
 
 <p>The BibleOL-based Hebrew-I Final Exam contains the following elements:</p>
 
@@ -110,7 +117,7 @@
 <p> </p>
 <br />
 
-<h1 style="clear: left;">How to take the Final Exam?</h1>
+<h2 style="clear: left;">How to take the Final Exam?</h2>
 
 <p>If you are presently enrolled in a Hebrew I (OTST551) class, you must take the following steps to get access to the Final Exam:</p>
 
