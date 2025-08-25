@@ -373,6 +373,10 @@ a.grammargroup {
   background: white url(../images/dadel/expand_more_24px.png) no-repeat;
   background-position: right 5px center;
 }
+.not-clickable {
+  pointer-events: none;
+  opacity: 0.45;
+}
 div#grammargroup {
   background: transparent;
   border: 0;

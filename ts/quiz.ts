@@ -139,7 +139,8 @@ class Quiz {
         if (this.currentDictIx+1 <= dictionaries.sentenceSets.length) {
             // enable the 'Next' button
             $('button#next_question').removeAttr('disabled');
-            $('button#finish').attr('disabled', 'disabled');
+            //$('button#finish').attr('disabled', 'disabled');
+            $('button#finish').addClass('not-clickable');
             $('button#finishNoStats').attr('disabled', 'disabled');
         }
 
@@ -278,7 +279,8 @@ class Quiz {
             }
         }
         else if (quizdata.fixedquestions>0) {
-            $('button#finish').attr('disabled', 'disabled');
+            //$('button#finish').attr('disabled', 'disabled');
+            $('button#finish').addClass('not-clickable');
             $('button#finishNoStats').attr('disabled', 'disabled');
         }
 
@@ -311,7 +313,7 @@ class Quiz {
             if (this.currentDictIx+1 === dictionaries.sentenceSets.length) {
                 // This is the last question, disable the 'Next' button
                 $('button#next_question').attr('disabled', 'disabled');
-                $('button#finish').removeAttr('disabled');
+                $('button#finish').removeClass('not-clickable');
                 $('button#finishNoStats').removeAttr('disabled');
             }
 
@@ -329,9 +331,9 @@ class Quiz {
 
         if(this.exam_mode == true) {
             if ($('#progress').val() < $('#progress').attr('max')) {
-                $('#finish').attr('disabled', 'disabled');
+                $('#finish').addClass('not-clickable')
             } else {
-              $('#finish').removeAttr('disabled');
+              $('#finish').removeClass('not-clickable');
             }
         }
         util.FollowerBox.resetCheckboxCounters(); // Reset counters in preparation for the following trigger() call
