@@ -194,7 +194,7 @@
     var l10n = <?= $l10n_json ?>;
     var l10n_js = <?= $l10n_js_json ?>;
     var typeinfo = <?= $typeinfo_json ?>;
-    var quizdata = <?= $quizData_json ?>;
+    var quizdata = <?= htmlspecialchars_decode($quizData_json, ENT_QUOTES) ?>;
     var site_url = '<?= site_url() ?>';
 
     <?php $this->load->helper('icon_helper'); ?>
