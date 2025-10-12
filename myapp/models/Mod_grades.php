@@ -894,7 +894,7 @@ class Mod_grades extends CI_Model {
         //     ->get();
         $query = $this->db
             ->from('sta_quiz as q')
-            ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer, rf.qono, sq.txt, GROUP_CONCAT(df.name) disp_type, GROUP_CONCAT(df.value) disp_value')
+            ->select('sq.quizid, rf.questid, DENSE_RANK() OVER (PARTITION BY sq.quizid ORDER BY rf.questid) AS qono, sq.time, rf.correct, sq.location, rf.name, rf.value, rf.answer, rf.qono as subqono, sq.txt, GROUP_CONCAT(df.name) disp_type, GROUP_CONCAT(df.value) disp_value')
             ->join('sta_question as sq','sq.quizid=q.id')
             ->join('sta_requestfeature as rf','rf.questid = sq.id')
             ->join('sta_displayfeature as df','rf.questid=df.questid and rf.qono=df.qono')

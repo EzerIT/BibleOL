@@ -4,6 +4,7 @@
         echo "<div class=\"alert alert-danger\">$valerr</div>\n";
     // Load helper for grades
     $this->load->helper('calc_grades_helper');
+    print_r($resfeatall);
 ?>
 
 <?php if ($status!=2): ?>
