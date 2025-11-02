@@ -885,14 +885,14 @@ class Mod_grades extends CI_Model {
 
         // Check for a match at this level
         if (isset($array[$searchKey])) {
-            return $array[$searchKey];
+            return preg_replace('/^#\d+? (.*)$/', '$1', $array[$searchKey]);;
         }
 
         // Continue traversal
         foreach ($array as $item) {
             $return_value = $this->recursiveSearchHelper($item, $searchKey);
             if (!empty($return_value)) {
-                return $return_value;
+                return preg_replace('/^#\d+? (.*)$/', '$1', $return_value);
             }
         }
         return false;
