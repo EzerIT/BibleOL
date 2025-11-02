@@ -1,20 +1,11 @@
 <?php
     // Load helper for grades
     // $this->load->helper('calc_grades_helper');
-
-     echo " <p>$userid</P>";
-     echo " <p>$quizzid</P>";
     //
-     print_r($resall);
     // load the language file for the translation of features
     // english is loaded as the default language if no language is set
     $language = $this->session->userdata('language') ?? 'en';
     $data = json_decode(file_get_contents('db/property_files/ETCBC4.' . $language . '.prop.pretty.json'), true);
-// print_r($data);
-// print_r($data['emdrosobject']['word']);
-// var_dump($data->emdrosobject->word->g_voc_lex_utf8_variant);
-
-// echo ($data['emdrosobject']['word']['g_voc_lex_utf8_variant'])
 
 ?>
 <p><a href="javascript:history.back()" title="<?= $this->lang->line('back_hooverover_txt') ?>"><?= $this->lang->line('go_back') ?></a></p>
