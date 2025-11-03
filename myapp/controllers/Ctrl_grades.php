@@ -807,6 +807,15 @@ class Ctrl_grades extends MY_Controller {
 
 
             $res_detail = $this->mod_grades-> get_quizz_detail($userid, $quizzid);
+            // Get variants
+            if (empty($_SESSION['variant'])) {
+                $curr_variant = '';
+            }
+            else {
+                $curr_variant = $_SESSION['variant'];
+            }
+            //print_r($_SESSION);
+            //$var_tables = $this->mod_grades-> get_quizz_variant_tables($quizzid, $curr_variant);
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('exercise_graphs_title'),
