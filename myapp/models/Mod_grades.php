@@ -363,7 +363,7 @@ class Mod_grades extends CI_Model {
             $escaped_pathname = str_replace("\\","\\\\",addcslashes($row->pathname,"()"));
 
             // Check if is teacher to select the right source for the combo
-            if ($this->mod_users->is_teacher()) {
+            if ($this->mod_users->is_the_teacher($classid, $this->mod_users->my_id())) {
 
 
                 $where_clause = "";
