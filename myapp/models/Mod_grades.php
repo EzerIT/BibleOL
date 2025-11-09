@@ -483,7 +483,7 @@ class Mod_grades extends CI_Model {
 
         if ($myid==-1){
           $query = $this->db
-          ->select('qt.id, qt.userid, qt.pathname, q.id as qzid, uc.classid')
+          ->select('qt.id, qt.userid')
           ->from('sta_quiztemplate qt')
           ->join('sta_quiz q', 'qt.id = q.templid')
           ->join('userclass uc','q.userid=uc.userid')
