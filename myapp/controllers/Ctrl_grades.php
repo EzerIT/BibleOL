@@ -484,7 +484,7 @@ class Ctrl_grades extends MY_Controller {
                 }
                 else {
                     // Find all user IDs and template IDs that match the specified pathname
-                    $users_and_templs = $this->mod_grades->get_users_and_templ($ex);
+                    $users_and_templs = $this->mod_grades->get_users_and_templ($ex, $classid);
 
                     $resall = array();
                     $resall_ind = array();
@@ -663,7 +663,7 @@ class Ctrl_grades extends MY_Controller {
                 }
                 else {
                     // Find all user IDs and template IDs that match the specified pathname
-                    $users_and_templs = $this->mod_grades->get_users_and_templ($ex, $this->mod_users->my_id());
+                    $users_and_templs = $this->mod_grades->get_users_and_templ($ex, $classid, $this->mod_users->my_id());
 
                     $resall = array();
                     $resall_ind = array();

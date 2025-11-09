@@ -522,7 +522,7 @@ class Ctrl_statistics extends MY_Controller {
                 }
                 else {
                     // Find all user IDs and template IDs that match the specified pathname
-                    $users_and_templs = $this->mod_statistics->get_users_and_templ($ex);
+                    $users_and_templs = $this->mod_statistics->get_users_and_templ($ex, $classid);
 
                     $resall = array();
                     $resfeatall = array();
