@@ -102,7 +102,7 @@ class Mod_users extends CI_Model {
             $is_the_teacher = true;
 		}
 
-		return $is_the_teacher;
+		return ($is_the_teacher || $this->me->isadmin) && $this->accepted_current_policy(); // All admins are teachers
 	}
 
     public function is_teacher() {
