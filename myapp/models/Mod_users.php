@@ -90,6 +90,21 @@ class Mod_users extends CI_Model {
 		return $is_grader;
 	}
 
+	/**
+	 * returns true only if the user is the owner of this class or an admin *
+	 * @param
+	 */
+    public function is_the_teacher($classid, $userid) {
+        $is_the_teacher = false;
+		$n = $this->db->select('id')->from('class')->where('id', $classid)->where('ownerid', $userid)->get()->num_rows();
+
+		if($n > 0) {
+            $is_the_teacher = true;
+		}
+
+		return ($is_the_teacher || $this->me->isadmin) && $this->accepted_current_policy(); // All admins are teachers
+	}
+
     public function is_teacher() {
         return ($this->me->isteacher || $this->me->isadmin) && $this->accepted_current_policy(); // All admins are teachers
     }

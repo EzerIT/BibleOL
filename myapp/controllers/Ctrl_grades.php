@@ -416,6 +416,7 @@ class Ctrl_grades extends MY_Controller {
     	$this->load->model('mod_users');
     	$this->load->model('mod_classes');
     	$this->load->model('mod_grades');
+        $this->load->model('mod_statistics');
         $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
 
         try {
@@ -455,7 +456,8 @@ class Ctrl_grades extends MY_Controller {
             foreach ($students as $st)
                 $student_ids[] = (int)$st->userid;
 
-            $exercise_list = $this->mod_grades->get_pathnames_for_class($classid, $student_ids);
+            //$exercise_list = $this->mod_grades->get_pathnames_for_class($classid, $student_ids);
+            $exercise_list = $this->mod_statistics->get_pathnames_for_class($classid);
 
             $this->statistics_timeperiod->set_validation_rules();
             $this->form_validation->set_rules('exercise', '', 'callback_always_true');  // Dummy rule. At least one rule is required
@@ -484,7 +486,7 @@ class Ctrl_grades extends MY_Controller {
                 }
                 else {
                     // Find all user IDs and template IDs that match the specified pathname
-                    $users_and_templs = $this->mod_grades->get_users_and_templ($ex);
+                    $users_and_templs = $this->mod_grades->get_users_and_templ($ex, $classid);
 
                     $resall = array();
                     $resall_ind = array();
@@ -663,7 +665,7 @@ class Ctrl_grades extends MY_Controller {
                 }
                 else {
                     // Find all user IDs and template IDs that match the specified pathname
-                    $users_and_templs = $this->mod_grades->get_users_and_templ($ex, $this->mod_users->my_id());
+                    $users_and_templs = $this->mod_grades->get_users_and_templ($ex, $classid, $this->mod_users->my_id());
 
                     $resall = array();
                     $resall_ind = array();
