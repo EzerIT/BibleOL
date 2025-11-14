@@ -71,18 +71,16 @@ class Ctrl_statistics extends MY_Controller {
 
       $data = array(
         'userid' => $this->mod_users->my_id(),
-        'activeexamid' => $this->input->get('examid'),
+        'attempt_id' => $this->input->get('exam_attempt_id'),
         'quizid' => $this->input->get('quizid'),
         'quiztemplid' => $this->mod_exams->get_template_id($this->input->get('quizid')),
       );
       $this->db->insert('exam_results', $data);
 
       if (!$this->input->get('exercise_lst')) {
-        $data = array(
-          'userid' => $this->mod_users->my_id(),
-          'activeexamid' => $this->input->get('examid')
-        );
-        $this->db->insert('exam_finished', $data);
+        $user_id = $this->mod_users->my_id();
+        $active_exam_id = $this->input->get('exam_attempt_id');
+        $this->mod_exams->set_exam_is_done($user_id, $active_exam_id);
       }
     }
 

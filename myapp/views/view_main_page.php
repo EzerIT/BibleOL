@@ -96,11 +96,15 @@ function logos() {
 
 
 <?php if (!isset($landingpage)): ?>
-<div class="<?= isset($right_title)
-                ? 'col-md-6'
-                : ((isset($in_help) && $in_help)
-                         ? 'col-md-9 col-lg-6'
-                         : 'col-md-9') ?> centerpanel" id="centerpanel">
+<div class="<?= !isset($left_title) && !isset($right_title)
+                ? 'col-md-12'
+                : (
+                    isset($right_title)
+                    ? 'col-md-6'
+                    : ((isset($in_help) && $in_help)
+                            ? 'col-md-9 col-lg-6'
+                            : 'col-md-9') 
+                    ) ?> centerpanel" id="centerpanel">
   <div class="centerblock">
     <?= $center ?>
   </div>

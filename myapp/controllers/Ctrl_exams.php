@@ -81,20 +81,43 @@ class Ctrl_exams extends MY_Controller
           }
           $instructors[$class_id] = $user_full_name;
           $active_exam_query = $this->db->get_where('exam_active', array('class_id' => $class_id))->result();
-          foreach ($active_exam_query as $exam_row) {
-            if ($exam_row->exam_end_time > time()){
-              if ($exam_row->exam_start_time <= time()){
-                if ($this->mod_users->is_teacher()) array_push($active_exams_list, $exam_row);
-                else {
-                  $exam_finished_query = $this->db->get_where('exam_finished', array('userid' => $user_id, 'activeexamid' => $exam_row->id));
-                  if (!$exam_finished_query->row()) array_push($active_exams_list, $exam_row);
-                }
-              } else {
-                array_push($future_exams_list, $exam_row);
-              }
-            } else {
-              array_push($past_exams_list, $exam_row);
+          foreach ($active_exam_query as $active_exam) {
+            if ($active_exam->exam_end_time <= time()) {
+              array_push($past_exams_list, $active_exam);
+              continue;
             }
+            if ($active_exam->exam_start_time > time()){
+              array_push($future_exams_list, $active_exam);
+              continue;
+            }
+
+            $active_exam->in_progress = false;
+            $active_exam->attempts_completed = 0;
+
+            $latest_attempt = $this->mod_exams->get_latest_attempt($user_id, $active_exam->id);
+            if (is_null($latest_attempt)) {
+              array_push($active_exams_list, $active_exam);
+              continue;
+            }
+
+            $latest_attempt_count = $latest_attempt->attempt_count;
+            if (!$latest_attempt->is_done) {
+              $active_exam->in_progress = true;
+              $active_exam->attempts_completed -= 1;
+            }
+
+            if ($this->mod_users->is_teacher()) {
+              array_push($active_exams_list, $active_exam);
+              continue;
+            }
+            
+            if ($latest_attempt_count > $active_exam->maximum_attempts) {
+              continue;
+            }
+
+            $active_exam->attempts_completed = $latest_attempt_count;
+
+            array_push($active_exams_list, $active_exam);
           }
         }
 
@@ -128,10 +151,7 @@ class Ctrl_exams extends MY_Controller
             ),
             true
         );
-        $this->load->view('view_main_page', array('left_title' => $this->lang->line('active_exams'),
-            'left' => $this->lang->line('active_exams_description'),
-            'center' => $center_text
-        ));
+        $this->load->view('view_main_page', array('center' => $center_text));
 
         $this->load->view('view_bottom');
       } catch (DataException $e) {
@@ -240,6 +260,15 @@ class Ctrl_exams extends MY_Controller
         $exam_length = $_GET["duration"];
         $exam_start_time = $_GET["start_time"];
         $exam_end_time = $_GET["end_time"];
+        $unlimited_attempts = isset($_GET["unlimited_attempts"]) ? true : false;
+        $max_attempts = (
+          (
+            isset($_GET["max-attempts"]) 
+            && $_GET["max-attempts"] !== ''
+            && $unlimited_attempts === false
+          ) ? (int)$_GET["max-attempts"]
+          : null
+        );
 
         // Start and end times are stored in local time zone of server
         $exam_start = strtotime("$exam_start_date $exam_start_time") + $seconds_offset;
@@ -255,16 +284,13 @@ class Ctrl_exams extends MY_Controller
           'exam_end_time' => $exam_end,
           'exam_length' => $exam_length,
           'exam_id' => $exam_id,
-          'instance_name' => $instance_name
+          'instance_name' => $instance_name,
+          'maximum_attempts' => $max_attempts
         );
-
-
 
         $this->db->insert('exam_active', $data);
 
         redirect("/exams/active_exams");
-
-
       } catch (DataException $e) {
         $this->error_view($e->getMessage(), $this->lang->line('exam_mgmt'));
       }
@@ -312,13 +338,13 @@ class Ctrl_exams extends MY_Controller
         $this->load->model('mod_localize');
 
         $javascripts = array('jstree/jquery.jstree.js',
-                                 'ckeditor/ckeditor.js',
-                                 'ckeditor/adapters/jquery.js',
-                                 'js/editquiz.js');
+          'ckeditor/ckeditor.js',
+          'ckeditor/adapters/jquery.js',
+          'js/editquiz.js');
         // View
         $this->load->view('view_top1', array('title' => $this->lang->line('edit_exam'),
-                                                             'css_list' => array('styles/jstree.css'),
-                                                             'js_list' => $javascripts));
+          'css_list' => array('styles/jstree.css'),
+          'js_list' => $javascripts));
         $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
         $this->load->view('view_top2');
         $this->load->view('view_menu_bar', array('langselect' => false));
@@ -326,17 +352,16 @@ class Ctrl_exams extends MY_Controller
 
         // Main view of the page.
         $center_text = $this->load->view(
-                'view_edit_exam',
-                array(
-                                                                'exam' => $_GET['exam'],
-                                                                'xml' => simplexml_load_string($this->mod_exams->get_exam_by_id($_GET['exam'])->examcode)
-                ),
-                true
-            );
+          'view_edit_exam',
+          array(
+            'exam' => $_GET['exam'],
+            'xml' => simplexml_load_string($this->mod_exams->get_exam_by_id($_GET['exam'])->examcode)
+          ),
+          true
+        );
         $this->load->view('view_main_page', array('left_title' => $this->lang->line('edit_exam'),
-                                                                    'left' => $this->lang->line('edit_exam_description'),
-
-                                                                    'center' => $center_text));
+          'left' => $this->lang->line('edit_exam_description'),
+          'center' => $center_text));
         $this->load->view('view_bottom');
       } catch (DataException $e) {
         $this->error_view($e->getMessage(), $this->lang->line('exam_mgmt'));
@@ -463,18 +488,19 @@ class Ctrl_exams extends MY_Controller
         $this->load->view('view_confirm_dialog');
         $this->load->view('view_alert_dialog');
 
-        $center_text = $this->load->view('view_manage_exams',
-                                          array(
-                                          'allexams' => $allexams,
-                                          'exam_count' => $exam_count,
-                                          'exams_per_page' => $exams_per_page,
-                                          'n_o_c' => $name_owned_classes,
-                                          'offset' => $offset,
-                                          'orderby' => $orderby,
-                                          'page_count' => $page_count,
-                                          'sortorder' => $sortorder
-                                        ),
-                                        true
+        $center_text = $this->load->view(
+          'view_manage_exams',
+          [
+            'allexams' => $allexams,
+            'exam_count' => $exam_count,
+            'exams_per_page' => $exams_per_page,
+            'n_o_c' => $name_owned_classes,
+            'offset' => $offset,
+            'orderby' => $orderby,
+            'page_count' => $page_count,
+            'sortorder' => $sortorder
+          ],
+          true
         );
 
         $this->load->view('view_main_page', array('left_title' => $this->lang->line('exam_mgmt'),
@@ -569,8 +595,11 @@ class Ctrl_exams extends MY_Controller
         $user_id = $this->mod_users->my_id();
         $active_exam_id = $_GET['exam'];
 
-        $query_finished = $this->db->get_where('exam_finished', array('userid' => $user_id, 'activeexamid' => $active_exam_id));
-        if ($query_finished->row() && !$this->mod_users->is_teacher()) {
+        // Check if a student has already attempted the exam the maximum number of times
+        if (
+          $this->mod_exams->user_has_completed_all_attempts_available($user_id, $active_exam_id) 
+          && !$this->mod_users->is_teacher()
+        ) {
           $center_text = $this->load->view(
             'view_exam_done',
             array(),
@@ -578,40 +607,47 @@ class Ctrl_exams extends MY_Controller
           );
         } else {
           $active_exam = $this->mod_exams->get_active_exam($active_exam_id);
-          $exam_id = $active_exam->exam_id;
 
-          // check if there is already an entry for this exam instance and users
-          $query_status = $this->db->get_where('exam_status', array('userid' => $user_id, 'activeexamid' => $active_exam_id));
-          $status_row = $query_status->row();
-          if ($status_row) {
-            // the user already started taking the exam
+          // check if the user already has an attempt in progress
+          $latest_attempt = $this->mod_exams->get_latest_attempt($user_id, $active_exam_id);
+          $completed_exercises = array();
+          if ($latest_attempt->is_done === false) {
+            // the user is in the middle of an attempt
+            $deadline = $latest_attempt->deadline;
 
-            $deadline = $status_row->deadline;
+            if (!$this->mod_users->is_teacher()) 
+              $completed_exercises = $this->mod_exams->get_completed_attempt_exercises($user_id, $latest_attempt->id);
           } else {
-            // the user is starting the exam_mgmt
+            // the user is starting an exam attempt
 
             $now = time();
             // If the user is a teacher the deadline is the exam instance end time
             // otherwise the deadline looks at the exam duration and exam end time
             // and uses whichever comes first.
-            $deadline = $this->mod_users->is_teacher() ? $active_exam->exam_end_time : min($active_exam->exam_end_time, $now + ($active_exam->exam_length * 60));
+            $deadline = ($this->mod_users->is_teacher() 
+              ? $active_exam->exam_end_time 
+              : min($active_exam->exam_end_time, $now + ($active_exam->exam_length * 60))
+            );
 
             $data = array(
               'userid' => $user_id,
               'activeexamid' => $active_exam_id,
+              'attempt_count' => $latest_attempt->attempt_count + 1,
               'start_time' => $now,
               'deadline' => $deadline
             );
 
-            // Add a record to exam_status indicating that the user started
+            // Add a record to exam_attempt indicating that the user started
             // taking the exam. This helps keep track of the deadline.
-            $this->db->insert('exam_status', $data);
+            $insert_success = $this->db->insert('exam_attempt', $data);
+
+            if (!insert_success) {
+              $this->error_view('Unable to start the exam attempt.', 'Please try again.');
+            }
+            $exam_attempt_id = $this->db->insert_id();
           }
 
-          $completed = array();
-          if (!$this->mod_users->is_teacher()) $completed = $this->mod_exams->get_completed_exam_exercises($user_id, $active_exam_id);
-
-          $examcode = $this->mod_exams->get_exam_by_id($exam_id)->examcode;
+          $examcode = $this->mod_exams->get_exam_by_id($active_exam->exam_id)->examcode;
           $xml = simplexml_load_string($examcode);
 
           $exercise_parameters = array();
@@ -638,7 +674,7 @@ class Ctrl_exams extends MY_Controller
               . $this->lang->line('questions');
 
             // Check if the exercise was already completed
-            if (in_array($name, $completed)) {
+            if (in_array($name, $completed_exercises)) {
                 $numberOfExercisesCompleted++;
                 $numberOfQuestionsCompleted += $exercise->numq;
 
@@ -666,7 +702,7 @@ class Ctrl_exams extends MY_Controller
               'view_take_exam',
               array(
                 'deadline' => $deadline,
-                'exam_id' => $active_exam_id,
+                'exam_attempt_id' => $exam_attempt_id,
                 'exercises' => $exercises,
                 'exercise_parameters' => $exercise_parameters,
                 'number_of_exercises_completed' => $numberOfExercisesCompleted,
@@ -778,80 +814,4 @@ class Ctrl_exams extends MY_Controller
             $this->error_view($e->getMessage(), $this->lang->line('exam_mgmt'));
         }
     }
-
-    // public function show_quiz() {
-    //       if (!isset($_GET['quiz'])) {
-    //           $this->select_quiz();
-    //           return;
-    //       }
-    //
-    //       $quiz = $_GET['quiz'];
-    //       $exam_parameters = $_SESSION['exam_parameters'];
-    //       $numq = $exam_parameters[$quiz]['numq'];
-    //
-    //       if ($numq <= 0){
-    //         $numq = 10;
-    //       }
-    //
-    //       $this->show_quiz_common($_GET['quiz'], $numq, $_GET['examid'], $_GET['exercise_lst']);
-    //   }
-    //
-    // // Common code for show_quiz() and show_quiz_sel()
-    // private function show_quiz_common(string $quiz, int $number_of_quizzes, int $examid, string $exercise_lst, array $universe = null) {
-    //   try {
-    //       // MODEL:
-    //       $this->load->model('mod_quizpath');
-    //       $this->load->model('mod_askemdros');
-    //       $this->mod_quizpath->init($quiz, false, true);
-    //
-    //       $this->mod_askemdros->show_quiz($number_of_quizzes, $universe);
-    //       $this->load->model('mod_localize');
-    //
-    //       // VIEW:
-    //       $javascripts = array('js/ol.js');
-    //       if ($this->quiz_data->quizFeatures->useVirtualKeyboard) {
-    //           switch ($this->db_config->dbinfo->charSet) {
-    //             case 'hebrew':
-    //                   $javascripts[] = 'VirtualKeyboard.full.3.7.2/vk_loader.js?vk_layout=IL%20Biblical%20Hebrew%20(SIL)&amp;vk_skin=goldie';
-    //                   break;
-    //
-    //             case 'greek':
-    //                   $javascripts[] = 'VirtualKeyboard.full.3.7.2/vk_loader.js?vk_layout=GR%20Greek%20Polytonic&amp;vk_skin=goldie';
-    //                   break;
-    //
-    //             case 'transliterated_hebrew':
-    //                   // Nothing for now
-    //                   break;
-    //           }
-    //       }
-    //
-    //       $this->load->view('view_top1', array('title' => $this->lang->line('quiz'),
-    //                                            'css_list' => array('styles/selectbox.css'),
-    //                                            'js_list' => $javascripts));
-    //       $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
-    //       $this->load->view('view_top2');
-    //       $this->load->view('view_text_display', array('is_exam' => true,
-    //                                                    'examid' => $examid,
-    //                                                    'exercise_lst' => $exercise_lst,
-    //                                                    'quizid' => $this->quiz_data->quizid,
-    //                                                    'is_quiz' => true,
-    //                                                    'mql_list' => isset($this->mql) ? $this->mql->mql_list : '',
-    //                                                    'useTooltip_str' => $this->mod_askemdros->use_tooltip ? 'true' : 'false',
-    //                                                    'quizData_json' => $this->mod_askemdros->quiz_data_json,
-    //                                                    'dbinfo_json' => $this->mod_askemdros->dbinfo_json,
-    //                                                    'dictionaries_json' => $this->mod_askemdros->dictionaries_json,
-    //                                                    'l10n_json' => $this->mod_askemdros->l10n_json,
-    //                                                    'l10n_js_json' => $this->mod_localize->get_json(),
-    //                                                    'typeinfo_json' => $this->mod_askemdros->typeinfo_json,
-    //                                                    'is_logged_in' => $this->mod_users->is_logged_in()));
-    //   }
-    //   catch (DataException $e) {
-    //       $this->error_view($e->getMessage(), $this->lang->line('quiz'));
-    //   }
-    // }
-
-    function submit_exam_quiz() {
-
-    }
-
 }

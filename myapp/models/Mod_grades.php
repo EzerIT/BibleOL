@@ -311,24 +311,6 @@ class Mod_grades extends CI_Model {
         return $templids;
     }
 
-    // //Get Availiable exams for the class
-    // public function get_exams_for_class(int $classid) {
-    //   // Build a query
-    //   $query = $this->db
-    //       ->select('instance_name,bol_exam_active.id')
-    //       ->from('exam_results')
-    //       ->join('exam_active','activeexamid=exam_active.exam_id')
-    //       ->join('exam','exam_active.exam_id=exam.id')
-    //       ->where('exam_active.class_id',$classid)
-    //       ->get();
-    //
-    //   $exams = array(); // This is used as a set
-    //   foreach ($query->result() as $row) {
-    //     $exams[] = array("id"=>$row->id, "name"=>$row->instance_name);
-    //   }
-    //   return $exams;
-    // }
-
     //Get Availiable exams for the class
     public function get_exams_for_class(int $classid) {
       // Build a query
@@ -493,18 +475,19 @@ class Mod_grades extends CI_Model {
 
     // Find all user IDs and exam IDs that match the specified exam activeexamid
     // The result is sorted by user ID
-    public function get_users_and_exam_results(string $activeexamid) {
+    public function get_users_and_exam_results(string $active_exam_id) {
         $query = $this->db
-            ->select('activeexamid id,userid')
-            ->distinct()
-            ->where('activeexamid', $activeexamid)
-            ->get('exam_results');
+            ->select('r.attempt_id,a.userid')
+            ->from('exam_results r')
+            ->join('exam_attempt a', 'r.attempt_id=a.id')
+            ->where('a.activeexamid', $active_exam_id)
+            ->get();
 
         $users_exam = array();
         foreach ($query->result() as $row) {
             if (!isset($users_exam[$row->userid]))
                 $users_exam[$row->userid] = array();
-            $users_exam[$row->userid][] = (int)$row->id;
+            $users_exam[$row->userid][] = (int)$row->attempt_id;
         }
 
         ksort($users_exam); // Sort by user ID

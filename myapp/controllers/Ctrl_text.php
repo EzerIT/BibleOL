@@ -269,7 +269,7 @@ class Ctrl_text extends MY_Controller {
         else
             $number_of_quizzes = intval($_GET['count']);
 
-        if (array_key_exists('examid', $_GET)) {
+        if (array_key_exists('exam_attempt_id', $_GET)) {
           $quiz = $_GET['quiz'];
           $exam_parameters = $_SESSION['exam_parameters'];
           $numq = $exam_parameters[str_replace("+", "%2B", $quiz)]['numq'];
@@ -277,7 +277,7 @@ class Ctrl_text extends MY_Controller {
           if ($numq <= 0) {
             $numq = 10;
           }
-          $this->show_quiz_common($_GET['quiz'], $numq, $universe = null, $examid=$_GET['examid'], $exercise_lst=$_GET['exercise_lst']);
+          $this->show_quiz_common($_GET['quiz'], $numq, $universe = null, $exam_attempt_id=$_GET['exam_attempt_id'], $exercise_lst=$_GET['exercise_lst']);
 
         } else {
           $this->show_quiz_common($_GET['quiz'], $number_of_quizzes);
@@ -329,7 +329,7 @@ class Ctrl_text extends MY_Controller {
     }
 
     // Common code for show_quiz() and show_quiz_sel()
-	private function show_quiz_common(string $quiz, int $number_of_quizzes, array $universe = null, int $examid = null, string $exercise_lst = null) {
+	private function show_quiz_common(string $quiz, int $number_of_quizzes, array $universe = null, int $exam_attempt_id = null, string $exercise_lst = null) {
         try {
             // MODEL:
             $this->load->model('mod_quizpath');
@@ -393,13 +393,13 @@ class Ctrl_text extends MY_Controller {
             );
 
             $exam_data = array(
-              'is_exam' => $examid !== null,
-              'examid' => $examid,
+              'is_exam' => $exam_attempt_id !== null,
+              'exam_attempt_id' => $exam_attempt_id,
               'exercise_lst' => $exercise_lst,
               'quizid' => $this->quiz_data->quizid,
             );
 
-            if ($examid) {
+            if ($exam_attempt_id) {
               $display_data = array_merge($display_data, $exam_data);
             }
 
@@ -409,11 +409,11 @@ class Ctrl_text extends MY_Controller {
                                                  'js_list' => $javascripts));
             $this->load->view('view_font_css', array('fonts' => $this->mod_askemdros->font_selection));
             $this->load->view('view_top2');
-            if ($examid === null) {
+            if ($exam_attempt_id === null) {
               $this->load->view('view_menu_bar', array('langselect' => false));
             }
             $this->load->view('view_text_display', $display_data);
-            if ($examid === null) {
+            if ($exam_attempt_id === null) {
               $this->load->view('view_bottom');
             }
         }

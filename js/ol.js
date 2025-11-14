@@ -2990,12 +2990,12 @@ var Quiz = (function () {
                 if (!_this.exam_mode)
                     window.location.replace(site_url + 'text/select_quiz');
                 else {
-                    $.get(site_url + 'statistics/update_exam_quiz_stat?examid=' + $('#exam_id').html() + '&quizid=' + $('#quiz_id').html() + '&exercise_lst=' + $('#exercise_lst').html())
+                    $.get(site_url + 'statistics/update_exam_quiz_stat?exam_attempt_id=' + $('#exam_attempt_id').html() + '&quizid=' + $('#quiz_id').html() + '&exercise_lst=' + $('#exercise_lst').html())
                         .done(function () {
                         if ($('#exercise_lst').html()) {
                             var exercise_lst = $('#exercise_lst').html().split("~");
                             var next_quiz = exercise_lst.shift();
-                            window.location.replace(site_url + 'text/show_quiz?quiz=' + next_quiz + '&count=10&examid=' + $('#exam_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
+                            window.location.replace(site_url + 'text/show_quiz?quiz=' + next_quiz + '&count=10&exam_attempt_id=' + $('#exam_attempt_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
                         }
                         else
                             window.location.replace(site_url + 'exams/exam_done');
@@ -3075,7 +3075,7 @@ $(function () {
             $('div#progressbar').hide();
         else
             $('progress#progress').hide();
-        quiz = new Quiz(quizdata.quizid, $('#exam_id').length > 0);
+        quiz = new Quiz(quizdata.quizid, $('#exam_attempt_id').length > 0);
         quiz.nextQuestion(true);
         $('#gramtabs .selectbutton input:enabled:checked').trigger('change', 'manual');
     }

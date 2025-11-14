@@ -84,6 +84,10 @@ $comment['finish'] = "";
 $format['finish'] = "";
 $use_textarea['finish'] = false;
 
+$comment['future_exams'] = "";
+$format['future_exams'] = "";
+$use_textarea['future_exams'] = false;
+
 $comment['instance_name'] = "";
 $format['instance_name'] = "";
 $use_textarea['instance_name'] = false;

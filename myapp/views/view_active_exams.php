@@ -1,21 +1,14 @@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="active-tab" data-toggle="tab" href="#active_exams" role="tab" aria-controls="home" aria-selected="true">
-      Active
+      <?= $this->lang->line('active_exams') ?>
     </a>
   </li>
   <li class="nav-item">
     <a class="nav-link" id="future-tab" data-toggle="tab" href="#future_exams" role="tab" aria-controls="profile" aria-selected="false">
-      Future
+      <?= $this->lang->line('future_exams') ?>
     </a>
   </li>
-  <!--
-  <li class="nav-item">
-    <a class="nav-link" id="past-tab" data-toggle="tab" href="#past_exams" role="tab" aria-controls="contact" aria-selected="false">
-      Past
-    </a>
-  </li>
--->
 </ul>
 
 <div class="tab-content" id="myTabContent">
@@ -29,20 +22,22 @@
           <th><?= $this->lang->line('start_time') ?></th>
           <th><?= $this->lang->line('end_time') ?></th>
           <th><?= $this->lang->line('duration') ?></th>
+          <th><?= $this->lang->line('attempts_completed') ?></th>
           <th><?= $this->lang->line('user_operations') ?></th>
         </tr>
-        <?php foreach ($active_exams_list as $exam): ?>
+        <?php foreach ($active_exams_list as $exam_instance): ?>
           <tr>
-            <td class="leftalign"><?= $class_names[$exam->class_id] ?></td>
-            <td class="leftalign"><?= $instructors[$exam->class_id] ?></td>
-            <td class="leftalign"><?= $exam->instance_name ?></td>
-            <td class="leftalign time"><?= $exam->exam_start_time ?></td>
-            <td class="leftalign time"><?= $exam->exam_end_time ?></td>
-            <td class="leftalign"><?= $exam->exam_length ?></td>
+            <td class="leftalign"><?= $class_names[$exam_instance->class_id] ?></td>
+            <td class="leftalign"><?= $instructors[$exam_instance->class_id] ?></td>
+            <td class="leftalign"><?= $exam_instance->instance_name ?></td>
+            <td class="leftalign time"><?= $exam_instance->exam_start_time ?></td>
+            <td class="leftalign time"><?= $exam_instance->exam_end_time ?></td>
+            <td class="leftalign"><?= $exam_instance->exam_length ?></td>
+            <td class="leftalign"><?= $exam_instance->attempts_completed ?> / <?= $exam_instance->maximum_attempts ?? '&infin;' ?></td>
             <td class="leftalign">
-              <a class="badge badge-primary" href="/exams/take_exam?exam=<?= $exam->id ?>">Take Exam</a>
+              <a class="badge badge-primary" href="/exams/take_exam?exam=<?= $exam_instance->id ?>"><?= $exam_instance->in_progress ? 'Continue' : 'Take' ?> Exam</a>
               <?php if ($this->mod_users->is_teacher()): ?>
-                <a class="badge badge-danger" href="#" onclick="dltexam(<?= $exam->id ?>, '<?= $exam->instance_name ?>');"><?= $this->lang->line('delete_exam_instance') ?></a>
+                <a class="badge badge-danger" href="#" onclick="dltexam(<?= $exam_instance->id ?>, '<?= $exam_instance->instance_name ?>');"><?= $this->lang->line('delete_exam_instance') ?></a>
               <?php endif; ?>
             </td>
           </tr>
@@ -63,17 +58,17 @@
           <th><?= $this->lang->line('duration') ?></th>
           <th><?= $this->lang->line('user_operations') ?></th>
         </tr>
-        <?php foreach ($future_exams_list as $exam): ?>
+        <?php foreach ($future_exams_list as $exam_instance): ?>
           <tr>
-            <td class="leftalign"><?= $class_names[$exam->class_id] ?></td>
-            <td class="leftalign"><?= $instructors[$exam->class_id] ?></td>
-            <td class="leftalign"><?= $exam->instance_name ?></td>
-            <td class="leftalign time"><?= $exam->exam_start_time ?></td>
-            <td class="leftalign time"><?= $exam->exam_end_time ?></td>
-            <td class="leftalign"><?= $exam->exam_length ?></td>
+            <td class="leftalign"><?= $class_names[$exam_instance->class_id] ?></td>
+            <td class="leftalign"><?= $instructors[$exam_instance->class_id] ?></td>
+            <td class="leftalign"><?= $exam_instance->instance_name ?></td>
+            <td class="leftalign time"><?= $exam_instance->exam_start_time ?></td>
+            <td class="leftalign time"><?= $exam_instance->exam_end_time ?></td>
+            <td class="leftalign"><?= $exam_instance->exam_length ?></td>
             <td class="leftalign">
               <?php if ($this->mod_users->is_teacher()): ?>
-                <a class="badge badge-danger" href="#" onclick="dltexam(<?= $exam->id ?>, '<?= $exam->instance_name ?>');"><?= $this->lang->line('delete_exam_instance') ?></a>
+                <a class="badge badge-danger" href="#" onclick="dltexam(<?= $exam_instance->id ?>, '<?= $exam_instance->instance_name ?>');"><?= $this->lang->line('delete_exam_instance') ?></a>
               <?php endif; ?>
             </td>
           </tr>
@@ -81,31 +76,6 @@
       </table>
     </div>
   </div>
-
-  <!-- <div class="tab-pane fade" id="past_exams" role="tabpanel" aria-labelledby="contact-tab">
-    <div class="table-responsive">
-      <table class="type2 table table-striped">
-        <tr>
-          <th><?= $this->lang->line('class_name') ?></th>
-          <th><?= $this->lang->line('exam_name') ?></th>
-          <th><?= $this->lang->line('start_time') ?></th>
-          <th><?= $this->lang->line('duration') ?></th>
-          <th><?= $this->lang->line('user_operations') ?></th>
-        </tr>
-        <?php foreach ($past_exams_list as $exam): ?>
-          <tr>
-            <td class="leftalign"><?= $exam->class_id ?></td>
-            <td class="leftalign"><?= $exam->instance_name ?></td>
-            <td class="leftalign"><?= date("m-d-Y H:i", $exam->exam_end_time) ?></td>
-            <td class="leftalign"><?= $exam->exam_length ?></td>
-            <td class="leftalign">
-              <a class="badge badge-primary" href="#">Hi</a>
-            </td>
-          </tr>
-        <?php endforeach; ?>
-      </table>
-    </div>
-  </div> -->
 </div>
 
 

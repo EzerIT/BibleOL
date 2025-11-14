@@ -578,24 +578,10 @@ CREATE TABLE `bol_exam_active` (
   `exam_length` int DEFAULT NULL,
   `exam_id` int DEFAULT NULL,
   `instance_name` varchar(45) NOT NULL,
+  `maximum_attempts` int DEFAULT 1,
   PRIMARY KEY (`id`),
   KEY `exam_id` (`exam_id`),
   CONSTRAINT `bol_exam_active_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `bol_exam` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
-
-
-
-
-
-DROP TABLE IF EXISTS `bol_exam_finished`;
-CREATE TABLE `bol_exam_finished` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `userid` int NOT NULL,
-  `activeexamid` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `activeexamid` (`activeexamid`),
-  CONSTRAINT `bol_exam_finished_ibfk_1` FOREIGN KEY (`activeexamid`) REFERENCES `bol_exam_active` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 
@@ -620,16 +606,20 @@ CREATE TABLE `bol_exam_results` (
 
 
 
-DROP TABLE IF EXISTS `bol_exam_status`;
-CREATE TABLE `bol_exam_status` (
+DROP TABLE IF EXISTS `bol_exam_attempt`;
+CREATE TABLE `bol_exam_attempt` (
   `id` int NOT NULL AUTO_INCREMENT,
   `userid` int NOT NULL,
   `activeexamid` int NOT NULL,
+  `attempt_count` int NOT NULL DEFAULT 1,
   `start_time` int NOT NULL,
   `deadline` int NOT NULL COMMENT 'Time that the exam will not be accessible anymore. This will equal either the end time of the exam or the start_time + duration, whichever happens first.',
+  `is_done` boolean NOT NULL DEFAULT FALSE,
   PRIMARY KEY (`id`),
   KEY `activeexamid` (`activeexamid`),
-  CONSTRAINT `bol_exam_status_ibfk_1` FOREIGN KEY (`activeexamid`) REFERENCES `bol_exam_active` (`id`) ON DELETE CASCADE
+  CONSTRAINT `bol_exam_attempt_ibfk_1` FOREIGN KEY (`activeexamid`) REFERENCES `bol_exam_active` (`id`) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT `bol_exam_attempt_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `bol_user` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `uc_user_exam_instance_attempt_count` UNIQUE (user_id, activeexamid, attempt_count)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 
