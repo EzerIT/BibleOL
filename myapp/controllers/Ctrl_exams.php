@@ -614,7 +614,10 @@ class Ctrl_exams extends MY_Controller
           // check if the user already has an attempt in progress
           $latest_attempt = $this->mod_exams->get_latest_attempt($user_id, $active_exam_id);
           $completed_exercises = array();
-          if ($latest_attempt->is_done === false) {
+          if (
+            !is_null($latest_attempt)
+            && $latest_attempt->is_done === false
+          ) {
             // the user is in the middle of an attempt
             $deadline = $latest_attempt->deadline;
 
@@ -644,7 +647,7 @@ class Ctrl_exams extends MY_Controller
             // taking the exam. This helps keep track of the deadline.
             $insert_success = $this->db->insert('exam_attempt', $data);
 
-            if (!insert_success) {
+            if (!$insert_success) {
               $this->error_view('Unable to start the exam attempt.', 'Please try again.');
             }
             $exam_attempt_id = $this->db->insert_id();
