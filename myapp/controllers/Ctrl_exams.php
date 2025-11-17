@@ -613,6 +613,10 @@ class Ctrl_exams extends MY_Controller
 
           // check if the user already has an attempt in progress
           $latest_attempt = $this->mod_exams->get_latest_attempt($user_id, $active_exam_id);
+          $latest_attempt_count = 0;
+          if (!is_null($latest_attempt)) {
+            $latest_attempt_count = $latest_attempt->attempt_count;
+          }
           $completed_exercises = array();
           if (
             !is_null($latest_attempt)
@@ -638,7 +642,7 @@ class Ctrl_exams extends MY_Controller
             $data = array(
               'userid' => $user_id,
               'activeexamid' => $active_exam_id,
-              'attempt_count' => $latest_attempt->attempt_count + 1,
+              'attempt_count' => $latest_attempt_count + 1,
               'start_time' => $now,
               'deadline' => $deadline
             );
