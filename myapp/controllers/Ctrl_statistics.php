@@ -78,8 +78,8 @@ class Ctrl_statistics extends MY_Controller {
 
       if (!$this->input->get('exercise_lst')) {
         $user_id = $this->mod_users->my_id();
-        $active_exam_id = $this->input->get('exam_attempt_id');
-        $this->mod_exams->set_exam_is_done($user_id, $active_exam_id);
+        $exam_attempt_id = $this->input->get('exam_attempt_id');
+        $this->mod_exams->set_exam_attempt_is_done($exam_attempt_id);
       }
     }
 
