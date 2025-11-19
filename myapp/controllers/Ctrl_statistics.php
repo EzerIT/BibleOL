@@ -70,7 +70,6 @@ class Ctrl_statistics extends MY_Controller {
       $this->load->model('mod_exams');
 
       $data = array(
-        'userid' => $this->mod_users->my_id(),
         'attempt_id' => $this->input->get('exam_attempt_id'),
         'quizid' => $this->input->get('quizid'),
         'quiztemplid' => $this->mod_exams->get_template_id($this->input->get('quizid')),
