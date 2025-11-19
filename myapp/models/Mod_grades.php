@@ -158,13 +158,15 @@ class Mod_grades extends CI_Model {
             if (isset($req_feat['correct_answer'])) { // Check that the question was not empty
                 $data = array();
                 foreach ($req_feat['correct_answer'] as $val) {
-                    $data[] = array('questid' => $questid,
-                                    'qono' => $qono+1,
-                                    'name' => $req_feat['names'][$featno],
-                                    'value' => $val,
-                                    'answer' => $req_feat['users_answer'][$ix],
-                                    'correct' => $req_feat['users_answer_was_correct'][$ix]=='true',
-                                    'userid' => $this->mod_users->my_id());
+                    $data[] = array(
+                        'questid' => $questid,
+                        'qono' => $qono+1,
+                        'name' => $req_feat['names'][$featno],
+                        'value' => $val,
+                        'answer' => $req_feat['users_answer'][$ix],
+                        'correct' => $req_feat['users_answer_was_correct'][$ix]=='true',
+                        'userid' => $this->mod_users->my_id()
+                    );
                     ++$ix;
                     if (++$featno === $maxFeatno) {
                         // Next question object
@@ -178,7 +180,6 @@ class Mod_grades extends CI_Model {
 
         /* Set end time and grading for quiz (MRCN: and the total number of questions) */
         // Get the total number of features for this quiz
-        //$tot_features=$this->quizRequestedFeatures($quizid);
         // Write the results to the DB
         $query = $this->db
             ->from('sta_question as sq')
@@ -577,19 +578,18 @@ class Mod_grades extends CI_Model {
         // Get results per quiz
         if ($calculate_percentages) {
           $query = $this->db
-          ->from('sta_quiz q')
-          //
-          ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
-          ->join('sta_question quest','quest.quizid=q.id')
-          ->join('sta_requestfeature rf','quest.id=rf.questid')
-          ->where('rf.userid',$uid);
+            ->from('sta_quiz q')
+            ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
+            ->join('sta_question quest','quest.quizid=q.id')
+            ->join('sta_requestfeature rf','quest.id=rf.questid')
+            ->where('rf.userid',$uid);
         } else {
           $query = $this->db
-          ->from('sta_quiz q')
-          ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
-          ->join('sta_question quest','quest.quizid=q.id')
-          ->join('sta_requestfeature rf','quest.id=rf.questid')
-          ->where('rf.userid',$uid);
+            ->from('sta_quiz q')
+            ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
+            ->join('sta_question quest','quest.quizid=q.id')
+            ->join('sta_requestfeature rf','quest.id=rf.questid')
+            ->where('rf.userid',$uid);
         }
 
         if (!$nongraded)
@@ -623,12 +623,14 @@ class Mod_grades extends CI_Model {
             $day = Statistics_timeperiod::round_to_noon((int)$row->start);
             $day = $row->start;
             if (!isset($perdate[$day]))
-                $perdate[$day] = array('duration' => 0,
-                                             'correct' => 0,
-                                             'userid' => $row->userid,
-                                             'quizzid' => $row->id,
-                                             'count' => 0,
-                                             'original_count' => 0);
+                $perdate[$day] = array(
+                    'duration' => 0,
+                    'correct' => 0,
+                    'userid' => $row->userid,
+                    'quizzid' => $row->id,
+                    'count' => 0,
+                    'original_count' => 0
+                );
             $perdate[$day]['duration'] += $row->duration;
             $perdate[$day]['correct'] += $row->correct;
             $perdate[$day]['count'] += $row->cnt;
@@ -645,36 +647,32 @@ class Mod_grades extends CI_Model {
         return $perdate;
     }
 
-    public function get_score_by_user_active_exam(int $uid,array $examids,/*int $period_start,int $period_end,*/ bool $nongraded, $calculate_percentages = false) {
+    public function get_score_by_user_active_exam(
+        int $uid,
+        array $examids,
+        bool $nongraded, 
+        $calculate_percentages = false
+    ) {
         if (empty($examids))
             return array();
 
         // Get results per exam, per quiz
-        // if ($calculate_percentages) {
-          $query = $this->db
-          ->from('exam_results er')
-          //
-          ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`, ex.examcode',false)
-          ->join('exam_active exa','exa.id=er.activeexamid')
-          ->join('exam ex','exa.exam_id=ex.id')
-          ->join('sta_quiz q','q.id=er.quizid')
-          ->join('sta_question quest','quest.quizid=q.id')
-          ->join('sta_requestfeature rf','quest.id=rf.questid')
-          ->where('rf.userid',$uid);
-        // } else {
-        //   $query = $this->db
-        //   ->from('sta_quiz q')
-        //   ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
-        //   ->join('sta_question quest','quest.quizid=q.id')
-        //   ->join('sta_requestfeature rf','quest.id=rf.questid')
-        //   ->where('rf.userid',$uid);
-        // }
+        $query = $this->db
+            ->from('exam_results er')
+            ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`, ex.examcode',false)
+            ->join('exam_attempt ea', 'er.attempt_id=ea.id')
+            ->join('exam_active exa','exa.id=ea.activeexamid')
+            ->join('exam ex','exa.exam_id=ex.id')
+            ->join('sta_quiz q','q.id=er.quizid')
+            ->join('sta_question quest','quest.quizid=q.id')
+            ->join('sta_requestfeature rf','quest.id=rf.questid')
+            ->where('rf.userid',$uid);
 
         if (!$nongraded)
             $query = $query->where('(grading is null OR grading=1)');
 
         $query = $query
-            ->where_in('er.activeexamid',$examids)
+            ->where_in('ea.activeexamid',$examids)
             // ->where('q.start >=',$period_start)
             // ->where('q.start <=',$period_end)
             ->where('q.end IS NOT NULL')
@@ -717,14 +715,17 @@ class Mod_grades extends CI_Model {
             $ex_count += 1;
 
             // sets the defaults to 0
-            if (!isset($perdate[$day]))
-                $perdate[$day] = array('duration' => 0,
-                                             'correct' => 0,
-                                             'count' => 0,
-                                             'exercise_name' => '',
-                                             'quizzid' => $row->id,
-                                             'userid' => $row->userid,
-                                             'weight' => 0);
+            if (!isset($perdate[$day])) {
+                $perdate[$day] = array(
+                    'duration' => 0,
+                    'correct' => 0,
+                    'count' => 0,
+                    'exercise_name' => '',
+                    'quizzid' => $row->id,
+                    'userid' => $row->userid,
+                    'weight' => 0
+                );
+            }
             $perdate[$day]['duration'] += $row->duration;
             $perdate[$day]['correct'] += $row->correct;
             $perdate[$day]['count'] += $row->cnt;
@@ -759,7 +760,6 @@ class Mod_grades extends CI_Model {
 
         $query = $this->db
             ->from('sta_quiz q')
-            // ->select('rf.name rfname,sum(`rf`.`correct`)/q.tot_questions*100 `pct`')
             ->select('rf.name rfname,sum(`rf`.`correct`)/count(*)*100 `pct`')
             ->join('sta_question quest','quest.quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
@@ -775,7 +775,6 @@ class Mod_grades extends CI_Model {
                 ->where('q.start <=',$period_end)
                 ->where('end IS NOT NULL')
                 ->where('valid',1)
-                // ->group_by('q.id,rfname')
                 ->group_by('rfname')
                 ->get();
         } else {
@@ -787,9 +786,6 @@ class Mod_grades extends CI_Model {
                   ->where('end IS NOT NULL')
                   ->where('valid',1)
                   ->group_by('rfname')
-                  // ->group_by('q.id, rfname')
-                  // // ->group_by('q.id, rfname')
-                  // ->order_by('pct desc')
                   ->get();
         }
 
@@ -798,17 +794,22 @@ class Mod_grades extends CI_Model {
 
 
     // Calculate rates by exam results
-    public function get_features_by_date_exam_result(int $uid,array $exams,/* int $period_start,int $period_end,*/ bool $nongraded, bool $highest_score_first = false) {
+    public function get_features_by_date_exam_result(
+        int $uid,
+        array $exams,
+        bool $nongraded, 
+        bool $highest_score_first = false
+    ) {
         if (empty($exams))
             return array();
 
         $query = $this->db
             ->from('exam_results er')
-            // ->select('rf.name rfname,sum(`rf`.`correct`)/q.tot_questions*100 `pct`')
             ->select('rf.name rfname,sum(`rf`.`correct`)/count(*)*100 `pct`')
             ->join('sta_quiz q','q.id=er.quizid')
             ->join('sta_question quest','quest.quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
+            ->join('exam_attempt ea', 'er.attempt_id=ea.id')
             ->where('rf.userid',$uid);
 
         if (!$nongraded)
@@ -817,28 +818,20 @@ class Mod_grades extends CI_Model {
         //TODO: To make the following if statement work as intended
 
         if (!$highest_score_first) {
-          $query = $query
-                ->where_in('er.activeexamid',$exams)
-                // ->where('q.start >=',$period_start)
-                // ->where('q.start <=',$period_end)
+            $query = $query
+                ->where_in('ea.activeexamid',$exams)
                 ->where('end IS NOT NULL')
                 ->where('valid',1)
-                // ->group_by('q.id,rfname')
                 ->group_by('rfname')
                 ->get();
         } else {
-          // MRCN
-          $query = $query
-                  ->where_in('er.activeexamid',$exams)
-                  // ->where('q.start >=',$period_start)
-                  // ->where('q.start <=',$period_end)
-                  ->where('end IS NOT NULL')
-                  ->where('valid',1)
-                  ->group_by('rfname')
-                  // ->group_by('q.id, rfname')
-                  // // ->group_by('q.id, rfname')
-                  // ->order_by('pct desc')
-                  ->get();
+            // MRCN
+            $query = $query
+                ->where_in('ea.activeexamid',$exams)
+                ->where('end IS NOT NULL')
+                ->where('valid',1)
+                ->group_by('rfname')
+                ->get();
         }
 
         return $query->result();
@@ -847,20 +840,9 @@ class Mod_grades extends CI_Model {
 
     // Get answers for quizzes by quizzid
     public function get_quizz_detail(int $uid,int $quizzid) {
-//       $this->db->select('distinct value,  qono, questid')->from('sta_displayfeature');
-//       $subQ = $this->db->get_compiled_select();
-//       // $selectQ = "SELECT q.*, rf.qono, rf.answer, rf.correct,rf.name,rf.value, df.value disp_value FROM sta_quiz q
-//       $selectQ = "SELECT * FROM sta_quiz q
-// join sta_question quest ON quest.quizid=q.id
-// join sta_requestfeature rf ON quest.id=rf.questid
-// join (SELECT distinct value,  qono, questid FROM sta_displayfeature) df ON rf.questid=df.questid
-// where q.id=$quizzid";
         if (empty($quizzid))
             return array();
 
-        // $query = $this->db
-        //     ->select($selectQ)
-        //     ->get();
         $query = $this->db
             ->from('sta_quiz as q')
             ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer, rf.qono, sq.txt, GROUP_CONCAT(df.name) disp_type, GROUP_CONCAT(df.value) disp_value')
@@ -870,12 +852,6 @@ class Mod_grades extends CI_Model {
             ->where('sq.quizid',$quizzid)
             ->group_by('rf.id, rf.questid, rf.qono')
             ->get();
-        // $query = $this->db
-        //     ->from('sta_question as sq')
-        //     ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer, rf.qono, sq.txt')
-        //     ->join('sta_requestfeature as rf','rf.questid = sq.id')
-        //     ->where('sq.quizid',$quizzid)
-        //     ->get();
 
         return $query->result();
     }
