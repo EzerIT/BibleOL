@@ -1446,7 +1446,7 @@ var Answer = (function () {
         this.c = comp.getComp();
         this.cType = comp.getCompType();
         this.answerSws = answerSws;
-        this.answerString = answerString.normalize('NFC');
+        this.answerString = this.decodeHtml(answerString).normalize('NFC');
         this.matchRegexp = matchRegexp;
         if (this.cType == COMPONENT_TYPE.checkBoxes) {
             if (this.answerString[0] == "(") {
@@ -1458,6 +1458,11 @@ var Answer = (function () {
             }
         }
     }
+    Answer.prototype.decodeHtml = function (html) {
+        var txt = document.createElement('textarea');
+        txt.innerHTML = html;
+        return txt.value;
+    };
     Answer.prototype.showIt = function () {
         switch (this.cType) {
             case COMPONENT_TYPE.textField:
