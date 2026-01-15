@@ -158,7 +158,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         let fpan2 : JQuery = $('<div style="display:none; padding-top:10px;" id="fpan2"></div>');
         let accordion2 : JQuery = $('<div id="accordion2" class="accordion"></div>');
         let card : JQuery = $('<div class="card"></div>');
-        let card_header : JQuery = $('<div id="cardhead" class="card-header"></div>');
+        let card_header : JQuery = $('<div id="cardhead_0" class="card-header"></div>');
         let accbody : JQuery = $('<div id="accbody2" class="" parent=""></div>');
         let card_body : JQuery = $('<div id="card-body-original" class="card-body"></div>');
 
@@ -244,6 +244,37 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         accordion2.append(card);
         fpan2.append(accordion2);
         where.append(fpan2);
+
+        let all_books = ["Matthew", "Mark", "Luke", "John"];
+        for(let i = 0; i < all_books.length; i++) {
+            let book_name = all_books[i];
+            let book_cell = $(`<tr class="bookrow"></tr>`);
+            let book_data = $(`<td id=row_book_0></td>`);
+            let book_button = $(`<button data-toggle="collapse" data-target="" id=book_${i} class="btn text-left"><b>${book_name}</b><span id="actual_count0"></span></button>`);
+            book_data.append(book_button);
+            book_cell.append(book_data);
+
+            if(i == 0) {
+                // add the first book section to the accordion
+                
+                $('#cardhead_0').append(book_cell); 
+            }
+            else {
+                // create a new card body and header
+                let card : JQuery = $('<div class="card"></div>');
+                let card_header : JQuery = $(`<div id="cardhead_${i}" class="card-header"></div>`);
+                card.append(card_header);
+                accbody.append(card_body);
+                card.append(accbody);
+                accordion2.append(card);
+                fpan2.append(accordion2);
+                
+                card_header.append(book_cell);
+
+            }
+        }
+
+
     }
 
     //------------------------------------------------------------------------------------------
