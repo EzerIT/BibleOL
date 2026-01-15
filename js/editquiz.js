@@ -1204,8 +1204,7 @@ var PanelTemplSentenceSelector = (function (_super) {
         var accordion2 = $('<div id="accordion2" class="accordion"></div>');
         var card = $('<div class="card"></div>');
         var card_header = $('<div id="cardhead_0" class="card-header"></div>');
-        var accbody = $('<div id="accbody2" class="" parent=""></div>');
-        var card_body = $('<div id="card-body-original" class="card-body"></div>');
+        var card_body = $("<div id=\"card-body_0\" class=\"card-body\"></div>");
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
         cell.append(this.cbUseForQo, '&nbsp;', this.cbUseForQoLabel);
@@ -1257,32 +1256,32 @@ var PanelTemplSentenceSelector = (function (_super) {
         row.append(cell);
         table.append(row);
         where.append(table);
-        card.append(card_header);
-        accbody.append(card_body);
-        card.append(accbody);
-        accordion2.append(card);
-        fpan2.append(accordion2);
-        where.append(fpan2);
         var all_books = ["Matthew", "Mark", "Luke", "John"];
         for (var i = 0; i < all_books.length; i++) {
             var book_name = all_books[i];
-            var book_cell = $("<tr class=\"bookrow\"></tr>");
-            var book_data = $("<td id=row_book_0></td>");
-            var book_button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\"><b>").concat(book_name, "</b><span id=\"actual_count0\"></span></button>"));
+            var book_cell = $("<tr class=\"bookrow_".concat(i, "\"></tr>"));
+            var book_data = $("<td id=row_book_".concat(i, "></td>"));
+            var book_button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\"><b>").concat(book_name, "</b><span></span></button>"));
             book_data.append(book_button);
             book_cell.append(book_data);
             if (i == 0) {
+                card.append(card_header);
+                card.append(card_body);
+                accordion2.append(card);
+                fpan2.append(accordion2);
+                where.append(fpan2);
                 $('#cardhead_0').append(book_cell);
             }
             else {
-                var card_1 = $('<div class="card"></div>');
-                var card_header_1 = $("<div id=\"cardhead_".concat(i, "\" class=\"card-header\"></div>"));
-                card_1.append(card_header_1);
-                accbody.append(card_body);
-                card_1.append(accbody);
-                accordion2.append(card_1);
+                var new_card = $('<div class="card"></div>');
+                var new_card_header = $("<div id=\"cardhead_".concat(i, "\" class=\"card-header\"></div>"));
+                var new_card_body = $("<div id=\"card-body_".concat(i, "\" class=\"card-body\"></div>"));
+                new_card_body.hide();
+                new_card.append(new_card_header);
+                new_card.append(new_card_body);
+                accordion2.append(new_card);
                 fpan2.append(accordion2);
-                card_header_1.append(book_cell);
+                new_card_header.append(book_cell);
             }
         }
     };
