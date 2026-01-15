@@ -156,10 +156,10 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         let row   : JQuery;
         let cell  : JQuery;
         let fpan2 : JQuery = $('<div style="display:none; padding-top:10px;" id="fpan2"></div>');
-        let accordion2 : JQuery = $('<div id="accordion2" class="accordion"></div>');
-        let card : JQuery = $('<div class="card"></div>');
-        let card_header : JQuery = $('<div id="cardhead_0" class="card-header"></div>');
-        let card_body : JQuery = $(`<div id="card-body_0" class="card-body"></div>`);
+        //let accordion2 : JQuery = $('<div id="accordion2" class="accordion"></div>');
+        //let card : JQuery = $('<div class="card"></div>');
+        //let card_header : JQuery = $('<div id="cardhead_0" class="card-header"></div>');
+        //let card_body : JQuery = $(`<div id="card-body_0" class="card-body"></div>`);
 
 
         // 1st row: Contains the 'Use for sentence unit selection' checkbox
@@ -235,8 +235,8 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         table.append(row);
         
         where.append(table);
-        
-
+        where.append(fpan2);
+        /*
         let all_books = ["Matthew", "Mark", "Luke", "John"];
         for(let i = 0; i < all_books.length; i++) {
             let book_name = all_books[i];
@@ -271,6 +271,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
 
             }
         }
+        */
 
 
     }
