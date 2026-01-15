@@ -661,6 +661,7 @@ var PanelTemplMql = (function () {
             _this.updateMql();
         });
         this.clear = $('<button id="clear_button" type="button">' + localize('clear_button') + '</button>');
+        this.test_query = $('<button style="margin-left:10px" id="test_query_button" type="button">' + localize('test_query') + '</button>');
         this.clear.click(function () {
             $('#virtualkbid').appendTo('#virtualkbcontainer');
             _this.rbFriendly.prop('checked', true);
@@ -1243,6 +1244,7 @@ var PanelTemplSentenceSelector = (function (_super) {
         row = $('<tr></tr>');
         cell = $('<td id="clearbuttoncell"></td>');
         cell.append(this.clear);
+        cell.append(this.test_query);
         row.append(cell);
         cell = $('<td></td>');
         cell.append(this.fpan);
@@ -1322,6 +1324,7 @@ var PanelTemplQuizObjectSelector = (function (_super) {
         row = $('<tr></tr>');
         cell = $('<td id="clearbuttoncell"></td>');
         cell.append(this.clear);
+        cell.append(this.test_query);
         row.append(cell);
         cell = $('<td></td>');
         cell.append(this.fpan);
