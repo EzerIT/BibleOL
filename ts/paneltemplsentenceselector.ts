@@ -155,6 +155,13 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         let table : JQuery = $('<table></table>');
         let row   : JQuery;
         let cell  : JQuery;
+        let fpan2 : JQuery = $('<div style="display:none; padding-top:10px;" id="fpan2"></div>');
+        let accordion2 : JQuery = $('<div id="accordion2" class="accordion"></div>');
+        let card : JQuery = $('<div class="card"></div>');
+        let card_header : JQuery = $('<div id="cardhead" class="card-header"></div>');
+        let accbody : JQuery = $('<div id="accbody2" class="" parent=""></div>');
+        let card_body : JQuery = $('<div id="card-body-original" class="card-body"></div>');
+
 
         // 1st row: Contains the 'Use for sentence unit selection' checkbox
         row = $('<tr></tr>');
@@ -229,6 +236,14 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         table.append(row);
         
         where.append(table);
+        
+        // preview data
+        card.append(card_header);
+        accbody.append(card_body);
+        card.append(accbody);
+        accordion2.append(card);
+        fpan2.append(accordion2);
+        where.append(fpan2);
     }
 
     //------------------------------------------------------------------------------------------

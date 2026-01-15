@@ -831,7 +831,7 @@ abstract class PanelTemplMql {
         ////////////////////////////////////////////////////////////
         // The 'Clear' button
         this.clear = $('<button id="clear_button" type="button">' + localize('clear_button') + '</button>');
-        this.test_query = $('<button style="margin-left:10px" id="test_query_button" type="button">' + localize('test_query') + '</button>');
+        this.test_query = $('<button onclick="preview_qdata()" style="margin-left:10px" id="test_query_button" type="button">' + localize('test_query') + '</button>');
 
         this.clear.click(() => {
             // When 'Clear' is pressed, reset everything and select the surface object ('[data-reset]')

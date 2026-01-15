@@ -82,6 +82,7 @@ let isSubmitting       : boolean = false;              // Are we in the process 
 let checked_passages   : any[];                        // Selected Bible passages
 let ckeditor           : any;                          // Text editor
 let charset            : Charset;                      // Character set
+let show_preview       : boolean = false;              // Toggle this variable to show and hide the preview of the quiz data
 
 
 //****************************************************************************************************
@@ -374,6 +375,58 @@ function check_overwrite() : void {
     // Show the overwrite dialog
     $('#overwrite-dialog-confirm').modal('show');
 }
+//****************************************************************************************************
+// format_preview_data function
+//
+// prepare and display the preview data to the new quiz panel into tables
+//
+function format_preview_data(pdata:object):void {
+    if(show_preview)
+        $('#fpan2').show();
+    else
+        $('#fpan2').hide();
+
+}
+
+
+//****************************************************************************************************
+// preview_qdata function
+//
+// sample the potential quiz data based on the feature selector parameters
+//
+function preview_qdata(): void {
+    show_preview = !show_preview;
+    console.log("Preview Quiz Data");
+    console.log("show_preview: " + show_preview);
+    let checked_passages = $('.jstree-checked');
+    let selected_paths = [];
+    for(let i = 0; i < checked_passages.length; i++) {
+        let r = checked_passages[i].getAttribute('data-ref');
+        if(r != null)
+            selected_paths.push(r);
+    }
+
+    let preview_data = {
+        'desc': ckeditor.val(),
+        'database': decoded_3et.database,
+        'properties': decoded_3et.properties,
+        'selected_paths': selected_paths,
+        'sentenceSelection': panelSent.getInfo(),
+        'quizObjectSelection': panelSentUnit.getInfo(),
+        'quizFeatures': panelFeatures.getInfo(),
+        'maylocate': $('#maylocate_cb').prop('checked'),
+        'sentbefore': $('#sentbefore').val(),
+        'sentafter': $('#sentafter').val(),
+        'fixedquestions': $('#fixedquestions').val(),
+        'randomize': $('#randomorder').prop('checked')
+    }
+
+    format_preview_data(preview_data);
+    
+
+    //console.log(preview_data);
+}
+
 
 //****************************************************************************************************
 // save_quiz2 function

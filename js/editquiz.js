@@ -661,7 +661,7 @@ var PanelTemplMql = (function () {
             _this.updateMql();
         });
         this.clear = $('<button id="clear_button" type="button">' + localize('clear_button') + '</button>');
-        this.test_query = $('<button style="margin-left:10px" id="test_query_button" type="button">' + localize('test_query') + '</button>');
+        this.test_query = $('<button onclick="preview_qdata()" style="margin-left:10px" id="test_query_button" type="button">' + localize('test_query') + '</button>');
         this.clear.click(function () {
             $('#virtualkbid').appendTo('#virtualkbcontainer');
             _this.rbFriendly.prop('checked', true);
@@ -1200,6 +1200,12 @@ var PanelTemplSentenceSelector = (function (_super) {
         var table = $('<table></table>');
         var row;
         var cell;
+        var fpan2 = $('<div style="display:none; padding-top:10px;" id="fpan2"></div>');
+        var accordion2 = $('<div id="accordion2" class="accordion"></div>');
+        var card = $('<div class="card"></div>');
+        var card_header = $('<div id="cardhead" class="card-header"></div>');
+        var accbody = $('<div id="accbody2" class="" parent=""></div>');
+        var card_body = $('<div id="card-body-original" class="card-body"></div>');
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
         cell.append(this.cbUseForQo, '&nbsp;', this.cbUseForQoLabel);
@@ -1251,6 +1257,12 @@ var PanelTemplSentenceSelector = (function (_super) {
         row.append(cell);
         table.append(row);
         where.append(table);
+        card.append(card_header);
+        accbody.append(card_body);
+        card.append(accbody);
+        accordion2.append(card);
+        fpan2.append(accordion2);
+        where.append(fpan2);
     };
     PanelTemplSentenceSelector.prototype.populateFeatureTab = function (otype) {
         if (this.cbUseForQo.prop('checked')) {
@@ -2336,6 +2348,7 @@ var isSubmitting = false;
 var checked_passages;
 var ckeditor;
 var charset;
+var show_preview = false;
 function isDirty() {
     if (isSubmitting)
         return false;
@@ -2497,6 +2510,39 @@ function check_overwrite() {
         $('#overwrite-dialog-confirm').modal('hide');
     });
     $('#overwrite-dialog-confirm').modal('show');
+}
+function format_preview_data(pdata) {
+    if (show_preview)
+        $('#fpan2').show();
+    else
+        $('#fpan2').hide();
+}
+function preview_qdata() {
+    show_preview = !show_preview;
+    console.log("Preview Quiz Data");
+    console.log("show_preview: " + show_preview);
+    var checked_passages = $('.jstree-checked');
+    var selected_paths = [];
+    for (var i = 0; i < checked_passages.length; i++) {
+        var r = checked_passages[i].getAttribute('data-ref');
+        if (r != null)
+            selected_paths.push(r);
+    }
+    var preview_data = {
+        'desc': ckeditor.val(),
+        'database': decoded_3et.database,
+        'properties': decoded_3et.properties,
+        'selected_paths': selected_paths,
+        'sentenceSelection': panelSent.getInfo(),
+        'quizObjectSelection': panelSentUnit.getInfo(),
+        'quizFeatures': panelFeatures.getInfo(),
+        'maylocate': $('#maylocate_cb').prop('checked'),
+        'sentbefore': $('#sentbefore').val(),
+        'sentafter': $('#sentafter').val(),
+        'fixedquestions': $('#fixedquestions').val(),
+        'randomize': $('#randomorder').prop('checked')
+    };
+    format_preview_data(preview_data);
 }
 function save_quiz2() {
     var minutes = $('#minutes-timer').val();
