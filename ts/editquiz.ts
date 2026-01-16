@@ -380,7 +380,7 @@ function check_overwrite() : void {
 //
 // prepare and display the preview data to the new quiz panel into tables
 //
-function format_preview_data(pdata:object):void {
+function format_preview_data(pdata:any):void {
     if(show_preview) {
         $('#fpan2').show();
         $(`#fpan2`).empty();
@@ -389,27 +389,51 @@ function format_preview_data(pdata:object):void {
         $('#fpan2').hide();
     }
 
-    let all_books = ["Default"];
-    let book_name = "Default";
-    let i = 0;
-    let accordion2 : JQuery = $('<div id="accordion2" class="accordion"></div>');
-    let card : JQuery = $('<div id="card_0" class="card"></div>');
-    let card_header : JQuery = $('<div id="cardhead_0" class="card-header"></div>');
-    let card_body : JQuery = $(`<div id="card-body_0" class="card-body"></div>`);
+    //let all_books = pdata['selected_paths'];
+    console.log(pdata);
+    let all_books = pdata.selected_paths;
+    for(let i = 0; i < all_books.length; i++){
+        let book_name = all_books[i];
+        let accordion2 : JQuery = $('<div id="accordion2_0" class="accordion"></div>');
+        let card : JQuery = $('<div id="card_0" class="card"></div>');
+        let card_header : JQuery = $('<div id="cardhead_0" class="card-header"></div>');
+        let card_body : JQuery = $(`<div id="card-body_0" class="card-body"></div>`);
 
-    let book_cell = $(`<tr class="bookrow_${i}"></tr>`);
-    let book_data = $(`<td id=row_book_${i}></td>`);
-    let book_button = $(`<button data-toggle="collapse" data-target="" id=book_${i} class="btn text-left"><b>${book_name}</b><span></span></button>`);
+        let book_cell = $(`<tr class="bookrow_${i}"></tr>`);
+        let book_data = $(`<td id=row_book_${i}></td>`);
+        let book_button = $(`<button data-toggle="collapse" data-target="" id=book_${i} class="btn text-left"><b>${book_name}</b><span></span></button>`);
+        book_data.append(book_button);
+        book_cell.append(book_data);
+        if(i == 0){
+            
+            card.append(card_header);
+            card.append(card_body);
+            accordion2.append(card);
+            $(`#fpan2`).append(accordion2);
+            $('#cardhead_0').append(book_cell);
+        }
+        else {
+            // create a new card body and header
+            let new_card : JQuery = $('<div class="card"></div>');
+            let new_card_header : JQuery = $(`<div id="cardhead_${i}" class="card-header"></div>`);
+            let new_card_body : JQuery  = $(`<div id="card-body_${i}" class="card-body"></div>`);
+            let new_accordion2 : JQuery = $(`<div id="accordion2_${i}" class="accordion"></div>`);
 
-    book_data.append(book_button);
-    book_cell.append(book_data);
-    card.append(card_header);
-    card.append(card_body);
-    accordion2.append(card);
-    $(`#fpan2`).append(accordion2);
-    $('#cardhead_0').append(book_cell); 
+            new_card_body.hide(); // for non initial cards hide the card body
+            new_card.append(new_card_header);
+            new_card.append(new_card_body);
+            new_accordion2.append(new_card);
+            $(`#fpan2`).append(new_accordion2);
+            
+            new_card_header.append(book_cell);
+
+        }
+    }
 
 
+
+
+    
 
 
 }
