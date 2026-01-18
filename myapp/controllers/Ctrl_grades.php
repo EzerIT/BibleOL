@@ -479,6 +479,7 @@ class Ctrl_grades extends MY_Controller {
                     $ex = '';
                     $status = 2; // 2=Initial display
                     $real_students = null;
+                    $user_emails = null;
                     $resall = null;
                     $resall_ind = null;
                     $resfeatall = null;
@@ -538,9 +539,16 @@ class Ctrl_grades extends MY_Controller {
                     else
                         $featloc = null;
 
+                    //Get emails
+                    $user_emails = $real_students;
+
                     // Get student names
                     foreach ($real_students as $uid => &$v)
                         $v = make_full_name($this->mod_users->get_user_by_id($uid)) . ($v ? ' *' : '');
+
+                    // Get student emails
+                    foreach ($user_emails as $uid => &$email_i)
+                        $email_i = $this->mod_users->get_user_by_id($uid)->email;
 
                     // Because $users_and_temps is sorted by user ID, $real_students and $resall are sorted in the same order
                 }
@@ -551,6 +559,7 @@ class Ctrl_grades extends MY_Controller {
                 $ex = '';
                 $status = 2; // 2=Initial display
                 $real_students = null;
+                $user_emails = null;
                 $resall = null;
                 $resall_ind = null;
                 $resfeatall = null;
@@ -588,7 +597,7 @@ class Ctrl_grades extends MY_Controller {
                                                                                       'end_date' => $this->statistics_timeperiod->end_string(),
                                                                                       'minpoint' => $this->statistics_timeperiod->start_timestamp(),
                                                                                       'maxpoint' => $this->statistics_timeperiod->end_timestamp(),
-                                                                                      'exercise_list' => $exercise_list), true);
+                                                                                      'exercise_list' => $exercise_list,'user_emails' => $user_emails), true);
 
             $main_params = array('left_title' => $this->lang->line('select_period_heading'),
                                  'left' => $this->lang->line('time_period_description')

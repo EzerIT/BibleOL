@@ -6,6 +6,11 @@
     $this->load->helper('calc_grades_helper');
 ?>
 
+<?php
+make_js('js/table2csv.min.js');
+make_js('js/table2excel.js');
+?>
+
 <?php if ($status!=2): ?>
     <p style="margin-top:10px">
       <a id="showsel" class="badge badge-primary" href="#"><?= $this->lang->line('show_selector') ?></a>
@@ -216,19 +221,30 @@
     <BR>
     <div class="table-responsive" id="table1" style="display:block">
       <h2><?= sprintf($this->lang->line('grades_for_exercise'),htmlspecialchars($quiz)) ?></h2>
-      <table class="type2 table table-striped autowidth">
+      <table id="grading_table" class="type2 table table-striped autowidth">
         <caption><?= $this->lang->line('grds_exercise_by_student_caption') ?></caption>
         <tr>
           <th><?= $this->lang->line('student') ?></th>
+          <th class="text-center"><?= $this->lang->line('email')?></th>
           <th class="text-center"><?= $this->lang->line('date') ?></th>
           <th class="text-center"><?= $this->lang->line('correct') ?></th>
           <th class="text-center"><?= $this->lang->line('quiz_grade') ?></th>
           <th class="text-center"><?= $this->lang->line('best_total_time') ?></th>
           <th class="text-center"><?= $this->lang->line('hgst_avr_per_qi') ?></th>
-          <th></th>
+            <th id="download_buttons">
+
+                <a id="csv_download" class="badge badge-primary" href="#">
+                    <?='CSV';?>
+                </a>
+                <a id="excel_download" class="badge badge-primary" href="#">
+                    <?='EXCEL';?>
+                </a>
+
+            </th>
         </tr>
         <?php reset($students);
               $st = current($students);
+              $email_i = current($user_emails);
               if ( empty($max_time) ) {
                 $max_time = 3600; // Sets to 1h, which virtually disables the feature
               }
@@ -254,6 +270,7 @@
           <?php $tot_featpMin = $result['featpermin'] <= 0 ? -1 : 60/$result['featpermin'] ?>
         <tr class="<?php echo $lineId==0?'headerDet':"{$stk}_hiddenDetails";  ?>">
           <td><?= $lineId==0?$st . " (" . $this->lang->line('hgst_grade') .")":$st ?></td>
+          <td><?= $email_i ?></td>
           <!-- <td class="text-center"><?= Statistics_timeperiod::format_date($time) ?></td> -->
           <td class="text-center"><?= Statistics_timeperiod::format_time($time) ?></td>
           <td class="text-center"><?= round($result['percentage']) ?>%</td>
@@ -310,7 +327,7 @@
         </tr>
         <?php foreach ($featpct as $fn => $fp): ?>
         <?php reset($students);
-              $st = current($students); ?>
+            $st = current($students); $email_i = current($user_emails);?>
         <?php foreach ($fp as $pct): ?>
         <tr>
           <td><?= isset($featloc->{$fn}) ? $featloc->{$fn} : $fn ?></td>
@@ -427,6 +444,27 @@
                   return false;
               }
               );
+
+          $('#csv_download').click(
+              function(){
+                  let outfile = "<?php echo $classname; ?>" + ".csv";
+                  let table_csv = $("#grading_table").table2csv('return', {'excludeColumns':'#download_buttons', 'excludeRows':'.exercise_data', 'quoteFields':false});
+                  let pattern = 'Details,'
+                  table_csv = table_csv.replaceAll(pattern,'');
+                  const blob = new Blob([table_csv], { type: 'text/csv;charset=utf-8,' });
+                  const objUrl = URL.createObjectURL(blob);
+                  this.setAttribute('href', objUrl);
+                  this.setAttribute('download', outfile);
+
+              }
+          );
+          $('#excel_download').click(
+              function(){
+                  let extension = '.xls'
+                  let outfile = "<?php echo $classname; ?>";
+                  let table_excel = $('#grading_table').table2excel({exclude: '.exercise_data, #download_buttons, #detail_data', name: 'blank', filename: outfile, filext: extension});
+              }
+          );
 
           var dataorig = <?= $resx ?>;
           var dataorigspf = <?= $resxspf ?>;
