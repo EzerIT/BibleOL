@@ -836,9 +836,9 @@ class Ctrl_grades extends MY_Controller {
 
         try {
             // Check if user is enrolled in the class
-            $classid = (int)$this->input->get('classid');
+            $classid = (int)$this->input->get('class-id');
             $is_enrolled=$this->mod_grades->check_if_enrolled($classid);
-            if ( !$is_enrolled ) {
+            if (!$is_enrolled) {
               // Check for admin if not enrolled
               $this->mod_users->check_teacher();
             }
@@ -850,9 +850,9 @@ class Ctrl_grades extends MY_Controller {
             // Add grading schemes (MRCN)
             $this->load->helper('calc_grades_helper');
 
-            $this->form_validation->set_data($_GET);
+            $this->form_validation->set_data($_POST);
 
-            $classid = (int)$this->input->get('classid');
+            $classid = (int)$this->input->post('class-id');
             $class = $this->mod_classes->get_class_by_id($classid);
             //			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
 			// if the classid is less than zero or (not enrolled and not the owner and not a grader)
@@ -869,18 +869,15 @@ class Ctrl_grades extends MY_Controller {
             $this->form_validation->set_rules('grade_system', '', 'callback_always_true');  // Dummy rule. At least one rule is required
             $this->form_validation->set_rules('max_time', '', 'callback_always_true');  // Dummy rule. At least one rule is required
 
-            $nongraded = $this->input->get('nongraded')=='on';
-
             // Get grading system
-            $grade_system = $this->input->get('grade_system');
-            $max_time = $this->input->get('max_time');
+            $grade_system = $this->input->post('grade-system');
 
 			if ($this->form_validation->run()) {
                 $this->statistics_timeperiod->ok_dates();
 
-                $ex = $this->input->get('exam');
-                if (empty($ex)) {
-                    $ex = '';
+                $active_exam_id = $this->input->post('active-exam-id');
+                if (empty($active_exam_id)) {
+                    $active_exam_id = '';
                     $status = 2; // 2=Initial display
                     $real_students = null;
                     $user_emails = null;
@@ -891,7 +888,7 @@ class Ctrl_grades extends MY_Controller {
                 }
                 else {
                     // Find all user IDs and exam IDs that match the specified activeexamid
-                    $users_and_templs = $this->mod_grades->get_users_and_exam_results($ex);
+                    $users_and_templs = $this->mod_grades->get_users_and_exam_results($active_exam_id);
 
                     $resall = array();
                     $resall_ind = array();
@@ -903,34 +900,32 @@ class Ctrl_grades extends MY_Controller {
                     $is_grader = $this->mod_users->is_grader($classid, $this->mod_users->my_id());
                     foreach ($users_and_templs as $uid => $exams) {
                         if ( $is_teacher || $is_grader || $this->mod_users->my_id()==$uid ) {
-                          $see_nongraded = $nongraded && $this->mod_grades->may_see_nongraded($uid, $ex);
+                            $see_nongraded = $nongraded && $this->mod_grades->may_see_nongraded($uid, $active_exam_id);
 
-                          // $res = $this->mod_grades->get_score_by_date_user_templ($uid,
-                          $res = $this->mod_grades->get_score_by_user_active_exam($uid,
-                          $exams,
-                          // $this->statistics_timeperiod->start_timestamp(),
-                          // $this->statistics_timeperiod->end_timestamp(),
-                          $see_nongraded,$calculate_percentages=true);
+                            // $res = $this->mod_grades->get_score_by_date_user_templ($uid,
+                            $res = $this->mod_grades->get_score_by_user_active_exam(
+                                $uid,
+                                $exams,
+                                // $this->statistics_timeperiod->start_timestamp(),
+                                // $this->statistics_timeperiod->end_timestamp(),
+                                // $see_nongraded,
+                                $calculate_percentages=true
+                            );
 
-                          // $res_ind = $this->mod_grades->get_score_by_user_templ($uid,
-                          $res_ind = $this->mod_grades->get_score_by_user_active_exam($uid,
-                          $exams,
-                          // $this->statistics_timeperiod->start_timestamp(),
-                          // $this->statistics_timeperiod->end_timestamp(),
-                          $see_nongraded,$calculate_percentages=true);
+                            $resfeat = $this->mod_grades->get_features_by_date_exam_result(
+                                $uid,
+                                $exams,
+                                // $this->statistics_timeperiod->start_timestamp(),
+                                // $this->statistics_timeperiod->end_timestamp(),
+                                $highest_score_first=true
+                            );
 
-                          $resfeat = $this->mod_grades->get_features_by_date_exam_result($uid,
-                          $exams,
-                          // $this->statistics_timeperiod->start_timestamp(),
-                          // $this->statistics_timeperiod->end_timestamp(),
-                          $see_nongraded,$highest_score_first=true);
+                            if (empty($res)) continue;
 
-                          if (empty($res))
-                          continue;
-                          $resall[] = $res;
-                          $resall_ind[] = $res_ind;
-                          $resfeatall[] = $resfeat;
-                          $real_students[$uid] = $see_nongraded;
+                            $resall[] = $res;
+                            $resall_ind[] = $res;
+                            $resfeatall[] = $resfeat;
+                            $real_students[$uid] = $see_nongraded;
                         }
                     }
 
@@ -965,7 +960,7 @@ class Ctrl_grades extends MY_Controller {
             else {
                 $this->statistics_timeperiod->default_dates();
 
-                $ex = '';
+                $active_exam_id = '';
                 $status = 2; // 2=Initial display
                 $real_students = null;
                 $user_emails = null;
@@ -976,43 +971,60 @@ class Ctrl_grades extends MY_Controller {
             }
 
             // VIEW:
-            $this->load->view('view_top1', array('title' => $this->lang->line('exercise_graphs_title'),
-                                                 'js_list' => array('RGraph/libraries/RGraph.common.core.js',
-                                                                    'RGraph/libraries/RGraph.hbar.js',
-                                                                    'RGraph/libraries/RGraph.scatter.js',
-                                                                    'RGraph/libraries/RGraph.common.dynamic.js',
-                                                                    'RGraph/libraries/RGraph.common.tooltips.js',
-                                                                    'RGraph/libraries/RGraph.common.key.js',
-                                                                    'js/datepicker_period.js',
-                                                                    'js/graphing.js',
-                                                                    'js/handle_legend.js')));
+            $this->load->view(
+                'view_top1', 
+                array(
+                    'title' => $this->lang->line('exercise_graphs_title'),
+                    'js_list' => array(
+                        'RGraph/libraries/RGraph.common.core.js',
+                        'RGraph/libraries/RGraph.hbar.js',
+                        'RGraph/libraries/RGraph.scatter.js',
+                        'RGraph/libraries/RGraph.common.dynamic.js',
+                        'RGraph/libraries/RGraph.common.tooltips.js',
+                        'RGraph/libraries/RGraph.common.key.js',
+                        'js/datepicker_period.js',
+                        'js/graphing.js',
+                        'js/handle_legend.js'
+                    )
+                )
+            );
 
             $this->load->view('view_top2');
             $this->load->view('view_menu_bar', array('langselect' => true));
 
-            $center_text = $this->load->view('view_grades_teacher_exams', array('classid' => $classid,
-                                                                                      'classname' => $class->classname,
-                                                                                      'students' => $real_students,
-                                                                                      'resscoreall' => $resall,
-                                                                                      'resscoreall_ind' => $resall_ind,
-                                                                                      'resfeatall' => $resfeatall,
-                                                                                      'featloc' => $featloc,
-                                                                                      'status' => $status,
-                                                                                      'quiz' => $ex,
-                                                                                      'nongraded' => $nongraded,
-                                                                                      'grade_system' => $grade_system,
-                                                                                      'max_time' => $max_time,
-                                                                                      'start_date' => $this->statistics_timeperiod->start_string(),
-                                                                                      'end_date' => $this->statistics_timeperiod->end_string(),
-                                                                                      'minpoint' => $this->statistics_timeperiod->start_timestamp(),
-                                                                                      'maxpoint' => $this->statistics_timeperiod->end_timestamp(),
-                                                                                      'exam_list' => $exam_list,
-                                                                                      'user_emails' => $user_emails), true);
+            $center_text = $this->load->view(
+                'view_grades_teacher_exams', 
+                array(
+                    'class_id' => $classid,
+                    'classname' => $class->classname,
+                    'students' => $real_students,
+                    'resscoreall' => $resall,
+                    'resscoreall_ind' => $resall_ind,
+                    'resfeatall' => $resfeatall,
+                    'featloc' => $featloc,
+                    'status' => $status,
+                    'active_exam_id' => $active_exam_id,
+                    'nongraded' => $nongraded,
+                    'grade_system' => $grade_system,
+                    'max_time' => $max_time,
+                    'start_date' => $this->statistics_timeperiod->start_string(),
+                    'end_date' => $this->statistics_timeperiod->end_string(),
+                    'minpoint' => $this->statistics_timeperiod->start_timestamp(),
+                    'maxpoint' => $this->statistics_timeperiod->end_timestamp(),
+                    'exam_list' => $exam_list,
+                    'user_emails' => $user_emails
+                ), 
+                true
+            );
 
-            $main_params = array('left_title' => $this->lang->line('select_period_heading'),
-                                 'left' => $this->lang->line('student_exam_description')
-                                 . $this->lang->line('student_exam_description2'),
-                                 'center' => $center_text);
+            $main_params = array(
+                'left_title' => $this->lang->line('select_period_heading'),
+                'left' => (
+                    $this->lang->line('student_exam_description')
+                    . $this->lang->line('student_exam_description2')
+                ),
+                'center' => $center_text
+            );
 
             if ($status==1) {
                 $main_params['extraleft'] = $this->load->view('view_progress_teacher_legend',

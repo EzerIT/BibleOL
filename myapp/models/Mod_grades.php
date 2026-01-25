@@ -650,7 +650,6 @@ class Mod_grades extends CI_Model {
     public function get_score_by_user_active_exam(
         int $uid,
         array $examids,
-        bool $nongraded, 
         $calculate_percentages = false
     ) {
         if (empty($examids))
@@ -666,12 +665,7 @@ class Mod_grades extends CI_Model {
             ->join('sta_quiz q','q.id=er.quizid')
             ->join('sta_question quest','quest.quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
-            ->where('rf.userid',$uid);
-
-        if (!$nongraded)
-            $query = $query->where('(grading is null OR grading=1)');
-
-        $query = $query
+            ->where('rf.userid',$uid)
             ->where_in('ea.activeexamid',$examids)
             // ->where('q.start >=',$period_start)
             // ->where('q.start <=',$period_end)
@@ -797,7 +791,6 @@ class Mod_grades extends CI_Model {
     public function get_features_by_date_exam_result(
         int $uid,
         array $exams,
-        bool $nongraded, 
         bool $highest_score_first = false
     ) {
         if (empty($exams))
@@ -811,9 +804,6 @@ class Mod_grades extends CI_Model {
             ->join('sta_requestfeature rf','quest.id=rf.questid')
             ->join('exam_attempt ea', 'er.attempt_id=ea.id')
             ->where('rf.userid',$uid);
-
-        if (!$nongraded)
-            $query = $query->where('(grading is null OR grading=1)');
 
         //TODO: To make the following if statement work as intended
 

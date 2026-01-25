@@ -619,7 +619,7 @@ CREATE TABLE `bol_exam_attempt` (
   KEY `activeexamid` (`activeexamid`),
   CONSTRAINT `bol_exam_attempt_ibfk_1` FOREIGN KEY (`activeexamid`) REFERENCES `bol_exam_active` (`id`) ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT `bol_exam_attempt_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `bol_user` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT `uc_user_exam_instance_attempt_count` UNIQUE (user_id, activeexamid, attempt_count)
+  CONSTRAINT `uc_user_exam_instance_attempt_count` UNIQUE (userid, activeexamid, attempt_count)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 

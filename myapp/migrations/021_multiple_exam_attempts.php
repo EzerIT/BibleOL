@@ -1,6 +1,7 @@
 <?php
 
 class Migration_Multiple_exam_attempts extends CI_Migration {
+
     public function __construct() {
         parent::__construct();
 
@@ -10,101 +11,141 @@ class Migration_Multiple_exam_attempts extends CI_Migration {
 
     public function up() {
 
-/*
--------------------------------------------------------------
--- Add a setting for the maximum number of attempts
--- NULL values represent no maximum
-ALTER TABLE bol_exam_active
-	ADD COLUMN maximum_attempts INT DEFAULT 1;
+        echo "Add column 'maximum_attempts' to {$this->db->dbprefix}exam_active\n";
+        $this->dbforge->add_column(
+            'exam_active',
+            [
+                'maximum_attempts' => [
+                    'type'    => 'INT',
+                    'null'    => true,
+                    'default' => null,
+                    'comment' => 'Maximum number of attempts allowed; NULL means unlimited'
+                ]
+            ]
+        );
 
-----------------------------------------------------------
--- Change the name of bol_exam_status to better describe
--- its behavior
-RENAME TABLE bol_exam_status TO bol_exam_attempt;
+        echo "Rename {$this->db->dbprefix}exam_status to {$this->db->dbprefix}exam_attempt\n";
+        $this->db->query("
+            RENAME TABLE {$this->db->dbprefix}exam_status
+            TO {$this->db->dbprefix}exam_attempt
+        ");
 
---------------------------------------------------------------
--- Consolidate bol_exam_finished into bol_exam_attempt
+        echo "Add attempt_count and is_done to {$this->db->dbprefix}exam_attempt\n";
+        $this->dbforge->add_column(
+            'exam_attempt',
+            [
+                'attempt_count' => [
+                    'type'    => 'INT',
+                    'null'    => false,
+                    'default' => 1,
+                    'after'   => 'activeexamid'
+                ],
+                'is_done' => [
+                    'type'    => 'BOOLEAN',
+                    'null'    => false,
+                    'default' => false
+                ]
+            ]
+        );
 
--- Add a column to bol_exam_attempt for storing the data 
--- from bol_exam_finished
-ALTER TABLE bol_exam_attempt
-ADD COLUMN attempt_count INT NOT NULL DEFAULT 1 AFTER activeexamid,
-ADD COLUMN is_done BOOLEAN NOT NULL DEFAULT FALSE;
+        /*
+         * ✅ Explicitly mark all legacy rows as attempt #1
+         */
+        echo "Initialize legacy exam_attempt rows with attempt_count = 1\n";
+        $this->db->query("
+            UPDATE {$this->db->dbprefix}exam_attempt
+            SET attempt_count = 1
+            WHERE attempt_count IS NULL
+        ");
 
--- Remove the existing foreign key in order to change its behaviors
-ALTER TABLE bol_exam_attempt DROP FOREIGN KEY bol_exam_status_ibfk_1;
+        echo "Drop old foreign key on {$this->db->dbprefix}exam_attempt\n";
+        $this->db->query("
+            ALTER TABLE {$this->db->dbprefix}exam_attempt
+            DROP FOREIGN KEY bol_exam_status_ibfk_1
+        ");
 
--- Add the new foreign keys
-ALTER TABLE bol_exam_attempt
-ADD CONSTRAINT bol_exam_attempt_ibfk_1
-FOREIGN KEY (activeexamid) REFERENCES bol_exam_active(id)
-ON UPDATE CASCADE ON DELETE RESTRICT;
--- When a user is deleted there is a message that says all their data is delete as well
-ALTER TABLE bol_exam_attempt
-ADD CONSTRAINT bol_exam_attempt_ibfk_2
-FOREIGN KEY (userid) REFERENCES bol_user(id)
-ON UPDATE CASCADE ON DELETE CASCADE;
+        echo "Add foreign keys to {$this->db->dbprefix}exam_attempt\n";
 
+        $this->db->query("
+            ALTER TABLE {$this->db->dbprefix}exam_attempt
+            ADD CONSTRAINT exam_attempt_ibfk_1
+            FOREIGN KEY (activeexamid)
+            REFERENCES {$this->db->dbprefix}exam_active(id)
+            ON UPDATE CASCADE ON DELETE RESTRICT
+        ");
 
--- Set is_done to TRUE for the entries that have a matching
--- entry in bol_exam_finished
-UPDATE bol_exam_attempt AS attempt
-JOIN bol_exam_finished AS finished
-    ON attempt.userid = finished.userid
-    AND attempt.activeexamid = finished.activeexamid
-SET attempt.is_done = TRUE;
+        $this->db->query("
+            ALTER TABLE {$this->db->dbprefix}exam_attempt
+            ADD CONSTRAINT exam_attempt_ibfk_2
+            FOREIGN KEY (userid)
+            REFERENCES {$this->db->dbprefix}user(id)
+            ON UPDATE CASCADE ON DELETE CASCADE
+        ");
 
--- Now that the data from bol_exam_finished is in bol_exam_status.is_done
--- we can delete bol_exam_finished
-DROP TABLE bol_exam_finished;
+        echo "Migrate {$this->db->dbprefix}exam_finished → exam_attempt.is_done\n";
+        $this->db->query("
+            UPDATE {$this->db->dbprefix}exam_attempt a
+            JOIN {$this->db->dbprefix}exam_finished f
+              ON a.userid = f.userid
+             AND a.activeexamid = f.activeexamid
+            SET a.is_done = TRUE
+        ");
 
----------------------------------------------------------------------
--- Add a unique constraint to make sure we don't have any duplicate
--- exam attempts
-ALTER TABLE bol_exam_attempt
-ADD CONSTRAINT uc_user_exam_instance_attempt_count
-UNIQUE (userid, activeexamid, attempt_count);
+        echo "Drop {$this->db->dbprefix}exam_finished\n";
+        $this->dbforge->drop_table('exam_finished', true);
 
-----------------------------------------------------------------------
--- Migrate bol_exam_results to point to bol_exam_attempt.id instead
--- of bol_exam_active.id
+        echo "Add unique constraint to {$this->db->dbprefix}exam_attempt\n";
+        $this->db->query("
+            ALTER TABLE {$this->db->dbprefix}exam_attempt
+            ADD CONSTRAINT uc_user_exam_instance_attempt_count
+            UNIQUE (userid, activeexamid, attempt_count)
+        ");
 
--- Create a new column instead of replacing the existing FK column
-ALTER TABLE bol_exam_results
-ADD COLUMN attempt_id INT
-AFTER activeexamid;
+        echo "Add attempt_id to {$this->db->dbprefix}exam_results\n";
+        $this->dbforge->add_column(
+            'exam_results',
+            [
+                'attempt_id' => [
+                    'type'  => 'INT',
+                    'null'  => true,
+                    'after' => 'activeexamid'
+                ]
+            ]
+        );
 
-UPDATE bol_exam_results r
-LEFT JOIN bol_exam_attempt a
-	ON r.activeexamid = a.activeexamid
-SET r.attempt_id = a.id
-WHERE r.attempt_id IS NULL;
--- Make sure that there are no rows with bol_exam_results.exam_attempt_id that IS NULL
+        echo "Populate {$this->db->dbprefix}exam_results.attempt_id\n";
+        $this->db->query("
+            UPDATE {$this->db->dbprefix}exam_results r
+            JOIN {$this->db->dbprefix}exam_attempt a
+              ON r.activeexamid = a.activeexamid
+             AND r.userid = a.userid
+            SET r.attempt_id = a.id
+            WHERE r.attempt_id IS NULL
+        ");
 
--- Make the new column NOT NULL, since all results must match up to 
--- an exam attempt
-ALTER TABLE bol_exam_results
-MODIFY COLUMN attempt_id INT NOT NULL;
+        echo "Make {$this->db->dbprefix}exam_results.attempt_id NOT NULL\n";
+        $this->db->query("
+            ALTER TABLE {$this->db->dbprefix}exam_results
+            MODIFY COLUMN attempt_id INT NOT NULL
+        ");
 
--- Add FK
-ALTER TABLE bol_exam_results
-ADD CONSTRAINT bol_exam_results_ibfk_2
-FOREIGN KEY (attempt_id)
-REFERENCES bol_exam_attempt(id);
+        echo "Add FK exam_results → exam_attempt\n";
+        $this->db->query("
+            ALTER TABLE {$this->db->dbprefix}exam_results
+            ADD CONSTRAINT exam_results_ibfk_2
+            FOREIGN KEY (attempt_id)
+            REFERENCES {$this->db->dbprefix}exam_attempt(id)
+        ");
 
--- Drop the old FK and column
-ALTER TABLE bol_exam_results
-DROP FOREIGN KEY bol_exam_results_ibfk_1;
+        echo "Remove old FK and columns from {$this->db->dbprefix}exam_results\n";
+        $this->db->query("
+            ALTER TABLE {$this->db->dbprefix}exam_results
+            DROP FOREIGN KEY exam_results_ibfk_1
+        ");
 
-ALTER TABLE bol_exam_results
-DROP COLUMN activeexamid;
-
--- We can also get the user from the exam_attempt
-ALTER TABLE bol_exam_results
-DROP COLUMN userid;
-*/
-
-   }
+        $this->dbforge->drop_column('exam_results', 'activeexamid');
+        $this->dbforge->drop_column('exam_results', 'userid');
+    }
 
     public function down()
     {

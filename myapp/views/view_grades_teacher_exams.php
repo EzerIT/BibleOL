@@ -11,93 +11,53 @@
   make_js('js/table2excel.js');
 ?>
 
-<?php if ($status!=2): ?>
-    <p style="margin-top:10px">
-      <a id="showsel" class="badge badge-primary" href="#"><?= $this->lang->line('show_selector') ?></a>
-      <a id="hidesel" class="badge badge-primary" style="display:none" href="#"><?= $this->lang->line('hide_selector') ?></a>
-    </p>
+<?= form_open(
+  "grades/teacher_exam",
+  [],
+  ['class-id' => $class_id]
+) ?>
+  <input 
+    type="hidden" 
+    id="active-exam-id" 
+    name="active-exam-id"
+    value="<?= $active_exam_id ?>"
+  />
+  <input
+    type="hidden"
+    id="grade-system"
+    name="grade-system"
+    value="<?= $grade_system ?>"
+  />
+</form>
 
-    <script>
-        $(function() {
-            $('#showsel').click(
-                function() {
-                    $('#selector').show();
-                    $('#showsel').hide();
-                    $('#hidesel').show();
-
-                    legend_adjust($('#leftpanel'), $('#centerpanel'));
-
-                    return false;
-                }
-            );
-            $('#hidesel').click(
-                function() {
-                    $('#selector').hide();
-                    $('#showsel').show();
-                    $('#hidesel').hide();
-
-                    legend_adjust($('#leftpanel'), $('#centerpanel'));
-
-                    return false;
-                }
-            );
-        });
-    </script>
-<?php else: ?>
-    <h1><?= sprintf($this->lang->line('exam_grades_for_class'), htmlspecialchars($classname)) ?></h1>
-<?php endif; ?>
-
-<div class="card mb-3" id="selector" <?= $status==2 ? '' : 'style="display:none"' ?>>
-  <div class="card-body">
-    <?= form_open("grades/teacher_exam",array('method'=>'get')) ?>
-      <input type="hidden" name="classid" value="<?= $classid ?>">
-
-      <p>&nbsp;</p>
-      <div>
-        <span style="font-weight:bold"><?= $this->lang->line('exam_prompt') ?></span>
-        <select name="exam">
-          <option value="" <?= set_select('exam', '', true) ?>></option>
-          <?php foreach($exam_list as $ex): ?>
-            <?php $ex2 = htmlspecialchars($ex["name"]); ?>
-            <option value="<?= $ex["id"] ?>" <?= set_select('exam', $ex["id"]) ?>><?= $ex2 ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-
-      <?php
-      global $arrayOfGradeSchemes;
-      loadArrayOfGradeSchemes();
-      ?>
-      <p>&nbsp;</p>
-      <div>
-        <span style="font-weight:bold"><?= $this->lang->line('grade_system_prompt') ?></span>
-        <select name="grade_system">
-          <!-- <option value="" <?= set_select('grade_system', '', true) ?>></option> -->
-          <?php foreach($arrayOfGradeSchemes as $gs => $gs_array): ?>
-            <?php $gs2 = htmlspecialchars($gs);
-            $gs_name = htmlspecialchars($gs_array["SchemeName"]); ?>
-            <option value="<?= $gs2 ?>" <?= set_select('grade_system', $gs) ?>><?= $gs_name ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-      <BR>
-
-      <div class="row">
-        <div class="form-group col">
-          <label for="max_time" class="col-form-label"><?= $this->lang->line('show_max_time_prompt') ?></label>
-          <input class="text" id="max_time" name="max_time" value="0" type="text" >
-        </div>
-      </div>
-
-      <!-- <div class="row">
-        <div class="form-group col">
-          <label for="nongraded" class="col-form-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
-          <input class="checkbox" id="nongraded" name="nongraded" value="on" type="checkbox" <?= set_checkbox('nongraded','on') ?>>
-        </div>
-      </div> -->
-
-      <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
-    </form>
+<div class="card mb-3" id="selector">
+  <div class="card-body d-inline-flex">
+    <div>
+      <strong><?= $this->lang->line('exam_prompt') ?></strong>
+      <select id="active-exam-id-select">
+        <option value="" <?= set_select('exam', '', true) ?>></option>
+        <?php foreach($exam_list as $ex): ?>
+          <?php $ex2 = htmlspecialchars($ex["name"]); ?>
+          <option value="<?= $ex["id"] ?>" <?= set_select('exam', $ex["id"]) ?>><?= $ex2 ?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+    &nbsp;
+    <?php
+    global $arrayOfGradeSchemes;
+    loadArrayOfGradeSchemes();
+    ?>
+    <div>
+      <strong><?= $this->lang->line('grade_system_prompt') ?></strong>
+      <select id="grade-system-select">
+        <!-- <option value="" <?= set_select('grade_system', '', true) ?>></option> -->
+        <?php foreach($arrayOfGradeSchemes as $gs => $gs_array): ?>
+          <?php $gs2 = htmlspecialchars($gs);
+          $gs_name = htmlspecialchars($gs_array["SchemeName"]); ?>
+          <option value="<?= $gs2 ?>" <?= set_select('grade_system', $gs) ?>><?= $gs_name ?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
   </div>
 </div>
 
@@ -108,16 +68,13 @@
 </script> -->
 
 
-<?php if ($status!=2): ?>
+<?php if ($status != 2): ?>
   <h1><?= sprintf($this->lang->line('exam_grades_for_class'), htmlspecialchars($classname)) ?></h1>
-  <BR>
+  <br>
 
-  <?php if ($status==0): ?>
-
+  <?php if ($status == 0): ?>
       <div class="alert alert-warning"><?= $this->lang->line('no_data') ?></div>
-
   <?php else: ?>
-
     <?php
       define("SHOW_WEEK_LIMIT", 10*24*3600); // 10 days
 
@@ -180,8 +137,8 @@
           $student_captions[$ix] = "'<input type=\"checkbox\" checked name=\"users\" value=\"$ix\">&nbsp;"
               . anchor(build_get('grades/student_exercise',
                                  array('userid' => $id,
-                                       'templ' => $quiz,
-                                       'nongraded' => $nongraded ? 'on' : 'off',
+                                       'templ' => $active_exam_id,
+                                       'nongraded' => 'off',
                                        'start_date' => $start_date,
                                        'end_date' => $end_date)), addslashes($name))
               . "'";
@@ -209,7 +166,7 @@
     </p>
     <BR>
     <div class="table-responsive" id="table1" style="display:block">
-      <h2><?= sprintf($this->lang->line('grades_for_exam'),htmlspecialchars($quiz)) ?></h2>
+      <h2><?= sprintf($this->lang->line('grades_for_exam'),htmlspecialchars($active_exam_id)) ?></h2>
       <table id="grading_table" class="type2 table table-striped autowidth">
         <caption><?= $this->lang->line('grds_exam_by_student_caption') ?></caption>
         <tr>
@@ -269,21 +226,18 @@
           ?>
         <?php foreach ($ra as $time => $result): ?>
           <?php
-          // Prepares data
-          $ncounter += 1;
-          if ( $startTime == 0 ) {
-            $startTime = $time;
-          }
-          $tot_duration += $result["duration"];
-          $tot_featpMin += $result['featpermin'] <= 0 ? -1 : 60/$result['featpermin'];
-          $tot_weight += $result['weight'];
-          $tot_percent += $result['percentage'];
-          $tot_percWeighted += $result['percentage'] * $result['weight'];
-          if ( round($tot_featpMin)<=$max_time ) {
-            // if the user took less than the max alloted time per question
+            // Prepares data
+            $ncounter += 1;
+            if ( $startTime == 0 ) {
+              $startTime = $time;
+            }
+            $tot_duration += $result["duration"];
+            $tot_featpMin += $result['featpermin'] <= 0 ? -1 : 60/$result['featpermin'];
+            $tot_weight += $result['weight'];
+            $tot_percent += $result['percentage'];
+            $tot_percWeighted += $result['percentage'] * $result['weight'];
             $tot_grade += $result['percentage'];
             $tot_gradeWeighted += $result['percentage'] * $result['weight'];
-          }
           ?>
         <?php endforeach; ?>
         <tr class="<?php echo 'headerDet';  ?>">
@@ -292,7 +246,13 @@
           <td class="text-center"><?= Statistics_timeperiod::format_time($startTime) ?></td>
           <td class="text-center"><?= round($tot_percWeighted/$tot_weight) . "% (" .  round($tot_percent/$ncounter)  ?>%)</td>
           <!-- <td class="text-center"><?php echo calculateGrade($grade_system, ($tot_percWeighted/$tot_weight));?></td> -->
-          <td class="text-center"><?= anchor(build_get('grades/teacher_quizz_detail/classid/' . $classid . '/quizzid/'.$result["quizzid"] . '/userid/'.$result["userid"], array() ), (round($tot_featpMin)<=$max_time)?calculateGrade($grade_system, ($tot_percWeighted/$tot_weight)):calculateGrade($grade_system, 0)) ?></td>
+          <td class="text-center">
+            <?= anchor(
+              build_get(
+                'grades/teacher_quizz_detail/classid/' . $class_id . '/quizzid/'.$result["quizzid"] . '/userid/'.$result["userid"], []), 
+                calculateGrade($grade_system, ($tot_percWeighted/$tot_weight))
+            ) ?>
+          </td>
           <td class="text-center"><?= $result["duration"] ?></td>
           <td class="text-center"><?= $tot_featpMin > 0 ? sprintf("%.1f",round(60/($tot_featpMin/$ncounter))) : "" ?></td>
           <td class="text-center" id="detail_data">
@@ -308,7 +268,7 @@
           <td class="text-center"><?= Statistics_timeperiod::format_time($time) ?></td>
           <td class="text-center"><?= round($result['percentage']) ?>%</td>
           <!-- <td class="text-center"><?= (round($tot_featpMin)<=$max_time)?calculateGrade($grade_system, $result['percentage']):calculateGrade($grade_system, 0) ?></td> -->
-          <td class="text-center"><?= anchor(build_get('grades/teacher_quizz_detail/classid/' . $classid . '/quizzid/'.$result["quizzid"] . '/userid/'.$result["userid"], array() ), (round($tot_featpMin)<=$max_time)?calculateGrade($grade_system, $result['percentage']):calculateGrade($grade_system, 0)) ?></td>
+          <td class="text-center"><?= anchor(build_get('grades/teacher_quizz_detail/classid/' . $class_id . '/quizzid/'.$result["quizzid"] . '/userid/'.$result["userid"], array() ), (round($tot_featpMin)<=$max_time)?calculateGrade($grade_system, $result['percentage']):calculateGrade($grade_system, 0)) ?></td>
           <td class="text-center"><?= $result["duration"] ?></td>
           <td class="text-center"><?= sprintf("%.1f",round($tot_featpMin)) ?></td>
           <td class="text-center"></td>
@@ -317,9 +277,6 @@
         <?php $st = next($students); $email_i = next($user_emails); ?>
         <?php endforeach; ?>
       </table>
-      <?php if ($nongraded): ?>
-        <p><?= $this->lang->line('students_marked_star') ?></p>
-      <?php endif; ?>
     </div>
     <style>
     <?php foreach ($hiddenStyles as $key => $value) {
@@ -365,9 +322,6 @@
         <p><?= $this->lang->line('students_marked_star') ?></p>
       <?php endif; ?>
     </div>
-
-
-
 
     <script>
       function set_config(config,on,data,colors) {
@@ -442,7 +396,7 @@
 
                   return false;
               }
-              );
+            );
           $('#show2').click(
               function() {
                   $('#table2').show();
