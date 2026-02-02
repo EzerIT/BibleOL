@@ -292,6 +292,7 @@ make_js('js/table2excel.js');
         </tr>
         <?php endforeach; ?>
         <?php $st = next($students); ?>
+        <?php $email_i = next($user_emails); ?>
         <?php endforeach; ?>
       </table>
       <?php if ($nongraded): ?>
