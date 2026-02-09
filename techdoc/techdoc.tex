@@ -6650,6 +6650,33 @@ area provides a link to the same chapter at the SHEBANQ website. A similar link 
 on the SHEBANQ website. Also, when a teacher is creating an exercise in Bible OL, they can import
 MQL queries from the SHEBANQ website (see Section \ref{sec-shebanq-import}).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Docker Development %%%%%%%%%%%%%%%%%%%%
+\chapter{Docker Development}
+
+\textbf{Read this chapter if you want to.}
+\plainbreak{3}
+
+Run BibleOL in a Docker container.
+
+%%%%%%%%%%%%%%%%%%%% What is Docker %%%%%%%%%%%%%%%%%%%%
+\section{Docker Context and Terms}
+
+A Docker container is a software package containing all of the dependencies required for an application. BibleOL has many important packages that it relies on, and the exact versions of these packages can be hard to track. This motivated our development team to create a container for BibleOL, so that it is more accessible for everyone. We have made our containers available for Mac, Windows, and Linux users.
+
+\begin{my-longtabu-nomid}{lX}{ \headii{Term}{Meaning} }
+
+\parbox[t]{3cm}{Docker-Container\index{question|hyperit}}& a lightweight, standalone, 
+and executable software package that includes everything needed to run an 
+application, such as the code, runtime, system tools, libraries, and settings. 
+It is a running instance of a Docker image.\\
+\midrule
+
+\parbox[t]{3cm}{Docker-Image\index{question|hyperit}}& A Docker image is a read-only template that contains the instructions for creating a Docker container. It includes the application code, libraries, dependencies, and configuration files needed to run the software. Images are used to instantiate containers and can be shared via registries like Docker Hub.\\
+\midrule
+\parbox[t]{3cm}{Docker-Hub\index{question|hyperit}}& Docker Hub is a cloud-based registry service for storing, sharing, and distributing Docker images. It allows users to publish images publicly or privately, collaborate, and pull images for container deployment.\\
+\midrule
+\end{my-longtabu-nomid}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Appendix: ETCBC4 Details %%%%%%%%%%%%%%%%%%%%
