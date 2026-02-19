@@ -155,6 +155,12 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         let table : JQuery = $('<table></table>');
         let row   : JQuery;
         let cell  : JQuery;
+        let fpan2 : JQuery = $('<div style="display:none; padding-top:10px;" id="fpan2"></div>');
+        //let accordion2 : JQuery = $('<div id="accordion2" class="accordion"></div>');
+        //let card : JQuery = $('<div class="card"></div>');
+        //let card_header : JQuery = $('<div id="cardhead_0" class="card-header"></div>');
+        //let card_body : JQuery = $(`<div id="card-body_0" class="card-body"></div>`);
+
 
         // 1st row: Contains the 'Use for sentence unit selection' checkbox
         row = $('<tr></tr>');
@@ -220,6 +226,7 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         cell = $('<td id="clearbuttoncell"></td>');
 
         cell.append(this.clear);
+        cell.append(this.test_query);
         row.append(cell);
         
         cell = $('<td></td>');
@@ -228,6 +235,45 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         table.append(row);
         
         where.append(table);
+        where.append(fpan2);
+        /*
+        let all_books = ["Matthew", "Mark", "Luke", "John"];
+        for(let i = 0; i < all_books.length; i++) {
+            let book_name = all_books[i];
+            let book_cell = $(`<tr class="bookrow_${i}"></tr>`);
+            let book_data = $(`<td id=row_book_${i}></td>`);
+            let book_button = $(`<button data-toggle="collapse" data-target="" id=book_${i} class="btn text-left"><b>${book_name}</b><span></span></button>`);
+
+            book_data.append(book_button);
+            book_cell.append(book_data);
+
+            if(i == 0) {
+                // add the first book section to the accordion
+                card.append(card_header);
+                card.append(card_body);
+                accordion2.append(card);
+                fpan2.append(accordion2);
+                where.append(fpan2);
+                $('#cardhead_0').append(book_cell); 
+            }
+            else {
+                // create a new card body and header
+                let new_card : JQuery = $('<div class="card"></div>');
+                let new_card_header : JQuery = $(`<div id="cardhead_${i}" class="card-header"></div>`);
+                let new_card_body : JQuery  = $(`<div id="card-body_${i}" class="card-body"></div>`);
+                new_card_body.hide(); // for non initial cards hide the card body
+                new_card.append(new_card_header);
+                new_card.append(new_card_body);
+                accordion2.append(new_card);
+                fpan2.append(accordion2);
+                
+                new_card_header.append(book_cell);
+
+            }
+        }
+        */
+
+
     }
 
     //------------------------------------------------------------------------------------------
