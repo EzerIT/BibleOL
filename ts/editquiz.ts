@@ -375,6 +375,16 @@ function check_overwrite() : void {
     // Show the overwrite dialog
     $('#overwrite-dialog-confirm').modal('show');
 }
+
+
+function toggle_card(idx:number):void {
+    let current_card = $(`#card-body_${idx}`)
+    if(current_card.is(':hidden'))
+        current_card.show();
+    else
+        current_card.hide();
+}
+
 //****************************************************************************************************
 // format_preview_data function
 //
@@ -401,7 +411,7 @@ function format_preview_data(pdata:any):void {
 
         let book_cell = $(`<tr class="bookrow_${i}"></tr>`);
         let book_data = $(`<td id=row_book_${i}></td>`);
-        let book_button = $(`<button data-toggle="collapse" data-target="" id=book_${i} class="btn text-left"><b>${book_name}</b><span></span></button>`);
+        let book_button = $(`<button onclick="toggle_card(${i})" data-toggle="collapse" data-target="" id=book_${i} class="btn text-left"><b>${book_name}</b><span></span></button>`);
         book_data.append(book_button);
         book_cell.append(book_data);
         card_header.append(book_cell)

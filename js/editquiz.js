@@ -2501,6 +2501,13 @@ function check_overwrite() {
     });
     $('#overwrite-dialog-confirm').modal('show');
 }
+function toggle_card(idx) {
+    var current_card = $("#card-body_".concat(idx));
+    if (current_card.is(':hidden'))
+        current_card.show();
+    else
+        current_card.hide();
+}
 function format_preview_data(pdata) {
     if (show_preview) {
         $('#fpan2').show();
@@ -2519,7 +2526,7 @@ function format_preview_data(pdata) {
         var card_body = $("<div id=\"card-body_".concat(i, "\" class=\"card-body\"></div>"));
         var book_cell = $("<tr class=\"bookrow_".concat(i, "\"></tr>"));
         var book_data = $("<td id=row_book_".concat(i, "></td>"));
-        var book_button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\"><b>").concat(book_name, "</b><span></span></button>"));
+        var book_button = $("<button onclick=\"toggle_card(".concat(i, ")\" data-toggle=\"collapse\" data-target=\"\" id=book_").concat(i, " class=\"btn text-left\"><b>").concat(book_name, "</b><span></span></button>"));
         book_data.append(book_button);
         book_cell.append(book_data);
         card_header.append(book_cell);
