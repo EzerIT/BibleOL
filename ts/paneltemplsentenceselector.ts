@@ -236,42 +236,6 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
         
         where.append(table);
         where.append(fpan2);
-        /*
-        let all_books = ["Matthew", "Mark", "Luke", "John"];
-        for(let i = 0; i < all_books.length; i++) {
-            let book_name = all_books[i];
-            let book_cell = $(`<tr class="bookrow_${i}"></tr>`);
-            let book_data = $(`<td id=row_book_${i}></td>`);
-            let book_button = $(`<button data-toggle="collapse" data-target="" id=book_${i} class="btn text-left"><b>${book_name}</b><span></span></button>`);
-
-            book_data.append(book_button);
-            book_cell.append(book_data);
-
-            if(i == 0) {
-                // add the first book section to the accordion
-                card.append(card_header);
-                card.append(card_body);
-                accordion2.append(card);
-                fpan2.append(accordion2);
-                where.append(fpan2);
-                $('#cardhead_0').append(book_cell); 
-            }
-            else {
-                // create a new card body and header
-                let new_card : JQuery = $('<div class="card"></div>');
-                let new_card_header : JQuery = $(`<div id="cardhead_${i}" class="card-header"></div>`);
-                let new_card_body : JQuery  = $(`<div id="card-body_${i}" class="card-body"></div>`);
-                new_card_body.hide(); // for non initial cards hide the card body
-                new_card.append(new_card_header);
-                new_card.append(new_card_body);
-                accordion2.append(new_card);
-                fpan2.append(accordion2);
-                
-                new_card_header.append(book_cell);
-
-            }
-        }
-        */
 
 
     }
