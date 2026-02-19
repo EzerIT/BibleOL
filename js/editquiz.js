@@ -2513,34 +2513,22 @@ function format_preview_data(pdata) {
     var all_books = pdata.selected_paths;
     for (var i = 0; i < all_books.length; i++) {
         var book_name = all_books[i];
-        var accordion2 = $('<div id="accordion2_0" class="accordion"></div>');
-        var card = $('<div id="card_0" class="card"></div>');
-        var card_header = $('<div id="cardhead_0" class="card-header"></div>');
-        var card_body = $("<div id=\"card-body_0\" class=\"card-body\"></div>");
+        var accordion2 = $("<div id=\"accordion2_".concat(i, "\" class=\"accordion\"></div>"));
+        var card = $('<div class="card"></div>');
+        var card_header = $("<div id=\"cardhead_".concat(i, "\" class=\"card-header\"></div>"));
+        var card_body = $("<div id=\"card-body_".concat(i, "\" class=\"card-body\"></div>"));
         var book_cell = $("<tr class=\"bookrow_".concat(i, "\"></tr>"));
         var book_data = $("<td id=row_book_".concat(i, "></td>"));
         var book_button = $("<button data-toggle=\"collapse\" data-target=\"\" id=book_".concat(i, " class=\"btn text-left\"><b>").concat(book_name, "</b><span></span></button>"));
         book_data.append(book_button);
         book_cell.append(book_data);
-        if (i == 0) {
-            card.append(card_header);
-            card.append(card_body);
-            accordion2.append(card);
-            $("#fpan2").append(accordion2);
-            $('#cardhead_0').append(book_cell);
-        }
-        else {
-            var new_card = $('<div class="card"></div>');
-            var new_card_header = $("<div id=\"cardhead_".concat(i, "\" class=\"card-header\"></div>"));
-            var new_card_body = $("<div id=\"card-body_".concat(i, "\" class=\"card-body\"></div>"));
-            var new_accordion2 = $("<div id=\"accordion2_".concat(i, "\" class=\"accordion\"></div>"));
-            new_card_body.hide();
-            new_card.append(new_card_header);
-            new_card.append(new_card_body);
-            new_accordion2.append(new_card);
-            $("#fpan2").append(new_accordion2);
-            new_card_header.append(book_cell);
-        }
+        card_header.append(book_cell);
+        card.append(card_header);
+        card.append(card_body);
+        accordion2.append(card);
+        $("#fpan2").append(accordion2);
+        if (i > 0)
+            card_body.hide();
     }
 }
 function preview_qdata() {
@@ -2568,7 +2556,8 @@ function preview_qdata() {
         'fixedquestions': $('#fixedquestions').val(),
         'randomize': $('#randomorder').prop('checked')
     };
-    format_preview_data(preview_data);
+    if (selected_paths.length >= 1)
+        format_preview_data(preview_data);
 }
 function save_quiz2() {
     var minutes = $('#minutes-timer').val();
