@@ -129,6 +129,7 @@ class PanelTemplQuizObjectSelector extends PanelTemplMql {
        
         cell.append(this.clear);
         cell.append(this.test_query);
+        cell.append(this.populate)
         row.append(cell);
         
         cell = $('<td></td>');

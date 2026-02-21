@@ -227,8 +227,9 @@ class PanelTemplSentenceSelector extends PanelTemplMql {
 
         cell.append(this.clear);
         cell.append(this.test_query);
+        cell.append(this.populate);
         row.append(cell);
-        
+
         cell = $('<td></td>');
         cell.append(this.fpan);
         row.append(cell);

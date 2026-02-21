@@ -662,6 +662,7 @@ var PanelTemplMql = (function () {
         });
         this.clear = $('<button id="clear_button" type="button">' + localize('clear_button') + '</button>');
         this.test_query = $('<button onclick="preview_qdata()" style="margin-left:10px" id="test_query_button" type="button">' + localize('test_query') + '</button>');
+        this.populate = $('<button onclick="populate()" style="margin-left:10px" id="populate_button" type="button">' + 'Populate' + '</button>');
         this.clear.click(function () {
             $('#virtualkbid').appendTo('#virtualkbcontainer');
             _this.rbFriendly.prop('checked', true);
@@ -1246,6 +1247,7 @@ var PanelTemplSentenceSelector = (function (_super) {
         cell = $('<td id="clearbuttoncell"></td>');
         cell.append(this.clear);
         cell.append(this.test_query);
+        cell.append(this.populate);
         row.append(cell);
         cell = $('<td></td>');
         cell.append(this.fpan);
@@ -1327,6 +1329,7 @@ var PanelTemplQuizObjectSelector = (function (_super) {
         cell = $('<td id="clearbuttoncell"></td>');
         cell.append(this.clear);
         cell.append(this.test_query);
+        cell.append(this.populate);
         row.append(cell);
         cell = $('<td></td>');
         cell.append(this.fpan);
@@ -2538,6 +2541,23 @@ function format_preview_data(pdata) {
             card_body.hide();
     }
 }
+function populate_data(preview_data) {
+    var submit_url = '/text/populate_data_backend';
+    var response_data = '';
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: preview_data,
+        success: function (response) {
+            console.log("success");
+            console.log(response);
+        },
+        error: function (error) {
+            console.log('ERROR!!');
+            console.log(error);
+        }
+    });
+}
 function preview_qdata() {
     show_preview = !show_preview;
     console.log("Preview Quiz Data");
@@ -2565,6 +2585,39 @@ function preview_qdata() {
     };
     if (selected_paths.length >= 1)
         format_preview_data(preview_data);
+}
+function populate() {
+    var checked_passages = $('.jstree-checked');
+    decoded_3et.desc = ckeditor.val();
+    decoded_3et.selectedPaths = [];
+    for (var i = 0; i < checked_passages.length; ++i) {
+        var r = $(checked_passages[i]).data('ref');
+        if (r != '')
+            decoded_3et.selectedPaths.push(r);
+    }
+    decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
+    decoded_3et.sentbefore = $('#sentbefore').val();
+    decoded_3et.sentafter = $('#sentafter').val();
+    decoded_3et.fixedquestions = +$('#fixedquestions').val();
+    decoded_3et.randomize = $('#randomorder').prop('checked');
+    if (!(decoded_3et.fixedquestions > 0))
+        decoded_3et.fixedquestions = 0;
+    decoded_3et.sentenceSelection = panelSent.getInfo();
+    decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
+    decoded_3et.quizFeatures = panelFeatures.getInfo();
+    var submit_url = '/text/populate_data_backend';
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: encodeURIComponent(JSON.stringify(decoded_3et)),
+        success: function (response) {
+            console.log(response);
+            console.log('success');
+        },
+        error: function (error) {
+            console.log('error');
+        }
+    });
 }
 function save_quiz2() {
     var minutes = $('#minutes-timer').val();

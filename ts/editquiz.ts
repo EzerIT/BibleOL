@@ -435,6 +435,25 @@ function format_preview_data(pdata:any):void {
 }
 
 
+function populate_data(preview_data:object){
+    var submit_url = '/text/populate_data_backend';
+    var response_data = '';
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: preview_data,
+        success: function (response) {
+            console.log("success");
+            console.log(response);
+        },
+        error: function (error) {
+            console.log('ERROR!!');
+            console.log(error);
+        }
+    });
+
+}
+
 //****************************************************************************************************
 // preview_qdata function
 //
@@ -471,8 +490,64 @@ function preview_qdata(): void {
     if(selected_paths.length >= 1)
         format_preview_data(preview_data);
     
+    //populate_data(preview_data);
 }
 
+function populate(): void{
+    //console.log('Populate');
+    //console.log(decoded_3et);
+    let checked_passages = $('.jstree-checked');
+    decoded_3et.desc = ckeditor.val();
+
+    decoded_3et.selectedPaths = [];
+
+    for (let i=0; i<checked_passages.length; ++i) {
+        let r = $(checked_passages[i]).data('ref');
+        if (r!='')
+            decoded_3et.selectedPaths.push(r);
+    }
+
+    decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
+    decoded_3et.sentbefore = $('#sentbefore').val();
+    decoded_3et.sentafter = $('#sentafter').val();
+    decoded_3et.fixedquestions = +$('#fixedquestions').val(); // Convert to number
+    decoded_3et.randomize = $('#randomorder').prop('checked');
+    if (!(decoded_3et.fixedquestions>0))
+        decoded_3et.fixedquestions = 0; // Non-positive or NaN
+
+    decoded_3et.sentenceSelection   = panelSent.getInfo();
+    decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
+    decoded_3et.quizFeatures        = panelFeatures.getInfo();
+
+    let submit_url = '/text/populate_data_backend';
+    $.ajax({
+        url:submit_url,
+        type:'POST',
+        data:encodeURIComponent(JSON.stringify(decoded_3et)),
+        success: function(response){
+            console.log(response);
+            console.log('success');
+        },
+        error: function(error){
+            console.log('error');
+        }
+    });
+    /*
+    //console.log('QUIZ DATA: ', encodeURIComponent(JSON.stringify(decoded_3et)));
+    // The HTML form contains the directory, the filename and the exercise as a JSON string
+    
+    let form : JQuery = $(`<form action="${submit_to}" method="post">
+                             <input type="hidden" name="dir"      value="${encodeURIComponent(dir_name)}">
+                             <input type="hidden" name="quiz"     value="${encodeURIComponent(quiz_name)}">
+                             <input type="hidden" name="quizdata" value="${encodeURIComponent(JSON.stringify(decoded_3et))}">
+                           </form>`);
+
+    $('body').append(form);
+
+    isSubmitting = true;
+    form.submit();
+    */
+}
 
 //****************************************************************************************************
 // save_quiz2 function
