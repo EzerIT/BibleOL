@@ -311,7 +311,7 @@ class Quiz_data {
         $monadset_tmp = $sheaf_tmp->get_monadset();
         $monad_count = count($monadset_tmp);
 
-        $monad_data = ["monad_set" => $monadset_tmp, "monad_count"];
+        $monad_data = ["monad_set" => $monadset_tmp, "monad_count" => $monad_count];
         return $monad_data;
     }
 

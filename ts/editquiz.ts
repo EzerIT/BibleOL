@@ -402,6 +402,7 @@ function format_preview_data(pdata:any):void {
     //let all_books = pdata['selected_paths'];
     console.log(pdata);
     let all_books = pdata.selected_paths;
+    console.log(all_books);
     for(let i = 0; i < all_books.length; i++){
         let book_name = all_books[i];
         let accordion2 : JQuery = $(`<div id="accordion2_${i}" class="accordion"></div>`);
@@ -485,11 +486,15 @@ function preview_qdata(): void {
         'fixedquestions': $('#fixedquestions').val(),
         'randomize': $('#randomorder').prop('checked')
     }
-
-    // only display data if at least one book is checked
+    // dev mode
+    preview_data = JSON.parse(`{"desc":"","database":"nestle1904","properties":"nestle1904","selected_paths":["Matthew","Mark"],"sentenceSelection":{"object":"word","mql":null,"featHand":{"vhand":[{"type":"enumfeature","name":"psp","comparator":"equals","values":["adjective","adverb"]}]},"useForQo":true},"quizObjectSelection":{"object":"word","mql":null,"featHand":{"vhand":[]},"useForQo":false},"quizFeatures":{"showFeatures":["visual"],"requestFeatures":[{"name":"psp","order_val":"1","usedropdown":false},{"name":"lemma","order_val":"2","usedropdown":false}],"dontShowFeatures":[],"dontShowObjects":[],"glosslimit":0},"maylocate":true,"sentbefore":"0","sentafter":"0","fixedquestions":"0","randomize":true}`); 
+    console.log(preview_data);
+    format_preview_data(preview_data);
+    /*
+    // uncomment for release mode
     if(selected_paths.length >= 1)
         format_preview_data(preview_data);
-    
+    */
     //populate_data(preview_data);
 }
 
@@ -519,13 +524,18 @@ function populate(): void{
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures        = panelFeatures.getInfo();
 
+    //console.log(JSON.stringify(decoded_3et));
+    let qdata_tmp = JSON.parse(`{"desc":"","database":"nestle1904","properties":"nestle1904","selectedPaths":["Matthew","Mark"],"sentenceSelection":{"object":"word","mql":null,"featHand":{"vhand":[{"type":"enumfeature","name":"psp","comparator":"equals","values":["adjective","adverb"]}]},"useForQo":true},"quizObjectSelection":{"object":"word","mql":null,"featHand":{"vhand":[]},"useForQo":false},"quizFeatures":{"showFeatures":["visual"],"requestFeatures":[{"name":"psp","order_val":"1","usedropdown":false},{"name":"lemma","order_val":"2","usedropdown":false}],"dontShowFeatures":[],"dontShowObjects":[],"glosslimit":0},"maylocate":true,"sentbefore":"0","sentafter":"0","fixedquestions":0,"randomize":true}`);
+
     let submit_url = '/text/populate_data_backend';
+    
+    // for release mode change qdata_tmp to decoded_3et
     $.ajax({
         url:submit_url,
         type:'POST',
-        data:decoded_3et,
+        data:qdata_tmp,
         success: function(response){
-            console.log(response)
+            console.log(JSON.parse(response));
             console.log('success');
         },
         error: function(error){

@@ -2521,6 +2521,7 @@ function format_preview_data(pdata) {
     }
     console.log(pdata);
     var all_books = pdata.selected_paths;
+    console.log(all_books);
     for (var i = 0; i < all_books.length; i++) {
         var book_name = all_books[i];
         var accordion2 = $("<div id=\"accordion2_".concat(i, "\" class=\"accordion\"></div>"));
@@ -2583,8 +2584,9 @@ function preview_qdata() {
         'fixedquestions': $('#fixedquestions').val(),
         'randomize': $('#randomorder').prop('checked')
     };
-    if (selected_paths.length >= 1)
-        format_preview_data(preview_data);
+    preview_data = JSON.parse("{\"desc\":\"\",\"database\":\"nestle1904\",\"properties\":\"nestle1904\",\"selected_paths\":[\"Matthew\",\"Mark\"],\"sentenceSelection\":{\"object\":\"word\",\"mql\":null,\"featHand\":{\"vhand\":[{\"type\":\"enumfeature\",\"name\":\"psp\",\"comparator\":\"equals\",\"values\":[\"adjective\",\"adverb\"]}]},\"useForQo\":true},\"quizObjectSelection\":{\"object\":\"word\",\"mql\":null,\"featHand\":{\"vhand\":[]},\"useForQo\":false},\"quizFeatures\":{\"showFeatures\":[\"visual\"],\"requestFeatures\":[{\"name\":\"psp\",\"order_val\":\"1\",\"usedropdown\":false},{\"name\":\"lemma\",\"order_val\":\"2\",\"usedropdown\":false}],\"dontShowFeatures\":[],\"dontShowObjects\":[],\"glosslimit\":0},\"maylocate\":true,\"sentbefore\":\"0\",\"sentafter\":\"0\",\"fixedquestions\":\"0\",\"randomize\":true}");
+    console.log(preview_data);
+    format_preview_data(preview_data);
 }
 function populate() {
     var checked_passages = $('.jstree-checked');
@@ -2605,13 +2607,14 @@ function populate() {
     decoded_3et.sentenceSelection = panelSent.getInfo();
     decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
     decoded_3et.quizFeatures = panelFeatures.getInfo();
+    var qdata_tmp = JSON.parse("{\"desc\":\"\",\"database\":\"nestle1904\",\"properties\":\"nestle1904\",\"selectedPaths\":[\"Matthew\",\"Mark\"],\"sentenceSelection\":{\"object\":\"word\",\"mql\":null,\"featHand\":{\"vhand\":[{\"type\":\"enumfeature\",\"name\":\"psp\",\"comparator\":\"equals\",\"values\":[\"adjective\",\"adverb\"]}]},\"useForQo\":true},\"quizObjectSelection\":{\"object\":\"word\",\"mql\":null,\"featHand\":{\"vhand\":[]},\"useForQo\":false},\"quizFeatures\":{\"showFeatures\":[\"visual\"],\"requestFeatures\":[{\"name\":\"psp\",\"order_val\":\"1\",\"usedropdown\":false},{\"name\":\"lemma\",\"order_val\":\"2\",\"usedropdown\":false}],\"dontShowFeatures\":[],\"dontShowObjects\":[],\"glosslimit\":0},\"maylocate\":true,\"sentbefore\":\"0\",\"sentafter\":\"0\",\"fixedquestions\":0,\"randomize\":true}");
     var submit_url = '/text/populate_data_backend';
     $.ajax({
         url: submit_url,
         type: 'POST',
-        data: decoded_3et,
+        data: qdata_tmp,
         success: function (response) {
-            console.log(response);
+            console.log(JSON.parse(response));
             console.log('success');
         },
         error: function (error) {
