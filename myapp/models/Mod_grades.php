@@ -329,7 +329,7 @@ class Mod_grades extends CI_Model {
     }
 
     // Get all pathnames of templates relating to $classid
-    public function get_pathnames_for_class(int $classid) {
+    public function get_pathnames_for_class(int $classid, array $student_ids=null) {
         // Find all pathids relating to $classid
         $query = $this->db
             ->select('pathname')
@@ -345,10 +345,24 @@ class Mod_grades extends CI_Model {
             // We need to escape parentheses i pathnames twice. So ( becomes \\(
             $escaped_pathname = str_replace("\\","\\\\",addcslashes($row->pathname,"()"));
 
-            $query2 = $this->db
-                ->select('pathname')
-                ->where("pathname REGEXP '^{$this->quizzespath}/$escaped_pathname/[^/]*$'")
-                ->get('sta_quiztemplate');
+            // Check if is teacher to select the right source for the combo
+            if ($this->mod_users->is_the_teacher($classid, $this->mod_users->my_id())) {
+
+
+                $where_clause = "";
+                $query2 = $this->db
+                    ->select('pathname')
+                    ->where("pathname REGEXP '^{$this->quizzespath}/$escaped_pathname/[^/]*$'")
+                    ->where_in('userid',$student_ids)
+                    ->get('sta_quiztemplate');
+            }
+            else {
+                $query2 = $this->db
+                    ->select('pathname')
+                    ->where("pathname REGEXP '^{$this->quizzespath}/$escaped_pathname/[^/]*$'" . " AND userid=" . $this->mod_users->my_id())
+                    ->get('sta_quiztemplate');
+            }
+
             foreach ($query2->result() as $row2)
                 $pathset[$row2->pathname] = true;
         }
@@ -448,12 +462,17 @@ class Mod_grades extends CI_Model {
 
     // Find all user IDs and template IDs that match the specified exercise pathname
     // The result is sorted by user ID
-    public function get_users_and_templ(string $path, int $myid=-1) {
+    public function get_users_and_templ(string $path, int $myclassid=-1, int $myid=-1) {
+
         if ($myid==-1){
           $query = $this->db
-          ->select('id,userid')
-          ->where('pathname',"$this->quizzespath/$path.3et")
-          ->get('sta_quiztemplate');
+          ->select('qt.id, qt.userid')
+          ->from('sta_quiztemplate qt')
+          ->join('sta_quiz q', 'qt.id = q.templid')
+          ->join('userclass uc','q.userid=uc.userid')
+          ->where('qt.pathname',"$this->quizzespath/$path.3et")
+          ->where('uc.classid',$myclassid)
+          ->get();
         }
         else {
           $query = $this->db
@@ -828,20 +847,122 @@ class Mod_grades extends CI_Model {
     }
 
 
+    // Seacrh a key and return the value
+    public function recursiveSearchHelper($array, $searchKey)
+    {
+        if (!is_array($array)) {
+            return false;
+        }
+
+        // Check for a match at this level
+        if (isset($array[$searchKey])) {
+            return preg_replace('/^#\d+? (.*)$/', '$1', $array[$searchKey]);;
+        }
+
+        // Continue traversal
+        foreach ($array as $item) {
+            $return_value = $this->recursiveSearchHelper($item, $searchKey);
+            if (!empty($return_value)) {
+                return preg_replace('/^#\d+? (.*)$/', '$1', $return_value);
+            }
+        }
+        return false;
+    }
+
     // Get answers for quizzes by quizzid
     public function get_quizz_detail(int $uid,int $quizzid) {
         if (empty($quizzid))
             return array();
 
+        // get template and internationalization info
+        $this->load->library('db_config');
+        $this->load->model('mod_userclass');
+        $quizz_temp = $this->db
+            ->from('sta_quiz q')
+            ->select('qt.quizcode, qt.dbname, qt.dbpropname, qt.qoname, q.templid')
+            ->join('sta_quiztemplate qt','qt.id=q.templid')
+            ->where('q.id',$quizzid)
+            ->get();
+        $dbnames = $this->mod_grades->get_templ_db([$quizz_temp->result()[0]->templid,]);
+        $this->db_config->init_config($dbnames->dbname,$dbnames->dbpropname, $this->language);
+        $l10n = json_decode($this->db_config->l10n_json);
+        //echo "<br><br>This is my Varianrt: <BR><BR>" ; print_r($_SESSION['variant']);
+        //$l10n->dbcopyright="";
+        //$l10n->emdrosobject="";
+        //$l10n->emdrostype="";
+        //$l10n->grammargroup="";
+        //$l10n->grammarfeature="";
+        //$l10n->grammarmetafeature="";
+        //$l10n->grammarsubfeature="";
+        //$l10n->universe="";
+        $l10n_array = json_decode(json_encode($l10n), true);
+        // Unset what we do not need
+        unset($l10n_array["dbcopyright"]);
+        unset($l10n_array["dbpropname"]);
+        unset($l10n_array["dbname"]);
+        unset($l10n_array["dbdescription"]);
+        // $featloc = $l10n->emdrosobject->{$dbnames->qoname}; // We only need localization of feature names
+        //echo "This is my Test: <BR><BR>" ; print_r($l10n_array);
+
+        // Get the result`
         $query = $this->db
             ->from('sta_quiz as q')
-            ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer, rf.qono, sq.txt, GROUP_CONCAT(df.name) disp_type, GROUP_CONCAT(df.value) disp_value')
+            ->select('sq.quizid, rf.questid, DENSE_RANK() OVER (PARTITION BY sq.quizid ORDER BY rf.questid) AS qono, sq.time, rf.correct, sq.location, rf.name, rf.value, rf.answer, rf.qono as subqono, sq.txt, GROUP_CONCAT(df.name) disp_type, GROUP_CONCAT(df.value) disp_value')
             ->join('sta_question as sq','sq.quizid=q.id')
             ->join('sta_requestfeature as rf','rf.questid = sq.id')
             ->join('sta_displayfeature as df','rf.questid=df.questid and rf.qono=df.qono')
             ->where('sq.quizid',$quizzid)
             ->group_by('rf.id, rf.questid, rf.qono')
             ->get();
+
+        // Localize feature names
+        $results = $query->result();
+        foreach ($results as $key => $value) {
+            // Feat requested
+            $transled = $this->recursiveSearchHelper($l10n_array, $value->name);
+            $results[$key]->name = (empty($transled) ? $value->name : $transled);
+            // Right Answer
+            $transled = $this->recursiveSearchHelper($l10n_array, $value->value);
+            $results[$key]->value = (empty($transled) ? $value->value : $transled);
+            // Student' s answer
+            $transled = $this->recursiveSearchHelper($l10n_array, $value->answer);
+            $results[$key]->answer = (empty($transled) ? $value->answer : $transled);
+        }
+
+        // return the results
+        return $results;
+    }
+
+    // get quiz varianttables
+    public function get_quizz_variant_tables(int $quizzid, string $user_variant) {
+        if (empty($quizzid))
+            return array();
+
+        if (empty($user_variant))
+            $db_table = 'db_localize';
+        else
+            $db_table = 'db_localize_'.$user_variant;
+
+        $l10n = json_decode($this->db_config->l10n_json);
+        $featloc = $l10n->emdrosobject->{$dbnames->qoname}; // We only need localization of feature names
+        print_r($l10n);
+        echo "<BR><BR>";
+        print_r($featloc);
+        return false;
+
+        $query = $this->db
+            ->from('sta_quiz as q')
+            ->select('quizcode, dbname, dbpropname')
+            ->join('sta_quiztemplate as qt','q.templid=qt.id')
+            ->where('sq.quizid',$quizzid)
+            ->group_by('rf.id, rf.questid, rf.qono')
+            ->get();
+        // $query = $this->db
+        //     ->from('sta_question as sq')
+        //     ->select('sq.quizid, sq.time, rf.correct, sq.location, rf.value, rf.answer, rf.qono, sq.txt')
+        //     ->join('sta_requestfeature as rf','rf.questid = sq.id')
+        //     ->where('sq.quizid',$quizzid)
+        //     ->get();
 
         return $query->result();
     }

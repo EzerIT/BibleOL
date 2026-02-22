@@ -416,6 +416,7 @@ class Ctrl_grades extends MY_Controller {
     	$this->load->model('mod_users');
     	$this->load->model('mod_classes');
     	$this->load->model('mod_grades');
+        $this->load->model('mod_statistics');
         $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
 
         try {
@@ -434,6 +435,8 @@ class Ctrl_grades extends MY_Controller {
             $this->load->helper('form');
             $this->load->library('form_validation');
             $this->load->library('db_config');
+            $this->load->model('mod_userclass');
+
             // Add grading schemes (MRCN)
             $this->load->helper('calc_grades_helper');
 
@@ -444,7 +447,17 @@ class Ctrl_grades extends MY_Controller {
 			if ($classid<=0 || ( !$is_enrolled && $class->ownerid!=$this->mod_users->my_id() ))
 				throw new DataException($this->lang->line('illegal_class_id'));
 
-            $exercise_list = $this->mod_grades->get_pathnames_for_class($classid);
+            // Send students ids
+            $students = $this->mod_userclass->get_named_users_in_class($classid);
+            if (empty($students))
+                throw new DataException('No students in class');
+
+            $student_ids = array();
+            foreach ($students as $st)
+                $student_ids[] = (int)$st->userid;
+
+            //$exercise_list = $this->mod_grades->get_pathnames_for_class($classid, $student_ids);
+            $exercise_list = $this->mod_statistics->get_pathnames_for_class($classid);
 
             $this->statistics_timeperiod->set_validation_rules();
             $this->form_validation->set_rules('exercise', '', 'callback_always_true');  // Dummy rule. At least one rule is required
@@ -466,6 +479,7 @@ class Ctrl_grades extends MY_Controller {
                     $ex = '';
                     $status = 2; // 2=Initial display
                     $real_students = null;
+                    $user_emails = null;
                     $resall = null;
                     $resall_ind = null;
                     $resfeatall = null;
@@ -473,7 +487,7 @@ class Ctrl_grades extends MY_Controller {
                 }
                 else {
                     // Find all user IDs and template IDs that match the specified pathname
-                    $users_and_templs = $this->mod_grades->get_users_and_templ($ex);
+                    $users_and_templs = $this->mod_grades->get_users_and_templ($ex, $classid);
 
                     $resall = array();
                     $resall_ind = array();
@@ -525,9 +539,16 @@ class Ctrl_grades extends MY_Controller {
                     else
                         $featloc = null;
 
+                    //Get emails
+                    $user_emails = $real_students;
+
                     // Get student names
                     foreach ($real_students as $uid => &$v)
                         $v = make_full_name($this->mod_users->get_user_by_id($uid)) . ($v ? ' *' : '');
+
+                    // Get student emails
+                    foreach ($user_emails as $uid => &$email_i)
+                        $email_i = $this->mod_users->get_user_by_id($uid)->email;
 
                     // Because $users_and_temps is sorted by user ID, $real_students and $resall are sorted in the same order
                 }
@@ -538,6 +559,7 @@ class Ctrl_grades extends MY_Controller {
                 $ex = '';
                 $status = 2; // 2=Initial display
                 $real_students = null;
+                $user_emails = null;
                 $resall = null;
                 $resall_ind = null;
                 $resfeatall = null;
@@ -575,7 +597,7 @@ class Ctrl_grades extends MY_Controller {
                                                                                       'end_date' => $this->statistics_timeperiod->end_string(),
                                                                                       'minpoint' => $this->statistics_timeperiod->start_timestamp(),
                                                                                       'maxpoint' => $this->statistics_timeperiod->end_timestamp(),
-                                                                                      'exercise_list' => $exercise_list), true);
+                                                                                      'exercise_list' => $exercise_list,'user_emails' => $user_emails), true);
 
             $main_params = array('left_title' => $this->lang->line('select_period_heading'),
                                  'left' => $this->lang->line('time_period_description')
@@ -652,7 +674,7 @@ class Ctrl_grades extends MY_Controller {
                 }
                 else {
                     // Find all user IDs and template IDs that match the specified pathname
-                    $users_and_templs = $this->mod_grades->get_users_and_templ($ex, $this->mod_users->my_id());
+                    $users_and_templs = $this->mod_grades->get_users_and_templ($ex, $classid, $this->mod_users->my_id());
 
                     $resall = array();
                     $resall_ind = array();
@@ -796,6 +818,15 @@ class Ctrl_grades extends MY_Controller {
 
 
             $res_detail = $this->mod_grades-> get_quizz_detail($userid, $quizzid);
+            // Get variants
+            if (empty($_SESSION['variant'])) {
+                $curr_variant = '';
+            }
+            else {
+                $curr_variant = $_SESSION['variant'];
+            }
+            //print_r($_SESSION);
+            //$var_tables = $this->mod_grades-> get_quizz_variant_tables($quizzid, $curr_variant);
 
             // VIEW:
             $this->load->view('view_top1', array('title' => $this->lang->line('exercise_graphs_title'),

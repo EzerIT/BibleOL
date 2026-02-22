@@ -336,8 +336,12 @@ class Mod_statistics extends CI_Model {
 
             $query2 = $this->db
                 ->select('pathname')
+                ->from('sta_quiztemplate qt')
+                //->innerjoin('sta_quiz q', 'qt.id = q.templid')
+                ->join('userclass uc','uc.userid=qt.userid')
                 ->where("pathname REGEXP '^{$this->quizzespath}/$escaped_pathname/[^/]*$'")
-                ->get('sta_quiztemplate');
+                ->where('uc.classid',$classid)
+                ->get();
             foreach ($query2->result() as $row2)
                 $pathset[$row2->pathname] = true;
         }
@@ -413,11 +417,15 @@ class Mod_statistics extends CI_Model {
 
     // Find all user IDs and template IDs that match the specified exercise pathname
     // The result is sorted by user ID
-    public function get_users_and_templ(string $path) {
-        $query = $this->db
-            ->select('id,userid')
-            ->where('pathname',"$this->quizzespath/$path.3et")
-            ->get('sta_quiztemplate');
+    public function get_users_and_templ(string $path, int $myclassid=-1) {
+        $$query = $this->db
+            ->select('qt.id, qt.userid')
+            ->from('sta_quiztemplate qt')
+            ->join('sta_quiz q', 'qt.id = q.templid')
+            ->join('userclass uc','q.userid=uc.userid')
+            ->where('qt.pathname',"$this->quizzespath/$path.3et")
+            ->where('uc.classid',$myclassid)
+            ->get();
 
         $users_templ = array();
         foreach ($query->result() as $row) {

@@ -19,3 +19,4 @@ loaddb.sh
 RGraph/big-libraries
 node_modules/
 package-lock.json
+.idea/

@@ -41,7 +41,7 @@ class Answer {
         this.c            = comp.getComp();
         this.cType        = comp.getCompType();
         this.answerSws    = answerSws;
-        this.answerString = answerString.normalize('NFC');
+        this.answerString = this.decodeHtml(answerString).normalize('NFC');
         this.matchRegexp  = matchRegexp;
 
         if (this.cType == COMPONENT_TYPE.checkBoxes) {
@@ -54,6 +54,17 @@ class Answer {
         }
     }
 
+    //------------------------------------------------------------------------------------------
+    // decodeHtml method
+    //
+    // Decodes the HTML string on the client side software.
+    //
+    public decodeHtml(html:string):string {
+        const txt = document.createElement('textarea');
+        txt.innerHTML = html;
+        return txt.value;
+    }
+    
     //------------------------------------------------------------------------------------------
     // showIt method
     //

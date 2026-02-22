@@ -3546,7 +3546,17 @@ statistics\index{statistics} for the user. The record in the user statistics tab
 called \emph{grading}; this field is set to 0 if the user pressed the ``SAVE outcome'' button, the
 field is set to 1 if the use pressed the ``GRADE task'' button.
 
+%%%%%%%%%%%%%%%%%%%% Running an Exercise %%%%%%%%%%%%%%%%%%%%
+\section{Setting Exercise Timers}
+Teachers can also set time limits for their exercises. The time limit will only apply to the entirety 
+of the exercise, and not individual questions. For example if the exercise limit is for five minutes, 
+and there are ten questions, the student can use the five minutes however they choose.
+Once the timer runs out, the exercise will be submitted with whatever data that was present.
 
+\begin{figure}[h]
+  \includegraphics[width=\textwidth]{exercise_timer.png}
+  \caption{The exercise timer tab}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% The dictionaries Variable %%%%%%%%%%%%%%%%%%%%
@@ -6650,6 +6660,75 @@ area provides a link to the same chapter at the SHEBANQ website. A similar link 
 on the SHEBANQ website. Also, when a teacher is creating an exercise in Bible OL, they can import
 MQL queries from the SHEBANQ website (see Section \ref{sec-shebanq-import}).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Docker Development %%%%%%%%%%%%%%%%%%%%
+\chapter{Docker Development}
+
+\textbf{Read this chapter if you want to.}
+\plainbreak{3}
+
+Run BibleOL in a Docker container.
+
+%%%%%%%%%%%%%%%%%%%% Docker Context %%%%%%%%%%%%%%%%%%%%
+\section{Docker Context and Terms}
+
+A Docker container is a software package containing all of the dependencies required for an application. BibleOL has many important packages that it relies on, and the exact versions of these packages can be hard to track. This motivated our development team to create a container for BibleOL, so that it is more accessible for everyone. We have made our containers available for Mac, Windows, and Linux users.
+
+\begin{my-longtabu-nomid}{lX}{ \headii{Term}{Meaning} }
+
+\parbox[t]{3cm}{Docker-Container\index{question|hyperit}}& a lightweight, standalone, 
+and executable software package that includes everything needed to run an 
+application, such as the code, runtime, system tools, libraries, and settings. 
+It is a running instance of a Docker image.\\
+\midrule
+
+\parbox[t]{3cm}{Docker-Image\index{question|hyperit}}& A Docker image is a read-only template that contains the instructions for creating a Docker container. It includes the application code, libraries, dependencies, and configuration files needed to run the software. Images are used to instantiate containers and can be shared via registries like Docker Hub.\\
+\midrule
+\parbox[t]{3cm}{Docker-Hub\index{question|hyperit}}& Docker Hub is a cloud-based registry service for storing, sharing, and distributing Docker images. It allows users to publish images publicly or privately, collaborate, and pull images for container deployment.\\
+\midrule
+\end{my-longtabu-nomid}
+
+%%%%%%%%%%%%%%%%%%%% Installing BibleOL with Docker %%%%%%%%%%%%%%%%%%%%
+\section{Installing BibleOL with Docker}
+
+\emph{All of the instructions and code for installing BibleOL can be found in \textbf{BibleOL/Dockerfiles}}\\
+
+There are two primary docker images for the Bible Online Learner. The image bibleol-arm is used for Mac operating systems that have an M1 or M2 chip, this is most of the newer models. The other image bibleol-amd will work on all other architectures including Windows, Linux, and Mac (Intel). The initial installation will take approximately 15 minutes, if the image is not already downloaded to your machine. Subsequent installations will generally take between 1-2 minutes. There is no need to be fluent in Docker commands to build these projects, because each sub-directory contains shell scripts and Makefiles that automate the installation.
+
+\subsection{Apple Silicion Installation for M1 and M2 Chips}
+
+\textbf{Installation Steps: }
+\begin{enumerate}
+  \item Open a terminal and change your directory to BibleOL/Dockerfiles/bibleol-arm.
+  \item Build the project by typing 'make'. If you do not have make you can install it with apt-get install make.
+  \item Go to localhost:8000 and you should be viewing the home page.
+  \item Login as the default administrator with the following credentials
+  \begin{itemize}
+    \item username: admin
+    \item password: bibleol\_pwd
+  \end{itemize}
+\end{enumerate}
+
+\subsection{Linux/Windows/Mac(Intel) Installation}
+\textbf{Installation Steps: }
+\begin{enumerate}
+  \item Open a terminal and change your directory to BibleOL/Dockerfiles/bibleol-amd.
+  \item Build the project by typing 'make'. If you do not have make you can install it with apt-get install make.
+  \item Go to localhost:8000 and you should be viewing the home page.
+  \item Login as the default administrator with the following credentials
+  \begin{itemize}
+    \item username: admin
+    \item password: bibleol\_pwd
+  \end{itemize}
+\end{enumerate}
+
+\subsection{Makefile Commands}
+\textbf{Commands: }
+\begin{itemize}
+  \item Type make stop to stop or pause the docker container
+  \item Type make start to start a stopped container
+  \item Type make clean to delete the image and container
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%% Appendix: ETCBC4 Details %%%%%%%%%%%%%%%%%%%%

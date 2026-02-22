@@ -104,7 +104,7 @@ class Mod_classes extends CI_Model {
         }
     }
 
-    // Get clases the ustand is enrolled in
+    // Get clases the student is enrolled in
     public function get_named_classes_enrolled($all=true) {
       $query = $this->db
       ->from('class c')

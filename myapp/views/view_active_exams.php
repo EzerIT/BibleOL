@@ -37,7 +37,18 @@
             <td class="leftalign">
               <a class="badge badge-primary" href="/exams/take_exam?exam=<?= $exam_instance->id ?>"><?= $exam_instance->in_progress ? 'Continue' : 'Take' ?> Exam</a>
               <?php if ($this->mod_users->is_teacher()): ?>
+<<<<<<< HEAD
                 <a class="badge badge-danger" href="#" onclick="dltexam(<?= $exam_instance->id ?>, '<?= $exam_instance->instance_name ?>');"><?= $this->lang->line('delete_exam_instance') ?></a>
+=======
+                <a 
+                  class="badge badge-danger delete-exam-instance-btn" 
+                  href="#"
+                  data-instance-name=<?= htmlspecialchars($exam->instance_name, ENT_QUOTES) ?>
+                  data-id=<?= $exam->id ?>
+                >
+                  <?= $this->lang->line('delete_exam_instance') ?>
+                </a>
+>>>>>>> master
               <?php endif; ?>
             </td>
           </tr>
@@ -60,15 +71,22 @@
         </tr>
         <?php foreach ($future_exams_list as $exam_instance): ?>
           <tr>
-            <td class="leftalign"><?= $class_names[$exam_instance->class_id] ?></td>
-            <td class="leftalign"><?= $instructors[$exam_instance->class_id] ?></td>
-            <td class="leftalign"><?= $exam_instance->instance_name ?></td>
-            <td class="leftalign time"><?= $exam_instance->exam_start_time ?></td>
-            <td class="leftalign time"><?= $exam_instance->exam_end_time ?></td>
-            <td class="leftalign"><?= $exam_instance->exam_length ?></td>
+            <td class="leftalign"><?= $class_names[$exam->class_id] ?></td>
+            <td class="leftalign"><?= $instructors[$exam->class_id] ?></td>
+            <td class="leftalign"><?= $exam->instance_name ?></td>
+            <td class="leftalign time"><?= $exam->exam_start_time ?></td>
+            <td class="leftalign time"><?= $exam->exam_end_time ?></td>
+            <td class="leftalign"><?= $exam->exam_length ?></td>
             <td class="leftalign">
               <?php if ($this->mod_users->is_teacher()): ?>
-                <a class="badge badge-danger" href="#" onclick="dltexam(<?= $exam_instance->id ?>, '<?= $exam_instance->instance_name ?>');"><?= $this->lang->line('delete_exam_instance') ?></a>
+                <a 
+                  class="badge badge-danger delete-exam-instance-btn" 
+                  href="#"
+                  data-instance-name=<?= htmlspecialchars($exam->instance_name, ENT_QUOTES) ?>
+                  data-id=<?= $exam->id ?>
+                >
+                  <?= $this->lang->line('delete_exam_instance') ?>
+                </a>
               <?php endif; ?>
             </td>
           </tr>
@@ -121,12 +139,20 @@
     this.innerText = new Date((this.innerText) * 1000).toString().split(" (")[0];
   })
 
-  function dltexam(examid, examname) {
-    $('#delete-exid').attr('value', examid);
-    document.getElementById('delete-exam-instance').innerHTML = examname;
+  $('.delete-exam-instance-btn').on('click', null, e => {
+    e.preventDefault();
+
+    const examId = $(e.target).data('id');
+    const instanceName = $(e.target).data('instance-name');
+
+    console.log(examId)
+    console.log(instanceName)
+
+    $('#delete-exid').attr('value', examId);
+    document.getElementById('delete-exam-instance').innerHTML = instanceName;
     $('#delete-error').hide();
     $("#delete-exam-instance-dialog").modal("show");
-  }
+  });
 
   $(function() {
     $('#delete-dialog-ok').click(function() {
