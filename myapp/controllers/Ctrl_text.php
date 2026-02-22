@@ -331,12 +331,18 @@ class Ctrl_text extends MY_Controller {
     // get the quiz data from emdros
     public function populate_data_backend(){
         // unpack the pending quizdata
-        $quizdata_tmp = json_decode(json_encode($_POST));
-        //echo $quizdata_tmp["database"];
+        //$quizdata_tmp = json_decode(json_encode($_POST));
+        //echo 
+        $qdata_tmp = json_encode($_POST);
+        $qdata_tmp = json_decode($qdata_tmp);
+        //echo var_dump($qdata_tmp);
+        //echo var_dump($qdata_tmp->selectedPaths) . "\n";
         $this->load->model('mod_quizpath');
         $this->load->model('mod_askemdros');
-        echo "hello world";
-        return;
+        //echo "hello world";
+        $monad_data = $this->mod_askemdros->preview_quiz($qdata_tmp);
+        echo json_encode($monad_data);
+        return $monad_data;
     }
 
     // Common code for show_quiz() and show_quiz_sel()

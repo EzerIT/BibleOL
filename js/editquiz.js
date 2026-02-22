@@ -2609,7 +2609,7 @@ function populate() {
     $.ajax({
         url: submit_url,
         type: 'POST',
-        data: encodeURIComponent(JSON.stringify(decoded_3et)),
+        data: decoded_3et,
         success: function (response) {
             console.log(response);
             console.log('success');
