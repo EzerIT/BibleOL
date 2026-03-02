@@ -7,6 +7,12 @@ sudo service apache2 start
 echo "CREATE USER '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';" | mysql 
 echo "CREATE DATABASE ${MYSQL_DATABASE}" | mysql
 echo "GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO ${MYSQL_USER}@localhost;" | mysql
+
+# Optional steps to run in a container if the .htaccess is not created
+cd /var/www/html/BibleOL
+if [ ! -e .htaccess ]; then  sudo cp .htaccess-dist .htaccess && echo "started hooks" ; fi
+
+# Continue normal processing 
 cd /var/www/html/BibleOL/myapp/config
 sudo cp database.php-dist database.php
 sudo sed -i -e "s/USERNAME/${MYSQL_USER}/g" database.php 
@@ -26,7 +32,7 @@ sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 10M/g' /etc/php/8.1/apa
 sed -i 's/post_max_size = 8M/post_max_size = 10M/g' /etc/php/8.1/apache2/php.ini
 
 #prepare quizzes directory
-mkdir /var/www/html/BibleOL/quizzes
+if [ ! -e /var/www/html/BibleOL/quizzes ]; then mkdir /var/www/html/BibleOL/quizzes; fi
 sudo chown -R www-data:www-data /var/www/html/BibleOL/quizzes
 
 sudo service apache2 restart
