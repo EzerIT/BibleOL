@@ -37,18 +37,14 @@
             <td class="leftalign">
               <a class="badge badge-primary" href="/exams/take_exam?exam=<?= $exam_instance->id ?>"><?= $exam_instance->in_progress ? 'Continue' : 'Take' ?> Exam</a>
               <?php if ($this->mod_users->is_teacher()): ?>
-<<<<<<< HEAD
-                <a class="badge badge-danger" href="#" onclick="dltexam(<?= $exam_instance->id ?>, '<?= $exam_instance->instance_name ?>');"><?= $this->lang->line('delete_exam_instance') ?></a>
-=======
                 <a 
                   class="badge badge-danger delete-exam-instance-btn" 
                   href="#"
-                  data-instance-name=<?= htmlspecialchars($exam->instance_name, ENT_QUOTES) ?>
-                  data-id=<?= $exam->id ?>
+                  data-instance-name=<?= htmlspecialchars($exam_instance->instance_name, ENT_QUOTES) ?>
+                  data-id=<?= $exam_instance->id ?>
                 >
                   <?= $this->lang->line('delete_exam_instance') ?>
                 </a>
->>>>>>> master
               <?php endif; ?>
             </td>
           </tr>

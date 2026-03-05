@@ -8,6 +8,10 @@ $comment['active_exams_description'] = "";
 $format['active_exams_description'] = "";
 $use_textarea['active_exams_description'] = false;
 
+$comment['attempts_completed'] = "";
+$format['attempts_completed'] = "";
+$use_textarea['attempts_completed'] = false;
+
 $comment['choose_exercises_in_order'] = "";
 $format['choose_exercises_in_order'] = "";
 $use_textarea['choose_exercises_in_order'] = false;
