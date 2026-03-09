@@ -593,12 +593,12 @@ DROP TABLE IF EXISTS `bol_exam_results`;
 CREATE TABLE `bol_exam_results` (
   `id` int NOT NULL AUTO_INCREMENT,
   `userid` int NOT NULL,
-  `activeexamid` int NOT NULL,
+  `attempt_id` int NOT NULL,
   `quizid` int NOT NULL,
   `quiztemplid` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `activeexamid` (`activeexamid`),
-  CONSTRAINT `bol_exam_results_ibfk_1` FOREIGN KEY (`activeexamid`) REFERENCES `bol_exam_active` (`id`) ON DELETE CASCADE
+  KEY `attempt_id` (`attempt_id`),
+  CONSTRAINT `bol_exam_results_ibfk_1` FOREIGN KEY (`attempt_id`) REFERENCES `bol_exam_attempt` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 
