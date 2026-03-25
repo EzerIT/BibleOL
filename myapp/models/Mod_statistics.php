@@ -418,7 +418,7 @@ class Mod_statistics extends CI_Model {
     // Find all user IDs and template IDs that match the specified exercise pathname
     // The result is sorted by user ID
     public function get_users_and_templ(string $path, int $myclassid=-1) {
-        $$query = $this->db
+        $query = $this->db
             ->select('qt.id, qt.userid')
             ->from('sta_quiztemplate qt')
             ->join('sta_quiz q', 'qt.id = q.templid')
