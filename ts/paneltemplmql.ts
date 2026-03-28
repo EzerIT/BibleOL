@@ -695,7 +695,7 @@ abstract class PanelTemplMql {
     protected rbMql           : JQuery;  // Radio button for selecting MQL input
     protected rbMqlLabel      : JQuery;  // Localized label for MQL feature selector
     protected clear           : JQuery;  // The 'Clear' button
-
+    protected test_query      : JQuery;  // The 'Test Query' button
     private   fname2fh        : { [key:string] : FeatureHandler } = {}; // Maps feature name => feature handler for features
                                                                         // in initial contents of exercise file
     private   groups          : { [key:string] : JQuery };              // Maps feature name => feature selector
@@ -831,6 +831,7 @@ abstract class PanelTemplMql {
         ////////////////////////////////////////////////////////////
         // The 'Clear' button
         this.clear = $('<button id="clear_button" type="button">' + localize('clear_button') + '</button>');
+        this.test_query = $('<button onclick="preview_qdata()" style="margin-left:10px" id="test_query_button" type="button">' + localize('test_query') + '</button>');
 
         this.clear.click(() => {
             // When 'Clear' is pressed, reset everything and select the surface object ('[data-reset]')

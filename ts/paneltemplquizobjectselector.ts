@@ -128,6 +128,7 @@ class PanelTemplQuizObjectSelector extends PanelTemplMql {
         cell = $('<td id="clearbuttoncell"></td>');
        
         cell.append(this.clear);
+        cell.append(this.test_query);
         row.append(cell);
         
         cell = $('<td></td>');
