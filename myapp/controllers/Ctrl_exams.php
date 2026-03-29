@@ -114,7 +114,10 @@ class Ctrl_exams extends MY_Controller
             continue;
           }
           
-          if ($active_exam->attempts_completed > $active_exam->maximum_attempts) {
+          if (
+            !is_null($active_exam->maximum_attempts)
+            && $active_exam->attempts_completed >= $active_exam->maximum_attempts
+          ) {
             continue;
           }
 
@@ -683,7 +686,9 @@ class Ctrl_exams extends MY_Controller
           $totalNumberOfExercises++;
           $totalNumberOfQuestions += $exercise->numq;
 
-          $name = str_replace("+", "%2B", $exercise->exercisename);
+          // Legacy exam XML stores '+' as '%2B'. Normalize back to the real quiz path
+          // before comparing, storing, and URL-encoding it later.
+          $name = rawurldecode(trim((string)$exercise->exercisename));
 
           $numberOfQuestionsByExercise .= "\nExercise "
             . $totalNumberOfExercises
@@ -702,9 +707,8 @@ class Ctrl_exams extends MY_Controller
 
           // If the exercise was not already completed, add
           // it to the exercises array
-          $name = trim($name);
           array_push($exercises, $name);
-            $exercise_parameters[$name] = array();
+          $exercise_parameters[$name] = array();
           $array = json_decode(json_encode((array) $exercise), TRUE);
           // Iterate through the features of the exercise.
           foreach ($array as $key => $value){

@@ -64,9 +64,15 @@ class Mod_exams extends CI_Model{
       return $query->row()->count;
   }
 
-  public function get_template_id(int $quizid){
+  public function get_template_id(int $quizid): ?int {
     $query = $this->db->get_where('sta_quiz', array('id' => $quizid));
-    return $query->row()->templid;
+    $row = $query->row();
+
+    if (is_null($row)) {
+      return null;
+    }
+
+    return (int)$row->templid;
   }
 
   public function get_active_exam(int $id) {
@@ -74,19 +80,30 @@ class Mod_exams extends CI_Model{
     return $query->row();
   }
 
+  public function exam_results_uses_attempt_id(): bool {
+    return $this->db->field_exists('attempt_id', 'exam_results');
+  }
+
   public function get_completed_attempt_exercises(int $user_id, int $exam_attempt_id) {
       $completed = [];
+      $exam_attempt = $this->get_exam_attempt_by_id($exam_attempt_id);
 
-      // Join exam_results and exam_attempt so we can filter by userid
+      if (is_null($exam_attempt) || (int)$exam_attempt->userid !== $user_id) {
+          return $completed;
+      }
+
       $this->db->select('exam_results.quiztemplid');
       $this->db->from('exam_results');
-      $this->db->join(
-          'exam_attempt',
-          'exam_attempt.id = exam_results.attempt_id',
-          'inner'
-      );
-      $this->db->where('exam_attempt.userid', $user_id);
-      $this->db->where('exam_attempt.id', $exam_attempt_id);
+
+      if ($this->exam_results_uses_attempt_id()) {
+          // New schema: exam_results links directly to the specific exam attempt.
+          $this->db->where('exam_results.attempt_id', $exam_attempt_id);
+      }
+      else {
+          // Legacy schema: exam_results links to the active exam and user instead.
+          $this->db->where('exam_results.userid', $user_id);
+          $this->db->where('exam_results.activeexamid', (int)$exam_attempt->activeexamid);
+      }
 
       $results = $this->db->get()->result();
 
@@ -131,7 +148,7 @@ class Mod_exams extends CI_Model{
     $latest_exam_attempt = $this->get_latest_attempt($user_id, $active_exam_id);
     if (
       is_null($latest_exam_attempt)
-      || $latest_exam_attempt->is_done === true
+      || (bool)$latest_exam_attempt->is_done
     ) {
       return false;
     }
@@ -147,20 +164,34 @@ class Mod_exams extends CI_Model{
     ]);
     $this->db->limit(1);
     $query = $this->db->get('exam_attempt');
-    return $query->num_rows() > 0;
+    $row = $query->row();
+
+    return !is_null($row) && (bool)$row->is_done;
   }
 
   public function user_has_completed_all_attempts_available(int $user_id, int $active_exam_id): bool {
+    $active_exam = $this->get_active_exam($active_exam_id);
+
+    if (is_null($active_exam) || is_null($active_exam->maximum_attempts)) {
+      return false;
+    }
+
     $this->db->where([
       'userid' => $user_id,
       'activeexamid' => $active_exam_id,
       'is_done' => true
     ]);
     $attempts_completed = $this->db->count_all_results('exam_attempt');
-
-    $active_exam = $this->get_active_exam($active_exam_id);
     
-    return $attempts_completed >= $active_exam->maximum_attempts;
+    return $attempts_completed >= (int)$active_exam->maximum_attempts;
+  }
+
+  public function get_exam_attempt_by_id(int $exam_attempt_id): ?stdClass {
+    return $this->db
+      ->where('id', $exam_attempt_id)
+      ->limit(1)
+      ->get('exam_attempt')
+      ->row();
   }
 
   public function set_exam_attempt_is_done(int $exam_attempt_id): int {

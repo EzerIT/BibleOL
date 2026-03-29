@@ -866,8 +866,14 @@ class Ctrl_grades extends MY_Controller {
         $this->load->library('statistics_timeperiod',array('default_period'=>'short'));
 
         try {
+            // The class picker links here with GET, while the filter form posts back.
+            // Accept either source and prefer POST on subsequent submissions.
+            $classid = (int)$this->input->post('class-id');
+            if ($classid <= 0) {
+                $classid = (int)$this->input->get('class-id');
+            }
+
             // Check if user is enrolled in the class
-            $classid = (int)$this->input->get('class-id');
             $is_enrolled=$this->mod_grades->check_if_enrolled($classid);
             if (!$is_enrolled) {
               // Check for admin if not enrolled
@@ -883,7 +889,6 @@ class Ctrl_grades extends MY_Controller {
 
             $this->form_validation->set_data($_POST);
 
-            $classid = (int)$this->input->post('class-id');
             $class = $this->mod_classes->get_class_by_id($classid);
             //			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && $this->mod_users->my_id()!=25)) // TODO remove 25
 			// if the classid is less than zero or (not enrolled and not the owner and not a grader)
@@ -900,8 +905,11 @@ class Ctrl_grades extends MY_Controller {
             $this->form_validation->set_rules('grade_system', '', 'callback_always_true');  // Dummy rule. At least one rule is required
             $this->form_validation->set_rules('max_time', '', 'callback_always_true');  // Dummy rule. At least one rule is required
 
+            $nongraded = $this->input->post('nongraded') == 'on';
+
             // Get grading system
             $grade_system = $this->input->post('grade-system');
+            $max_time = $this->input->post('max_time');
 
 			if ($this->form_validation->run()) {
                 $this->statistics_timeperiod->ok_dates();

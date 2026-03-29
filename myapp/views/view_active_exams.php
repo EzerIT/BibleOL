@@ -67,19 +67,19 @@
         </tr>
         <?php foreach ($future_exams_list as $exam_instance): ?>
           <tr>
-            <td class="leftalign"><?= $class_names[$exam->class_id] ?></td>
-            <td class="leftalign"><?= $instructors[$exam->class_id] ?></td>
-            <td class="leftalign"><?= $exam->instance_name ?></td>
-            <td class="leftalign time"><?= $exam->exam_start_time ?></td>
-            <td class="leftalign time"><?= $exam->exam_end_time ?></td>
-            <td class="leftalign"><?= $exam->exam_length ?></td>
+            <td class="leftalign"><?= $class_names[$exam_instance->class_id] ?></td>
+            <td class="leftalign"><?= $instructors[$exam_instance->class_id] ?></td>
+            <td class="leftalign"><?= $exam_instance->instance_name ?></td>
+            <td class="leftalign time"><?= $exam_instance->exam_start_time ?></td>
+            <td class="leftalign time"><?= $exam_instance->exam_end_time ?></td>
+            <td class="leftalign"><?= $exam_instance->exam_length ?></td>
             <td class="leftalign">
               <?php if ($this->mod_users->is_teacher()): ?>
                 <a 
                   class="badge badge-danger delete-exam-instance-btn" 
                   href="#"
-                  data-instance-name=<?= htmlspecialchars($exam->instance_name, ENT_QUOTES) ?>
-                  data-id=<?= $exam->id ?>
+                  data-instance-name=<?= htmlspecialchars($exam_instance->instance_name, ENT_QUOTES) ?>
+                  data-id=<?= $exam_instance->id ?>
                 >
                   <?= $this->lang->line('delete_exam_instance') ?>
                 </a>

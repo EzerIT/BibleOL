@@ -272,7 +272,9 @@ class Ctrl_text extends MY_Controller {
         if (array_key_exists('exam_attempt_id', $_GET)) {
           $quiz = $_GET['quiz'];
           $exam_parameters = $_SESSION['exam_parameters'];
-          $numq = $exam_parameters[str_replace("+", "%2B", $quiz)]['numq'];
+          $numq = isset($exam_parameters[$quiz]['numq'])
+            ? $exam_parameters[$quiz]['numq']
+            : 10;
 
           if ($numq <= 0) {
             $numq = 10;

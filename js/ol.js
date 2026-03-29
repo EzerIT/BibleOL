@@ -3000,7 +3000,10 @@ var Quiz = (function () {
                         if ($('#exercise_lst').html()) {
                             var exercise_lst = $('#exercise_lst').html().split("~");
                             var next_quiz = exercise_lst.shift();
-                            window.location.replace(site_url + 'text/show_quiz?quiz=' + next_quiz + '&count=10&exam_attempt_id=' + $('#exam_attempt_id').html() + '&exercise_lst=' + exercise_lst.join("~"));
+                                    window.location.replace(site_url
+                                        + 'text/show_quiz?quiz=' + encodeURIComponent(next_quiz)
+                                        + '&count=10&exam_attempt_id=' + $('#exam_attempt_id').html()
+                                        + '&exercise_lst=' + encodeURIComponent(exercise_lst.join("~")));
                         }
                         else
                             window.location.replace(site_url + 'exams/exam_done');
