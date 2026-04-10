@@ -101,12 +101,16 @@ class Ctrl_statistics extends MY_Controller {
         'quiztemplid' => $quiz_template_id,
       );
 
+      if ($this->db->field_exists('userid', 'exam_results')) {
+        $data['userid'] = (int)$exam_attempt->userid;
+      }
+
+      if ($this->db->field_exists('activeexamid', 'exam_results')) {
+        $data['activeexamid'] = (int)$exam_attempt->activeexamid;
+      }
+
       if ($this->mod_exams->exam_results_uses_attempt_id()) {
         $data['attempt_id'] = $exam_attempt_id;
-      }
-      else {
-        $data['userid'] = (int)$exam_attempt->userid;
-        $data['activeexamid'] = (int)$exam_attempt->activeexamid;
       }
 
       if (!$this->db->insert('exam_results', $data)) {
