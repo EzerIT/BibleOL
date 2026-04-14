@@ -2588,6 +2588,27 @@ function preview_qdata() {
     console.log(preview_data);
     format_preview_data(preview_data);
 }
+function group_by_passage(monadObjects) {
+    var monads_by_passage = {};
+    for (var i = 0; i < monadObjects.length; i++) {
+        var ref = monadObjects[i][0][0]['bcv_loc'];
+        ref = ref.replace(/\d/g, '');
+        ref = ref.replace(':', '');
+        if (ref in monads_by_passage) {
+            monads_by_passage[ref].push(monadObjects[i]);
+        }
+        else {
+            monads_by_passage[ref] = [monadObjects[i]];
+        }
+    }
+    console.log('Monads by Passage: ', monads_by_passage);
+    return monads_by_passage;
+}
+function display_query_data(query_data) {
+    var monads = query_data['monad_set'];
+    var monads_by_passage = {};
+    console.log(monads);
+}
 function populate() {
     var checked_passages = $('.jstree-checked');
     decoded_3et.desc = ckeditor.val();
@@ -2614,7 +2635,8 @@ function populate() {
         type: 'POST',
         data: qdata_tmp,
         success: function (response) {
-            console.log(JSON.parse(response));
+            response = JSON.parse(response);
+            display_query_data(response);
             console.log('success');
         },
         error: function (error) {

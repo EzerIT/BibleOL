@@ -35,6 +35,10 @@ interface myalertInterface {
     (dialogtitle : string, dialogtext : string) : void;
 }
 
+interface MyObject {
+    [key: number]: any;
+  }
+
 //****************************************************************************************************
 // myalert function
 //
@@ -497,6 +501,56 @@ function preview_qdata(): void {
     */
     //populate_data(preview_data);
 }
+/*
+function group_by_passage(monadObjects:{[key:number]:any}):any {
+    //let MyObject monads_by_passage = {};
+    let monads_by_passage: MyObject = {};
+    
+    for(let i = 0; i < monadObjects.length; i++) {
+      let ref = monadObjects[i][0][0]['bcv_loc'];
+      ref = ref.replace(/\d/g, '');
+      ref = ref.replace(':', '');
+      if(ref in monads_by_passage) {
+        monads_by_passage[ref].push(monadObjects[i]);
+      }
+      else {
+        monads_by_passage[ref] = [monadObjects[i]];
+      }
+    }
+    console.log('Monads by Passage: ', monads_by_passage);
+
+    return monads_by_passage;
+}
+*/
+
+function group_by_passage(monadObjects:any) {
+    let monads_by_passage: any = {};
+    for(let i = 0; i < monadObjects.length; i++) {
+      let ref = monadObjects[i][0][0]['bcv_loc'];
+      ref = ref.replace(/\d/g, '');
+      ref = ref.replace(':', '');
+      if(ref in monads_by_passage) {
+        monads_by_passage[ref].push(monadObjects[i]);
+      }
+      else {
+        monads_by_passage[ref] = [monadObjects[i]];
+      }
+    }
+    console.log('Monads by Passage: ', monads_by_passage);
+
+    return monads_by_passage;
+  }
+
+function display_query_data(query_data:any): void {
+    //query_data = group_by_passage(query_data);
+    let monads = query_data['monad_set'];
+    let monads_by_passage = {};
+    //monads_by_passage = group_by_passage(monads);
+    
+    
+    console.log(monads);
+
+}
 
 function populate(): void{
     //console.log('Populate');
@@ -535,7 +589,9 @@ function populate(): void{
         type:'POST',
         data:qdata_tmp,
         success: function(response){
-            console.log(JSON.parse(response));
+            //console.log(JSON.parse(response));
+            response = JSON.parse(response);
+            display_query_data(response);
             console.log('success');
         },
         error: function(error){
