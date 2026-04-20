@@ -304,6 +304,13 @@ make_js('js/table2excel.js');
       <?php endif; ?>
     </div>
     <style>
+    #grading_table th:not([data-no-sort]) {
+      color: #007bff;
+      cursor: pointer;
+    }
+    #grading_table th:not([data-no-sort]):hover {
+      text-decoration: underline;
+    }
     <?php foreach ($hiddenStyles as $key => $value) {
       // print each style
       echo $value;

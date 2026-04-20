@@ -380,6 +380,13 @@
       background-color: #e9ecef;
       font-weight: 600;
     }
+    #grading_table .grading-header .grading-cell:not([data-no-sort]) {
+      color: #007bff;
+      cursor: pointer;
+    }
+    #grading_table .grading-header .grading-cell:not([data-no-sort]):hover {
+      text-decoration: underline;
+    }
     #grading_table .grading-cell {
       padding: 0.75rem;
       min-width: 0;
