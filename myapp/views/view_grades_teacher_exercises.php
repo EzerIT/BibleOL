@@ -223,6 +223,7 @@ make_js('js/table2excel.js');
       <h2><?= sprintf($this->lang->line('grades_for_exercise'),htmlspecialchars($quiz)) ?></h2>
       <table id="grading_table" class="type2 table table-striped autowidth">
         <caption><?= $this->lang->line('grds_exercise_by_student_caption') ?></caption>
+        <thead>
         <tr>
           <th><?= $this->lang->line('student') ?></th>
           <th class="text-center"><?= $this->lang->line('email')?></th>
@@ -231,7 +232,7 @@ make_js('js/table2excel.js');
           <th class="text-center"><?= $this->lang->line('quiz_grade') ?></th>
           <th class="text-center"><?= $this->lang->line('best_total_time') ?></th>
           <th class="text-center"><?= $this->lang->line('hgst_avr_per_qi') ?></th>
-            <th id="download_buttons">
+            <th id="download_buttons" data-no-sort="true">
 
                 <a id="csv_download" class="badge badge-primary" href="#">
                     <?='CSV';?>
@@ -242,6 +243,8 @@ make_js('js/table2excel.js');
 
             </th>
         </tr>
+        </thead>
+        <tbody>
         <?php reset($students);
               $st = current($students);
               $email_i = current($user_emails);
@@ -268,12 +271,12 @@ make_js('js/table2excel.js');
           "; ?>
         <?php foreach ($ra as $time => $result): ?>
           <?php $tot_featpMin = $result['featpermin'] <= 0 ? -1 : 60/$result['featpermin'] ?>
-        <tr class="<?php echo $lineId==0?'headerDet':"{$stk}_hiddenDetails";  ?>">
+        <tr class="<?php echo $lineId==0?'headerDet':"{$stk}_hiddenDetails hiddenDetailsRow";  ?>">
           <td><?= $lineId==0?$st . " (" . $this->lang->line('hgst_grade') .")":$st ?></td>
           <td><?= $email_i ?></td>
           <!-- <td class="text-center"><?= Statistics_timeperiod::format_date($time) ?></td> -->
           <td class="text-center"><?= Statistics_timeperiod::format_time($time) ?></td>
-          <td class="text-center"><?= round($result['percentage']) ?>%</td>
+          <td class="text-center" data-sort-value="<?= $result['percentage'] ?>"><?= round($result['percentage']) ?>%</td>
           <!-- <td class="text-center"><?= (round($tot_featpMin)<=$max_time)?calculateGrade($grade_system, $result['percentage']):calculateGrade($grade_system, 0) ?></td> -->
           <td class="text-center"><?= anchor(build_get('grades/teacher_quizz_detail/classid/' . $classid . '/quizzid/'.$result["quizzid"] . '/userid/'.$result["userid"], array() ),(round($tot_featpMin)<=$max_time)?calculateGrade($grade_system, $result['percentage']):calculateGrade($grade_system, 0)) ?></td>
           <!-- <td class="text-center"><?= $result['count'] ?></td> -->
@@ -294,6 +297,7 @@ make_js('js/table2excel.js');
         <?php $st = next($students); ?>
         <?php $email_i = next($user_emails); ?>
         <?php endforeach; ?>
+        </tbody>
       </table>
       <?php if ($nongraded): ?>
         <p><?= $this->lang->line('students_marked_star') ?></p>
@@ -305,6 +309,16 @@ make_js('js/table2excel.js');
       echo $value;
     }
     ?>
+    .zebra-odd {
+      background-color: #f2f2f2 !important;
+    }
+    .zebra-even {
+      background-color: #e5e5e5 !important;
+    }
+    .hiddenDetailsRow {
+      background-color: #f9f9f9 !important;
+      font-style: italic;
+    }
     </style>
 
 
@@ -392,12 +406,25 @@ make_js('js/table2excel.js');
 
                 //legend_adjust($('#leftpanel'), $('#centerpanel'));
 
+                $('#grading_table').data('bibleolSorter').refreshZebra();
+
                 return false;
               }
             );
             ";
           }
           ?>
+
+          $('#grading_table').bibleolSorter({
+              rowSelector: 'tbody tr',
+              headerSelector: 'thead th',
+              detailRowClass: 'hiddenDetailsRow'
+          });
+
+          // Ensure zebra is correct after sort and re-draw
+          $('#grading_table').on('click', 'thead th', function() {
+              $('#grading_table').data('bibleolSorter').refreshZebra();
+          });
 
           $('#show1').click(
               function() {

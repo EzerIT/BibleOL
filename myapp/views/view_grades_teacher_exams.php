@@ -176,14 +176,14 @@
       <div id="grading_table" class="grading-flex-list" role="table" aria-label="<?= htmlspecialchars($this->lang->line('grds_exam_by_student_caption')) ?>">
         <div class="grading-row grading-header" role="row">
           <div class="grading-cell col-student"><?= $this->lang->line('student') ?></div>
-          <div class="grading-cell col-attempt text-center">Attempt</div>
+          <div class="grading-cell col-attempt text-center" data-sort-value="0"><?= $this->lang->line('attempts') ?></div>
           <div class="grading-cell col-email text-center"><?= $this->lang->line('email')?></div>
           <div class="grading-cell col-date text-center"><?= $this->lang->line('date') ?></div>
           <div class="grading-cell col-correct text-center"><?= $this->lang->line('correct') ?></div>
           <div class="grading-cell col-grade text-center"><?= $this->lang->line('quiz_grade') ?></div>
           <div class="grading-cell col-duration text-center"><?= $this->lang->line('best_total_time') ?></div>
           <div class="grading-cell col-speed text-center"><?= $this->lang->line('hgst_avr_per_qi') ?></div>
-          <div class="grading-cell col-actions text-center grading-downloads" data-export-skip="true">
+          <div class="grading-cell col-actions text-center grading-downloads" data-export-skip="true" data-no-sort="true">
             <a id="csv_download" class="badge badge-primary" href="#"><?='CSV';?></a>
             <a id="excel_download" class="badge badge-primary" href="#"><?='EXCEL';?></a>
           </div>
@@ -264,10 +264,10 @@
         ?>
         <div class="grading-row student-summary-row <?php echo 'headerDet';  ?>" role="row">
           <div class="grading-cell col-student"><?= $student_label ?></div>
-          <div class="grading-cell col-attempt text-center"><?= $best_attempt_count !== null ? $best_attempt_count : "" ?></div>
+          <div class="grading-cell col-attempt text-center" data-sort-value="<?= $best_attempt_count ?>"><?= $best_attempt_count !== null ? $best_attempt_count : "" ?></div>
           <div class="grading-cell col-email"><?= $email_i ?></div>
           <div class="grading-cell col-date text-center"><?= $best_attempt_start_time ? Statistics_timeperiod::format_time($best_attempt_start_time) : "" ?></div>
-          <div class="grading-cell col-correct text-center"><?= round($best_attempt_percent) . "% (" .  round($best_attempt_avg_percent)  ?>%)</div>
+          <div class="grading-cell col-correct text-center" data-sort-value="<?= $best_attempt_percent ?>"><?= round($best_attempt_percent) . "% (" .  round($best_attempt_avg_percent)  ?>%)</div>
           <div class="grading-cell col-grade text-center">
             <?php if ($best_attempt_last_result): ?>
             <?= anchor(
@@ -314,8 +314,8 @@
               $last_result = $result;
             }
         ?>
-        <div class="grading-row hidden-row <?php echo "{$student_key}_child attempt-summary-row";  ?>" role="row">
-          <div class="grading-cell col-student attempt-cell attempt-title-cell">Attempt <?= $attempt_count ?></div>
+        <div class="grading-row hidden-row <?php echo "{$student_key}_child attempt-summary-row detailRow";  ?>" role="row">
+          <div class="grading-cell col-student attempt-cell attempt-title-cell"><?= $this->lang->line('attempt') . " " . $attempt_count ?></div>
           <div class="grading-cell col-attempt text-center attempt-cell"><?= $attempt_count ?></div>
           <div class="grading-cell col-email text-center attempt-cell"></div>
           <div class="grading-cell col-date text-center attempt-cell"><?= Statistics_timeperiod::format_time($startTime) ?></div>
@@ -335,8 +335,8 @@
         </div>
 
         <?php foreach ($attempt_rows as $time => $result): ?>
-        <div class="grading-row hidden-row <?php echo "{$student_key}_child {$attempt_row_key}_detail exercise_data exercise-detail-row";  ?>" role="row">
-          <div class="grading-cell col-student exercise-cell exercise-title-cell"><?= $result["exercise_name"] ?></div>
+        <div class="grading-row hidden-row <?php echo "{$student_key}_child {$attempt_row_key}_detail exercise_data exercise-detail-row detailRow";  ?>" role="row">
+          <div class="grading-cell col-student exercise-cell exercise-title-cell"><?= htmlspecialchars($result["exercise_name"]) ?></div>
           <div class="grading-cell col-attempt text-center exercise-cell"></div>
           <div class="grading-cell col-email text-center exercise-cell"></div>
           <div class="grading-cell col-date text-center exercise-cell"><?= Statistics_timeperiod::format_time($time) ?></div>
@@ -367,11 +367,14 @@
       border-bottom: 1px solid #dee2e6;
       align-items: stretch;
     }
+    #grading_table .grading-row.zebra-odd {
+      background-color: #ffffff !important;
+    }
+    #grading_table .grading-row.zebra-even {
+      background-color: rgba(0, 0, 0, 0.05) !important;
+    }
     #grading_table .hidden-row {
       display: none;
-    }
-    #grading_table .grading-row:nth-child(even):not(.grading-header):not(.attempt-summary-row):not(.exercise-detail-row) {
-      background-color: rgba(0, 0, 0, 0.05);
     }
     #grading_table .grading-header {
       background-color: #e9ecef;
@@ -496,6 +499,14 @@
             $('#allkey').hide();
           <?php endif; ?>
           
+          $('#grading_table').bibleolSorter({
+              rowSelector: '.grading-row',
+              headerSelector: '.grading-header .grading-cell',
+              cellSelector: '.grading-cell',
+              detailRowClass: 'detailRow',
+              excludeSelector: '.grading-header'
+          });
+
           <?php
           // one function for each button
           foreach ($hiddenStyles as $key => $value) {
@@ -524,7 +535,7 @@
                   $('#det_" . $key . "').text('" . $this->lang->line('hide_detail') . "')
                 }
 
-                //legend_adjust($('#leftpanel'), $('#centerpanel'));
+                $('#grading_table').data('bibleolSorter').refreshZebra();
 
                 return false;
               }

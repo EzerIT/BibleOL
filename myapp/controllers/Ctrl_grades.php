@@ -575,6 +575,7 @@ class Ctrl_grades extends MY_Controller {
                                                                     'RGraph/libraries/RGraph.common.tooltips.js',
                                                                     'RGraph/libraries/RGraph.common.key.js',
                                                                     'js/datepicker_period.js',
+                                                                    'js/sorting.js',
                                                                     'js/graphing.js',
                                                                     'js/handle_legend.js')));
 
@@ -1013,7 +1014,7 @@ class Ctrl_grades extends MY_Controller {
             $this->load->view(
                 'view_top1', 
                 array(
-                    'title' => $this->lang->line('exercise_graphs_title'),
+                    'title' => $this->lang->line('exam_graphs_title'),
                     'js_list' => array(
                         'RGraph/libraries/RGraph.common.core.js',
                         'RGraph/libraries/RGraph.hbar.js',
@@ -1022,6 +1023,7 @@ class Ctrl_grades extends MY_Controller {
                         'RGraph/libraries/RGraph.common.tooltips.js',
                         'RGraph/libraries/RGraph.common.key.js',
                         'js/datepicker_period.js',
+                        'js/sorting.js',
                         'js/graphing.js',
                         'js/handle_legend.js'
                     )
