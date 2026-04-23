@@ -64,10 +64,12 @@ function logos() {
                 <h1><?= $this->lang->line('press_login_button') ?></h1>
                 <p style="margin-left: 1em"><a class="btn btn-primary" href="<?= site_url("/login") ?>"><?= $this->lang->line('login') ?></a></p>
                 <h1><?= $this->lang->line('no_login') ?></h1>
+                <!--
                 <div class="alert alert-warning" role="alert" style="margin-top:8px;">
                     <strong>Account creation is temporarily disabled.</strong>
                         Please contact your supervisor to request an account.
                 </div>
+                -->
 
                 <p style="margin-left: 1em;margin-bottom: 0"><a class="btn btn-outline-dark" href="<?= site_url("/users/sign_up") ?>"><?= $this->lang->line('sign_up') ?></a></p>
             <?php else: ?>
