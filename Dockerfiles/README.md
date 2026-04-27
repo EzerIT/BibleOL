@@ -39,6 +39,8 @@ password: bibleol_pwd
 
 ## Windows 11
 ```
+0. (Optional) Run BibleOL/Dockerfiles/bibleol-windows/prepare_environment.bat as Administrator to install dependencies (WSL, Docker, etc.).
+
 1. Open a terminal and change your directory to BibleOL/Dockerfiles/bibleol-windows
 
 2. Build the project by typing 'make'. If you do not have make, you can install it with choclatey with choco install make, or you can use our shell scripts to automate the build with ./make_windows.sh.
