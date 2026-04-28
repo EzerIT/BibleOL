@@ -4,7 +4,7 @@ This directory containting the source code for running Bible Online Learner in a
 ## Installation
 The initial installation will take approximately 15 minutes, if the image is not already downloaded to your machine. Subsequent installations will generally take between 1-2 minutes. 
 
-1. (Optional) Run `prepare_environment.bat` as Administrator to ensure WSL, Docker, Chocolatey, Git, and Make are installed on your system.
+1. (Optional) From an Administrator window (preferably PowerShell, go to the directory BibleOL/Dockerfiles/bibleol-windows/ to install dependencies (WSL, Docker, etc.) by running the batch file prepare_environment.bat. If the first run fails, reboot and try again.
 
 2. Open a terminal (PowerShell or Command Prompt) and change your directory to BibleOL/Dockerfiles/bibleol-windows
 

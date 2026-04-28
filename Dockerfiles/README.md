@@ -39,7 +39,7 @@ password: bibleol_pwd
 
 ## Windows 11
 ```
-0. (Optional) Run BibleOL/Dockerfiles/bibleol-windows/prepare_environment.bat as Administrator to install dependencies (WSL, Docker, etc.).
+0. (Optional) From an Administrator window (preferably PowerShell, go to the directory BibleOL/Dockerfiles/bibleol-windows/ to install dependencies (WSL, Docker, etc.) by running the batch file prepare_environment.bat. If the first run fails, reboot and try again.
 
 1. Open a terminal and change your directory to BibleOL/Dockerfiles/bibleol-windows
 
