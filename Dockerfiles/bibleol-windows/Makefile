@@ -8,7 +8,7 @@ build:
 	docker container exec $(CONTAINER_NAME) bash start.sh
 
 build2:
-	./build2_windows.bat
+	build2_windows.bat
 
 stop:
 	docker container stop $(CONTAINER_NAME)

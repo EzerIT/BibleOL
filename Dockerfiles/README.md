@@ -132,3 +132,5 @@ password: bibleol_pwd
 All of the running containers will have git installed, and the root directory ```/var/www/html/BibleOL``` will point to this repository. Therefore any edits made in a docker container can be commited and pushed back to this repository.
 
 If you run `make build2` instead of just `make`, the /var/www/html/BibleOL/myapp of the docker will be mapped to BibleOL/myapp on your host machine.  
+
+Note: If you are using Windows 11 and running from a mapped network drive (e.g., Z:\), the `make build2` command may fail with a "recognized file system" error. In this case, it is recommended to move the project to a local drive (like C:\).
