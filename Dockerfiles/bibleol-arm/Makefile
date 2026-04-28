@@ -7,9 +7,11 @@ build:
 	docker container run -dt -p 8000:80 --env-file environment.txt --name $(CONTAINER_NAME) tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)
 	docker container exec $(CONTAINER_NAME) bash start.sh
 
+PROJECT_ROOT = $(shell realpath ../..)
+
 build2:
 	docker image build -t tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG) .
-	docker container run -dt -p 8000:80 --env-file environment.txt --volume ~/BibleOL:/var/www/html/BibleOL --volume /var/www/html/BibleOL/jstree --volume /var/www/html/BibleOL/zocial --volume /var/www/html/BibleOL/db  --name $(CONTAINER_NAME) tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)
+	docker container run -dt -p 8000:80 --env-file environment.txt --volume $(PROJECT_ROOT):/var/www/html/BibleOL  --name $(CONTAINER_NAME) tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)
 	docker container exec $(CONTAINER_NAME) bash start.sh
 
 stop:
@@ -22,7 +24,7 @@ start:
 clean:
 	docker container rm -f $(CONTAINER_NAME) 
 	docker image rm -f tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)
-	rm -rf ~/BibleOL/.htaccess
+	rm -rf $(PROJECT_ROOT)/.htaccess
 
 pull:
 	docker pull tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)
