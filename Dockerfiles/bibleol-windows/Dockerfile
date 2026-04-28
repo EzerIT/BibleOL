@@ -24,6 +24,7 @@ RUN cd /var/www/html/BibleOL && bash git-hooks/setup.sh && sudo cp .htaccess-dis
 RUN sudo chown www-data:www-data /var/lib/php/sessions
 
 ADD bibleol.conf /etc/apache2/sites-available/
+RUN sed -i 's/\r$//' /etc/apache2/sites-available/bibleol.conf
 
 RUN sudo a2ensite bibleol 
 # RUN sudo service apache2 reload
@@ -31,6 +32,7 @@ EXPOSE 8000
 
 ADD start.sh /
 RUN chmod +x start.sh
+RUN sed -i 's/\r$//' /start.sh
 
 # update repository
 RUN cd /var/www/html/BibleOL && git pull origin master
