@@ -71,7 +71,7 @@ build:
 build2:
 ifeq ($(PLATFORM),windows)
 	@echo "Running build2 for Windows ($(ARCH))..."
-	./build2_windows.bat $(ARCH)
+	build2_windows.bat $(ARCH)
 else
 	docker image build $(BUILD_ARGS) -t tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG) .
 	docker container run -dt -p 8000:80 --env-file environment.txt --volume $(PROJECT_ROOT_DOCKER):/var/www/html/BibleOL --name $(CONTAINER_NAME) tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)
