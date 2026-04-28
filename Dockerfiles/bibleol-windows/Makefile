@@ -9,7 +9,7 @@ build:
 
 build2:
 	docker image build -t tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG) .
-	docker container run -dt -p 8000:80 --env-file environment.txt --volume %cd%/../..:/var/www/html/BibleOL --name $(CONTAINER_NAME) tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)
+	powershell -Command "$p = Join-Path (Get-Location) '../../' | Resolve-Path; docker container run -dt -p 8000:80 --env-file environment.txt --volume \"$($p.Path):/var/www/html/BibleOL\" --name $(CONTAINER_NAME) tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)"
 	docker container exec $(CONTAINER_NAME) bash start.sh
 
 stop:
