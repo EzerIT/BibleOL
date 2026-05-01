@@ -11,113 +11,76 @@
   make_js('js/table2excel.js');
 ?>
 
-<?php if ($status!=2): ?>
-    <p style="margin-top:10px">
-      <a id="showsel" class="badge badge-primary" href="#"><?= $this->lang->line('show_selector') ?></a>
-      <a id="hidesel" class="badge badge-primary" style="display:none" href="#"><?= $this->lang->line('hide_selector') ?></a>
-    </p>
-
-    <script>
-        $(function() {
-            $('#showsel').click(
-                function() {
-                    $('#selector').show();
-                    $('#showsel').hide();
-                    $('#hidesel').show();
-
-                    legend_adjust($('#leftpanel'), $('#centerpanel'));
-
-                    return false;
-                }
-            );
-            $('#hidesel').click(
-                function() {
-                    $('#selector').hide();
-                    $('#showsel').show();
-                    $('#hidesel').hide();
-
-                    legend_adjust($('#leftpanel'), $('#centerpanel'));
-
-                    return false;
-                }
-            );
-        });
-    </script>
-<?php else: ?>
-    <h1><?= sprintf($this->lang->line('exam_grades_for_class'), htmlspecialchars($classname)) ?></h1>
-<?php endif; ?>
-
-<div class="card mb-3" id="selector" <?= $status==2 ? '' : 'style="display:none"' ?>>
+<div class="card mb-3" id="selector">
   <div class="card-body">
-    <?= form_open("grades/teacher_exam",array('method'=>'get')) ?>
-      <input type="hidden" name="classid" value="<?= $classid ?>">
+    <?= form_open("grades/teacher_exam", ['id' => 'exam-grades-form']) ?>
+      <input type="hidden" name="class-id" value="<?= $class_id ?>">
+      <input type="hidden" name="max_time" value="<?= htmlspecialchars((string)$max_time) ?>">
 
-      <p>&nbsp;</p>
-      <div>
-        <span style="font-weight:bold"><?= $this->lang->line('exam_prompt') ?></span>
-        <select name="exam">
-          <option value="" <?= set_select('exam', '', true) ?>></option>
-          <?php foreach($exam_list as $ex): ?>
-            <?php $ex2 = htmlspecialchars($ex["name"]); ?>
-            <option value="<?= $ex["id"] ?>" <?= set_select('exam', $ex["id"]) ?>><?= $ex2 ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
+      <div class="form-row align-items-end">
+        <div class="form-group col-md-6">
+          <label for="active-exam-id-select" class="font-weight-bold"><?= $this->lang->line('exam_prompt') ?></label>
+          <select id="active-exam-id-select" name="active-exam-id" class="form-control">
+            <option value=""></option>
+            <?php foreach($exam_list as $ex): ?>
+              <?php $ex2 = htmlspecialchars($ex["name"]); ?>
+              <option value="<?= $ex["id"] ?>" <?= (string)$active_exam_id === (string)$ex["id"] ? 'selected' : '' ?>><?= $ex2 ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
 
-      <?php
-      global $arrayOfGradeSchemes;
-      loadArrayOfGradeSchemes();
-      ?>
-      <p>&nbsp;</p>
-      <div>
-        <span style="font-weight:bold"><?= $this->lang->line('grade_system_prompt') ?></span>
-        <select name="grade_system">
-          <!-- <option value="" <?= set_select('grade_system', '', true) ?>></option> -->
-          <?php foreach($arrayOfGradeSchemes as $gs => $gs_array): ?>
-            <?php $gs2 = htmlspecialchars($gs);
-            $gs_name = htmlspecialchars($gs_array["SchemeName"]); ?>
-            <option value="<?= $gs2 ?>" <?= set_select('grade_system', $gs) ?>><?= $gs_name ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-      <BR>
-
-      <div class="row">
-        <div class="form-group col">
-          <label for="max_time" class="col-form-label"><?= $this->lang->line('show_max_time_prompt') ?></label>
-          <input class="text" id="max_time" name="max_time" value="0" type="text" >
+        <?php
+        global $arrayOfGradeSchemes;
+        loadArrayOfGradeSchemes();
+        $selected_grade_system = $grade_system;
+        if (empty($selected_grade_system) && !empty($arrayOfGradeSchemes)) {
+          reset($arrayOfGradeSchemes);
+          $selected_grade_system = key($arrayOfGradeSchemes);
+        }
+        ?>
+        <div class="form-group col-md-6">
+          <label for="grade-system-select" class="font-weight-bold"><?= $this->lang->line('grade_system_prompt') ?></label>
+          <select id="grade-system-select" name="grade-system" class="form-control">
+            <?php foreach($arrayOfGradeSchemes as $gs => $gs_array): ?>
+              <?php
+              $gs2 = htmlspecialchars($gs);
+              $gs_name = htmlspecialchars($gs_array["SchemeName"]);
+              ?>
+              <option value="<?= $gs2 ?>" <?= (string)$selected_grade_system === (string)$gs ? 'selected' : '' ?>><?= $gs_name ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
       </div>
-
-      <!-- <div class="row">
-        <div class="form-group col">
-          <label for="nongraded" class="col-form-label"><?= $this->lang->line('show_non_graded_prompt') ?></label>
-          <input class="checkbox" id="nongraded" name="nongraded" value="on" type="checkbox" <?= set_checkbox('nongraded','on') ?>>
-        </div>
-      </div> -->
-
-      <p><input class="btn btn-primary" style="margin-top:10px;" type="submit" name="submit" value="<?= $this->lang->line('OK_button') ?>"></p>
     </form>
   </div>
 </div>
 
-<!-- <script>
-    $(function() {
-            $(datepicker_period('input[name="start_date"]','input[name="end_date"]'));
-        });
-</script> -->
+<script>
+  $(function() {
+    const form = $('#exam-grades-form');
+    const examSelect = $('#active-exam-id-select');
+    const gradeSystemSelect = $('#grade-system-select');
+
+    examSelect.on('change', function() {
+      form.trigger('submit');
+    });
+
+    gradeSystemSelect.on('change', function() {
+      if (examSelect.val()) {
+        form.trigger('submit');
+      }
+    });
+  });
+</script>
 
 
-<?php if ($status!=2): ?>
+<?php if ($status != 2): ?>
   <h1><?= sprintf($this->lang->line('exam_grades_for_class'), htmlspecialchars($classname)) ?></h1>
-  <BR>
+  <br>
 
-  <?php if ($status==0): ?>
-
+  <?php if ($status == 0): ?>
       <div class="alert alert-warning"><?= $this->lang->line('no_data') ?></div>
-
   <?php else: ?>
-
     <?php
       define("SHOW_WEEK_LIMIT", 10*24*3600); // 10 days
 
@@ -180,8 +143,8 @@
           $student_captions[$ix] = "'<input type=\"checkbox\" checked name=\"users\" value=\"$ix\">&nbsp;"
               . anchor(build_get('grades/student_exercise',
                                  array('userid' => $id,
-                                       'templ' => $quiz,
-                                       'nongraded' => $nongraded ? 'on' : 'off',
+                                       'templ' => $active_exam_id,
+                                       'nongraded' => 'off',
                                        'start_date' => $start_date,
                                        'end_date' => $end_date)), addslashes($name))
               . "'";
@@ -209,29 +172,22 @@
     </p>
     <BR>
     <div class="table-responsive" id="table1" style="display:block">
-      <h2><?= sprintf($this->lang->line('grades_for_exam'),htmlspecialchars($quiz)) ?></h2>
-      <table id="grading_table" class="type2 table table-striped autowidth">
-        <caption><?= $this->lang->line('grds_exam_by_student_caption') ?></caption>
-        <tr>
-          <th><?= $this->lang->line('student') ?></th>
-          <th class="text-center"><?= $this->lang->line('email')?></th>
-          <th class="text-center"><?= $this->lang->line('date') ?></th>
-          <th class="text-center"><?= $this->lang->line('correct') ?></th>
-          <th class="text-center"><?= $this->lang->line('quiz_grade') ?></th>
-          <th class="text-center"><?= $this->lang->line('best_total_time') ?></th>
-          <th class="text-center"><?= $this->lang->line('hgst_avr_per_qi') ?></th>
-          
-          <th id="download_buttons">
-            
-            <a id="csv_download" class="badge badge-primary" href="#">
-              <?='CSV';?>
-            </a>
-            <a id="excel_download" class="badge badge-primary" href="#">
-              <?='EXCEL';?>
-            </a>
-            
-          </th>
-        </tr>
+      <h2><?= sprintf($this->lang->line('grades_for_exam'),htmlspecialchars($active_exam_id)) ?></h2>
+      <div id="grading_table" class="grading-flex-list" role="table" aria-label="<?= htmlspecialchars($this->lang->line('grds_exam_by_student_caption')) ?>">
+        <div class="grading-row grading-header" role="row">
+          <div class="grading-cell col-student"><?= $this->lang->line('student') ?></div>
+          <div class="grading-cell col-attempt text-center" data-sort-value="0"><?= $this->lang->line('attempts') ?></div>
+          <div class="grading-cell col-email text-center"><?= $this->lang->line('email')?></div>
+          <div class="grading-cell col-date text-center"><?= $this->lang->line('date') ?></div>
+          <div class="grading-cell col-correct text-center"><?= $this->lang->line('correct') ?></div>
+          <div class="grading-cell col-grade text-center"><?= $this->lang->line('quiz_grade') ?></div>
+          <div class="grading-cell col-duration text-center"><?= $this->lang->line('best_total_time') ?></div>
+          <div class="grading-cell col-speed text-center"><?= $this->lang->line('hgst_avr_per_qi') ?></div>
+          <div class="grading-cell col-actions text-center grading-downloads" data-export-skip="true" data-no-sort="true">
+            <a id="csv_download" class="badge badge-primary" href="#"><?='CSV';?></a>
+            <a id="excel_download" class="badge badge-primary" href="#"><?='EXCEL';?></a>
+          </div>
+        </div>
         <?php reset($students);
               $st = current($students);
               $email_i = current($user_emails);
@@ -246,87 +202,244 @@
         } 
         foreach ($resscoreall_ind as $ra): ?>
           <?PHP 
-          
-
-          $lineId = 0; 
+          $student_label = $st;
           $st = removeNonAlphaExceptSpaceExams($st);
-          $stk = str_replace(" ", "__", $st); 
-          $hiddenStyles["$stk"] = ".{$stk}_hiddenDetails {
-            visibility: collapse;
+          $student_key = str_replace(" ", "__", $st) . "__student";
+          $hiddenStyles[$student_key] = true;
+          $attempt_groups = array();
+          foreach ($ra as $time => $result) {
+            $attempt_key = isset($result['attempt_count']) ? (int)$result['attempt_count'] : 1;
+            if (!isset($attempt_groups[$attempt_key])) {
+              $attempt_groups[$attempt_key] = array();
+            }
+            $attempt_groups[$attempt_key][$time] = $result;
           }
-          ";
+          ksort($attempt_groups);
 
-          //Reset the counters each student
-          $tot_percent = 0;
-          $tot_percWeighted = 0;
-          $tot_grade = 0;
-          $tot_gradeWeighted = 0;
-          $startTime = 0;
-          $ncounter = 0;
-          $tot_weight = 0;
-          $tot_duration = 0;
-          $tot_featpMin = 0;
-          ?>
-        <?php foreach ($ra as $time => $result): ?>
-          <?php
-          // Prepares data
-          $ncounter += 1;
-          if ( $startTime == 0 ) {
-            $startTime = $time;
+          $best_attempt_count = null;
+          $best_attempt_start_time = 0;
+          $best_attempt_percent = 0;
+          $best_attempt_avg_percent = 0;
+          $best_attempt_duration = 0;
+          $best_attempt_featpmin = 0;
+          $best_attempt_last_result = null;
+          $best_attempt_score = -1;
+
+          foreach ($attempt_groups as $attempt_count => $attempt_rows) {
+            $attempt_percent = 0;
+            $attempt_perc_weighted = 0;
+            $attempt_start_time = 0;
+            $attempt_counter = 0;
+            $attempt_weight = 0;
+            $attempt_duration = 0;
+            $attempt_featpmin = 0;
+            $attempt_last_result = null;
+
+            foreach ($attempt_rows as $time => $result) {
+              $attempt_counter += 1;
+              if ($attempt_start_time == 0) {
+                $attempt_start_time = $time;
+              }
+              $attempt_duration += $result["duration"];
+              $attempt_featpmin += $result['featpermin'] <= 0 ? -1 : 60/$result['featpermin'];
+              $attempt_weight += $result['weight'];
+              $attempt_percent += $result['percentage'];
+              $attempt_perc_weighted += $result['percentage'] * $result['weight'];
+              $attempt_last_result = $result;
+            }
+
+            $attempt_score = $attempt_weight > 0 ? ($attempt_perc_weighted / $attempt_weight) : 0;
+
+            if ($attempt_score > $best_attempt_score || ($attempt_score == $best_attempt_score && $attempt_count > $best_attempt_count)) {
+              $best_attempt_count = $attempt_count;
+              $best_attempt_start_time = $attempt_start_time;
+              $best_attempt_percent = $attempt_score;
+              $best_attempt_avg_percent = $attempt_counter > 0 ? ($attempt_percent / $attempt_counter) : 0;
+              $best_attempt_duration = $attempt_duration;
+              $best_attempt_featpmin = ($attempt_counter > 0 && $attempt_featpmin > 0) ? round(60/($attempt_featpmin/$attempt_counter)) : 0;
+              $best_attempt_last_result = $attempt_last_result;
+              $best_attempt_score = $attempt_score;
+            }
           }
-          $tot_duration += $result["duration"];
-          $tot_featpMin += $result['featpermin'] <= 0 ? -1 : 60/$result['featpermin'];
-          $tot_weight += $result['weight'];
-          $tot_percent += $result['percentage'];
-          $tot_percWeighted += $result['percentage'] * $result['weight'];
-          if ( round($tot_featpMin)<=$max_time ) {
-            // if the user took less than the max alloted time per question
-            $tot_grade += $result['percentage'];
-            $tot_gradeWeighted += $result['percentage'] * $result['weight'];
-          }
-          ?>
+        ?>
+        <div class="grading-row student-summary-row <?php echo 'headerDet';  ?>" role="row">
+          <div class="grading-cell col-student"><?= $student_label ?></div>
+          <div class="grading-cell col-attempt text-center" data-sort-value="<?= $best_attempt_count ?>"><?= $best_attempt_count !== null ? $best_attempt_count : "" ?></div>
+          <div class="grading-cell col-email"><?= $email_i ?></div>
+          <div class="grading-cell col-date text-center"><?= $best_attempt_start_time ? Statistics_timeperiod::format_time($best_attempt_start_time) : "" ?></div>
+          <div class="grading-cell col-correct text-center" data-sort-value="<?= $best_attempt_percent ?>"><?= round($best_attempt_percent) . "% (" .  round($best_attempt_avg_percent)  ?>%)</div>
+          <div class="grading-cell col-grade text-center">
+            <?php if ($best_attempt_last_result): ?>
+            <?= anchor(
+              build_get(
+                'grades/teacher_quizz_detail/classid/' . $class_id . '/quizzid/'.$best_attempt_last_result["quizzid"] . '/userid/'.$best_attempt_last_result["userid"], []), 
+                calculateGrade($grade_system, $best_attempt_percent)
+            ) ?>
+            <?php endif; ?>
+          </div>
+          <div class="grading-cell col-duration text-center"><?= $best_attempt_duration ?></div>
+          <div class="grading-cell col-speed text-center"><?= $best_attempt_featpmin > 0 ? sprintf("%.1f",$best_attempt_featpmin) : "" ?></div>
+          <div class="grading-cell col-actions text-center" id="detail_data" data-export-skip="true">
+              <a id="det_<?php echo $student_key;?>" class="badge badge-primary" href="#"><?= $this->lang->line('detail') ?></a>
+          </div>
+        </div>
+
+        <?php foreach ($attempt_groups as $attempt_count => $attempt_rows):
+            $attempt_row_key = "{$student_key}__attempt_" . $attempt_count;
+            $hiddenStyles[$attempt_row_key] = true;
+
+            $tot_percent = 0;
+            $tot_percWeighted = 0;
+            $tot_grade = 0;
+            $tot_gradeWeighted = 0;
+            $startTime = 0;
+            $ncounter = 0;
+            $tot_weight = 0;
+            $tot_duration = 0;
+            $tot_featpMin = 0;
+            $last_result = null;
+
+            foreach ($attempt_rows as $time => $result) {
+              $ncounter += 1;
+              if ($startTime == 0) {
+                $startTime = $time;
+              }
+              $tot_duration += $result["duration"];
+              $tot_featpMin += $result['featpermin'] <= 0 ? -1 : 60/$result['featpermin'];
+              $tot_weight += $result['weight'];
+              $tot_percent += $result['percentage'];
+              $tot_percWeighted += $result['percentage'] * $result['weight'];
+              $tot_grade += $result['percentage'];
+              $tot_gradeWeighted += $result['percentage'] * $result['weight'];
+              $last_result = $result;
+            }
+        ?>
+        <div class="grading-row hidden-row <?php echo "{$student_key}_child attempt-summary-row detailRow";  ?>" role="row">
+          <div class="grading-cell col-student attempt-cell attempt-title-cell"><?= $this->lang->line('attempt') . " " . $attempt_count ?></div>
+          <div class="grading-cell col-attempt text-center attempt-cell"><?= $attempt_count ?></div>
+          <div class="grading-cell col-email text-center attempt-cell"></div>
+          <div class="grading-cell col-date text-center attempt-cell"><?= Statistics_timeperiod::format_time($startTime) ?></div>
+          <div class="grading-cell col-correct text-center attempt-cell"><?= round($tot_percWeighted/$tot_weight) . "% (" .  round($tot_percent/$ncounter)  ?>%)</div>
+          <div class="grading-cell col-grade text-center attempt-cell">
+            <?= anchor(
+              build_get(
+                'grades/teacher_quizz_detail/classid/' . $class_id . '/quizzid/'.$last_result["quizzid"] . '/userid/'.$last_result["userid"], []), 
+              calculateGrade($grade_system, ($tot_percWeighted/$tot_weight))
+            ) ?>
+          </div>
+          <div class="grading-cell col-duration text-center attempt-cell"><?= $tot_duration ?></div>
+          <div class="grading-cell col-speed text-center attempt-cell"><?= $tot_featpMin > 0 ? sprintf("%.1f",round(60/($tot_featpMin/$ncounter))) : "" ?></div>
+          <div class="grading-cell col-actions text-center attempt-cell" id="detail_data" data-export-skip="true">
+            <a id="det_<?php echo $attempt_row_key;?>" class="badge badge-primary" href="#"><?= $this->lang->line('detail') ?></a>
+          </div>
+        </div>
+
+        <?php foreach ($attempt_rows as $time => $result): ?>
+        <div class="grading-row hidden-row <?php echo "{$student_key}_child {$attempt_row_key}_detail exercise_data exercise-detail-row detailRow";  ?>" role="row">
+          <div class="grading-cell col-student exercise-cell exercise-title-cell"><?= htmlspecialchars($result["exercise_name"]) ?></div>
+          <div class="grading-cell col-attempt text-center exercise-cell"></div>
+          <div class="grading-cell col-email text-center exercise-cell"></div>
+          <div class="grading-cell col-date text-center exercise-cell"><?= Statistics_timeperiod::format_time($time) ?></div>
+          <div class="grading-cell col-correct text-center exercise-cell"><?= round($result['percentage']) ?>%</div>
+          <div class="grading-cell col-grade text-center exercise-cell"><?= anchor(build_get('grades/teacher_quizz_detail/classid/' . $class_id . '/quizzid/'.$result["quizzid"] . '/userid/'.$result["userid"], array() ), (round($tot_featpMin)<=$max_time)?calculateGrade($grade_system, $result['percentage']):calculateGrade($grade_system, 0)) ?></div>
+          <div class="grading-cell col-duration text-center exercise-cell"><?= $result["duration"] ?></div>
+          <div class="grading-cell col-speed text-center exercise-cell"><?= sprintf("%.1f",round($tot_featpMin)) ?></div>
+          <div class="grading-cell col-actions text-center exercise-cell" data-export-skip="true"></div>
+        </div>
         <?php endforeach; ?>
-        <tr class="<?php echo 'headerDet';  ?>">
-          <td><?= $st ?></td>
-          <td><?= $email_i ?></td>
-          <td class="text-center"><?= Statistics_timeperiod::format_time($startTime) ?></td>
-          <td class="text-center"><?= round($tot_percWeighted/$tot_weight) . "% (" .  round($tot_percent/$ncounter)  ?>%)</td>
-          <!-- <td class="text-center"><?php echo calculateGrade($grade_system, ($tot_percWeighted/$tot_weight));?></td> -->
-          <td class="text-center"><?= anchor(build_get('grades/teacher_quizz_detail/classid/' . $classid . '/quizzid/'.$result["quizzid"] . '/userid/'.$result["userid"], array() ), (round($tot_featpMin)<=$max_time)?calculateGrade($grade_system, ($tot_percWeighted/$tot_weight)):calculateGrade($grade_system, 0)) ?></td>
-          <td class="text-center"><?= $result["duration"] ?></td>
-          <td class="text-center"><?= $tot_featpMin > 0 ? sprintf("%.1f",round(60/($tot_featpMin/$ncounter))) : "" ?></td>
-          <td class="text-center" id="detail_data">
-              <a id="det_<?php echo $stk;?>" class="badge badge-primary" href="#"><?= $this->lang->line('detail') ?></a>
-          </td>
-        </tr>
-
-        <?php
-        // Print the exercise pieces
-        foreach ($ra as $time => $result): ?>
-        <tr class="<?php echo "{$stk}_hiddenDetails exercise_data";  ?>">
-          <td>>>> <?= $result["exercise_name"] ?></td>
-          <td class="text-center"><?= Statistics_timeperiod::format_time($time) ?></td>
-          <td class="text-center"><?= round($result['percentage']) ?>%</td>
-          <!-- <td class="text-center"><?= (round($tot_featpMin)<=$max_time)?calculateGrade($grade_system, $result['percentage']):calculateGrade($grade_system, 0) ?></td> -->
-          <td class="text-center"><?= anchor(build_get('grades/teacher_quizz_detail/classid/' . $classid . '/quizzid/'.$result["quizzid"] . '/userid/'.$result["userid"], array() ), (round($tot_featpMin)<=$max_time)?calculateGrade($grade_system, $result['percentage']):calculateGrade($grade_system, 0)) ?></td>
-          <td class="text-center"><?= $result["duration"] ?></td>
-          <td class="text-center"><?= sprintf("%.1f",round($tot_featpMin)) ?></td>
-          <td class="text-center"></td>
-        </tr>
         <?php endforeach; ?>
         <?php $st = next($students); $email_i = next($user_emails); ?>
         <?php endforeach; ?>
-      </table>
-      <?php if ($nongraded): ?>
-        <p><?= $this->lang->line('students_marked_star') ?></p>
-      <?php endif; ?>
+      </div>
     </div>
     <style>
-    <?php foreach ($hiddenStyles as $key => $value) {
-      // print each style
-      echo $value;
+    #grading_table {
+      width: 100% !important;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #dee2e6;
+      border-bottom: 0;
+      background-color: #fff;
     }
-    ?>
+    #grading_table .grading-row {
+      display: flex;
+      width: 100%;
+      border-bottom: 1px solid #dee2e6;
+      align-items: stretch;
+    }
+    #grading_table .grading-row.zebra-odd {
+      background-color: #ffffff !important;
+    }
+    #grading_table .grading-row.zebra-even {
+      background-color: rgba(0, 0, 0, 0.05) !important;
+    }
+    #grading_table .hidden-row {
+      display: none;
+    }
+    #grading_table .grading-header {
+      background-color: #e9ecef;
+      font-weight: 600;
+    }
+    #grading_table .grading-header .grading-cell:not([data-no-sort]) {
+      color: #007bff;
+      cursor: pointer;
+    }
+    #grading_table .grading-header .grading-cell:not([data-no-sort]):hover {
+      text-decoration: underline;
+    }
+    #grading_table .grading-cell {
+      padding: 0.75rem;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      overflow-wrap: anywhere;
+    }
+    #grading_table .col-student {
+      flex: 2.4 1 0;
+    }
+    #grading_table .col-attempt {
+      flex: 0.8 0 0;
+      justify-content: center;
+    }
+    #grading_table .col-email {
+      flex: 1.8 1 0;
+    }
+    #grading_table .col-date,
+    #grading_table .col-correct,
+    #grading_table .col-grade,
+    #grading_table .col-duration,
+    #grading_table .col-speed {
+      flex: 1.1 1 0;
+      justify-content: center;
+    }
+    #grading_table .col-actions {
+      flex: 0.9 0 0;
+      justify-content: center;
+    }
+    #grading_table .grading-downloads {
+      gap: 0.4rem;
+    }
+    #grading_table .student-summary-row {
+      font-weight: 500;
+    }
+    #grading_table .attempt-summary-row {
+      background-color: #f8f9fa;
+      border-top: 2px solid #dee2e6;
+      font-weight: 600;
+    }
+    #grading_table .attempt-title-cell {
+      padding-left: 1.5rem;
+      font-weight: 600;
+      color: #343a40;
+    }
+    #grading_table .exercise-detail-row {
+      background-color: #fcfcfc;
+      font-size: 0.95rem;
+    }
+    #grading_table .exercise-title-cell {
+      padding-left: 3rem;
+      color: #495057;
+    }
     </style>
 
 
@@ -366,9 +479,6 @@
       <?php endif; ?>
     </div>
 
-
-
-
     <script>
       function set_config(config,on,data,colors) {
           config.data = [];
@@ -396,6 +506,14 @@
             $('#allkey').hide();
           <?php endif; ?>
           
+          $('#grading_table').bibleolSorter({
+              rowSelector: '.grading-row',
+              headerSelector: '.grading-header .grading-cell',
+              cellSelector: '.grading-cell',
+              detailRowClass: 'detailRow',
+              excludeSelector: '.grading-header'
+          });
+
           <?php
           // one function for each button
           foreach ($hiddenStyles as $key => $value) {
@@ -403,16 +521,28 @@
             echo "
             $('#det_" . $key . "').click(
               function() {
-                if ($('." . $key . "_hiddenDetails').css('visibility')=='visible') {
-                  $('." . $key . "_hiddenDetails').css('visibility',' collapse');
+                if ($('." . $key . "_child.attempt-summary-row').length > 0) {
+                  if ($('." . $key . "_child.attempt-summary-row').is(':visible')) {
+                    $('." . $key . "_child.attempt-summary-row').hide();
+                    $('[class*=\"" . $key . "__attempt_\"][class*=\"_detail\"]').hide();
+                    $('[id^=\"det_" . $key . "__attempt_\"]').text('" . $this->lang->line('detail') . "');
+                    $('#det_" . $key . "').text('" . $this->lang->line('detail') . "')
+                  }
+                  else {
+                    $('." . $key . "_child.attempt-summary-row').css('display', 'flex');
+                    $('#det_" . $key . "').text('" . $this->lang->line('hide_detail') . "')
+                  }
+                }
+                else if ($('." . $key . "_detail').is(':visible')) {
+                  $('." . $key . "_detail').hide();
                   $('#det_" . $key . "').text('" . $this->lang->line('detail') . "')
                 }
                 else {
-                  $('." . $key . "_hiddenDetails').css('visibility',' visible');
+                  $('." . $key . "_detail').css('display', 'flex');
                   $('#det_" . $key . "').text('" . $this->lang->line('hide_detail') . "')
                 }
 
-                //legend_adjust($('#leftpanel'), $('#centerpanel'));
+                $('#grading_table').data('bibleolSorter').refreshZebra();
 
                 return false;
               }
@@ -442,7 +572,7 @@
 
                   return false;
               }
-              );
+            );
           $('#show2').click(
               function() {
                   $('#table2').show();
@@ -470,9 +600,19 @@
           $('#csv_download').click(
               function(){
                   let outfile = "<?php echo $classname; ?>" + ".csv";
-                  let table_csv = $("#grading_table").table2csv('return', {'excludeColumns':'#download_buttons', 'excludeRows':'.exercise_data', 'quoteFields':false});
-                  let pattern = 'Details,'
-                  table_csv = table_csv.replaceAll(pattern,'');                  
+                  let csvRows = [];
+                  $('#grading_table .grading-row').not('.exercise_data').each(function() {
+                      let row = [];
+                      $(this).find('.grading-cell').each(function() {
+                          if ($(this).data('export-skip')) {
+                              return;
+                          }
+                          let cellText = $(this).text().trim().replace(/\s+/g, ' ');
+                          row.push('"' + cellText.replace(/"/g, '""') + '"');
+                      });
+                      csvRows.push(row.join(','));
+                  });
+                  let table_csv = csvRows.join("\n");
                   const blob = new Blob([table_csv], { type: 'text/csv;charset=utf-8,' });
                   const objUrl = URL.createObjectURL(blob);
                   this.setAttribute('href', objUrl);
@@ -482,9 +622,23 @@
               );
           $('#excel_download').click(
               function(){
-                  let extension = '.xls'
-                  let outfile = "<?php echo $classname; ?>";
-                  let table_excel = $('#grading_table').table2excel({exclude: '.exercise_data, #download_buttons, #detail_data', name: 'blank', filename: outfile, filext: extension});
+                  let outfile = "<?php echo $classname; ?>" + '.xls';
+                  let html = '<table>';
+                  $('#grading_table .grading-row').not('.exercise_data').each(function() {
+                      html += '<tr>';
+                      $(this).find('.grading-cell').each(function() {
+                          if ($(this).data('export-skip')) {
+                              return;
+                          }
+                          html += '<td>' + $('<div>').text($(this).text().trim().replace(/\s+/g, ' ')).html() + '</td>';
+                      });
+                      html += '</tr>';
+                  });
+                  html += '</table>';
+                  const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+                  const objUrl = URL.createObjectURL(blob);
+                  this.setAttribute('href', objUrl);
+                  this.setAttribute('download', outfile);
                 }
               );
           

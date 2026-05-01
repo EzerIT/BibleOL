@@ -1,6 +1,6 @@
 <?php if (isset($is_exam) && $is_exam): ?>
   <div id="quiz_id" style="display: none;"><?= $quizid ?></div>
-  <div id="exam_id" style="display: none;"><?= $examid ?></div>
+  <div id="exam_attempt_id" style="display: none;"><?= $exam_attempt_id ?></div>
   <div id="exercise_lst" style="display: none;"><?= $exercise_lst ?></div>
 <?php endif; ?>
 
@@ -21,16 +21,12 @@
   <?php if(isset($is_quiz) && $is_quiz): ?>
     var seconds = <?= isset($time_seconds) ? $time_seconds : -1000 ?>;
     if (seconds != -1000){ 
-      console.log('HELLO FROM SCIRPT');
       var number_small_questions = <?= isset($number_small_questions) ? $number_small_questions : $number_of_quizzes; ?>;
       var total_time = number_small_questions * seconds;
 
-      //seconds = seconds * 60;
       var deadline = (new Date().getTime() / 1000) + total_time;
       var isExam = <?php echo isset($is_exam) ? 'true' : 'false'; ?>;
       
-      
-      //console.log('Exam Status: ', exam_status);
       var quiz_idx = 0
       function iterateTimer(){
         var timeLeft = deadline - new Date().getTime() / 1000;
@@ -45,8 +41,6 @@
         }
         var timestamp = formatTime(timeLeft);
         document.getElementById("timeLeft").innerHTML =   timestamp;
-      
-        
       }
 
 
@@ -66,8 +60,6 @@
         }
         var timestamp = formatTime(timeLeft);
         document.getElementById("timeLeft").innerHTML =   timestamp;
-      
-      
       }, 1000);
     }
   <?php endif; ?>

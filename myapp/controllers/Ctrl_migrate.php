@@ -2,6 +2,12 @@
 class Ctrl_migrate extends CI_Controller {
     public function __construct() {
         parent::__construct();
+
+        if (is_cli()) {
+            $this->load->database();
+        }
+
+        $this->load->library('migration');
     }
 
     public function index() {

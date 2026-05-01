@@ -3,6 +3,7 @@
 $lang['active_exams'] = "Active Exams";
 $lang['active_exams_description'] = "List of exams that are available.";
 $lang['add_grader'] = "Add Grader";
+$lang['attempts_completed'] = "Attempts Completed";
 $lang['choose_exercises_in_order'] = "Exercises will appear in the order in which they are selected.";
 $lang['class_name'] = "Class name";
 $lang['create_exam'] = "Create Exam";
@@ -22,6 +23,7 @@ $lang['exam_mgmt'] = "Exam Management";
 $lang['exam_mgmt_description'] = "Here you can manage existing exams or create a new exam.";
 $lang['exam_name'] = "Exam name";
 $lang['finish'] = "Finish Section";
+$lang['future_exams'] = "Future Exams";
 $lang['instance_name'] = "Instance name";
 $lang['instructor'] = "Instructor";
 $lang['next'] = "Next";

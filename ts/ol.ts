@@ -75,7 +75,7 @@ $(function() {
             $('progress#progress').hide();
 
         // Run the exercise
-        quiz = new Quiz(quizdata.quizid, $('#exam_id').length>0);
+        quiz = new Quiz(quizdata.quizid, $('#exam_attempt_id').length>0);
         quiz.nextQuestion(true);
         
         $('#gramtabs .selectbutton input:enabled:checked').trigger('change','manual'); // Make sure the relevant features are displayed

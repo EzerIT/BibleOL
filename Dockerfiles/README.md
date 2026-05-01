@@ -1,11 +1,13 @@
 # Bible Online Learner Docker Images
-There are two primary docker images for the Bible Online Learner. The image ```bibleol-arm``` is used for Mac operating systems that have an M1 or M2 chip, this is most of the newer models. The other image ```bibleol-amd``` will work on all other architectures including Windows, Linux, and Mac (Intel).
+There are three primary docker images for the Bible Online Learner. The image ```bibleol-arm``` is used for Mac operating systems that have an M1 or M2 chip, this is most of the newer models. The image ```bibleol-windows``` is used for Windows 11 systems using WSL2. The other image ```bibleol-amd``` will work on all other architectures including Linux and Mac (Intel).
 
 # Dockerfiles Directory Contents
 
-**bibleol-amd**: the directory containting the source code for running Bible Online Learner in an AMD container (Linux, Windows, Mac (Intel)).
+**bibleol-amd**: the directory containting the source code for running Bible Online Learner in an AMD container (Linux, Mac (Intel)).
 
 **bibleol-arm**: the directory containting the source code for running Bible Online Learner in an ARM container (Mac M1 & M2).
+
+**bibleol-windows**: the directory containting the source code for running Bible Online Learner in a Windows 11 container (using WSL2).
 
 **multistage**: a directory containing two sub-directories that build AMD and ARM containers respectively using primarily shell scripts instead of Dockerfiles, this approach is more space efficient, but the installation time will be constant across subsequent builds of the project because none of the required installation steps will be cached. This method is only reccomended for users who have less than 2GB of storage available.
 
@@ -35,6 +37,30 @@ username: admin
 password: bibleol_pwd
 ```
 
+## Windows 11
+```
+0. (Optional) From an Administrator window (preferably PowerShell, go to the directory BibleOL/Dockerfiles/bibleol-windows/ to install dependencies (WSL, Docker, etc.) by running the batch file prepare_environment.bat. If the first run fails, reboot and try again.
+
+1. Open a terminal and change your directory to BibleOL/Dockerfiles/bibleol-windows
+
+2. Build the project by typing 'make'. If you do not have make, you can install it with choclatey with choco install make, or you can use our shell scripts to automate the build with ./make_windows.sh.
+
+3. If this is your first installation of the containerized application, please allow for 15 minutes of installation time. If this is a subsequent installation, the installation time should take between 1-2 minutes.
+
+3. Go to localhost:8000 and you should be viewing the home page.
+
+4. Type make stop to stop or pause the docker container, if you do not have make installed then copy and paste the commands from the Makefile stop target into your terminal.
+
+5. Type make start to start a stopped container, if you do not have make installed then copy and paste the commands from the Makefile start target into your terminal.
+
+6. If you have make type make clean to delete the container and image, or use the shell script with ./clean_windows.sh
+
+7. To log on as the default administrator go to Login and enter the login information
+
+username: admin
+password: bibleol_pwd
+```
+
 ## Linux
 ```
 1. Open a terminal and change your directory to BibleOL/Dockerfiles/bibleol-amd
@@ -57,7 +83,7 @@ username: admin
 password: bibleol_pwd
 ```
 
-## Windows
+## Windows (Other)
 ```
 1. Open a terminal and change your directory to BibleOL/Dockerfiles/bibleol-amd
 
@@ -106,3 +132,5 @@ password: bibleol_pwd
 All of the running containers will have git installed, and the root directory ```/var/www/html/BibleOL``` will point to this repository. Therefore any edits made in a docker container can be commited and pushed back to this repository.
 
 If you run `make build2` instead of just `make`, the /var/www/html/BibleOL/myapp of the docker will be mapped to BibleOL/myapp on your host machine.  
+
+Note: If you are using Windows 11 and running from a mapped network drive (e.g., Z:\), the `make build2` command may fail with a "recognized file system" error. In this case, it is recommended to move the project to a local drive (like C:\).
