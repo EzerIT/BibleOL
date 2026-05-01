@@ -949,7 +949,8 @@ class Ctrl_grades extends MY_Controller {
                                 // $this->statistics_timeperiod->start_timestamp(),
                                 // $this->statistics_timeperiod->end_timestamp(),
                                 // $see_nongraded,
-                                $calculate_percentages=true
+                                $calculate_percentages=true,
+                                $active_exam_id
                             );
 
                             $resfeat = $this->mod_grades->get_features_by_date_exam_result(

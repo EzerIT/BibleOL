@@ -576,6 +576,34 @@ class Mod_grades extends CI_Model {
 
         ksort($users_exam); // Sort by user ID
 
+        // Fallback: find students who have quizzes during the exam window but no attempt row
+        $exam_active = $this->db
+            ->select('exam_start_time, exam_end_time, class_id')
+            ->from('exam_active')
+            ->where('id', $active_exam_id)
+            ->get()->row();
+
+        if ($exam_active) {
+            $quiz_users = $this->db
+                ->select('DISTINCT q.userid', false)
+                ->from('sta_quiz q')
+                ->join('userclass uc', 'uc.userid = q.userid')
+                ->where('uc.classid', $exam_active->class_id)
+                ->where('q.start >=', $exam_active->exam_start_time)
+                ->where('q.start <=', $exam_active->exam_end_time)
+                ->where('q.end IS NOT NULL')
+                ->where('q.valid', 1)
+                ->get();
+
+            foreach ($quiz_users->result() as $row) {
+                if (!isset($users_exam[$row->userid])) {
+                    $users_exam[$row->userid] = []; // empty signals quiz-only fallback
+                }
+            }
+
+            ksort($users_exam);
+        }
+
         return $users_exam;
     }
 
@@ -733,10 +761,70 @@ class Mod_grades extends CI_Model {
     public function get_score_by_user_active_exam(
         int $uid,
         array $examids,
-        $calculate_percentages = false
+        $calculate_percentages = false,
+        $active_exam_id = null
     ) {
-        if (empty($examids))
-            return array();
+        if (empty($examids)) {
+            if ($active_exam_id === null)
+                return array();
+
+            // Fallback: query quizzes directly using the exam's time window
+            $exam_active = $this->db
+                ->select('exam_start_time, exam_end_time, exam_id')
+                ->from('exam_active')
+                ->where('id', $active_exam_id)
+                ->get()->row();
+
+            if (!$exam_active)
+                return array();
+
+            $query = $this->db
+                ->from('sta_quiz q')
+                ->select('q.userid, q.id, q.start, q.end-q.start duration, SUM(rf.correct) correct, q.tot_questions cnt, SUM(rf.correct)/q.tot_questions*100 perc, ex.examcode, qt.pathname, 1 AS attempt_count', false)
+                ->join('sta_quiztemplate qt', 'qt.id=q.templid')
+                ->join('sta_question quest', 'quest.quizid=q.id')
+                ->join('sta_requestfeature rf', 'quest.id=rf.questid')
+                ->join('exam ex', 'ex.id=' . (int)$exam_active->exam_id)
+                ->where('q.userid', $uid)
+                ->where('q.start >=', $exam_active->exam_start_time)
+                ->where('q.start <=', $exam_active->exam_end_time)
+                ->where('q.end IS NOT NULL')
+                ->where('q.valid', 1)
+                ->group_by('q.userid, q.id, ex.examcode, qt.pathname')
+                ->get();
+
+            $perdate = array();
+            foreach ($query->result() as $row) {
+                $day = $row->start;
+                $exercise_name = $this->get_relative_template_path($row->pathname);
+                $metadata = $this->get_exam_exercise_metadata($row->examcode);
+                $metadata_for_exercise = isset($metadata[$exercise_name])
+                    ? $metadata[$exercise_name]
+                    : array('exercise_name' => $exercise_name !== '' ? $exercise_name : 'N/A', 'weight' => 1);
+                $weight = $metadata_for_exercise['weight'];
+                $exercise_name = $metadata_for_exercise['exercise_name'];
+
+                if (!isset($perdate[$day])) {
+                    $perdate[$day] = array(
+                        'duration' => 0, 'correct' => 0, 'count' => 0,
+                        'exercise_name' => '', 'quizzid' => $row->id,
+                        'userid' => $row->userid, 'weight' => 0, 'attempt_count' => 1
+                    );
+                }
+                $perdate[$day]['duration']     += $row->duration;
+                $perdate[$day]['correct']      += $row->correct;
+                $perdate[$day]['count']        += $row->cnt;
+                $perdate[$day]['exercise_name'] = $exercise_name;
+                $perdate[$day]['weight']       += $weight;
+            }
+
+            foreach ($perdate as &$v) {
+                $v['percentage'] = $v['count'] > 0 ? 100 * $v['correct'] / $v['count'] : 0;
+                $v['featpermin'] = $v['duration'] > 0 ? 60 * $v['count'] / $v['duration'] : 0;
+            }
+
+            return $perdate;
+        }
 
         $attempt_table = $this->get_exam_attempt_table();
         $attempt_table_name = $this->db->dbprefix($attempt_table);
