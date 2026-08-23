@@ -143,6 +143,15 @@
 			width="560">
 		</iframe><br />
 	</li><br />
-	<li>When you are finished taking your exam you can lookup your exam results instantly.
-	</li>
+
+	<li>When you are finished taking your exam you can lookup your exam results instantly. The following video provides a complete walkthrough of the process:<br />
+		<iframe 
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+			allowfullscreen="" 
+			frameborder="0" 
+			height="315" 
+			src="https://www.youtube.com/embed/yv6L3IUC3QQ?si=IwxgIcSBeTGq5mbZ" 
+			width="560">
+		</iframe>
+	</li><br />
 </ol>
