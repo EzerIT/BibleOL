@@ -73,6 +73,11 @@ $menu = array(
 
     'TOHFL/Hebrew course' => array('tohfl_course_introduction'   => array(0,'Introduction to the TOHFL/Hebrew course'),
         'tohfl_course_FirstStepsForStudents'  => array(1,'First Steps for Students'),
+        'tohfl_course_FirstStepsForStudents_AU'  => array(2,'Andrews University Students'),
+        'tohfl_course_FirstStepsForStudents_ETF'  => array(2,'ETF Leuven Students'),        
+        'tohfl_course_FirstStepsForStudents_PThU'  => array(2,'PThU Students'),
+        'tohfl_course_FirstStepsForStudents_UBS'  => array(2,'UBS Translators'),
+        'tohfl_course_FirstStepsForStudents_VU'  => array(2,'VU Amsterdam Students'),
         'tohfl_course_PerformanceAndGrades'  => array(1,'Taking Exercises, Exams and Looking up Grades/Performance Data'),
         'tohfl_course_part1'  => array(0,'TOHFL-I course'),
         'tohfl_course_part1_final-exam'  => array(1,'Final Exam'),
