@@ -1,51 +1,72 @@
-<? version: 20250704 ?>
+<!--? version: 20260828 ?-->
 
 <h1>First Steps for Students</h1>
 
-<p>To get started, it is important to create a BibleOL (1) user account, (2) update one&#39;s user profile, and (3) enroll in a class. Below each single step is explained in detail with instructional videos.</p>
+<p>
+    If you are using the TOHFL course as part of a course in which you are
+    officially enrolled at a university, click on your institution below
+    for institution-specific instructions:
+</p>
 
-<ol>
-	<li>Creating a User Account on BibleOL:<br />
-		<iframe 
-			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-			allowfullscreen="" 
-			frameborder="0" 
-			height="315" 
-			src="https://www.youtube.com/embed/a96RG5gw-tA" 
-			width="560">
-		</iframe>
-	</li><br />
+<p>&nbsp;</p>
 
-	<li>Updating one&rsquo;s User Profile:<br />
-	Change your User Profile and choose the profile &ldquo;AndrewsUniversity&rdquo;:<br />
-		<iframe 
-			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-			allowfullscreen="" 
-			frameborder="0" 
-			height="315" 
-			src="https://www.youtube.com/embed/UYE69Sg-W8M"
-			width="560">
-		</iframe>
-	 </li><br />
+<figure class="easyimage easyimage-full">
+    <a href="/help/show_help/tohfl_course_FirstStepsForStudents_AU">
+        <img
+            class="mx-auto img-fluid d-block"
+            src="/usersguide/en/images/Logo_AU.png"
+            alt="Andrews University"
+        >
+    </a>
+</figure>
 
-	<li>Enrolling in a Class:<br />
-    Your instructor will tell you the name of the class you are to enroll (for example: &ldquo;OTST552-Heb-II_2023-03(fall)_glanz&rdquo;):<br />
-    	<figure 
-			class="easyimage easyimage-full" 
-			style="float: left; width: 560px; margin: 0;">
-        	<?= $hdir->img("AU_ClassEnrollment.png") ?>
-    	</figure>
-    </li><br />
+<p>&nbsp;</p>
 
-	<li>
-	<p style="clear: left; margin: 0; padding: 0;">Here you see all enrollment steps in detail. </p>
-		<iframe 
-			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-			allowfullscreen="" 
-			frameborder="0" 
-			height="315" 
-			src="https://www.youtube.com/embed/e-8zfi4U5uc" 
-			width="560">
-		</iframe>
-	 </li>
-</ol>
+<figure class="easyimage easyimage-full">
+    <a href="/help/show_help/tohfl_course_FirstStepsForStudents_ETF">
+        <img
+            class="mx-auto img-fluid d-block"
+            src="/usersguide/en/images/Logo_ETF.png"
+            alt="Evangelische Theologische Faculteit"
+        >
+    </a>
+</figure>
+
+<p>&nbsp;</p>
+
+<figure class="easyimage easyimage-full">
+    <a href="/help/show_help/tohfl_course_FirstStepsForStudents_PThU">
+        <img
+            class="mx-auto img-fluid d-block"
+            src="/usersguide/en/images/Logo_PThU.png"
+            alt="Protestantse Theologische Universiteit"
+        >
+    </a>
+</figure>
+
+
+<p>&nbsp;</p>
+
+
+<figure class="easyimage easyimage-full">
+    <a href="/help/show_help/tohfl_course_FirstStepsForStudents_UBS">
+        <img
+            class="mx-auto img-fluid d-block"
+            src="/usersguide/en/images/Logo_UBS.png"
+            alt="Protestantse Theologische Universiteit"
+        >
+    </a>
+</figure>
+
+
+<p>&nbsp;</p>
+
+<figure class="easyimage easyimage-full">
+    <a href="/help/show_help/tohfl_course_FirstStepsForStudents_VU">
+        <img
+            class="mx-auto img-fluid d-block"
+            src="/usersguide/en/images/Logo_VU.png"
+            alt="Vrije Universiteit Amsterdam"
+        >
+    </a>
+</figure>

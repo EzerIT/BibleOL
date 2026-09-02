@@ -33,11 +33,18 @@
 			allowfullscreen="" 
 			frameborder="0" 
 			height="315" 
-			src="https://www.youtube.com/embed/LLcumsc4LkA?si=u8G_TnnxrF-v8gco" 
+			src="https://www.youtube.com/embed/LLcumsc4LkA" 
 			width="560">
 		</iframe>
 	</li><br />
 	<li>How to look up your exam grade:<br />
-		<em>video to be published soon&hellip;.</em>
+		<iframe 
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+			allowfullscreen="" 
+			frameborder="0" 
+			height="315" 
+			src="https://www.youtube.com/embed/mV9Lak69RqQ" 
+			width="560">
+		</iframe>
 	</li>
 </ol>

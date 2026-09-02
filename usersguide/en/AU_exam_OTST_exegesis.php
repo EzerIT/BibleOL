@@ -16,9 +16,23 @@
 
 <p>Test results are provided immediately. Based on their performance, students can make an informed decision about whether to continue in the course or withdraw if they feel unprepared. The test does not count toward the final course grade; its sole purpose is to assess the likelihood of successful course completion. In cases of weak performance, the instructor will offer appropriate guidance and support.</p>
 
-
-
 <p> </p>
+<p> </p>
+
+<p>The video below gives you a brief overview of the Hebrew Proficiency Exam site:
+		<iframe 
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+			allowfullscreen="" 
+			frameborder="0" 
+			height="315" 
+			src="https://www.youtube.com/embed/E0UufOG4x10" 
+			width="560">
+		</iframe>
+</p>
+
+
+<p> </p>		
+
 <br />
 <h2>The Exam</h2>
 
@@ -144,7 +158,8 @@
 		</iframe><br />
 	</li><br />
 
-	<li>When you are finished taking your exam you can lookup your exam results instantly. The following video provides a complete walkthrough of the process:<br />
+	<li>Once you have completed your exam, you can view your exam results immediately. The following video provides a complete walkthrough of the process and includes a table of contents (TOC) to help you navigate to specific topics.
+:<br />
 		<iframe 
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
 			allowfullscreen="" 
