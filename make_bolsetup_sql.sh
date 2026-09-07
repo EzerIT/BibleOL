@@ -57,9 +57,8 @@ dump_font font
 dump_struct_and_data translation_languages
 dump_struct exam
 dump_struct exam_active
-dump_struct exam_finished
 dump_struct exam_results
-dump_struct exam_status
+dump_struct exam_attempt
 
 echo '*****************************************************************' > /dev/tty
 echo 'NOTE: Check that `bol_font` only contains 4 records in the output' > /dev/tty

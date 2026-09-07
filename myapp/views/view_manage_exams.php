@@ -126,6 +126,12 @@ This button redirects to the exam creation page.
           <br>
           <br>
           <?= $this->lang->line('duration') ?>: <input type="number" id="duration" name="duration" min="1" step="1" required>
+          <br>
+          <br>
+          <?= "Unlimited attempts" ?>? <input type="checkbox" id="unlimited-attempts" name="unlimited_attempts">
+          <div id="max-attempts-wrapper">
+            <?= "Maximum attempts" ?>: <input type="number" id="max-attempts" name="max-attempts" min="1" step="1">
+          </div>
         </form>
 
       </div>
@@ -139,6 +145,14 @@ This button redirects to the exam creation page.
 
 
 <script>
+  $('#unlimited-attempts').on('change', function() {
+    if ($(this).prop('checked')) {
+      $('#max-attempts-wrapper').hide();
+    } else {
+      $('#max-attempts-wrapper').show();
+    }
+  })
+
   function cr_exam_inst(examname, examid) {
     $('#create-instance-error').hide();
     $('#create-instance-examname').attr('value', examname);
@@ -160,11 +174,12 @@ This button redirects to the exam creation page.
 
     $('#create-instance-dialog-ok').click(function() {
       let duration_value = document.getElementById('duration').value;
+      let max_attempts_value = parseInt(document.getElementById('max-attempts').value);
       let class_selected = document.getElementById('class_select').value;
       let cr_inst_err_txt = document.getElementById('create-instance-error-text');
       cr_inst_err_txt.innerText = "Creating instance...";
       $('#create-instance-error').show();
-      if (!duration_value || duration_value < 1){
+      if (isNaN(duration_value) || duration_value < 1){
         cr_inst_err_txt.innerText = "Invalid duration";
       }
       else if (!class_selected || class_selected <= 0) {
@@ -172,6 +187,15 @@ This button redirects to the exam creation page.
       }
       else if (document.getElementById('instance_name').value.length == 0){
         cr_inst_err_txt.innerText = "Invalid Name";
+      }
+      else if (
+        !document.getElementById('unlimited-attempts').checked 
+        && (
+          isNaN(max_attempts_value) 
+          || max_attempts_value < 1
+        )
+      ) {
+        cr_inst_err_txt.innerText = "Invalid maximum attempts";
       }
       else{
         $('#create-instance-form').submit();

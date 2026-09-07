@@ -341,6 +341,11 @@ class Mod_askemdros extends CI_Model {
             else
                 $error = $this->lang->line('mql_compiler_error_colon') . "\n$e->compiler_error";
 
+            $quiz_file = $this->mod_quizpath->get_relative();
+            $db_name = isset($this->decoded_3et->database) ? (string)$this->decoded_3et->database : 'unknown';
+            $prop_name = isset($this->decoded_3et->properties) ? (string)$this->decoded_3et->properties : 'unknown';
+            $error .= "\n\nQuiz file: $quiz_file\nDatabase: $db_name\nProperties: $prop_name";
+
             $error = str_replace("\n","<br>",htmlspecialchars($error));
             throw new DataException($error);
         }

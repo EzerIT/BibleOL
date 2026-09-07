@@ -129,6 +129,15 @@ class MY_Lang extends CI_Lang {
     private function load_from_db_specific(string $langfile, string $idiom, bool $use_variant, array &$lang) {
         $CI =& get_instance();
 
+        if (!isset($CI->db)) {
+            $CI->load->database();
+        }
+
+        // If idiom is empty, skip database loading
+        if (empty($idiom)) {
+            return;
+        }
+
         if ($use_variant) {
             $variant_lang_table = self::create_variant_lang_table($idiom); // Make sure table exists
             if (empty($variant_lang_table))
@@ -138,12 +147,12 @@ class MY_Lang extends CI_Lang {
         }
         else
             $query = $CI->db->where('textgroup',$langfile)->get('language_'.$idiom);
-        
+
         $strings = $query->result();
         foreach ($strings as $s)
             $lang[$s->symbolic_name] = $s->text;
     }
-    
+
     private function load_from_db($langfile, string $idiom, bool $return, bool $add_suffix /*ignored*/, string $alt_path /*ignored*/)
     {
         if ($idiom==='english')
@@ -183,16 +192,14 @@ class MY_Lang extends CI_Lang {
     }
 
 	public function load($langfile, $idiom = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '')
-	{
-		if ($idiom == '') {  // This may happen if load() is called from CodeIgniter
-			$CI =& get_instance();
-			if (isset($CI->language))
-				$idiom = $CI->language;
-		}
+    {
+        if (empty($idiom)) {
+            $idiom = 'en'; // default CLI language
+        }
 
         if ($return) {
             if ($idiom!='english')
-                $l1 = $this->load_from_db($langfile, 'english', true, $add_suffix, $alt_path); // For fallback strings
+                $l1 = $this->load_from_db($langfile, 'english', true, $add_suffix, $alt_path);
             else
                 $l1 = array();
 
@@ -201,11 +208,12 @@ class MY_Lang extends CI_Lang {
         }
         else {
             if ($idiom!='english')
-                $this->load_from_db($langfile, 'english', false, $add_suffix, $alt_path); // For fallback strings
+                $this->load_from_db($langfile, 'english', false, $add_suffix, $alt_path);
 
             $this->load_from_db($langfile, $idiom, false, $add_suffix, $alt_path);
         }
     }
+
 
 	public function line($line, $log_errors = TRUE)
     {

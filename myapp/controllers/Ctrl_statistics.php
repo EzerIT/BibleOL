@@ -68,21 +68,59 @@ class Ctrl_statistics extends MY_Controller {
 
     public function update_exam_quiz_stat() {
       $this->load->model('mod_exams');
+      $this->check_logged_in();
+
+      $exam_attempt_id = (int)$this->input->get('exam_attempt_id');
+      $quiz_id = (int)$this->input->get('quizid');
+
+      if ($exam_attempt_id <= 0 || $quiz_id <= 0) {
+        $this->output->set_status_header(400);
+        echo 'Missing or invalid exam attempt data.';
+        return;
+      }
+
+      $exam_attempt = $this->mod_exams->get_exam_attempt_by_id($exam_attempt_id);
+      if (
+        is_null($exam_attempt)
+        || (int)$exam_attempt->userid !== (int)$this->mod_users->my_id()
+      ) {
+        $this->output->set_status_header(403);
+        echo 'Exam attempt not found for current user.';
+        return;
+      }
+
+      $quiz_template_id = $this->mod_exams->get_template_id($quiz_id);
+      if (is_null($quiz_template_id)) {
+        $this->output->set_status_header(500);
+        echo 'Unable to locate quiz template for exam save.';
+        return;
+      }
 
       $data = array(
-        'userid' => $this->mod_users->my_id(),
-        'activeexamid' => $this->input->get('examid'),
-        'quizid' => $this->input->get('quizid'),
-        'quiztemplid' => $this->mod_exams->get_template_id($this->input->get('quizid')),
+        'quizid' => $quiz_id,
+        'quiztemplid' => $quiz_template_id,
       );
-      $this->db->insert('exam_results', $data);
+
+      if ($this->db->field_exists('userid', 'exam_results')) {
+        $data['userid'] = (int)$exam_attempt->userid;
+      }
+
+      if ($this->db->field_exists('activeexamid', 'exam_results')) {
+        $data['activeexamid'] = (int)$exam_attempt->activeexamid;
+      }
+
+      if ($this->mod_exams->exam_results_uses_attempt_id()) {
+        $data['attempt_id'] = $exam_attempt_id;
+      }
+
+      if (!$this->db->insert('exam_results', $data)) {
+        $this->output->set_status_header(500);
+        echo 'Unable to save exam results.';
+        return;
+      }
 
       if (!$this->input->get('exercise_lst')) {
-        $data = array(
-          'userid' => $this->mod_users->my_id(),
-          'activeexamid' => $this->input->get('examid')
-        );
-        $this->db->insert('exam_finished', $data);
+        $this->mod_exams->set_exam_attempt_is_done($exam_attempt_id);
       }
     }
 

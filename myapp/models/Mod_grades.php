@@ -30,6 +30,59 @@ class Mod_grades extends CI_Model {
             return $h|self::$sign_extend; // A negative value is sign-extended
     }
 
+    public function exam_results_uses_attempt_id(): bool {
+        return $this->db->field_exists('attempt_id', 'exam_results');
+    }
+
+    public function get_exam_attempt_table(): string {
+        if ($this->db->table_exists('exam_attempt')) {
+            return 'exam_attempt';
+        }
+
+        return 'exam_status';
+    }
+
+    public function exam_attempts_have_count(): bool {
+        $attempt_table = $this->get_exam_attempt_table();
+        return $this->db->field_exists('attempt_count', $attempt_table);
+    }
+
+    private function normalize_exam_exercise_path(string $path): string {
+        return rawurldecode(trim($path));
+    }
+
+    private function get_exam_exercise_metadata(string $examcode): array {
+        $metadata = array();
+        $xml = @simplexml_load_string($examcode);
+
+        if ($xml === false || !isset($xml->exercise)) {
+            return $metadata;
+        }
+
+        foreach ($xml->exercise as $exercise) {
+            $exercise_name = isset($exercise->exercisename)
+                ? $this->normalize_exam_exercise_path((string)$exercise->exercisename)
+                : '';
+
+            if ($exercise_name === '') {
+                continue;
+            }
+
+            $metadata[$exercise_name] = array(
+                'exercise_name' => $exercise_name,
+                'weight' => isset($exercise->weight) && (string)$exercise->weight !== ''
+                    ? (int)$exercise->weight
+                    : 1
+            );
+        }
+
+        return $metadata;
+    }
+
+    private function get_relative_template_path(string $pathname): string {
+        return str_replace($this->quizzespath . '/', '', $pathname);
+    }
+
 
     /** Insert a quiz template into the database unless it is already there.
      * @param quizFile The file containing the template.
@@ -158,13 +211,15 @@ class Mod_grades extends CI_Model {
             if (isset($req_feat['correct_answer'])) { // Check that the question was not empty
                 $data = array();
                 foreach ($req_feat['correct_answer'] as $val) {
-                    $data[] = array('questid' => $questid,
-                                    'qono' => $qono+1,
-                                    'name' => $req_feat['names'][$featno],
-                                    'value' => $val,
-                                    'answer' => $req_feat['users_answer'][$ix],
-                                    'correct' => $req_feat['users_answer_was_correct'][$ix]=='true',
-                                    'userid' => $this->mod_users->my_id());
+                    $data[] = array(
+                        'questid' => $questid,
+                        'qono' => $qono+1,
+                        'name' => $req_feat['names'][$featno],
+                        'value' => $val,
+                        'answer' => $req_feat['users_answer'][$ix],
+                        'correct' => $req_feat['users_answer_was_correct'][$ix]=='true',
+                        'userid' => $this->mod_users->my_id()
+                    );
                     ++$ix;
                     if (++$featno === $maxFeatno) {
                         // Next question object
@@ -178,7 +233,6 @@ class Mod_grades extends CI_Model {
 
         /* Set end time and grading for quiz (MRCN: and the total number of questions) */
         // Get the total number of features for this quiz
-        //$tot_features=$this->quizRequestedFeatures($quizid);
         // Write the results to the DB
         $query = $this->db
             ->from('sta_question as sq')
@@ -310,24 +364,6 @@ class Mod_grades extends CI_Model {
 
         return $templids;
     }
-
-    // //Get Availiable exams for the class
-    // public function get_exams_for_class(int $classid) {
-    //   // Build a query
-    //   $query = $this->db
-    //       ->select('instance_name,bol_exam_active.id')
-    //       ->from('exam_results')
-    //       ->join('exam_active','activeexamid=exam_active.exam_id')
-    //       ->join('exam','exam_active.exam_id=exam.id')
-    //       ->where('exam_active.class_id',$classid)
-    //       ->get();
-    //
-    //   $exams = array(); // This is used as a set
-    //   foreach ($query->result() as $row) {
-    //     $exams[] = array("id"=>$row->id, "name"=>$row->instance_name);
-    //   }
-    //   return $exams;
-    // }
 
     //Get Availiable exams for the class
     public function get_exams_for_class(int $classid) {
@@ -512,21 +548,61 @@ class Mod_grades extends CI_Model {
 
     // Find all user IDs and exam IDs that match the specified exam activeexamid
     // The result is sorted by user ID
-    public function get_users_and_exam_results(string $activeexamid) {
+    public function get_users_and_exam_results(string $active_exam_id) {
+        $attempt_table = $this->get_exam_attempt_table();
+        $attempt_table_name = $this->db->dbprefix($attempt_table);
+
         $query = $this->db
-            ->select('activeexamid id,userid')
-            ->distinct()
-            ->where('activeexamid', $activeexamid)
-            ->get('exam_results');
+            ->select('id AS exam_result_ref, userid')
+            ->from($attempt_table_name)
+            ->where('activeexamid', $active_exam_id)
+            ->order_by('userid ASC');
+
+        if ($this->exam_attempts_have_count()) {
+            $query = $query->order_by('attempt_count ASC');
+        }
+        else {
+            $query = $query->order_by('start_time ASC');
+        }
+
+        $query = $query->get();
 
         $users_exam = array();
         foreach ($query->result() as $row) {
             if (!isset($users_exam[$row->userid]))
                 $users_exam[$row->userid] = array();
-            $users_exam[$row->userid][] = (int)$row->id;
+            $users_exam[$row->userid][] = (int)$row->exam_result_ref;
         }
 
         ksort($users_exam); // Sort by user ID
+
+        // Fallback: find students who have quizzes during the exam window but no attempt row
+        $exam_active = $this->db
+            ->select('exam_start_time, exam_end_time, class_id')
+            ->from('exam_active')
+            ->where('id', $active_exam_id)
+            ->get()->row();
+
+        if ($exam_active) {
+            $quiz_users = $this->db
+                ->select('DISTINCT q.userid', false)
+                ->from('sta_quiz q')
+                ->join('userclass uc', 'uc.userid = q.userid')
+                ->where('uc.classid', $exam_active->class_id)
+                ->where('q.start >=', $exam_active->exam_start_time)
+                ->where('q.start <=', $exam_active->exam_end_time)
+                ->where('q.end IS NOT NULL')
+                ->where('q.valid', 1)
+                ->get();
+
+            foreach ($quiz_users->result() as $row) {
+                if (!isset($users_exam[$row->userid])) {
+                    $users_exam[$row->userid] = []; // empty signals quiz-only fallback
+                }
+            }
+
+            ksort($users_exam);
+        }
 
         return $users_exam;
     }
@@ -613,19 +689,18 @@ class Mod_grades extends CI_Model {
         // Get results per quiz
         if ($calculate_percentages) {
           $query = $this->db
-          ->from('sta_quiz q')
-          //
-          ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
-          ->join('sta_question quest','quest.quizid=q.id')
-          ->join('sta_requestfeature rf','quest.id=rf.questid')
-          ->where('rf.userid',$uid);
+            ->from('sta_quiz q')
+            ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
+            ->join('sta_question quest','quest.quizid=q.id')
+            ->join('sta_requestfeature rf','quest.id=rf.questid')
+            ->where('rf.userid',$uid);
         } else {
           $query = $this->db
-          ->from('sta_quiz q')
-          ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
-          ->join('sta_question quest','quest.quizid=q.id')
-          ->join('sta_requestfeature rf','quest.id=rf.questid')
-          ->where('rf.userid',$uid);
+            ->from('sta_quiz q')
+            ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
+            ->join('sta_question quest','quest.quizid=q.id')
+            ->join('sta_requestfeature rf','quest.id=rf.questid')
+            ->where('rf.userid',$uid);
         }
 
         if (!$nongraded)
@@ -659,12 +734,14 @@ class Mod_grades extends CI_Model {
             $day = Statistics_timeperiod::round_to_noon((int)$row->start);
             $day = $row->start;
             if (!isset($perdate[$day]))
-                $perdate[$day] = array('duration' => 0,
-                                             'correct' => 0,
-                                             'userid' => $row->userid,
-                                             'quizzid' => $row->id,
-                                             'count' => 0,
-                                             'original_count' => 0);
+                $perdate[$day] = array(
+                    'duration' => 0,
+                    'correct' => 0,
+                    'userid' => $row->userid,
+                    'quizzid' => $row->id,
+                    'count' => 0,
+                    'original_count' => 0
+                );
             $perdate[$day]['duration'] += $row->duration;
             $perdate[$day]['correct'] += $row->correct;
             $perdate[$day]['count'] += $row->cnt;
@@ -681,48 +758,124 @@ class Mod_grades extends CI_Model {
         return $perdate;
     }
 
-    public function get_score_by_user_active_exam(int $uid,array $examids,/*int $period_start,int $period_end,*/ bool $nongraded, $calculate_percentages = false) {
-        if (empty($examids))
-            return array();
+    public function get_score_by_user_active_exam(
+        int $uid,
+        array $examids,
+        $calculate_percentages = false,
+        $active_exam_id = null
+    ) {
+        if (empty($examids)) {
+            if ($active_exam_id === null)
+                return array();
+
+            // Fallback: query quizzes directly using the exam's time window
+            $exam_active = $this->db
+                ->select('exam_start_time, exam_end_time, exam_id')
+                ->from('exam_active')
+                ->where('id', $active_exam_id)
+                ->get()->row();
+
+            if (!$exam_active)
+                return array();
+
+            $query = $this->db
+                ->from('sta_quiz q')
+                ->select('q.userid, q.id, q.start, q.end-q.start duration, SUM(rf.correct) correct, q.tot_questions cnt, SUM(rf.correct)/q.tot_questions*100 perc, ex.examcode, qt.pathname, 1 AS attempt_count', false)
+                ->join('sta_quiztemplate qt', 'qt.id=q.templid')
+                ->join('sta_question quest', 'quest.quizid=q.id')
+                ->join('sta_requestfeature rf', 'quest.id=rf.questid')
+                ->join('exam ex', 'ex.id=' . (int)$exam_active->exam_id)
+                ->where('q.userid', $uid)
+                ->where('q.start >=', $exam_active->exam_start_time)
+                ->where('q.start <=', $exam_active->exam_end_time)
+                ->where('q.end IS NOT NULL')
+                ->where('q.valid', 1)
+                ->group_by('q.userid, q.id, ex.examcode, qt.pathname')
+                ->get();
+
+            $perdate = array();
+            foreach ($query->result() as $row) {
+                $day = $row->start;
+                $exercise_name = $this->get_relative_template_path($row->pathname);
+                $metadata = $this->get_exam_exercise_metadata($row->examcode);
+                $metadata_for_exercise = isset($metadata[$exercise_name])
+                    ? $metadata[$exercise_name]
+                    : array('exercise_name' => $exercise_name !== '' ? $exercise_name : 'N/A', 'weight' => 1);
+                $weight = $metadata_for_exercise['weight'];
+                $exercise_name = $metadata_for_exercise['exercise_name'];
+
+                if (!isset($perdate[$day])) {
+                    $perdate[$day] = array(
+                        'duration' => 0, 'correct' => 0, 'count' => 0,
+                        'exercise_name' => '', 'quizzid' => $row->id,
+                        'userid' => $row->userid, 'weight' => 0, 'attempt_count' => 1
+                    );
+                }
+                $perdate[$day]['duration']     += $row->duration;
+                $perdate[$day]['correct']      += $row->correct;
+                $perdate[$day]['count']        += $row->cnt;
+                $perdate[$day]['exercise_name'] = $exercise_name;
+                $perdate[$day]['weight']       += $weight;
+            }
+
+            foreach ($perdate as &$v) {
+                $v['percentage'] = $v['count'] > 0 ? 100 * $v['correct'] / $v['count'] : 0;
+                $v['featpermin'] = $v['duration'] > 0 ? 60 * $v['count'] / $v['duration'] : 0;
+            }
+
+            return $perdate;
+        }
+
+        $attempt_table = $this->get_exam_attempt_table();
+        $attempt_table_name = $this->db->dbprefix($attempt_table);
 
         // Get results per exam, per quiz
-        // if ($calculate_percentages) {
-          $query = $this->db
-          ->from('exam_results er')
-          //
-          ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`, ex.examcode',false)
-          ->join('exam_active exa','exa.id=er.activeexamid')
-          ->join('exam ex','exa.exam_id=ex.id')
-          ->join('sta_quiz q','q.id=er.quizid')
-          ->join('sta_question quest','quest.quizid=q.id')
-          ->join('sta_requestfeature rf','quest.id=rf.questid')
-          ->where('rf.userid',$uid);
-        // } else {
-        //   $query = $this->db
-        //   ->from('sta_quiz q')
-        //   ->select('q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`',false)
-        //   ->join('sta_question quest','quest.quizid=q.id')
-        //   ->join('sta_requestfeature rf','quest.id=rf.questid')
-        //   ->where('rf.userid',$uid);
-        // }
+        $query = $this->db
+            ->from('exam_results er')
+            ->select('rf.userid, q.id,`start`,`end`-`start` `duration`,sum(`rf`.`correct`) `correct`,q.tot_questions `cnt`, sum(`rf`.`correct`)/q.tot_questions*100 `perc`, ex.examcode, qt.pathname',false)
+            ->join('sta_quiz q','q.id=er.quizid')
+            ->join('sta_quiztemplate qt','qt.id=er.quiztemplid')
+            ->join('sta_question quest','quest.quizid=q.id')
+            ->join('sta_requestfeature rf','quest.id=rf.questid')
+            ->where('rf.userid',$uid)
+            ->where('q.end IS NOT NULL')
+            ->where('valid',1);
 
-        if (!$nongraded)
-            $query = $query->where('(grading is null OR grading=1)');
+        if ($this->exam_results_uses_attempt_id()) {
+            $query = $query
+                ->select($this->exam_attempts_have_count() ? 'ea.attempt_count' : '1 AS attempt_count', false)
+                ->join("$attempt_table_name ea", 'er.attempt_id=ea.id')
+                ->join('exam_active exa','exa.id=ea.activeexamid')
+                ->join('exam ex','exa.exam_id=ex.id')
+                ->where_in('ea.id', $examids);
+        }
+        else {
+            $query = $query
+                ->join(
+                    "$attempt_table_name ea",
+                    "ea.id = (SELECT ea2.id
+                              FROM {$attempt_table_name} ea2
+                              WHERE ea2.activeexamid = er.activeexamid
+                                AND ea2.userid = er.userid
+                                AND ea2.start_time <= q.start
+                              ORDER BY ea2.start_time DESC" . ($this->exam_attempts_have_count() ? ', ea2.attempt_count DESC' : '') . "
+                              LIMIT 1)",
+                    'inner',
+                    false
+                )
+                ->select($this->exam_attempts_have_count() ? 'ea.attempt_count' : '1 AS attempt_count', false)
+                ->join('exam_active exa','exa.id=ea.activeexamid')
+                ->join('exam ex','exa.exam_id=ex.id')
+                ->where('er.userid', $uid)
+                ->where_in('ea.id', $examids);
+        }
 
         $query = $query
-            ->where_in('er.activeexamid',$examids)
-            // ->where('q.start >=',$period_start)
-            // ->where('q.start <=',$period_end)
-            ->where('q.end IS NOT NULL')
-            ->where('valid',1)
-            ->group_by('rf.userid, q.id,ex.examcode ');
-            // // TODO
-            ///////////////
-            $query = $query->get();
+            ->group_by('rf.userid, q.id, ex.examcode, qt.pathname, attempt_count')
+            ->get();
 
         // Consolidate by date
         $perdate = array();
-        $ex_count = 0;
         // TODO: MRCN
         // TODO:  Fix this later: hack to get just the fhighest counted.
         $int_counter=0;
@@ -734,39 +887,37 @@ class Mod_grades extends CI_Model {
 
             // $day = Statistics_timeperiod::round_to_noon((int)$row->start);
             $day = $row->start;
-            // get the wight for this interation
-            $matches=array();
-            if ( preg_match_all('/<weight.*>([0-9]*)<\/weight>/',$row->examcode, $matches) ) {
-              $weight=$matches[1][$ex_count];
-            }
-            else {
-              $weight=1;
-            }
-            $matches=array();
-            if ( preg_match_all('/<exercisename.*>(.*)<\/exercisename>/',$row->examcode, $matches) ) {
-              $exercise_name=$matches[1][$ex_count];
-            }
-            else {
-              $exercise_name="N/A";
-            }
-            // increment the exercise count
-            $ex_count += 1;
+            $exercise_name = $this->get_relative_template_path($row->pathname);
+            $metadata = $this->get_exam_exercise_metadata($row->examcode);
+            $metadata_for_exercise = isset($metadata[$exercise_name])
+                ? $metadata[$exercise_name]
+                : array(
+                    'exercise_name' => $exercise_name !== '' ? $exercise_name : 'N/A',
+                    'weight' => 1
+                );
+            $weight = $metadata_for_exercise['weight'];
+            $exercise_name = $metadata_for_exercise['exercise_name'];
 
             // sets the defaults to 0
-            if (!isset($perdate[$day]))
-                $perdate[$day] = array('duration' => 0,
-                                             'correct' => 0,
-                                             'count' => 0,
-                                             'exercise_name' => '',
-                                             'quizzid' => $row->id,
-                                             'userid' => $row->userid,
-                                             'weight' => 0);
+            if (!isset($perdate[$day])) {
+                $perdate[$day] = array(
+                    'duration' => 0,
+                    'correct' => 0,
+                    'count' => 0,
+                    'exercise_name' => '',
+                    'quizzid' => $row->id,
+                    'userid' => $row->userid,
+                    'weight' => 0,
+                    'attempt_count' => (int)$row->attempt_count
+                );
+            }
             $perdate[$day]['duration'] += $row->duration;
             $perdate[$day]['correct'] += $row->correct;
             $perdate[$day]['count'] += $row->cnt;
             // $perdate[$day]['count'] += sizeof($this->get_quizz_detail($uid,$row->id));  //Count based in the number of questions, not the number of words
             $perdate[$day]['exercise_name'] = $exercise_name;
             $perdate[$day]['weight'] += $weight;
+            $perdate[$day]['attempt_count'] = (int)$row->attempt_count;
             // $perdate[$day]['quizzid'] = $row->id;
             // // TODO: MRCN part of the // HACK:
             // $int_counter +=1;
@@ -795,7 +946,6 @@ class Mod_grades extends CI_Model {
 
         $query = $this->db
             ->from('sta_quiz q')
-            // ->select('rf.name rfname,sum(`rf`.`correct`)/q.tot_questions*100 `pct`')
             ->select('rf.name rfname,sum(`rf`.`correct`)/count(*)*100 `pct`')
             ->join('sta_question quest','quest.quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
@@ -811,7 +961,6 @@ class Mod_grades extends CI_Model {
                 ->where('q.start <=',$period_end)
                 ->where('end IS NOT NULL')
                 ->where('valid',1)
-                // ->group_by('q.id,rfname')
                 ->group_by('rfname')
                 ->get();
         } else {
@@ -823,9 +972,6 @@ class Mod_grades extends CI_Model {
                   ->where('end IS NOT NULL')
                   ->where('valid',1)
                   ->group_by('rfname')
-                  // ->group_by('q.id, rfname')
-                  // // ->group_by('q.id, rfname')
-                  // ->order_by('pct desc')
                   ->get();
         }
 
@@ -834,47 +980,74 @@ class Mod_grades extends CI_Model {
 
 
     // Calculate rates by exam results
-    public function get_features_by_date_exam_result(int $uid,array $exams,/* int $period_start,int $period_end,*/ bool $nongraded, bool $highest_score_first = false) {
+    public function get_features_by_date_exam_result(
+        int $uid,
+        array $exams,
+        bool $highest_score_first = false
+    ) {
         if (empty($exams))
             return array();
 
+        $attempt_table = $this->get_exam_attempt_table();
+        $attempt_table_name = $this->db->dbprefix($attempt_table);
+
         $query = $this->db
             ->from('exam_results er')
-            // ->select('rf.name rfname,sum(`rf`.`correct`)/q.tot_questions*100 `pct`')
             ->select('rf.name rfname,sum(`rf`.`correct`)/count(*)*100 `pct`')
             ->join('sta_quiz q','q.id=er.quizid')
             ->join('sta_question quest','quest.quizid=q.id')
             ->join('sta_requestfeature rf','quest.id=rf.questid')
             ->where('rf.userid',$uid);
 
-        if (!$nongraded)
-            $query = $query->where('(grading is null OR grading=1)');
+        if ($this->exam_results_uses_attempt_id()) {
+            $query = $query->join("$attempt_table_name ea", 'er.attempt_id=ea.id');
+        }
+        else {
+            $query = $query
+                ->join(
+                    "$attempt_table_name ea",
+                    "ea.id = (SELECT ea2.id
+                              FROM {$attempt_table_name} ea2
+                              WHERE ea2.activeexamid = er.activeexamid
+                                AND ea2.userid = er.userid
+                                AND ea2.start_time <= q.start
+                              ORDER BY ea2.start_time DESC" . ($this->exam_attempts_have_count() ? ', ea2.attempt_count DESC' : '') . "
+                              LIMIT 1)",
+                    'inner',
+                    false
+                )
+                ->where('er.userid', $uid);
+        }
 
         //TODO: To make the following if statement work as intended
 
         if (!$highest_score_first) {
-          $query = $query
-                ->where_in('er.activeexamid',$exams)
-                // ->where('q.start >=',$period_start)
-                // ->where('q.start <=',$period_end)
+            if ($this->exam_results_uses_attempt_id()) {
+                $query = $query->where_in('ea.id', $exams);
+            }
+            else {
+                $query = $query->where_in('ea.id', $exams);
+            }
+
+            $query = $query
                 ->where('end IS NOT NULL')
                 ->where('valid',1)
-                // ->group_by('q.id,rfname')
                 ->group_by('rfname')
                 ->get();
         } else {
-          // MRCN
-          $query = $query
-                  ->where_in('er.activeexamid',$exams)
-                  // ->where('q.start >=',$period_start)
-                  // ->where('q.start <=',$period_end)
-                  ->where('end IS NOT NULL')
-                  ->where('valid',1)
-                  ->group_by('rfname')
-                  // ->group_by('q.id, rfname')
-                  // // ->group_by('q.id, rfname')
-                  // ->order_by('pct desc')
-                  ->get();
+            // MRCN
+            if ($this->exam_results_uses_attempt_id()) {
+                $query = $query->where_in('ea.id', $exams);
+            }
+            else {
+                $query = $query->where_in('ea.id', $exams);
+            }
+
+            $query = $query
+                ->where('end IS NOT NULL')
+                ->where('valid',1)
+                ->group_by('rfname')
+                ->get();
         }
 
         return $query->result();
@@ -905,7 +1078,6 @@ class Mod_grades extends CI_Model {
 
     // Get answers for quizzes by quizzid
     public function get_quizz_detail(int $uid,int $quizzid) {
-
         if (empty($quizzid))
             return array();
 

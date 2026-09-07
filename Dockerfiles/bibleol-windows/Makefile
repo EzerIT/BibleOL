@@ -1,18 +1,14 @@
-IMAGE_NAME = bibleol-amd
-IMAGE_TAG = 2023_12_12
-CONTAINER_NAME = bibleol-amd-container
+IMAGE_NAME = bibleol-windows
+IMAGE_TAG = 2026_04_27
+CONTAINER_NAME = bibleol-windows-container
 
 build:
 	docker image build -t tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG) .
 	docker container run -dt -p 8000:80 --env-file environment.txt --name $(CONTAINER_NAME) tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)
 	docker container exec $(CONTAINER_NAME) bash start.sh
 
-PROJECT_ROOT = $(shell realpath ../..)
-
 build2:
-	docker image build -t tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG) .
-	docker container run -dt -p 8000:80 --env-file environment.txt --volume $(PROJECT_ROOT):/var/www/html/BibleOL --name $(CONTAINER_NAME) tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)
-	docker container exec $(CONTAINER_NAME) bash start.sh
+	build2_windows.bat
 
 stop:
 	docker container stop $(CONTAINER_NAME)
@@ -24,7 +20,6 @@ start:
 clean:
 	docker container rm -f $(CONTAINER_NAME) 
 	docker image rm -f tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)
-	rm -rf $(PROJECT_ROOT)/.htaccess
 
 pull:
 	docker pull tmccormack14/$(IMAGE_NAME):$(IMAGE_TAG)

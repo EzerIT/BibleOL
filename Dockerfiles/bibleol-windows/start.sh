@@ -23,6 +23,7 @@ done
 
 if [ $TRIES -eq $MAX_TRIES ]; then
   echo "Error: MySQL failed to start within $MAX_TRIES seconds."
+  # Try to show logs if possible, though in Docker it might be hard
   exit 1
 fi
 
