@@ -661,6 +661,8 @@ var PanelTemplMql = (function () {
             _this.updateMql();
         });
         this.clear = $('<button id="clear_button" type="button">' + localize('clear_button') + '</button>');
+        this.test_query = $('<button onclick="preview_qdata()" style="margin-left:10px" id="test_query_button" type="button">' + localize('test_query') + '</button>');
+        this.populate = $('<button onclick="populate()" style="margin-left:10px" id="populate_button" type="button">' + 'Populate' + '</button>');
         this.clear.click(function () {
             $('#virtualkbid').appendTo('#virtualkbcontainer');
             _this.rbFriendly.prop('checked', true);
@@ -1199,6 +1201,7 @@ var PanelTemplSentenceSelector = (function (_super) {
         var table = $('<table></table>');
         var row;
         var cell;
+        var fpan2 = $('<div style="display:none; padding-top:10px;" id="fpan2"></div>');
         row = $('<tr></tr>');
         cell = $('<td colspan="2"></td>');
         cell.append(this.cbUseForQo, '&nbsp;', this.cbUseForQoLabel);
@@ -1243,12 +1246,15 @@ var PanelTemplSentenceSelector = (function (_super) {
         row = $('<tr></tr>');
         cell = $('<td id="clearbuttoncell"></td>');
         cell.append(this.clear);
+        cell.append(this.test_query);
+        cell.append(this.populate);
         row.append(cell);
         cell = $('<td></td>');
         cell.append(this.fpan);
         row.append(cell);
         table.append(row);
         where.append(table);
+        where.append(fpan2);
     };
     PanelTemplSentenceSelector.prototype.populateFeatureTab = function (otype) {
         if (this.cbUseForQo.prop('checked')) {
@@ -1322,6 +1328,8 @@ var PanelTemplQuizObjectSelector = (function (_super) {
         row = $('<tr></tr>');
         cell = $('<td id="clearbuttoncell"></td>');
         cell.append(this.clear);
+        cell.append(this.test_query);
+        cell.append(this.populate);
         row.append(cell);
         cell = $('<td></td>');
         cell.append(this.fpan);
@@ -2333,6 +2341,7 @@ var isSubmitting = false;
 var checked_passages;
 var ckeditor;
 var charset;
+var show_preview = false;
 function isDirty() {
     if (isSubmitting)
         return false;
@@ -2494,6 +2503,146 @@ function check_overwrite() {
         $('#overwrite-dialog-confirm').modal('hide');
     });
     $('#overwrite-dialog-confirm').modal('show');
+}
+function toggle_card(idx) {
+    var current_card = $("#card-body_".concat(idx));
+    if (current_card.is(':hidden'))
+        current_card.show();
+    else
+        current_card.hide();
+}
+function format_preview_data(pdata) {
+    if (show_preview) {
+        $('#fpan2').show();
+        $("#fpan2").empty();
+    }
+    else {
+        $('#fpan2').hide();
+    }
+    console.log(pdata);
+    var all_books = pdata.selected_paths;
+    console.log(all_books);
+    for (var i = 0; i < all_books.length; i++) {
+        var book_name = all_books[i];
+        var accordion2 = $("<div id=\"accordion2_".concat(i, "\" class=\"accordion\"></div>"));
+        var card = $('<div class="card"></div>');
+        var card_header = $("<div id=\"cardhead_".concat(i, "\" class=\"card-header\"></div>"));
+        var card_body = $("<div id=\"card-body_".concat(i, "\" class=\"card-body\"></div>"));
+        var book_cell = $("<tr class=\"bookrow_".concat(i, "\"></tr>"));
+        var book_data = $("<td id=row_book_".concat(i, "></td>"));
+        var book_button = $("<button onclick=\"toggle_card(".concat(i, ")\" data-toggle=\"collapse\" data-target=\"\" id=book_").concat(i, " class=\"btn text-left\"><b>").concat(book_name, "</b><span></span></button>"));
+        book_data.append(book_button);
+        book_cell.append(book_data);
+        card_header.append(book_cell);
+        card.append(card_header);
+        card.append(card_body);
+        accordion2.append(card);
+        $("#fpan2").append(accordion2);
+        if (i > 0)
+            card_body.hide();
+    }
+}
+function populate_data(preview_data) {
+    var submit_url = '/text/populate_data_backend';
+    var response_data = '';
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: preview_data,
+        success: function (response) {
+            console.log("success");
+            console.log(response);
+        },
+        error: function (error) {
+            console.log('ERROR!!');
+            console.log(error);
+        }
+    });
+}
+function preview_qdata() {
+    show_preview = !show_preview;
+    console.log("Preview Quiz Data");
+    console.log("show_preview: " + show_preview);
+    var checked_passages = $('.jstree-checked');
+    var selected_paths = [];
+    for (var i = 0; i < checked_passages.length; i++) {
+        var r = checked_passages[i].getAttribute('data-ref');
+        if (r != null)
+            selected_paths.push(r);
+    }
+    var preview_data = {
+        'desc': ckeditor.val(),
+        'database': decoded_3et.database,
+        'properties': decoded_3et.properties,
+        'selected_paths': selected_paths,
+        'sentenceSelection': panelSent.getInfo(),
+        'quizObjectSelection': panelSentUnit.getInfo(),
+        'quizFeatures': panelFeatures.getInfo(),
+        'maylocate': $('#maylocate_cb').prop('checked'),
+        'sentbefore': $('#sentbefore').val(),
+        'sentafter': $('#sentafter').val(),
+        'fixedquestions': $('#fixedquestions').val(),
+        'randomize': $('#randomorder').prop('checked')
+    };
+    preview_data = JSON.parse("{\"desc\":\"\",\"database\":\"nestle1904\",\"properties\":\"nestle1904\",\"selected_paths\":[\"Matthew\",\"Mark\"],\"sentenceSelection\":{\"object\":\"word\",\"mql\":null,\"featHand\":{\"vhand\":[{\"type\":\"enumfeature\",\"name\":\"psp\",\"comparator\":\"equals\",\"values\":[\"adjective\",\"adverb\"]}]},\"useForQo\":true},\"quizObjectSelection\":{\"object\":\"word\",\"mql\":null,\"featHand\":{\"vhand\":[]},\"useForQo\":false},\"quizFeatures\":{\"showFeatures\":[\"visual\"],\"requestFeatures\":[{\"name\":\"psp\",\"order_val\":\"1\",\"usedropdown\":false},{\"name\":\"lemma\",\"order_val\":\"2\",\"usedropdown\":false}],\"dontShowFeatures\":[],\"dontShowObjects\":[],\"glosslimit\":0},\"maylocate\":true,\"sentbefore\":\"0\",\"sentafter\":\"0\",\"fixedquestions\":\"0\",\"randomize\":true}");
+    console.log(preview_data);
+    format_preview_data(preview_data);
+}
+function group_by_passage(monadObjects) {
+    var monads_by_passage = {};
+    for (var i = 0; i < monadObjects.length; i++) {
+        var ref = monadObjects[i][0][0]['bcv_loc'];
+        ref = ref.replace(/\d/g, '');
+        ref = ref.replace(':', '');
+        if (ref in monads_by_passage) {
+            monads_by_passage[ref].push(monadObjects[i]);
+        }
+        else {
+            monads_by_passage[ref] = [monadObjects[i]];
+        }
+    }
+    console.log('Monads by Passage: ', monads_by_passage);
+    return monads_by_passage;
+}
+function display_query_data(query_data) {
+    var monads = query_data['monad_set'];
+    var monads_by_passage = {};
+    console.log(monads);
+}
+function populate() {
+    var checked_passages = $('.jstree-checked');
+    decoded_3et.desc = ckeditor.val();
+    decoded_3et.selectedPaths = [];
+    for (var i = 0; i < checked_passages.length; ++i) {
+        var r = $(checked_passages[i]).data('ref');
+        if (r != '')
+            decoded_3et.selectedPaths.push(r);
+    }
+    decoded_3et.maylocate = $('#maylocate_cb').prop('checked');
+    decoded_3et.sentbefore = $('#sentbefore').val();
+    decoded_3et.sentafter = $('#sentafter').val();
+    decoded_3et.fixedquestions = +$('#fixedquestions').val();
+    decoded_3et.randomize = $('#randomorder').prop('checked');
+    if (!(decoded_3et.fixedquestions > 0))
+        decoded_3et.fixedquestions = 0;
+    decoded_3et.sentenceSelection = panelSent.getInfo();
+    decoded_3et.quizObjectSelection = panelSentUnit.getInfo();
+    decoded_3et.quizFeatures = panelFeatures.getInfo();
+    var qdata_tmp = JSON.parse("{\"desc\":\"\",\"database\":\"nestle1904\",\"properties\":\"nestle1904\",\"selectedPaths\":[\"Matthew\",\"Mark\"],\"sentenceSelection\":{\"object\":\"word\",\"mql\":null,\"featHand\":{\"vhand\":[{\"type\":\"enumfeature\",\"name\":\"psp\",\"comparator\":\"equals\",\"values\":[\"adjective\",\"adverb\"]}]},\"useForQo\":true},\"quizObjectSelection\":{\"object\":\"word\",\"mql\":null,\"featHand\":{\"vhand\":[]},\"useForQo\":false},\"quizFeatures\":{\"showFeatures\":[\"visual\"],\"requestFeatures\":[{\"name\":\"psp\",\"order_val\":\"1\",\"usedropdown\":false},{\"name\":\"lemma\",\"order_val\":\"2\",\"usedropdown\":false}],\"dontShowFeatures\":[],\"dontShowObjects\":[],\"glosslimit\":0},\"maylocate\":true,\"sentbefore\":\"0\",\"sentafter\":\"0\",\"fixedquestions\":0,\"randomize\":true}");
+    var submit_url = '/text/populate_data_backend';
+    $.ajax({
+        url: submit_url,
+        type: 'POST',
+        data: qdata_tmp,
+        success: function (response) {
+            response = JSON.parse(response);
+            display_query_data(response);
+            console.log('success');
+        },
+        error: function (error) {
+            console.log('error');
+        }
+    });
 }
 function save_quiz2() {
     var minutes = $('#minutes-timer').val();

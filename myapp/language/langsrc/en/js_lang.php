@@ -62,6 +62,7 @@ $lang['show'] = "Show";
 $lang['show_answer'] = "Show answer";
 $lang['show_border'] = "Show border";
 $lang['show_qere'] = "Show qere";
+$lang['test_query'] = "Test Query";
 $lang['unlimited'] = "Unlimited";
 $lang['use_for_qosel'] = "Also use this for sentence unit selection";
 $lang['use_qo_selection'] = "Do you also wish to use {0} for sentence unit selection?";

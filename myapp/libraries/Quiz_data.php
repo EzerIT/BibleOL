@@ -303,6 +303,18 @@ class Quiz_data {
 		return $this->CI->dictionary;
 	}
 	
+    public function previewSheaf(){
+        $emdros_data_tmp = $this->CI->mql->exec("SELECT ALL OBJECTS IN $this->universe "
+                                                  . "WHERE [{$this->CI->db_config->dbinfo->granularity} $this->mqlSentenceSelection\n] GOqxqxqx", true);
+
+        $sheaf_tmp = $emdros_data_tmp[0]->get_sheaf();
+        $monadset_tmp = $sheaf_tmp->get_monadset();
+        $monad_count = count($monadset_tmp);
+
+        $monad_data = ["monad_set" => $monadset_tmp, "monad_count" => $monad_count];
+        return $monad_data;
+    }
+
 	public function getCandidateSheaf() {
         $quick_emdros_data = $this->CI->mql->exec("SELECT ALL OBJECTS IN $this->universe "
                                                   . "WHERE [{$this->CI->db_config->dbinfo->granularity} $this->mqlSentenceSelection\n] GOqxqxqx", true);
