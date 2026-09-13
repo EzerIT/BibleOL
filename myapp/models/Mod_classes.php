@@ -20,6 +20,32 @@ class Mod_classes extends CI_Model {
         return $all_classes;
     }
 
+    /// Same as get_all_classes(), but restricted to classes matching the given class name
+    /// and/or owner name. Either argument may be empty to skip that filter.
+    public function filter_classes($classname, $ownername) {
+        $query = $this->db->select('*, class.id as clid, user.id as uid, class.password as clpass')
+                           ->from('class')
+                           ->join('user','ownerid=user.id', 'left');
+
+        if (!empty($classname))
+            $query = $query->like('classname', $classname);
+
+        if (!empty($ownername))
+            $query = $query->group_start()
+                            ->like('user.first_name', $ownername)
+                            ->or_like('user.last_name', $ownername)
+                            ->or_like('user.username', $ownername)
+                            ->group_end();
+
+        $query = $query->get();
+
+        $all_classes = array();
+        foreach ($query->result() as $row)
+            $all_classes[$row->clid] = $row;
+
+        return $all_classes;
+    }
+
     // $classid==-1 means create new class
     public function get_class_by_id(int $classid) {
         if ($classid===-1) {

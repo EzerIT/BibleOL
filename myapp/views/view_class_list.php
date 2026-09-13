@@ -1,3 +1,26 @@
+<?= form_open("classes/filter_classes") ?>
+<table class="searchbar">
+  <tr>
+    <td>
+      <?= $this->lang->line('class_name') ?>:
+    </td>
+    <td class="norb">
+      <input type="text" name="classname">
+    </td>
+    <td>
+      <?= $this->lang->line('owner_name') ?>:
+    </td>
+    <td class="norb">
+      <input type="text" name="ownername">
+    </td>
+    <td style="text-align:right; white-space:nowrap;">
+      <input class="btn btn-primary" type="submit" name="submit" value="<?= "Search" ?>">
+      <a class="btn btn-outline-dark" href="<?= site_url("classes") ?>"><?= "Clear" ?></a>
+    </td>
+  </tr>
+</table>
+<p style="height:8px">&nbsp;</p>
+
 <div class="table-responsive">
 <table class="type2 table table-striped">
   <tr>

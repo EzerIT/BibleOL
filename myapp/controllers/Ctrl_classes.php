@@ -20,6 +20,7 @@ class Ctrl_classes extends MY_Controller {
         try {
             $this->mod_users->check_teacher();
             $this->lang->load('owner', $this->language);
+            $this->load->helper('form');
 
             if ($this->mod_users->is_admin())
                 $teachers = $this->mod_users->get_teachers();
@@ -27,6 +28,47 @@ class Ctrl_classes extends MY_Controller {
                 $teachers = array();
 
             $allclasses = $this->mod_classes->get_all_classes();
+            usort($allclasses, 'classname_cmp');
+
+            // VIEW:
+            $this->load->view('view_top1', array('title' => $this->lang->line('classes')));
+            $this->load->view('view_top2');
+            $this->load->view('view_menu_bar', array('langselect' => true));
+            $this->load->view('view_confirm_dialog');
+            $this->load->view('view_alert_dialog');
+
+            $center_text = $this->load->view('view_class_list',
+                                             array('allclasses' => $allclasses,
+                                                   'teachers' => $teachers,
+                                                   'myid' => $this->mod_users->my_id(),
+                                                   'isadmin' => $this->mod_users->is_admin()),
+                                             true);
+            $this->load->view('view_main_page', array('left_title' => $this->lang->line('class_list'),
+                                                      'left' => $this->lang->line('configure_your_classes'),
+                                                      'center' => $center_text));
+            $this->load->view('view_bottom');
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('classes'));
+        }
+    }
+
+    public function filter_classes() {
+        try {
+            $this->mod_users->check_teacher();
+            $this->lang->load('owner', $this->language);
+            $this->load->helper('form');
+            $this->load->library('form_validation');
+
+            if ($this->mod_users->is_admin())
+                $teachers = $this->mod_users->get_teachers();
+            else
+                $teachers = array();
+
+            $classname = $this->input->post('classname');
+            $ownername = $this->input->post('ownername');
+
+            $allclasses = $this->mod_classes->filter_classes($classname, $ownername);
             usort($allclasses, 'classname_cmp');
 
             // VIEW:
