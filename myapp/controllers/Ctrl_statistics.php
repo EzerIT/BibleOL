@@ -371,7 +371,7 @@ class Ctrl_statistics extends MY_Controller {
 
             $classid = (int)$this->input->get('classid');
             $class = $this->mod_classes->get_class_by_id($classid);
-			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
+			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && !$this->mod_users->is_admin()))
 				throw new DataException($this->lang->line('illegal_class_id'));
 
             $this->statistics_timeperiod->set_validation_rules();
@@ -497,7 +497,7 @@ class Ctrl_statistics extends MY_Controller {
 
             $classid = (int)$this->input->get('classid');
             $class = $this->mod_classes->get_class_by_id($classid);
-			if ($classid<=0 || $class->ownerid!=$this->mod_users->my_id())
+			if ($classid<=0 || ($class->ownerid!=$this->mod_users->my_id() && !$this->mod_users->is_admin()))
 				throw new DataException($this->lang->line('illegal_class_id'));
 
             $exercise_list = $this->mod_statistics->get_pathnames_for_class($classid);
