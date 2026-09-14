@@ -28,6 +28,29 @@ on the page.
 
 <h1><?= sprintf($this->lang->line('number_of_exams'), $exam_count) ?></h1>
 <h2><?= sprintf($this->lang->line('exams_per_page'), $exams_per_page) ?></h2>
+
+<?= form_open("exams/filter_exams") ?>
+<table class="searchbar">
+  <tr>
+    <td>
+      <?= $this->lang->line('exam_name') ?>:
+    </td>
+    <td class="norb">
+      <input type="text" name="examname">
+    </td>
+    <td>
+      <?= $this->lang->line('owner') ?>:
+    </td>
+    <td class="norb">
+      <input type="text" name="ownername">
+    </td>
+    <td style="text-align:right; white-space:nowrap;">
+      <input class="btn btn-primary" type="submit" name="submit" value="<?= "Search" ?>">
+      <a class="btn btn-outline-dark" href="<?= site_url("exams") ?>"><?= "Clear" ?></a>
+    </td>
+  </tr>
+</table>
+<p style="height:8px">&nbsp;</p>
 <nav>
     <ul class="pagination">
         <?php for ($p=0; $p<$page_count; ++$p): ?>

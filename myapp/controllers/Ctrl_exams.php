@@ -434,6 +434,7 @@ class Ctrl_exams extends MY_Controller
     public function manage_exams()
     {
         $this->mod_users->check_teacher();
+        $this->load->helper('form');
 
         $exams_per_page = $this->config->item('exams_per_page');
         $exam_count = $this->mod_exams->count_exams();
@@ -454,6 +455,62 @@ class Ctrl_exams extends MY_Controller
         $sortorder = isset($_GET['desc']) ? 'desc' : 'asc';
 
         $allexams = $this->mod_exams->get_all_exams_part($exams_per_page,$offset*$exams_per_page,$orderby,$sortorder);
+        $name_owned_classes = $this->mod_classes->get_named_classes_owned(false);
+
+        $this->load->view('view_top1', array('title' => $this->lang->line('exam_mgmt')));
+
+        $this->load->view('view_top2');
+        $this->load->view('view_menu_bar', array('langselect' => true));
+        $this->load->view('view_confirm_dialog');
+        $this->load->view('view_alert_dialog');
+
+        $center_text = $this->load->view('view_manage_exams',
+                                          array(
+                                          'allexams' => $allexams,
+                                          'exam_count' => $exam_count,
+                                          'exams_per_page' => $exams_per_page,
+                                          'n_o_c' => $name_owned_classes,
+                                          'offset' => $offset,
+                                          'orderby' => $orderby,
+                                          'page_count' => $page_count,
+                                          'sortorder' => $sortorder
+                                        ),
+                                        true
+        );
+
+        $this->load->view('view_main_page', array('left_title' => $this->lang->line('exam_mgmt'),
+                                              'left' => $this->lang->line('exam_mgmt_description'),
+                                              'center' => $center_text));
+        $this->load->view('view_bottom');
+    }
+
+    public function filter_exams()
+    {
+        $this->mod_users->check_teacher();
+        $this->load->helper('form');
+
+        $exams_per_page = $this->config->item('exams_per_page');
+        $exam_count = $this->mod_exams->count_exams();
+        $page_count = intval(ceil($exam_count/$exams_per_page));
+
+        $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+        if ($offset>=$page_count)
+            $offset = $page_count-1;
+        if ($offset<0)
+            $offset = 0;
+
+        if (isset($_GET['orderby']) && in_array($_GET['orderby'],
+                                                array('exam_name', 'owner'), true))
+            $orderby = $_GET['orderby'];
+        else
+            $orderby = 'exam_name';
+
+        $sortorder = isset($_GET['desc']) ? 'desc' : 'asc';
+
+        $examname = $this->input->post('examname');
+        $ownername = $this->input->post('ownername');
+
+        $allexams = $this->mod_exams->filter_exams($orderby, $sortorder, $examname, $ownername);
         $name_owned_classes = $this->mod_classes->get_named_classes_owned(false);
 
         $this->load->view('view_top1', array('title' => $this->lang->line('exam_mgmt')));

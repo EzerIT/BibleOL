@@ -168,6 +168,7 @@ class Ctrl_userclass extends MY_Controller {
     public function enroll() {
         try {
             $this->mod_users->check_logged_in();
+            $this->load->helper('form');
 
             $userid = $this->mod_users->my_id();
 
@@ -215,7 +216,68 @@ class Ctrl_userclass extends MY_Controller {
             $this->error_view($e->getMessage(), $this->lang->line('classes'));
         }
     }
-    
+
+    public function filter_enroll() {
+        try {
+            $this->mod_users->check_logged_in();
+            $this->load->helper('form');
+
+            $userid = $this->mod_users->my_id();
+
+            $classname = $this->input->post('classname');
+
+            $all_classes = $this->mod_classes->get_all_classes();
+            $old_classes = $this->mod_userclass->get_classes_and_access_for_user($userid);
+            $avail_classes = array();
+            $priority_classes = array();
+            $no_priority_classes = array();
+
+            foreach ($all_classes as $ix => $ac) {
+                if (!empty($classname) && stripos($ac->classname,$classname)===false)
+                    continue;
+
+                // if the class is not in the old_classes array and if the enrole_before date is valid, then add the class id to $avail_classes
+                if (!array_key_exists($ac->clid, $old_classes) && (empty($ac->enrol_before) ||self::before_date($ac->enrol_before))) {
+                    // if the class is valid and high priority, then add it to $priority_classes
+                    if($ac->priority) {
+                        $priority_classes[] = $ac->clid;
+                    }
+                    else {
+                        $no_priority_classes[] = $ac->clid;
+                    }
+                }
+            }
+            $avail_classes = array_merge($priority_classes, $no_priority_classes);
+
+            if (!empty($classname))
+                $old_classes = array_filter($old_classes, function($clid) use ($all_classes, $classname) {
+                    return isset($all_classes[$clid]) && stripos($all_classes[$clid]->classname,$classname)!==false;
+                }, ARRAY_FILTER_USE_KEY);
+
+            // VIEW:
+            $this->load->view('view_top1', array('title' => $this->lang->line('enroll_in_class')));
+            $this->load->view('view_top2');
+            $this->load->view('view_menu_bar', array('langselect' => true,
+                                                     'more_help_items' => array('enroll' => 'help_this_page')));
+            $this->load->view('view_confirm_dialog');
+
+            $center_text = $this->load->view('view_enroll_in_class',
+                                             array('all_classes' => $all_classes,
+                                                   'old_classes' => $old_classes,
+                                                   'avail_classes' => $avail_classes,
+                                                   'curdir' => null,
+                                                   'dir' => null),
+                                             true);
+
+            $this->load->view('view_main_page', array('left_title' =>  $this->lang->line('enroll_in_classes'),
+                                                      'center' => $center_text));
+            $this->load->view('view_bottom');
+        }
+        catch (DataException $e) {
+            $this->error_view($e->getMessage(), $this->lang->line('classes'));
+        }
+    }
+
     public function enroll_by_folder() {
         try {
             $this->load->model('mod_classdir');

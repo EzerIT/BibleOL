@@ -59,6 +59,27 @@ class Mod_exams extends CI_Model{
         return $query->result();
     }
 
+    /// Same as get_all_exams_part(), but restricted to exams matching the given exam name
+    /// and/or owner name, with no limit/offset. Either argument may be empty to skip that filter.
+    public function filter_exams(string $orderby, string $sortorder, $examname, $ownername){
+        $query = $this->db->select('exam.*')
+                           ->from('exam')
+                           ->join('user','exam.ownerid=user.id', 'left')
+                           ->where('exam.archived', 0);
+
+        if (!empty($examname))
+            $query = $query->like('exam.exam_name', $examname);
+
+        if (!empty($ownername))
+            $query = $query->group_start()
+                            ->like('user.first_name', $ownername)
+                            ->or_like('user.last_name', $ownername)
+                            ->or_like('user.username', $ownername)
+                            ->group_end();
+
+        return $query->order_by($orderby, $sortorder)->get()->result();
+    }
+
     public function count_exams(){
         $query = $this->db->select('count(*) as count')->get('exam');
         return $query->row()->count;

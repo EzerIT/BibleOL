@@ -1,3 +1,20 @@
+<?= form_open("userclass/filter_enroll") ?>
+<table class="searchbar">
+  <tr>
+    <td>
+      <?= $this->lang->line('class_name') ?>:
+    </td>
+    <td class="norb">
+      <input type="text" name="classname">
+    </td>
+    <td style="text-align:right; white-space:nowrap;">
+      <input class="btn btn-primary" type="submit" name="submit" value="<?= "Search" ?>">
+      <a class="btn btn-outline-dark" href="<?= site_url("userclass/enroll") ?>"><?= "Clear" ?></a>
+    </td>
+  </tr>
+</table>
+<p style="height:8px">&nbsp;</p>
+
 <h2><?= $this->lang->line('you_can_enroll_in') ?></h2>
 
 <?php if (empty($avail_classes)): ?>
