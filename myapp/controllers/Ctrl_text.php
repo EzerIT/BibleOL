@@ -312,7 +312,7 @@ class Ctrl_text extends MY_Controller {
         $this->mod_askemdros->convert_ETCBC4_v7($filename);
     }
 
-
+    
     // Displays a quiz with the universe specified by the user.
 	public function show_quiz_sel() {
         if (!isset($_POST['quiz']) || !isset($_POST['count']) || !isset($_POST['sel'])) {
@@ -326,6 +326,23 @@ class Ctrl_text extends MY_Controller {
         }
 
         $this->show_quiz_common($_POST['quiz'], intval($_POST['count']), $_POST['sel']);
+    }
+
+    // get the quiz data from emdros
+    public function populate_data_backend(){
+        // unpack the pending quizdata
+        //$quizdata_tmp = json_decode(json_encode($_POST));
+        //echo 
+        $qdata_tmp = json_encode($_POST);
+        $qdata_tmp = json_decode($qdata_tmp);
+        //echo var_dump($qdata_tmp);
+        //echo var_dump($qdata_tmp->selectedPaths) . "\n";
+        $this->load->model('mod_quizpath');
+        $this->load->model('mod_askemdros');
+        //echo "hello world";
+        $monad_data = $this->mod_askemdros->preview_quiz($qdata_tmp);
+        echo json_encode($monad_data);
+        return $monad_data;
     }
 
     // Common code for show_quiz() and show_quiz_sel()

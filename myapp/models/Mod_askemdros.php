@@ -316,6 +316,54 @@ class Mod_askemdros extends CI_Model {
         }
 
     }
+    public function preview_quiz($qdata_tmp){
+        $this->load->library('db_config');
+
+        // calculate the sentence selector:
+        $comparator = $qdata_tmp->sentenceSelection->featHand->vhand[0]->comparator;
+        if($comparator == "equals")
+            $joiner = "IN";
+        else    
+            $joiner = "NOT IN";
+        
+        $values = $qdata_tmp->sentenceSelection->featHand->vhand[0]->values;
+        $values_str = "(" . implode(",", $values) . ")";
+
+        $sentenceSelector = "[{$qdata_tmp->sentenceSelection->object} NORETRIEVE {$qdata_tmp->sentenceSelection->featHand->vhand[0]->name} {$joiner} {$values_str}]";
+
+        // setup the database
+        $this->setup($qdata_tmp->database, $qdata_tmp->properties);
+        if(property_exists($qdata_tmp, 'selectedPaths')){
+            $preview_universe = array('');
+            
+            if (count($qdata_tmp->selectedPaths) > 0)                
+                $preview_universe = $qdata_tmp->selectedPaths;
+
+                $quizid = -1;
+                
+                $this->load->library('quiz_data',array('quizid' => $quizid,
+                    'universe' => self::parsePath($qdata_tmp->selectedPaths, $qdata_tmp->fixedquestions>0 ? null : null),
+                    'senSelect' => $sentenceSelector,
+                    'qoSelect' => '',
+                    'desc' => $qdata_tmp->desc,
+                    'maylocate' => $qdata_tmp->maylocate,
+                    'sentbefore' => $qdata_tmp->sentbefore,
+                    'sentafter' => $qdata_tmp->sentafter,
+                    'fixedquestions' => $qdata_tmp->fixedquestions,
+                    'randomize' => $qdata_tmp->randomize,
+                    'show_features' => $qdata_tmp->quizFeatures->showFeatures ?? [],
+                    'request_features' => $qdata_tmp->quizFeatures->requestFeatures ?? [],
+                    'dontshow_features' => $qdata_tmp->quizFeatures->dontShowFeatures ?? [],
+                    'dontshow_objects' => $qdata_tmp->quizFeatures->dontShowObjects ?? [],
+                    'glosslimit' => $qdata_tmp->quizFeatures->glosslimit,
+                    'oType' => $qdata_tmp->quizObjectSelection->object)
+                );
+                
+                $monad_data = $this->quiz_data->previewSheaf();
+                return $monad_data;
+        }
+
+    }
     public function show_quiz(int $number_of_quizzes, array $use_selection = null) {
         try {
             $this->load->library('db_config');
